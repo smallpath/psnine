@@ -1,4 +1,4 @@
->表示带有toker验证,需解决token的问题,无token返回{"code":"502","error":"token empty"},token错误返回{"code":"502","error":"token error"})
+>带有toker验证的API,需解决token的问题,无token返回{"code":"502","error":"token empty"},token错误返回{"code":"502","error":"token error"}
 
 
 ## IP地址:
@@ -11,7 +11,6 @@ http://120.55.124.66/user/secondlife_xhm?token=94977175041653d70e50a9f2aaa2ece7
 
 - 我的游戏
 	- http://120.55.124.66/usergame/secondlife_xhm?page=1&token=8a1466db11654b9dffb2fb504d837b1c
-
 - 奖杯列表
 	- http://120.55.124.66/trophy/10066?token=5ded2a13af6e900f79441a684ea61932
 - 排行:
@@ -37,8 +36,6 @@ http://120.55.124.66/user/secondlife_xhm/notice
 
 ## 社区:
 ### 主题列表:
-120.55.124.66/topic?page=1&node=
-
 120.55.124.66/topic?page=X&node=   (X为数字)
 
 - node: 
@@ -131,7 +128,7 @@ http://120.55.124.66/gene/507
 
 
 ## 获得的图片路径的前缀:
-photo.d7vg.com/
+photo.d7vg.com
 
 ## CSS:
 http://120.55.124.66/View/p9.css
