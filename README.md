@@ -1,5 +1,5 @@
 # P9-app
-Android App for [P9](http://psnine.com/) written by Weex
+Android App for [P9](http://psnine.com/) written by React Native
 
 ## TODO
-- [ ] Weex初始化
+- [x] React Native初始化
