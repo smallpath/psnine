@@ -9,24 +9,68 @@ import {
   AppRegistry,
   StyleSheet,
   Text,
-  View
+  View,
+  Image,
+  DrawerLayoutAndroid,
+  ToolbarAndroid,
+  ToastAndroid,
+  BackAndroid,
+  TouchableOpacity,
+  Dimensions,
 } from 'react-native';
 
+let DRAWER_REF = 'drawer';
+let DRAWER_WIDTH_LEFT = 100;
+let toolbarActions = [
+  {title: '搜索', show: 'always'},
+  {title: '全部', show: 'never'},
+  {title: '新闻', show: 'never'},
+  {title: '攻略', show: 'never'},
+  {title: '测评', show: 'never'},
+  {title: '心得', show: 'never'},
+  {title: 'Plus', show: 'never'},
+  {title: '二手', show: 'never'},
+  {title: '开箱', show: 'never'},
+  {title: '游列', show: 'never'},
+  {title: '活动', show: 'never'},
+];
+
+let title = "PSNINE";
+
+import NavigatorDrawer from './NavigatorDrawer';
+
+let navigationView = ( 
+        <View style={{flex: 1, backgroundColor: '#fff'}}> 
+            <Text style={{margin: 10, fontSize: 15, textAlign: 'left'}}>I'm in the Drawer!</Text> 
+        </View> );
+
 class Psnine extends Component {
-  render() {
+  _renderNavigationView(){
     return (
-      <View style={styles.container}>
-        <Text style={styles.welcome}>
-          Welcome to Psnine!
-        </Text>
-        <Text style={styles.instructions}>
-          To get started, edit index.android.js
-        </Text>
-        <Text style={styles.instructions}>
-          Double tap R on your keyboard to reload,{'\n'}
-          Shake or press menu button for dev menu
-        </Text>
-      </View>
+      <NavigatorDrawer
+      
+      /> 
+    )
+  }
+  render() {
+    return ( 
+      <DrawerLayoutAndroid 
+            ref={DRAWER_REF}
+            drawerWidth={Dimensions.get('window').width - DRAWER_WIDTH_LEFT} 
+            drawerPosition={DrawerLayoutAndroid.positions.Left} 
+            renderNavigationView={this._renderNavigationView}> 
+                <View style={styles.container}> 
+                  <ToolbarAndroid
+                    navIcon={require('image!ic_menu_white')}
+                    title={title}
+                    style={styles.toolbar}
+                    actions={toolbarActions}
+                    onIconClicked={()=> this.refs[DRAWER_REF].openDrawer()}
+                  />
+                  <Text style={{margin: 10, fontSize: 15, textAlign: 'center'}}>Hello</Text> 
+                  <Text style={{margin: 10, fontSize: 15, textAlign: 'center'}}>World!</Text> 
+                </View> 
+      </DrawerLayoutAndroid> 
     );
   }
 }
@@ -34,19 +78,12 @@ class Psnine extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    flexDirection: 'column',
     backgroundColor: '#F5FCFF',
   },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
+  toolbar: {
+    backgroundColor: '#00a2ed',
+    height: 56,
   },
 });
 
