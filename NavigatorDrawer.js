@@ -20,10 +20,19 @@ class NavigatorDrawer extends Component {
       this.state = {
           isLoading: false,
           dataSource:dataSource.cloneWithRows([
-              "新闻","游戏","机因","约战","排行","Plus","Store","闲游"
+              "我的游戏","我的消息","设置"
           ]),
       }
   }
+ renderSeparator(sectionID: number, rowID: number, adjacentRowHighlighted: bool) { 
+   return ( 
+     <View 
+      key={`${sectionID}-${rowID}`} 
+      style={{ height: adjacentRowHighlighted ? 4 : 1, backgroundColor: adjacentRowHighlighted ? '#3B5998' : '#CCCCCC', }} 
+      /> 
+      ); 
+    }
+
   renderHeader(){
       let TouchableElement = TouchableHighlight;
       if (Platform.OS === 'android') {
@@ -42,14 +51,14 @@ class NavigatorDrawer extends Component {
               </Text>
             </View>
           </TouchableElement>
-          <View style={styles.row}>
+          <View style={styles.trophyRow}>
             <TouchableElement>
               <View style={styles.menuContainer}>
                 <Image
                   source={require('image!ic_favorites_white')}
                   style={{width: 30, height: 30}} />
                 <Text style={styles.menuText}>
-                  我的游戏
+                  白
                 </Text>
               </View>
             </TouchableElement>
@@ -59,7 +68,59 @@ class NavigatorDrawer extends Component {
                 source={require('image!ic_download_white')}
                 style={{width: 30, height: 30}} />
                 <Text style={styles.menuText}>
-                  设置
+                  金
+                </Text>
+              </View>
+            </TouchableElement>
+            <TouchableElement>
+              <View style={styles.menuContainer}>
+              <Image
+                source={require('image!ic_download_white')}
+                style={{width: 30, height: 30}} />
+                <Text style={styles.menuText}>
+                  银
+                </Text>
+              </View>
+            </TouchableElement>
+            <TouchableElement>
+              <View style={styles.menuContainer}>
+              <Image
+                source={require('image!ic_download_white')}
+                style={{width: 30, height: 30}} />
+                <Text style={styles.menuText}>
+                  铜
+                </Text>
+              </View>
+            </TouchableElement>
+          </View>
+          <View style={styles.row}>
+            <TouchableElement>
+              <View style={styles.menuContainer}>
+                <Image
+                  source={require('image!ic_favorites_white')}
+                  style={{width: 30, height: 30}} />
+                <Text style={styles.menuText}>
+                  帖子
+                </Text>
+              </View>
+            </TouchableElement>
+            <TouchableElement>
+              <View style={styles.menuContainer}>
+              <Image
+                source={require('image!ic_download_white')}
+                style={{width: 30, height: 30}} />
+                <Text style={styles.menuText}>
+                  关注
+                </Text>
+              </View>
+            </TouchableElement>
+            <TouchableElement>
+              <View style={styles.menuContainer}>
+              <Image
+                source={require('image!ic_download_white')}
+                style={{width: 30, height: 30}} />
+                <Text style={styles.menuText}>
+                  收藏
                 </Text>
               </View>
             </TouchableElement>
@@ -73,7 +134,7 @@ class NavigatorDrawer extends Component {
               source={require('image!home')}
               style={{width: 30, height: 30, marginLeft: 10}} />
             <Text style={styles.homeTheme}>
-              首页
+              签到
             </Text>
           </View>
         </TouchableElement>
@@ -81,7 +142,7 @@ class NavigatorDrawer extends Component {
       );
   }  
 
-  renderRow(rowData) {
+  renderRow(rowData, sectionID, rowID, highlightRow) {
     let TouchableElement = TouchableHighlight;
     if (Platform.OS === 'android') {
       TouchableElement = TouchableNativeFeedback;
@@ -116,6 +177,7 @@ class NavigatorDrawer extends Component {
           keyboardShouldPersistTaps={true}
           showsVerticalScrollIndicator={false}
           renderHeader={this.renderHeader}
+          // renderSeparator={this.renderSeparator}
           style={{flex:1, backgroundColor: 'white'}}
         />
       </View>
@@ -136,6 +198,12 @@ const styles = StyleSheet.create({
   userInfo: {
     flex: 4,
     backgroundColor: '#00a2ed',
+  },
+  trophyRow: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 0,
   },
   row: {
     flex: 1,
