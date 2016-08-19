@@ -13,13 +13,13 @@ var tweenState = require('react-tween-state');
 
 var styles = StyleSheet.create({
     container: {
-        flex: 1,
+
     },
     titleContainer: {
         flexDirection: 'row',
     },
     title: {
-        // flex: 1,
+        flex: 1,
         backgroundColor: '#00a2ed',
         alignItems: 'center',
         paddingHorizontal: 2,
@@ -31,6 +31,7 @@ var styles = StyleSheet.create({
     barContainer: {
         height: 4,
         position: 'relative',
+        backgroundColor: '#00a2ed',
     },
     bar: {
         backgroundColor: '#00f',
@@ -80,8 +81,6 @@ var SegmentedView = React.createClass({
 
     getInitialState() {
         return {
-            barLeft: 0,
-            barRight: screen.width,
             barPosition: [0, screen.width],
             titleWidth: 0,
         };
@@ -96,8 +95,6 @@ var SegmentedView = React.createClass({
     },
 
     measureHandler(ox, oy, width,height,pageX,pageY) {
-        //console.log(arguments)
-        console.log(`${pageX}, ${screen.width - pageX - width}`);
 
         this.tweenState(['barPosition',0], {
             easing: tweenState.easingTypes.easeInOutQuad,
@@ -109,32 +106,6 @@ var SegmentedView = React.createClass({
         this.setState({
             titleWidth : width,
         });
-
-        // this.tweenState(['barPosition',1], {
-        //     easing: tweenState.easingTypes.easeInOutQuad,
-        //     stackBehavior: tweenState.stackBehavior.DESTRUCTIVE,
-        //     duration: 0,
-        //     beginValue: this.getTweeningValue(['barPosition', 1]),
-        //     endValue: screen.width - pageX - width,
-        // });
-
-
-        // this.tweenState('barLeft', {
-        //     easing: tweenState.easingTypes.easeInOutQuad,
-        //     duration: this.props.duration,
-        //     endValue: pageX
-        // });
-
-        // this.tweenState('barRight', {
-        //     easing: tweenState.easingTypes.easeInOutQuad,
-        //     duration: this.props.duration,
-        //     endValue: screen.width - pageX - width,
-        // });
-
-        // this.setState({
-        //     barRight: screen.width - pageX - width,
-        // })
-        //setTimeout(this.props.onTransitionStart, 0);
     },
 
     moveTo(index) {
@@ -178,8 +149,8 @@ var SegmentedView = React.createClass({
         var barContainer = (
           <View style={styles.barContainer}>
               <View ref="bar" style={[styles.bar, {
-                  left: left,
-                  width:this.state.titleWidth,
+                  left: left+5,
+                  width:this.state.titleWidth-5,
                   backgroundColor: this.props.barColor
               }]} 
               />
@@ -191,7 +162,7 @@ var SegmentedView = React.createClass({
                 <View style={styles.titleContainer}>
                     {items}
                 </View>
-                {this.props.barPosition == 'bottom' && barContainer}
+                {this.props.barPosition == 'bottom' && barContainer}  
             </View>
         );
     }

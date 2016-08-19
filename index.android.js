@@ -19,6 +19,7 @@ import {
   TouchableOpacity,
   Dimensions,
   TouchableNativeFeedback,
+  RefreshControl,
 } from 'react-native';
 
 let DRAWER_REF = 'drawer';
@@ -42,6 +43,26 @@ let title = "PSNINE";
 import NavigatorDrawer from './NavigatorDrawer';
 import SegmentedView from './SegmentedView';
 import { fetchTopics } from './Dao';
+import moment from 'moment';
+moment().format();
+
+moment.locale('en', {
+    relativeTime : {
+        future: "后 %s",
+        past:   "%s前",
+        s:  "秒",
+        m:  "1分钟",
+        mm: "%d 分钟",
+        h:  "1小时",
+        hh: "%d小时",
+        d:  "1天",
+        dd: "%d天",
+        M:  "1月",
+        MM: "%d月",
+        y:  "1年",
+        yy: "%d年"
+    }
+});
 
 let navigationView = ( 
         <View style={{flex: 1, backgroundColor: '#fff'}}> 
@@ -54,26 +75,25 @@ class Psnine extends Component {
     const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
     this.state = {
       index:0,
+      page:0,
+      refreshing: false,
       dataSource: ds.cloneWithRows([
         'John', 'Joel', 'James', 'Jimmy', 'Jackson', 'Jillian', 'Julie', 'Devin'
-      ])
+      ]),
+      rowCache: [],
     }
   }
   _renderSegmentedView(){
     return (
       <SegmentedView
-          titles={[
-            {title:"社区"},
-            {title:"游戏"},
-            {title:"Store"},
-            {title:"约战"},
-            {title:"机因"}
-          ]}
+          titles={["社区","游戏","Store","约战","机因"]}
           index={this.state.index}
           style={styles.segmentedView}
           stretch
+          duration={500}
           barPosition='bottom'
           underlayColor='#000'
+          barColor='#fff'
           onPress={index => this.setState({ index })}
       />
     )
@@ -87,12 +107,18 @@ class Psnine extends Component {
     this.fetchTopics();
   }
 
+ _onRefresh() { 
+  this.setState({refreshing: true}); 
+  this.fetchTopics().then( this.setState({refreshing: false}));
+}
+
   fetchTopics(){
-    fetchTopics().then(topics =>{ 
+    return fetchTopics().then(topics =>{ 
       let ds = this.state.dataSource.cloneWithRows(topics.data);
-      console.log(ds);
       this.setState({
+          page:1,
           dataSource: ds,
+          rowCache: [...this.state.rowCache,...topics.data]
       });
     })
   }
@@ -105,8 +131,18 @@ class Psnine extends Component {
       ); 
     }
   _renderRow(rowData){
-    let uri = `http://photo.d7vg.com/avatar/${rowData.avatar}.png@50w.png`;
-    let date = rowData.date;
+
+    let uri;
+    if(rowData.profilepicture == ''){    
+      let path = rowData.avatar.toString().replace('\\','');
+      uri = `http://photo.d7vg.com/avatar/${path}.png@50w.png`;
+    }else{
+      uri = `http://photo.d7vg.com/avaself/${rowData.psnid}.png@50w.png`;
+    }
+    let time = parseInt(rowData.date);
+    time*=1000;
+    let date = new Date(time);
+    let fromNow = moment(date).fromNow();
     let TouchableElement = TouchableNativeFeedback;
     return (
       <View>
@@ -120,13 +156,14 @@ class Psnine extends Component {
           <View style={{marginLeft: 10,flex: 1,flexDirection: 'column',margin: 0}}>
             <Text 
               ellipsizeMode={'head'}
-              numberOfLines={3}>
+              numberOfLines={3}
+              style={{color: 'black',}}>
               {rowData.title}
             </Text>
 
-            <View style={{flex: 1,flexDirection: 'row',paddingTop:5,}}>
+            <View style={{flex: 1,flexDirection: 'row', justifyContent: 'center',alignItems:'flex-end',paddingTop:5,}}>
               <Text style={{flex: 1,flexDirection: 'row'}}>{rowData.psnid}</Text>
-              <Text style={{flex: 1,flexDirection: 'row'}}>{date}</Text>
+              <Text style={{flex: 1,flexDirection: 'row'}}>{fromNow}</Text>
               <Text style={{flex: 1,flexDirection: 'row'}}>{rowData.views}浏览</Text>
             </View>
 
@@ -136,6 +173,35 @@ class Psnine extends Component {
 
       </View>
     )
+  }
+  _onEndReached(){
+    if(!this)
+      return;
+
+    if(this.state.refreshing == true)
+      return;
+
+    this.setState({
+      refreshing: true
+    });
+    fetchTopics(this.state.page+1).then(topics =>{ 
+      console.log(typeof this.state.dataSource);
+      let pre = this.state.rowCache;
+      let mergedArr = [...pre,...topics.data];
+      let ds = this.state.dataSource.cloneWithRows(mergedArr);
+      this.setState({
+          page: this.state.page+1,
+          dataSource: ds,
+          refreshing: false,
+          rowCache: mergedArr,
+      });
+    }).catch(err=>{
+      console.log(err);
+      this.setState({
+          refreshing: false
+      });
+    })
+
   }
   render() {
     return ( 
@@ -152,7 +218,15 @@ class Psnine extends Component {
                     actions={toolbarActions}
                     onIconClicked={()=> this.refs[DRAWER_REF].openDrawer()}
                   />
+                  {this._renderSegmentedView()}
                   <ListView
+                    refreshControl={ 
+                      <RefreshControl 
+                        refreshing={this.state.refreshing} 
+                        onRefresh={this._onRefresh.bind(this)} 
+                      />
+                    }
+                    onEndReached={this._onEndReached.bind(this)}
                     dataSource={this.state.dataSource}
                     renderRow={this._renderRow}
                     renderSeparator={this._renderSeparator}
@@ -175,7 +249,7 @@ const styles = StyleSheet.create({
     height: 56,
   },
   segmentedView: {
-    //backgroundColor: '#0000ff',
+    backgroundColor: '#F5FCFF',
   },
   selectedTitle:{
     //backgroundColor: '#00ffff'
