@@ -1,10 +1,4 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- * @flow
- */
-
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import {
   AppRegistry,
   StyleSheet,
@@ -20,10 +14,29 @@ import {
   Dimensions,
   TouchableNativeFeedback,
   RefreshControl,
+  InteractionManager,
 } from 'react-native';
+
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import {
+	getTopicList,
+	changeTopicListRefreshing,
+	changeTopicListLoadingMore,
+  changePageNumberToDefault,
+  changePageNumberIncreasing,
+} from '../actions/mainScreen.js';
+
+import NavigatorDrawer from '../components/NavigatorDrawer';
+import SegmentedView from '../components/SegmentedView';
+import Topic from './Topic';
+
+import { getTopicURL } from '../dao/dao';
+import moment from '../utils/moment';
 
 let DRAWER_REF = 'drawer';
 let DRAWER_WIDTH_LEFT = 100;
+
 let toolbarActions = [
   {title: '搜索', show: 'always'},
   {title: '全部', show: 'never'},
@@ -39,50 +52,20 @@ let toolbarActions = [
 ];
 
 let title = "PSNINE";
-
-import NavigatorDrawer from '../components/NavigatorDrawer';
-import SegmentedView from '../components/SegmentedView';
-import { fetchTopics } from '../dao/dao';
-import moment from 'moment';
-moment().format();
-
-moment.locale('en', {
-    relativeTime : {
-        future: "后 %s",
-        past:   "%s前",
-        s:  "秒",
-        m:  "1分钟",
-        mm: "%d 分钟",
-        h:  "1小时",
-        hh: "%d小时",
-        d:  "1天",
-        dd: "%d天",
-        M:  "1月",
-        MM: "%d月",
-        y:  "1年",
-        yy: "%d年"
-    }
+const ds = new ListView.DataSource({
+      rowHasChanged: (row1, row2) => row1 !== row2,
 });
 
-let navigationView = ( 
-        <View style={{flex: 1, backgroundColor: '#fff'}}> 
-            <Text style={{margin: 10, fontSize: 15, textAlign: 'left'}}>I'm in the Drawer!</Text> 
-        </View> );
-
-class Psnine extends Component {
+class MainScreen extends Component {
   constructor(props){
     super(props);
-    const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+
     this.state = {
-      index:0,
-      page:0,
-      refreshing: false,
-      dataSource: ds.cloneWithRows([
-        'John', 'Joel', 'James', 'Jimmy', 'Jackson', 'Jillian', 'Julie', 'Devin'
-      ]),
-      rowCache: [],
+
     }
+
   }
+
   _renderSegmentedView(){
     return (
       <SegmentedView
@@ -99,29 +82,6 @@ class Psnine extends Component {
     )
   }
 
-  _renderNavigationView(){
-    return (<NavigatorDrawer/>)
-  }
-
-  componentDidMount() {
-    this.fetchTopics();
-  }
-
- _onRefresh() { 
-  this.setState({refreshing: true}); 
-  this.fetchTopics().then( this.setState({refreshing: false}));
-}
-
-  fetchTopics(){
-    return fetchTopics().then(topics =>{ 
-      let ds = this.state.dataSource.cloneWithRows(topics.data);
-      this.setState({
-          page:1,
-          dataSource: ds,
-          rowCache: [...this.state.rowCache,...topics.data]
-      });
-    })
-  }
  _renderSeparator(sectionID: number, rowID: number, adjacentRowHighlighted: bool) { 
    return ( 
      <View 
@@ -130,7 +90,28 @@ class Psnine extends Component {
       /> 
       ); 
     }
-  _renderRow(rowData){
+
+
+	_onRowPressed = (rowData)=>{
+		const { navigator } = this.props;
+		const URL = getTopicURL(rowData.id);
+		console.log("打开WebView",URL);
+		if(navigator) {
+			navigator.push({
+			    component: Topic,
+			    params: {
+            URL,
+			    	rowData
+			    }
+			});
+		}
+	}
+
+  _renderRow = (rowData,    
+    sectionID: number | string,
+    rowID: number | string,
+    highlightRow: (sectionID: number, rowID: number) => void
+    )=>{
 
     let uri;
     if(rowData.profilepicture == ''){    
@@ -143,98 +124,130 @@ class Psnine extends Component {
     time*=1000;
     let date = new Date(time);
     let fromNow = moment(date).fromNow();
+
     let TouchableElement = TouchableNativeFeedback;
+
     return (
-      <View>
+      <View rowID={ rowID }>
+        <TouchableElement  onPress={()=>this._onRowPressed(rowData)}>
+          <View style={{flex: 1,flexDirection: 'row', alignItems: 'center', padding: 10}}>
+            <Image 
+              source={{uri: uri}}
+              style={styles.avatar}
+            />
 
-        <View style={{flex: 1,flexDirection: 'row', alignItems: 'center', padding: 10}}>
-          <Image 
-            source={{uri: uri}}
-            style={styles.avatar}
-          />
+            <View style={{marginLeft: 10,flex: 1,flexDirection: 'column',margin: 0}}>
+              <Text 
+                ellipsizeMode={'head'}
+                numberOfLines={3}
+                style={{color: 'black',}}>
+                {rowData.title}
+              </Text>
 
-          <View style={{marginLeft: 10,flex: 1,flexDirection: 'column',margin: 0}}>
-            <Text 
-              ellipsizeMode={'head'}
-              numberOfLines={3}
-              style={{color: 'black',}}>
-              {rowData.title}
-            </Text>
+              <View style={{flex: 1,flexDirection: 'row', justifyContent: 'center',alignItems:'flex-end',paddingTop:5,}}>
+                <Text style={{flex: 1,flexDirection: 'row'}}>{rowData.psnid}</Text>
+                <Text style={{flex: 1,flexDirection: 'row'}}>{fromNow}</Text>
+                <Text style={{flex: 1,flexDirection: 'row'}}>{rowData.views}浏览</Text>
+              </View>
 
-            <View style={{flex: 1,flexDirection: 'row', justifyContent: 'center',alignItems:'flex-end',paddingTop:5,}}>
-              <Text style={{flex: 1,flexDirection: 'row'}}>{rowData.psnid}</Text>
-              <Text style={{flex: 1,flexDirection: 'row'}}>{fromNow}</Text>
-              <Text style={{flex: 1,flexDirection: 'row'}}>{rowData.views}浏览</Text>
             </View>
 
           </View>
-
-        </View>
-
+        </TouchableElement>
       </View>
     )
   }
-  _onEndReached(){
-    if(!this)
+
+  componentWillReceiveProps (nextProps) {
+
+    // Object.keys(nextProps.mainScreen).forEach((item,index)=>{
+    //   if(item!='topics') 
+    //     console.log('153-->',item,nextProps.mainScreen[item])
+
+    // });
+
+    this.props.mainScreen = nextProps.mainScreen;
+  
+  }
+
+
+  componentDidMount = ()=> {
+    this._onRefresh();
+  }
+
+  _onRefresh = () => { 
+    const { mainScreen:reducer, dispatch } = this.props;
+
+    if(reducer.isLoadingMore || reducer.isRefreshing)
       return;
 
-    if(this.state.refreshing == true)
+    dispatch(getTopicList(1));
+
+    // Object.keys(reducer).forEach((item,index)=>{
+    //   if(item!='topics') 
+    //     console.log('187-->',item,reducer[item])
+
+    // });
+  }
+
+  _loadMoreData = () => {
+
+		const { mainScreen:reducer, dispatch } = this.props;
+
+    // Object.keys(reducer).forEach((item,index)=>{
+    //   if(item!='topics') 
+    //     console.log('198-->',item,reducer[item])
+
+    // });
+
+		let page = reducer.topicPage + 1;
+		dispatch(getTopicList(page));
+
+  }
+
+  _onEndReached = () => { 
+    const { mainScreen:reducer } = this.props;
+
+    if(reducer.isLoadingMore || reducer.isRefreshing)
       return;
 
-    this.setState({
-      refreshing: true
+		InteractionManager.runAfterInteractions(() => {
+			  this._loadMoreData();
     });
-    fetchTopics(this.state.page+1).then(topics =>{ 
-      console.log(typeof this.state.dataSource);
-      let pre = this.state.rowCache;
-      let mergedArr = [...pre,...topics.data];
-      let ds = this.state.dataSource.cloneWithRows(mergedArr);
-      this.setState({
-          page: this.state.page+1,
-          dataSource: ds,
-          refreshing: false,
-          rowCache: mergedArr,
-      });
-    }).catch(err=>{
-      console.log(err);
-      this.setState({
-          refreshing: false
-      });
-    })
 
   }
-  render() {
-    return ( 
-      <DrawerLayoutAndroid 
-            ref={DRAWER_REF}
-            drawerWidth={Dimensions.get('window').width - DRAWER_WIDTH_LEFT} 
-            drawerPosition={DrawerLayoutAndroid.positions.Left} 
-            renderNavigationView={this._renderNavigationView}> 
-                <View style={styles.container}> 
-                  <ToolbarAndroid
-                    navIcon={require('image!ic_menu_white')}
-                    title={title}
-                    style={styles.toolbar}
-                    actions={toolbarActions}
-                    onIconClicked={()=> this.refs[DRAWER_REF].openDrawer()}
-                  />
-                  {this._renderSegmentedView()}
-                  <ListView
-                    refreshControl={ 
-                      <RefreshControl 
-                        refreshing={this.state.refreshing} 
-                        onRefresh={this._onRefresh.bind(this)} 
-                      />
-                    }
-                    onEndReached={this._onEndReached.bind(this)}
-                    dataSource={this.state.dataSource}
-                    renderRow={this._renderRow}
-                    renderSeparator={this._renderSeparator}
-                  />
-                </View> 
-      </DrawerLayoutAndroid> 
-    );
+
+  render(){
+    const { mainScreen:reducer } = this.props;
+    return (
+      <View style={styles.container}> 
+        <ToolbarAndroid
+          navIcon={require('image!ic_menu_white')}
+          title={title}
+          style={styles.toolbar}
+          actions={toolbarActions}
+          onIconClicked={this.props._callDrawer()}
+        />
+        {this._renderSegmentedView()}
+        <ListView
+          refreshControl={ 
+            <RefreshControl 
+              refreshing={reducer.isRefreshing || reducer.isLoadingMore } 
+              onRefresh={this._onRefresh} 
+            />
+          }
+          pageSize = {32}
+          removeClippedSubviews={false} 
+          onEndReached={this._onEndReached}
+          onEndReachedThreshold={10}
+          dataSource={ ds.cloneWithRows(reducer.topics) }
+          renderRow={this._renderRow}
+          renderSeparator={this._renderSeparator}
+        />
+      </View> 
+    )
   }
+
 }
 
 
@@ -261,5 +274,17 @@ const styles = StyleSheet.create({
   }
 });
 
+// MainScreen.propTypes = {
+//   topics: PropTypes.object,
+//   segmentedIndex: PropTypes.number,
+//   topicPage: PropTypes.number,
+//   isRefreshing: PropTypes.bool,
+//   isLoadingMore: PropTypes.bool,
+//   indicatorShouldShow: PropTypes.bool,
+// };
 
-module.exports = Psnine;
+const dataSource = new ListView.DataSource({
+  rowHasChanged: (r1, r2) => r1 !== r2,
+});
+
+export default MainScreen;
