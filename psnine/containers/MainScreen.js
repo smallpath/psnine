@@ -20,9 +20,9 @@ import {
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import {
-	getTopicList,
-	changeTopicListRefreshing,
-	changeTopicListLoadingMore,
+  getTopicList,
+  changeTopicListRefreshing,
+  changeTopicListLoadingMore,
   changePageNumberToDefault,
   changePageNumberIncreasing,
 } from '../actions/mainScreen.js';
@@ -38,90 +38,95 @@ let DRAWER_REF = 'drawer';
 let DRAWER_WIDTH_LEFT = 100;
 
 let toolbarActions = [
-  {title: '搜索', show: 'always'},
-  {title: '全部', show: 'never'},
-  {title: '新闻', show: 'never'},
-  {title: '攻略', show: 'never'},
-  {title: '测评', show: 'never'},
-  {title: '心得', show: 'never'},
-  {title: 'Plus', show: 'never'},
-  {title: '二手', show: 'never'},
-  {title: '开箱', show: 'never'},
-  {title: '游列', show: 'never'},
-  {title: '活动', show: 'never'},
+  { title: '搜索', show: 'always' },
+  { title: '全部', show: 'never' },
+  { title: '新闻', show: 'never' },
+  { title: '攻略', show: 'never' },
+  { title: '测评', show: 'never' },
+  { title: '心得', show: 'never' },
+  { title: 'Plus', show: 'never' },
+  { title: '二手', show: 'never' },
+  { title: '开箱', show: 'never' },
+  { title: '游列', show: 'never' },
+  { title: '活动', show: 'never' },
 ];
 
 let title = "PSNINE";
 const ds = new ListView.DataSource({
-      rowHasChanged: (row1, row2) => row1 !== row2,
+  rowHasChanged: (row1, row2) => row1 !== row2,
 });
 
 class MainScreen extends Component {
-  constructor(props){
+  constructor(props) {
     super(props);
 
     this.state = {
-
+      index: 0,
     }
 
+  }
+
+  onSegmentedViewPress=(index)=>{
+    this.props.navigator.requestAnimationFrame(()=>{
+      this.setState({ index }); 
+    })
   }
 
   _renderSegmentedView(){
     return (
       <SegmentedView
-          titles={["社区","游戏","Store","约战","机因"]}
-          index={this.state.index}
-          style={styles.segmentedView}
-          stretch
-          duration={500}
-          barPosition='bottom'
-          underlayColor='#000'
-          barColor='#fff'
-          onPress={index => this.setState({ index })}
-      />
+        titles={["社区", "游戏", "Store", "约战", "机因"]}
+        index={this.state.index}
+        style={styles.segmentedView}
+        stretch
+        duration={200}
+        barPosition='bottom'
+        underlayColor='#000'
+        barColor='#fff'
+        onPress={this.onSegmentedViewPress}
+        />
     )
   }
 
- _renderSeparator(sectionID: number, rowID: number, adjacentRowHighlighted: bool) { 
-   return ( 
-     <View 
-      key={`${sectionID}-${rowID}`} 
-      style={{ height: adjacentRowHighlighted ? 4 : 1, backgroundColor: adjacentRowHighlighted ? '#3B5998' : '#CCCCCC', }} 
-      /> 
-      ); 
+  _renderSeparator(sectionID: number, rowID: number, adjacentRowHighlighted: bool) {
+    return (
+      <View
+        key={`${sectionID}-${rowID}`}
+        style={{ height: adjacentRowHighlighted ? 4 : 1, backgroundColor: adjacentRowHighlighted ? '#3B5998' : '#CCCCCC', }}
+        />
+    );
+  }
+
+
+  _onRowPressed = (rowData) => {
+    const { navigator } = this.props;
+    const URL = getTopicURL(rowData.id);
+    if (navigator) {
+      navigator.push({
+        component: Topic,
+        params: {
+          URL,
+          rowData
+        }
+      });
     }
+  }
 
-
-	_onRowPressed = (rowData)=>{
-		const { navigator } = this.props;
-		const URL = getTopicURL(rowData.id);
-		console.log("打开WebView",URL);
-		if(navigator) {
-			navigator.push({
-			    component: Topic,
-			    params: {
-            URL,
-			    	rowData
-			    }
-			});
-		}
-	}
-
-  _renderRow = (rowData,    
+  _renderRow = (rowData,
     sectionID: number | string,
     rowID: number | string,
     highlightRow: (sectionID: number, rowID: number) => void
-    )=>{
+  ) => {
 
     let uri;
-    if(rowData.profilepicture == ''){    
-      let path = rowData.avatar.toString().replace('\\','');
+    if (rowData.profilepicture == '') {
+      let path = rowData.avatar.toString().replace('\\', '');
       uri = `http://photo.d7vg.com/avatar/${path}.png@50w.png`;
-    }else{
+    } else {
       uri = `http://photo.d7vg.com/avaself/${rowData.psnid}.png@50w.png`;
     }
     let time = parseInt(rowData.date);
-    time*=1000;
+    time *= 1000;
     let date = new Date(time);
     let fromNow = moment(date).fromNow();
 
@@ -129,25 +134,25 @@ class MainScreen extends Component {
 
     return (
       <View rowID={ rowID }>
-        <TouchableElement  onPress={()=>this._onRowPressed(rowData)}>
-          <View style={{flex: 1,flexDirection: 'row', alignItems: 'center', padding: 10}}>
-            <Image 
-              source={{uri: uri}}
+        <TouchableElement  onPress={() => this._onRowPressed(rowData) }>
+          <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', padding: 10 }}>
+            <Image
+              source={{ uri: uri }}
               style={styles.avatar}
-            />
+              />
 
-            <View style={{marginLeft: 10,flex: 1,flexDirection: 'column',margin: 0}}>
-              <Text 
+            <View style={{ marginLeft: 10, flex: 1, flexDirection: 'column', margin: 0 }}>
+              <Text
                 ellipsizeMode={'head'}
                 numberOfLines={3}
-                style={{color: 'black',}}>
+                style={{ color: 'black', }}>
                 {rowData.title}
               </Text>
 
-              <View style={{flex: 1,flexDirection: 'row', justifyContent: 'center',alignItems:'flex-end',paddingTop:5,}}>
-                <Text style={{flex: 1,flexDirection: 'row'}}>{rowData.psnid}</Text>
-                <Text style={{flex: 1,flexDirection: 'row'}}>{fromNow}</Text>
-                <Text style={{flex: 1,flexDirection: 'row'}}>{rowData.views}浏览</Text>
+              <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'flex-end', paddingTop: 5, }}>
+                <Text style={{ flex: 1, flexDirection: 'row' }}>{rowData.psnid}</Text>
+                <Text style={{ flex: 1, flexDirection: 'row' }}>{fromNow}</Text>
+                <Text style={{ flex: 1, flexDirection: 'row' }}>{rowData.views}浏览</Text>
               </View>
 
             </View>
@@ -158,93 +163,75 @@ class MainScreen extends Component {
     )
   }
 
-  componentWillReceiveProps (nextProps) {
-
+  componentWillReceiveProps(nextProps) {
     // Object.keys(nextProps.mainScreen).forEach((item,index)=>{
     //   if(item!='topics') 
     //     console.log('153-->',item,nextProps.mainScreen[item])
 
     // });
-
     this.props.mainScreen = nextProps.mainScreen;
-  
   }
 
-
-  componentDidMount = ()=> {
+  componentDidMount = () => {
     this._onRefresh();
   }
 
-  _onRefresh = () => { 
-    const { mainScreen:reducer, dispatch } = this.props;
+  _onRefresh = () => {
+    const { mainScreen: reducer, dispatch } = this.props;
 
-    if(reducer.isLoadingMore || reducer.isRefreshing)
+    if (reducer.isLoadingMore || reducer.isRefreshing)
       return;
 
     dispatch(getTopicList(1));
-
-    // Object.keys(reducer).forEach((item,index)=>{
-    //   if(item!='topics') 
-    //     console.log('187-->',item,reducer[item])
-
-    // });
   }
 
   _loadMoreData = () => {
-
-		const { mainScreen:reducer, dispatch } = this.props;
-
-    // Object.keys(reducer).forEach((item,index)=>{
-    //   if(item!='topics') 
-    //     console.log('198-->',item,reducer[item])
-
-    // });
-
-		let page = reducer.topicPage + 1;
-		dispatch(getTopicList(page));
-
+    const { mainScreen: reducer, dispatch } = this.props;
+    let page = reducer.topicPage + 1;
+    dispatch(getTopicList(page));
   }
 
-  _onEndReached = () => { 
-    const { mainScreen:reducer } = this.props;
+  _onEndReached = () => {
+    const { mainScreen: reducer } = this.props;
 
-    if(reducer.isLoadingMore || reducer.isRefreshing)
+    if (reducer.isLoadingMore || reducer.isRefreshing)
       return;
 
-		InteractionManager.runAfterInteractions(() => {
-			  this._loadMoreData();
+    InteractionManager.runAfterInteractions(() => {
+      this._loadMoreData();
     });
 
   }
 
-  render(){
-    const { mainScreen:reducer } = this.props;
+  render() {
+    const { mainScreen: reducer } = this.props;
     return (
-      <View style={styles.container}> 
+      <View style={styles.container}>
         <ToolbarAndroid
-          navIcon={require('image!ic_menu_white')}
+          navIcon={require('image!ic_menu_white') }
           title={title}
           style={styles.toolbar}
           actions={toolbarActions}
-          onIconClicked={this.props._callDrawer()}
-        />
-        {this._renderSegmentedView()}
+          onIconClicked={this.props._callDrawer() }
+          />
+        {this._renderSegmentedView.bind(this)() }
         <ListView
-          refreshControl={ 
-            <RefreshControl 
-              refreshing={reducer.isRefreshing || reducer.isLoadingMore } 
-              onRefresh={this._onRefresh} 
-            />
+          refreshControl={
+            <RefreshControl
+              refreshing={reducer.isRefreshing || reducer.isLoadingMore }
+              onRefresh={this._onRefresh}
+              />
           }
           pageSize = {32}
-          removeClippedSubviews={false} 
+          removeClippedSubviews={false}
+          enableEmptySections={true}
           onEndReached={this._onEndReached}
           onEndReachedThreshold={10}
           dataSource={ ds.cloneWithRows(reducer.topics) }
           renderRow={this._renderRow}
           renderSeparator={this._renderSeparator}
-        />
-      </View> 
+          />
+      </View>
     )
   }
 
@@ -264,7 +251,7 @@ const styles = StyleSheet.create({
   segmentedView: {
     backgroundColor: '#F5FCFF',
   },
-  selectedTitle:{
+  selectedTitle: {
     //backgroundColor: '#00ffff'
     //fontSize: 20
   },

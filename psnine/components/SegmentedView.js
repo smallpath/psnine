@@ -5,7 +5,10 @@ import {
     Image,
     View,
     TouchableHighlight,
+    TouchableNativeFeedback,
+    TouchableWithoutFeedback,
     Dimensions,
+    InteractionManager,
 } from 'react-native';
 
 var screen = Dimensions.get('window');
@@ -23,13 +26,13 @@ var styles = StyleSheet.create({
         backgroundColor: '#00a2ed',
         alignItems: 'center',
         paddingHorizontal: 2,
-        paddingVertical: 10,
+        paddingVertical: 8,
     },
     spacer: {
         flex: 1,
     },
     barContainer: {
-        height: 4,
+        height: 6,
         position: 'relative',
         backgroundColor: '#00a2ed',
     },
@@ -123,9 +126,16 @@ var SegmentedView = React.createClass({
     renderTitle(title, i) {
         return (
             <View collapsable={false} key={i} ref={i} style={{ flex: this.props.stretch ? 1 : 0 }}>
-                <TouchableHighlight underlayColor={this.props.underlayColor} onPress={() => this.props.onPress(i)}>
+                <TouchableNativeFeedback 
+                    delayPressIn={0}
+                    delayPressOut={0}
+                    underlayColor={this.props.underlayColor} 
+                    onPress={() =>{
+                     console.log('i:',i);
+                     this.props.onPress(i)
+                    }}>
                     {this.props.renderTitle ? this.props.renderTitle(title, i) : this._renderTitle(title, i)}
-                </TouchableHighlight>
+                </TouchableNativeFeedback>
             </View>
         );
     },

@@ -31,6 +31,7 @@ let toolbarActions = [
   {title: '全部', show: 'never'},
 ];
 let title = "TOPIC";
+let WEBVIEW_REF = `WEBVIEW_REF`;
 
 class MyWeb extends Component {
   constructor(props){
@@ -46,12 +47,19 @@ class MyWeb extends Component {
 
 
   _pressButton = ()=> {
-    const {navigator} = this.props;
-    if (navigator)
-        navigator.pop();
+    this.refs[WEBVIEW_REF].goBack();
   }
 
   callDrawer(){this.refs[DRAWER_REF].openDrawer()}
+
+  onNavigationStateChange = (...args) => {
+    //console.log(...args);
+  }
+
+ onShouldStartLoadWithRequest = (event) => { 
+    console.log(event);
+    return true; 
+  }
 
   render() {
     const { reducer } = this.props;
@@ -64,18 +72,22 @@ class MyWeb extends Component {
             renderNavigationView={this._renderNavigationView}> 
             <View style={{flex:1}}>
                 <ToolbarAndroid
-                navIcon={require('image!ic_menu_white')}
-                title={title}
-                style={styles.toolbar}
-                actions={toolbarActions}
-                onIconClicked={this._pressButton}
+                  navIcon={require('image!ic_menu_white')}
+                  title={this.props.rowData.title}
+                  style={styles.toolbar}
+                  actions={toolbarActions}
+                  onIconClicked={this._pressButton}
                 />
                 <WebView
+                    ref={WEBVIEW_REF}
                     source={{uri: this.props.URL}} 
                     style={{flex:3}}
                     scalesPageToFit={true}
                     domStorageEnabled={true}
+                    onNavigationStateChange={this.onNavigationStateChange}
+                    onShouldStartLoadWithRequest={this.onShouldStartLoadWithRequest}
                     startInLoadingState={true}  
+                    injectedJavaScript={`$('.header').hide()`}
                 />
             </View>
       </DrawerLayoutAndroid> 

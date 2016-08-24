@@ -7,9 +7,7 @@ const initialState = {
     isLoadingMore: false,
     indicatorShouldShow: false,
     totalTopicCount: 200,
-    topics: [
-        'John', 'Joel', 'James', 'Jimmy', 'Jackson', 'Jillian', 'Julie', 'Devin'
-    ],
+    topics: [],
 }
 
 function reducer(state = initialState, action){

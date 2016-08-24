@@ -2,7 +2,9 @@
 
 import React from 'react-native';
 
-const host = `http://120.55.124.66`
+const host = `http://120.55.124.66`;
+
+const webHost = `http://psnine.com`
 
 const topicsAPI = (page = 1,type = '') => `${host}/topic?page=${page}&node=${type}`;
 
@@ -23,7 +25,7 @@ const safeFetch = function(reqUrl) {
 
 const fetchTopics = (page = 1,type = '') => safeFetch(topicsAPI(page,type));
 
-const getTopicURL = (id) => host + '/topic/' + id; 
+const getTopicURL = id => webHost + '/topic/' + id; 
 
 module.exports = {
     fetchTopics,
