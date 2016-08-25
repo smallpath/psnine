@@ -3,6 +3,7 @@ import {
 	Navigator,
 	BackAndroid,
 	Dimensions,
+	ToastAndroid,
 } from 'react-native';
 import { Provider } from 'react-redux'
 
@@ -12,12 +13,21 @@ import App from './containers/App.js'
 const store = configureStore();
 
 let _navigator;
+let backPressClickTimeStamp = 0;
 BackAndroid.addEventListener('hardwareBackPress', function () {
 	if (_navigator && _navigator.getCurrentRoutes().length > 1) {
 		_navigator.pop();
 		return true;
+	}else{
+		var timestamp = (new Date()).valueOf();
+	    if(timestamp - backPressClickTimeStamp>2000){
+	      backPressClickTimeStamp = timestamp;
+		  ToastAndroid.show('再按一次退出',2000);
+	      return true;
+	    }else{
+	      return false;
+	    }
 	}
-	return false;
 });
 
 const SCREEN_WIDTH = Dimensions.get('window').width;

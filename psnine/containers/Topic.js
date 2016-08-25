@@ -21,14 +21,9 @@ import { connect } from 'react-redux';
 import reducer from '../reducers/rootReducer.js'
 import { bindActionCreators } from 'redux';
 
-import NavigatorDrawer from '../components/NavigatorDrawer';
-
-let DRAWER_REF = 'drawer';
-let DRAWER_WIDTH_LEFT = 100;
-
 let toolbarActions = [
-  {title: '搜索', show: 'always'},
-  {title: '全部', show: 'never'},
+  {title: '收藏', show: 'always'},
+  {title: '感谢', show: 'never'},
 ];
 let title = "TOPIC";
 let WEBVIEW_REF = `WEBVIEW_REF`;
@@ -38,22 +33,21 @@ class MyWeb extends Component {
     super(props);
     this.state = {
       isLogIn: false,
+      canGoBack: false,
     }
   }
 
-  _renderNavigationView(){
-    return (<NavigatorDrawer/>)
-  }
-
-
   _pressButton = ()=> {
-    this.refs[WEBVIEW_REF].goBack();
+    if(this.state.canGoBack)
+      this.refs[WEBVIEW_REF].goBack();
+    else
+      this.props.navigator.pop();
   }
 
-  callDrawer(){this.refs[DRAWER_REF].openDrawer()}
-
-  onNavigationStateChange = (...args) => {
-    //console.log(...args);
+  onNavigationStateChange = (navState) => {
+    this.setState({
+      canGoBack: navState.canGoBack,
+    });
   }
 
  onShouldStartLoadWithRequest = (event) => { 
@@ -65,32 +59,26 @@ class MyWeb extends Component {
     const { reducer } = this.props;
     //console.log('App.js/51 line',this.props);
     return ( 
-      <DrawerLayoutAndroid 
-            ref={DRAWER_REF}
-            drawerWidth={Dimensions.get('window').width - DRAWER_WIDTH_LEFT} 
-            drawerPosition={DrawerLayoutAndroid.positions.Left} 
-            renderNavigationView={this._renderNavigationView}> 
-            <View style={{flex:1}}>
-                <ToolbarAndroid
-                  navIcon={require('image!ic_menu_white')}
-                  title={this.props.rowData.title}
-                  style={styles.toolbar}
-                  actions={toolbarActions}
-                  onIconClicked={this._pressButton}
-                />
-                <WebView
-                    ref={WEBVIEW_REF}
-                    source={{uri: this.props.URL}} 
-                    style={{flex:3}}
-                    scalesPageToFit={true}
-                    domStorageEnabled={true}
-                    onNavigationStateChange={this.onNavigationStateChange}
-                    onShouldStartLoadWithRequest={this.onShouldStartLoadWithRequest}
-                    startInLoadingState={true}  
-                    injectedJavaScript={`$('.header').hide()`}
-                />
-            </View>
-      </DrawerLayoutAndroid> 
+          <View style={{flex:1}}>
+              <ToolbarAndroid
+                navIcon={require('image!ic_back_white')}
+                title={this.props.rowData.title}
+                style={styles.toolbar}
+                actions={toolbarActions}
+                onIconClicked={this._pressButton}
+              />
+              <WebView
+                  ref={WEBVIEW_REF}
+                  source={{uri: this.props.URL}} 
+                  style={{flex:3}}
+                  scalesPageToFit={true}
+                  domStorageEnabled={true}
+                  onNavigationStateChange={this.onNavigationStateChange}
+                  onShouldStartLoadWithRequest={this.onShouldStartLoadWithRequest}
+                  startInLoadingState={true}  
+                  injectedJavaScript={`$('.header').hide()`}
+              />
+          </View>
     );
   }
 }
