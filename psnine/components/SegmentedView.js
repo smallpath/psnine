@@ -155,7 +155,6 @@ var SegmentedView = React.createClass({
             }
         }
         var left = this.getTweeningValue(['barPosition',0]);
-        var right = this.getTweeningValue(['barPosition',1]);
         var barContainer = (
           <View style={styles.barContainer}>
               <View ref="bar" style={[styles.bar, {

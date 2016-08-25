@@ -22,13 +22,16 @@ import reducer from '../reducers/rootReducer.js'
 import { bindActionCreators } from 'redux';
 
 let toolbarActions = [
-  {title: '收藏', show: 'always'},
+  {title: '收藏', icon: require('image!ic_collect_white') ,show: 'always'},
+  {title: '刷新', icon: require('image!ic_refresh_white'), show: 'always'},
   {title: '感谢', show: 'never'},
+  {title: '分享', icon: require('image!ic_share_white'), show: 'never' },
 ];
 let title = "TOPIC";
 let WEBVIEW_REF = `WEBVIEW_REF`;
 
 class MyWeb extends Component {
+
   constructor(props){
     super(props);
     this.state = {
@@ -37,7 +40,20 @@ class MyWeb extends Component {
     }
   }
 
-  _pressButton = ()=> {
+  _onActionSelected = (index) => {
+    switch(index){
+      case 0 :
+        return;
+      case 1 :
+        return this.refs[WEBVIEW_REF].reload();
+      case 2 :
+        return;
+      case 3 :
+        return;
+    }
+  }
+
+  _pressButton = () => {
     if(this.state.canGoBack)
       this.refs[WEBVIEW_REF].goBack();
     else
@@ -45,9 +61,20 @@ class MyWeb extends Component {
   }
 
   onNavigationStateChange = (navState) => {
-    this.setState({
-      canGoBack: navState.canGoBack,
-    });
+    if(navState.url.indexOf(this.props.URL) !== -1 ){
+      this.setState({
+        canGoBack: navState.canGoBack,
+      });
+    }else{
+      // let replyFloorURL = ``;
+      // let replyMainURL = ``;
+      // let emotionURL = ``;
+      // console.log('Target URL:',navState);
+      this.setState({
+        canGoBack: navState.canGoBack,
+      });
+      this.refs[WEBVIEW_REF].stopLoading();
+    }//return false;
   }
 
  onShouldStartLoadWithRequest = (event) => { 
@@ -66,6 +93,7 @@ class MyWeb extends Component {
                 style={styles.toolbar}
                 actions={toolbarActions}
                 onIconClicked={this._pressButton}
+                onActionSelected={this._onActionSelected}
               />
               <WebView
                   ref={WEBVIEW_REF}

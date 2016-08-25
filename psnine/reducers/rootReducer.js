@@ -1,8 +1,12 @@
 import { combineReducers } from 'redux';
-import mainScreen from './mainScreen';
+import app from './App';
+import community from './Community';
+import gene from './Gene';
 
 const rootReducer = combineReducers({
-    mainScreen,
+    app,
+    community,
+    gene,
 });
 
 export default rootReducer;

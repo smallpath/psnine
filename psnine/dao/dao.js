@@ -2,14 +2,7 @@
 
 import React from 'react-native';
 
-const host = `http://120.55.124.66`;
-
-const webHost = `http://psnine.com`
-
-const topicsAPI = (page = 1,type = '') => `${host}/topic?page=${page}&node=${type}`;
-
 const safeFetch = function(reqUrl) {
-  // console.log('reqUrl', reqUrl);
   return new Promise((resolve, reject) => {
     fetch(reqUrl)
       .then((response) => response.json())
@@ -23,9 +16,22 @@ const safeFetch = function(reqUrl) {
   });
 };
 
-const fetchTopics = (page = 1,type = '') => safeFetch(topicsAPI(page,type));
+const host = `http://120.55.124.66`;
+
+const webHost = `http://psnine.com`;
+
+const getTopicsAPI = (page, type) => `${host}/topic?page=${page}&node=${type}`;
+
+const getGenesAPI = (page, type) => `${host}/gene?page=${page}&type=${type}`;
+
+const fetchTopics = (page = 1,type = '') => safeFetch(getTopicsAPI(page,type));
+
+const fetchGenes = (page = 1, type = 'all') => safeFetch(getGenesAPI(page,type));
 
 const getTopicURL = id => webHost + '/topic/' + id; 
+
+const getGeneURL = id => webHost + '/gene/' + id;
+
 
 module.exports = {
     fetchTopics,

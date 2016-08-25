@@ -54,9 +54,9 @@ class NavigatorDrawer extends Component {
           <View style={styles.trophyRow}>
             <TouchableElement>
               <View style={styles.menuContainer}>
-                <Image
+              {/*<Image
                   source={require('image!ic_favorites_white')}
-                  style={{width: 30, height: 30}} />
+                  style={{width: 30, height: 30}} />*/}
                 <Text style={styles.menuText}>
                   白
                 </Text>
@@ -64,9 +64,9 @@ class NavigatorDrawer extends Component {
             </TouchableElement>
             <TouchableElement>
               <View style={styles.menuContainer}>
-              <Image
+              {/*<Image
                 source={require('image!ic_download_white')}
-                style={{width: 30, height: 30}} />
+                style={{width: 30, height: 30}} /> */}
                 <Text style={styles.menuText}>
                   金
                 </Text>
@@ -74,9 +74,9 @@ class NavigatorDrawer extends Component {
             </TouchableElement>
             <TouchableElement>
               <View style={styles.menuContainer}>
-              <Image
+              {/*<Image
                 source={require('image!ic_download_white')}
-                style={{width: 30, height: 30}} />
+                style={{width: 30, height: 30}} />*/}
                 <Text style={styles.menuText}>
                   银
                 </Text>
@@ -84,9 +84,9 @@ class NavigatorDrawer extends Component {
             </TouchableElement>
             <TouchableElement>
               <View style={styles.menuContainer}>
-              <Image
+              {/*<Image
                 source={require('image!ic_download_white')}
-                style={{width: 30, height: 30}} />
+                style={{width: 30, height: 30}} />*/}
                 <Text style={styles.menuText}>
                   铜
                 </Text>

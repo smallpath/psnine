@@ -21,7 +21,7 @@ import reducer from '../reducers/rootReducer.js'
 import { bindActionCreators } from 'redux';
 
 import NavigatorDrawer from '../components/NavigatorDrawer';
-import MainScreen from './MainScreen';
+import Toolbar from './Toolbar';
 
 
 let DRAWER_REF = 'drawer';
@@ -39,7 +39,9 @@ class Psnine extends Component {
     return (<NavigatorDrawer/>)
   }
 
-  callDrawer(){this.refs[DRAWER_REF].openDrawer()}
+  callDrawer(){
+    this.refs[DRAWER_REF].openDrawer()
+  }
 
   render() {
     const { reducer } = this.props;
@@ -50,7 +52,7 @@ class Psnine extends Component {
             drawerWidth={Dimensions.get('window').width - DRAWER_WIDTH_LEFT} 
             drawerPosition={DrawerLayoutAndroid.positions.Left} 
             renderNavigationView={this._renderNavigationView}> 
-            <MainScreen
+            <Toolbar
               {...this.props} 
               _callDrawer = {() => this.callDrawer.bind(this)}
             />

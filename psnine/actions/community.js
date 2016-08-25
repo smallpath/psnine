@@ -2,29 +2,27 @@ import React, {NativeModules} from 'react-native';
 import * as ActionTypes from '../constants/actionTypes';
 
 import { fetchTopics } from '../dao/dao';
+import { changeRefreshing, changeLoadingMore } from './app';
 
 export function getTopicList(page = 1, type = '') {
     return dispatch => {
         if (page === 1) {
-            dispatch(changeTopicListRefreshing(true));
+            dispatch(changeRefreshing(true));
         }else{
-         	dispatch(changeTopicListLoadingMore(true)); 
+         	dispatch(changeLoadingMore(true)); 
         };
 
         return fetchTopics(page, type)
             .then(response => {
                 dispatch(gotTopicList(response,page));
-                // console.log(`---> 成功加载${response.data.length}条`);
                 if (page === 1) {
-                    dispatch(changeTopicListRefreshing(false));
-                    // dispatch(changePageNumberToDefault());
+                    dispatch(changeRefreshing(false));
                 } else {
-                    dispatch(changeTopicListLoadingMore(false));
-                    // dispatch(changePageNumberIncreasing());
+                    dispatch(changeLoadingMore(false));
                 }
             }).catch(err => {
-                dispatch(changeTopicListRefreshing(false));
-                dispatch(changeTopicListLoadingMore(false));
+                dispatch(changeRefreshing(false));
+                dispatch(changeLoadingMore(false));
                 console.log(err);
             });
     }
@@ -49,19 +47,5 @@ export function changePageNumberToDefault(argument){
     return {
         type: ActionTypes.REFRESHING_TOPICS,
         value: argument,
-    }
-}
-
-export function changeTopicListRefreshing(argument) {
-    return {
-        type: ActionTypes.IS_REFRESHING_TOPICS,
-        value: argument,
-    }
-}
-
-export function changeTopicListLoadingMore(argument) {
-    return {
-        type: ActionTypes.LOAD_MORE_TOPICS,
-        value: argument
     }
 }
