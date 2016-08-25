@@ -1,10 +1,10 @@
 import React, {NativeModules} from 'react-native';
 import * as ActionTypes from '../constants/actionTypes';
 
-import { fetchTopics } from '../dao/dao';
+import { fetchGenes } from '../dao/dao';
 import { changeRefreshing, changeLoadingMore } from './app';
 
-export function getTopicList(page = 1, type = '') {
+export function getGeneList(page = 1, type = '') {
     return dispatch => {
         if (page === 1) {
             dispatch(changeRefreshing(true));
@@ -12,9 +12,9 @@ export function getTopicList(page = 1, type = '') {
          	dispatch(changeLoadingMore(true)); 
         };
 
-        return fetchTopics(page, type)
+        return fetchGenes(page, type)
             .then(response => {
-                dispatch(gotTopicList(response,page,type));
+                dispatch(gotGeneList(response,page,type));
                 if (page === 1) {
                     dispatch(changeRefreshing(false));
                 } else {
@@ -28,9 +28,9 @@ export function getTopicList(page = 1, type = '') {
     }
 }
 
-function gotTopicList(argument, page, type) {
+function gotGeneList(argument, page, type) {
     return {
-        type: ActionTypes.GET_TOPICS_SUCCESS,
+        type: ActionTypes.GET_GENES_SUCCESS,
         value: argument,
         page: page,
     };

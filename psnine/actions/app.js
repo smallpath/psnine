@@ -14,3 +14,10 @@ export function changeLoadingMore(argument) {
         value: argument
     }
 }
+
+export function changeSegmentIndex(argument) {
+    return {
+        type: ActionTypes.CHANGE_SEGMENTED_INDEX,
+        value: argument
+    }
+}

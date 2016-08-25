@@ -18,14 +18,17 @@ import {
 
 import NavigatorDrawer from '../components/NavigatorDrawer';
 import SegmentedView from '../components/SegmentedView';
+
 import Community from './Community';
+import Gene from './Gene';
+
+import { changeSegmentIndex } from '../actions/app';
 
 
-let DRAWER_REF = 'drawer';
-let DRAWER_WIDTH_LEFT = 100;
+let title = "PSNINE";
 
 let toolbarActions = [
-  { title: '搜索', show: 'always' },
+  { title: '搜索', show: 'always'},
   { title: '全部', show: 'never' },
   { title: '新闻', show: 'never' },
   { title: '攻略', show: 'never' },
@@ -38,10 +41,13 @@ let toolbarActions = [
   { title: '活动', show: 'never' },
 ];
 
-let title = "PSNINE";
+let titlesArr = ["社区", "游戏", "Store", "约战", "机因"];
+
 const ds = new ListView.DataSource({
   rowHasChanged: (row1, row2) => row1 !== row2,
 });
+
+
 
 class Toolbar extends Component {
   constructor(props) {
@@ -53,39 +59,41 @@ class Toolbar extends Component {
 
   }
 
-  onSegmentedViewPress = segmentedIndex =>{
-    this.props.navigator.requestAnimationFrame(()=>{
-      this.setState({ segmentedIndex }); 
-    });
-  }
-
-  _renderSegmentedView(){
+  _renderSegmentedView = () =>{
     return (
       <SegmentedView
-        titles={["社区", "游戏", "Store", "约战", "机因"]}
-        index={this.state.segmentedIndex}
+        {...this.props}
+        titles={titlesArr}
+        index={this.props.app.segmentedIndex}
         style={styles.segmentedView}
         stretch
         duration={200}
+        restWidth={10}
         barPosition='bottom'
         underlayColor='#000'
         barColor='#fff'
-        onPress={this.onSegmentedViewPress}
+        titleWidth={Dimensions.get('window').width/titlesArr.length}
         />
     )
   }
 
   componentWillReceiveProps(nextProps) {
-    // Object.keys(nextProps.mainScreen).forEach((item,index)=>{
-    //   if(item!='topics') 
-    //     console.log('153-->',item,nextProps.mainScreen[item])
-
-    // });
-    this.props.mainScreen = nextProps.mainScreen;
+    this.props.app = nextProps.app;
   }
 
   componentDidMount = () => {
-    // this._onRefresh();
+    const { app: appReducer,dispatch } = this.props;
+    dispatch(changeSegmentIndex(appReducer.segmentedIndex));
+  }
+
+  _chooseWinner = () => {
+    const { app: appReducer } = this.props;
+    let index = appReducer.segmentedIndex;
+    if (index === 0){
+      return (<Community {...this.props} />);
+    }else if(index === 4){
+      return (<Gene {...this.props} />)
+    }
   }
 
   render() {
@@ -99,8 +107,8 @@ class Toolbar extends Component {
           actions={toolbarActions}
           onIconClicked={this.props._callDrawer() }
           />
-        {this._renderSegmentedView.bind(this)() }
-        <Community {...this.props} />
+        {this._renderSegmentedView() }
+        {this._chooseWinner()}
       </View>
     )
   }

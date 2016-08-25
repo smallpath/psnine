@@ -47,6 +47,7 @@ class Community extends Component {
         component: Topic,
         params: {
           URL,
+          title: rowData.title,
           rowData
         }
       });
@@ -77,7 +78,7 @@ class Community extends Component {
     return (
       <View rowID={ rowID }>
         <TouchableElement  onPress={() => this._onRowPressed(rowData) }>
-          <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', padding: 10 }}>
+          <View style={{ flex: 1, flexDirection: 'row', alignItems: 'flex-start', padding: 10 }}>
             <Image
               source={{ uri: uri }}
               style={styles.avatar}
@@ -85,16 +86,16 @@ class Community extends Component {
 
             <View style={{ marginLeft: 10, flex: 1, flexDirection: 'column', margin: 0 }}>
               <Text
-                ellipsizeMode={'head'}
+                ellipsizeMode={'tail'}
                 numberOfLines={3}
                 style={{ color: 'black', }}>
                 {rowData.title}
               </Text>
 
               <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'flex-end', paddingTop: 5, }}>
-                <Text style={{ flex: 1, flexDirection: 'row' }}>{rowData.psnid}</Text>
-                <Text style={{ flex: 1, flexDirection: 'row' }}>{fromNow}</Text>
-                <Text style={{ flex: 1, flexDirection: 'row' }}>{rowData.views}浏览</Text>
+                <Text style={{ flex: 1.5 }}>{rowData.psnid}</Text>
+                <Text style={{ flex: 1 }}>{fromNow}</Text>
+                <Text style={{ flex: 1 }}>{rowData.views}浏览</Text>
               </View>
 
             </View>
@@ -106,17 +107,14 @@ class Community extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    // Object.keys(nextProps.community).forEach((item,index)=>{
-    //   if(item!='topics') 
-    //     console.log('153-->',item,nextProps.community[item])
-
-    // });
     this.props.community = nextProps.community;
     this.props.app = nextProps.app;
   }
 
   componentDidMount = () => {
-    this._onRefresh();
+    const { community: communityReducer } = this.props;
+    if (communityReducer.topicPage == 0)
+      this._onRefresh();
   }
 
 
@@ -149,9 +147,6 @@ class Community extends Component {
 
   render(){
     const { community: communityReducer, app: appReducer } = this.props;
-    // Object.keys(nextProps.community).forEach((item,index)=>{
-    //     console.log('153-->',item,nextProps.community[item])
-    // });
     return (
         <ListView
           refreshControl={
@@ -175,10 +170,6 @@ class Community extends Component {
 }
 
 const styles = StyleSheet.create({
-  selectedTitle: {
-    //backgroundColor: '#00ffff'
-    //fontSize: 20
-  },
   avatar: {
     width: 50,
     height: 50,

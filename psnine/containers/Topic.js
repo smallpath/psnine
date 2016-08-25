@@ -83,13 +83,11 @@ class MyWeb extends Component {
   }
 
   render() {
-    const { reducer } = this.props;
-    //console.log('App.js/51 line',this.props);
     return ( 
           <View style={{flex:1}}>
               <ToolbarAndroid
                 navIcon={require('image!ic_back_white')}
-                title={this.props.rowData.title}
+                title={this.props.title}
                 style={styles.toolbar}
                 actions={toolbarActions}
                 onIconClicked={this._pressButton}

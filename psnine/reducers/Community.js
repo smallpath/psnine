@@ -21,18 +21,6 @@ function reducer(state = initialState, action){
                 });
             }
             return newState;
-        case ActionTypes.REFRESHING_TOPICS:
-            newState = Object.assign({},state,{
-                topicPage: 1,
-                topics: state.topics.map(topic=>topic)
-            });
-            return state;
-        case ActionTypes.INCREASE_TOPIC_PAGE_NUMBER:
-            newState = Object.assign({},state,{
-                topicPage: state.topicPage + 1,
-                topics: state.topics.map(topic=>topic)
-            });
-            return state;
         default:
             return state;
     }

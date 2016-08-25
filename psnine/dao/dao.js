@@ -3,6 +3,7 @@
 import React from 'react-native';
 
 const safeFetch = function(reqUrl) {
+  console.log('req:', reqUrl);
   return new Promise((resolve, reject) => {
     fetch(reqUrl)
       .then((response) => response.json())
@@ -36,4 +37,6 @@ const getGeneURL = id => webHost + '/gene/' + id;
 module.exports = {
     fetchTopics,
     getTopicURL,
+    fetchGenes,
+    getGeneURL,
 }

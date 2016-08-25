@@ -12,21 +12,15 @@ import {
   InteractionManager,
 } from 'react-native';
 
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
 import {
-  getTopicList,
-  changeTopicListRefreshing,
-  changeTopicListLoadingMore,
-  changePageNumberToDefault,
-  changePageNumberIncreasing,
-} from '../actions/mainScreen.js';
+  getGeneList,
+} from '../actions/gene.js';
 
 import NavigatorDrawer from '../components/NavigatorDrawer';
 import SegmentedView from '../components/SegmentedView';
 import Topic from './Topic';
 
-import { getTopicURL } from '../dao/dao';
+import { getGeneURL } from '../dao/dao';
 import moment from '../utils/moment';
 
 const ds = new ListView.DataSource({
@@ -34,9 +28,9 @@ const ds = new ListView.DataSource({
 });
 
 class Gene extends Component {
-    constructor(props){
-        super(props);
-    }
+  constructor(props) {
+    super(props);
+  }
 
   _renderSeparator(sectionID: number, rowID: number, adjacentRowHighlighted: bool) {
     return (
@@ -49,12 +43,13 @@ class Gene extends Component {
 
   _onRowPressed = (rowData) => {
     const { navigator } = this.props;
-    const URL = getTopicURL(rowData.id);
+    const URL = getGeneURL(rowData.id);
     if (navigator) {
       navigator.push({
         component: Topic,
         params: {
           URL,
+          title: rowData.content,
           rowData
         }
       });
@@ -82,10 +77,25 @@ class Gene extends Component {
 
     let TouchableElement = TouchableNativeFeedback;
 
+    let imageArr = [];
+    let type = rowData.type;
+
+    if(rowData.photo != '' && type == 'photo'){
+      let arr = rowData.photo.split(',');
+      imageArr = arr.map(value=>'http://ww4.sinaimg.cn/thumb150/'+value+'.jpg');
+    }else if(rowData.plus.img != '' && type == 'video'){
+      imageArr = [rowData.plus.img];
+    }else if(rowData.plus.cover != '' && type == 'music'){
+      imageArr = [rowData.plus.cover];
+    }
+
+    let imageItems = [];
+    imageArr.forEach((value,index)=>imageItems.push(<Image key={rowData.id+''+index} source={{ uri: value }} style={styles.geneImage}/>));
+
     return (
       <View rowID={ rowID }>
         <TouchableElement  onPress={() => this._onRowPressed(rowData) }>
-          <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', padding: 10 }}>
+          <View style={{ flex: 1, flexDirection: 'row', alignItems: 'flex-start', padding: 10 }}>
             <Image
               source={{ uri: uri }}
               style={styles.avatar}
@@ -93,16 +103,18 @@ class Gene extends Component {
 
             <View style={{ marginLeft: 10, flex: 1, flexDirection: 'column', margin: 0 }}>
               <Text
-                ellipsizeMode={'head'}
+                ellipsizeMode={'tail'}
                 numberOfLines={3}
                 style={{ color: 'black', }}>
-                {rowData.title}
+                {rowData.content}
               </Text>
-
-              <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'flex-end', paddingTop: 5, }}>
-                <Text style={{ flex: 1, flexDirection: 'row' }}>{rowData.psnid}</Text>
-                <Text style={{ flex: 1, flexDirection: 'row' }}>{fromNow}</Text>
-                <Text style={{ flex: 1, flexDirection: 'row' }}>{rowData.views}浏览</Text>
+              <View style={{flex:1, flexDirection: 'row'}}>
+                {imageItems}
+              </View>
+              <View style={{ flex: 1, flexDirection: 'row',  alignItems: 'flex-end', paddingTop: 5, }}>
+                <Text style={{ flex: 1.5 }}>{rowData.psnid}</Text>
+                <Text style={{ flex: 1 }}>{fromNow}</Text>
+                <Text style={{ flex: 1 }}>{rowData.views}浏览</Text>
               </View>
 
             </View>
@@ -114,38 +126,36 @@ class Gene extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    // Object.keys(nextProps.mainScreen).forEach((item,index)=>{
-    //   if(item!='topics') 
-    //     console.log('153-->',item,nextProps.mainScreen[item])
-
-    // });
-    this.props.mainScreen = nextProps.mainScreen;
+    this.props.app = nextProps.app;
+    this.props.gene = nextProps.gene;
   }
 
   componentDidMount = () => {
-    this._onRefresh();
+    const { gene: geneReducer } = this.props;
+    if (geneReducer.genePage == 0)
+      this._onRefresh();
   }
 
 
   _onRefresh = () => {
-    const { mainScreen: reducer, dispatch } = this.props;
+    const { app: appReducer, dispatch } = this.props;
 
-    if (reducer.isLoadingMore || reducer.isRefreshing)
+    if (appReducer.isLoadingMore || appReducer.isRefreshing)
       return;
 
-    dispatch(getTopicList(1));
+    dispatch(getGeneList(1));
   }
 
   _loadMoreData = () => {
-    const { mainScreen: reducer, dispatch } = this.props;
-    let page = reducer.topicPage + 1;
-    dispatch(getTopicList(page));
+    const { gene: geneReducer, dispatch } = this.props;
+    let page = geneReducer.genePage + 1;
+    dispatch(getGeneList(page));
   }
 
   _onEndReached = () => {
-    const { mainScreen: reducer } = this.props;
+    const { app: appReducer } = this.props;
 
-    if (reducer.isLoadingMore || reducer.isRefreshing)
+    if (appReducer.isLoadingMore || appReducer.isRefreshing)
       return;
 
     InteractionManager.runAfterInteractions(() => {
@@ -154,38 +164,39 @@ class Gene extends Component {
 
   }
 
-  render(){
-    const { mainScreen: reducer } = this.props;
+  render() {
+    const { gene: geneReducer, app: appReducer } = this.props;
     return (
-        <ListView
-          refreshControl={
-            <RefreshControl
-              refreshing={reducer.isRefreshing || reducer.isLoadingMore }
-              onRefresh={this._onRefresh}
-              />
-          }
-          pageSize = {32}
-          removeClippedSubviews={false}
-          enableEmptySections={true}
-          onEndReached={this._onEndReached}
-          onEndReachedThreshold={10}
-          dataSource={ ds.cloneWithRows(reducer.topics) }
-          renderRow={this._renderRow}
-          renderSeparator={this._renderSeparator}
-          />
+      <ListView
+        refreshControl={
+          <RefreshControl
+            refreshing={appReducer.isRefreshing || appReducer.isLoadingMore }
+            onRefresh={this._onRefresh}
+            />
+        }
+        pageSize = {32}
+        removeClippedSubviews={false}
+        enableEmptySections={true}
+        onEndReached={this._onEndReached}
+        onEndReachedThreshold={10}
+        dataSource={ ds.cloneWithRows(geneReducer.genes) }
+        renderRow={this._renderRow}
+        renderSeparator={this._renderSeparator}
+        />
     )
   }
 
 }
 
 const styles = StyleSheet.create({
-  selectedTitle: {
-    //backgroundColor: '#00ffff'
-    //fontSize: 20
-  },
   avatar: {
     width: 50,
     height: 50,
+  },
+  geneImage: {
+    margin: 3,
+    width: 120,
+    height: 120,
   }
 });
 
