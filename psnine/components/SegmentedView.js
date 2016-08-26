@@ -9,12 +9,16 @@ import {
     TouchableWithoutFeedback,
     Dimensions,
     InteractionManager,
+    ViewPagerAndroid,
 } from 'react-native';
 
 var screen = Dimensions.get('window');
 var tweenState = require('react-tween-state');
 
 import { changeSegmentIndex } from '../actions/app';
+
+import Community from '../containers/Community';
+import Gene from '../containers/Gene';
 
 var styles = StyleSheet.create({
     container: {
@@ -45,6 +49,7 @@ var styles = StyleSheet.create({
     }
 });
 
+var isScrollToSegmented = false;
 
 var SegmentedView = React.createClass({
 
@@ -88,6 +93,7 @@ var SegmentedView = React.createClass({
     getInitialState() {
         return {
             barLeft: 0, 
+            segmentedIndex: 0,
         };
     },
 
@@ -100,17 +106,22 @@ var SegmentedView = React.createClass({
         if(appReducer.segmentedIndex == nextProps.app.segmentedIndex)
             return;
 
-        this.props.app = nextProps;
+        this.props.app = nextProps.app;
+
+        if(isScrollToSegmented != true){
+            this.viewPage.setPage(nextProps.app.segmentedIndex);
+        }
+
         navigator.requestAnimationFrame(()=>{
             this.moveTo(nextProps.app.segmentedIndex);
         });
+        isScrollToSegmented = false;
     },
 
     measureHandler(ox, oy, width,height,pageX,pageY) {
 
         this.tweenState('barLeft', {
             easing: tweenState.easingTypes.easeInOutQuad,
-            stackBehavior: tweenState.stackBehavior.DESTRUCTIVE,
             duration: this.props.duration,
             endValue: pageX
         });
@@ -137,14 +148,22 @@ var SegmentedView = React.createClass({
                     delayPressOut={0}
                     underlayColor={this.props.underlayColor} 
                     onPress={() =>{
+                      if(this.props.app.segmentedIndex == i)
+                        return;
+
                       const { dispatch, navigator } = this.props;
                       dispatch(changeSegmentIndex(i));
-                      //this.props.onPress(i,this);
                     }}>
                     {this.props.renderTitle ? this.props.renderTitle(title, i) : this._renderTitle(title, i)}
                 </TouchableNativeFeedback>
             </View>
         );
+    },
+
+    _onPageSelected(event){
+        const { dispatch, navigator } = this.props;
+        isScrollToSegmented = true;
+        dispatch(changeSegmentIndex(event.nativeEvent.position));
     },
 
     render() {
@@ -161,6 +180,7 @@ var SegmentedView = React.createClass({
                 items.push(<View key={`s${i}`} style={styles.spacer} />);
             }
         }
+
         var left = this.getTweeningValue('barLeft');
         var restWidth = this.props.restWidth;
         var barContainer = (
@@ -174,12 +194,35 @@ var SegmentedView = React.createClass({
           </View>
         );
         return (
-            <View {...this.props} style={[styles.container, this.props.style]}>
-                {this.props.barPosition == 'top' && barContainer}
-                <View style={styles.titleContainer}>
-                    {items}
+            <View style={{flex:1}}>
+                <View {...this.props} style={[styles.container, this.props.style]}>
+                    {this.props.barPosition == 'top' && barContainer}
+                    <View style={styles.titleContainer}>
+                        {items}
+                    </View>
+                    {this.props.barPosition == 'bottom' && barContainer}  
                 </View>
-                {this.props.barPosition == 'bottom' && barContainer}  
+                <ViewPagerAndroid style={{
+                    flex: 10,
+                    flexDirection: 'row',
+                    backgroundColor: '#F5FCFF',
+                    alignItems: 'center',
+                    paddingHorizontal: 2,
+                    paddingVertical: 8,}
+                }
+                ref={viewPager => {this.viewPage = viewPager;}}
+                onPageSelected={this._onPageSelected}
+                >
+                    <View key={`s00`}>
+                        <Community {...this.props}/>
+                    </View>
+                    <View key={`s11`}><Text>{titles[1]}</Text></View>
+                    <View key={`s22`}><Text>{titles[2]}</Text></View>
+                    <View key={`s33`}><Text>{titles[3]}</Text></View>
+                    <View key={`s44`}>
+                        <Gene {...this.props}/>
+                    </View>
+                </ViewPagerAndroid>
             </View>
         );
     }

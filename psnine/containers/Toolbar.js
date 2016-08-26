@@ -86,16 +86,6 @@ class Toolbar extends Component {
     dispatch(changeSegmentIndex(appReducer.segmentedIndex));
   }
 
-  _chooseWinner = () => {
-    const { app: appReducer } = this.props;
-    let index = appReducer.segmentedIndex;
-    if (index === 0){
-      return (<Community {...this.props} />);
-    }else if(index === 4){
-      return (<Gene {...this.props} />)
-    }
-  }
-
   render() {
     const { mainScreen: reducer } = this.props;
     return (
@@ -108,13 +98,11 @@ class Toolbar extends Component {
           onIconClicked={this.props._callDrawer() }
           />
         {this._renderSegmentedView() }
-        {this._chooseWinner()}
       </View>
     )
   }
 
 }
-
 
 const styles = StyleSheet.create({
   container: {

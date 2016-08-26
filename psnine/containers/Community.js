@@ -117,7 +117,6 @@ class Community extends Component {
       this._onRefresh();
   }
 
-
   _onRefresh = () => {
     const { app: appReducer, dispatch } = this.props;
 

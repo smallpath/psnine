@@ -4,15 +4,14 @@ import rootReducer from '../reducers/rootReducer';
 const createStoreWithMiddleware = applyMiddleware(thunk)(createStore);
 
 export default function configureStore(initialState){
-    console.log(rootReducer);
     const store = createStoreWithMiddleware(rootReducer,initialState);
 
-    // if(module.hot){
-    //     module.hot.accept('../reducers/rootReducer',()=>{
-    //         const nextReducer = require('../reducers/rootReducer');
-    //         store.replaceReducer(nextReducer);
-    //     })
-    // }
+    if(module.hot){
+        module.hot.accept('../reducers/rootReducer',()=>{
+            const nextReducer = require('../reducers/rootReducer');
+            store.replaceReducer(nextReducer);
+        })
+    }
 
     return store;
 }
