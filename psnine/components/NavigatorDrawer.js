@@ -11,6 +11,13 @@ import {
   TouchableHighlight,
 } from 'react-native';
 
+
+var imageArr = [
+  require('image!home'),
+  require('image!ic_message_blue'),
+  require('image!ic_setting_blue'),
+];
+
 class NavigatorDrawer extends Component {
   constructor(props){
       super(props);
@@ -147,7 +154,7 @@ class NavigatorDrawer extends Component {
     if (Platform.OS === 'android') {
       TouchableElement = TouchableNativeFeedback;
     }
-    var icon = true ? require('image!ic_menu_arrow') : require('image!ic_menu_follow');
+    var icon = imageArr[rowID];
     return (
       <View>
         <TouchableElement
@@ -156,10 +163,10 @@ class NavigatorDrawer extends Component {
           // onHideUnderlay={highlightRowFunc}
           >
           <View style={styles.themeItem}>
+            <Image source={icon} style={styles.themeIndicate}/>
             <Text style={styles.themeName}>
               {rowData}
             </Text>
-            <Image source={icon} style={styles.themeIndicate}/>
           </View>
         </TouchableElement>
       </View>
@@ -238,9 +245,9 @@ const styles = StyleSheet.create({
     marginLeft: 16,
   },
   themeIndicate: {
-    marginRight: 16,
-    width: 16,
-    height: 16,
+    marginLeft: 16,
+    width: 30,
+    height: 30,
   },
   separator: {
     height: 1,

@@ -25,7 +25,7 @@ let toolbarActions = [
   {title: '收藏', icon: require('image!ic_collect_white') ,show: 'always'},
   {title: '刷新', icon: require('image!ic_refresh_white'), show: 'always'},
   {title: '感谢', show: 'never'},
-  {title: '分享', icon: require('image!ic_share_white'), show: 'never' },
+  {title: '分享', show: 'never' },
 ];
 let title = "TOPIC";
 let WEBVIEW_REF = `WEBVIEW_REF`;

@@ -28,7 +28,7 @@ import { changeSegmentIndex } from '../actions/app';
 let title = "PSNINE";
 
 let toolbarActions = [
-  { title: '搜索', show: 'always'},
+  { title: '搜索', icon: require('image!ic_search_white') , show: 'always'},
   { title: '全部', show: 'never' },
   { title: '新闻', show: 'never' },
   { title: '攻略', show: 'never' },

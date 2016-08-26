@@ -10,15 +10,17 @@ import {
     Dimensions,
     InteractionManager,
     ViewPagerAndroid,
+    Animated,
+    PanResponder,
 } from 'react-native';
 
 var screen = Dimensions.get('window');
-var tweenState = require('react-tween-state');
 
 import { changeSegmentIndex } from '../actions/app';
 
 import Community from '../containers/Community';
 import Gene from '../containers/Gene';
+
 
 var styles = StyleSheet.create({
     container: {
@@ -49,11 +51,9 @@ var styles = StyleSheet.create({
     }
 });
 
-var isScrollToSegmented = false;
+var isScrollByClickSegmentedButton = false;
 
 var SegmentedView = React.createClass({
-
-    mixins: [tweenState.Mixin],
 
     propTypes: {
         duration: PropTypes.number,
@@ -91,10 +91,55 @@ var SegmentedView = React.createClass({
     },
 
     getInitialState() {
+
+        let { app: appReducer, titleWidth, restWidth } = this.props;
         return {
-            barLeft: 0, 
-            segmentedIndex: 0,
+            fadeAnim: new Animated.Value(titleWidth*appReducer.segmentedIndex + restWidth),
         };
+    },
+
+    componentWillMount() {
+        let { app: appReducer, titleWidth: width, restWidth } = this.props;
+        let len = this.props.titles.length;
+        this.panResponder = PanResponder.create({  
+            onPanResponderTerminationRequest: () => false,
+            onStartShouldSetPanResponderCapture: () => true,
+            onMoveShouldSetResponderCapture: () => true,
+            onMoveShouldSetPanResponderCapture: () => true,
+            onPanResponderGrant:(e, gestureState) => {
+                this.state.fadeAnim.setOffset(gestureState.x0 - width/2);
+                this.state.fadeAnim.setValue(this.state.fadeAnim._startingValue);
+            },
+            onPanResponderMove: Animated.event([null,{ 
+                dx : this.state.fadeAnim,
+            }]),
+            onPanResponderRelease: (e, gesture) => {
+                let { app: appReducer, titleWidth: width, restWidth } = this.props;
+                let targetX = e.nativeEvent.pageX;
+                let segmentedIndex = parseInt(targetX/width);
+
+                let finalTargetX = segmentedIndex*width+restWidth;
+
+                this.state.fadeAnim.setOffset(targetX - width/2 - restWidth );
+                this.state.fadeAnim.setValue(this.state.fadeAnim._startingValue);
+                this.state.fadeAnim.flattenOffset();
+
+                // Disabled: why this.viewPager.setPage can trigger Animated.spring?
+                Animated.spring( 
+                    this.state.fadeAnim, 
+                    {toValue: finalTargetX,duration: this.props.duration}
+                ).start();
+
+                if(this.props.app.segmentedIndex == segmentedIndex){
+                    return;
+                }
+
+                isScrollByClickSegmentedButton = true;
+
+                const { dispatch, navigator } = this.props;
+                dispatch(changeSegmentIndex(segmentedIndex));
+            } 
+        });
     },
 
     componentDidMount() {
@@ -102,34 +147,23 @@ var SegmentedView = React.createClass({
     },
 
     componentWillReceiveProps(nextProps) {
-        const { app: appReducer, dispatch, navigator } = this.props;
+        const { app: appReducer, dispatch, titleWidth, navigator,restWidth } = this.props;
         if(appReducer.segmentedIndex == nextProps.app.segmentedIndex)
             return;
 
         this.props.app = nextProps.app;
 
-        if(isScrollToSegmented != true){
-            this.viewPage.setPage(nextProps.app.segmentedIndex);
-        }
+        this.viewPage.setPage(nextProps.app.segmentedIndex);
 
-        navigator.requestAnimationFrame(()=>{
-            this.moveTo(nextProps.app.segmentedIndex);
-        });
-        isScrollToSegmented = false;
-    },
-
-    measureHandler(ox, oy, width,height,pageX,pageY) {
-
-        this.tweenState('barLeft', {
-            easing: tweenState.easingTypes.easeInOutQuad,
-            duration: this.props.duration,
-            endValue: pageX
-        });
-
+        // this.state.fadeAnim.flattenOffset();
+        // Animated.timing( 
+        //     this.state.fadeAnim, { 
+        //         toValue: titleWidth*nextProps.app.segmentedIndex + restWidth,
+        //         duration: this.props.duration, 
     },
 
     moveTo(index) {
-        this.refs[index].measure(this.measureHandler);
+        //this.refs[index].measure(this.measureHandler);
     },
 
     _renderTitle(title, i) {
@@ -143,27 +177,69 @@ var SegmentedView = React.createClass({
     renderTitle(title, i) {
         return (
             <View collapsable={false} key={i} ref={i} style={{ flex: this.props.stretch ? 1 : 0 }}>
-                <TouchableNativeFeedback 
+                <TouchableWithoutFeedback 
                     delayPressIn={0}
                     delayPressOut={0}
                     underlayColor={this.props.underlayColor} 
-                    onPress={() =>{
-                      if(this.props.app.segmentedIndex == i)
-                        return;
-
-                      const { dispatch, navigator } = this.props;
-                      dispatch(changeSegmentIndex(i));
-                    }}>
+                    >
                     {this.props.renderTitle ? this.props.renderTitle(title, i) : this._renderTitle(title, i)}
-                </TouchableNativeFeedback>
+                </TouchableWithoutFeedback>
             </View>
         );
     },
 
     _onPageSelected(event){
         const { dispatch, navigator } = this.props;
-        isScrollToSegmented = true;
+        isScrollByClickSegmentedButton = false;
         dispatch(changeSegmentIndex(event.nativeEvent.position));
+    },
+
+    onPageScroll({ nativeEvent }){
+        const { app: appReducer, dispatch, titleWidth, navigator,restWidth } = this.props;
+        
+        if(isScrollByClickSegmentedButton == true){
+            return;
+        }
+
+        let left = titleWidth * (nativeEvent.position + nativeEvent.offset) + restWidth;
+
+        this.state.fadeAnim.setOffset(left);
+        this.state.fadeAnim.setValue(0);
+
+        // let onResponderMove = this.fadeInView.panResponder.panHandlers.onResponderMove;
+        // console.log(typeof onResponderMove);
+        // console.log(onResponderMove);
+        // onResponderMove();
+        //this.fadeInView.props.onResponderMove(event);
+        //Object.keys().forEach(value=>console.log(value));
+        //console.log(event.nativeEvent);
+        // offset: 0-1 , position: pageNumber,
+    },
+
+    onPageScrollStateChanged(scrollingState){
+        if(scrollingState=='dragging'){
+            isScrollByClickSegmentedButton = false;
+        }else if(scrollingState=='settling'){
+            isScrollByClickSegmentedButton = false;
+            // const { app: appReducer, dispatch, titleWidth, navigator,restWidth } = this.props;
+
+
+            // let fadeAnim = this.state.fadeAnim;
+            // fadeAnim.flattenOffset();
+            // let currentLeft = fadeAnim._value;
+            // let targetLeft = appReducer.segmentedIndex * titleWidth + restWidth;
+            // let distance = targetLeft - currentLeft;
+            // let duration = distance*this.props.duration/titleWidth 
+
+            // Animated.timing( 
+            //     this.state.fadeAnim, 
+            //     {toValue: targetLeft,duration: duration}
+            // ).start();
+            // this.viewPage.setPage(this.props.app.segmentedIndex);
+
+        }else if(scrollingState=='idle'){
+            isScrollByClickSegmentedButton = false;
+        }
     },
 
     render() {
@@ -181,26 +257,22 @@ var SegmentedView = React.createClass({
             }
         }
 
-        var left = this.getTweeningValue('barLeft');
-        var restWidth = this.props.restWidth;
-        var barContainer = (
-          <View style={styles.barContainer}>
-              <View ref="bar" style={[styles.bar, {
-                  left: left+restWidth,
-                  width:this.props.titleWidth-restWidth*2,
-                  backgroundColor: this.props.barColor
-              }]} 
-              />
-          </View>
-        );
         return (
-            <View style={{flex:1}}>
-                <View {...this.props} style={[styles.container, this.props.style]}>
-                    {this.props.barPosition == 'top' && barContainer}
-                    <View style={styles.titleContainer}>
+            <View 
+                style={{flex:1}}>
+                <View {...this.props} {...this.panResponder.panHandlers} style={[styles.container, this.props.style]}>
+                    <View  style={styles.titleContainer}>
                         {items}
                     </View>
-                    {this.props.barPosition == 'bottom' && barContainer}  
+                    <View style={styles.barContainer}>
+                        <Animated.View  
+                            style={[
+                                { left: this.state.fadeAnim}, 
+                                { width: this.props.titleWidth-this.props.restWidth*2},
+                                { height:4,backgroundColor: '#fff',}
+                            ]}> 
+                        </Animated.View>
+                    </View>
                 </View>
                 <ViewPagerAndroid style={{
                     flex: 10,
@@ -212,6 +284,8 @@ var SegmentedView = React.createClass({
                 }
                 ref={viewPager => {this.viewPage = viewPager;}}
                 onPageSelected={this._onPageSelected}
+                onPageScrollStateChanged={this.onPageScrollStateChanged}
+                onPageScroll={this.onPageScroll}
                 >
                     <View key={`s00`}>
                         <Community {...this.props}/>
