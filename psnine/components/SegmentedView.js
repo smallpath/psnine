@@ -130,30 +130,26 @@ var SegmentedView = React.createClass({
                     {toValue: finalTargetX,duration: this.props.duration}
                 ).start();
 
-                if(this.props.app.segmentedIndex == segmentedIndex){
-                    return;
-                }
-
                 isScrollByClickSegmentedButton = true;
 
-                const { dispatch, navigator } = this.props;
-                dispatch(changeSegmentIndex(segmentedIndex));
+                // const { dispatch, navigator } = this.props;
+                // dispatch(changeSegmentIndex(segmentedIndex));
+
+                this.viewPage.setPage(segmentedIndex);
             } 
         });
     },
 
     componentDidMount() {
-        //setTimeout(() => this.moveTo(this.props.index), 0);
+
     },
 
     componentWillReceiveProps(nextProps) {
         const { app: appReducer, dispatch, titleWidth, navigator,restWidth } = this.props;
-        if(appReducer.segmentedIndex == nextProps.app.segmentedIndex)
-            return;
 
         this.props.app = nextProps.app;
 
-        this.viewPage.setPage(nextProps.app.segmentedIndex);
+        //this.viewPage.setPage(nextProps.app.segmentedIndex);
 
         // this.state.fadeAnim.flattenOffset();
         // Animated.timing( 
@@ -162,9 +158,6 @@ var SegmentedView = React.createClass({
         //         duration: this.props.duration, 
     },
 
-    moveTo(index) {
-        //this.refs[index].measure(this.measureHandler);
-    },
 
     _renderTitle(title, i) {
         return (
@@ -191,7 +184,7 @@ var SegmentedView = React.createClass({
     _onPageSelected(event){
         const { dispatch, navigator } = this.props;
         isScrollByClickSegmentedButton = false;
-        dispatch(changeSegmentIndex(event.nativeEvent.position));
+        // dispatch(changeSegmentIndex(event.nativeEvent.position));
     },
 
     onPageScroll({ nativeEvent }){
@@ -220,7 +213,7 @@ var SegmentedView = React.createClass({
         if(scrollingState=='dragging'){
             isScrollByClickSegmentedButton = false;
         }else if(scrollingState=='settling'){
-            isScrollByClickSegmentedButton = false;
+
             // const { app: appReducer, dispatch, titleWidth, navigator,restWidth } = this.props;
 
 
