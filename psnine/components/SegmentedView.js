@@ -19,8 +19,10 @@ var screen = Dimensions.get('window');
 import { changeSegmentIndex } from '../actions/app';
 
 import Community from '../containers/Community';
+import Game from '../containers/Game';
+import Rank from '../containers/Rank';
+import Battle from '../containers/Battle';
 import Gene from '../containers/Gene';
-
 
 var styles = StyleSheet.create({
     container: {
@@ -136,6 +138,7 @@ var SegmentedView = React.createClass({
                 // dispatch(changeSegmentIndex(segmentedIndex));
 
                 this.viewPage.setPage(segmentedIndex);
+                // this.props.index = segmentedIndex;
             } 
         });
     },
@@ -199,6 +202,9 @@ var SegmentedView = React.createClass({
         this.state.fadeAnim.setOffset(left);
         this.state.fadeAnim.setValue(0);
 
+        // let segmentedIndex = parseInt(left/titleWidth);
+        // this.props.index = segmentedIndex;
+        // console.log(this.props.index,segmentedIndex);
         // let onResponderMove = this.fadeInView.panResponder.panHandlers.onResponderMove;
         // console.log(typeof onResponderMove);
         // console.log(onResponderMove);
@@ -283,9 +289,21 @@ var SegmentedView = React.createClass({
                     <View key={`s00`}>
                         <Community {...this.props}/>
                     </View>
-                    <View key={`s11`}><Text>{titles[1]}</Text></View>
-                    <View key={`s22`}><Text>{titles[2]}</Text></View>
-                    <View key={`s33`}><Text>{titles[3]}</Text></View>
+                    <View key={`s11`}>
+                        <Game  {...this.props}
+                            URL={'http://psnine.com/psngame'}
+                        />
+                    </View>
+                    <View key={`s22`}>
+                        <Rank {...this.props}
+                            URL={'http://psnine.com/psnid'}
+                        />
+                    </View>
+                    <View key={`s33`}>
+                        <Battle {...this.props}
+                            URL={'http://psnine.com/battle'}
+                        />
+                    </View>
                     <View key={`s44`}>
                         <Gene {...this.props}/>
                     </View>

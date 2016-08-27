@@ -40,6 +40,8 @@ class Psnine extends Component {
   }
 
   callDrawer(){
+    //Object.keys(this.props.navigator).map(value=>console.log(value));
+    //console.log(this.props.navigator.getCurrentRoutes());
     this.refs[DRAWER_REF].openDrawer()
   }
 
