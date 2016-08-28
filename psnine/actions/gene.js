@@ -2,27 +2,26 @@ import React, {NativeModules} from 'react-native';
 import * as ActionTypes from '../constants/actionTypes';
 
 import { fetchGenes } from '../dao/dao';
-import { changeRefreshing, changeLoadingMore } from './app';
 
 export function getGeneList(page = 1, type = '') {
     return dispatch => {
         if (page === 1) {
-            dispatch(changeRefreshing(true));
+            dispatch(changeGeneRefreshing(true));
         }else{
-         	dispatch(changeLoadingMore(true)); 
+         	dispatch(changeGeneLoadingMore(true)); 
         };
 
         return fetchGenes(page, type)
             .then(response => {
                 dispatch(gotGeneList(response,page,type));
                 if (page === 1) {
-                    dispatch(changeRefreshing(false));
+                    dispatch(changeGeneRefreshing(false));
                 } else {
-                    dispatch(changeLoadingMore(false));
+                    dispatch(changeGeneLoadingMore(false));
                 }
             }).catch(err => {
-                dispatch(changeRefreshing(false));
-                dispatch(changeLoadingMore(false));
+                dispatch(changeGeneRefreshing(false));
+                dispatch(changeGeneLoadingMore(false));
                 console.log(err);
             });
     }
@@ -35,3 +34,19 @@ function gotGeneList(argument, page, type) {
         page: page,
     };
 }
+
+
+export function changeGeneRefreshing(argument) {
+    return {
+        type: ActionTypes.GENE_IS_REFRESHING,
+        value: argument,
+    }
+}
+
+export function changeGeneLoadingMore(argument) {
+    return {
+        type: ActionTypes.GENE_IS_LOADINGD_MORE,
+        value: argument
+    }
+}
+

@@ -14,9 +14,7 @@ import {
 
 import { connect } from 'react-redux';
 
-import {
-  getGeneList,
-} from '../actions/gene.js';
+import { getGeneList } from '../actions/gene.js';
 
 import NavigatorDrawer from '../components/NavigatorDrawer';
 import SegmentedView from '../components/SegmentedView';
@@ -128,10 +126,7 @@ class Gene extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    this.props.app = nextProps.app;
-    if(this.props.app.segmentedIndex == this.props.segmentedIndex){
-      this.props.gene = nextProps.gene;
-    }
+    this.props.gene = nextProps.gene;
   }
 
   componentDidMount = () => {
@@ -142,9 +137,9 @@ class Gene extends Component {
 
 
   _onRefresh = () => {
-    const { app: appReducer, dispatch } = this.props;
+    const { gene: geneReducer, dispatch } = this.props;
 
-    if (appReducer.isLoadingMore || appReducer.isRefreshing)
+    if (geneReducer.isLoadingMore || geneReducer.isRefreshing)
       return;
 
     dispatch(getGeneList(1));
@@ -157,31 +152,25 @@ class Gene extends Component {
   }
 
   _onEndReached = () => {
-    const { app: appReducer } = this.props;
+    const { gene: geneReducer, dispatch } = this.props;
 
-    if (appReducer.isLoadingMore || appReducer.isRefreshing)
+    if (geneReducer.isLoadingMore || geneReducer.isRefreshing)
       return;
 
     this._loadMoreData();
 
   }
 
-  shouldComponentUpdate(nextProps,nextStates){
-    if(nextProps.app.segmentedIndex==this.props.segmentedIndex){
-      return true;
-    }
-    return false;
-  }
-
   render() {
     console.log('Gene.js rendered');
-    const { gene: geneReducer, app: appReducer } = this.props;
+    const { gene: geneReducer } = this.props;
     return (
       <ListView
         refreshControl={
           <RefreshControl
-            refreshing={appReducer.isRefreshing || appReducer.isLoadingMore }
+            refreshing={geneReducer.isRefreshing || geneReducer.isLoadingMore }
             onRefresh={this._onRefresh}
+            colors={['#00a2ed']}
             />
         }
         pageSize = {32}
@@ -212,10 +201,6 @@ const styles = StyleSheet.create({
 
 function mapStateToProps(state) {
     return {
-      app: {
-        isLoadingMore: state.app.isLoadingMore,
-        isRefreshing: state.app.isRefreshing,
-      },
       gene: state.gene,
     };
 }

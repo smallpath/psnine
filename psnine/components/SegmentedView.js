@@ -18,6 +18,8 @@ var screen = Dimensions.get('window');
 
 import { changeSegmentIndex } from '../actions/app';
 
+import { getTopicList } from '../actions/community.js';
+
 import Community from '../containers/Community';
 import Game from '../containers/Game';
 import Rank from '../containers/Rank';
@@ -101,7 +103,7 @@ var SegmentedView = React.createClass({
     },
 
     componentWillMount() {
-        let { app: appReducer, titleWidth: width, restWidth } = this.props;
+        let { titleWidth: width, restWidth } = this.props;
         let len = this.props.titles.length;
         this.panResponder = PanResponder.create({  
             onPanResponderTerminationRequest: () => false,
@@ -116,7 +118,7 @@ var SegmentedView = React.createClass({
                 dx : this.state.fadeAnim,
             }]),
             onPanResponderRelease: (e, gesture) => {
-                let { app: appReducer, titleWidth: width, restWidth } = this.props;
+                let { titleWidth: width, restWidth } = this.props;
                 let targetX = e.nativeEvent.pageX;
                 let segmentedIndex = parseInt(targetX/width);
 
@@ -134,12 +136,7 @@ var SegmentedView = React.createClass({
 
                 isScrollByClickSegmentedButton = true;
 
-                // const { dispatch, navigator } = this.props;
                 this.viewPage.setPage(segmentedIndex);
-                //dispatch(changeSegmentIndex(segmentedIndex));
-
-                
-                // this.props.index = segmentedIndex;
             } 
         });
     },
@@ -149,17 +146,7 @@ var SegmentedView = React.createClass({
     },
 
     componentWillReceiveProps(nextProps) {
-        const { app: appReducer, dispatch, titleWidth, navigator,restWidth } = this.props;
-
-        this.props.app = nextProps.app;
-
-        //this.viewPage.setPage(nextProps.app.segmentedIndex);
-
-        // this.state.fadeAnim.flattenOffset();
-        // Animated.timing( 
-        //     this.state.fadeAnim, { 
-        //         toValue: titleWidth*nextProps.app.segmentedIndex + restWidth,
-        //         duration: this.props.duration, 
+        const { dispatch, titleWidth, navigator,restWidth } = this.props;
     },
 
 
@@ -189,11 +176,10 @@ var SegmentedView = React.createClass({
         const { dispatch, navigator } = this.props;
         isScrollByClickSegmentedButton = false;
         let segmentedIndex = event.nativeEvent.position;
-        //dispatch(changeSegmentIndex(segmentedIndex));
     },
 
     onPageScroll({ nativeEvent }){
-        const { app: appReducer, dispatch, titleWidth, navigator,restWidth } = this.props;
+        const { dispatch, titleWidth, navigator,restWidth } = this.props;
         
         if(isScrollByClickSegmentedButton == true){
             return;
@@ -221,16 +207,10 @@ var SegmentedView = React.createClass({
             let currentLeft = fadeAnim._value;
             let segmentedIndex = parseInt(currentLeft/titleWidth);
 
-            let dispatch = this.game.store.dispatch;
+            let dispatch = this.props.toolbarDispatch;
+
             dispatch(changeSegmentIndex(segmentedIndex));
-
-
-            //let v = this.game;
-            //console.log(v);
-            //console.log(this.game.getState())
-            // Object.keys(v).map(value=>console.log(value));
-            //dispatch(changeSegmentIndex(segmentedIndex));
-            
+            //console.log(this.game.store.getState().app);
         }
     },
 
@@ -326,4 +306,4 @@ var SegmentedView = React.createClass({
     }
 });
 
-module.exports = SegmentedView;
+export default SegmentedView;

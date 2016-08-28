@@ -16,6 +16,8 @@ import {
   InteractionManager,
 } from 'react-native';
 
+import { connect } from 'react-redux';
+
 import NavigatorDrawer from '../components/NavigatorDrawer';
 import SegmentedView from '../components/SegmentedView';
 
@@ -27,7 +29,7 @@ import { changeSegmentIndex } from '../actions/app';
 
 let title = "PSNINE";
 
-let toolbarActions = [
+let communityActions = [
   { title: '搜索', icon: require('image!ic_search_white') , show: 'always'},
   { title: '全部', show: 'never' },
   { title: '新闻', show: 'never' },
@@ -41,13 +43,34 @@ let toolbarActions = [
   { title: '活动', show: 'never' },
 ];
 
+let gameActions = [
+  { title: '搜索', icon: require('image!ic_search_white') , show: 'always'},
+];
+
+let rankActions = [
+  { title: '搜索', icon: require('image!ic_search_white') , show: 'always'},
+];
+
+let battleActions = [
+  { title: '搜索', icon: require('image!ic_search_white') , show: 'always'},
+];
+
+let geneActions = [
+  { title: '搜索', icon: require('image!ic_search_white') , show: 'always'},
+  { title: '全部', show: 'never' },
+  { title: '图文类', show: 'never' },
+  { title: '音乐类', show: 'never' },
+  { title: '影视类', show: 'never' },
+  { title: '视频类', show: 'never' },
+];
+
+let toolbarActions = [communityActions,gameActions,rankActions,battleActions,geneActions]
+
 let titlesArr = ["社区", "游戏", "排行", "约战", "机因"];
 
 const ds = new ListView.DataSource({
   rowHasChanged: (row1, row2) => row1 !== row2,
 });
-
-
 
 class Toolbar extends Component {
   constructor(props) {
@@ -62,7 +85,7 @@ class Toolbar extends Component {
   _renderSegmentedView = () =>{
     return (
       <SegmentedView
-        {...{navigator:this.props.navigator}} 
+        {...{navigator:this.props.navigator, toolbarDispatch: this.props.dispatch}} 
         titles={titlesArr}
         index={0}
         style={styles.segmentedView}
@@ -87,7 +110,7 @@ class Toolbar extends Component {
   }
 
   render() {
-    const { mainScreen: reducer } = this.props;
+    const { app: appReducer } = this.props;
     console.log('Toolbar.js rendered');
     return (
       <View style={styles.container}>
@@ -95,7 +118,9 @@ class Toolbar extends Component {
           navIcon={require('image!ic_menu_white') }
           title={title}
           style={styles.toolbar}
-          actions={toolbarActions}
+          titleColor="white"
+          overflowIcon={require('image!ic_more_white')}
+          actions={toolbarActions[appReducer.segmentedIndex]}
           onIconClicked={this.props._callDrawer() }
           />
         {this._renderSegmentedView() }
@@ -128,4 +153,13 @@ const styles = StyleSheet.create({
   }
 });
 
-export default Toolbar;
+function mapStateToProps(state) {
+    return {
+      app: state.app,
+    };
+}
+
+export default connect(
+  mapStateToProps
+)(Toolbar);
+

@@ -59,13 +59,6 @@ class Battle extends Component {
     return true; 
   }
 
-  // shouldComponentUpdate(nextProps,nextStates){
-  //   if(nextProps.app.segmentedIndex==this.props.segmentedIndex){
-  //     return true;
-  //   }
-  //   return false;
-  // }
-
   render() {
     console.log('Battle.js rendered');
     return ( 
@@ -128,10 +121,7 @@ const styles = StyleSheet.create({
 
 function mapStateToProps(state) {
     return {
-      app: {
-        isLoadingMore: state.app.isLoadingMore,
-        isRefreshing: state.app.isRefreshing,
-      },
+
     };
 }
 

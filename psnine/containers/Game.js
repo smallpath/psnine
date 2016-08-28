@@ -54,12 +54,6 @@ class Game extends Component {
     // }
   }
 
-  shouldComponentUpdate(nextProps,nextStates){
-    if(nextProps.app.segmentedIndex==this.props.segmentedIndex){
-      return true;
-    }
-    return false;
-  }
 
   render() {
     console.log('Game.js rendered');
@@ -125,10 +119,7 @@ const styles = StyleSheet.create({
 
 function mapStateToProps(state) {
     return {
-      app: {
-        isLoadingMore: state.app.isLoadingMore,
-        isRefreshing: state.app.isRefreshing,
-      },
+
     };
 }
 

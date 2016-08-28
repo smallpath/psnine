@@ -14,9 +14,7 @@ import {
 
 import { connect } from 'react-redux';
 
-import {
-  getTopicList,
-} from '../actions/community.js';
+import { getTopicList } from '../actions/community.js';
 
 import Topic from './Topic';
 
@@ -110,9 +108,7 @@ class Community extends Component {
 
   componentWillReceiveProps(nextProps) {
     this.props.app = nextProps.app;
-    if(this.props.app.segmentedIndex == this.props.segmentedIndex){
-      this.props.community = nextProps.community;
-    }
+    this.props.community = nextProps.community;
   }
 
   componentDidMount = () => {
@@ -122,9 +118,9 @@ class Community extends Component {
   }
 
   _onRefresh = () => {
-    const { app: appReducer, dispatch } = this.props;
+    const { community: communityReducer, dispatch } = this.props;
 
-    if (appReducer.isLoadingMore || appReducer.isRefreshing)
+    if (communityReducer.isLoadingMore || communityReducer.isRefreshing)
       return;
 
     dispatch(getTopicList(1));
@@ -137,32 +133,25 @@ class Community extends Component {
   }
 
   _onEndReached = () => {
-    const { app: appReducer } = this.props;
+    const { community: communityReducer } = this.props;
 
-    if (appReducer.isLoadingMore || appReducer.isRefreshing)
+    if (communityReducer.isLoadingMore || communityReducer.isRefreshing)
       return;
 
       this._loadMoreData();
 
   }
 
-  // shouldComponentUpdate(nextProps,nextStates){
-  //   if(nextProps.app.segmentedIndex==this.props.segmentedIndex){
-  //     return true;
-  //   }
-  //   return false;
-  // }
-
   render(){
-    const { community: communityReducer, app: appReducer } = this.props;
-    console.log(appReducer);
+    const { community: communityReducer } = this.props;
     console.log('Community.js rendered');
     return (
         <ListView
           refreshControl={
             <RefreshControl
-              refreshing={appReducer.isRefreshing || appReducer.isLoadingMore }
+              refreshing={communityReducer.isRefreshing || communityReducer.isLoadingMore}
               onRefresh={this._onRefresh}
+              colors={['#00a2ed']}
               />
           }
           pageSize = {32}
@@ -189,10 +178,6 @@ const styles = StyleSheet.create({
 
 function mapStateToProps(state) {
     return {
-      app: {
-        isLoadingMore: state.app.isLoadingMore,
-        isRefreshing: state.app.isRefreshing,
-      },
       community: state.community,
     };
 }
