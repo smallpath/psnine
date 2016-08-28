@@ -12,6 +12,8 @@ import {
   InteractionManager,
 } from 'react-native';
 
+import { connect } from 'react-redux';
+
 import {
   getGeneList,
 } from '../actions/gene.js';
@@ -36,7 +38,7 @@ class Gene extends Component {
     return (
       <View
         key={`${sectionID}-${rowID}`}
-        style={{ height: adjacentRowHighlighted ? 4 : 1, backgroundColor: adjacentRowHighlighted ? '#3B5998' : '#CCCCCC', }}
+        style={{ height: 1,backgroundColor: 'rgba(0, 0, 0, 0.1)',marginLeft:10,marginRight:10}}
         />
     );
   }
@@ -127,7 +129,9 @@ class Gene extends Component {
 
   componentWillReceiveProps(nextProps) {
     this.props.app = nextProps.app;
-    this.props.gene = nextProps.gene;
+    if(this.props.app.segmentedIndex == this.props.segmentedIndex){
+      this.props.gene = nextProps.gene;
+    }
   }
 
   componentDidMount = () => {
@@ -158,13 +162,19 @@ class Gene extends Component {
     if (appReducer.isLoadingMore || appReducer.isRefreshing)
       return;
 
-    InteractionManager.runAfterInteractions(() => {
-      this._loadMoreData();
-    });
+    this._loadMoreData();
 
   }
 
+  shouldComponentUpdate(nextProps,nextStates){
+    if(nextProps.app.segmentedIndex==this.props.segmentedIndex){
+      return true;
+    }
+    return false;
+  }
+
   render() {
+    console.log('Gene.js rendered');
     const { gene: geneReducer, app: appReducer } = this.props;
     return (
       <ListView
@@ -200,4 +210,16 @@ const styles = StyleSheet.create({
   }
 });
 
-export default Gene;
+function mapStateToProps(state) {
+    return {
+      app: {
+        isLoadingMore: state.app.isLoadingMore,
+        isRefreshing: state.app.isRefreshing,
+      },
+      gene: state.gene,
+    };
+}
+
+export default connect(
+  mapStateToProps
+)(Gene);

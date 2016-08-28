@@ -62,9 +62,9 @@ class Toolbar extends Component {
   _renderSegmentedView = () =>{
     return (
       <SegmentedView
-        {...this.props}
+        {...{navigator:this.props.navigator}} 
         titles={titlesArr}
-        index={this.props.app.segmentedIndex}
+        index={0}
         style={styles.segmentedView}
         stretch
         duration={200}
@@ -82,12 +82,13 @@ class Toolbar extends Component {
   }
 
   componentDidMount = () => {
-    const { app: appReducer,dispatch } = this.props;
-    dispatch(changeSegmentIndex(appReducer.segmentedIndex));
+    //const { app: appReducer,dispatch } = this.props;
+    //dispatch(changeSegmentIndex(appReducer.segmentedIndex));
   }
 
   render() {
     const { mainScreen: reducer } = this.props;
+    console.log('Toolbar.js rendered');
     return (
       <View style={styles.container}>
         <ToolbarAndroid

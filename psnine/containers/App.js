@@ -16,10 +16,6 @@ import {
   RefreshControl,
 } from 'react-native';
 
-import { connect } from 'react-redux';
-import reducer from '../reducers/rootReducer.js'
-import { bindActionCreators } from 'redux';
-
 import NavigatorDrawer from '../components/NavigatorDrawer';
 import Toolbar from './Toolbar';
 
@@ -40,22 +36,19 @@ class Psnine extends Component {
   }
 
   callDrawer(){
-    //Object.keys(this.props.navigator).map(value=>console.log(value));
-    //console.log(this.props.navigator.getCurrentRoutes());
     this.refs[DRAWER_REF].openDrawer()
   }
 
   render() {
     const { reducer } = this.props;
-    //console.log('App.js/51 line',this.props);
+    console.log('App.js rendered');
     return ( 
       <DrawerLayoutAndroid 
             ref={DRAWER_REF}
             drawerWidth={Dimensions.get('window').width - DRAWER_WIDTH_LEFT} 
             drawerPosition={DrawerLayoutAndroid.positions.Left} 
             renderNavigationView={this._renderNavigationView}> 
-            <Toolbar
-              {...this.props} 
+            <Toolbar {...{navigator:this.props.navigator}} 
               _callDrawer = {() => this.callDrawer.bind(this)}
             />
       </DrawerLayoutAndroid> 
@@ -84,11 +77,4 @@ const styles = StyleSheet.create({
   }
 });
 
-
-function mapStateToProps(state) {
-    return state;
-}
-
-export default connect(
-  mapStateToProps
-)(Psnine);
+export default Psnine;

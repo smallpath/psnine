@@ -17,6 +17,8 @@ import {
   WebView,
 } from 'react-native';
 
+import { connect } from 'react-redux';
+
 let WEBVIEW_REF = `WEBVIEW_REF_BATTLE`;
 let back_image = require('image!ic_back_blue');
 let imageSize = 40;
@@ -57,7 +59,15 @@ class Battle extends Component {
     return true; 
   }
 
+  // shouldComponentUpdate(nextProps,nextStates){
+  //   if(nextProps.app.segmentedIndex==this.props.segmentedIndex){
+  //     return true;
+  //   }
+  //   return false;
+  // }
+
   render() {
+    console.log('Battle.js rendered');
     return ( 
         <View style={{flex:3}}>
             <View style={{
@@ -116,5 +126,17 @@ const styles = StyleSheet.create({
   }
 });
 
+function mapStateToProps(state) {
+    return {
+      app: {
+        isLoadingMore: state.app.isLoadingMore,
+        isRefreshing: state.app.isRefreshing,
+      },
+    };
+}
 
-export default Battle
+export default connect(
+  mapStateToProps
+)(Battle);
+
+// export default Battle;

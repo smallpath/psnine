@@ -17,6 +17,8 @@ import {
   WebView,
 } from 'react-native';
 
+import { connect } from 'react-redux';
+
 let WEBVIEW_REF = `WEBVIEW_REF_RANK`;
 let back_image = require('image!ic_back_blue');
 let imageSize = 40;
@@ -51,8 +53,16 @@ class Rank extends Component {
     //   this.refs[WEBVIEW_REF].stopLoading();
     // }
   }
+  
+  shouldComponentUpdate(nextProps,nextStates){
+    if(nextProps.app.segmentedIndex==this.props.segmentedIndex){
+      return true;
+    }
+    return false;
+  }
 
   render() {
+    console.log('Rank.js rendered');
     return ( 
         <View style={{flex:3}}>
             <View style={{
@@ -111,5 +121,15 @@ const styles = StyleSheet.create({
   }
 });
 
+function mapStateToProps(state) {
+    return {
+      app: {
+        isLoadingMore: state.app.isLoadingMore,
+        isRefreshing: state.app.isRefreshing,
+      },
+    };
+}
 
-export default Rank
+export default connect(
+  mapStateToProps
+)(Rank);

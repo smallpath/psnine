@@ -12,6 +12,8 @@ import {
   InteractionManager,
 } from 'react-native';
 
+import { connect } from 'react-redux';
+
 import {
   getTopicList,
 } from '../actions/community.js';
@@ -34,7 +36,7 @@ class Community extends Component {
     return (
       <View
         key={`${sectionID}-${rowID}`}
-        style={{ height: adjacentRowHighlighted ? 4 : 1, backgroundColor: adjacentRowHighlighted ? '#3B5998' : '#CCCCCC', }}
+        style={{ height: 1,backgroundColor: 'rgba(0, 0, 0, 0.1)',marginLeft:10,marginRight:10}}
         />
     );
   }
@@ -107,8 +109,10 @@ class Community extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    this.props.community = nextProps.community;
     this.props.app = nextProps.app;
+    if(this.props.app.segmentedIndex == this.props.segmentedIndex){
+      this.props.community = nextProps.community;
+    }
   }
 
   componentDidMount = () => {
@@ -138,14 +142,21 @@ class Community extends Component {
     if (appReducer.isLoadingMore || appReducer.isRefreshing)
       return;
 
-    InteractionManager.runAfterInteractions(() => {
       this._loadMoreData();
-    });
 
   }
 
+  // shouldComponentUpdate(nextProps,nextStates){
+  //   if(nextProps.app.segmentedIndex==this.props.segmentedIndex){
+  //     return true;
+  //   }
+  //   return false;
+  // }
+
   render(){
     const { community: communityReducer, app: appReducer } = this.props;
+    console.log(appReducer);
+    console.log('Community.js rendered');
     return (
         <ListView
           refreshControl={
@@ -175,4 +186,17 @@ const styles = StyleSheet.create({
   }
 });
 
-export default Community;
+
+function mapStateToProps(state) {
+    return {
+      app: {
+        isLoadingMore: state.app.isLoadingMore,
+        isRefreshing: state.app.isRefreshing,
+      },
+      community: state.community,
+    };
+}
+
+export default connect(
+  mapStateToProps
+)(Community);

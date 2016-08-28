@@ -83,6 +83,7 @@ class MyWeb extends Component {
   }
 
   render() {
+    console.log('Topic.js rendered');
     return ( 
           <View style={{flex:1}}>
               <ToolbarAndroid

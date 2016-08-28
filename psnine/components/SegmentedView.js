@@ -93,10 +93,10 @@ var SegmentedView = React.createClass({
     },
 
     getInitialState() {
-
-        let { app: appReducer, titleWidth, restWidth } = this.props;
+        let { titleWidth, restWidth } = this.props;
         return {
-            fadeAnim: new Animated.Value(titleWidth*appReducer.segmentedIndex + restWidth),
+            fadeAnim: new Animated.Value(titleWidth*0 + restWidth),
+            segmentedIndex: 0,
         };
     },
 
@@ -135,9 +135,10 @@ var SegmentedView = React.createClass({
                 isScrollByClickSegmentedButton = true;
 
                 // const { dispatch, navigator } = this.props;
-                // dispatch(changeSegmentIndex(segmentedIndex));
-
                 this.viewPage.setPage(segmentedIndex);
+                //dispatch(changeSegmentIndex(segmentedIndex));
+
+                
                 // this.props.index = segmentedIndex;
             } 
         });
@@ -187,7 +188,8 @@ var SegmentedView = React.createClass({
     _onPageSelected(event){
         const { dispatch, navigator } = this.props;
         isScrollByClickSegmentedButton = false;
-        // dispatch(changeSegmentIndex(event.nativeEvent.position));
+        let segmentedIndex = event.nativeEvent.position;
+        //dispatch(changeSegmentIndex(segmentedIndex));
     },
 
     onPageScroll({ nativeEvent }){
@@ -202,17 +204,6 @@ var SegmentedView = React.createClass({
         this.state.fadeAnim.setOffset(left);
         this.state.fadeAnim.setValue(0);
 
-        // let segmentedIndex = parseInt(left/titleWidth);
-        // this.props.index = segmentedIndex;
-        // console.log(this.props.index,segmentedIndex);
-        // let onResponderMove = this.fadeInView.panResponder.panHandlers.onResponderMove;
-        // console.log(typeof onResponderMove);
-        // console.log(onResponderMove);
-        // onResponderMove();
-        //this.fadeInView.props.onResponderMove(event);
-        //Object.keys().forEach(value=>console.log(value));
-        //console.log(event.nativeEvent);
-        // offset: 0-1 , position: pageNumber,
     },
 
     onPageScrollStateChanged(scrollingState){
@@ -220,28 +211,31 @@ var SegmentedView = React.createClass({
             isScrollByClickSegmentedButton = false;
         }else if(scrollingState=='settling'){
 
-            // const { app: appReducer, dispatch, titleWidth, navigator,restWidth } = this.props;
-
-
-            // let fadeAnim = this.state.fadeAnim;
-            // fadeAnim.flattenOffset();
-            // let currentLeft = fadeAnim._value;
-            // let targetLeft = appReducer.segmentedIndex * titleWidth + restWidth;
-            // let distance = targetLeft - currentLeft;
-            // let duration = distance*this.props.duration/titleWidth 
-
-            // Animated.timing( 
-            //     this.state.fadeAnim, 
-            //     {toValue: targetLeft,duration: duration}
-            // ).start();
-            // this.viewPage.setPage(this.props.app.segmentedIndex);
 
         }else if(scrollingState=='idle'){
             isScrollByClickSegmentedButton = false;
+            const { titleWidth } = this.props;
+
+            let fadeAnim = this.state.fadeAnim;
+            fadeAnim.flattenOffset();
+            let currentLeft = fadeAnim._value;
+            let segmentedIndex = parseInt(currentLeft/titleWidth);
+
+            let dispatch = this.game.store.dispatch;
+            dispatch(changeSegmentIndex(segmentedIndex));
+
+
+            //let v = this.game;
+            //console.log(v);
+            //console.log(this.game.getState())
+            // Object.keys(v).map(value=>console.log(value));
+            //dispatch(changeSegmentIndex(segmentedIndex));
+            
         }
     },
 
     render() {
+        console.log('SegmentedView.js rendered');
         var items = [];
         var titles = this.props.titles;
 
@@ -259,7 +253,9 @@ var SegmentedView = React.createClass({
         return (
             <View 
                 style={{flex:1}}>
-                <View {...this.props} {...this.panResponder.panHandlers} style={[styles.container, this.props.style]}>
+                <View 
+                    {...{navigator:this.props.navigator}} 
+                    {...this.panResponder.panHandlers} style={[styles.container, this.props.style]}>
                     <View  style={styles.titleContainer}>
                         {items}
                     </View>
@@ -287,25 +283,42 @@ var SegmentedView = React.createClass({
                 onPageScroll={this.onPageScroll}
                 >
                     <View key={`s00`}>
-                        <Community {...this.props}/>
+                        <Community 
+                            segmentedIndex={0} 
+                            ref={community=>this.community=community}
+                            {...{navigator:this.props.navigator}} 
+                        />
                     </View>
                     <View key={`s11`}>
-                        <Game  {...this.props}
+                        <Game 
+                            segmentedIndex={1} 
+                            ref={game=>this.game=game}
+                            {...{navigator:this.props.navigator}} 
                             URL={'http://psnine.com/psngame'}
                         />
                     </View>
                     <View key={`s22`}>
-                        <Rank {...this.props}
+                        <Rank 
+                            ref={rank=>this.rank=rank}
+                            segmentedIndex={2}
+                            {...{navigator:this.props.navigator}} 
                             URL={'http://psnine.com/psnid'}
                         />
                     </View>
                     <View key={`s33`}>
-                        <Battle {...this.props}
+                        <Battle 
+                            segmentedIndex={3} 
+                            ref={battle=>this.battle=battle}
+                            {...{navigator:this.props.navigator}} 
                             URL={'http://psnine.com/battle'}
                         />
                     </View>
                     <View key={`s44`}>
-                        <Gene {...this.props}/>
+                        <Gene 
+                            ref={gene=>this.gene=gene}
+                            segmentedIndex={4} 
+                            {...{navigator:this.props.navigator}} 
+                        />
                     </View>
                 </ViewPagerAndroid>
             </View>

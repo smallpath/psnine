@@ -12,10 +12,16 @@ import {
 } from 'react-native';
 
 
+var settingIcon = require('image!ic_setting_blue');
+
+var signIcon = require('image!ic_assignment_blue');
+
 var imageArr = [
-  require('image!home'),
+  require('image!ic_game_blue'),
   require('image!ic_message_blue'),
-  require('image!ic_setting_blue'),
+  require('image!ic_plus_blue'),
+  require('image!ic_store_blue'),
+  require('image!ic_business_blue'),
 ];
 
 class NavigatorDrawer extends Component {
@@ -27,7 +33,7 @@ class NavigatorDrawer extends Component {
       this.state = {
           isLoading: false,
           dataSource:dataSource.cloneWithRows([
-              "我的游戏","我的消息","设置"
+              "我的游戏","我的消息","游惠","Store","闲游",
           ]),
       }
   }
@@ -47,104 +53,109 @@ class NavigatorDrawer extends Component {
       }
       return (
       <View style={styles.header}>
+
         <View style={styles.userInfo}>
           <TouchableElement>
-            <View style={{flexDirection: 'row', alignItems: 'center', padding: 16}}>
+            <View style={{flexDirection: 'row', alignItems: 'center', padding: 0}}>
               <Image
                 source={require('image!comment_avatar')}
-                style={{width: 40, height: 40, marginLeft: 8, marginRight: 8}} />
+                style={{width: 60, height: 60, marginRight: 8}} />
               <Text style={styles.menuText}>
                 请登录
               </Text>
+              <TouchableElement
+                // onPress={() => this.props.onSelectItem(theme)}
+                // onShowUnderlay={highlightRowFunc}
+                // onHideUnderlay={highlightRowFunc}
+                >
+                <View style={styles.themeItem}>
+                  <Image source={require('image!ic_assignment_white')}            
+                          style={{width: 20, height: 20, marginLeft: 16}} />
+                  <Text style={[styles.menuText,{marginLeft:8}]}>
+                    签到
+                  </Text>
+                </View>
+              </TouchableElement>
             </View>
           </TouchableElement>
-          <View style={styles.trophyRow}>
-            <TouchableElement>
-              <View style={styles.menuContainer}>
-              {/*<Image
-                  source={require('image!ic_favorites_white')}
-                  style={{width: 30, height: 30}} />*/}
-                <Text style={styles.menuText}>
-                  白
-                </Text>
-              </View>
-            </TouchableElement>
-            <TouchableElement>
-              <View style={styles.menuContainer}>
-              {/*<Image
-                source={require('image!ic_download_white')}
-                style={{width: 30, height: 30}} /> */}
-                <Text style={styles.menuText}>
-                  金
-                </Text>
-              </View>
-            </TouchableElement>
-            <TouchableElement>
-              <View style={styles.menuContainer}>
-              {/*<Image
-                source={require('image!ic_download_white')}
-                style={{width: 30, height: 30}} />*/}
-                <Text style={styles.menuText}>
-                  银
-                </Text>
-              </View>
-            </TouchableElement>
-            <TouchableElement>
-              <View style={styles.menuContainer}>
-              {/*<Image
-                source={require('image!ic_download_white')}
-                style={{width: 30, height: 30}} />*/}
-                <Text style={styles.menuText}>
-                  铜
-                </Text>
-              </View>
-            </TouchableElement>
-          </View>
-          <View style={styles.row}>
-            <TouchableElement>
-              <View style={styles.menuContainer}>
-                <Image
-                  source={require('image!ic_favorites_white')}
-                  style={{width: 30, height: 30}} />
-                <Text style={styles.menuText}>
-                  帖子
-                </Text>
-              </View>
-            </TouchableElement>
-            <TouchableElement>
-              <View style={styles.menuContainer}>
-              <Image
-                source={require('image!ic_download_white')}
-                style={{width: 30, height: 30}} />
-                <Text style={styles.menuText}>
-                  关注
-                </Text>
-              </View>
-            </TouchableElement>
-            <TouchableElement>
-              <View style={styles.menuContainer}>
-              <Image
-                source={require('image!ic_download_white')}
-                style={{width: 30, height: 30}} />
-                <Text style={styles.menuText}>
-                  收藏
-                </Text>
-              </View>
-            </TouchableElement>
-          </View>
         </View>
-        <TouchableElement 
-            //onPress={() => this.props.onSelectItem(null)}
-            >
-          <View style={styles.themeItem}>
+
+        <View style={styles.trophyRow}>
+          <TouchableElement>
+            <View style={styles.menuContainer}>
+            {/*<Image
+                source={require('image!ic_favorites_white')}
+                style={{width: 30, height: 30}} />*/}
+              <Text style={styles.menuText}>
+                白
+              </Text>
+            </View>
+          </TouchableElement>
+          <TouchableElement>
+            <View style={styles.menuContainer}>
+            {/*<Image
+              source={require('image!ic_download_white')}
+              style={{width: 30, height: 30}} /> */}
+              <Text style={styles.menuText}>
+                金
+              </Text>
+            </View>
+          </TouchableElement>
+          <TouchableElement>
+            <View style={styles.menuContainer}>
+            {/*<Image
+              source={require('image!ic_download_white')}
+              style={{width: 30, height: 30}} />*/}
+              <Text style={styles.menuText}>
+                银
+              </Text>
+            </View>
+          </TouchableElement>
+          <TouchableElement>
+            <View style={styles.menuContainer}>
+            {/*<Image
+              source={require('image!ic_download_white')}
+              style={{width: 30, height: 30}} />*/}
+              <Text style={styles.menuText}>
+                铜
+              </Text>
+            </View>
+          </TouchableElement>
+        </View>
+
+        <View style={styles.row}>
+          <TouchableElement>
+            <View style={styles.menuContainer}>
+              <Image
+                source={require('image!ic_favorites_white')}
+                style={{width: 30, height: 30}} />
+              <Text style={styles.menuText}>
+                帖子
+              </Text>
+            </View>
+          </TouchableElement>
+          <TouchableElement>
+            <View style={styles.menuContainer}>
             <Image
-              source={require('image!home')}
-              style={{width: 30, height: 30, marginLeft: 10}} />
-            <Text style={styles.homeTheme}>
-              签到
-            </Text>
-          </View>
-        </TouchableElement>
+              source={require('image!ic_download_white')}
+              style={{width: 30, height: 30}} />
+              <Text style={styles.menuText}>
+                关注
+              </Text>
+            </View>
+          </TouchableElement>
+          <TouchableElement>
+            <View style={styles.menuContainer}>
+            <Image
+              source={require('image!ic_download_white')}
+              style={{width: 30, height: 30}} />
+              <Text style={styles.menuText}>
+                收藏
+              </Text>
+            </View>
+          </TouchableElement>
+        </View>
+        
       </View>
       );
   }  
@@ -173,7 +184,29 @@ class NavigatorDrawer extends Component {
     );
   }
 
+  renderFooter(){
+    rowData = "设置";
+    let TouchableElement = TouchableHighlight;
+    if (Platform.OS === 'android') {
+      TouchableElement = TouchableNativeFeedback;
+    }
+    icon = settingIcon;
+    return (
+      <View >
+        <TouchableElement>
+          <View style={styles.themeItem}>
+            <Image source={icon} style={styles.themeIndicate}/>
+            <Text style={styles.themeName}>
+              {rowData}
+            </Text>
+          </View>
+        </TouchableElement>
+      </View>
+    )
+  }
+
   render() {
+    console.log('NavigatorDrawer.js rendered');
     return (
       <View style={styles.container} {...this.props}>
         <ListView
@@ -182,8 +215,8 @@ class NavigatorDrawer extends Component {
           renderRow={this.renderRow}
           keyboardDismissMode="on-drag"
           keyboardShouldPersistTaps={true}
-          showsVerticalScrollIndicator={false}
           renderHeader={this.renderHeader}
+          renderFooter={this.renderFooter}
           // renderSeparator={this.renderSeparator}
           style={{flex:1, backgroundColor: 'white'}}
         />
@@ -201,28 +234,34 @@ const styles = StyleSheet.create({
   header: {
     flex: 1,
     flexDirection: 'column',
+    backgroundColor: '#00a2ed',
+    height: 140,
   },
   userInfo: {
-    flex: 4,
-    backgroundColor: '#00a2ed',
+    flex: 2,
+    marginLeft: 10,
+    marginTop:10,
+    marginRight:10,
   },
   trophyRow: {
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    padding: 0,
+    marginLeft: 20,
+    marginTop: -20,
   },
   row: {
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    padding: 8,
+    marginTop: -10,
+    paddingLeft: 5,
   },
   menuContainer: {
     flex:1,
     flexDirection: 'row',
     alignItems: 'center',
-    padding: 8,
+    padding: 0,
   },
   menuText: {
     fontSize: 14,
@@ -252,9 +291,6 @@ const styles = StyleSheet.create({
   separator: {
     height: 1,
     backgroundColor: '#eeeeee',
-  },
-  scrollSpinner: {
-    marginVertical: 20,
   },
   rowSeparator: {
     backgroundColor: 'rgba(0, 0, 0, 0.1)',
