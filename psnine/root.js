@@ -33,25 +33,18 @@ BackAndroid.addEventListener('hardwareBackPress', function () {
 const SCREEN_WIDTH = Dimensions.get('window').width;
 let BaseConfig = Navigator.SceneConfigs.FloatFromRight;
 
-let CustomGesture = Object.assign({}, BaseConfig.gestures.pop, {  
-	// Make it snap back really quickly after canceling pop
+let CustomGesture = Object.assign({}, BaseConfig.gestures.pop, { 
 	snapVelocity: 8, 
-	// Make it so we can drag anywhere on the screen
 	edgeHitWidth: SCREEN_WIDTH,
-	// The min distance to be moving
-	gestureDetectMovement:3,
-	fullDistance: SCREEN_WIDTH/4,
-	// directionRatio:0.33,
+	gestureDetectMovement:2,
+  	stillCompletionRatio: 3 / 10,
+	directionRatio: 1,
+	fullDistance: SCREEN_WIDTH/2
 });
 
-// Object.keys(CustomGesture).forEach((item,index)=>console.log(item,CustomGesture[item]));
 
 let CustomSceneConfig = Object.assign({}, BaseConfig, {  
-	// A very tightly wound spring will make this transition fast
-	// springTension: 0, 
-	// springFriction: 0,  
-	// Use our custom gesture defined above
-	gestures: { pop: CustomGesture, }
+	gestures: { pop: CustomGesture }
 });
 
 class Root extends React.Component {
@@ -59,7 +52,6 @@ class Root extends React.Component {
 		let Component = route.component;
 		_navigator = navigator;
 		return <Component {...route.params} navigator={navigator} />
-		//  上面的route.params 是为了方便后续界面间传递参数用的
 	}
 	render() {
 		return (

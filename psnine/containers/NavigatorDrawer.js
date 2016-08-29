@@ -180,7 +180,6 @@ class NavigatorDrawer extends Component {
 
             break;
         case 2:
-            console.log('here')
             URL = getHappyPlusOneURL();
 
             navigator.push({

@@ -7,3 +7,18 @@ export function changeSegmentIndex(argument) {
         value: argument
     }
 }
+
+export function changeCommunityType(argument) {
+    return {
+        type: ActionTypes.CHANGE_COMMUNITY_TYPE,
+        value: argument
+    }
+}
+
+export function changeGeneType(argument) {
+    return {
+        type: ActionTypes.CHANGE_GENE_TYPE,
+        value: argument
+    }
+}
+

@@ -24,7 +24,7 @@ import SegmentedView from './SegmentedView';
 import Community from './viewPagers/Community';
 import Gene from './viewPagers/Gene';
 
-import { changeSegmentIndex } from '../actions/app';
+import { changeSegmentIndex, changeCommunityType, changeGeneType } from '../actions/app';
 
 
 let title = "PSNINE";
@@ -37,7 +37,6 @@ let communityActions = [
   { title: '测评', value: 'review',show: 'never' },
   { title: '心得', value: 'plus',show: 'never' },
   { title: 'Plus', value: 'exp',show: 'never' },
-  { title: '二手', value: 'all4all',show: 'never' },
   { title: '开箱', value: 'openbox',show: 'never' },
   { title: '游列', value: 'gamelist',show: 'never' },
   { title: '活动', value: 'event',show: 'never' },
@@ -75,20 +74,14 @@ const ds = new ListView.DataSource({
 class Toolbar extends Component {
   constructor(props) {
     super(props);
-
-    this.state = {
-      communityType: '',
-      geneType: '',
-    }
-
   }
 
   _renderSegmentedView = () =>{
     return (
       <SegmentedView
         {...{
-            communityType: this.state.communityType, 
-            geneType: this.state.geneType,
+            communityType: this.props.app.communityType, 
+            geneType: this.props.app.geneType,
             navigator:this.props.navigator, 
             toolbarDispatch: this.props.dispatch
         }} 
@@ -117,14 +110,13 @@ class Toolbar extends Component {
 
   onActionSelected = (index) => {
     const { segmentedIndex } = this.props.app;
+    const { dispatch } = this.props;
     if(segmentedIndex == 0){
-      this.setState({
-        communityType: toolbarActions[0][index].value,
-      });
+      let type = toolbarActions[segmentedIndex][index].value;
+      dispatch(changeCommunityType(type))
     }else if(segmentedIndex == 4){
-      this.setState({
-        geneType: toolbarActions[4][index].value,
-      }); 
+      let type = toolbarActions[segmentedIndex][index].value;
+      dispatch(changeGeneType(type))
     }
   }
 

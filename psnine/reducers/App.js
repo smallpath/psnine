@@ -2,6 +2,8 @@ import * as ActionTypes from '../constants/actionTypes';
 
 const initialState = {
     segmentedIndex: 0,
+    communityType: '',
+    geneType: '',
 }
 
 function reducer(state = initialState, action){
@@ -12,6 +14,16 @@ function reducer(state = initialState, action){
                 segmentedIndex: action.value,
             });
             return newState; 
+        case ActionTypes.CHANGE_COMMUNITY_TYPE:
+            newState = Object.assign({},state,{
+                communityType: action.value,
+            });
+            return newState;
+        case ActionTypes.CHANGE_GENE_TYPE:
+            newState = Object.assign({},state,{
+                geneType: action.value,
+            });
+            return newState;
         default:
             return state;
     }

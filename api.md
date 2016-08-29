@@ -45,7 +45,6 @@ http://120.55.124.66/user/secondlife_xhm/notice
 	- review
 	- plus
 	- exp
-	- all4all
 	- openbox
 	- gamelist
 	- event
