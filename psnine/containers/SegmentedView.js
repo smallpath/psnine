@@ -14,19 +14,19 @@ import {
     PanResponder,
 } from 'react-native';
 
-var screen = Dimensions.get('window');
-
 import { changeSegmentIndex } from '../actions/app';
 
 import { getTopicList } from '../actions/community.js';
 
-import Community from '../containers/Community';
-import Game from '../containers/Game';
-import Rank from '../containers/Rank';
-import Battle from '../containers/Battle';
-import Gene from '../containers/Gene';
+import Community from './viewPagers/Community';
+import Game from './viewPagers/Game';
+import Rank from './viewPagers/Rank';
+import Battle from './viewPagers/Battle';
+import Gene from './viewPagers/Gene';
 
-var styles = StyleSheet.create({
+let screen = Dimensions.get('window');
+
+let styles = StyleSheet.create({
     container: {
 
     },
@@ -55,11 +55,11 @@ var styles = StyleSheet.create({
     }
 });
 
-var isScrollByClickSegmentedButton = false;
+let isScrollByClickSegmentedButton = false;
 
-var SegmentedView = React.createClass({
+class SegmentedView extends Component {
 
-    propTypes: {
+    static propTypes = {
         duration: PropTypes.number,
         onTransitionStart: PropTypes.func,
         onTransitionEnd: PropTypes.func,
@@ -74,33 +74,32 @@ var SegmentedView = React.createClass({
         titleStyle: PropTypes.object,
         titleWidth: PropTypes.number,
         restWidth: PropTypes.number,
-    },
+    }; 
 
-    getDefaultProps() {
-        return {
-            duration: 200,
-            onTransitionStart: ()=>{},
-            onTransitionEnd: ()=>{},
-            renderTitle: null,
-            index: 0,
-            barColor: '#44B7E1',
-            barPosition:'top',
-            underlayColor: '#CCCCCC',
-            stretch: false,
-            selectedTextStyle: null,
-            textStyle: null,
-            titleWidth: 72,
-            restWidth: 5,
-        };
-    },
+    static defaultProps = {
+        duration: 200,
+        onTransitionStart: ()=>{},
+        onTransitionEnd: ()=>{},
+        renderTitle: null,
+        index: 0,
+        barColor: '#44B7E1',
+        barPosition:'top',
+        underlayColor: '#CCCCCC',
+        stretch: false,
+        selectedTextStyle: null,
+        textStyle: null,
+        titleWidth: 72,
+        restWidth: 5,
+    };  
 
-    getInitialState() {
+    constructor(props){
+        super(props);
+
         let { titleWidth, restWidth } = this.props;
-        return {
+        this.state= {
             fadeAnim: new Animated.Value(titleWidth*0 + restWidth),
-            segmentedIndex: 0,
         };
-    },
+    }
 
     componentWillMount() {
         let { titleWidth: width, restWidth } = this.props;
@@ -139,16 +138,7 @@ var SegmentedView = React.createClass({
                 this.viewPage.setPage(segmentedIndex);
             } 
         });
-    },
-
-    componentDidMount() {
-
-    },
-
-    componentWillReceiveProps(nextProps) {
-        const { dispatch, titleWidth, navigator,restWidth } = this.props;
-    },
-
+    }
 
     _renderTitle(title, i) {
         return (
@@ -156,7 +146,7 @@ var SegmentedView = React.createClass({
                 <Text style={[this.props.titleStyle, i === this.props.index && this.props.selectedTitleStyle]}>{title}</Text>
             </View>
         );
-    },
+    }
 
     renderTitle(title, i) {
         return (
@@ -170,16 +160,16 @@ var SegmentedView = React.createClass({
                 </TouchableWithoutFeedback>
             </View>
         );
-    },
+    }
 
-    _onPageSelected(event){
-        const { dispatch, navigator } = this.props;
+    _onPageSelected = (event) => {
+        const { navigator } = this.props;
         isScrollByClickSegmentedButton = false;
         let segmentedIndex = event.nativeEvent.position;
-    },
+    }
 
-    onPageScroll({ nativeEvent }){
-        const { dispatch, titleWidth, navigator,restWidth } = this.props;
+    onPageScroll = ({ nativeEvent }) => {
+        const { titleWidth, navigator,restWidth } = this.props;
         
         if(isScrollByClickSegmentedButton == true){
             return;
@@ -190,9 +180,9 @@ var SegmentedView = React.createClass({
         this.state.fadeAnim.setOffset(left);
         this.state.fadeAnim.setValue(0);
 
-    },
+    }
 
-    onPageScrollStateChanged(scrollingState){
+    onPageScrollStateChanged = (scrollingState) => {
         if(scrollingState=='dragging'){
             isScrollByClickSegmentedButton = false;
         }else if(scrollingState=='settling'){
@@ -212,18 +202,18 @@ var SegmentedView = React.createClass({
             dispatch(changeSegmentIndex(segmentedIndex));
             //console.log(this.game.store.getState().app);
         }
-    },
+    }
 
     render() {
         console.log('SegmentedView.js rendered');
-        var items = [];
-        var titles = this.props.titles;
+        let items = [];
+        let titles = this.props.titles;
 
         if (!this.props.stretch) {
             items.push(<View key={`s`} style={styles.spacer} />);
         }
 
-        for (var i = 0; i < titles.length; i++) {
+        for (let i = 0; i < titles.length; i++) {
             items.push(this.renderTitle(titles[i], i));
             if (!this.props.stretch) {
                 items.push(<View key={`s${i}`} style={styles.spacer} />);
@@ -304,6 +294,7 @@ var SegmentedView = React.createClass({
             </View>
         );
     }
-});
+}
+
 
 export default SegmentedView;

@@ -30,7 +30,7 @@ let toolbarActions = [
 let title = "TOPIC";
 let WEBVIEW_REF = `WEBVIEW_REF`;
 
-class MyWeb extends Component {
+class GeneTopic extends Component {
 
   constructor(props){
     super(props);
@@ -132,4 +132,4 @@ const styles = StyleSheet.create({
 });
 
 
-export default MyWeb
+export default GeneTopic

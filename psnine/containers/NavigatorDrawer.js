@@ -12,11 +12,11 @@ import {
 } from 'react-native';
 
 
-var settingIcon = require('image!ic_setting_blue');
+let settingIcon = require('image!ic_setting_blue');
 
-var signIcon = require('image!ic_assignment_blue');
+let signIcon = require('image!ic_assignment_blue');
 
-var imageArr = [
+let imageArr = [
   require('image!ic_game_blue'),
   require('image!ic_message_blue'),
   require('image!ic_plus_blue'),
@@ -27,7 +27,7 @@ var imageArr = [
 class NavigatorDrawer extends Component {
   constructor(props){
       super(props);
-      var dataSource = new ListView.DataSource({
+      let dataSource = new ListView.DataSource({
         rowHasChanged: (row1, row2) => row1 !== row2,
       });
       this.state = {
@@ -165,7 +165,7 @@ class NavigatorDrawer extends Component {
     if (Platform.OS === 'android') {
       TouchableElement = TouchableNativeFeedback;
     }
-    var icon = imageArr[rowID];
+    let icon = imageArr[rowID];
     return (
       <View>
         <TouchableElement

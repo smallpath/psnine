@@ -18,11 +18,11 @@ import {
 
 import { connect } from 'react-redux';
 
-import NavigatorDrawer from '../components/NavigatorDrawer';
-import SegmentedView from '../components/SegmentedView';
+import NavigatorDrawer from './NavigatorDrawer';
+import SegmentedView from './SegmentedView';
 
-import Community from './Community';
-import Gene from './Gene';
+import Community from './viewPagers/Community';
+import Gene from './viewPagers/Gene';
 
 import { changeSegmentIndex } from '../actions/app';
 

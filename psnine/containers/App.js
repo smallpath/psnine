@@ -16,7 +16,7 @@ import {
   RefreshControl,
 } from 'react-native';
 
-import NavigatorDrawer from '../components/NavigatorDrawer';
+import NavigatorDrawer from './NavigatorDrawer';
 import Toolbar from './Toolbar';
 
 

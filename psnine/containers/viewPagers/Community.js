@@ -14,23 +14,21 @@ import {
 
 import { connect } from 'react-redux';
 
-import { getGeneList } from '../actions/gene.js';
+import { getTopicList } from '../../actions/community.js';
 
-import NavigatorDrawer from '../components/NavigatorDrawer';
-import SegmentedView from '../components/SegmentedView';
-import Topic from './Topic';
+import CommunityTopic from '../../components/CommunityTopic';
 
-import { getGeneURL } from '../dao/dao';
-import moment from '../utils/moment';
+import { getTopicURL } from '../../dao/dao';
+import moment from '../../utils/moment';
 
 const ds = new ListView.DataSource({
   rowHasChanged: (row1, row2) => row1 !== row2,
 });
 
-class Gene extends Component {
-  constructor(props) {
-    super(props);
-  }
+class Community extends Component {
+    constructor(props){
+        super(props);
+    }
 
   _renderSeparator(sectionID: number, rowID: number, adjacentRowHighlighted: bool) {
     return (
@@ -43,13 +41,13 @@ class Gene extends Component {
 
   _onRowPressed = (rowData) => {
     const { navigator } = this.props;
-    const URL = getGeneURL(rowData.id);
+    const URL = getTopicURL(rowData.id);
     if (navigator) {
       navigator.push({
-        component: Topic,
+        component: CommunityTopic,
         params: {
           URL,
-          title: rowData.content,
+          title: rowData.title,
           rowData
         }
       });
@@ -77,21 +75,6 @@ class Gene extends Component {
 
     let TouchableElement = TouchableNativeFeedback;
 
-    let imageArr = [];
-    let type = rowData.type;
-
-    if(rowData.photo != '' && type == 'photo'){
-      let arr = rowData.photo.split(',');
-      imageArr = arr.map(value=>'http://ww4.sinaimg.cn/thumb150/'+value+'.jpg');
-    }else if(rowData.plus.img != '' && type == 'video'){
-      imageArr = [rowData.plus.img];
-    }else if(rowData.plus.cover != '' && type == 'music'){
-      imageArr = [rowData.plus.cover];
-    }
-
-    let imageItems = [];
-    imageArr.forEach((value,index)=>imageItems.push(<Image key={rowData.id+''+index} source={{ uri: value }} style={styles.geneImage}/>));
-
     return (
       <View rowID={ rowID }>
         <TouchableElement  onPress={() => this._onRowPressed(rowData) }>
@@ -106,12 +89,10 @@ class Gene extends Component {
                 ellipsizeMode={'tail'}
                 numberOfLines={3}
                 style={{ color: 'black', }}>
-                {rowData.content}
+                {rowData.title}
               </Text>
-              <View style={{flex:1, flexDirection: 'row'}}>
-                {imageItems}
-              </View>
-              <View style={{ flex: 1, flexDirection: 'row',  alignItems: 'flex-end', paddingTop: 5, }}>
+
+              <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'flex-end', paddingTop: 5, }}>
                 <Text style={{ flex: 1.5 }}>{rowData.psnid}</Text>
                 <Text style={{ flex: 1 }}>{fromNow}</Text>
                 <Text style={{ flex: 1 }}>{rowData.views}浏览</Text>
@@ -126,62 +107,62 @@ class Gene extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    this.props.gene = nextProps.gene;
+    this.props.app = nextProps.app;
+    this.props.community = nextProps.community;
   }
 
   componentDidMount = () => {
-    const { gene: geneReducer } = this.props;
-    if (geneReducer.genePage == 0)
+    const { community: communityReducer } = this.props;
+    if (communityReducer.topicPage == 0)
       this._onRefresh();
   }
 
-
   _onRefresh = () => {
-    const { gene: geneReducer, dispatch } = this.props;
+    const { community: communityReducer, dispatch } = this.props;
 
-    if (geneReducer.isLoadingMore || geneReducer.isRefreshing)
+    if (communityReducer.isLoadingMore || communityReducer.isRefreshing)
       return;
 
-    dispatch(getGeneList(1));
+    dispatch(getTopicList(1));
   }
 
   _loadMoreData = () => {
-    const { gene: geneReducer, dispatch } = this.props;
-    let page = geneReducer.genePage + 1;
-    dispatch(getGeneList(page));
+    const { community: communityReducer, dispatch } = this.props;
+    let page = communityReducer.topicPage + 1;
+    dispatch(getTopicList(page));
   }
 
   _onEndReached = () => {
-    const { gene: geneReducer, dispatch } = this.props;
+    const { community: communityReducer } = this.props;
 
-    if (geneReducer.isLoadingMore || geneReducer.isRefreshing)
+    if (communityReducer.isLoadingMore || communityReducer.isRefreshing)
       return;
 
-    this._loadMoreData();
+      this._loadMoreData();
 
   }
 
-  render() {
-    console.log('Gene.js rendered');
-    const { gene: geneReducer } = this.props;
+  render(){
+    const { community: communityReducer } = this.props;
+    console.log('Community.js rendered');
     return (
-      <ListView
-        refreshControl={
-          <RefreshControl
-            refreshing={geneReducer.isRefreshing || geneReducer.isLoadingMore }
-            onRefresh={this._onRefresh}
-            colors={['#00a2ed']}
-            />
-        }
-        pageSize = {32}
-        removeClippedSubviews={false}
-        enableEmptySections={true}
-        onEndReached={this._onEndReached}
-        onEndReachedThreshold={10}
-        dataSource={ ds.cloneWithRows(geneReducer.genes) }
-        renderRow={this._renderRow}
-        renderSeparator={this._renderSeparator}
-        />
+        <ListView
+          refreshControl={
+            <RefreshControl
+              refreshing={communityReducer.isRefreshing || communityReducer.isLoadingMore}
+              onRefresh={this._onRefresh}
+              colors={['#00a2ed']}
+              />
+          }
+          pageSize = {32}
+          removeClippedSubviews={false}
+          enableEmptySections={true}
+          onEndReached={this._onEndReached}
+          onEndReachedThreshold={10}
+          dataSource={ ds.cloneWithRows(communityReducer.topics) }
+          renderRow={this._renderRow}
+          renderSeparator={this._renderSeparator}
+          />
     )
   }
 
@@ -191,20 +172,16 @@ const styles = StyleSheet.create({
   avatar: {
     width: 50,
     height: 50,
-  },
-  geneImage: {
-    margin: 3,
-    width: 120,
-    height: 120,
   }
 });
 
+
 function mapStateToProps(state) {
     return {
-      gene: state.gene,
+      community: state.community,
     };
 }
 
 export default connect(
   mapStateToProps
-)(Gene);
+)(Community);
