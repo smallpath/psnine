@@ -31,12 +31,16 @@ class Psnine extends Component {
     }
   }
 
-  _renderNavigationView(){
-    return (<NavigatorDrawer/>)
+  _renderNavigationView = ()=>{
+    return (<NavigatorDrawer {...{closeDrawer: this.closeDrawer,navigator:this.props.navigator}}/>)
   }
 
-  callDrawer(){
+  callDrawer=()=>{
     this.refs[DRAWER_REF].openDrawer()
+  }
+
+  closeDrawer=()=>{
+    this.refs[DRAWER_REF].closeDrawer()
   }
 
   render() {

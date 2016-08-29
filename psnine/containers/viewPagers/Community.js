@@ -106,9 +106,11 @@ class Community extends Component {
     )
   }
 
-  componentWillReceiveProps(nextProps) {
-    this.props.app = nextProps.app;
-    this.props.community = nextProps.community;
+  componentWillReceiveProps = (nextProps) => {
+    if(this.props.communityType != nextProps.communityType){
+      this.props.communityType = nextProps.communityType;
+      this._onRefresh(nextProps.communityType);
+    }
   }
 
   componentDidMount = () => {
@@ -117,19 +119,20 @@ class Community extends Component {
       this._onRefresh();
   }
 
-  _onRefresh = () => {
+  _onRefresh = (type = '') => {
     const { community: communityReducer, dispatch } = this.props;
 
     if (communityReducer.isLoadingMore || communityReducer.isRefreshing)
       return;
 
-    dispatch(getTopicList(1));
+    dispatch(getTopicList(1, type));
   }
 
   _loadMoreData = () => {
-    const { community: communityReducer, dispatch } = this.props;
+    const { community: communityReducer, dispatch, communityType } = this.props;
+
     let page = communityReducer.topicPage + 1;
-    dispatch(getTopicList(page));
+    dispatch(getTopicList(page, communityType));
   }
 
   _onEndReached = () => {
@@ -138,7 +141,7 @@ class Community extends Component {
     if (communityReducer.isLoadingMore || communityReducer.isRefreshing)
       return;
 
-      this._loadMoreData();
+      this._loadMoreData(this.props.type);
 
   }
 

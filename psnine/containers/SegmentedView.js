@@ -101,6 +101,14 @@ class SegmentedView extends Component {
         };
     }
 
+    componentWillReceiveProps(nextProps) {
+        if(this.props.communityType != nextProps.communityType){
+            this.props.communityType = nextProps.communityType;
+        }else if(this.props.geneType != nextProps.geneType){
+            this.props.geneType = nextProps.geneType;
+        }
+    }
+
     componentWillMount() {
         let { titleWidth: width, restWidth } = this.props;
         let len = this.props.titles.length;
@@ -254,14 +262,18 @@ class SegmentedView extends Component {
                 >
                     <View key={`s00`}>
                         <Community 
-                            segmentedIndex={0} 
+                            index={0} 
                             ref={community=>this.community=community}
-                            {...{navigator:this.props.navigator}} 
+                            {...{
+                                navigator:this.props.navigator, 
+                                communityType: this.props.communityType, 
+                              }
+                            } 
                         />
                     </View>
                     <View key={`s11`}>
                         <Game 
-                            segmentedIndex={1} 
+                            index={1} 
                             ref={game=>this.game=game}
                             {...{navigator:this.props.navigator}} 
                             URL={'http://psnine.com/psngame'}
@@ -270,14 +282,14 @@ class SegmentedView extends Component {
                     <View key={`s22`}>
                         <Rank 
                             ref={rank=>this.rank=rank}
-                            segmentedIndex={2}
+                            index={2}
                             {...{navigator:this.props.navigator}} 
                             URL={'http://psnine.com/psnid'}
                         />
                     </View>
                     <View key={`s33`}>
                         <Battle 
-                            segmentedIndex={3} 
+                            index={3} 
                             ref={battle=>this.battle=battle}
                             {...{navigator:this.props.navigator}} 
                             URL={'http://psnine.com/battle'}
@@ -286,8 +298,12 @@ class SegmentedView extends Component {
                     <View key={`s44`}>
                         <Gene 
                             ref={gene=>this.gene=gene}
-                            segmentedIndex={4} 
-                            {...{navigator:this.props.navigator}} 
+                            index={4} 
+                            {...{
+                                navigator:this.props.navigator, 
+                                geneType: this.props.geneType, 
+                              }
+                            } 
                         />
                     </View>
                 </ViewPagerAndroid>

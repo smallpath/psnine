@@ -83,7 +83,7 @@ class CommunityTopic extends Component {
   }
 
   render() {
-    console.log('Topic.js rendered');
+    console.log('CommunityTopic.js rendered');
     return ( 
           <View style={{flex:1}}>
               <ToolbarAndroid

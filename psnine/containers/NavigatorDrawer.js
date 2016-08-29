@@ -11,6 +11,13 @@ import {
   TouchableHighlight,
 } from 'react-native';
 
+import { getDealURL, getHappyPlusOneURL, getStoreURL } from '../dao/dao';
+
+import CommunityTopic from '../components/CommunityTopic';
+import Deal from '../components/Deal';
+import GeneTopic from '../components/GeneTopic';
+import HappyPlusOne from '../components/HappyPlusOne';
+import Store from '../components/Store';
 
 let settingIcon = require('image!ic_setting_blue');
 
@@ -160,7 +167,56 @@ class NavigatorDrawer extends Component {
       );
   }  
 
-  renderRow(rowData, sectionID, rowID, highlightRow) {
+  onSelectItem = (sectionID,rowID)=>{
+    const { navigator, closeDrawer} = this.props;
+    closeDrawer();
+    let URL;
+    if(sectionID == 's1'){
+      switch (parseInt(rowID)) {
+        case 0:
+
+            break;
+        case 1:
+
+            break;
+        case 2:
+            console.log('here')
+            URL = getHappyPlusOneURL();
+
+            navigator.push({
+              component: HappyPlusOne,
+              params: {
+                URL,
+                title: '游惠',
+              }
+            });
+            break;
+        case 3:
+            URL = getStoreURL();
+            navigator.push({
+              component: Store,
+              params: {
+                URL,
+                title: 'Store',
+              }
+            });
+            break;
+        case 4:
+            URL = getDealURL();
+            navigator.push({
+              component: Deal,
+              params: {
+                URL,
+                title: '闲游',
+              }
+            });
+            break;
+      }
+
+    }
+  }
+
+  renderRow = (rowData, sectionID, rowID, highlightRow) => {
     let TouchableElement = TouchableHighlight;
     if (Platform.OS === 'android') {
       TouchableElement = TouchableNativeFeedback;
@@ -169,7 +225,7 @@ class NavigatorDrawer extends Component {
     return (
       <View>
         <TouchableElement
-          // onPress={() => this.props.onSelectItem(theme)}
+           onPress={()=>this.onSelectItem(sectionID,rowID)}
           // onShowUnderlay={highlightRowFunc}
           // onHideUnderlay={highlightRowFunc}
           >
@@ -184,7 +240,7 @@ class NavigatorDrawer extends Component {
     );
   }
 
-  renderFooter(){
+  renderFooter = () =>{
     rowData = "设置";
     let TouchableElement = TouchableHighlight;
     if (Platform.OS === 'android') {
@@ -205,7 +261,7 @@ class NavigatorDrawer extends Component {
     )
   }
 
-  render() {
+  render = () => {
     console.log('NavigatorDrawer.js rendered');
     return (
       <View style={styles.container} {...this.props}>

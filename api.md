@@ -47,7 +47,7 @@ http://120.55.124.66/user/secondlife_xhm/notice
 	- exp
 	- all4all
 	- openbox
-	- gamlist
+	- gamelist
 	- event
 
 ## 社区主题:

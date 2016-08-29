@@ -30,7 +30,7 @@ let toolbarActions = [
 let title = "TOPIC";
 let WEBVIEW_REF = `WEBVIEW_REF`;
 
-class GeneTopic extends Component {
+class Deal extends Component {
 
   constructor(props){
     super(props);
@@ -83,7 +83,7 @@ class GeneTopic extends Component {
   }
 
   render() {
-    console.log('GeneTopic.js rendered');
+    console.log('Deal.js rendered');
     return ( 
           <View style={{flex:1}}>
               <ToolbarAndroid
@@ -132,4 +132,4 @@ const styles = StyleSheet.create({
 });
 
 
-export default GeneTopic
+export default Deal

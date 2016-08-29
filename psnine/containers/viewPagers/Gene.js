@@ -124,7 +124,10 @@ class Gene extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    this.props.gene = nextProps.gene;
+    if(this.props.geneType != nextProps.geneType){
+      this.props.geneType = nextProps.geneType;
+      this._onRefresh(nextProps.geneType);
+    }
   }
 
   componentDidMount = () => {
@@ -134,19 +137,19 @@ class Gene extends Component {
   }
 
 
-  _onRefresh = () => {
+  _onRefresh = (type = '') => {
     const { gene: geneReducer, dispatch } = this.props;
 
     if (geneReducer.isLoadingMore || geneReducer.isRefreshing)
       return;
 
-    dispatch(getGeneList(1));
+    dispatch(getGeneList(1, type));
   }
 
   _loadMoreData = () => {
-    const { gene: geneReducer, dispatch } = this.props;
+    const { gene: geneReducer, dispatch, geneType } = this.props;
     let page = geneReducer.genePage + 1;
-    dispatch(getGeneList(page));
+    dispatch(getGeneList(page, geneType));
   }
 
   _onEndReached = () => {

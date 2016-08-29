@@ -30,17 +30,17 @@ import { changeSegmentIndex } from '../actions/app';
 let title = "PSNINE";
 
 let communityActions = [
-  { title: '搜索', icon: require('image!ic_search_white') , show: 'always'},
-  { title: '全部', show: 'never' },
-  { title: '新闻', show: 'never' },
-  { title: '攻略', show: 'never' },
-  { title: '测评', show: 'never' },
-  { title: '心得', show: 'never' },
-  { title: 'Plus', show: 'never' },
-  { title: '二手', show: 'never' },
-  { title: '开箱', show: 'never' },
-  { title: '游列', show: 'never' },
-  { title: '活动', show: 'never' },
+  { title: '搜索', icon: require('image!ic_search_white'), value: '', show: 'always'},
+  { title: '全部', value: '', show: 'never' },
+  { title: '新闻', value: 'news',show: 'never' },
+  { title: '攻略', value: 'guide',show: 'never' },
+  { title: '测评', value: 'review',show: 'never' },
+  { title: '心得', value: 'plus',show: 'never' },
+  { title: 'Plus', value: 'exp',show: 'never' },
+  { title: '二手', value: 'all4all',show: 'never' },
+  { title: '开箱', value: 'openbox',show: 'never' },
+  { title: '游列', value: 'gamelist',show: 'never' },
+  { title: '活动', value: 'event',show: 'never' },
 ];
 
 let gameActions = [
@@ -56,12 +56,12 @@ let battleActions = [
 ];
 
 let geneActions = [
-  { title: '搜索', icon: require('image!ic_search_white') , show: 'always'},
-  { title: '全部', show: 'never' },
-  { title: '图文类', show: 'never' },
-  { title: '音乐类', show: 'never' },
-  { title: '影视类', show: 'never' },
-  { title: '视频类', show: 'never' },
+  { title: '搜索', icon: require('image!ic_search_white') ,value: '', show: 'always'},
+  { title: '全部', value: 'all', show: 'never' },
+  { title: '图文类',value: 'photo', show: 'never' },
+  { title: '音乐类',value: 'music', show: 'never' },
+  { title: '影视类',value: 'movie', show: 'never' },
+  { title: '视频类',value: 'video', show: 'never' },
 ];
 
 let toolbarActions = [communityActions,gameActions,rankActions,battleActions,geneActions]
@@ -77,7 +77,8 @@ class Toolbar extends Component {
     super(props);
 
     this.state = {
-      segmentedIndex: 0,
+      communityType: '',
+      geneType: '',
     }
 
   }
@@ -85,7 +86,12 @@ class Toolbar extends Component {
   _renderSegmentedView = () =>{
     return (
       <SegmentedView
-        {...{navigator:this.props.navigator, toolbarDispatch: this.props.dispatch}} 
+        {...{
+            communityType: this.state.communityType, 
+            geneType: this.state.geneType,
+            navigator:this.props.navigator, 
+            toolbarDispatch: this.props.dispatch
+        }} 
         titles={titlesArr}
         index={0}
         style={styles.segmentedView}
@@ -109,6 +115,19 @@ class Toolbar extends Component {
     //dispatch(changeSegmentIndex(appReducer.segmentedIndex));
   }
 
+  onActionSelected = (index) => {
+    const { segmentedIndex } = this.props.app;
+    if(segmentedIndex == 0){
+      this.setState({
+        communityType: toolbarActions[0][index].value,
+      });
+    }else if(segmentedIndex == 4){
+      this.setState({
+        geneType: toolbarActions[4][index].value,
+      }); 
+    }
+  }
+
   render() {
     const { app: appReducer } = this.props;
     console.log('Toolbar.js rendered');
@@ -121,6 +140,7 @@ class Toolbar extends Component {
           titleColor="white"
           overflowIcon={require('image!ic_more_white')}
           actions={toolbarActions[appReducer.segmentedIndex]}
+          onActionSelected={this.onActionSelected}
           onIconClicked={this.props._callDrawer() }
           />
         {this._renderSegmentedView() }
