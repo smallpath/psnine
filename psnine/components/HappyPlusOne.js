@@ -77,13 +77,8 @@ class HappyPlusOne extends Component {
     }//return false;
   }
 
- onShouldStartLoadWithRequest = (event) => { 
-    console.log(event);
-    return true; 
-  }
-
   render() {
-    console.log('HappyPlusOne.js rendered');
+    // console.log('HappyPlusOne.js rendered');
     return ( 
           <View style={{flex:1}}>
               <ToolbarAndroid
@@ -101,7 +96,6 @@ class HappyPlusOne extends Component {
                   scalesPageToFit={true}
                   domStorageEnabled={true}
                   onNavigationStateChange={this.onNavigationStateChange}
-                  onShouldStartLoadWithRequest={this.onShouldStartLoadWithRequest}
                   startInLoadingState={true}  
                   injectedJavaScript={`$('.header').hide()`}
               />

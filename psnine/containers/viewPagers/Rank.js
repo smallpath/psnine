@@ -55,7 +55,7 @@ class Rank extends Component {
   }
 
   render() {
-    console.log('Rank.js rendered');
+    // console.log('Rank.js rendered');
     return ( 
         <View style={{flex:3}}>
             <View style={{

@@ -261,7 +261,7 @@ class NavigatorDrawer extends Component {
   }
 
   render = () => {
-    console.log('NavigatorDrawer.js rendered');
+    // console.log('NavigatorDrawer.js rendered');
     return (
       <View style={styles.container} {...this.props}>
         <ListView

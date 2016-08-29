@@ -163,7 +163,7 @@ class Gene extends Component {
   }
 
   render() {
-    console.log('Gene.js rendered');
+    // console.log('Gene.js rendered');
     const { gene: geneReducer } = this.props;
     return (
       <ListView

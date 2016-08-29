@@ -77,15 +77,14 @@ class CommunityTopic extends Component {
     }//return false;
   }
 
- onShouldStartLoadWithRequest = (event) => { 
-    console.log(event);
-    return true; 
-  }
-
   render() {
-    console.log('CommunityTopic.js rendered');
+    // console.log('CommunityTopic.js rendered');
     return ( 
-          <View style={{flex:1}}>
+          <View 
+            style={{flex:1}}
+            onStartShouldSetResponder={() => false}
+            onMoveShouldSetResponder={() => false}
+            >
               <ToolbarAndroid
                 navIcon={require('image!ic_back_white')}
                 title={this.props.title}
@@ -101,7 +100,6 @@ class CommunityTopic extends Component {
                   scalesPageToFit={true}
                   domStorageEnabled={true}
                   onNavigationStateChange={this.onNavigationStateChange}
-                  onShouldStartLoadWithRequest={this.onShouldStartLoadWithRequest}
                   startInLoadingState={true}  
                   injectedJavaScript={`$('.header').hide()`}
               />

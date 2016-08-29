@@ -213,7 +213,7 @@ class SegmentedView extends Component {
     }
 
     render() {
-        console.log('SegmentedView.js rendered');
+        // console.log('SegmentedView.js rendered');
         let items = [];
         let titles = this.props.titles;
 

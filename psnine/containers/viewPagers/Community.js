@@ -147,7 +147,7 @@ class Community extends Component {
 
   render(){
     const { community: communityReducer } = this.props;
-    console.log('Community.js rendered');
+    // console.log('Community.js rendered');
     return (
         <ListView
           refreshControl={

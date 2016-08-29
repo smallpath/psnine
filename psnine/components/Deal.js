@@ -77,13 +77,8 @@ class Deal extends Component {
     }//return false;
   }
 
- onShouldStartLoadWithRequest = (event) => { 
-    console.log(event);
-    return true; 
-  }
-
   render() {
-    console.log('Deal.js rendered');
+    // console.log('Deal.js rendered');
     return ( 
           <View style={{flex:1}}>
               <ToolbarAndroid
@@ -101,7 +96,6 @@ class Deal extends Component {
                   scalesPageToFit={true}
                   domStorageEnabled={true}
                   onNavigationStateChange={this.onNavigationStateChange}
-                  onShouldStartLoadWithRequest={this.onShouldStartLoadWithRequest}
                   startInLoadingState={true}  
                   injectedJavaScript={`$('.header').hide()`}
               />

@@ -122,7 +122,7 @@ class Toolbar extends Component {
 
   render() {
     const { app: appReducer } = this.props;
-    console.log('Toolbar.js rendered');
+    // console.log('Toolbar.js rendered');
     return (
       <View style={styles.container}>
         <ToolbarAndroid

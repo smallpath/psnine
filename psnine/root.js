@@ -34,11 +34,15 @@ const SCREEN_WIDTH = Dimensions.get('window').width;
 let BaseConfig = Navigator.SceneConfigs.FloatFromRight;
 
 let CustomGesture = Object.assign({}, BaseConfig.gestures.pop, { 
+	isDetachable: true,
 	snapVelocity: 8, 
 	edgeHitWidth: SCREEN_WIDTH,
-	gestureDetectMovement:2,
+	// set it from 3(Default) to 12 to ignore Navigator gestures being triggerred 
+	// because Navigator gesture will be triggerred first when there is another components
+	// which has scroll abiliy, such as ScrollView and WebView
+	gestureDetectMovement:12,	
   	stillCompletionRatio: 3 / 10,
-	directionRatio: 1,
+	directionRatio: 2,
 	fullDistance: SCREEN_WIDTH/2
 });
 
@@ -58,9 +62,7 @@ class Root extends React.Component {
 			<Provider store={ store }>
 				<Navigator
 					initialRoute={{ component: App }}
-					configureScene={(route) => {
-						return CustomSceneConfig;
-					} }
+					configureScene={route => CustomSceneConfig }
 					renderScene={this.renderScene.bind(this) } />
 			</Provider>
 		);

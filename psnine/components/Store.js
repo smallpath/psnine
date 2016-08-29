@@ -77,13 +77,8 @@ class Store extends Component {
     }//return false;
   }
 
- onShouldStartLoadWithRequest = (event) => { 
-    console.log(event);
-    return true; 
-  }
-
   render() {
-    console.log('Store.js rendered');
+    // console.log('Store.js rendered');
     return ( 
           <View style={{flex:1}}>
               <ToolbarAndroid
@@ -101,7 +96,6 @@ class Store extends Component {
                   scalesPageToFit={true}
                   domStorageEnabled={true}
                   onNavigationStateChange={this.onNavigationStateChange}
-                  onShouldStartLoadWithRequest={this.onShouldStartLoadWithRequest}
                   startInLoadingState={true}  
                   injectedJavaScript={`$('.header').hide()`}
               />

@@ -56,7 +56,7 @@ class Game extends Component {
 
 
   render() {
-    console.log('Game.js rendered');
+    // console.log('Game.js rendered');
     return ( 
         <View style={{flex:3}}>
             <View style={{

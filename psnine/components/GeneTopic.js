@@ -77,13 +77,9 @@ class GeneTopic extends Component {
     }//return false;
   }
 
- onShouldStartLoadWithRequest = (event) => { 
-    console.log(event);
-    return true; 
-  }
 
   render() {
-    console.log('GeneTopic.js rendered');
+    // console.log('GeneTopic.js rendered');
     return ( 
           <View style={{flex:1}}>
               <ToolbarAndroid
@@ -101,7 +97,6 @@ class GeneTopic extends Component {
                   scalesPageToFit={true}
                   domStorageEnabled={true}
                   onNavigationStateChange={this.onNavigationStateChange}
-                  onShouldStartLoadWithRequest={this.onShouldStartLoadWithRequest}
                   startInLoadingState={true}  
                   injectedJavaScript={`$('.header').hide()`}
               />

@@ -54,13 +54,8 @@ class Battle extends Component {
     // }
   }
 
- onShouldStartLoadWithRequest = (event) => { 
-    console.log(event);
-    return true; 
-  }
-
   render() {
-    console.log('Battle.js rendered');
+    // console.log('Battle.js rendered');
     return ( 
         <View style={{flex:3}}>
             <View style={{
@@ -89,7 +84,6 @@ class Battle extends Component {
                 scalesPageToFit={true}
                 domStorageEnabled={true}
                 onNavigationStateChange={this.onNavigationStateChange}
-                onShouldStartLoadWithRequest={this.onShouldStartLoadWithRequest}
                 startInLoadingState={false}  
                 injectedJavaScript={`$('.header').hide(); $('.scrollbar').removeClass('scrollbar').hide()`}
             />

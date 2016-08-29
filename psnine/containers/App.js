@@ -45,7 +45,7 @@ class Psnine extends Component {
 
   render() {
     const { reducer } = this.props;
-    console.log('App.js rendered');
+    // console.log('App.js rendered');
     return ( 
       <DrawerLayoutAndroid 
             ref={DRAWER_REF}
