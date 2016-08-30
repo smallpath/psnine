@@ -58,6 +58,7 @@ let styles = StyleSheet.create({
 });
 
 let isScrollByClickSegmentedButton = false;
+let direction = '';
 
 class SegmentedView extends Component {
 
@@ -190,6 +191,20 @@ class SegmentedView extends Component {
         this.state.fadeAnim.setOffset(left);
         this.state.fadeAnim.setValue(0);
 
+        if (direction==''){
+            direction = nativeEvent.offset*2 > 1 ? 'left' : 'right';
+        }
+        let fromIndex, toIndex;
+        if(direction == 'left'){
+            fromIndex = nativeEvent.position + 1,
+            toIndex = nativeEvent.position;
+        }else{
+            fromIndex = nativeEvent.position;
+            toIndex = nativeEvent.position+1;
+        }
+        
+        this.props.scrollTo(fromIndex,toIndex,nativeEvent.offset)
+
     }
 
     onPageScrollStateChanged = (scrollingState) => {
@@ -199,7 +214,6 @@ class SegmentedView extends Component {
 
 
         }else if(scrollingState=='idle'){
-            isScrollByClickSegmentedButton = false;
             const { titleWidth } = this.props;
 
             let fadeAnim = this.state.fadeAnim;
@@ -207,10 +221,14 @@ class SegmentedView extends Component {
             let currentLeft = fadeAnim._value;
             let segmentedIndex = parseInt(currentLeft/titleWidth);
 
-            let dispatch = this.props.toolbarDispatch;
+            direction = '';
 
+            let dispatch = this.props.toolbarDispatch;
+            let fromIndex = this.props.segmentedIndex;
             dispatch(changeSegmentIndex(segmentedIndex));
-            //console.log(this.game.store.getState().app);
+            if (isScrollByClickSegmentedButton == true){
+                this.props.switchTo(fromIndex,segmentedIndex);
+            }
         }
     }
 
@@ -265,6 +283,12 @@ class SegmentedView extends Component {
                 onPageScrollStateChanged={this.onPageScrollStateChanged}
                 onPageScroll={this.onPageScroll}
                 >
+                {/*<View key={'s000'}></View> 
+                <View key={'s001'}></View> 
+                <View key={'s002'}></View> 
+                <View key={'s003'}></View> 
+                <View key={'s004'}></View>*/} 
+                
                     <View key={`s00`}>
                         <Community 
                             index={0} 

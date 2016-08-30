@@ -5,6 +5,7 @@ let config =  {
 
     nodeColor: '#E1F0F7',
     idColor: '#3498db',
+    accentColor: '#ff4081',
 }
 
 //export default config;

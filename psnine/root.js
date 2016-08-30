@@ -70,7 +70,7 @@ class Root extends React.Component {
 						initialRoute={{ component: App }}
 						configureScene={route => CustomSceneConfig }
 						renderScene={this.renderScene.bind(this) } 
-						style={{width:SCREEN_WIDTH, height:SCREEN_HEIGHT}}/>
+						style={{width:SCREEN_WIDTH, height:SCREEN_HEIGHT-StatusBar.currentHeight}}/>
 				 </View>
 			</Provider>
 		);

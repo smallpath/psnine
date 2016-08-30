@@ -14,6 +14,8 @@ import {
   TouchableNativeFeedback,
   RefreshControl,
   InteractionManager,
+  Animated,
+  Easing,
 } from 'react-native';
 
 import { connect } from 'react-redux';
@@ -26,10 +28,13 @@ import Gene from './viewPagers/Gene';
 
 import { changeSegmentIndex, changeCommunityType, changeGeneType } from '../actions/app';
 
-import { standardColor } from '../config/config';
+import { standardColor, accentColor } from '../config/config';
 
 
 let title = "PSNINE";
+let isMounted = false;
+let indexWithFloatButton = [0,3,4];
+let indexWithoutFloatButton = [1,2];
 
 let communityActions = [
   { title: '搜索', icon: require('image!ic_search_white'), value: '', show: 'always'},
@@ -76,6 +81,12 @@ const ds = new ListView.DataSource({
 class Toolbar extends Component {
   constructor(props) {
     super(props);
+
+    this.state = {
+      rotation: new Animated.Value(1),
+      scale: new Animated.Value(1),
+      opacity: new Animated.Value(1),
+    }
   }
 
   _renderSegmentedView = () =>{
@@ -85,12 +96,15 @@ class Toolbar extends Component {
             communityType: this.props.app.communityType, 
             geneType: this.props.app.geneType,
             navigator:this.props.navigator, 
-            toolbarDispatch: this.props.dispatch
+            toolbarDispatch: this.props.dispatch,
+            segmentedIndex: this.props.app.segmentedIndex,
         }} 
         titles={titlesArr}
         index={0}
         style={styles.segmentedView}
         stretch
+        switchTo={this.switchTo}
+        scrollTo={this.scrollTo}
         duration={200}
         restWidth={10}
         barPosition='bottom'
@@ -105,11 +119,6 @@ class Toolbar extends Component {
     this.props.app = nextProps.app;
   }
 
-  componentDidMount = () => {
-    //const { app: appReducer,dispatch } = this.props;
-    //dispatch(changeSegmentIndex(appReducer.segmentedIndex));
-  }
-
   onActionSelected = (index) => {
     const { segmentedIndex } = this.props.app;
     const { dispatch } = this.props;
@@ -120,6 +129,103 @@ class Toolbar extends Component {
       let type = toolbarActions[segmentedIndex][index].value;
       dispatch(changeGeneType(type))
     }
+  }
+
+  componentDidMount() {
+        //this.parallelFadeIn(1);
+  }
+
+
+  parallelFadeOut = (toValue) => {
+    let spring = Animated.spring;
+    let timing = Animated.timing;
+    Animated.parallel(['opacity','rotation','scale'].map(property => {
+        if(property == 'rotation' || property == 'scale'){
+          return spring(this.state[property], {
+                      toValue: toValue,
+                      easing: Easing.elastic(2),
+                 });
+        }else if(property == 'opacity'){
+          return timing(this.state[property], {
+                      toValue: toValue,
+                      delay: 200,
+                      duration: 0,
+                 });
+        }
+    })).start();
+  }
+
+  parallelFadeIn = (toValue) => {
+    let spring = Animated.spring;
+    let timing = Animated.timing;
+    Animated.parallel(['opacity','rotation','scale'].map(property => {
+        if(property == 'rotation' || property == 'scale'){
+          return spring(this.state[property], {
+                      toValue: toValue,
+                      easing: Easing.elastic(2),
+                 });
+        }else if(property == 'opacity'){
+          return timing(this.state[property], {
+                      toValue: toValue,
+                      duration: 0,
+                 });
+        }
+    })).start();
+  }
+
+  switchTo = (fromIndex,toIndex) => {
+    if (indexWithFloatButton.indexOf(fromIndex) != -1 && indexWithoutFloatButton.indexOf(toIndex) !=-1){
+      //this.state.opacity.setValue(1-value);
+      //this.state.rotation.setValue(1-value);
+      this.parallelFadeOut(0);
+    }else if(indexWithoutFloatButton.indexOf(fromIndex) != -1 && indexWithFloatButton.indexOf(toIndex) !=-1){
+      //this.state.opacity.setValue(value);
+      //this.state.rotation.setValue(value);
+      this.parallelFadeIn(1);
+    }else if(indexWithoutFloatButton.indexOf(fromIndex) != -1 && indexWithoutFloatButton.indexOf(toIndex) !=-1){
+
+    }else if(indexWithFloatButton.indexOf(fromIndex) != -1 && indexWithFloatButton.indexOf(toIndex) !=-1){
+      let value = this.state.rotation._value;
+      let targetValue = 1-value; 
+      Animated.timing(this.state.rotation, {
+            toValue: targetValue,
+            easing: Easing.elastic(2),
+      }).start();
+    }
+    
+  }
+
+  scrollTo = (fromIndex,toIndex, value) => {
+    if (isMounted == false){
+      isMounted = true;
+      return;
+    }
+    if (indexWithFloatButton.indexOf(fromIndex) != -1 && indexWithoutFloatButton.indexOf(toIndex) !=-1){
+      if (fromIndex < toIndex){
+        this.state.opacity.setValue(1-value);
+        this.state.rotation.setValue(1-value);
+        this.state.scale.setValue(1-value);
+      }else{
+        this.state.opacity.setValue(value);
+        this.state.rotation.setValue(value);
+        this.state.scale.setValue(value);
+      }
+    }else if(indexWithoutFloatButton.indexOf(fromIndex) != -1 && indexWithFloatButton.indexOf(toIndex) !=-1){
+      if (fromIndex < toIndex){
+        this.state.opacity.setValue(value);
+        this.state.rotation.setValue(value);
+        this.state.scale.setValue(value);
+      }else{
+        this.state.opacity.setValue(1-value);
+        this.state.rotation.setValue(1-value);
+        this.state.scale.setValue(1-value);
+      }
+    }else if(indexWithoutFloatButton.indexOf(fromIndex) != -1 && indexWithoutFloatButton.indexOf(toIndex) !=-1){
+
+    }else if(indexWithFloatButton.indexOf(fromIndex) != -1 && indexWithFloatButton.indexOf(toIndex) !=-1){
+      this.state.rotation.setValue(value);
+    }
+
   }
 
   render() {
@@ -137,7 +243,45 @@ class Toolbar extends Component {
           onActionSelected={this.onActionSelected}
           onIconClicked={this.props._callDrawer() }
           />
-        {this._renderSegmentedView() }
+          {this._renderSegmentedView() }
+          <Animated.View style={{
+            width: 56,
+            height: 56,
+            borderRadius: 30,
+            backgroundColor: accentColor,
+            position:'absolute',
+            bottom: 16,
+            right: 16,
+            elevation: 6,
+            opacity: this.state.opacity,
+
+            transform: [{
+                        scale: this.state.scale,                        
+                      },{
+                        rotateZ: this.state.rotation.interpolate({
+                          inputRange: [0,1],
+                          outputRange: ['0deg', '360deg']
+                        }),
+                      }]
+          }}>
+          <TouchableNativeFeedback 
+            delayPressIn={0}
+            background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
+            style={{
+            width: 56,
+            height: 56,
+            borderRadius: 30,
+            flex:1}}>
+            <View style={{borderRadius: 30,}}>
+              <Image source={require('image!ic_add_white')}
+                    style={{
+                      left:0,
+                      top:0,
+                  }}
+              />
+            </View>
+          </TouchableNativeFeedback>
+          </Animated.View>
       </View>
     )
   }

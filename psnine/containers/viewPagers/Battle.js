@@ -23,7 +23,7 @@ import { standardColor } from '../../config/config';
 
 let WEBVIEW_REF = `WEBVIEW_REF_BATTLE`;
 let back_image = require('image!ic_back_blue');
-let imageSize = 40;
+let imageSize = 56;
 
 class Battle extends Component {
 
@@ -62,8 +62,8 @@ class Battle extends Component {
         <View style={{flex:3}}>
             <View style={{
                     position: 'absolute',
-                    bottom: 40,
-                    right: 20,
+                    bottom: 16,
+                    right: 16,
                     width: imageSize,
                     height: imageSize,
                     zIndex: 100,
