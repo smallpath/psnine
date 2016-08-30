@@ -4,8 +4,11 @@ import {
 	BackAndroid,
 	Dimensions,
 	ToastAndroid,
+	StatusBar,
+	View,
 } from 'react-native';
 import { Provider } from 'react-redux'
+import { deepColor } from './config/config';
 
 import configureStore from './store/store.js'
 import App from './containers/App.js'
@@ -22,7 +25,7 @@ BackAndroid.addEventListener('hardwareBackPress', function () {
 		var timestamp = (new Date()).valueOf();
 	    if(timestamp - backPressClickTimeStamp>2000){
 	      backPressClickTimeStamp = timestamp;
-		  ToastAndroid.show('再按一次退出',2000);
+		  ToastAndroid.show('再按一次退出程序',2000);
 	      return true;
 	    }else{
 	      return false;
@@ -30,7 +33,8 @@ BackAndroid.addEventListener('hardwareBackPress', function () {
 	}
 });
 
-const SCREEN_WIDTH = Dimensions.get('window').width;
+const { width:SCREEN_WIDTH, height:SCREEN_HEIGHT } = Dimensions.get('window');
+
 let BaseConfig = Navigator.SceneConfigs.FloatFromRight;
 
 let CustomGesture = Object.assign({}, BaseConfig.gestures.pop, { 
@@ -60,10 +64,14 @@ class Root extends React.Component {
 	render() {
 		return (
 			<Provider store={ store }>
-				<Navigator
-					initialRoute={{ component: App }}
-					configureScene={route => CustomSceneConfig }
-					renderScene={this.renderScene.bind(this) } />
+				 <View> 
+				 	<StatusBar translucent={false} backgroundColor={deepColor} barStyle="light-content" />
+					<Navigator
+						initialRoute={{ component: App }}
+						configureScene={route => CustomSceneConfig }
+						renderScene={this.renderScene.bind(this) } 
+						style={{width:SCREEN_WIDTH, height:SCREEN_HEIGHT}}/>
+				 </View>
 			</Provider>
 		);
 	}

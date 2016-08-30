@@ -18,6 +18,7 @@ import {
 } from 'react-native';
 
 import { connect } from 'react-redux';
+import { standardColor } from '../../config/config';
 
 let WEBVIEW_REF = `WEBVIEW_REF_RANK`;
 let back_image = require('image!ic_back_blue');
@@ -101,7 +102,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#F5FCFF',
   },
   toolbar: {
-    backgroundColor: '#00a2ed',
+    backgroundColor: standardColor,
     height: 56,
   },
   selectedTitle:{

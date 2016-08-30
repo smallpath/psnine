@@ -26,6 +26,8 @@ import Gene from './viewPagers/Gene';
 
 import { changeSegmentIndex, changeCommunityType, changeGeneType } from '../actions/app';
 
+import { standardColor } from '../config/config';
+
 
 let title = "PSNINE";
 
@@ -149,7 +151,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#F5FCFF',
   },
   toolbar: {
-    backgroundColor: '#00a2ed',
+    backgroundColor: standardColor,
     height: 56,
   },
   segmentedView: {

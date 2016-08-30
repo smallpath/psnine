@@ -18,8 +18,8 @@ import {
 } from 'react-native';
 
 import { connect } from 'react-redux';
-import reducer from '../reducers/rootReducer.js'
-import { bindActionCreators } from 'redux';
+
+import { standardColor } from '../config/config';
 
 let toolbarActions = [
   {title: '收藏', icon: require('image!ic_collect_white') ,show: 'always'},
@@ -113,7 +113,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#F5FCFF',
   },
   toolbar: {
-    backgroundColor: '#00a2ed',
+    backgroundColor: standardColor,
     height: 56,
   },
   selectedTitle:{

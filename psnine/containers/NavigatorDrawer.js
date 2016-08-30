@@ -12,6 +12,7 @@ import {
 } from 'react-native';
 
 import { getDealURL, getHappyPlusOneURL, getStoreURL } from '../dao/dao';
+import { standardColor } from '../config/config';
 
 import CommunityTopic from '../components/CommunityTopic';
 import Deal from '../components/Deal';
@@ -289,7 +290,7 @@ const styles = StyleSheet.create({
   header: {
     flex: 1,
     flexDirection: 'column',
-    backgroundColor: '#00a2ed',
+    backgroundColor: standardColor,
     height: 140,
   },
   userInfo: {
@@ -325,7 +326,7 @@ const styles = StyleSheet.create({
   homeTheme: {
     fontSize: 16,
     marginLeft: 16,
-    color: '#00a2ed'
+    color: standardColor
   },
   themeItem: {
     flex: 1,

@@ -24,6 +24,8 @@ import Rank from './viewPagers/Rank';
 import Battle from './viewPagers/Battle';
 import Gene from './viewPagers/Gene';
 
+import { standardColor } from '../config/config';
+
 let screen = Dimensions.get('window');
 
 let styles = StyleSheet.create({
@@ -35,7 +37,7 @@ let styles = StyleSheet.create({
     },
     title: {
         flex: 1,
-        backgroundColor: '#00a2ed',
+        backgroundColor: standardColor,
         alignItems: 'center',
         paddingHorizontal: 2,
         paddingVertical: 8,
@@ -46,7 +48,7 @@ let styles = StyleSheet.create({
     barContainer: {
         height: 6,
         position: 'relative',
-        backgroundColor: '#00a2ed',
+        backgroundColor: standardColor,
     },
     bar: {
         backgroundColor: '#00f',
@@ -250,7 +252,8 @@ class SegmentedView extends Component {
                 <ViewPagerAndroid style={{
                     flex: 10,
                     flexDirection: 'row',
-                    backgroundColor: '#F5FCFF',
+                    /*backgroundColor: '#F5FCFF',*/
+                    backgroundColor: '#FAFAFA',
                     alignItems: 'center',
                     paddingHorizontal: 2,
                     paddingVertical: 8,}

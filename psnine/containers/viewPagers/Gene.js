@@ -13,7 +13,7 @@ import {
 } from 'react-native';
 
 import { connect } from 'react-redux';
-
+import { standardColor, nodeColor, idColor  } from '../../config/config';
 import { getGeneList } from '../../actions/gene.js';
 
 import GeneTopic from '../../components/GeneTopic';
@@ -87,32 +87,48 @@ class Gene extends Component {
       imageArr = [rowData.plus.cover];
     }
 
+    imageArr.length >2 && imageArr.splice(2);
+
     let imageItems = [];
     imageArr.forEach((value,index)=>imageItems.push(<Image key={rowData.id+''+index} source={{ uri: value }} style={styles.geneImage}/>));
 
     return (
-      <View rowID={ rowID }>
-        <TouchableElement  onPress={() => this._onRowPressed(rowData) }>
-          <View style={{ flex: 1, flexDirection: 'row', alignItems: 'flex-start', padding: 10 }}>
+      <View rowID={ rowID } style={{              
+            marginTop: 8,
+            borderTopWidth: 0.2,
+            borderBottomWidth : 0.1,
+            borderTopColor: '#ddd',
+            borderBottomColor: '#ddd',
+            backgroundColor: '#FFFFFF',
+            elevation: 1,
+        }}>
+        <TouchableElement  
+          onPress ={()=>{this._onRowPressed(rowData)}}
+          delayPressIn={0}
+          >
+          <View style={{ flex: 1, flexDirection: 'row', padding: 12 }}>
             <Image
               source={{ uri: uri }}
               style={styles.avatar}
               />
 
-            <View style={{ marginLeft: 10, flex: 1, flexDirection: 'column', margin: 0 }}>
+            <View style={{ marginLeft: 10, flex: 1, flexDirection: 'column', }}>
               <Text
                 ellipsizeMode={'tail'}
                 numberOfLines={3}
-                style={{ color: 'black', }}>
+                style={{ flex: -1,color: 'black', }}>
                 {rowData.content}
               </Text>
-              <View style={{flex:1, flexDirection: 'row'}}>
+              <View style={{flex:-1, flexDirection: 'row'}}>
                 {imageItems}
               </View>
-              <View style={{ flex: 1, flexDirection: 'row',  alignItems: 'flex-end', paddingTop: 5, }}>
-                <Text style={{ flex: 1.5 }}>{rowData.psnid}</Text>
-                <Text style={{ flex: 1 }}>{fromNow}</Text>
-                <Text style={{ flex: 1 }}>{rowData.views}浏览</Text>
+              <View style={{ flex: 1, flexDirection: 'row', justifyContent :'space-between', marginTop: 5, }}>
+                <View style={{ flex: -1, backgroundColor: nodeColor,borderRadius: 2,}}>
+                  <Text style={{ flex: -1, color: idColor,textAlign : 'center', textAlignVertical: 'center' , marginLeft: 5, marginRight: 5}}>{rowData.psnid}</Text>
+                </View>
+                <Text style={{ flex: -1,textAlign : 'center', textAlignVertical: 'center' }}>{fromNow}</Text>
+                <Text style={{ flex: -1,textAlign : 'center', textAlignVertical: 'center' }}>{rowData.views}浏览</Text>
+                <Text style={{ flex: -1,textAlign : 'center', textAlignVertical: 'center' }}>{rowData.count}回复</Text>
               </View>
 
             </View>
@@ -171,7 +187,7 @@ class Gene extends Component {
           <RefreshControl
             refreshing={geneReducer.isRefreshing || geneReducer.isLoadingMore }
             onRefresh={this._onRefresh}
-            colors={['#00a2ed']}
+            colors={[standardColor]}
             />
         }
         pageSize = {32}

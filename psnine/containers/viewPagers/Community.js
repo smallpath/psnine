@@ -13,8 +13,8 @@ import {
 } from 'react-native';
 
 import { connect } from 'react-redux';
-
 import { getTopicList } from '../../actions/community.js';
+import { standardColor, nodeColor, idColor  } from '../../config/config';
 
 import CommunityTopic from '../../components/CommunityTopic';
 
@@ -76,26 +76,40 @@ class Community extends Component {
     let TouchableElement = TouchableNativeFeedback;
 
     return (
-      <View rowID={ rowID }>
-        <TouchableElement  onPress={() => this._onRowPressed(rowData) }>
-          <View style={{ flex: 1, flexDirection: 'row', alignItems: 'flex-start', padding: 10 }}>
+      <View rowID={ rowID } style={{              
+            marginTop: 7,
+            borderTopWidth: 0.1,
+            borderBottomWidth : 0.1,
+            borderTopColor: '#ccc',
+            borderBottomColor: '#ccc',
+            backgroundColor: '#FFFFFF',
+            elevation: 1,
+        }}>
+        <TouchableElement  
+          onPress ={()=>{this._onRowPressed(rowData)}}
+          delayPressIn={0}
+          >
+          <View style={{ flex: 1, flexDirection: 'row',  padding: 12 }}>
             <Image
               source={{ uri: uri }}
               style={styles.avatar}
               />
 
-            <View style={{ marginLeft: 10, flex: 1, flexDirection: 'column', margin: 0 }}>
+            <View style={{ marginLeft: 10, flex: 1, flexDirection: 'column'}}>
               <Text
                 ellipsizeMode={'tail'}
                 numberOfLines={3}
-                style={{ color: 'black', }}>
+                style={{ flex: 2,color: 'black', }}>
                 {rowData.title}
               </Text>
 
-              <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'flex-end', paddingTop: 5, }}>
-                <Text style={{ flex: 1.5 }}>{rowData.psnid}</Text>
-                <Text style={{ flex: 1 }}>{fromNow}</Text>
-                <Text style={{ flex: 1 }}>{rowData.views}浏览</Text>
+              <View style={{ flex: 1, flexDirection: 'row', justifyContent :'space-between', }}>
+                <View style={{ flex: -1, backgroundColor: nodeColor,borderRadius: 2,}}>
+                  <Text style={{ flex: -1, color: idColor,textAlign : 'center', textAlignVertical: 'center' , marginLeft: 5, marginRight: 5}}>{rowData.psnid}</Text>
+                </View>
+                <Text style={{ flex: -1,textAlign : 'center', textAlignVertical: 'center' }}>{fromNow}</Text>
+                <Text style={{ flex: -1,textAlign : 'center', textAlignVertical: 'center' }}>{rowData.views}浏览</Text>
+                <Text style={{ flex: -1,textAlign : 'center', textAlignVertical: 'center' }}>{rowData.count}回复</Text>
               </View>
 
             </View>
@@ -154,7 +168,7 @@ class Community extends Component {
             <RefreshControl
               refreshing={communityReducer.isRefreshing || communityReducer.isLoadingMore}
               onRefresh={this._onRefresh}
-              colors={['#00a2ed']}
+              colors={[standardColor]}
               />
           }
           pageSize = {32}
@@ -164,7 +178,6 @@ class Community extends Component {
           onEndReachedThreshold={10}
           dataSource={ ds.cloneWithRows(communityReducer.topics) }
           renderRow={this._renderRow}
-          renderSeparator={this._renderSeparator}
           />
     )
   }

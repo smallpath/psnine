@@ -19,6 +19,8 @@ import {
 import NavigatorDrawer from './NavigatorDrawer';
 import Toolbar from './Toolbar';
 
+import { standardColor } from '../config/config';
+
 
 let DRAWER_REF = 'drawer';
 let DRAWER_WIDTH_LEFT = 100;
@@ -68,7 +70,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#F5FCFF',
   },
   toolbar: {
-    backgroundColor: '#00a2ed',
+    backgroundColor: standardColor,
     height: 56,
   },
   selectedTitle:{
