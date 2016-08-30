@@ -153,6 +153,7 @@ const styles = StyleSheet.create({
   toolbar: {
     backgroundColor: standardColor,
     height: 56,
+    elevation: 4,
   },
   segmentedView: {
     backgroundColor: '#F5FCFF',

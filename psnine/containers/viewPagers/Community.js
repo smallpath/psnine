@@ -78,16 +78,13 @@ class Community extends Component {
     return (
       <View rowID={ rowID } style={{              
             marginTop: 7,
-            borderTopWidth: 0.1,
-            borderBottomWidth : 0.1,
-            borderTopColor: '#ccc',
-            borderBottomColor: '#ccc',
             backgroundColor: '#FFFFFF',
             elevation: 1,
         }}>
         <TouchableElement  
           onPress ={()=>{this._onRowPressed(rowData)}}
           delayPressIn={0}
+          background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
           >
           <View style={{ flex: 1, flexDirection: 'row',  padding: 12 }}>
             <Image
@@ -104,12 +101,10 @@ class Community extends Component {
               </Text>
 
               <View style={{ flex: 1, flexDirection: 'row', justifyContent :'space-between', }}>
-                <View style={{ flex: -1, backgroundColor: nodeColor,borderRadius: 2,}}>
-                  <Text style={{ flex: -1, color: idColor,textAlign : 'center', textAlignVertical: 'center' , marginLeft: 5, marginRight: 5}}>{rowData.psnid}</Text>
-                </View>
+                <Text style={{ flex: -1, color: idColor,textAlign : 'center', textAlignVertical: 'center' , marginLeft: 5, marginRight: 5}}>{rowData.psnid}</Text>
                 <Text style={{ flex: -1,textAlign : 'center', textAlignVertical: 'center' }}>{fromNow}</Text>
-                <Text style={{ flex: -1,textAlign : 'center', textAlignVertical: 'center' }}>{rowData.views}浏览</Text>
                 <Text style={{ flex: -1,textAlign : 'center', textAlignVertical: 'center' }}>{rowData.count}回复</Text>
+                <Text style={{ flex: -1,textAlign : 'center', textAlignVertical: 'center' }}>{rowData.views}浏览</Text>
               </View>
 
             </View>

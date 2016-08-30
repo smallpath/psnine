@@ -84,6 +84,7 @@ class GeneTopic extends Component {
           <View style={{flex:1}}>
               <ToolbarAndroid
                 navIcon={require('image!ic_back_white')}
+                overflowIcon={require('image!ic_more_white')}
                 title={this.props.title}
                 style={styles.toolbar}
                 actions={toolbarActions}
@@ -115,6 +116,7 @@ const styles = StyleSheet.create({
   toolbar: {
     backgroundColor: standardColor,
     height: 56,
+    elevation: 4,
   },
   selectedTitle:{
     //backgroundColor: '#00ffff'

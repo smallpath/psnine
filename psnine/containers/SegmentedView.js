@@ -235,7 +235,9 @@ class SegmentedView extends Component {
                 style={{flex:1}}>
                 <View 
                     {...{navigator:this.props.navigator}} 
-                    {...this.panResponder.panHandlers} style={[styles.container, this.props.style]}>
+                    {...this.panResponder.panHandlers} style={[styles.container, this.props.style, {
+                        elevation: 4,
+                    }]}>
                     <View  style={styles.titleContainer}>
                         {items}
                     </View>
