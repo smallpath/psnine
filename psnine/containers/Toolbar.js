@@ -186,7 +186,10 @@ class Toolbar extends Component {
 
     }else if(indexWithFloatButton.indexOf(fromIndex) != -1 && indexWithFloatButton.indexOf(toIndex) !=-1){
       let value = this.state.rotation._value;
-      let targetValue = 1-value; 
+      if(fromIndex < toIndex)
+        targetValue = value - 1/4;
+      else
+        targetValue = value + 1/4;
       Animated.timing(this.state.rotation, {
             toValue: targetValue,
             easing: Easing.elastic(2),
@@ -200,20 +203,23 @@ class Toolbar extends Component {
       isMounted = true;
       return;
     }
+    //console.log(fromIndex, toIndex);
     if (indexWithFloatButton.indexOf(fromIndex) != -1 && indexWithoutFloatButton.indexOf(toIndex) !=-1){
       if (fromIndex < toIndex){
         this.state.opacity.setValue(1-value);
+        //console.log(1-value);
         this.state.rotation.setValue(1-value);
         this.state.scale.setValue(1-value);
       }else{
         this.state.opacity.setValue(value);
-        this.state.rotation.setValue(value);
+        //console.log(1-value);
+        this.state.rotation.setValue(1-value);
         this.state.scale.setValue(value);
       }
     }else if(indexWithoutFloatButton.indexOf(fromIndex) != -1 && indexWithFloatButton.indexOf(toIndex) !=-1){
       if (fromIndex < toIndex){
         this.state.opacity.setValue(value);
-        this.state.rotation.setValue(value);
+        this.state.rotation.setValue(1-value);
         this.state.scale.setValue(value);
       }else{
         this.state.opacity.setValue(1-value);
@@ -223,7 +229,7 @@ class Toolbar extends Component {
     }else if(indexWithoutFloatButton.indexOf(fromIndex) != -1 && indexWithoutFloatButton.indexOf(toIndex) !=-1){
 
     }else if(indexWithFloatButton.indexOf(fromIndex) != -1 && indexWithFloatButton.indexOf(toIndex) !=-1){
-      this.state.rotation.setValue(value);
+      this.state.rotation.setValue((1-value)/4);
     }
 
   }
