@@ -12,7 +12,7 @@ import {
   ToastAndroid,
 } from 'react-native';
 
-import { getDealURL, getHappyPlusOneURL, getStoreURL } from '../dao/dao';
+import { pngPrefix, getDealURL, getHappyPlusOneURL, getStoreURL } from '../dao/dao';
 import { standardColor } from '../config/config';
 
 import CommunityTopic from '../components/CommunityTopic';
@@ -23,6 +23,7 @@ import Store from '../components/Store';
 
 import Login from './authPagers/Login';
 import { safeLogout } from '../dao/logout';
+import { fetchUser } from '../dao/userParser';
 
 let settingIcon = require('image!ic_setting_blue');
 
@@ -43,12 +44,44 @@ class NavigatorDrawer extends Component {
         rowHasChanged: (row1, row2) => row1 !== row2,
       });
       this.state = {
-          isLoading: false,
+          psnid: '',
+          userInfo : {
+            avatar: require('image!comment_avatar'),
+            platinum: '白',
+            gold: '金',
+            silver: '银',
+            bronze: '铜',
+          },
           dataSource:dataSource.cloneWithRows([
               "我的游戏","我的消息","游惠","Store","闲游",
           ]),
       }
   }
+
+  componentWillMount(){
+    this.checkLoginState();
+  }
+
+  checkLoginState = async () =>{
+    const psnid = await AsyncStorage.getItem('@psnid');
+
+
+    const userInfo = await fetchUser(psnid)
+    await AsyncStorage.setItem('@userInfo', JSON.stringify(userInfo));
+
+    if(psnid==null)
+      return;
+    
+    if(psnid=='')
+      return;
+    
+
+    this.setState({
+      psnid,
+      userInfo,
+    })
+  }
+
  renderSeparator(sectionID: number, rowID: number, adjacentRowHighlighted: bool) { 
    return ( 
      <View 
@@ -60,58 +93,50 @@ class NavigatorDrawer extends Component {
 
   pressLogin = () =>{
     const { navigator, closeDrawer} = this.props;
+    const { psnid } = this.state;
     closeDrawer();
-    navigator.push({
-      component: Login,
-      params: {
-
-      },
-      withoutAnimation: true,
-    })
+    if (psnid == ''){
+      navigator.push({
+        component: Login,
+        params: {
+          setLogin: this.setLogin,
+        },
+        withoutAnimation: true,
+      })
+    }else{
+      ToastAndroid.show('已登录', 2000);
+    }
   }
 
   pressLogout = async () =>{
     const { navigator, closeDrawer} = this.props;
-    console.log('here1');
+    closeDrawer();
     await safeLogout();
-        console.log('here2');
+    this.setState({
+      psnid:'',          
+      userInfo : {
+        avatar: require('image!comment_avatar'),
+        platinum: '白',
+        gold: '金',
+        silver: '银',
+        bronze: '铜',
+      },
+    });
     ToastAndroid.show('登出成功', 2000);
-        console.log('here3');
+  }
+
+  setLogin = (psnid,userInfo) => {
+    this.setState({
+      psnid,
+      userInfo,
+    })
   }
 
   renderHeader = () => {
-      return (
-      <View style={styles.header}>
-
-        <View style={styles.userInfo}>
-            <View style={{flexDirection: 'row',  alignItems: 'center',}}>
-                <View style={{flexDirection: 'column',  alignItems: 'center', }}>
-                  <TouchableNativeFeedback onPress={this.pressLogin}>
-                    <View style={{flexDirection: 'column',  alignItems: 'center', }}>
-                      <Image
-                        source={require('image!comment_avatar')}
-                        style={{width: 70, height: 70, marginRight: 8}} />
-                      <Text style={[styles.menuText,{marginTop: 5}]}>
-                        请登录
-                      </Text>
-                    </View>
-                  </TouchableNativeFeedback>
-                </View>
-                <View style={{ flexDirection: 'row', marginLeft: 0, marginTop: 0 }}>
-                  <TouchableNativeFeedback
-                    // onPress={() => this.props.onSelectItem(theme)}
-                    // onShowUnderlay={highlightRowFunc}
-                    // onHideUnderlay={highlightRowFunc}
-                    >
-                    <View style={{flexDirection: 'column',  justifyContent: 'center',marginLeft: 20}}>
-                      <Image source={require('image!ic_assignment_white')}            
-                              style={{width: 20, height: 20}} />
-                      <Text style={[styles.menuText,{marginTop:5}]}>
-                        签到
-                      </Text>
-                    </View>
-                  </TouchableNativeFeedback>
-                  <TouchableNativeFeedback
+      //let avatar = 
+      let toolActions = [];
+      toolActions.push(<TouchableNativeFeedback
+                        key={'changeStyle'}
                     // onPress={() => this.props.onSelectItem(theme)}
                     // onShowUnderlay={highlightRowFunc}
                     // onHideUnderlay={highlightRowFunc}
@@ -123,9 +148,30 @@ class NavigatorDrawer extends Component {
                         夜间
                       </Text>
                     </View>
-                  </TouchableNativeFeedback>
-                  <TouchableNativeFeedback
+                  </TouchableNativeFeedback>);
+
+      
+      
+      if(this.state.psnid != ''){
+
+        toolActions.push(<TouchableNativeFeedback
+                          key={'sign'}
+                    // onPress={() => this.props.onSelectItem(theme)}
+                    // onShowUnderlay={highlightRowFunc}
+                    // onHideUnderlay={highlightRowFunc}
+                    >
+                    <View style={{flexDirection: 'column',  justifyContent: 'center',marginLeft: 20}}>
+                      <Image source={require('image!ic_assignment_white')}            
+                              style={{width: 20, height: 20}} />
+                      <Text style={[styles.menuText,{marginTop:5}]}>
+                        签到
+                      </Text>
+                    </View>
+                  </TouchableNativeFeedback>)
+        
+        toolActions.push(<TouchableNativeFeedback
                      onPress={this.pressLogout}
+                     key={'exitApp'}
                     // onShowUnderlay={highlightRowFunc}
                     // onHideUnderlay={highlightRowFunc}
                     >
@@ -136,7 +182,29 @@ class NavigatorDrawer extends Component {
                         退出
                       </Text>
                     </View>
+                  </TouchableNativeFeedback>)
+        }  
+
+
+      return (
+      <View style={styles.header}>
+
+        <View style={styles.userInfo}>
+            <View style={{flexDirection: 'row',  alignItems: 'center',}}>
+                <View style={{flexDirection: 'column',  alignItems: 'center', }}>
+                  <TouchableNativeFeedback onPress={this.pressLogin}>
+                    <View style={{flexDirection: 'column',  alignItems: 'center', }}>
+                      <Image
+                        source={this.state.userInfo.avatar}
+                        style={{width: 70, height: 70, marginRight: 8}} />
+                      <Text style={[styles.menuText,{marginTop: 5}]}>
+                        {this.state.psnid == '' ? '请登录': this.state.psnid}
+                      </Text>
+                    </View>
                   </TouchableNativeFeedback>
+                </View>
+                <View style={{ flexDirection: 'row', marginLeft: 0, marginTop: 0 }}>
+                  {toolActions}
                 </View>
             </View>
         </View>
@@ -147,8 +215,8 @@ class NavigatorDrawer extends Component {
             {/*<Image
                 source={require('image!ic_favorites_white')}
                 style={{width: 30, height: 30}} />*/}
-              <Text style={styles.menuText}>
-                白
+              <Text style={styles.platinum}>
+                {this.state.userInfo.platinum}
               </Text>
             </View>
           </TouchableNativeFeedback>
@@ -157,8 +225,8 @@ class NavigatorDrawer extends Component {
             {/*<Image
               source={require('image!ic_download_white')}
               style={{width: 30, height: 30}} /> */}
-              <Text style={styles.menuText}>
-                金
+              <Text style={styles.gold}>
+                {this.state.userInfo.gold}
               </Text>
             </View>
           </TouchableNativeFeedback>
@@ -167,8 +235,8 @@ class NavigatorDrawer extends Component {
             {/*<Image
               source={require('image!ic_download_white')}
               style={{width: 30, height: 30}} />*/}
-              <Text style={styles.menuText}>
-                银
+              <Text style={styles.silver}>
+                {this.state.userInfo.silver}
               </Text>
             </View>
           </TouchableNativeFeedback>
@@ -177,8 +245,8 @@ class NavigatorDrawer extends Component {
             {/*<Image
               source={require('image!ic_download_white')}
               style={{width: 30, height: 30}} />*/}
-              <Text style={styles.menuText}>
-                铜
+              <Text style={styles.bronze}>
+                {this.state.userInfo.bronze}
               </Text>
             </View>
           </TouchableNativeFeedback>
@@ -255,7 +323,8 @@ class NavigatorDrawer extends Component {
             });
             break;
         case 4:
-            URL = getDealURL();
+            //URL = getDealURL();
+            URL = 'http://120.55.124.66/user/smallpath';
             navigator.push({
               component: Deal,
               params: {

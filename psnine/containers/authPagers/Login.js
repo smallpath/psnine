@@ -24,7 +24,11 @@ import { connect } from 'react-redux';
 
 import { standardColor, accentColor } from '../../config/config';
 
+import { pngPrefix, getDealURL, getHappyPlusOneURL, getStoreURL } from '../../dao/dao';
+
 import { safeLogin } from '../../dao/login';
+
+import { fetchUser } from '../../dao/userParser';
 
 let toolbarActions = [
 
@@ -58,10 +62,14 @@ class Login extends Component {
     
     if (length > 10000){
       await AsyncStorage.setItem('@psnid', psnid);
-      const value = await AsyncStorage.getItem('@psnid');
-      ToastAndroid.show(`登录成功`,2000);
-    }else{
+      const user = await fetchUser(psnid);
+      await AsyncStorage.setItem('@userInfo', JSON.stringify(user));
       
+      ToastAndroid.show(`登录成功`,2000);
+      this.props.setLogin(psnid,user);
+      this.props.navigator.pop();
+    }else{
+
       await AsyncStorage.removeItem('@psnid');
       const value = await AsyncStorage.getItem('@psnid');
       ToastAndroid.show(`登录失败`,2000);

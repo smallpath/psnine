@@ -36,4 +36,6 @@ export const getDealURL = id => webHost + '/trade';
 
 export const getStoreURL = id => webHost + '/store';
 
+export const pngPrefix = 'http://photo.d7vg.com/'
+
  

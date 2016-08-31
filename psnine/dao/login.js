@@ -12,7 +12,7 @@ export const safeLogin = function(psnid, pass) {
         formBody.push(encodedKey + "=" + encodedValue);
     }
     formBody = formBody.join("&");
-    console.log(formBody)
+    //console.log(formBody)
 
     return new Promise((resolve, reject) => {
         fetch(loginURL,{

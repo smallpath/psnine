@@ -28,9 +28,6 @@ let DRAWER_WIDTH_LEFT = 110;
 class Psnine extends Component {
   constructor(props){
     super(props);
-    this.state = {
-      isLogIn: false,
-    }
   }
 
   _renderNavigationView = ()=>{
