@@ -141,7 +141,11 @@ class NavigatorDrawer extends Component {
                     // onShowUnderlay={highlightRowFunc}
                     // onHideUnderlay={highlightRowFunc}
                     >
-                    <View style={{flexDirection: 'column',  justifyContent: 'center',marginLeft: 20}}>
+                    <View style={{
+                      flexDirection: 'column',  
+                      justifyContent: 'center',
+                      marginLeft: this.state.psnid == '' ? 90: 20,
+                    }}>
                       <Image source={require('image!ic_assignment_white')}            
                               style={{width: 20, height: 20}} />
                       <Text style={[styles.menuText,{marginTop:5}]}>
@@ -150,10 +154,85 @@ class NavigatorDrawer extends Component {
                     </View>
                   </TouchableNativeFeedback>);
 
-      
-      
-      if(this.state.psnid != ''){
+      let rows = [];
 
+      if(this.state.psnid != ''){
+        rows.push(
+          <View key={'trophy'} style={styles.trophyRow}>
+            <TouchableNativeFeedback>
+              <View style={styles.menuContainer}>
+              {/*<Image
+                  source={require('image!ic_favorites_white')}
+                  style={{width: 30, height: 30}} />*/}
+                <Text style={styles.platinum}>
+                  {this.state.userInfo.platinum}
+                </Text>
+              </View>
+            </TouchableNativeFeedback>
+            <TouchableNativeFeedback>
+              <View style={styles.menuContainer}>
+              {/*<Image
+                source={require('image!ic_download_white')}
+                style={{width: 30, height: 30}} /> */}
+                <Text style={styles.gold}>
+                  {this.state.userInfo.gold}
+                </Text>
+              </View>
+            </TouchableNativeFeedback>
+            <TouchableNativeFeedback>
+              <View style={styles.menuContainer}>
+              {/*<Image
+                source={require('image!ic_download_white')}
+                style={{width: 30, height: 30}} />*/}
+                <Text style={styles.silver}>
+                  {this.state.userInfo.silver}
+                </Text>
+              </View>
+            </TouchableNativeFeedback>
+            <TouchableNativeFeedback>
+              <View style={styles.menuContainer}>
+              {/*<Image
+                source={require('image!ic_download_white')}
+                style={{width: 30, height: 30}} />*/}
+                <Text style={styles.bronze}>
+                  {this.state.userInfo.bronze}
+                </Text>
+              </View>
+            </TouchableNativeFeedback>
+          </View>);
+
+        rows.push(<View key={'rows'} style={styles.row}>
+            <TouchableNativeFeedback>
+              <View style={styles.menuContainer}>
+                <Image
+                  source={require('image!ic_favorites_white')}
+                  style={{width: 30, height: 30}} />
+                <Text style={styles.menuText}>
+                  帖子
+                </Text>
+              </View>
+            </TouchableNativeFeedback>
+            <TouchableNativeFeedback>
+              <View style={styles.menuContainer}>
+              <Image
+                source={require('image!ic_download_white')}
+                style={{width: 30, height: 30}} />
+                <Text style={styles.menuText}>
+                  关注
+                </Text>
+              </View>
+            </TouchableNativeFeedback>
+            <TouchableNativeFeedback>
+              <View style={styles.menuContainer}>
+              <Image
+                source={require('image!ic_download_white')}
+                style={{width: 30, height: 30}} />
+                <Text style={styles.menuText}>
+                  收藏
+                </Text>
+              </View>
+            </TouchableNativeFeedback>
+          </View>);
         toolActions.push(<TouchableNativeFeedback
                           key={'sign'}
                     // onPress={() => this.props.onSelectItem(theme)}
@@ -183,11 +262,15 @@ class NavigatorDrawer extends Component {
                       </Text>
                     </View>
                   </TouchableNativeFeedback>)
+
+
         }  
 
 
       return (
-      <View style={styles.header}>
+      <View style={[styles.header, {
+        height: this.state.psnid == '' ? 120: 180,
+      }]}>
 
         <View style={styles.userInfo}>
             <View style={{flexDirection: 'row',  alignItems: 'center',}}>
@@ -209,82 +292,8 @@ class NavigatorDrawer extends Component {
             </View>
         </View>
 
-        <View style={styles.trophyRow}>
-          <TouchableNativeFeedback>
-            <View style={styles.menuContainer}>
-            {/*<Image
-                source={require('image!ic_favorites_white')}
-                style={{width: 30, height: 30}} />*/}
-              <Text style={styles.platinum}>
-                {this.state.userInfo.platinum}
-              </Text>
-            </View>
-          </TouchableNativeFeedback>
-          <TouchableNativeFeedback>
-            <View style={styles.menuContainer}>
-            {/*<Image
-              source={require('image!ic_download_white')}
-              style={{width: 30, height: 30}} /> */}
-              <Text style={styles.gold}>
-                {this.state.userInfo.gold}
-              </Text>
-            </View>
-          </TouchableNativeFeedback>
-          <TouchableNativeFeedback>
-            <View style={styles.menuContainer}>
-            {/*<Image
-              source={require('image!ic_download_white')}
-              style={{width: 30, height: 30}} />*/}
-              <Text style={styles.silver}>
-                {this.state.userInfo.silver}
-              </Text>
-            </View>
-          </TouchableNativeFeedback>
-          <TouchableNativeFeedback>
-            <View style={styles.menuContainer}>
-            {/*<Image
-              source={require('image!ic_download_white')}
-              style={{width: 30, height: 30}} />*/}
-              <Text style={styles.bronze}>
-                {this.state.userInfo.bronze}
-              </Text>
-            </View>
-          </TouchableNativeFeedback>
-        </View>
+        {rows}
 
-        <View style={styles.row}>
-          <TouchableNativeFeedback>
-            <View style={styles.menuContainer}>
-              <Image
-                source={require('image!ic_favorites_white')}
-                style={{width: 30, height: 30}} />
-              <Text style={styles.menuText}>
-                帖子
-              </Text>
-            </View>
-          </TouchableNativeFeedback>
-          <TouchableNativeFeedback>
-            <View style={styles.menuContainer}>
-            <Image
-              source={require('image!ic_download_white')}
-              style={{width: 30, height: 30}} />
-              <Text style={styles.menuText}>
-                关注
-              </Text>
-            </View>
-          </TouchableNativeFeedback>
-          <TouchableNativeFeedback>
-            <View style={styles.menuContainer}>
-            <Image
-              source={require('image!ic_download_white')}
-              style={{width: 30, height: 30}} />
-              <Text style={styles.menuText}>
-                收藏
-              </Text>
-            </View>
-          </TouchableNativeFeedback>
-        </View>
-        
       </View>
       );
   }  
@@ -417,14 +426,14 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     marginLeft: 25,
-    marginTop: -20,
+    marginTop: -60,
   },
   row: {
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-around',
-    marginTop: 0,
     marginLeft: 12,
+    paddingTop: -10,
   },
   menuContainer: {
     flex:1,
@@ -468,6 +477,18 @@ const styles = StyleSheet.create({
   },
   rowSeparatorHide: {
     opacity: 0.0,
+  },
+  platinum: {
+    color: '#fff'
+  },
+  gold: {
+    color: '#fff'
+  },
+  silver: {
+    color: '#fff'
+  },
+  bronze: {
+    color: '#fff'
   },
 });
 

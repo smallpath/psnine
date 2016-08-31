@@ -92,6 +92,7 @@ class Login extends Component {
             <Text style={styles.mainFont}>PSN ID :</Text>
             <TextInput placeholder="不是邮箱" underlineColorAndroid={accentColor}
               onChange={({nativeEvent})=>{ this.setState({psnid:nativeEvent.text})}}
+              style={styles.textInput}
             />
           </View>
 
@@ -99,10 +100,15 @@ class Login extends Component {
             <Text style={styles.mainFont}>密码 :</Text>
             <TextInput placeholder="你在本站完成认证时的密码" underlineColorAndroid={accentColor} secureTextEntry={true}
               onChange={({nativeEvent})=>{ this.setState({password:nativeEvent.text})}}
+              style={styles.textInput}
             />
             <Text>忘记密码</Text>
           </View>
 
+
+        </KeyboardAvoidingView>
+
+        <View style={styles.customView}>
           <View style={styles.submit}>
             <TouchableNativeFeedback
               onPress={this.login}
@@ -114,10 +120,10 @@ class Login extends Component {
           </View>
 
           <View style={styles.regist}>
-            <Text>如果是第一次访问本站，请先完成 PSNID认证</Text>
+            <Text>如果是第一次使用PSNINE，请先完成 PSNID认证</Text>
           </View>
+        </View>
 
-        </KeyboardAvoidingView>
       </View>
     );
   }
@@ -137,7 +143,15 @@ const styles = StyleSheet.create({
     color:accentColor
   },
   textInput: {
-
+    fontSize: 15,
+  },
+  customView: {
+    flex: -1, 
+    marginTop: -20,
+    width: width - 40,
+    alignSelf:'center',
+    justifyContent: 'center',
+    flexDirection: 'column' 
   },
   KeyboardAvoidingView: { 
     flex: -1, 
