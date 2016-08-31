@@ -49,19 +49,6 @@ export const fetchUser = function(psnid) {
         fetch(userURL)
         .then(data=>{
             let obj = parseAll(data._bodyInit);
-            //console.log(data);
-            // let str = data._bodyInit;
-            // let index = str.indexOf(imageIndexStr);
-            // //console.log('位置:',index, '总长度', str.length)
-            // let relativeImageURL = '';
-            // if(index!=0){
-            //     index+=imageIndexStr.length;
-            //     while (str[index] != '\"'){
-            //         relativeImageURL += str[index];
-            //         index++;
-            //     }
-            // }
-
             resolve(obj);
         })
     });

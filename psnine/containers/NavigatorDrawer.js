@@ -332,8 +332,8 @@ class NavigatorDrawer extends Component {
             });
             break;
         case 4:
-            //URL = getDealURL();
-            URL = 'http://120.55.124.66/user/smallpath';
+            URL = getDealURL();
+            //URL = 'http://120.55.124.66/user/smallpath';
             navigator.push({
               component: Deal,
               params: {
