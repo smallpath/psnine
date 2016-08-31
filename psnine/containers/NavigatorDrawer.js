@@ -9,6 +9,7 @@ import {
   View,
   TouchableNativeFeedback,
   TouchableHighlight,
+  ToastAndroid,
 } from 'react-native';
 
 import { getDealURL, getHappyPlusOneURL, getStoreURL } from '../dao/dao';
@@ -19,6 +20,9 @@ import Deal from '../components/Deal';
 import GeneTopic from '../components/GeneTopic';
 import HappyPlusOne from '../components/HappyPlusOne';
 import Store from '../components/Store';
+
+import Login from './authPagers/Login';
+import { safeLogout } from '../dao/logout';
 
 let settingIcon = require('image!ic_setting_blue');
 
@@ -54,42 +58,91 @@ class NavigatorDrawer extends Component {
       ); 
     }
 
-  renderHeader(){
-      let TouchableElement = TouchableHighlight;
-      if (Platform.OS === 'android') {
-        TouchableElement = TouchableNativeFeedback;
-      }
+  pressLogin = () =>{
+    const { navigator, closeDrawer} = this.props;
+    closeDrawer();
+    navigator.push({
+      component: Login,
+      params: {
+
+      },
+      withoutAnimation: true,
+    })
+  }
+
+  pressLogout = async () =>{
+    const { navigator, closeDrawer} = this.props;
+    console.log('here1');
+    await safeLogout();
+        console.log('here2');
+    ToastAndroid.show('登出成功', 2000);
+        console.log('here3');
+  }
+
+  renderHeader = () => {
       return (
       <View style={styles.header}>
 
         <View style={styles.userInfo}>
-          <TouchableElement>
-            <View style={{flexDirection: 'row', alignItems: 'center', padding: 0}}>
-              <Image
-                source={require('image!comment_avatar')}
-                style={{width: 60, height: 60, marginRight: 8}} />
-              <Text style={styles.menuText}>
-                请登录
-              </Text>
-              <TouchableElement
-                // onPress={() => this.props.onSelectItem(theme)}
-                // onShowUnderlay={highlightRowFunc}
-                // onHideUnderlay={highlightRowFunc}
-                >
-                <View style={styles.themeItem}>
-                  <Image source={require('image!ic_assignment_white')}            
-                          style={{width: 20, height: 20, marginLeft: 16}} />
-                  <Text style={[styles.menuText,{marginLeft:8}]}>
-                    签到
-                  </Text>
+            <View style={{flexDirection: 'row',  alignItems: 'center',}}>
+                <View style={{flexDirection: 'column',  alignItems: 'center', }}>
+                  <TouchableNativeFeedback onPress={this.pressLogin}>
+                    <View style={{flexDirection: 'column',  alignItems: 'center', }}>
+                      <Image
+                        source={require('image!comment_avatar')}
+                        style={{width: 70, height: 70, marginRight: 8}} />
+                      <Text style={[styles.menuText,{marginTop: 5}]}>
+                        请登录
+                      </Text>
+                    </View>
+                  </TouchableNativeFeedback>
                 </View>
-              </TouchableElement>
+                <View style={{ flexDirection: 'row', marginLeft: 0, marginTop: 0 }}>
+                  <TouchableNativeFeedback
+                    // onPress={() => this.props.onSelectItem(theme)}
+                    // onShowUnderlay={highlightRowFunc}
+                    // onHideUnderlay={highlightRowFunc}
+                    >
+                    <View style={{flexDirection: 'column',  justifyContent: 'center',marginLeft: 20}}>
+                      <Image source={require('image!ic_assignment_white')}            
+                              style={{width: 20, height: 20}} />
+                      <Text style={[styles.menuText,{marginTop:5}]}>
+                        签到
+                      </Text>
+                    </View>
+                  </TouchableNativeFeedback>
+                  <TouchableNativeFeedback
+                    // onPress={() => this.props.onSelectItem(theme)}
+                    // onShowUnderlay={highlightRowFunc}
+                    // onHideUnderlay={highlightRowFunc}
+                    >
+                    <View style={{flexDirection: 'column',  justifyContent: 'center',marginLeft: 20}}>
+                      <Image source={require('image!ic_assignment_white')}            
+                              style={{width: 20, height: 20}} />
+                      <Text style={[styles.menuText,{marginTop:5}]}>
+                        夜间
+                      </Text>
+                    </View>
+                  </TouchableNativeFeedback>
+                  <TouchableNativeFeedback
+                     onPress={this.pressLogout}
+                    // onShowUnderlay={highlightRowFunc}
+                    // onHideUnderlay={highlightRowFunc}
+                    >
+                    <View style={{flexDirection: 'column',  justifyContent: 'center',marginLeft: 20}}>
+                      <Image source={require('image!ic_assignment_white')}            
+                              style={{width: 20, height: 20}} />
+                      <Text style={[styles.menuText,{marginTop:5}]}>
+                        退出
+                      </Text>
+                    </View>
+                  </TouchableNativeFeedback>
+                </View>
             </View>
-          </TouchableElement>
         </View>
 
         <View style={styles.trophyRow}>
-          <TouchableElement>
+          <TouchableNativeFeedback>
             <View style={styles.menuContainer}>
             {/*<Image
                 source={require('image!ic_favorites_white')}
@@ -98,8 +151,8 @@ class NavigatorDrawer extends Component {
                 白
               </Text>
             </View>
-          </TouchableElement>
-          <TouchableElement>
+          </TouchableNativeFeedback>
+          <TouchableNativeFeedback>
             <View style={styles.menuContainer}>
             {/*<Image
               source={require('image!ic_download_white')}
@@ -108,8 +161,8 @@ class NavigatorDrawer extends Component {
                 金
               </Text>
             </View>
-          </TouchableElement>
-          <TouchableElement>
+          </TouchableNativeFeedback>
+          <TouchableNativeFeedback>
             <View style={styles.menuContainer}>
             {/*<Image
               source={require('image!ic_download_white')}
@@ -118,8 +171,8 @@ class NavigatorDrawer extends Component {
                 银
               </Text>
             </View>
-          </TouchableElement>
-          <TouchableElement>
+          </TouchableNativeFeedback>
+          <TouchableNativeFeedback>
             <View style={styles.menuContainer}>
             {/*<Image
               source={require('image!ic_download_white')}
@@ -128,11 +181,11 @@ class NavigatorDrawer extends Component {
                 铜
               </Text>
             </View>
-          </TouchableElement>
+          </TouchableNativeFeedback>
         </View>
 
         <View style={styles.row}>
-          <TouchableElement>
+          <TouchableNativeFeedback>
             <View style={styles.menuContainer}>
               <Image
                 source={require('image!ic_favorites_white')}
@@ -141,8 +194,8 @@ class NavigatorDrawer extends Component {
                 帖子
               </Text>
             </View>
-          </TouchableElement>
-          <TouchableElement>
+          </TouchableNativeFeedback>
+          <TouchableNativeFeedback>
             <View style={styles.menuContainer}>
             <Image
               source={require('image!ic_download_white')}
@@ -151,8 +204,8 @@ class NavigatorDrawer extends Component {
                 关注
               </Text>
             </View>
-          </TouchableElement>
-          <TouchableElement>
+          </TouchableNativeFeedback>
+          <TouchableNativeFeedback>
             <View style={styles.menuContainer}>
             <Image
               source={require('image!ic_download_white')}
@@ -161,7 +214,7 @@ class NavigatorDrawer extends Component {
                 收藏
               </Text>
             </View>
-          </TouchableElement>
+          </TouchableNativeFeedback>
         </View>
         
       </View>
@@ -217,15 +270,12 @@ class NavigatorDrawer extends Component {
   }
 
   renderRow = (rowData, sectionID, rowID, highlightRow) => {
-    let TouchableElement = TouchableHighlight;
-    if (Platform.OS === 'android') {
-      TouchableElement = TouchableNativeFeedback;
-    }
     let icon = imageArr[rowID];
     return (
       <View>
-        <TouchableElement
+        <TouchableNativeFeedback
            onPress={()=>this.onSelectItem(sectionID,rowID)}
+           delayPressIn={0}
           // onShowUnderlay={highlightRowFunc}
           // onHideUnderlay={highlightRowFunc}
           >
@@ -235,28 +285,24 @@ class NavigatorDrawer extends Component {
               {rowData}
             </Text>
           </View>
-        </TouchableElement>
+        </TouchableNativeFeedback>
       </View>
     );
   }
 
   renderFooter = () =>{
     rowData = "设置";
-    let TouchableElement = TouchableHighlight;
-    if (Platform.OS === 'android') {
-      TouchableElement = TouchableNativeFeedback;
-    }
     icon = settingIcon;
     return (
       <View >
-        <TouchableElement>
+        <TouchableNativeFeedback>
           <View style={styles.themeItem}>
             <Image source={icon} style={styles.themeIndicate}/>
             <Text style={styles.themeName}>
               {rowData}
             </Text>
           </View>
-        </TouchableElement>
+        </TouchableNativeFeedback>
       </View>
     )
   }
@@ -291,27 +337,25 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
     backgroundColor: standardColor,
-    height: 140,
+    height: 180,
   },
   userInfo: {
-    flex: 2,
-    marginLeft: 10,
-    marginTop:10,
-    marginRight:10,
+    flex: 4,
+    margin: 20,
   },
   trophyRow: {
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    marginLeft: 20,
+    marginLeft: 25,
     marginTop: -20,
   },
   row: {
     flex: 1,
     flexDirection: 'row',
-    alignItems: 'center',
-    marginTop: -10,
-    paddingLeft: 5,
+    justifyContent: 'space-around',
+    marginTop: 0,
+    marginLeft: 12,
   },
   menuContainer: {
     flex:1,

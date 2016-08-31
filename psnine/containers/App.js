@@ -23,7 +23,7 @@ import { standardColor } from '../config/config';
 
 
 let DRAWER_REF = 'drawer';
-let DRAWER_WIDTH_LEFT = 100;
+let DRAWER_WIDTH_LEFT = 110;
 
 class Psnine extends Component {
   constructor(props){
@@ -51,6 +51,7 @@ class Psnine extends Component {
     return ( 
       <DrawerLayoutAndroid 
             ref={DRAWER_REF}
+            {...{navigator:this.props.navigator}}
             drawerWidth={Dimensions.get('window').width - DRAWER_WIDTH_LEFT} 
             drawerPosition={DrawerLayoutAndroid.positions.Left} 
             renderNavigationView={this._renderNavigationView}> 

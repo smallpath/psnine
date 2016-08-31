@@ -1,7 +1,5 @@
 'use strict';
 
-import React from 'react-native';
-
 const safeFetch = function(reqUrl) {
   return new Promise((resolve, reject) => {
     fetch(reqUrl)

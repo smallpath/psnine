@@ -61,6 +61,15 @@ class Root extends React.Component {
 		_navigator = navigator;
 		return <Component {...route.params} navigator={navigator} />
 	}
+	configureScene(route){
+		// console.log(route.withoutAnimation);
+		// if(typeof route.withoutAnimation != 'undefined'){
+		// 	if(route.withoutAnimation == true){
+		// 		return Navigator.SceneConfigs.VerticalUpSwipeJump;
+		// 	}
+		// }
+		return CustomSceneConfig
+	}
 	render() {
 		return (
 			<Provider store={ store }>
@@ -68,7 +77,7 @@ class Root extends React.Component {
 				 	<StatusBar translucent={false} backgroundColor={deepColor} barStyle="light-content" />
 					<Navigator
 						initialRoute={{ component: App }}
-						configureScene={route => CustomSceneConfig }
+						configureScene={ this.configureScene }
 						renderScene={this.renderScene.bind(this) } 
 						style={{width:SCREEN_WIDTH, height:SCREEN_HEIGHT-StatusBar.currentHeight}}/>
 				 </View>

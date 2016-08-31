@@ -283,12 +283,12 @@ class SegmentedView extends Component {
                 onPageScrollStateChanged={this.onPageScrollStateChanged}
                 onPageScroll={this.onPageScroll}
                 >
-                {/*<View key={'s000'}></View> 
+                <View key={'s000'}></View> 
                 <View key={'s001'}></View> 
                 <View key={'s002'}></View> 
                 <View key={'s003'}></View> 
-                <View key={'s004'}></View>*/} 
-                
+                <View key={'s004'}></View>
+                 {/*
                     <View key={`s00`}>
                         <Community 
                             index={0} 
@@ -334,7 +334,7 @@ class SegmentedView extends Component {
                               }
                             } 
                         />
-                    </View>
+                    </View>*/}
                 </ViewPagerAndroid>
             </View>
         );
