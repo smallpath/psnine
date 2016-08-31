@@ -53,7 +53,7 @@ http://120.55.124.66/user/secondlife_xhm/notice
 http://120.55.124.66/topic/17586
 
 ## 游戏:
-http://120.55.124.66/game?page=1&token=9d45d918c535e89d1c9b5b1f5967e501&pf=all&dlc=all&ob=newest 
+http://120.55.124.66/psngame?page=1&token=9d45d918c535e89d1c9b5b1f5967e501&pf=all&dlc=all&ob=newest 
 
 - pf
 	- all
@@ -127,7 +127,7 @@ http://120.55.124.66/gene/507
 
 
 ## 获得的图片路径的前缀:
-photo.d7vg.com
+http://photo.d7vg.com
 
 ## CSS:
 http://120.55.124.66/View/p9.css
