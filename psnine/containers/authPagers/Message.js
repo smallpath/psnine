@@ -19,7 +19,7 @@ import { standardColor, nodeColor, idColor  } from '../../config/config';
 
 import CommunityTopic from '../../components/CommunityTopic';
 
-import { getTopicURL, fetchMessages } from '../../dao/dao';
+import { getTopicURL, fetchMessages,  } from '../../dao/dao';
 import moment from '../../utils/moment';
 
 const ds = new ListView.DataSource({
@@ -40,6 +40,39 @@ class Message extends Component {
     const { navigator } = this.props;
     if (navigator) {
       navigator.pop();
+    }
+  }
+
+  _pressRow = (rowData) => {
+    const { navigator } = this.props;
+    let URL;
+    let type = rowData.type;
+    switch (type) {
+      case 'topic':
+        URL = getTopicURL(rowData.tid);
+        navigator.push({
+          component: CommunityTopic,
+          params: {
+            URL,
+            title: rowData.content,
+            rowData
+          }
+        });
+        break;
+      case 'gene':
+        URL = getGeneURL(rowData.tid);
+        navigator.push({
+          component: GeneTopic,
+          params: {
+            URL,
+            title: rowData.content,
+            rowData
+          }
+        });
+        break;
+      default:
+        ToastAndroid.show(`type '${rowData.type}' not implement yet.`,2000);
+        break;
     }
   }
 
@@ -73,6 +106,7 @@ class Message extends Component {
         <TouchableElement  
           delayPressIn={0}
           background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
+          onPress={()=>this._pressRow(rowData)}
           >
           <View style={{ flex: 1, flexDirection: 'row',  padding: 12 }}>
             <Image
@@ -107,7 +141,6 @@ class Message extends Component {
 
   async fetchMessages () {
     const data = await fetchMessages(this.props.psnid);
-    console.log(data);
     this.setState({
         messages: data.data,
     });
