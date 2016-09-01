@@ -106,7 +106,7 @@ class NavigatorDrawer extends Component {
         withoutAnimation: true,
       })
     }else{
-      ToastAndroid.show('已登录', 2000);
+      ToastAndroid.show('您已登录, 请先退出', 2000);
     }
   }
 
@@ -389,9 +389,9 @@ class NavigatorDrawer extends Component {
     icon = settingIcon;
     return (
       <View >
-        <View 
+        {/*<View 
           style={{backgroundColor: 'rgba(0,0,0,0.1)', height: 1}}
-        />
+        />*/}
         <TouchableNativeFeedback>
           <View style={[styles.themeItem,{
             padding: 10,

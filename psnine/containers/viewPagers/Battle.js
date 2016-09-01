@@ -152,9 +152,12 @@ class Battle extends Component {
         //backgroundColor: nodeColor,
         flex: -1, left:0,
         height:25, 
-        width:100,
+        width:200,
         elevation: 0, 
-        marginTop: sectionID == 'day1'? 7: 14}}>
+        marginTop: sectionID == 'day1'? 7: 14,
+        marginLeft: 7,
+        marginBottom: 7,
+        }}>
         <Text numberOfLines={1}
           style={{fontSize: 20, color:idColor,textAlign : 'left', lineHeight:25, marginLeft: 2,marginTop: 2 }}
         >
@@ -194,11 +197,13 @@ class Battle extends Component {
       let sectionName = keys[i];
       let localName = sectionName;
       if (localName == 'day1'){
-        localName = '今天'
+        localName = '今天  ' + moment().add(1,'days').format('YYYY年MM月DD日');
       }else if(localName == 'day2'){
-        localName = '明天'
+        localName = '明天  '  + moment().add(2,'days').format('YYYY年MM月DD日');
       }else if(localName == 'day3'){
-        localName = '后天'
+        localName = '后天  ' + moment().add(3,'days').format('YYYY年MM月DD日');
+      }else{
+        localName = moment().add(parseInt(localName.replace('day','')),'days').format('YYYY年MM月DD日');
       }
       sectionIDs.push(sectionName);
       dataBlob[sectionName] = localName;
