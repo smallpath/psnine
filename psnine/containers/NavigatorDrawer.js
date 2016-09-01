@@ -22,6 +22,7 @@ import HappyPlusOne from '../components/HappyPlusOne';
 import Store from '../components/Store';
 
 import Login from './authPagers/Login';
+import Message from './authPagers/Message';
 import { safeLogout } from '../dao/logout';
 import { fetchUser } from '../dao/userParser';
 
@@ -308,7 +309,18 @@ class NavigatorDrawer extends Component {
 
             break;
         case 1:
+            if(this.state.psnid == ''){
+              ToastAndroid.show('未登录',2000);
+              return;
+            }
+              
 
+            navigator.push({
+              component: Message,
+              params: {
+                psnid: this.state.psnid,
+              }
+            });
             break;
         case 2:
             URL = getHappyPlusOneURL();

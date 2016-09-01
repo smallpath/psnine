@@ -38,4 +38,6 @@ export const getStoreURL = id => webHost + '/store';
 
 export const pngPrefix = 'http://photo.d7vg.com/'
 
- 
+export const getMessageURL = (id) => host + '/user/' + id + '/notice';
+
+export const fetchMessages = (id) => safeFetch(getMessageURL(id));
