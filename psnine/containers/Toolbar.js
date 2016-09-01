@@ -47,6 +47,7 @@ let communityActions = [
   { title: '开箱', value: 'openbox',show: 'never' },
   { title: '游列', value: 'gamelist',show: 'never' },
   { title: '活动', value: 'event',show: 'never' },
+  { title: '火星', value: 'mars',show: 'never'},
 ];
 
 let gameActions = [
