@@ -1,128 +1,255 @@
 import React, { Component } from 'react';
 import {
-  AppRegistry,
   StyleSheet,
   Text,
   View,
   ListView,
   Image,
-  DrawerLayoutAndroid,
-  ToolbarAndroid,
   ToastAndroid,
-  BackAndroid,
-  TouchableOpacity,
   Dimensions,
   TouchableNativeFeedback,
   RefreshControl,
-  WebView,
+  InteractionManager,
 } from 'react-native';
 
 import { connect } from 'react-redux';
+import { getBattleList } from '../../actions/battle.js';
+import { standardColor, nodeColor, idColor, accentColor  } from '../../config/config';
 
-import { standardColor } from '../../config/config';
+import CommunityTopic from '../../components/CommunityTopic';
 
-let WEBVIEW_REF = `WEBVIEW_REF_BATTLE`;
-let back_image = require('image!ic_back_blue');
-let imageSize = 56;
+import { getBattleURL, getGamePngURL } from '../../dao/dao';
+import moment from '../../utils/moment';
+
+let getSectionData = (dataBlob, sectionID) => {
+  return dataBlob[sectionID];
+};
+let getRowData = (dataBlob, sectionID, rowID) => {
+  return dataBlob[rowID];
+};
+
+const ds = new ListView.DataSource({
+  getRowData: getRowData,
+  getSectionHeaderData: getSectionData,
+  rowHasChanged: (row1, row2) => row1 !== row2,
+  sectionHeaderHasChanged: (s1, s2) => s1 !== s2,
+});
 
 class Battle extends Component {
-
   constructor(props){
-    super(props);
-    this.state = {
-      isLogIn: false,
-      canGoBack: false,
+      super(props);
+  }
+
+  _renderSeparator(sectionID: number, rowID: number, adjacentRowHighlighted: bool) {
+    return (
+      <View
+        key={`${sectionID}-${rowID}`}
+        style={{ height: 1,backgroundColor: 'rgba(0, 0, 0, 0.1)',marginLeft:10,marginRight:10}}
+        />
+    );
+  }
+
+  _onRowPressed = (rowData) => {
+    const { navigator } = this.props;
+    const URL = getBattleURL(rowData.id);
+    if (navigator) {
+      navigator.push({
+        component: CommunityTopic,
+        params: {
+          URL,
+          title: rowData.title,
+          rowData
+        }
+      });
     }
   }
 
-  _pressButton = () => {
-    if(this.state.canGoBack)
-      this.refs[WEBVIEW_REF].goBack();
-    else
-      this.props.navigator.pop();
-  }
 
-  onNavigationStateChange = (navState) => {
+  _renderRow = (rowData,
+    sectionID: number | string,
+    rowID: number | string,
+    highlightRow: (sectionID: number, rowID: number) => void
+  ) => {
 
-    // if(navState.url.indexOf(this.props.URL) !== -1 ){
-      this.setState({
-        canGoBack: navState.canGoBack,
-      });
-    // }else{
-    //   this.setState({
-    //     canGoBack: navState.canGoBack,
-    //   });
-    //   this.refs[WEBVIEW_REF].stopLoading();
-    // }
-  }
+    let uri;
+    if (rowData.profilepicture == '') {
+      let path = rowData.avatar.toString().replace('\\', '');
+      uri = `http://photo.d7vg.com/avatar/${path}.png@50w.png`;
+    } else {
+      uri = `http://photo.d7vg.com/avaself/${rowData.psnid}.png@50w.png`;
+    }
+    let time = parseInt(rowData.startdate);
+    time *= 1000;
+    let date = new Date(time);
+    let startTime = moment(date).format('HH:mm');
 
-  render() {
-    // console.log('Battle.js rendered');
-    return ( 
-        <View style={{flex:3}}>
-            <View style={{
-                    position: 'absolute',
-                    bottom: 16,
-                    right: 16,
-                    width: imageSize,
-                    height: imageSize,
-                    zIndex: 100,
-                }}>
-                <TouchableNativeFeedback
-                    onPress={this._pressButton}
-                >
-                <View style={{width:imageSize, height:imageSize}}>
-                    <Image 
-                        style={{width:imageSize, height:imageSize}}
-                        source={back_image}
-                    />
-                    </View>
-                </TouchableNativeFeedback>
+    let title = rowData.cnname == '' ? rowData.title : rowData.cnname;
+
+    let TouchableElement = TouchableNativeFeedback;
+
+    return (
+      <View rowID={ rowID } style={{              
+            marginTop: rowID.indexOf('R0') == -1 ? 3.5:0,
+            marginBottom: 3.5,
+            backgroundColor: '#FFFFFF',
+            elevation: 1,
+        }}>
+        <TouchableElement  
+          onPress ={()=>{this._onRowPressed(rowData)}}
+          delayPressIn={0}
+          background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
+          >
+          <View style={{ flex: 1, flexDirection: 'row',  padding: 12 }}>
+            <Image
+              source={{ uri: getGamePngURL(rowData.gid) }}
+              style={{
+                width: 91,
+                height: 50,
+                alignSelf: 'center',
+              }}
+              />
+
+            <View style={{ marginLeft: 10, flex: 1, flexDirection: 'column'}}>
+              <Text
+                ellipsizeMode={'tail'}
+                numberOfLines={1}
+                style={{ flex: -1,color: 'black', fontSize: 15 }}>
+                { title }
+              </Text>
+
+              <Text>
+                <Text style={{ flex: -1,color: 'black' }} numberOfLines={1}>{startTime}</Text>
+                <Text style={{ flex: -1 }} numberOfLines={1}> 开始</Text>
+              </Text>
+
+              <Text>
+                <Text style={{ flex: -1,color: 'black' }} numberOfLines={1}>{rowData.num}</Text>
+                <Text style={{ flex: -1 }} numberOfLines={1}> 人招募</Text>
+              </Text>
+
+              <View style={{ flex: 1, flexDirection: 'row', justifyContent :'space-between' }}>
+                <Text style={{ flex: -1,textAlign : 'center', textAlignVertical: 'center' }}>{rowData.platform.split(',').join(' ')}</Text>
+                <Text style={{ flex: -1, color: idColor, marginRight: -60 , textAlignVertical: 'center' }}>{rowData.psnid}</Text>
+              </View>
+
             </View>
-            <WebView
-                ref={WEBVIEW_REF}
-                source={{uri: this.props.URL}} 
-                style={{flex:3}}
-                scalesPageToFit={true}
-                domStorageEnabled={true}
-                onNavigationStateChange={this.onNavigationStateChange}
-                startInLoadingState={false}  
-                injectedJavaScript={`$('.header').hide(); $('.scrollbar').removeClass('scrollbar').hide()`}
-            />
-        </View>   
-    );
+
+
+            <Image
+              source={{ uri: uri }}
+              style={[styles.avatar,{marginLeft: 10}]}
+              />
+
+          </View>
+        </TouchableElement>
+      </View>
+    )
   }
+
+  _renderSectionHeader = (sectionData: string, sectionID: string) => {
+    return (
+      <View style={{
+        //backgroundColor: nodeColor,
+        flex: -1, left:0,
+        height:25, 
+        width:100,
+        elevation: 0, 
+        marginTop: sectionID == 'day1'? 7: 14}}>
+        <Text numberOfLines={1}
+          style={{fontSize: 20, color:idColor,textAlign : 'left', lineHeight:25, marginLeft: 2,marginTop: 2 }}
+        >
+          {sectionData}
+        </Text>
+      </View>
+    );
+  };
+
+
+  componentDidMount = () => {
+    const { battle: battleReducer } = this.props;
+    // if (battleReducer.battles.length == 0)
+      this._onRefresh();
+  }
+
+  _onRefresh = (type = '') => {
+    const { battle: battleReducer, dispatch } = this.props;
+
+    if (battleReducer.isRefreshing)
+      return;
+
+    dispatch(getBattleList());
+  }
+
+  render(){
+    const { battle: battleReducer } = this.props;
+    let data = battleReducer.battles;
+    let keys = Object.keys(data);
+    let NUM_SECTIONS = keys.length;
+
+    let dataBlob = {};
+    let sectionIDs = [];
+    let rowIDs = [];
+
+    for (let i = 0; i < NUM_SECTIONS; i++) {
+      let sectionName = keys[i];
+      let localName = sectionName;
+      if (localName == 'day1'){
+        localName = '今天'
+      }else if(localName == 'day2'){
+        localName = '明天'
+      }else if(localName == 'day3'){
+        localName = '后天'
+      }
+      sectionIDs.push(sectionName);
+      dataBlob[sectionName] = localName;
+      rowIDs[i] = [];
+      let rows = data[sectionName];
+      let NUM_ROWS = rows.length;
+
+      for (let j = 0; j < NUM_ROWS; j++) {
+        let rowName = 'S' + i + ', R' + j;
+        rowIDs[i].push(rowName);
+        dataBlob[rowName] = rows[j];
+      }
+    }
+
+    let finalDs = ds.cloneWithRowsAndSections(dataBlob, sectionIDs, rowIDs);
+    // console.log('Community.js rendered');
+    return (
+        <ListView
+          refreshControl={
+            <RefreshControl
+              refreshing={battleReducer.isRefreshing}
+              onRefresh={this._onRefresh}
+              colors={[standardColor]}
+              />
+          }
+          pageSize = {32}
+          removeClippedSubviews={false}
+          enableEmptySections={true}
+          dataSource={ finalDs }
+          renderSectionHeader = {this._renderSectionHeader}
+          renderRow={this._renderRow}
+          />
+    )
+  }
+
 }
 
-
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    flexDirection: 'column',
-    backgroundColor: '#F5FCFF',
-  },
-  toolbar: {
-    backgroundColor: standardColor,
-    height: 56,
-  },
-  selectedTitle:{
-    //backgroundColor: '#00ffff'
-    //fontSize: 20
-  },
   avatar: {
     width: 50,
     height: 50,
   }
 });
 
+
 function mapStateToProps(state) {
     return {
-
+      battle: state.battle,
     };
 }
 
 export default connect(
   mapStateToProps
 )(Battle);
-
-// export default Battle;

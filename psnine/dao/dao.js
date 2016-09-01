@@ -38,6 +38,14 @@ export const getStoreURL = id => webHost + '/store';
 
 export const pngPrefix = 'http://photo.d7vg.com/'
 
-export const getMessageURL = (id) => host + '/user/' + id + '/notice';
+export const getMessagesAPI = id => host + '/user/' + id + '/notice';
 
-export const fetchMessages = (id) => safeFetch(getMessageURL(id));
+export const fetchMessages = id => safeFetch(getMessagesAPI(id));
+
+export const getBattlesAPI = id => host + '/battle';
+
+export const fetchBattles = () => safeFetch(getBattlesAPI());
+
+export const getBattleURL = id => webHost + '/battle/' + id;
+
+export const getGamePngURL = id => `${pngPrefix}/psngame/${id}.png@91w.png`

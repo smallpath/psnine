@@ -1,6 +1,7 @@
 import React from 'react-native';
 import app from './app';
 import community from './community';
+import battle from './battle';
 
 let actions = {};
 

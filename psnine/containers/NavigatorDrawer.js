@@ -31,6 +31,7 @@ let settingIcon = require('image!ic_setting_blue');
 let signIcon = require('image!ic_assignment_blue');
 
 let imageArr = [
+  require('image!home'),
   require('image!ic_game_blue'),
   require('image!ic_message_blue'),
   require('image!ic_plus_blue'),
@@ -54,7 +55,7 @@ class NavigatorDrawer extends Component {
             bronze: '铜',
           },
           dataSource:dataSource.cloneWithRows([
-              "我的游戏","我的消息","游惠","Store","闲游",
+              "个人中心","我的游戏","我的消息","游惠","Store","闲游",
           ]),
       }
   }
@@ -309,6 +310,9 @@ class NavigatorDrawer extends Component {
 
             break;
         case 1:
+
+            break;
+        case 2:
             if(this.state.psnid == ''){
               ToastAndroid.show('未登录',2000);
               return;
@@ -322,7 +326,7 @@ class NavigatorDrawer extends Component {
               }
             });
             break;
-        case 2:
+        case 3:
             URL = getHappyPlusOneURL();
 
             navigator.push({
@@ -333,7 +337,7 @@ class NavigatorDrawer extends Component {
               }
             });
             break;
-        case 3:
+        case 4:
             URL = getStoreURL();
             navigator.push({
               component: Store,
@@ -343,7 +347,7 @@ class NavigatorDrawer extends Component {
               }
             });
             break;
-        case 4:
+        case 5:
             URL = getDealURL();
             //URL = 'http://120.55.124.66/user/smallpath';
             navigator.push({
@@ -385,8 +389,13 @@ class NavigatorDrawer extends Component {
     icon = settingIcon;
     return (
       <View >
+        <View 
+          style={{backgroundColor: 'rgba(0,0,0,0.1)', height: 1}}
+        />
         <TouchableNativeFeedback>
-          <View style={styles.themeItem}>
+          <View style={[styles.themeItem,{
+            padding: 10,
+          }]}>
             <Image source={icon} style={styles.themeIndicate}/>
             <Text style={styles.themeName}>
               {rowData}
