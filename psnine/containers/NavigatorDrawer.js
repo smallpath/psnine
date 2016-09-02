@@ -41,6 +41,10 @@ let imageArr = [
   require('image!ic_business_blue'),
 ];
 
+let items = [
+              "个人中心","我的游戏","我的消息","游惠","Store","闲游",
+];
+
 class NavigatorDrawer extends Component {
   constructor(props){
       super(props);
@@ -56,9 +60,7 @@ class NavigatorDrawer extends Component {
             silver: '银',
             bronze: '铜',
           },
-          dataSource:dataSource.cloneWithRows([
-              "个人中心","我的游戏","我的消息","游惠","Store","闲游",
-          ]),
+          dataSource:dataSource.cloneWithRows(items),
       }
   }
 
@@ -307,7 +309,9 @@ class NavigatorDrawer extends Component {
     closeDrawer();
     let URL;
     if(sectionID == 's1'){
-      switch (parseInt(rowID)) {
+      let index = parseInt(rowID);
+      index = this.state.psnid == '' ? index +3 : index;
+      switch (index) {
         case 0:
             if(this.state.psnid == ''){
               ToastAndroid.show('未登录',2000);
@@ -380,12 +384,12 @@ class NavigatorDrawer extends Component {
 
   renderRow = (rowData, sectionID, rowID, highlightRow) => {
     let icon = imageArr[rowID];
-    if(this.state.psnid == ''){
-      console.log(rowID, typeof rowID);
-      if([0,1,2].indexOf(parseInt(rowID)) != -1){
-        return null;
-      }
-    }
+    // if(this.state.psnid == ''){
+    //   console.log(this.state.psnid, typeof this.state.psnid,rowID, typeof rowID);
+    //   if([0,1,2].indexOf(parseInt(rowID)) != -1){
+    //     return null;
+    //   }
+    // }
     return (
       <View>
         <TouchableNativeFeedback
@@ -433,7 +437,7 @@ class NavigatorDrawer extends Component {
       <View style={styles.container} {...this.props}>
         <ListView
           ref="themeslistview"
-          dataSource={this.state.dataSource}
+          dataSource={this.state.psnid != '' ? this.state.dataSource : this.state.dataSource.cloneWithRows(items.slice(3))}
           renderRow={this.renderRow}
           keyboardDismissMode="on-drag"
           keyboardShouldPersistTaps={true}
