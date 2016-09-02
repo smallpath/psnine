@@ -18,3 +18,6 @@ Android App for [P9](http://psnine.com/) written by React Native
 - [x] Material Design化已有组件
 - [x] 添加悬浮按钮及其动画
 - [x] 登录与登出以及本地存储
+- [x] 注册
+- [x] 个人中心
+- [x] Toolbar的下滑隐藏和上划显示
