@@ -89,10 +89,11 @@ class Battle extends Component {
 
     return (
       <View rowID={ rowID } style={{              
-            marginTop: rowID.indexOf('R0') == -1 ? 3.5:0,
-            marginBottom: 3.5,
+            marginTop: rowID.indexOf('R0') == -1 ? 0:0,
+            marginLeft: 7,
+            marginRight: 7,
             backgroundColor: '#FFFFFF',
-            elevation: 1,
+            elevation: 2,
         }}>
         <TouchableElement  
           onPress ={()=>{this._onRowPressed(rowData)}}
@@ -197,11 +198,11 @@ class Battle extends Component {
       let sectionName = keys[i];
       let localName = sectionName;
       if (localName == 'day1'){
-        localName = '今天  ' + moment().add(1,'days').format('YYYY年MM月DD日');
+        localName = '今天  ' + moment().format('YYYY年MM月DD日');
       }else if(localName == 'day2'){
-        localName = '明天  '  + moment().add(2,'days').format('YYYY年MM月DD日');
+        localName = '明天  '  + moment().add(1,'days').format('YYYY年MM月DD日');
       }else if(localName == 'day3'){
-        localName = '后天  ' + moment().add(3,'days').format('YYYY年MM月DD日');
+        localName = '后天  ' + moment().add(2,'days').format('YYYY年MM月DD日');
       }else{
         localName = moment().add(parseInt(localName.replace('day','')),'days').format('YYYY年MM月DD日');
       }
