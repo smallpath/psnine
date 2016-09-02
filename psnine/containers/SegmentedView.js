@@ -12,6 +12,8 @@ import {
     ViewPagerAndroid,
     Animated,
     PanResponder,
+    ListView,
+    StatusBar,
 } from 'react-native';
 
 import { changeSegmentIndex } from '../actions/app';
@@ -27,6 +29,16 @@ import Gene from './viewPagers/Gene';
 import { standardColor } from '../config/config';
 
 let screen = Dimensions.get('window');
+
+const { width:SCREEN_WIDTH, height:SCREEN_HEIGHT } = screen;
+
+let statusBarHeight = StatusBar.currentHeight;
+let segmentedHeight = 38;
+let toolbarHeight = 56;
+
+let thisScreenHeightWitoutStatusBar = SCREEN_HEIGHT - statusBarHeight - segmentedHeight + toolbarHeight;
+let viewPagerHeight = SCREEN_HEIGHT - statusBarHeight - segmentedHeight
+
 
 let styles = StyleSheet.create({
     container: {
@@ -233,7 +245,7 @@ class SegmentedView extends Component {
     }
 
     render() {
-        // console.log('SegmentedView.js rendered');
+
         let items = [];
         let titles = this.props.titles;
 
@@ -250,11 +262,14 @@ class SegmentedView extends Component {
 
         return (
             <View 
-                style={{flex:1}}>
-                <View 
+                style={{height: thisScreenHeightWitoutStatusBar }}
+                >
+                <View
                     {...{navigator:this.props.navigator}} 
+
                     {...this.panResponder.panHandlers} style={[styles.container, this.props.style, {
                         elevation: 4,
+                        height: segmentedHeight,
                     }]}>
                     <View  style={styles.titleContainer}>
                         {items}
@@ -270,9 +285,9 @@ class SegmentedView extends Component {
                     </View>
                 </View>
                 <ViewPagerAndroid style={{
-                    flex: 10,
+                    height: viewPagerHeight ,
                     flexDirection: 'row',
-                    /*backgroundColor: '#F5FCFF',*/
+                    //backgroundColor: '#00f',
                     backgroundColor: '#FAFAFA',
                     alignItems: 'center',
                     paddingHorizontal: 2,
@@ -282,13 +297,16 @@ class SegmentedView extends Component {
                 onPageSelected={this._onPageSelected}
                 onPageScrollStateChanged={this.onPageScrollStateChanged}
                 onPageScroll={this.onPageScroll}
+                {...this.props.moveUpResponders.panHandlers}
                 >
-                {/*<View key={'s000'}></View> 
+                {/*<View key={'s000'} style={{flex:1}}>
+                    <Text style={{flex:1,textAlign : 'center', textAlignVertical: 'center'}} >Middle</Text>
+                </View> 
                 <View key={'s001'}></View> 
                 <View key={'s002'}></View> 
                 <View key={'s003'}></View> 
-                <View key={'s004'}></View>*/}
-                 
+                <View key={'s004'}></View>
+                  */}
                     <View key={`s00`}>
                         <Community 
                             index={0} 
@@ -300,6 +318,7 @@ class SegmentedView extends Component {
                             } 
                         />
                     </View>
+                    {/* 
                     <View key={`s11`}>
                         <Game 
                             index={1} 
@@ -335,6 +354,7 @@ class SegmentedView extends Component {
                             } 
                         />
                     </View>
+                    */}
                 </ViewPagerAndroid>
             </View>
         );

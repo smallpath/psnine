@@ -16,6 +16,7 @@ import {
   InteractionManager,
   Animated,
   Easing,
+  PanResponder,
 } from 'react-native';
 
 import { connect } from 'react-redux';
@@ -79,7 +80,13 @@ const ds = new ListView.DataSource({
   rowHasChanged: (row1, row2) => row1 !== row2,
 });
 
+
+let toolbarHeight = 56;
+let releasedMarginTop = 0;
+
 class Toolbar extends Component {
+
+
   constructor(props) {
     super(props);
 
@@ -87,6 +94,7 @@ class Toolbar extends Component {
       rotation: new Animated.Value(1),
       scale: new Animated.Value(1),
       opacity: new Animated.Value(1),
+      marginTop: new Animated.Value(0),
     }
   }
 
@@ -112,6 +120,7 @@ class Toolbar extends Component {
         underlayColor='#000'
         barColor='#fff'
         titleWidth={Dimensions.get('window').width/titlesArr.length}
+        moveUpResponders = {this.panResponder}
         />
     )
   }
@@ -134,6 +143,48 @@ class Toolbar extends Component {
 
   componentDidMount() {
         //this.parallelFadeIn(1);
+  }
+
+  componentWillMount() {
+        this.panResponder = PanResponder.create({  
+
+            onStartShouldSetPanResponderCapture: (e, gestureState) =>{ 
+              return false 
+            },
+
+            onMoveShouldSetPanResponderCapture:(e, gestureState) =>{ 
+              let shouldSet = Math.abs(gestureState.dy) >=2;
+              return shouldSet 
+            },
+
+            onPanResponderGrant:(e, gestureState) => {
+
+            },
+            onPanResponderMove: (e, gesture) => {
+              let dy = gesture.dy;
+              let vy = gesture.vy;
+              if(dy < 0){
+                dy = dy + releasedMarginTop;
+                if(-dy <= toolbarHeight){
+                  if(dy>0)
+                    return;
+                  this.state.marginTop.setValue(dy); 
+                }
+              }else{
+                dy = dy + releasedMarginTop;
+                if(-dy <= toolbarHeight){
+                  if(dy>0)
+                    return;
+                  this.state.marginTop.setValue(dy); 
+                }
+              }
+            }, 
+            onPanResponderRelease: (e, gesture) => {
+              let dy = gesture.dy;
+              let vy = gesture.vy;
+              releasedMarginTop = this.state.marginTop._value;
+            } 
+        });
   }
 
 
@@ -176,16 +227,17 @@ class Toolbar extends Component {
 
   switchTo = (fromIndex,toIndex) => {
     if (indexWithFloatButton.indexOf(fromIndex) != -1 && indexWithoutFloatButton.indexOf(toIndex) !=-1){
-      //this.state.opacity.setValue(1-value);
-      //this.state.rotation.setValue(1-value);
+      
       this.parallelFadeOut(0);
+
     }else if(indexWithoutFloatButton.indexOf(fromIndex) != -1 && indexWithFloatButton.indexOf(toIndex) !=-1){
-      //this.state.opacity.setValue(value);
-      //this.state.rotation.setValue(value);
+      
       this.parallelFadeIn(1);
+
     }else if(indexWithoutFloatButton.indexOf(fromIndex) != -1 && indexWithoutFloatButton.indexOf(toIndex) !=-1){
 
     }else if(indexWithFloatButton.indexOf(fromIndex) != -1 && indexWithFloatButton.indexOf(toIndex) !=-1){
+      
       let value = this.state.rotation._value;
       if(fromIndex < toIndex)
         targetValue = value - 1/4;
@@ -195,6 +247,7 @@ class Toolbar extends Component {
             toValue: targetValue,
             easing: Easing.elastic(2),
       }).start();
+
     }
     
   }
@@ -204,29 +257,39 @@ class Toolbar extends Component {
       isMounted = true;
       return;
     }
-    //console.log(fromIndex, toIndex);
+
     if (indexWithFloatButton.indexOf(fromIndex) != -1 && indexWithoutFloatButton.indexOf(toIndex) !=-1){
+      
       if (fromIndex < toIndex){
+
         this.state.opacity.setValue(1-value);
-        //console.log(1-value);
         this.state.rotation.setValue(1-value);
         this.state.scale.setValue(1-value);
+
       }else{
+
         this.state.opacity.setValue(value);
-        //console.log(1-value);
         this.state.rotation.setValue(1-value);
         this.state.scale.setValue(value);
+
       }
+
     }else if(indexWithoutFloatButton.indexOf(fromIndex) != -1 && indexWithFloatButton.indexOf(toIndex) !=-1){
+      
       if (fromIndex < toIndex){
+
         this.state.opacity.setValue(value);
         this.state.rotation.setValue(1-value);
         this.state.scale.setValue(value);
+
       }else{
+
         this.state.opacity.setValue(1-value);
         this.state.rotation.setValue(1-value);
         this.state.scale.setValue(1-value);
+
       }
+
     }else if(indexWithoutFloatButton.indexOf(fromIndex) != -1 && indexWithoutFloatButton.indexOf(toIndex) !=-1){
 
     }else if(indexWithFloatButton.indexOf(fromIndex) != -1 && indexWithFloatButton.indexOf(toIndex) !=-1){
@@ -239,7 +302,12 @@ class Toolbar extends Component {
     const { app: appReducer } = this.props;
     // console.log('Toolbar.js rendered');
     return (
-      <View style={styles.container}>
+      <Animated.View 
+        style={[styles.container,{
+          marginTop: this.state.marginTop,
+        }]} 
+
+      >
         <ToolbarAndroid
           navIcon={require('image!ic_menu_white') }
           title={title}
@@ -289,7 +357,7 @@ class Toolbar extends Component {
             </View>
           </TouchableNativeFeedback>
           </Animated.View>
-      </View>
+      </Animated.View>
     )
   }
 
@@ -303,7 +371,7 @@ const styles = StyleSheet.create({
   },
   toolbar: {
     backgroundColor: standardColor,
-    height: 56,
+    height: toolbarHeight,
     elevation: 4,
   },
   segmentedView: {
