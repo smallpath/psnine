@@ -12,7 +12,7 @@ import {
   ToastAndroid,
 } from 'react-native';
 
-import { pngPrefix, getDealURL, getHappyPlusOneURL, getStoreURL } from '../dao/dao';
+import { getHomeURL, pngPrefix, getDealURL, getHappyPlusOneURL, getStoreURL } from '../dao/dao';
 import { standardColor } from '../config/config';
 
 import CommunityTopic from '../components/CommunityTopic';
@@ -23,6 +23,8 @@ import Store from '../components/Store';
 
 import Login from './authPagers/Login';
 import Message from './authPagers/Message';
+import Home from './authPagers/Home';
+
 import { safeLogout } from '../dao/logout';
 import { fetchUser } from '../dao/userParser';
 
@@ -307,7 +309,20 @@ class NavigatorDrawer extends Component {
     if(sectionID == 's1'){
       switch (parseInt(rowID)) {
         case 0:
+            if(this.state.psnid == ''){
+              ToastAndroid.show('未登录',2000);
+              return;
+            }
 
+            URL = getHomeURL(this.state.psnid);
+
+            navigator.push({
+              component: HappyPlusOne,
+              params: {
+                URL,
+                title: this.state.psnid,
+              }
+            });
             break;
         case 1:
 

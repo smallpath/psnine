@@ -49,3 +49,5 @@ export const fetchBattles = () => safeFetch(getBattlesAPI());
 export const getBattleURL = id => webHost + '/battle/' + id;
 
 export const getGamePngURL = id => `${pngPrefix}/psngame/${id}.png@91w.png`
+
+export const getHomeURL = id => `${webHost}/psnid/${id}`;
