@@ -163,6 +163,10 @@ class SegmentedView extends Component {
         });
     }
 
+    componentDidMount(){
+
+    }
+
     _renderTitle(title, i) {
         return (
             <View style={styles.title}>
@@ -259,10 +263,11 @@ class SegmentedView extends Component {
                 items.push(<View key={`s${i}`} style={styles.spacer} />);
             }
         }
-
+                //{...this.props.moveUpResponders.panHandlers}
         return (
             <View 
                 style={{height: thisScreenHeightWitoutStatusBar }}
+                {...this.props.moveUpResponders.panHandlers}
                 >
                 <View
                     {...{navigator:this.props.navigator}} 
@@ -297,7 +302,6 @@ class SegmentedView extends Component {
                 onPageSelected={this._onPageSelected}
                 onPageScrollStateChanged={this.onPageScrollStateChanged}
                 onPageScroll={this.onPageScroll}
-                {...this.props.moveUpResponders.panHandlers}
                 >
                 {/*<View key={'s000'} style={{flex:1}}>
                     <Text style={{flex:1,textAlign : 'center', textAlignVertical: 'center'}} >Middle</Text>
@@ -305,8 +309,8 @@ class SegmentedView extends Component {
                 <View key={'s001'}></View> 
                 <View key={'s002'}></View> 
                 <View key={'s003'}></View> 
-                <View key={'s004'}></View>
-                  */}
+                <View key={'s004'}></View> */}
+                  
                     <View key={`s00`}>
                         <Community 
                             index={0} 
@@ -318,7 +322,7 @@ class SegmentedView extends Component {
                             } 
                         />
                     </View>
-                    {/* 
+                     
                     <View key={`s11`}>
                         <Game 
                             index={1} 
@@ -354,7 +358,7 @@ class SegmentedView extends Component {
                             } 
                         />
                     </View>
-                    */}
+                   
                 </ViewPagerAndroid>
             </View>
         );

@@ -80,6 +80,10 @@ const ds = new ListView.DataSource({
   rowHasChanged: (row1, row2) => row1 !== row2,
 });
 
+let clamp = (value,min, max) => {
+  return Math.min(Math.max(value, min), max);
+};
+
 
 let toolbarHeight = 56;
 let releasedMarginTop = 0;
@@ -148,19 +152,23 @@ class Toolbar extends Component {
   componentWillMount() {
         this.panResponder = PanResponder.create({  
 
-            onStartShouldSetPanResponderCapture: (e, gestureState) =>{ 
-              return false 
+            onStartShouldSetPanResponderCapture: (e, gesture) =>{ 
+              // console.log('1');
+              return false; 
             },
 
-            onMoveShouldSetPanResponderCapture:(e, gestureState) =>{ 
-              let shouldSet = Math.abs(gestureState.dy) >=2;
-              return shouldSet 
+            onMoveShouldSetPanResponderCapture:(e, gesture) =>{ 
+              let shouldSet = Math.abs(gesture.dy) >=2;
+              // console.log('2');
+              return shouldSet; 
             },
 
-            onPanResponderGrant:(e, gestureState) => {
+            onPanResponderGrant:(e, gesture) => {
+              // console.log('3');
 
             },
             onPanResponderMove: (e, gesture) => {
+              // console.log(`====>${gesture.vy} ${gesture.vy<=5}`);
               let dy = gesture.dy;
               let vy = gesture.vy;
               if(dy < 0){
@@ -180,10 +188,82 @@ class Toolbar extends Component {
               }
             }, 
             onPanResponderRelease: (e, gesture) => {
+
+            },
+            onPanResponderTerminationRequest : (evt, gesture) => {  
+              // console.log('6');
+              return true;
+            },
+            onPanResponderTerminate: (evt, gesture) => {  
+              
+            },
+            onShouldBlockNativeResponder: (evt, gesture) => {  
+              // console.log('8');
+              return true;
+            },
+            onPanResponderReject: (evt, gesture) => {  
+              // console.log('9');
+              return false;
+            },
+            onPanResponderEnd: (evt, gesture) => {  
               let dy = gesture.dy;
               let vy = gesture.vy;
-              releasedMarginTop = this.state.marginTop._value;
-            } 
+              
+              this.state.marginTop.flattenOffset();
+
+              let value = this.state.marginTop._value;
+              let duration = 50; 
+
+              if(vy<0){
+
+                if(value <= -toolbarHeight/2 || -vy >= 2.0e-7){
+
+                  Animated.timing(this.state.marginTop,{
+                    toValue: -toolbarHeight,
+                    duration,
+                    easing: Easing.linear,
+                  }).start();
+
+                  releasedMarginTop = -toolbarHeight;
+
+                }else{
+
+                  Animated.timing(this.state.marginTop,{
+                    toValue: 0,
+                    duration,
+                    easing: Easing.linear,
+                  }).start();
+
+                  releasedMarginTop = 0;
+                }
+
+              }else{
+
+                if(value >= -toolbarHeight/2 || vy >= 2.0e-7){
+
+                  Animated.timing(this.state.marginTop,{
+                    toValue: 0,
+                    duration,
+                    easing: Easing.linear,
+                  }).start();
+
+                  releasedMarginTop = 0;
+
+                }else{
+
+                  Animated.timing(this.state.marginTop,{
+                    toValue: -toolbarHeight,
+                    duration,
+                    easing: Easing.linear,
+                  }).start();
+
+                  releasedMarginTop = -toolbarHeight;
+                }
+
+              }
+
+            },
+
         });
   }
 
@@ -306,7 +386,6 @@ class Toolbar extends Component {
         style={[styles.container,{
           marginTop: this.state.marginTop,
         }]} 
-
       >
         <ToolbarAndroid
           navIcon={require('image!ic_menu_white') }
