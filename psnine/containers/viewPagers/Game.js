@@ -15,6 +15,7 @@ import {
   TouchableNativeFeedback,
   RefreshControl,
   WebView,
+  KeyboardAvoidingView,
 } from 'react-native';
 
 import { connect } from 'react-redux';
@@ -79,19 +80,21 @@ class Game extends Component {
                     </View>
                 </TouchableNativeFeedback>
             </View>
-            <WebView
-                ref={WEBVIEW_REF}
-                source={{uri: this.props.URL}} 
-                style={{flex:3, zIndex: 0}}
-                scalesPageToFit={true}
-                domStorageEnabled={true}
-                onNavigationStateChange={this.onNavigationStateChange}
-                onShouldStartLoadWithRequest={this.onShouldStartLoadWithRequest}
-                startInLoadingState={false}  
-                injectedJavaScript={`$('.header').hide(); $('.scrollbar').removeClass('scrollbar').hide()`}
-            >
-
-            </WebView>
+            <KeyboardAvoidingView
+              behavior={'padding'}
+              style={{flex:3}}
+              >
+              <WebView
+                  ref={WEBVIEW_REF}
+                  source={{uri: this.props.URL}} 
+                  style={{flex:3}}
+                  scalesPageToFit={true}
+                  domStorageEnabled={true}
+                  onNavigationStateChange={this.onNavigationStateChange}
+                  startInLoadingState={true}  
+                  injectedJavaScript={`$('.header').hide(); $('.scrollbar').removeClass('scrollbar').hide()`}
+              />
+            </KeyboardAvoidingView>
         </View>
     );
   }
