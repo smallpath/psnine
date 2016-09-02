@@ -120,7 +120,12 @@ class Login extends Component {
           </View>
 
           <View style={styles.regist}>
-            <Text>如果是第一次使用PSNINE，请先完成 PSNID认证</Text>
+            <Text>如果是第一次使用PSNINE，请先完成</Text>
+            <TouchableNativeFeedback>
+              <View>
+              <Text style={styles.openURL}>PSNID认证</Text>
+              </View>
+            </TouchableNativeFeedback>
           </View>
         </View>
 
@@ -189,9 +194,13 @@ const styles = StyleSheet.create({
   },
   regist: { 
     flex: 1, 
-    flexDirection: 'column' , 
+    flexDirection: 'row' , 
     marginTop: 20,
     margin: 10,
+  },
+  openURL: {
+    color:accentColor, 
+    textDecorationLine:'underline',
   },
 });
 
