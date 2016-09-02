@@ -18,6 +18,7 @@ import {
   KeyboardAvoidingView,
   TextInput,
   AsyncStorage,
+  Linking,
 } from 'react-native';
 
 import { connect } from 'react-redux';
@@ -26,9 +27,10 @@ import { standardColor, accentColor } from '../../config/config';
 
 import { pngPrefix, getDealURL, getHappyPlusOneURL, getStoreURL } from '../../dao/dao';
 
-import { safeLogin } from '../../dao/login';
+import { safeLogin, registURL } from '../../dao/login';
 
 import { fetchUser } from '../../dao/userParser';
+
 
 let toolbarActions = [
 
@@ -77,6 +79,16 @@ class Login extends Component {
 
   }
 
+  regist = () => {
+      Linking.canOpenURL(registURL)
+              .then(supported => { 
+                if (supported)
+                  Linking.openURL(registURL);
+                else
+                  ToastAndroid.show(`未找到浏览器, 如果您使用了冰箱, 请先解冻浏览器`,2000); 
+              }).catch(err => {});
+  }
+
   render() {
     // console.log('Loggin.js rendered');
     return (
@@ -121,7 +133,9 @@ class Login extends Component {
 
           <View style={styles.regist}>
             <Text>如果是第一次使用PSNINE，请先完成</Text>
-            <TouchableNativeFeedback>
+            <TouchableNativeFeedback
+              onPress={this.regist}
+            >
               <View>
               <Text style={styles.openURL}>PSNID认证</Text>
               </View>

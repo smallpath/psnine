@@ -2,6 +2,8 @@
 
 const loginURL = 'http://psnine.com/sign/in';
 
+export const registURL = `http://psnine.com/psnauth`;
+
 export const safeLogin = function(psnid, pass) {
     let signin = '';
     let formBody = [];
