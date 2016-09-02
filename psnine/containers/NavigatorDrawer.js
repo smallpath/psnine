@@ -380,6 +380,12 @@ class NavigatorDrawer extends Component {
 
   renderRow = (rowData, sectionID, rowID, highlightRow) => {
     let icon = imageArr[rowID];
+    if(this.state.psnid == ''){
+      console.log(rowID, typeof rowID);
+      if([0,1,2].indexOf(parseInt(rowID)) != -1){
+        return null;
+      }
+    }
     return (
       <View>
         <TouchableNativeFeedback
