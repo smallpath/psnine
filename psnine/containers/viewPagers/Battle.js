@@ -28,10 +28,10 @@ let getRowData = (dataBlob, sectionID, rowID) => {
   return dataBlob[rowID];
 };
 
-const ds = new ListView.DataSource({
+const dataSource = new ListView.DataSource({
   getRowData: getRowData,
   getSectionHeaderData: getSectionData,
-  rowHasChanged: (row1, row2) => row1 !== row2,
+  rowHasChanged: (row1, row2) => row1.id !== row2.id,
   sectionHeaderHasChanged: (s1, s2) => s1 !== s2,
 });
 
@@ -216,7 +216,7 @@ class Battle extends Component {
       }
     }
 
-    let finalDs = ds.cloneWithRowsAndSections(dataBlob, sectionIDs, rowIDs);
+    dataSource = dataSource.cloneWithRowsAndSections(dataBlob, sectionIDs, rowIDs);
     // console.log('Community.js rendered');
     return (
         <ListView
@@ -230,7 +230,7 @@ class Battle extends Component {
           pageSize = {32}
           removeClippedSubviews={false}
           enableEmptySections={true}
-          dataSource={ finalDs }
+          dataSource={ dataSource }
           renderSectionHeader = {this._renderSectionHeader}
           renderRow={this._renderRow}
           />

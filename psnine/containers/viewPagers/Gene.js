@@ -21,8 +21,10 @@ import GeneTopic from '../../components/GeneTopic';
 import { getGeneURL } from '../../dao/dao';
 import moment from '../../utils/moment';
 
-const ds = new ListView.DataSource({
-  rowHasChanged: (row1, row2) => row1 !== row2,
+const dataSource = new ListView.DataSource({
+  rowHasChanged:  (row1, row2) => {
+    return row1.id !== row2.id || row1.views !== row2.views || row1.count !== row2.count;
+  },
 });
 
 class Gene extends Component {
@@ -190,6 +192,7 @@ class Gene extends Component {
   render() {
     // console.log('Gene.js rendered');
     const { gene: geneReducer } = this.props;
+    dataSource = dataSource.cloneWithRows(geneReducer.genes);
     return (
       <ListView
         refreshControl={
@@ -206,7 +209,7 @@ class Gene extends Component {
         enableEmptySections={true}
         onEndReached={this._onEndReached}
         onEndReachedThreshold={10}
-        dataSource={ ds.cloneWithRows(geneReducer.genes) }
+        dataSource={ dataSource }
         renderRow={this._renderRow}
         />
     )

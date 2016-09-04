@@ -21,8 +21,10 @@ import CommunityTopic from '../../components/CommunityTopic';
 import { getTopicURL } from '../../dao/dao';
 import moment from '../../utils/moment';
 
-const ds = new ListView.DataSource({
-  rowHasChanged: (row1, row2) => row1 !== row2,
+const dataSource = new ListView.DataSource({
+  rowHasChanged: (row1, row2) => {
+    return row1.id !== row2.id || row1.views !== row2.views || row1.count !== row2.count;
+  },
 });
 
 class Community extends Component {
@@ -172,6 +174,7 @@ class Community extends Component {
   render(){
     const { community: communityReducer } = this.props;
     // console.log('Community.js rendered');
+    dataSource = dataSource.cloneWithRows(communityReducer.topics);
     return (
         <ListView
           refreshControl={
@@ -189,7 +192,7 @@ class Community extends Component {
           enableEmptySections={true}
           onEndReached={this._onEndReached}
           onEndReachedThreshold={10}
-          dataSource={ ds.cloneWithRows(communityReducer.topics) }
+          dataSource={ dataSource }
           renderRow={this._renderRow}
           />
     )
