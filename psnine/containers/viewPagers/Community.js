@@ -119,6 +119,7 @@ class Community extends Component {
     if(this.props.communityType != nextProps.communityType){
       this.props.communityType = nextProps.communityType;
       this._onRefresh(nextProps.communityType);
+      //console.log(Object.keys(this.listView));
     }
   }
 
@@ -133,8 +134,13 @@ class Community extends Component {
 
     if (communityReducer.isLoadingMore || communityReducer.isRefreshing)
       return;
-
+      
+    this._scrollToTop();
     dispatch(getTopicList(1, type));
+  }
+
+  _scrollToTop = () => {
+    this.listView.scrollTo({y:0, animated: true});
   }
 
   _loadMoreData = () => {
@@ -150,7 +156,7 @@ class Community extends Component {
     if (communityReducer.isLoadingMore || communityReducer.isRefreshing)
       return;
 
-      this._loadMoreData(this.props.type);
+    this._loadMoreData(this.props.type);
 
   }
 
@@ -166,6 +172,7 @@ class Community extends Component {
               colors={[standardColor]}
               />
           }
+          ref={listView=>this.listView=listView}
           pageSize = {32}
           removeClippedSubviews={false}
           enableEmptySections={true}

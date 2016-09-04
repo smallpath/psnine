@@ -138,10 +138,10 @@ class Toolbar extends Component {
     const { dispatch } = this.props;
     if(segmentedIndex == 0){
       let type = toolbarActions[segmentedIndex][index].value;
-      dispatch(changeCommunityType(type))
+      dispatch(changeCommunityType(type));
     }else if(segmentedIndex == 4){
       let type = toolbarActions[segmentedIndex][index].value;
-      dispatch(changeGeneType(type))
+      dispatch(changeGeneType(type));
     }
   }
 

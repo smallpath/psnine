@@ -3,7 +3,7 @@ import * as ActionTypes from '../constants/actionTypes';
 
 import { fetchTopics } from '../dao/dao';
 
-export function getTopicList(page = 1, type = '') {
+export function getTopicList(page = 1, type = '', callback) {
     return dispatch => {
         if (page === 1) {
             dispatch(changeTopicRefreshing(true));
@@ -14,6 +14,9 @@ export function getTopicList(page = 1, type = '') {
         return fetchTopics(page, type)
             .then(response => {
                 dispatch(gotTopicList(response,page,type));
+                if (typeof callback == 'function'){
+                    callback(); 
+                }
                 if (page === 1) {
                     dispatch(changeTopicRefreshing(false));
                 } else {

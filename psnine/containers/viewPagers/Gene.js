@@ -154,7 +154,12 @@ class Gene extends Component {
     if (geneReducer.isLoadingMore || geneReducer.isRefreshing)
       return;
 
+    this._scrollToTop();
     dispatch(getGeneList(1, type));
+  }
+
+  _scrollToTop = () => {
+    this.listView.scrollTo({y:0, animated: true});
   }
 
   _loadMoreData = () => {
@@ -185,6 +190,7 @@ class Gene extends Component {
             colors={[standardColor]}
             />
         }
+        ref={listView=>this.listView=listView}
         pageSize = {32}
         removeClippedSubviews={false}
         enableEmptySections={true}
