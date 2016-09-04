@@ -131,9 +131,6 @@ class Community extends Component {
   _onRefresh = (type = '') => {
     const { community: communityReducer, dispatch } = this.props;
 
-    if (communityReducer.isLoadingMore || communityReducer.isRefreshing)
-      return;
-
     this.refreshControl._nativeRef.setNativeProps({
       refreshing: true,
     });
@@ -159,9 +156,6 @@ class Community extends Component {
 
   _onEndReached = () => {
     const { community: communityReducer } = this.props;
-
-    if (communityReducer.isLoadingMore || communityReducer.isRefreshing)
-      return;
 
     this.refreshControl._nativeRef.setNativeProps({
       refreshing: true,
@@ -190,6 +184,7 @@ class Community extends Component {
           }
           ref={listView=>this.listView=listView}
           pageSize = {32}
+          initialListSize = {32}
           removeClippedSubviews={false}
           enableEmptySections={true}
           onEndReached={this._onEndReached}

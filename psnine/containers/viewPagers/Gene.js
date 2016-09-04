@@ -151,9 +151,6 @@ class Gene extends Component {
   _onRefresh = (type = '') => {
     const { gene: geneReducer, dispatch } = this.props;
 
-    if (geneReducer.isLoadingMore || geneReducer.isRefreshing)
-      return;
-
     this.refreshControl._nativeRef.setNativeProps({
       refreshing: true,
     });
@@ -179,9 +176,6 @@ class Gene extends Component {
 
   _onEndReached = () => {
     const { gene: geneReducer, dispatch } = this.props;
-
-    if (geneReducer.isLoadingMore || geneReducer.isRefreshing)
-      return;
 
     this.refreshControl._nativeRef.setNativeProps({
       refreshing: true,

@@ -178,9 +178,6 @@ class Battle extends Component {
   _onRefresh = (type = '') => {
     const { battle: battleReducer, dispatch } = this.props;
 
-    if (battleReducer.isRefreshing)
-      return;
-
     dispatch(getBattleList());
   }
 
@@ -225,7 +222,7 @@ class Battle extends Component {
         <ListView
           refreshControl={
             <RefreshControl
-              refreshing={battleReducer.isRefreshing}
+              refreshing={false}
               onRefresh={this._onRefresh}
               colors={[standardColor]}
               />
