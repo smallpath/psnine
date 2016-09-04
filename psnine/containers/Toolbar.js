@@ -17,6 +17,7 @@ import {
   Animated,
   Easing,
   PanResponder,
+  TouchableHighlight,
 } from 'react-native';
 
 import { connect } from 'react-redux';
@@ -99,6 +100,7 @@ class Toolbar extends Component {
       scale: new Animated.Value(1),
       opacity: new Animated.Value(1),
       marginTop: new Animated.Value(0),
+      pressStatus: false,
     }
   }
 
@@ -406,7 +408,7 @@ class Toolbar extends Component {
             position:'absolute',
             bottom: 16,
             right: 16,
-            elevation: 6,
+            elevation: this.state.pressStatus == false ? 6 : 12,
             opacity: this.state.opacity,
 
             transform: [{
@@ -418,14 +420,26 @@ class Toolbar extends Component {
                         }),
                       }]
           }}>
-          <TouchableNativeFeedback 
+          <TouchableHighlight 
+            onPress={
+              ()=>{}
+            }
             delayPressIn={0}
-            background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
+            activeOpacity={1}
+            underlayColor={accentColor}
+            onHideUnderlay={()=>{
+              this.setState({ pressStatus: false })
+            }}
+            onShowUnderlay={()=>{
+              console.log(this.state.pressStatus)
+              this.setState({ pressStatus: true })
+            }}
             style={{
-            width: 56,
-            height: 56,
-            borderRadius: 30,
-            flex:1}}>
+              width: 56,
+              height: 56,
+              borderRadius: 30,
+              flex:1,
+            }}>
             <View style={{borderRadius: 30,}}>
               <Image source={require('image!ic_add_white')}
                     style={{
@@ -433,8 +447,9 @@ class Toolbar extends Component {
                       top:0,
                   }}
               />
+
             </View>
-          </TouchableNativeFeedback>
+          </TouchableHighlight>
           </Animated.View>
       </Animated.View>
     )
