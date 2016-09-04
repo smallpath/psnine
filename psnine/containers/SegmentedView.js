@@ -33,7 +33,7 @@ let screen = Dimensions.get('window');
 const { width:SCREEN_WIDTH, height:SCREEN_HEIGHT } = screen;
 
 let statusBarHeight = StatusBar.currentHeight;
-let segmentedHeight = 38;
+let segmentedHeight = 44;
 let toolbarHeight = 56;
 
 let thisScreenHeightWitoutStatusBar = SCREEN_HEIGHT - statusBarHeight - segmentedHeight + toolbarHeight;
@@ -276,6 +276,8 @@ class SegmentedView extends Component {
                         elevation: 4,
                         height: segmentedHeight,
                     }]}>
+                    <View style={styles.barContainer}>
+                    </View>
                     <View  style={styles.titleContainer}>
                         {items}
                     </View>

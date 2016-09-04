@@ -124,6 +124,7 @@ class Toolbar extends Component {
         barPosition='bottom'
         underlayColor='#000'
         barColor='#fff'
+        titleStyle={{ fontSize:15 }}
         titleWidth={Dimensions.get('window').width/titlesArr.length}
         moveUpResponders = {this.panResponder}
         />
