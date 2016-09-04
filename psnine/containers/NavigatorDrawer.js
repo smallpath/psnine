@@ -71,15 +71,14 @@ class NavigatorDrawer extends Component {
   checkLoginState = async () =>{
     const psnid = await AsyncStorage.getItem('@psnid');
 
-
-    const userInfo = await fetchUser(psnid)
-    await AsyncStorage.setItem('@userInfo', JSON.stringify(userInfo));
-
     if(psnid==null)
       return;
     
     if(psnid=='')
       return;
+
+    const userInfo = await fetchUser(psnid)
+    await AsyncStorage.setItem('@userInfo', JSON.stringify(userInfo));
     
 
     this.setState({
