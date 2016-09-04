@@ -119,7 +119,6 @@ class Community extends Component {
     if(this.props.communityType != nextProps.communityType){
       this.props.communityType = nextProps.communityType;
       this._onRefresh(nextProps.communityType);
-      //console.log(Object.keys(this.listView));
     }
   }
 
@@ -134,9 +133,17 @@ class Community extends Component {
 
     if (communityReducer.isLoadingMore || communityReducer.isRefreshing)
       return;
-      
+
+    this.refreshControl._nativeRef.setNativeProps({
+      refreshing: true,
+    });
+
     this._scrollToTop();
     dispatch(getTopicList(1, type));
+
+    this.refreshControl._nativeRef.setNativeProps({
+      refreshing: false,
+    });
   }
 
   _scrollToTop = () => {
@@ -156,7 +163,15 @@ class Community extends Component {
     if (communityReducer.isLoadingMore || communityReducer.isRefreshing)
       return;
 
+    this.refreshControl._nativeRef.setNativeProps({
+      refreshing: true,
+    });
+
     this._loadMoreData(this.props.type);
+
+    this.refreshControl._nativeRef.setNativeProps({
+      refreshing: false,
+    });
 
   }
 
@@ -167,9 +182,10 @@ class Community extends Component {
         <ListView
           refreshControl={
             <RefreshControl
-              refreshing={communityReducer.isRefreshing || communityReducer.isLoadingMore}
+              refreshing={false}
               onRefresh={this._onRefresh}
               colors={[standardColor]}
+              ref={ ref => this.refreshControl = ref}
               />
           }
           ref={listView=>this.listView=listView}

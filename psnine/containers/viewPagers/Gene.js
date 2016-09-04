@@ -154,8 +154,17 @@ class Gene extends Component {
     if (geneReducer.isLoadingMore || geneReducer.isRefreshing)
       return;
 
+    this.refreshControl._nativeRef.setNativeProps({
+      refreshing: true,
+    });
+
     this._scrollToTop();
     dispatch(getGeneList(1, type));
+
+    this.refreshControl._nativeRef.setNativeProps({
+      refreshing: false,
+    });
+
   }
 
   _scrollToTop = () => {
@@ -174,7 +183,15 @@ class Gene extends Component {
     if (geneReducer.isLoadingMore || geneReducer.isRefreshing)
       return;
 
+    this.refreshControl._nativeRef.setNativeProps({
+      refreshing: true,
+    });
+
     this._loadMoreData();
+
+    this.refreshControl._nativeRef.setNativeProps({
+      refreshing: false,
+    });
 
   }
 
@@ -185,9 +202,10 @@ class Gene extends Component {
       <ListView
         refreshControl={
           <RefreshControl
-            refreshing={geneReducer.isRefreshing || geneReducer.isLoadingMore }
+            refreshing={false}
             onRefresh={this._onRefresh}
             colors={[standardColor]}
+            ref={ ref => this.refreshControl = ref}
             />
         }
         ref={listView=>this.listView=listView}
