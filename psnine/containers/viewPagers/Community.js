@@ -122,12 +122,19 @@ class Community extends Component {
     }
   }
 
-  componentDidMount = () => {
-    const { community: communityReducer } = this.props;
-    if (communityReducer.topicPage == 0)
-      this._onRefresh();
+  componentDidUpdate = () => {
+    this.refreshControl._nativeRef.setNativeProps({
+      refreshing: false,
+    });
   }
 
+  componentDidMount = () => {
+    const { community: communityReducer } = this.props;
+    if (communityReducer.topicPage == 0){
+      this._onRefresh();
+    }
+  }
+  
   _onRefresh = (type = '') => {
     const { community: communityReducer, dispatch } = this.props;
 
@@ -138,9 +145,6 @@ class Community extends Component {
     this._scrollToTop();
     dispatch(getTopicList(1, type));
 
-    this.refreshControl._nativeRef.setNativeProps({
-      refreshing: false,
-    });
   }
 
   _scrollToTop = () => {
@@ -162,10 +166,6 @@ class Community extends Component {
     });
 
     this._loadMoreData(this.props.type);
-
-    this.refreshControl._nativeRef.setNativeProps({
-      refreshing: false,
-    });
 
   }
 

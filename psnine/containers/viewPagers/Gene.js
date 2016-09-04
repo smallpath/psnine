@@ -141,6 +141,12 @@ class Gene extends Component {
     }
   }
 
+  componentDidUpdate = () => {
+    this.refreshControl._nativeRef.setNativeProps({
+      refreshing: false,
+    });
+  }
+
   componentDidMount = () => {
     const { gene: geneReducer } = this.props;
     if (geneReducer.genePage == 0)
@@ -157,10 +163,6 @@ class Gene extends Component {
 
     this._scrollToTop();
     dispatch(getGeneList(1, type));
-
-    this.refreshControl._nativeRef.setNativeProps({
-      refreshing: false,
-    });
 
   }
 
@@ -182,10 +184,6 @@ class Gene extends Component {
     });
 
     this._loadMoreData();
-
-    this.refreshControl._nativeRef.setNativeProps({
-      refreshing: false,
-    });
 
   }
 
