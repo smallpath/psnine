@@ -47,8 +47,12 @@ export const fetchUser = function(psnid) {
 
     return new Promise((resolve, reject) => {
         fetch(userURL)
-        .then(data=>{
-            let obj = parseAll(data._bodyInit);
+        .then((response)=>{
+            setTimeout(() => null, 0);
+            return response.text();
+        })
+        .then(html=>{
+            let obj = parseAll(html);
             resolve(obj);
         })
     });
