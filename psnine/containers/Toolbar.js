@@ -100,7 +100,6 @@ class Toolbar extends Component {
       scale: new Animated.Value(1),
       opacity: new Animated.Value(1),
       marginTop: new Animated.Value(0),
-      pressStatus: false,
     }
   }
 
@@ -400,25 +399,27 @@ class Toolbar extends Component {
           onIconClicked={this.props._callDrawer() }
           />
           {this._renderSegmentedView() }
-          <Animated.View style={{
-            width: 56,
-            height: 56,
-            borderRadius: 30,
-            backgroundColor: accentColor,
-            position:'absolute',
-            bottom: 16,
-            right: 16,
-            elevation: this.state.pressStatus == false ? 6 : 12,
-            opacity: this.state.opacity,
+          <Animated.View 
+            ref={float=>this.float=float}
+            style={{
+              width: 56,
+              height: 56,
+              borderRadius: 30,
+              backgroundColor: accentColor,
+              position:'absolute',
+              bottom: 16,
+              right: 16,
+              elevation: 6 ,
+              opacity: this.state.opacity,
 
-            transform: [{
-                        scale: this.state.scale,                        
-                      },{
-                        rotateZ: this.state.rotation.interpolate({
-                          inputRange: [0,1],
-                          outputRange: ['0deg', '360deg']
-                        }),
-                      }]
+              transform: [{
+                          scale: this.state.scale,                        
+                        },{
+                          rotateZ: this.state.rotation.interpolate({
+                            inputRange: [0,1],
+                            outputRange: ['0deg', '360deg']
+                          }),
+                        }]
           }}>
           <TouchableHighlight 
             onPress={
@@ -428,11 +429,16 @@ class Toolbar extends Component {
             activeOpacity={1}
             underlayColor={accentColor}
             onHideUnderlay={()=>{
-              this.setState({ pressStatus: false })
+              this.float.setNativeProps({
+                style :{
+                elevation: 6,
+              }});
             }}
             onShowUnderlay={()=>{
-              console.log(this.state.pressStatus)
-              this.setState({ pressStatus: true })
+              this.float.setNativeProps({
+                style :{
+                elevation: 12,
+              }});
             }}
             style={{
               width: 56,
