@@ -17,7 +17,7 @@ function reducer(state = initialState, action){
             } else{
                 newState = Object.assign({},state,{
                     genes: state.genes.concat(action.value.data),
-                    genePage: state.topicPage + 1,
+                    genePage: state.genePage + 1,
                 });
             }
             return newState;

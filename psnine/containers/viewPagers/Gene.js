@@ -147,7 +147,7 @@ class Gene extends Component {
     const { gene: geneReducer } = this.props;
 
     if(geneReducer.genePage == 1){
-      this._scrollToTop()
+      this._scrollToTop();
     }else{
       this.currentHeight = this.listView.getMetrics().contentLength;
     }
@@ -171,7 +171,6 @@ class Gene extends Component {
       refreshing: true,
     });
 
-    this._scrollToTop();
     dispatch(getGeneList(1, type));
 
   }
@@ -223,7 +222,7 @@ class Gene extends Component {
           this.listViewHeight = event.nativeEvent.layout.height
         }}
         onContentSizeChange={() => {
-            if (geneReducer.topicPage == 1)
+            if (geneReducer.genePage == 1)
               return;
 
             this.listView.scrollTo({y: this.currentHeight + 60 - this.listViewHeight, animated: true})
