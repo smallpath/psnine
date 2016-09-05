@@ -122,9 +122,18 @@ class Community extends Component {
       this.props.communityType = nextProps.communityType;
       this._onRefresh(nextProps.communityType);
     }
+
   }
 
   componentDidUpdate = () => {
+    const { community: communityReducer } = this.props;
+
+    if(communityReducer.topicPage == 1){
+      this._scrollToTop()
+    }else{
+      this.currentHeight = this.listView.getMetrics().contentLength;
+    }
+
     this.refreshControl._nativeRef.setNativeProps({
       refreshing: false,
     });
@@ -144,7 +153,6 @@ class Community extends Component {
       refreshing: true,
     });
 
-    this._scrollToTop();
     dispatch(getTopicList(1, type));
 
   }
@@ -194,6 +202,15 @@ class Community extends Component {
           onEndReachedThreshold={10}
           dataSource={ dataSource }
           renderRow={this._renderRow}
+          onLayout={event => {
+            this.listViewHeight = event.nativeEvent.layout.height
+          }}
+          onContentSizeChange={() => {
+              if (communityReducer.topicPage == 1)
+                return;
+
+              this.listView.scrollTo({y: this.currentHeight + 60 - this.listViewHeight, animated: true})
+            }}
           />
     )
   }

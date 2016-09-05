@@ -144,6 +144,14 @@ class Gene extends Component {
   }
 
   componentDidUpdate = () => {
+    const { gene: geneReducer } = this.props;
+
+    if(geneReducer.genePage == 1){
+      this._scrollToTop()
+    }else{
+      this.currentHeight = this.listView.getMetrics().contentLength;
+    }
+
     this.refreshControl._nativeRef.setNativeProps({
       refreshing: false,
     });
@@ -211,6 +219,15 @@ class Gene extends Component {
         onEndReachedThreshold={10}
         dataSource={ dataSource }
         renderRow={this._renderRow}
+        onLayout={event => {
+          this.listViewHeight = event.nativeEvent.layout.height
+        }}
+        onContentSizeChange={() => {
+            if (geneReducer.topicPage == 1)
+              return;
+
+            this.listView.scrollTo({y: this.currentHeight + 60 - this.listViewHeight, animated: true})
+        }}
         />
     )
   }
