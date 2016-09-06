@@ -20,6 +20,7 @@ import Deal from '../components/Deal';
 import GeneTopic from '../components/GeneTopic';
 import HappyPlusOne from '../components/HappyPlusOne';
 import Store from '../components/Store';
+import Rank from '../components/Rank';
 
 import Login from './authPagers/Login';
 import Message from './authPagers/Message';
@@ -37,12 +38,13 @@ let imageArr = [
   require('image!ic_game_blue'),
   require('image!ic_message_blue'),
   require('image!ic_plus_blue'),
+  require('image!ic_plus_blue'),
   require('image!ic_store_blue'),
   require('image!ic_business_blue'),
 ];
 
 let items = [
-              "个人中心","我的游戏","我的消息","游惠","Store","闲游",
+              "个人中心","我的游戏","我的消息","排行","游惠","Store","闲游",
 ];
 
 class NavigatorDrawer extends Component {
@@ -345,6 +347,18 @@ class NavigatorDrawer extends Component {
             });
             break;
         case 3:
+            URL = 'http://psnine.com/psnid';
+
+            navigator.push({
+              component: HappyPlusOne,
+              params: {
+                URL,
+                title: '游惠',
+              }
+            });
+            break;
+
+        case 4:
             URL = getHappyPlusOneURL();
 
             navigator.push({
@@ -355,7 +369,7 @@ class NavigatorDrawer extends Component {
               }
             });
             break;
-        case 4:
+        case 5:
             URL = getStoreURL();
             navigator.push({
               component: Store,
@@ -365,7 +379,7 @@ class NavigatorDrawer extends Component {
               }
             });
             break;
-        case 5:
+        case 6:
             URL = getDealURL();
             //URL = 'http://120.55.124.66/user/smallpath';
             navigator.push({
@@ -499,7 +513,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    padding: 10,
+    padding: 8,
   },
   themeName: {
     flex: 1,
