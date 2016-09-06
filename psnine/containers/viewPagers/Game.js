@@ -23,7 +23,7 @@ import { standardColor } from '../../config/config';
 
 let WEBVIEW_REF = `WEBVIEW_REF_GAME`;
 let back_image = require('image!ic_back_blue');
-let imageSize = 56;
+let imageSize = 48;
 
 class Game extends Component {
 
@@ -62,8 +62,8 @@ class Game extends Component {
         <View style={{flex:3}}>
             <View style={{
                     position: 'absolute',
-                    bottom: 16,
-                    right: 16,
+                    bottom: 20,
+                    right: 20,
                     width: imageSize,
                     height: imageSize,
                     zIndex: 100,
