@@ -27,6 +27,7 @@ import Message from './authPagers/Message';
 import Home from './authPagers/Home';
 
 import { safeLogout } from '../dao/logout';
+import { safeSignOn } from '../dao/signon';
 import { fetchUser } from '../dao/userParser';
 
 let settingIcon = require('image!ic_setting_blue');
@@ -61,6 +62,7 @@ class NavigatorDrawer extends Component {
             gold: '金',
             silver: '银',
             bronze: '铜',
+            isSigned: true,
           },
           dataSource:dataSource.cloneWithRows(items),
       }
@@ -118,7 +120,7 @@ class NavigatorDrawer extends Component {
   pressLogout = async () =>{
     const { navigator, closeDrawer} = this.props;
     closeDrawer();
-    await safeLogout();
+    await safeLogout(this.state.psnid);
     this.setState({
       psnid:'',          
       userInfo : {
@@ -139,9 +141,36 @@ class NavigatorDrawer extends Component {
     })
   }
 
+  pressSign = async () => {
+    const { navigator, closeDrawer} = this.props;
+    closeDrawer();
+    let data = await safeSignOn(this.state.psnid);
+    this.setState({
+      userInfo: Object.assign({},this.state.userInfo,{ isSigned: false }),
+    });
+    console.log(data);
+    ToastAndroid.show(data,2000);
+  }
+
   renderHeader = () => {
       //let avatar = 
       let toolActions = [];
+
+      if(this.state.psnid != '' && this.state.userInfo.isSigned == false){
+        toolActions.push(<TouchableNativeFeedback
+                          key={'sign'}
+                          onPress={this.pressSign}
+                          >
+                          <View style={{flexDirection: 'column',  justifyContent: 'center',marginLeft: 20}}>
+                            <Image source={require('image!ic_assignment_white')}            
+                                    style={{width: 20, height: 20}} />
+                            <Text style={[styles.menuText,{marginTop:5}]}>
+                              签到
+                            </Text>
+                          </View>
+                        </TouchableNativeFeedback>)
+      }
+
       toolActions.push(<TouchableNativeFeedback
                         key={'changeStyle'}
                     // onPress={() => this.props.onSelectItem(theme)}
@@ -240,20 +269,6 @@ class NavigatorDrawer extends Component {
               </View>
             </TouchableNativeFeedback>
           </View>);
-        toolActions.push(<TouchableNativeFeedback
-                          key={'sign'}
-                    // onPress={() => this.props.onSelectItem(theme)}
-                    // onShowUnderlay={highlightRowFunc}
-                    // onHideUnderlay={highlightRowFunc}
-                    >
-                    <View style={{flexDirection: 'column',  justifyContent: 'center',marginLeft: 20}}>
-                      <Image source={require('image!ic_assignment_white')}            
-                              style={{width: 20, height: 20}} />
-                      <Text style={[styles.menuText,{marginTop:5}]}>
-                        签到
-                      </Text>
-                    </View>
-                  </TouchableNativeFeedback>)
         
         toolActions.push(<TouchableNativeFeedback
                      onPress={this.pressLogout}
@@ -269,8 +284,6 @@ class NavigatorDrawer extends Component {
                       </Text>
                     </View>
                   </TouchableNativeFeedback>)
-
-
         }  
 
 

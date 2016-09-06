@@ -5,11 +5,12 @@ let platinumStr = 'text-platinum">';
 let goldStr = 'text-gold">';
 let silverStr ='text-silver">';
 let bronzeStr = 'text-bronze">'
+let signStr = 'class="btn" style="color:white;">';
 
 const parseAvatar = (source, pattern)=>{
     let index = source.indexOf(pattern);
     let str = '';
-    if(index!=0){
+    if(index!=-1){
         index+=pattern.length;
         while (source[index] != '\"'){
             str += source[index];
@@ -22,7 +23,7 @@ const parseAvatar = (source, pattern)=>{
 const parseTrophy = (source, pattern)=>{
     let index = source.indexOf(pattern);
     let str = '';
-    if(index!=0){
+    if(index!=-1){
         index+=pattern.length;
         while (source[index] != '<'){
             str += source[index];
@@ -32,6 +33,15 @@ const parseTrophy = (source, pattern)=>{
     return str;
 }
 
+const parseSignState = (source, pattern) =>{
+    let index = source.indexOf(pattern);
+    let str = '';
+    if(index!=-1){
+        return false  
+    }
+    return true;  
+}
+
 export const parseAll = (source)=>{
     let obj = {};
     obj.avatar = { uri: parseAvatar(source, imageIndexStr) };
@@ -39,6 +49,7 @@ export const parseAll = (source)=>{
     obj.gold = parseTrophy(source, goldStr);
     obj.silver = parseTrophy(source, silverStr);
     obj.bronze = parseTrophy(source, bronzeStr);
+    obj.isSigned = parseSignState(source, signStr);
     return obj;
 }
 
