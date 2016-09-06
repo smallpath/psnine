@@ -262,7 +262,7 @@ class NavigatorDrawer extends Component {
                     // onHideUnderlay={highlightRowFunc}
                     >
                     <View style={{flexDirection: 'column',  justifyContent: 'center',marginLeft: 20}}>
-                      <Image source={require('image!ic_assignment_white')}            
+                      <Image source={require('image!ic_exit_white')}            
                               style={{width: 20, height: 20}} />
                       <Text style={[styles.menuText,{marginTop:5}]}>
                         退出
