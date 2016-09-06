@@ -160,7 +160,7 @@ class Toolbar extends Component {
             },
 
             onMoveShouldSetPanResponderCapture:(e, gesture) =>{ 
-              let shouldSet = Math.abs(gesture.dy) >=2;
+              let shouldSet = Math.abs(gesture.dy) >=4;
               // console.log('2');
               return shouldSet; 
             },
