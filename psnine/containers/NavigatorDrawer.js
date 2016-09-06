@@ -37,7 +37,7 @@ let imageArr = [
   require('image!home'),
   require('image!ic_game_blue'),
   require('image!ic_message_blue'),
-  require('image!ic_plus_blue'),
+  require('image!ic_rank_blue'),
   require('image!ic_plus_blue'),
   require('image!ic_store_blue'),
   require('image!ic_business_blue'),
