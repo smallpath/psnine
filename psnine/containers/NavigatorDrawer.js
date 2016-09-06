@@ -148,28 +148,13 @@ class NavigatorDrawer extends Component {
     this.setState({
       userInfo: Object.assign({},this.state.userInfo,{ isSigned: false }),
     });
-    console.log(data);
+
     ToastAndroid.show(data,2000);
   }
 
   renderHeader = () => {
       //let avatar = 
       let toolActions = [];
-
-      if(this.state.psnid != '' && this.state.userInfo.isSigned == false){
-        toolActions.push(<TouchableNativeFeedback
-                          key={'sign'}
-                          onPress={this.pressSign}
-                          >
-                          <View style={{flexDirection: 'column',  justifyContent: 'center',marginLeft: 20}}>
-                            <Image source={require('image!ic_assignment_white')}            
-                                    style={{width: 20, height: 20}} />
-                            <Text style={[styles.menuText,{marginTop:5}]}>
-                              签到
-                            </Text>
-                          </View>
-                        </TouchableNativeFeedback>)
-      }
 
       toolActions.push(<TouchableNativeFeedback
                         key={'changeStyle'}
@@ -180,7 +165,7 @@ class NavigatorDrawer extends Component {
                     <View style={{
                       flexDirection: 'column',  
                       justifyContent: 'center',
-                      marginLeft: this.state.psnid == '' ? 90: 20,
+                      marginLeft: this.state.psnid == '' ? 90 : this.state.userInfo.isSigned ? 55 : 20,
                     }}>
                       <Image source={require('image!ic_assignment_white')}            
                               style={{width: 20, height: 20}} />
@@ -270,6 +255,22 @@ class NavigatorDrawer extends Component {
             </TouchableNativeFeedback>
           </View>);
         
+
+        if(this.state.userInfo.isSigned == false){
+          toolActions.push(<TouchableNativeFeedback
+                            key={'sign'}
+                            onPress={this.pressSign}
+                            >
+                            <View style={{flexDirection: 'column',  justifyContent: 'center',marginLeft: 20}}>
+                              <Image source={require('image!ic_assignment_white')}            
+                                      style={{width: 20, height: 20}} />
+                              <Text style={[styles.menuText,{marginTop:5}]}>
+                                签到
+                              </Text>
+                            </View>
+                          </TouchableNativeFeedback>)
+        }
+
         toolActions.push(<TouchableNativeFeedback
                      onPress={this.pressLogout}
                      key={'exitApp'}
