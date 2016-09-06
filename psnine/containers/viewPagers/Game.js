@@ -56,7 +56,6 @@ class Game extends Component {
     // }
   }
 
-
   render() {
     // console.log('Game.js rendered');
     return ( 
@@ -95,7 +94,7 @@ class Game extends Component {
                   injectedJavaScript={`$('.header').hide(); $('.scrollbar').removeClass('scrollbar').hide()`}
               />
             </KeyboardAvoidingView>
-        </View>
+       </View>    
     );
   }
 }

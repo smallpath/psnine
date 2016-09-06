@@ -21,8 +21,8 @@ import { changeSegmentIndex } from '../actions/app';
 import { getTopicList } from '../actions/community.js';
 
 import Community from './viewPagers/Community';
+import Qa from './viewPagers/Qa';
 import Game from './viewPagers/Game';
-import Rank from './viewPagers/Rank';
 import Battle from './viewPagers/Battle';
 import Gene from './viewPagers/Gene';
 
@@ -326,19 +326,19 @@ class SegmentedView extends Component {
                     </View>
                      
                     <View key={`s11`}>
-                        <Game 
+                        <Qa 
                             index={1} 
-                            ref={game=>this.game=game}
+                            ref={qa=>this.qa=qa}
                             {...{navigator:this.props.navigator}} 
-                            URL={'http://psnine.com/psngame'}
+                            URL={'http://psnine.com/qa'}
                         />
                     </View>
                     <View key={`s22`}>
-                        <Rank 
-                            ref={rank=>this.rank=rank}
+                        <Game 
+                            ref={game=>this.game=game}
                             index={2}
                             {...{navigator:this.props.navigator}} 
-                            URL={'http://psnine.com/psnid'}
+                            URL={'http://psnine.com/psngame'}
                         />
                     </View>
                     <View key={`s33`}>

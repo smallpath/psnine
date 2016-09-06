@@ -75,7 +75,7 @@ let geneActions = [
 
 let toolbarActions = [communityActions,gameActions,rankActions,battleActions,geneActions]
 
-let titlesArr = ["社区", "游戏", "排行", "约战", "机因"];
+let titlesArr = ["社区", "问答", "游戏",  "约战", "机因"];
 
 const ds = new ListView.DataSource({
   rowHasChanged: (row1, row2) => row1 !== row2,
