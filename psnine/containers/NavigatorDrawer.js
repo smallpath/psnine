@@ -12,7 +12,15 @@ import {
   ToastAndroid,
 } from 'react-native';
 
-import { getHomeURL, pngPrefix, getDealURL, getHappyPlusOneURL, getStoreURL } from '../dao/dao';
+import { 
+  getHomeURL, 
+  pngPrefix, 
+  getDealURL, 
+  getHappyPlusOneURL, 
+  getStoreURL,
+  getRankURL,
+  getMyGameURL,
+} from '../dao/dao';
 import { standardColor } from '../config/config';
 
 import CommunityTopic from '../components/CommunityTopic';
@@ -25,6 +33,7 @@ import Rank from '../components/Rank';
 import Login from './authPagers/Login';
 import Message from './authPagers/Message';
 import Home from './authPagers/Home';
+import MyGame from './authPagers/MyGame';
 
 import { safeLogout } from '../dao/logout';
 import { safeSignOn } from '../dao/signon';
@@ -344,7 +353,20 @@ class NavigatorDrawer extends Component {
             });
             break;
         case 1:
+            if(this.state.psnid == ''){
+              ToastAndroid.show('未登录',2000);
+              return;
+            }
 
+            URL = getMyGameURL(this.state.psnid);
+
+            navigator.push({
+              component: MyGame,
+              params: {
+                URL,
+                title: this.state.psnid,
+              }
+            });
             break;
         case 2:
             if(this.state.psnid == ''){
@@ -352,7 +374,6 @@ class NavigatorDrawer extends Component {
               return;
             }
               
-
             navigator.push({
               component: Message,
               params: {
@@ -361,13 +382,13 @@ class NavigatorDrawer extends Component {
             });
             break;
         case 3:
-            URL = 'http://psnine.com/psnid';
+            URL = getRankURL();
 
             navigator.push({
               component: HappyPlusOne,
               params: {
                 URL,
-                title: '游惠',
+                title: '排行',
               }
             });
             break;

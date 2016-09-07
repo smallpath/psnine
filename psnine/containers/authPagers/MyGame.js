@@ -23,15 +23,15 @@ import { connect } from 'react-redux';
 import { standardColor } from '../../config/config';
 
 let toolbarActions = [
-  {title: '关注', icon: require('image!ic_collect_white') ,show: 'always'},
-  {title: '感谢', icon: require('image!ic_refresh_white'), show: 'always'},
-  {title: '同步', icon: require('image!ic_refresh_white'), show: 'always'},
+  {title: '收藏', icon: require('image!ic_collect_white') ,show: 'always'},
+  {title: '刷新', icon: require('image!ic_refresh_white'), show: 'always'},
+  {title: '感谢', show: 'never'},
   {title: '分享', show: 'never' },
 ];
 let title = "TOPIC";
-let WEBVIEW_REF = `WEBVIEW_REF`;
+let WEBVIEW_REF = `WEBVIEW_MY_GAME`;
 
-class Home extends Component {
+class MyGame extends Component {
 
   constructor(props){
     super(props);
@@ -75,11 +75,11 @@ class Home extends Component {
         canGoBack: navState.canGoBack,
       });
       // this.refs[WEBVIEW_REF].stopLoading();
-    }//return false;
+    }
   }
 
   render() {
-    // console.log('Deal.js rendered');
+    // console.log('MyGame.js rendered');
     return ( 
           <View style={{flex:1}}>
               <ToolbarAndroid
@@ -101,7 +101,7 @@ class Home extends Component {
                     style={{flex:3}}
                     scalesPageToFit={true}
                     domStorageEnabled={true}
-                    onNavigationStateChange={this.onNavigationStateChange}
+                    // onNavigationStateChange={this.onNavigationStateChange}
                     startInLoadingState={true}  
                     injectedJavaScript={`$('.header').hide()`}
                 />
@@ -134,4 +134,4 @@ const styles = StyleSheet.create({
 });
 
 
-export default Home
+export default MyGame
