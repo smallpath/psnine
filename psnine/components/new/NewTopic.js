@@ -67,9 +67,7 @@ class NewTopic extends Component {
     let config = {tension: 30, friction: 7};
     this.isClosing = true;
     Animated.spring(this.props.openVal, {toValue: 0, ...config}).start(()=>{
-        // this.props.navigator.pop({
-        //     isPreViewStatic : true,
-        // });
+      this.props.addDefaultBackAndroidListener();
     });
     
   }

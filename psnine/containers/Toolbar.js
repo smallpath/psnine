@@ -36,7 +36,6 @@ import { changeSegmentIndex, changeCommunityType, changeGeneType } from '../acti
 
 import { standardColor, accentColor } from '../config/config';
 
-
 let title = "PSNINE";
 let isMounted = false;
 let indexWithFloatButton = [0,3,4];
@@ -387,20 +386,62 @@ class Toolbar extends Component {
 
   }
 
+  addDefaultBackAndroidListener = () =>{
+    const { navigator: _navigator } = this.props;
+    let backPressClickTimeStamp = 0;
+    BackAndroid.addEventListener('hardwareBackPress', function () {
+      if (_navigator && _navigator.getCurrentRoutes().length > 1) {
+        _navigator.pop();
+        return true;
+      }else{
+        let timestamp = new Date();
+          if(timestamp - backPressClickTimeStamp>2000){
+            backPressClickTimeStamp = timestamp;
+          ToastAndroid.show('再按一次退出程序',2000);
+            return true;
+          }else{
+            return false;
+          }
+      }
+    });
+  }
+
+  addSwitchBackListener = (AnimatedValue) =>{
+    let config = {tension: 30, friction: 7};
+
+    BackAndroid.addEventListener('hardwareBackPress', () => {
+      if(AnimatedValue._value != 1)
+        return true;
+
+      Animated.spring(AnimatedValue, {toValue: 0, ...config}).start(()=>{
+        BackAndroid.clearAllListeners();
+        this.addDefaultBackAndroidListener();
+      });
+
+      return true;
+    });
+    
+  }
+
   pressNew = () => {
     const { segmentedIndex } = this.props.app;
     if (segmentedIndex == 1 || segmentedIndex == 2)
       return;
 
 
-    const { navigator } = this.props;
+    const { navigator: _navigator } = this.props;
 
     let config = {tension: 30, friction: 7};
 
     switch (segmentedIndex) {
       case 0 : 
+        BackAndroid.clearAllListeners();
+        BackAndroid.addEventListener('hardwareBackPress', ()=>true);
+
         setTimeout(() => {
-            Animated.spring(this.state.openTopicVal, {toValue: 1, ...config}).start();
+            Animated.spring(this.state.openTopicVal, {toValue: 1, ...config}).start(()=>{
+              this.addSwitchBackListener(this.state.openTopicVal);
+            });
         }, 0);
         
         break;
@@ -409,14 +450,24 @@ class Toolbar extends Component {
 
         break;
       case 3 : 
+        BackAndroid.clearAllListeners();
+        BackAndroid.addEventListener('hardwareBackPress', ()=>true);
+
         setTimeout(() => {
-          Animated.spring(this.state.openBattleVal, {toValue: 1, ...config}).start();
+          Animated.spring(this.state.openBattleVal, {toValue: 1, ...config}).start(()=>{
+            this.addSwitchBackListener(this.state.openBattleVal);
+          });
         }, 0);
 
         break;
       case 4 : 
+        BackAndroid.clearAllListeners();
+        BackAndroid.addEventListener('hardwareBackPress', ()=>true);
+        
         setTimeout(() => {
-          Animated.spring(this.state.openGeneVal, {toValue: 1, ...config}).start();
+          Animated.spring(this.state.openGeneVal, {toValue: 1, ...config}).start(()=>{
+            this.addSwitchBackListener(this.state.openGeneVal);
+          });
         }, 0);
 
         break;
@@ -508,9 +559,21 @@ class Toolbar extends Component {
             </View>
           </TouchableNativeFeedback>
           </Animated.View>
-          <NewTopic openVal={this.state.openTopicVal} marginTop={this.state.marginTop}/>
-          <NewBattle openVal={this.state.openBattleVal} marginTop={this.state.marginTop}/>
-          <NewGene openVal={this.state.openGeneVal} marginTop={this.state.marginTop}/>
+          <NewTopic 
+              addDefaultBackAndroidListener={this.addDefaultBackAndroidListener}
+              openVal={this.state.openTopicVal} 
+              marginTop={this.state.marginTop}
+          />
+          <NewBattle 
+              addDefaultBackAndroidListener={this.addDefaultBackAndroidListener}
+              openVal={this.state.openBattleVal} 
+              marginTop={this.state.marginTop}
+          />
+          <NewGene
+              addDefaultBackAndroidListener={this.addDefaultBackAndroidListener} 
+              openVal={this.state.openGeneVal} 
+              marginTop={this.state.marginTop}
+          />
       </Animated.View>
     )
   }

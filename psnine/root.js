@@ -68,11 +68,11 @@ class Root extends React.Component {
 		return <Component {...route.params} navigator={navigator} />
 	}
 	configureScene = (route) => {
-		if(typeof route.withoutAnimation != 'undefined'){
-			if(route.withoutAnimation == true){
-				return CustomPushWithoutAnimation;
-			}
-		}
+		// if(typeof route.withoutAnimation != 'undefined'){
+		// 	if(route.withoutAnimation == true){
+		// 		return CustomPushWithoutAnimation;
+		// 	}
+		// }
 		return CustomSceneConfig
 	}
 	render() {
