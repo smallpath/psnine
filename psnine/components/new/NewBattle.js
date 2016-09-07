@@ -64,9 +64,6 @@ class NewTopic extends Component {
 
   _pressButton = () => {
     let config = {tension: 30, friction: 7};
-
-    BackAndroid.clearAllListeners();
-    this.props.addDefaultBackAndroidListener();
     
     Animated.spring(this.props.openVal, {toValue: 0, ...config}).start();
     

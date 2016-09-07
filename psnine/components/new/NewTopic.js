@@ -53,7 +53,6 @@ class NewTopic extends Component {
 
   constructor(props) {
     super(props);
-    this.isClosing = false;
 
     this.state = {
       psnid: '',
@@ -65,7 +64,7 @@ class NewTopic extends Component {
 
   _pressButton = () => {
     let config = {tension: 30, friction: 7};
-    this.isClosing = true;
+
     Animated.spring(this.props.openVal, {toValue: 0, ...config}).start(()=>{
       this.props.addDefaultBackAndroidListener();
     });

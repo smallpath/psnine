@@ -414,7 +414,7 @@ class Toolbar extends Component {
         return true;
 
       Animated.spring(AnimatedValue, {toValue: 0, ...config}).start(()=>{
-        BackAndroid.clearAllListeners();
+        BackAndroid.clearAllListeners && BackAndroid.clearAllListeners();
         this.addDefaultBackAndroidListener();
       });
 
@@ -435,7 +435,7 @@ class Toolbar extends Component {
 
     switch (segmentedIndex) {
       case 0 : 
-        BackAndroid.clearAllListeners();
+        BackAndroid.clearAllListeners && BackAndroid.clearAllListeners();
         BackAndroid.addEventListener('hardwareBackPress', ()=>true);
 
         setTimeout(() => {
@@ -450,7 +450,7 @@ class Toolbar extends Component {
 
         break;
       case 3 : 
-        BackAndroid.clearAllListeners();
+        BackAndroid.clearAllListeners && BackAndroid.clearAllListeners();
         BackAndroid.addEventListener('hardwareBackPress', ()=>true);
 
         setTimeout(() => {
@@ -461,7 +461,7 @@ class Toolbar extends Component {
 
         break;
       case 4 : 
-        BackAndroid.clearAllListeners();
+        BackAndroid.clearAllListeners && BackAndroid.clearAllListeners();
         BackAndroid.addEventListener('hardwareBackPress', ()=>true);
         
         setTimeout(() => {
