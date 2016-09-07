@@ -57,36 +57,139 @@ class NewTopic extends Component {
     this.state = {
       psnid: '',
       password: '',
-
-
+      
     }
   }
 
   _pressButton = () => {
+    let { openVal, innerMarginTop } = this.props;
     let config = {tension: 30, friction: 7};
-    
-    Animated.spring(this.props.openVal, {toValue: 0, ...config}).start(()=>{
+
+    Animated.parallel([openVal,innerMarginTop].map((property,index) => {
+        if(index == 0){
+          return Animated.spring(property, {toValue: 0, ...config});
+        }else if(index == 1){
+          return Animated.spring(property, {toValue: 0, ...config});
+        }
+    })).start(()=>{
         BackAndroid.clearAllListeners &&this.props.addDefaultBackAndroidListener();
     });
-    
   }
 
-  componentDidMount = () =>{
-      
+
+  componentWillMount() {
+        this.panResponder = PanResponder.create({  
+
+            onStartShouldSetPanResponderCapture: (e, gesture) =>{ 
+              return false; 
+            },
+
+            onMoveShouldSetPanResponderCapture:(e, gesture) =>{ 
+              let shouldSet = Math.abs(gesture.dy) >=4;
+              return shouldSet; 
+            },
+
+            onPanResponderGrant:(e, gesture) => {
+                this.props.innerMarginTop.setOffset(gesture.y0);
+                this.props.innerMarginTop.setValue(this.props.innerMarginTop._startingValue);
+            },
+            onPanResponderMove: Animated.event([
+              null,
+              { dy: this.props.innerMarginTop}
+            ]), 
+            
+            onPanResponderRelease: (e, gesture) => {
+
+            },
+            onPanResponderTerminationRequest : (evt, gesture) => {  
+              return true;
+            },
+            onPanResponderTerminate: (evt, gesture) => {  
+              
+            },
+            onShouldBlockNativeResponder: (evt, gesture) => {  
+              return true;
+            },
+            onPanResponderReject: (evt, gesture) => {  
+              return false;
+            },
+            onPanResponderEnd: (evt, gesture) => {  
+              let dy = gesture.dy;
+              let vy = gesture.vy;
+              
+              this.props.innerMarginTop.flattenOffset();
+
+              let duration = 50; 
+
+              if(vy<0){
+
+                if(Math.abs(dy) <= CIRCLE_SIZE ){
+
+                  Animated.spring(this.props.innerMarginTop,{
+                    toValue: SCREEN_HEIGHT- CIRCLE_SIZE,
+                    duration,
+                    easing: Easing.linear,
+                  }).start();
+
+                }else{
+
+                  Animated.spring(this.props.innerMarginTop,{
+                    toValue: 0,
+                    duration,
+                    easing: Easing.linear,
+                  }).start();
+
+                }
+
+              }else{
+
+                if(Math.abs(dy) <= CIRCLE_SIZE){
+
+                  Animated.spring(this.props.innerMarginTop,{
+                    toValue: 0,
+                    duration,
+                    easing: Easing.linear,
+                  }).start();
+
+                }else{
+
+                  Animated.spring(this.props.innerMarginTop,{
+                    toValue: SCREEN_HEIGHT- CIRCLE_SIZE,
+                    duration,
+                    easing: Easing.linear,
+                  }).start();
+                }
+
+              }
+
+            },
+
+        });
   }
 
   render() {
     let { openVal, marginTop } = this.props;
 
+    this._reverseAnimatedValue = marginTop.interpolate({
+        inputRange: [-56, 0],
+        outputRange: [56, 0],
+        extrapolate: 'clamp'
+    });
+
+
     let outerStyle = {
-        marginTop: marginTop.interpolate({inputRange: [-56, 0], outputRange: [56 , 0 ]}),
+        marginTop: Animated.add(this.props.innerMarginTop,this._reverseAnimatedValue).interpolate({
+          inputRange: [0, SCREEN_HEIGHT], 
+          outputRange: [0 ,SCREEN_HEIGHT]
+        }),
     }
 
-    let animatedStyle = {                                 // (step4: uncomment)
+
+    let animatedStyle = {                                
         left: openVal.interpolate({inputRange: [0, 1], outputRange: [SCREEN_WIDTH - 56-16 , 0]}),
         top: openVal.interpolate({inputRange: [0, 1], outputRange: [SCREEN_HEIGHT - 16-56 , 0]}),
         width: openVal.interpolate({inputRange: [0, 1], outputRange: [CIRCLE_SIZE, SCREEN_WIDTH]}),
-        height: openVal.interpolate({inputRange: [0, 1], outputRange: [CIRCLE_SIZE, SCREEN_HEIGHT]}),
+        height: openVal.interpolate({inputRange: [0, 1], outputRange: [CIRCLE_SIZE, SCREEN_HEIGHT+100]}),
         borderWidth: openVal.interpolate({inputRange: [0, 0.5 ,1], outputRange: [2, 2, 0]}),
         borderRadius: openVal.interpolate({inputRange: [-0.15, 0, 0.5, 1], outputRange: [0, CIRCLE_SIZE / 2, CIRCLE_SIZE * 1.3, 0]}),
         opacity : openVal.interpolate({inputRange: [0, 0.1 ,1], outputRange: [0, 1, 1]}),
@@ -96,13 +199,17 @@ class NewTopic extends Component {
     return (
       <Animated.View 
         style={[
-            styles.circle, styles.open, animatedStyle, outerStyle
-        ]}>
+          { backgroundColor: 'transparent' },  styles.circle, styles.open, animatedStyle, outerStyle/*, innerPaddingStyle*/
+        ]}
+        
+        >
+
         <ToolbarAndroid
           navIcon={require('image!ic_back_white') }
           title={title}
           style={styles.toolbar}
           onIconClicked={this._pressButton}
+          {...this.panResponder.panHandlers}
           />
         <KeyboardAvoidingView behavior={'padding'} style={styles.KeyboardAvoidingView} >
           <View style={styles.accountView}>

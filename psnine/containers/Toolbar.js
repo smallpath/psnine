@@ -106,6 +106,9 @@ class Toolbar extends Component {
       openTopicVal: new Animated.Value(0),
       openBattleVal: new Animated.Value(0),
       openGeneVal: new Animated.Value(0),
+      innerTopicMarginTop: new Animated.Value(0),
+      innerBattleMarginTop: new Animated.Value(0),
+      innerGeneMarginTop: new Animated.Value(0),
     }
   }
 
@@ -406,16 +409,22 @@ class Toolbar extends Component {
     });
   }
 
-  addSwitchBackListener = (AnimatedValue) =>{
+  addSwitchBackListener = (AnimatedValue, MarginTopValue) =>{
     let config = {tension: 30, friction: 7};
 
     BackAndroid.addEventListener('hardwareBackPress', () => {
       if(AnimatedValue._value != 1)
         return true;
 
-      Animated.spring(AnimatedValue, {toValue: 0, ...config}).start(()=>{
-        BackAndroid.clearAllListeners && BackAndroid.clearAllListeners();
-        this.addDefaultBackAndroidListener();
+      Animated.parallel([AnimatedValue,MarginTopValue].map((property,index) => {
+          if(index == 0){
+            return Animated.spring(property, {toValue: 0, ...config});
+          }else if(index == 1){
+            return Animated.spring(property, {toValue: 0, ...config});
+          }
+      })).start(()=>{
+          BackAndroid.clearAllListeners && BackAndroid.clearAllListeners();
+          BackAndroid.clearAllListeners && this.addDefaultBackAndroidListener();
       });
 
       return true;
@@ -440,7 +449,7 @@ class Toolbar extends Component {
 
         setTimeout(() => {
             Animated.spring(this.state.openTopicVal, {toValue: 1, ...config}).start(()=>{
-              BackAndroid.clearAllListeners &&this.addSwitchBackListener(this.state.openTopicVal);
+              BackAndroid.clearAllListeners &&this.addSwitchBackListener(this.state.openTopicVal,this.state.innerTopicMarginTop);
             });
         }, 0);
         
@@ -455,7 +464,7 @@ class Toolbar extends Component {
 
         setTimeout(() => {
           Animated.spring(this.state.openBattleVal, {toValue: 1, ...config}).start(()=>{
-            BackAndroid.clearAllListeners &&this.addSwitchBackListener(this.state.openBattleVal);
+            BackAndroid.clearAllListeners &&this.addSwitchBackListener(this.state.openBattleVal,this.state.innerBattleMarginTop);
           });
         }, 0);
 
@@ -466,7 +475,7 @@ class Toolbar extends Component {
         
         setTimeout(() => {
           Animated.spring(this.state.openGeneVal, {toValue: 1, ...config}).start(()=>{
-            BackAndroid.clearAllListeners &&this.addSwitchBackListener(this.state.openGeneVal);
+            BackAndroid.clearAllListeners &&this.addSwitchBackListener(this.state.openGeneVal,this.state.innerGeneMarginTop);
           });
         }, 0);
 
@@ -563,16 +572,19 @@ class Toolbar extends Component {
               addDefaultBackAndroidListener={this.addDefaultBackAndroidListener}
               openVal={this.state.openTopicVal} 
               marginTop={this.state.marginTop}
+              innerMarginTop={this.state.innerTopicMarginTop}
           />
           <NewBattle 
               addDefaultBackAndroidListener={this.addDefaultBackAndroidListener}
               openVal={this.state.openBattleVal} 
               marginTop={this.state.marginTop}
+              innerMarginTop={this.state.innerBattleMarginTop}
           />
           <NewGene
               addDefaultBackAndroidListener={this.addDefaultBackAndroidListener} 
               openVal={this.state.openGeneVal} 
               marginTop={this.state.marginTop}
+              innerMarginTop={this.state.innerGeneMarginTop}
           />
       </Animated.View>
     )
