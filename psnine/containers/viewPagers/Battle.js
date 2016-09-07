@@ -97,7 +97,7 @@ class Battle extends Component {
         }}>
         <TouchableElement  
           onPress ={()=>{this._onRowPressed(rowData)}}
-          delayPressIn={0}
+          delayPressIn={100}
           background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
           >
           <View style={{ flex: 1, flexDirection: 'row',  padding: 12 }}>

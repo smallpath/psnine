@@ -146,7 +146,7 @@ class NavigatorDrawer extends Component {
     closeDrawer();
     let data = await safeSignOn(this.state.psnid);
     this.setState({
-      userInfo: Object.assign({},this.state.userInfo,{ isSigned: false }),
+      userInfo: Object.assign({},this.state.userInfo,{ isSigned: true }),
     });
 
     ToastAndroid.show(data,2000);
