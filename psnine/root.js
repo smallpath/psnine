@@ -10,6 +10,8 @@ import {
 import { Provider } from 'react-redux'
 import { deepColor } from './config/config';
 
+import PushWithoutAnimation from './utils/PushWithoutAnimation';
+
 import configureStore from './store/store.js'
 import App from './containers/App.js'
 
@@ -22,7 +24,7 @@ BackAndroid.addEventListener('hardwareBackPress', function () {
 		_navigator.pop();
 		return true;
 	}else{
-		var timestamp = (new Date()).valueOf();
+		let timestamp = new Date();
 	    if(timestamp - backPressClickTimeStamp>2000){
 	      backPressClickTimeStamp = timestamp;
 		  ToastAndroid.show('再按一次退出程序',2000);
@@ -55,19 +57,22 @@ let CustomSceneConfig = Object.assign({}, BaseConfig, {
 	gestures: { pop: CustomGesture }
 });
 
+let CustomPushWithoutAnimation = Object.assign({}, PushWithoutAnimation.NONE, {
+	gestures: { pop: CustomGesture }
+})
+
 class Root extends React.Component {
-	renderScene(route, navigator) {
+	renderScene = (route, navigator)=> {
 		let Component = route.component;
 		_navigator = navigator;
 		return <Component {...route.params} navigator={navigator} />
 	}
-	configureScene(route){
-		// console.log(route.withoutAnimation);
-		// if(typeof route.withoutAnimation != 'undefined'){
-		// 	if(route.withoutAnimation == true){
-		// 		return Navigator.SceneConfigs.VerticalUpSwipeJump;
-		// 	}
-		// }
+	configureScene = (route) => {
+		if(typeof route.withoutAnimation != 'undefined'){
+			if(route.withoutAnimation == true){
+				return CustomPushWithoutAnimation;
+			}
+		}
 		return CustomSceneConfig
 	}
 	render() {
@@ -78,7 +83,7 @@ class Root extends React.Component {
 					<Navigator
 						initialRoute={{ component: App }}
 						configureScene={ this.configureScene }
-						renderScene={this.renderScene.bind(this) } 
+						renderScene={this.renderScene } 
 						style={{width:SCREEN_WIDTH, height:SCREEN_HEIGHT-StatusBar.currentHeight}}/>
 				 </View>
 			</Provider>
