@@ -456,7 +456,7 @@ class Toolbar extends Component {
         break;
       case 3 : 
         BackAndroid.clearAllListeners && BackAndroid.clearAllListeners();
-        BackAndroid.clearAllListeners && this.addSwitchBackListener(this.state.openTopicVal,this.state.innerTopicMarginTop);
+        BackAndroid.clearAllListeners && this.addSwitchBackListener(this.state.openBattleVal,this.state.innerTopicMarginTop);
 
         setTimeout(() => {
           Animated.spring(this.state.openBattleVal, {toValue: 1, ...config}).start();
@@ -465,7 +465,7 @@ class Toolbar extends Component {
         break;
       case 4 : 
         BackAndroid.clearAllListeners && BackAndroid.clearAllListeners();
-        BackAndroid.clearAllListeners && this.addSwitchBackListener(this.state.openTopicVal,this.state.innerTopicMarginTop);
+        BackAndroid.clearAllListeners && this.addSwitchBackListener(this.state.openGeneVal,this.state.innerTopicMarginTop);
 
         setTimeout(() => {
           Animated.spring(this.state.openGeneVal, {toValue: 1, ...config}).start();
