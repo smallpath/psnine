@@ -21,7 +21,11 @@ function reducer(state = initialState, action){
                 });
             }
             return newState;
-
+        case ActionTypes.GET_TOPICS_ERROR:
+            newState = Object.assign({},state,{
+                topicPage: 0,
+                topics: [],
+            });
         default:
             return state;
     }

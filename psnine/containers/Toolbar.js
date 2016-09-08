@@ -157,29 +157,25 @@ class Toolbar extends Component {
   }
 
   componentDidMount() {
-        //this.parallelFadeIn(1);
+
   }
 
   componentWillMount() {
         this.panResponder = PanResponder.create({  
 
             onStartShouldSetPanResponderCapture: (e, gesture) =>{ 
-              // console.log('1');
               return false; 
             },
 
             onMoveShouldSetPanResponderCapture:(e, gesture) =>{ 
               let shouldSet = Math.abs(gesture.dy) >=4;
-              // console.log('2');
               return shouldSet; 
             },
 
             onPanResponderGrant:(e, gesture) => {
-              // console.log('3');
 
             },
             onPanResponderMove: (e, gesture) => {
-              // console.log(`====>${gesture.vy} ${gesture.vy<=5}`);
               let dy = gesture.dy;
               let vy = gesture.vy;
               if(dy < 0){
@@ -202,18 +198,15 @@ class Toolbar extends Component {
 
             },
             onPanResponderTerminationRequest : (evt, gesture) => {  
-              // console.log('6');
               return true;
             },
             onPanResponderTerminate: (evt, gesture) => {  
               
             },
             onShouldBlockNativeResponder: (evt, gesture) => {  
-              // console.log('8');
               return true;
             },
             onPanResponderReject: (evt, gesture) => {  
-              // console.log('9');
               return false;
             },
             onPanResponderEnd: (evt, gesture) => {  
@@ -394,17 +387,22 @@ class Toolbar extends Component {
     let backPressClickTimeStamp = 0;
     BackAndroid.addEventListener('hardwareBackPress', function () {
       if (_navigator && _navigator.getCurrentRoutes().length > 1) {
+
         _navigator.pop();
         return true;
+
       }else{
+
         let timestamp = new Date();
-          if(timestamp - backPressClickTimeStamp>2000){
-            backPressClickTimeStamp = timestamp;
+
+        if(timestamp - backPressClickTimeStamp>2000){
+          backPressClickTimeStamp = timestamp;
           ToastAndroid.show('再按一次退出程序',2000);
-            return true;
-          }else{
-            return false;
-          }
+          return true;
+        }else{
+          return false;
+        }
+
       }
     });
   }
@@ -445,12 +443,10 @@ class Toolbar extends Component {
     switch (segmentedIndex) {
       case 0 : 
         BackAndroid.clearAllListeners && BackAndroid.clearAllListeners();
-        BackAndroid.clearAllListeners &&BackAndroid.addEventListener('hardwareBackPress', ()=>true);
+        BackAndroid.clearAllListeners && this.addSwitchBackListener(this.state.openTopicVal,this.state.innerTopicMarginTop);
 
         setTimeout(() => {
-            Animated.spring(this.state.openTopicVal, {toValue: 1, ...config}).start(()=>{
-              BackAndroid.clearAllListeners &&this.addSwitchBackListener(this.state.openTopicVal,this.state.innerTopicMarginTop);
-            });
+            Animated.spring(this.state.openTopicVal, {toValue: 1, ...config}).start();
         }, 0);
         
         break;
@@ -460,23 +456,19 @@ class Toolbar extends Component {
         break;
       case 3 : 
         BackAndroid.clearAllListeners && BackAndroid.clearAllListeners();
-        BackAndroid.clearAllListeners &&BackAndroid.addEventListener('hardwareBackPress', ()=>true);
+        BackAndroid.clearAllListeners && this.addSwitchBackListener(this.state.openTopicVal,this.state.innerTopicMarginTop);
 
         setTimeout(() => {
-          Animated.spring(this.state.openBattleVal, {toValue: 1, ...config}).start(()=>{
-            BackAndroid.clearAllListeners &&this.addSwitchBackListener(this.state.openBattleVal,this.state.innerBattleMarginTop);
-          });
+          Animated.spring(this.state.openBattleVal, {toValue: 1, ...config}).start();
         }, 0);
 
         break;
       case 4 : 
         BackAndroid.clearAllListeners && BackAndroid.clearAllListeners();
-        BackAndroid.clearAllListeners &&BackAndroid.addEventListener('hardwareBackPress', ()=>true);
-        
+        BackAndroid.clearAllListeners && this.addSwitchBackListener(this.state.openTopicVal,this.state.innerTopicMarginTop);
+
         setTimeout(() => {
-          Animated.spring(this.state.openGeneVal, {toValue: 1, ...config}).start(()=>{
-            BackAndroid.clearAllListeners &&this.addSwitchBackListener(this.state.openGeneVal,this.state.innerGeneMarginTop);
-          });
+          Animated.spring(this.state.openGeneVal, {toValue: 1, ...config}).start();
         }, 0);
 
         break;

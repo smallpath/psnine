@@ -2,8 +2,19 @@
 
 const safeFetch = function(reqUrl) {
   return new Promise((resolve, reject) => {
+    let timeout = setTimeout(reject, 2000);
     fetch(reqUrl)
-      .then((response) => response.json())
+      .then((response) => {
+        clearTimeout(timeout);
+
+        let data;
+        try{
+          data = response.json()
+        }catch(err){
+          data = { data:[] }
+        }
+          return data;
+        })
       .then((responseData) => {
         resolve(responseData);
       })

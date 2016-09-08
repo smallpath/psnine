@@ -65,15 +65,16 @@ class NewTopic extends Component {
     let { openVal, innerMarginTop } = this.props;
     let config = {tension: 30, friction: 7};
 
+    BackAndroid.clearAllListeners && BackAndroid.clearAllListeners();
+    BackAndroid.clearAllListeners && this.props.addDefaultBackAndroidListener();
+
     Animated.parallel([openVal,innerMarginTop].map((property,index) => {
         if(index == 0){
           return Animated.spring(property, {toValue: 0, ...config});
         }else if(index == 1){
           return Animated.spring(property, {toValue: 0, ...config});
         }
-    })).start(()=>{
-        BackAndroid.clearAllListeners &&this.props.addDefaultBackAndroidListener();
-    });
+    })).start();
   }
 
 

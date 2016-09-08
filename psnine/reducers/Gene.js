@@ -21,7 +21,11 @@ function reducer(state = initialState, action){
                 });
             }
             return newState;
-
+        case ActionTypes.GET_GENES_ERROR:
+            newState = Object.assign({},state,{
+                genePage: 0,
+                genes: [],
+            });
         default:
             return state;
     }

@@ -1,4 +1,4 @@
-import React, {NativeModules} from 'react-native';
+import React, { ToastAndroid } from 'react-native';
 import * as ActionTypes from '../constants/actionTypes';
 
 import { fetchGenes } from '../dao/dao';
@@ -9,7 +9,8 @@ export function getGeneList(page = 1, type = '') {
             .then(response => {
                 dispatch(gotGeneList(response,page,type));
             }).catch(err => {
-                console.log(err);
+                dispatch(gotGeneListError());
+                ToastAndroid.show('网络错误',2000);
             });
     }
 }
@@ -22,3 +23,8 @@ function gotGeneList(argument, page, type) {
     };
 }
 
+function gotGeneListError(argument, page, type) {
+    return {
+        type: ActionTypes.GET_GENES_ERROR,
+    };
+}
