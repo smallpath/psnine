@@ -28,7 +28,7 @@ import {
 
 import { connect } from 'react-redux';
 
-import { standardColor, accentColor } from '../../config/config';
+import { standardColor, accentColor } from '../../config/colorConfig';
 
 import { pngPrefix, getDealURL, getHappyPlusOneURL, getStoreURL } from '../../dao/dao';
 
@@ -200,17 +200,18 @@ class NewTopic extends Component {
         zIndex : openVal.interpolate({inputRange: [0 ,1], outputRange: [0, 3]}),
         backgroundColor: openVal.interpolate({
           inputRange: [0 ,1], 
-          outputRange: [accentColor, 'white']
+          outputRange: [accentColor, this.props.modeInfo.brighterLevelOne]
         }),
         //elevation : openVal.interpolate({inputRange: [0 ,1], outputRange: [0, 8]})
     };
 
     let animatedSubmitStyle = {
-      height: openVal.interpolate({inputRange: [0, 0.5 ,1], outputRange: [0, 0, 40]}),
+      height: openVal.interpolate({inputRange: [0, 0.9 ,1], outputRange: [0, 0, 40]}),
     }
 
     let animatedToolbarStyle = {
-      height: openVal.interpolate({inputRange: [0, 0.5 ,1], outputRange: [0, 0, 56]}),
+      height: openVal.interpolate({inputRange: [0, 0.9 ,1], outputRange: [0, 0, 56]}),
+      backgroundColor: this.props.modeInfo.standardColor,
     }
 
     return (
@@ -239,7 +240,7 @@ class NewTopic extends Component {
                 />
               </View>
             </TouchableNativeFeedback>
-            <Text style={{color: '#000', fontSize: 23, marginLeft:10,}}>{title}</Text>
+            <Text style={{color: 'white', fontSize: 23, marginLeft:10, }}>{title}</Text>
           </View>
 
         </Animated.View >
@@ -248,7 +249,8 @@ class NewTopic extends Component {
           <View style={styles.accountView}>
             <TextInput placeholder="标题" underlineColorAndroid={accentColor}
               onChange={({nativeEvent})=>{ this.setState({psnid:nativeEvent.text})}}
-              style={styles.textInput}
+              style={[styles.textInput, { color:this.props.modeInfo.standardTextColor }]}
+              placeholderTextColor={this.props.modeInfo.standardTextColor}
             />
           </View>
 
@@ -256,7 +258,8 @@ class NewTopic extends Component {
             <Text style={styles.mainFont}>权限 :</Text>
             <TextInput placeholder="不是邮箱" underlineColorAndroid={accentColor}
               onChange={({nativeEvent})=>{ this.setState({psnid:nativeEvent.text})}}
-              style={styles.textInput}
+              style={[styles.textInput, { color:this.props.modeInfo.standardTextColor }]}
+              placeholderTextColor={this.props.modeInfo.standardTextColor}
             />
           </View>
 
@@ -264,7 +267,8 @@ class NewTopic extends Component {
             <Text style={styles.mainFont}>内容 :</Text>
             <TextInput placeholder="内容" underlineColorAndroid={accentColor} secureTextEntry={false}
               onChange={({nativeEvent})=>{ this.setState({password:nativeEvent.text})}}
-              style={styles.textInput}
+              style={[styles.textInput, { color:this.props.modeInfo.standardTextColor }]}
+              placeholderTextColor={this.props.modeInfo.standardTextColor}
             />
           </View>
 
@@ -277,13 +281,13 @@ class NewTopic extends Component {
               //onPress={this.login}
               >
               <View style={styles.submitButton}>
-                <Text>提交</Text>
+                <Text style={[styles.textInput, { color:this.props.modeInfo.standardTextColor }]}>提交</Text>
               </View>
             </TouchableNativeFeedback>
           </View>
 
           <View style={styles.regist}>
-            <Text>如果是第一次使用PSNINE，请先完成</Text>
+            <Text style={[styles.textInput, { color:this.props.modeInfo.standardTextColor }]}>如果是第一次使用PSNINE，请先完成</Text>
             <TouchableNativeFeedback
               //onPress={this.regist}
             >

@@ -19,7 +19,7 @@ import {
 } from 'react-native';
 
 import { connect } from 'react-redux';
-import { standardColor } from '../../config/config';
+import { standardColor } from '../../config/colorConfig';
 
 let WEBVIEW_REF = `WEBVIEW_REF_Qa`;
 let back_image = require('image!ic_back_blue');

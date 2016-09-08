@@ -8,7 +8,16 @@ import {
 	View,
 } from 'react-native';
 import { Provider } from 'react-redux'
-import { deepColor } from './config/config';
+import { 
+	deepColor, standardColor, tintColor,
+	nightDeepColor, nightStandardColor, nightTintColor,
+
+	backgroundColor, nightBackgroundColor,
+	backgroundColorBrighterLevelOne,
+	nightBackgroundColorBrighterLevelOne,
+	standardTextColor, nightStandardTextColor,
+
+} from './config/colorConfig';
 
 import PushWithoutAnimation from './utils/PushWithoutAnimation';
 
@@ -62,10 +71,49 @@ let CustomPushWithoutAnimation = Object.assign({}, PushWithoutAnimation.NONE, {
 })
 
 class Root extends React.Component {
+	constructor(props){
+		super(props);
+
+		this.state = {
+			isNightMode: true,
+		};
+
+		this.dayModeInfo = {
+			isNightMode: false,
+			deepColor: deepColor, 
+			standardColor: standardColor, 
+			tintColor: tintColor,
+			backgroundColor: backgroundColor,
+			brighterLevelOne: backgroundColorBrighterLevelOne,
+			standardTextColor: standardTextColor,
+		}
+
+		this.nightModeInfo = {
+			isNightMode: true,
+			deepColor: nightDeepColor, 
+			standardColor: nightStandardColor, 
+			tintColor: nightTintColor,
+			backgroundColor: nightBackgroundColor,
+			brighterLevelOne: nightBackgroundColorBrighterLevelOne,
+			standardTextColor: nightStandardTextColor,
+		}
+	}
+
+	switchModeOnRoot = () => {
+		let targetState = !this.state.isNightMode;
+		this.setState({
+			isNightMode: targetState,
+		});
+		return targetState;
+	}
+
 	renderScene = (route, navigator)=> {
 		let Component = route.component;
 		_navigator = navigator;
-		return <Component {...route.params} navigator={navigator} />
+		return <Component {...route.params} 
+					modeInfo={this.state.isNightMode ? this.nightModeInfo :this.dayModeInfo  } 
+					switchModeOnRoot={this.switchModeOnRoot}
+					navigator={navigator} />
 	}
 	configureScene = (route) => {
 		// if(typeof route.withoutAnimation != 'undefined'){
@@ -79,7 +127,7 @@ class Root extends React.Component {
 		return (
 			<Provider store={ store }>
 				 <View> 
-				 	<StatusBar translucent={false} backgroundColor={deepColor} barStyle="light-content" />
+				 	<StatusBar translucent={false} backgroundColor={this.state.isNightMode ? nightDeepColor: deepColor} barStyle="light-content" />
 					<Navigator
 						initialRoute={{ component: App }}
 						configureScene={ this.configureScene }

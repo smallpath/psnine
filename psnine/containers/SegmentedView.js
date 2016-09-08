@@ -26,7 +26,7 @@ import Game from './viewPagers/Game';
 import Battle from './viewPagers/Battle';
 import Gene from './viewPagers/Gene';
 
-import { standardColor } from '../config/config';
+import { standardColor } from '../config/colorConfig';
 
 let screen = Dimensions.get('window');
 
@@ -169,7 +169,7 @@ class SegmentedView extends Component {
 
     _renderTitle(title, i) {
         return (
-            <View style={styles.title}>
+            <View style={[styles.title, {backgroundColor: this.props.modeInfo.standardColor,}]}>
                 <Text style={[this.props.titleStyle, i === this.props.index && this.props.selectedTitleStyle]}>{title}</Text>
             </View>
         );
@@ -276,12 +276,12 @@ class SegmentedView extends Component {
                         elevation: 4,
                         height: segmentedHeight,
                     }]}>
-                    <View style={styles.barContainer}>
+                    <View style={[styles.barContainer,{backgroundColor: this.props.modeInfo.standardColor,}]}>
                     </View>
                     <View  style={styles.titleContainer}>
                         {items}
                     </View>
-                    <View style={styles.barContainer}>
+                    <View style={[styles.barContainer,{backgroundColor: this.props.modeInfo.standardColor,}]}>
                         <Animated.View  
                             style={[
                                 { left: this.state.fadeAnim}, 
@@ -320,6 +320,7 @@ class SegmentedView extends Component {
                             {...{
                                 navigator:this.props.navigator, 
                                 communityType: this.props.communityType, 
+                                modeInfo:this.props.modeInfo,
                               }
                             } 
                         />
@@ -329,7 +330,7 @@ class SegmentedView extends Component {
                         <Qa 
                             index={1} 
                             ref={qa=>this.qa=qa}
-                            {...{navigator:this.props.navigator}} 
+                            {...{navigator:this.props.navigator,modeInfo:this.props.modeInfo,}} 
                             URL={'http://psnine.com/qa'}
                         />
                     </View>
@@ -337,7 +338,7 @@ class SegmentedView extends Component {
                         <Game 
                             ref={game=>this.game=game}
                             index={2}
-                            {...{navigator:this.props.navigator}} 
+                            {...{navigator:this.props.navigator,modeInfo:this.props.modeInfo,}} 
                             URL={'http://psnine.com/psngame'}
                         />
                     </View>
@@ -345,7 +346,7 @@ class SegmentedView extends Component {
                         <Battle 
                             index={3} 
                             ref={battle=>this.battle=battle}
-                            {...{navigator:this.props.navigator}} 
+                            {...{navigator:this.props.navigator,modeInfo:this.props.modeInfo,}} 
                             URL={'http://psnine.com/battle'}
                         />
                     </View>
@@ -356,6 +357,7 @@ class SegmentedView extends Component {
                             {...{
                                 navigator:this.props.navigator, 
                                 geneType: this.props.geneType, 
+                                modeInfo:this.props.modeInfo,
                               }
                             } 
                         />

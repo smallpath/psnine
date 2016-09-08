@@ -23,7 +23,7 @@ import {
 
 import { connect } from 'react-redux';
 
-import { standardColor, accentColor } from '../../config/config';
+import { standardColor, accentColor } from '../../config/colorConfig';
 
 import { pngPrefix, getDealURL, getHappyPlusOneURL, getStoreURL } from '../../dao/dao';
 
@@ -92,11 +92,11 @@ class Login extends Component {
   render() {
     // console.log('Loggin.js rendered');
     return (
-      <View style={{ flex: 1, backgroundColor:'white' }}>
+      <View style={{ flex: 1, backgroundColor:this.props.modeInfo.brighterLevelOne }}>
         <ToolbarAndroid
           navIcon={require('image!ic_back_white') }
           title={title}
-          style={styles.toolbar}
+          style={[styles.toolbar, {backgroundColor: this.props.modeInfo.standardColor,}]}
           onIconClicked={this._pressButton}
           />
         <KeyboardAvoidingView behavior={'padding'} style={styles.KeyboardAvoidingView} >

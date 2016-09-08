@@ -19,7 +19,7 @@ import {
 import NavigatorDrawer from './NavigatorDrawer';
 import Toolbar from './Toolbar';
 
-import { standardColor } from '../config/config';
+import { standardColor } from '../config/colorConfig';
 
 
 let DRAWER_REF = 'drawer';
@@ -31,7 +31,12 @@ class Psnine extends Component {
   }
 
   _renderNavigationView = ()=>{
-    return (<NavigatorDrawer {...{closeDrawer: this.closeDrawer,navigator:this.props.navigator}}/>)
+    return (<NavigatorDrawer {...{
+          closeDrawer: this.closeDrawer,
+          navigator:this.props.navigator, 
+          modeInfo:this.props.modeInfo,
+          switchModeOnRoot: this.props.switchModeOnRoot
+        }}/>)
   }
 
   callDrawer=()=>{
@@ -48,11 +53,11 @@ class Psnine extends Component {
     return ( 
       <DrawerLayoutAndroid 
             ref={DRAWER_REF}
-            {...{navigator:this.props.navigator}}
             drawerWidth={Dimensions.get('window').width - DRAWER_WIDTH_LEFT} 
             drawerPosition={DrawerLayoutAndroid.positions.Left} 
-            renderNavigationView={this._renderNavigationView}> 
-            <Toolbar {...{navigator:this.props.navigator}} 
+            renderNavigationView={this._renderNavigationView}>
+            <Toolbar 
+              {...{navigator:this.props.navigator, modeInfo:this.props.modeInfo }}
               _callDrawer = {() => this.callDrawer.bind(this)}
             />
       </DrawerLayoutAndroid> 

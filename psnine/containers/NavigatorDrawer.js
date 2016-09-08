@@ -21,7 +21,7 @@ import {
   getRankURL,
   getMyGameURL,
 } from '../dao/dao';
-import { standardColor } from '../config/config';
+import { standardColor } from '../config/colorConfig';
 
 import CommunityTopic from '../components/CommunityTopic';
 import Deal from '../components/Deal';
@@ -164,25 +164,22 @@ class NavigatorDrawer extends Component {
   renderHeader = () => {
       //let avatar = 
       let toolActions = [];
-
       toolActions.push(<TouchableNativeFeedback
                         key={'changeStyle'}
-                    // onPress={() => this.props.onSelectItem(theme)}
-                    // onShowUnderlay={highlightRowFunc}
-                    // onHideUnderlay={highlightRowFunc}
-                    >
-                    <View style={{
-                      flexDirection: 'column',  
-                      justifyContent: 'center',
-                      marginLeft: this.state.psnid == '' ? 90 : this.state.userInfo.isSigned ? 55 : 20,
-                    }}>
-                      <Image source={require('image!ic_assignment_white')}            
-                              style={{width: 20, height: 20}} />
-                      <Text style={[styles.menuText,{marginTop:5}]}>
-                        夜间
-                      </Text>
-                    </View>
-                  </TouchableNativeFeedback>);
+                        onPress={this.props.switchModeOnRoot}
+                        >
+                        <View style={{
+                          flexDirection: 'column',  
+                          justifyContent: 'center',
+                          marginLeft: this.state.psnid == '' ? 90 : this.state.userInfo.isSigned ? 55 : 20,
+                        }}>
+                          <Image source={require('image!ic_assignment_white')}            
+                                  style={{width: 20, height: 20}} />
+                          <Text style={[styles.menuText,{marginTop:5}]}>
+                            {this.props.modeInfo.isNightMode ? '日间' : '夜间'}
+                          </Text>
+                        </View>
+                      </TouchableNativeFeedback>);
 
       let rows = [];
 
@@ -300,6 +297,7 @@ class NavigatorDrawer extends Component {
       return (
       <View style={[styles.header, {
         height: this.state.psnid == '' ? 120: 180,
+        backgroundColor: this.props.modeInfo.standardColor,
       }]}>
 
         <View style={styles.userInfo}>
@@ -446,9 +444,11 @@ class NavigatorDrawer extends Component {
           // onShowUnderlay={highlightRowFunc}
           // onHideUnderlay={highlightRowFunc}
           >
-          <View style={styles.themeItem}>
+          <View style={[styles.themeItem,{
+            backgroundColor: this.props.modeInfo.brighterLevelOne
+          }]}>
             <Image source={icon} style={styles.themeIndicate}/>
-            <Text style={styles.themeName}>
+            <Text style={[styles.themeName,{color: this.props.modeInfo.standardTextColor}]}>
               {rowData}
             </Text>
           </View>
@@ -467,10 +467,10 @@ class NavigatorDrawer extends Component {
         />*/}
         <TouchableNativeFeedback>
           <View style={[styles.themeItem,{
-            padding: 10,
+            padding: 10,backgroundColor: this.props.modeInfo.brighterLevelOne
           }]}>
             <Image source={icon} style={styles.themeIndicate}/>
-            <Text style={styles.themeName}>
+            <Text style={[styles.themeName,{color: this.props.modeInfo.standardTextColor}]}>
               {rowData}
             </Text>
           </View>
@@ -492,7 +492,7 @@ class NavigatorDrawer extends Component {
           renderHeader={this.renderHeader}
           renderFooter={this.renderFooter}
           // renderSeparator={this.renderSeparator}
-          style={{flex:1, backgroundColor: 'white'}}
+          style={{flex:1, backgroundColor: this.props.modeInfo.brighterLevelOne}}
         />
       </View>
     );

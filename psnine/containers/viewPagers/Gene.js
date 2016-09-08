@@ -13,7 +13,7 @@ import {
 } from 'react-native';
 
 import { connect } from 'react-redux';
-import { standardColor, nodeColor, idColor  } from '../../config/config';
+import { standardColor, nodeColor, idColor  } from '../../config/colorConfig';
 import { getGeneList } from '../../actions/gene.js';
 
 import GeneTopic from '../../components/GeneTopic';
@@ -99,7 +99,7 @@ class Gene extends Component {
             marginTop: 7,
             marginLeft: 7,
             marginRight: 7,
-            backgroundColor: '#FFFFFF',
+            backgroundColor: this.props.modeInfo.backgroundColor,
             elevation: 2,
         }}>
         <TouchableElement  
@@ -208,8 +208,10 @@ class Gene extends Component {
             onRefresh={this._onRefresh}
             colors={[standardColor]}
             ref={ ref => this.refreshControl = ref}
+            progressBackgroundColor={this.props.modeInfo.backgroundColor}
             />
         }
+        style={{backgroundColor: this.props.modeInfo.brighterLevelOne}}
         ref={listView=>this.listView=listView}
         pageSize = {32}
         removeClippedSubviews={false}

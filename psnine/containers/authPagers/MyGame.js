@@ -20,7 +20,7 @@ import {
 
 import { connect } from 'react-redux';
 
-import { standardColor } from '../../config/config';
+import { standardColor } from '../../config/colorConfig';
 
 let toolbarActions = [
   {title: '收藏', icon: require('image!ic_collect_white') ,show: 'always'},

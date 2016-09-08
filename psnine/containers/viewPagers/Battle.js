@@ -14,7 +14,7 @@ import {
 
 import { connect } from 'react-redux';
 import { getBattleList } from '../../actions/battle.js';
-import { standardColor, nodeColor, idColor, accentColor  } from '../../config/config';
+import { standardColor, nodeColor, idColor, accentColor  } from '../../config/colorConfig';
 
 import CommunityTopic from '../../components/CommunityTopic';
 
@@ -92,7 +92,7 @@ class Battle extends Component {
             marginTop: rowID.indexOf('R0') == -1 ? 0:0,
             marginLeft: 7,
             marginRight: 7,
-            backgroundColor: '#FFFFFF',
+            backgroundColor: this.props.modeInfo.backgroundColor,
             elevation: 2,
         }}>
         <TouchableElement  
@@ -225,8 +225,10 @@ class Battle extends Component {
               refreshing={false}
               onRefresh={this._onRefresh}
               colors={[standardColor]}
+              progressBackgroundColor={this.props.modeInfo.backgroundColor}
               />
           }
+          style={{backgroundColor: this.props.modeInfo.brighterLevelOne}}
           pageSize = {32}
           removeClippedSubviews={false}
           enableEmptySections={true}

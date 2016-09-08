@@ -15,7 +15,7 @@ import {
 
 import { connect } from 'react-redux';
 import { getTopicList } from '../../actions/community.js';
-import { standardColor, nodeColor, idColor  } from '../../config/config';
+import { standardColor, nodeColor, idColor  } from '../../config/colorConfig';
 
 import CommunityTopic from '../../components/CommunityTopic';
 
@@ -100,7 +100,7 @@ class Message extends Component {
     return (
       <View rowID={ rowID } style={{              
             marginTop: 7,
-            backgroundColor: '#FFFFFF',
+            backgroundColor: this.props.modeInfo.backgroundColor,
             elevation: 1,
         }}>
         <TouchableElement  
@@ -150,7 +150,7 @@ class Message extends Component {
     // console.log('Message.js rendered');
     return (
           <View 
-            style={{flex:1}}
+            style={{flex:1,backgroundColor:this.props.modeInfo.brighterLevelOne}}
             onStartShouldSetResponder={() => false}
             onMoveShouldSetResponder={() => false}
             >

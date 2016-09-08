@@ -20,7 +20,7 @@ import {
 
 import { connect } from 'react-redux';
 
-import { standardColor } from '../config/config';
+import { standardColor } from '../config/colorConfig';
 
 let toolbarActions = [
   {title: '收藏', icon: require('image!ic_collect_white') ,show: 'always'},
@@ -90,7 +90,7 @@ class CommunityTopic extends Component {
                 navIcon={require('image!ic_back_white')}
                 overflowIcon={require('image!ic_more_white')}
                 title={this.props.title}
-                style={styles.toolbar}
+                style={[styles.toolbar, {backgroundColor: this.props.modeInfo.standardColor,}]}
                 actions={toolbarActions}
                 onIconClicked={this._pressButton}
                 onActionSelected={this._onActionSelected}

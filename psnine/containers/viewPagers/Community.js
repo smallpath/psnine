@@ -14,7 +14,7 @@ import {
 
 import { connect } from 'react-redux';
 import { getTopicList } from '../../actions/community.js';
-import { standardColor, nodeColor, idColor  } from '../../config/config';
+import { standardColor, nodeColor, idColor  } from '../../config/colorConfig';
 
 import CommunityTopic from '../../components/CommunityTopic';
 
@@ -80,7 +80,7 @@ class Community extends Component {
     return (
       <View rowID={ rowID } style={{              
             marginTop: 7,
-            backgroundColor: '#FFFFFF',
+            backgroundColor: this.props.modeInfo.backgroundColor,
             elevation: 1,
         }}>
         <TouchableElement  
@@ -190,10 +190,12 @@ class Community extends Component {
               refreshing={false}
               onRefresh={this._onRefresh}
               colors={[standardColor]}
+              progressBackgroundColor={this.props.modeInfo.backgroundColor}
               ref={ ref => this.refreshControl = ref}
               />
           }
           ref={listView=>this.listView=listView}
+          style={{backgroundColor: this.props.modeInfo.brighterLevelOne}}
           pageSize = {32}
           initialListSize = {32}
           removeClippedSubviews={false}

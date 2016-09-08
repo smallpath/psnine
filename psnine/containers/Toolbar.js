@@ -34,7 +34,7 @@ import NewTopic from '../components/new/NewTopic';
 
 import { changeSegmentIndex, changeCommunityType, changeGeneType } from '../actions/app';
 
-import { standardColor, accentColor } from '../config/config';
+import { standardColor, accentColor } from '../config/colorConfig';
 
 let title = "PSNINE";
 let isMounted = false;
@@ -121,6 +121,7 @@ class Toolbar extends Component {
             navigator:this.props.navigator, 
             toolbarDispatch: this.props.dispatch,
             segmentedIndex: this.props.app.segmentedIndex,
+            modeInfo:this.props.modeInfo,
         }} 
         titles={titlesArr}
         index={0}
@@ -513,7 +514,7 @@ class Toolbar extends Component {
         <ToolbarAndroid
           navIcon={require('image!ic_menu_white') }
           title={title}
-          style={styles.toolbar}
+          style={[styles.toolbar, {backgroundColor: this.props.modeInfo.standardColor,}]}
           titleColor="white"
           overflowIcon={require('image!ic_more_white')}
           actions={toolbarActions[appReducer.segmentedIndex]}
@@ -587,18 +588,21 @@ class Toolbar extends Component {
               openVal={this.state.openTopicVal} 
               marginTop={this.state.marginTop}
               innerMarginTop={this.state.innerTopicMarginTop}
+              {...{navigator:this.props.navigator, modeInfo:this.props.modeInfo }}
           />
           <NewBattle 
               addDefaultBackAndroidListener={this.addDefaultBackAndroidListener}
               openVal={this.state.openBattleVal} 
               marginTop={this.state.marginTop}
               innerMarginTop={this.state.innerBattleMarginTop}
+              {...{navigator:this.props.navigator, modeInfo:this.props.modeInfo }}
           />
           <NewGene
               addDefaultBackAndroidListener={this.addDefaultBackAndroidListener} 
               openVal={this.state.openGeneVal} 
               marginTop={this.state.marginTop}
               innerMarginTop={this.state.innerGeneMarginTop}
+              {...{navigator:this.props.navigator, modeInfo:this.props.modeInfo }}
           />
       </Animated.View>
     )
