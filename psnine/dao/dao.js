@@ -9,7 +9,7 @@ const safeFetch = function(reqUrl) {
 
         let data;
         try{
-          data = response.json()
+          data = response.json();
         }catch(err){
           data = { data:[] }
         }

@@ -13,6 +13,7 @@ import {
   TouchableOpacity,
   Dimensions,
   TouchableNativeFeedback,
+  TouchableWithoutFeedback,
   RefreshControl,
   WebView,
   KeyboardAvoidingView,
@@ -65,15 +66,15 @@ class NewTopic extends Component {
     let { openVal, innerMarginTop } = this.props;
     let config = {tension: 30, friction: 7};
 
-    BackAndroid.clearAllListeners && BackAndroid.clearAllListeners();
-    BackAndroid.clearAllListeners && this.props.addDefaultBackAndroidListener();
+      BackAndroid.clearAllListeners && BackAndroid.clearAllListeners();
+      BackAndroid.clearAllListeners && this.props.addDefaultBackAndroidListener();
 
     Animated.parallel([openVal,innerMarginTop].map((property,index) => {
-        if(index == 0){
-          return Animated.spring(property, {toValue: 0, ...config});
-        }else if(index == 1){
-          return Animated.spring(property, {toValue: 0, ...config});
-        }
+      if(index == 0){
+        return Animated.spring(property, {toValue: 0, ...config});
+      }else if(index == 1){
+        return Animated.spring(property, {toValue: 0, ...config});
+      }
     })).start();
   }
 
@@ -196,24 +197,53 @@ class NewTopic extends Component {
         borderWidth: openVal.interpolate({inputRange: [0, 0.5 ,1], outputRange: [2, 2, 0]}),
         borderRadius: openVal.interpolate({inputRange: [-0.15, 0, 0.5, 1], outputRange: [0, CIRCLE_SIZE / 2, CIRCLE_SIZE * 1.3, 0]}),
         opacity : openVal.interpolate({inputRange: [0, 0.1 ,1], outputRange: [0, 1, 1]}),
-        zIndex : openVal.interpolate({inputRange: [0 ,1], outputRange: [0, 3]})
+        zIndex : openVal.interpolate({inputRange: [0 ,1], outputRange: [0, 3]}),
+        backgroundColor: openVal.interpolate({
+          inputRange: [0 ,1], 
+          outputRange: [accentColor, 'white']
+        }),
+        //elevation : openVal.interpolate({inputRange: [0 ,1], outputRange: [0, 8]})
     };
+
+    let animatedSubmitStyle = {
+      height: openVal.interpolate({inputRange: [0, 0.5 ,1], outputRange: [0, 0, 40]}),
+    }
+
+    let animatedToolbarStyle = {
+      height: openVal.interpolate({inputRange: [0, 0.5 ,1], outputRange: [0, 0, 56]}),
+    }
 
     return (
       <Animated.View 
         style={[
-          { backgroundColor: 'transparent' },  styles.circle, styles.open, animatedStyle, outerStyle
+          styles.circle, styles.open, animatedStyle, outerStyle
         ]}
         
         >
+        <Animated.View {...this.panResponder.panHandlers} style={[styles.toolbar ,animatedToolbarStyle]}>
+          <View style={{    
+              flex: 1, 
+              flexDirection: 'row' , 
+              alignItems: 'center',
+            }}>
+            <TouchableNativeFeedback
+              onPress={this._pressButton}
+              delayPressIn={0}
+              background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
+              style={{ borderRadius: 25}}
+              >
+              <View style={{ width: 50, height:50, marginLeft:0, borderRadius: 25}}>
+                <Image 
+                  source={require('image!ic_back_white_smaller')}
+                  style={{ width: 50, height:50, }}
+                />
+              </View>
+            </TouchableNativeFeedback>
+            <Text style={{color: '#000', fontSize: 23, marginLeft:10,}}>{title}</Text>
+          </View>
 
-        <ToolbarAndroid
-          navIcon={require('image!ic_back_white') }
-          title={title}
-          style={styles.toolbar}
-          onIconClicked={this._pressButton}
-          {...this.panResponder.panHandlers}
-          />
+        </Animated.View >
+
         <KeyboardAvoidingView behavior={'padding'} style={styles.KeyboardAvoidingView} >
           <View style={styles.accountView}>
             <TextInput placeholder="标题" underlineColorAndroid={accentColor}
@@ -241,7 +271,7 @@ class NewTopic extends Component {
 
         </KeyboardAvoidingView>
 
-        <View style={styles.customView}>
+        <Animated.View  style={animatedSubmitStyle}>
           <View style={styles.submit}>
             <TouchableNativeFeedback
               //onPress={this.login}
@@ -262,7 +292,7 @@ class NewTopic extends Component {
               </View>
             </TouchableNativeFeedback>
           </View>
-        </View>
+        </Animated.View >
 
       </Animated.View>
     );
@@ -281,8 +311,7 @@ const styles = StyleSheet.create({
     height: CIRCLE_SIZE,
     borderRadius: CIRCLE_SIZE / 2,
     borderWidth: 2,
-    borderColor: standardColor,
-    overflow: 'hidden',
+    borderColor: accentColor,
     elevation: 12,
   },
   open: {

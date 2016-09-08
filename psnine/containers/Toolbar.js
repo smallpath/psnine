@@ -411,8 +411,8 @@ class Toolbar extends Component {
     let config = {tension: 30, friction: 7};
 
     BackAndroid.addEventListener('hardwareBackPress', () => {
-      if(AnimatedValue._value != 1)
-        return true;
+      // if(AnimatedValue._value != 1)
+      //   return true;
 
       Animated.parallel([AnimatedValue,MarginTopValue].map((property,index) => {
           if(index == 0){
@@ -420,7 +420,9 @@ class Toolbar extends Component {
           }else if(index == 1){
             return Animated.spring(property, {toValue: 0, ...config});
           }
-      })).start(()=>{
+      })).start(({ finished })=>{
+          if (!finished) return;
+
           BackAndroid.clearAllListeners && BackAndroid.clearAllListeners();
           BackAndroid.clearAllListeners && this.addDefaultBackAndroidListener();
       });
@@ -430,11 +432,16 @@ class Toolbar extends Component {
     
   }
 
+  addEmptyBackListener = () =>{
+    BackAndroid.addEventListener('hardwareBackPress', () => true);
+  }
+
   pressNew = () => {
+
     const { segmentedIndex } = this.props.app;
+
     if (segmentedIndex == 1 || segmentedIndex == 2)
       return;
-
 
     const { navigator: _navigator } = this.props;
 
@@ -446,7 +453,12 @@ class Toolbar extends Component {
         BackAndroid.clearAllListeners && this.addSwitchBackListener(this.state.openTopicVal,this.state.innerTopicMarginTop);
 
         setTimeout(() => {
-            Animated.spring(this.state.openTopicVal, {toValue: 1, ...config}).start();
+            Animated.spring(this.state.openTopicVal, {toValue: 1, ...config}).start(({ finished })=>{
+              if (!finished) return;
+
+              BackAndroid.clearAllListeners && BackAndroid.clearAllListeners();
+              BackAndroid.clearAllListeners && this.addSwitchBackListener(this.state.openTopicVal,this.state.innerTopicMarginTop);
+            });
         }, 0);
         
         break;
@@ -456,19 +468,29 @@ class Toolbar extends Component {
         break;
       case 3 : 
         BackAndroid.clearAllListeners && BackAndroid.clearAllListeners();
-        BackAndroid.clearAllListeners && this.addSwitchBackListener(this.state.openBattleVal,this.state.innerTopicMarginTop);
+        BackAndroid.clearAllListeners && this.addSwitchBackListener(this.state.openBattleVal,this.state.innerBattleMarginTop);
 
         setTimeout(() => {
-          Animated.spring(this.state.openBattleVal, {toValue: 1, ...config}).start();
+          Animated.spring(this.state.openBattleVal, {toValue: 1, ...config}).start(({ finished })=>{
+            if (!finished) return;
+
+            BackAndroid.clearAllListeners && BackAndroid.clearAllListeners();
+            BackAndroid.clearAllListeners && this.addSwitchBackListener(this.state.openBattleVal,this.state.innerBattleMarginTop);
+          });
         }, 0);
 
         break;
       case 4 : 
         BackAndroid.clearAllListeners && BackAndroid.clearAllListeners();
-        BackAndroid.clearAllListeners && this.addSwitchBackListener(this.state.openGeneVal,this.state.innerTopicMarginTop);
+        BackAndroid.clearAllListeners && this.addSwitchBackListener(this.state.openGeneVal,this.state.innerGeneMarginTop);
 
         setTimeout(() => {
-          Animated.spring(this.state.openGeneVal, {toValue: 1, ...config}).start();
+          Animated.spring(this.state.openGeneVal, {toValue: 1, ...config}).start(({ finished })=>{
+            if (!finished) return;
+
+            BackAndroid.clearAllListeners && BackAndroid.clearAllListeners();
+            BackAndroid.clearAllListeners && this.addSwitchBackListener(this.state.openGeneVal,this.state.innerGeneMarginTop);
+          });
         }, 0);
 
         break;
