@@ -8,6 +8,7 @@ import {
   Text,
   View,
   TouchableNativeFeedback,
+  TouchableWithoutFeedback,
   TouchableHighlight,
   ToastAndroid,
 } from 'react-native';
@@ -161,12 +162,20 @@ class NavigatorDrawer extends Component {
     ToastAndroid.show(data,2000);
   }
 
+  switch = () => {
+    const { navigator, closeDrawer, switchModeOnRoot} = this.props;
+    closeDrawer();
+    switchModeOnRoot();
+  }
+
   renderHeader = () => {
       //let avatar = 
       let toolActions = [];
+      let Touchable = TouchableWithoutFeedback;
+
       toolActions.push(<TouchableNativeFeedback
                         key={'changeStyle'}
-                        onPress={this.props.switchModeOnRoot}
+                        onPress={this.switch}
                         >
                         <View style={{
                           flexDirection: 'column',  
@@ -229,7 +238,7 @@ class NavigatorDrawer extends Component {
           </View>);
 
         rows.push(<View key={'rows'} style={styles.row}>
-            <TouchableNativeFeedback>
+            <Touchable>
               <View style={styles.menuContainer}>
                 <Image
                   source={require('image!ic_favorites_white')}
@@ -238,8 +247,8 @@ class NavigatorDrawer extends Component {
                   帖子
                 </Text>
               </View>
-            </TouchableNativeFeedback>
-            <TouchableNativeFeedback>
+            </Touchable>
+            <Touchable>
               <View style={styles.menuContainer}>
               <Image
                 source={require('image!ic_download_white')}
@@ -248,8 +257,8 @@ class NavigatorDrawer extends Component {
                   关注
                 </Text>
               </View>
-            </TouchableNativeFeedback>
-            <TouchableNativeFeedback>
+            </Touchable>
+            <Touchable>
               <View style={styles.menuContainer}>
               <Image
                 source={require('image!ic_download_white')}
@@ -258,7 +267,7 @@ class NavigatorDrawer extends Component {
                   收藏
                 </Text>
               </View>
-            </TouchableNativeFeedback>
+            </Touchable>
           </View>);
         
 
@@ -303,7 +312,7 @@ class NavigatorDrawer extends Component {
         <View style={styles.userInfo}>
             <View style={{flexDirection: 'row',  alignItems: 'center',}}>
                 <View style={{flexDirection: 'column',  alignItems: 'center', }}>
-                  <TouchableNativeFeedback onPress={this.pressLogin}>
+                  <Touchable onPress={this.pressLogin}>
                     <View style={{flexDirection: 'column',  alignItems: 'center', }}>
                       <Image
                         source={this.state.userInfo.avatar}
@@ -312,7 +321,7 @@ class NavigatorDrawer extends Component {
                         {this.state.psnid == '' ? '请登录': this.state.psnid}
                       </Text>
                     </View>
-                  </TouchableNativeFeedback>
+                  </Touchable>
                 </View>
                 <View style={{ flexDirection: 'row', marginLeft: 0, marginTop: 0 }}>
                   {toolActions}

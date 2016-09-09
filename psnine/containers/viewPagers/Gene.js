@@ -21,7 +21,7 @@ import GeneTopic from '../../components/GeneTopic';
 import { getGeneURL } from '../../dao/dao';
 import moment from '../../utils/moment';
 
-const dataSource = new ListView.DataSource({
+let dataSource = new ListView.DataSource({
   rowHasChanged:  (row1, row2) => {
     return row1.id !== row2.id || row1.views !== row2.views || row1.count !== row2.count;
   },
@@ -115,7 +115,7 @@ class Gene extends Component {
 
             <View style={{ marginLeft: 10, flex: 1, flexDirection: 'column', }}>
               <Text
-                style={{ flex: -1,color: 'black', }}>
+                style={{ flex: -1,color: this.props.modeInfo.titleTextColor, }}>
                 {rowData.content}
               </Text>
               <View style={{flex:-1, flexDirection: 'row', marginTop: 5, marginBottom: 5 ,}}>
@@ -123,9 +123,9 @@ class Gene extends Component {
               </View>
               <View style={{ flex: 1, flexDirection: 'row', justifyContent :'space-between',  }}>
                 <Text style={{ flex: -1, color: idColor,textAlign : 'center', textAlignVertical: 'center' }}>{rowData.psnid}</Text>
-                <Text style={{ flex: -1,textAlign : 'center', textAlignVertical: 'center' }}>{fromNow}</Text>
-                <Text style={{ flex: -1,textAlign : 'center', textAlignVertical: 'center' }}>{rowData.count}回复</Text>
-                <Text style={{ flex: -1,textAlign : 'center', textAlignVertical: 'center' }}>{rowData.views}浏览</Text>
+                <Text style={{ flex: -1,color: this.props.modeInfo.standardTextColor,textAlign : 'center', textAlignVertical: 'center' }}>{fromNow}</Text>
+                <Text style={{ flex: -1,color: this.props.modeInfo.standardTextColor,textAlign : 'center', textAlignVertical: 'center' }}>{rowData.count}回复</Text>
+                <Text style={{ flex: -1,color: this.props.modeInfo.standardTextColor,textAlign : 'center', textAlignVertical: 'center' }}>{rowData.views}浏览</Text>
               </View>
 
             </View>
@@ -139,6 +139,10 @@ class Gene extends Component {
   componentWillReceiveProps(nextProps) {
     if(this.props.geneType != nextProps.geneType){
       this.props.geneType = nextProps.geneType;
+      this._onRefresh(nextProps.geneType);
+    }else if(this.props.modeInfo.isNightMode != nextProps.modeInfo.isNightMode ){
+      this.props.modeInfo == nextProps.modeInfo;
+      dataSource = dataSource.cloneWithRows([]);
       this._onRefresh(nextProps.geneType);
     }
   }

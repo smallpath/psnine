@@ -281,7 +281,7 @@ class NewTopic extends Component {
               //onPress={this.login}
               >
               <View style={styles.submitButton}>
-                <Text style={[styles.textInput, { color:this.props.modeInfo.standardTextColor }]}>提交</Text>
+                <Text style={[styles.textInput, { color:this.props.modeInfo.titleTextColor }]}>提交</Text>
               </View>
             </TouchableNativeFeedback>
           </View>

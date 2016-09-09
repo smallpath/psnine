@@ -5,6 +5,7 @@ let config =  {
     backgroundColor: '#fff',
     backgroundColorBrighterLevelOne: '#fff',
     standardTextColor: '#757575',
+    titleTextColor: '#000',
 
     nightDeepColor: '#01579b',       //700
     nightStandardColor: '#0288d1',   //500
@@ -12,6 +13,7 @@ let config =  {
     nightBackgroundColor: '#212121',
     nightBackgroundColorBrighterLevelOne: '#424242',
     nightStandardTextColor: '#e0e0e0',
+    nightTitleTextColor: '#fff',
 
     nodeColor: '#E1F0F7',
     idColor: '#3498db',

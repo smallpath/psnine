@@ -16,6 +16,7 @@ import {
 	backgroundColorBrighterLevelOne,
 	nightBackgroundColorBrighterLevelOne,
 	standardTextColor, nightStandardTextColor,
+	titleTextColor, nightTitleTextColor
 
 } from './config/colorConfig';
 
@@ -48,6 +49,8 @@ const { width:SCREEN_WIDTH, height:SCREEN_HEIGHT } = Dimensions.get('window');
 
 let BaseConfig = Navigator.SceneConfigs.FloatFromRight;
 
+let FloatFromBottom = Navigator.SceneConfigs.FloatFromBottomAndroid;
+
 let CustomGesture = Object.assign({}, BaseConfig.gestures.pop, { 
 	isDetachable: true,
 	snapVelocity: 8, 
@@ -58,7 +61,8 @@ let CustomGesture = Object.assign({}, BaseConfig.gestures.pop, {
 	gestureDetectMovement:12,	
   	stillCompletionRatio: 3 / 10,
 	directionRatio: 2,
-	fullDistance: SCREEN_WIDTH/2
+	fullDistance: SCREEN_WIDTH/2,
+	direction: 'left-to-right',
 });
 
 
@@ -75,7 +79,7 @@ class Root extends React.Component {
 		super(props);
 
 		this.state = {
-			isNightMode: true,
+			isNightMode: false,
 		};
 
 		this.dayModeInfo = {
@@ -86,6 +90,7 @@ class Root extends React.Component {
 			backgroundColor: backgroundColor,
 			brighterLevelOne: backgroundColorBrighterLevelOne,
 			standardTextColor: standardTextColor,
+			titleTextColor: titleTextColor
 		}
 
 		this.nightModeInfo = {
@@ -96,6 +101,7 @@ class Root extends React.Component {
 			backgroundColor: nightBackgroundColor,
 			brighterLevelOne: nightBackgroundColorBrighterLevelOne,
 			standardTextColor: nightStandardTextColor,
+			titleTextColor: nightTitleTextColor,
 		}
 	}
 

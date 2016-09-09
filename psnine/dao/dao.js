@@ -2,10 +2,10 @@
 
 const safeFetch = function(reqUrl) {
   return new Promise((resolve, reject) => {
-    let timeout = setTimeout(reject, 2000);
+    //let timeout = setTimeout(reject, 2000);
     fetch(reqUrl)
       .then((response) => {
-        clearTimeout(timeout);
+        //clearTimeout(timeout);
 
         let data;
         try{
