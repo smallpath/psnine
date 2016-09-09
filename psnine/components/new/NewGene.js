@@ -24,6 +24,7 @@ import {
   Easing,
   PanResponder,
   StatusBar,
+  Picker,
 } from 'react-native';
 
 import { connect } from 'react-redux';
@@ -40,6 +41,9 @@ import { fetchUser } from '../../dao/userParser';
 let toolbarActions = [
 
 ];
+
+let AnimatedKeyboardAvoidingView = Animated.createAnimatedComponent(KeyboardAvoidingView);
+
 let title = "创建基因";
 
 let screen = Dimensions.get('window');
@@ -56,9 +60,9 @@ class NewTopic extends Component {
     super(props);
 
     this.state = {
-      psnid: '',
-      password: '',
-      
+      title: '',
+      isPublic: true,
+      content: '',
     }
   }
 
@@ -245,58 +249,118 @@ class NewTopic extends Component {
 
         </Animated.View >
 
-        <KeyboardAvoidingView behavior={'padding'} style={styles.KeyboardAvoidingView} >
-          <View style={styles.accountView}>
-            <TextInput placeholder="标题" underlineColorAndroid={accentColor}
-              onChange={({nativeEvent})=>{ this.setState({psnid:nativeEvent.text})}}
-              style={[styles.textInput, { color:this.props.modeInfo.standardTextColor }]}
+        <Animated.View  style={[styles.KeyboardAvoidingView, {
+          flex: openVal.interpolate({inputRange: [0, 1], outputRange: [0 , 10]}), 
+        }]} >
+          <AnimatedKeyboardAvoidingView behavior={'height'} style={[styles.titleView,
+            {flex: openVal.interpolate({inputRange: [0, 1], outputRange: [0 , 1]}), }
+            ]}>
+            <TextInput placeholder="标题" 
+              onChange={({nativeEvent})=>{ this.setState({title:nativeEvent.text})}}
+              style={[styles.textInput, { 
+                color:this.props.modeInfo.titleTextColor, 
+                textAlignVertical:'center', 
+              }]}
               placeholderTextColor={this.props.modeInfo.standardTextColor}
+              underlineColorAndroid='rgba(0,0,0,0)'
             />
-          </View>
+          </AnimatedKeyboardAvoidingView >
 
-          <View style={styles.accountView}>
-            <Text style={styles.mainFont}>权限 :</Text>
-            <TextInput placeholder="不是邮箱" underlineColorAndroid={accentColor}
-              onChange={({nativeEvent})=>{ this.setState({psnid:nativeEvent.text})}}
-              style={[styles.textInput, { color:this.props.modeInfo.standardTextColor }]}
+          <View style={{ height:1, opacity:0.5 ,backgroundColor: this.props.modeInfo.standardTextColor  }}/>
+
+          <AnimatedKeyboardAvoidingView behavior={'height'} style={[styles.isPublicView,{
+            flex: openVal.interpolate({inputRange: [0, 1], outputRange: [0 , 1]}),}
+            ]}>
+            <Text style={[styles.mainFont,{color: this.props.modeInfo.standardTextColor,marginLeft:4}]}>权限 :</Text>
+            <Picker 
+              style={{ 
+                marginLeft:5, 
+                width: 140,
+                color:this.props.modeInfo.titleTextColor,
+              }}
+              selectedValue={this.state.isPublic}
+              onValueChange={(isPublic) => this.setState({isPublic: isPublic})}>
+              <Picker.Item label="完全开放" value="true" />
+              <Picker.Item label="仅自己可见" value="false" />
+            </Picker>
+          </AnimatedKeyboardAvoidingView >
+
+          <View style={{ height:1, opacity:0.5 ,backgroundColor: this.props.modeInfo.standardTextColor  }}/>
+
+          <AnimatedKeyboardAvoidingView behavior={'padding'} style={[styles.contentView,{
+            flex: openVal.interpolate({inputRange: [0, 1], outputRange: [0 , 12]}),
+          }]}>
+            <TextInput placeholder="内容" 
+              multiline={true}
+
+              onChange={({nativeEvent})=>{ this.setState({content:nativeEvent.text})}}
+              style={[styles.textInput, { 
+                color:this.props.modeInfo.titleTextColor,
+                textAlign: 'left',
+                textAlignVertical: 'top',
+                flex:1,
+              }]}
               placeholderTextColor={this.props.modeInfo.standardTextColor}
+              // underlineColorAndroid={accentColor}
+              underlineColorAndroid='rgba(0,0,0,0)'
             />
-          </View>
+            <Animated.View style={[{    
+                  elevation: 4,
+                },animatedToolbarStyle]}>
+                <View style={{    
+                    flex: 1, 
+                    flexDirection: 'row' , 
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                  }}>
+                  <View style={{flexDirection: 'row' ,  }}>
+                    <TouchableNativeFeedback
+                      onPress={this._pressButton}
+                      delayPressIn={0}
+                      background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
+                      style={{ borderRadius: 25}}
+                      >
+                      <View style={{ width: 50, height:50, marginLeft:0, borderRadius: 25,}}>
+                        <Image 
+                          source={require('image!ic_insert_emoticon_white')}
+                          style={{ width: 50, height:50 }}
+                        />
+                      </View>
+                    </TouchableNativeFeedback>
+                    <TouchableNativeFeedback
+                      onPress={this._pressButton}
+                      delayPressIn={0}
+                      background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
+                      style={{ borderRadius: 25}}
+                      >
+                      <View style={{ width: 50, height:50, marginLeft:0, borderRadius: 25,}}>
+                        <Image 
+                          source={require('image!ic_insert_photo_white')}
+                          style={{ width: 50, height:50 }}
+                        />
+                      </View>
+                    </TouchableNativeFeedback>
+                  </View>
+                  <TouchableNativeFeedback
+                    onPress={this._pressButton}
+                    delayPressIn={0}
+                    background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
+                    style={{ borderRadius: 25}}
+                    >
+                    <View style={{ width: 50, height:50, marginLeft:0, borderRadius: 25,}}>
+                      <Image 
+                        source={require('image!ic_send_white')}
+                        style={{ width: 50, height:50 }}
+                      />
+                    </View>
+                  </TouchableNativeFeedback>
+                </View>
 
-          <View style={styles.passwordView}>
-            <Text style={styles.mainFont}>内容 :</Text>
-            <TextInput placeholder="内容" underlineColorAndroid={accentColor} secureTextEntry={false}
-              onChange={({nativeEvent})=>{ this.setState({password:nativeEvent.text})}}
-              style={[styles.textInput, { color:this.props.modeInfo.standardTextColor }]}
-              placeholderTextColor={this.props.modeInfo.standardTextColor}
-            />
-          </View>
+              </Animated.View>
+              <View style={{elevation: 4, bottom:0, height: 100, backgroundColor: this.props.modeInfo.standardColor }} />
+          </AnimatedKeyboardAvoidingView>
 
-
-        </KeyboardAvoidingView>
-
-        <Animated.View  style={animatedSubmitStyle}>
-          <View style={styles.submit}>
-            <TouchableNativeFeedback
-              //onPress={this.login}
-              >
-              <View style={styles.submitButton}>
-                <Text style={[styles.textInput, { color:this.props.modeInfo.titleTextColors }]}>提交</Text>
-              </View>
-            </TouchableNativeFeedback>
-          </View>
-
-          <View style={styles.regist}>
-            <Text style={[styles.textInput, { color:this.props.modeInfo.standardTextColor }]}>如果是第一次使用PSNINE，请先完成</Text>
-            <TouchableNativeFeedback
-              //onPress={this.regist}
-            >
-              <View>
-              <Text style={styles.openURL}>PSNID认证</Text>
-              </View>
-            </TouchableNativeFeedback>
-          </View>
-        </Animated.View >
+        </Animated.View>
 
       </Animated.View>
     );
@@ -308,7 +372,7 @@ const width = Dimensions.get('window').width;
 
 const styles = StyleSheet.create({
   circle: {
-    //flex: 1, 
+    flex: 1, 
     position: 'absolute',
     backgroundColor:'white',
     width: CIRCLE_SIZE,
@@ -332,6 +396,7 @@ const styles = StyleSheet.create({
     backgroundColor: standardColor,
     height: 56,
     elevation: 4,
+    flex: -1,
   },
   mainFont: {
     fontSize: 15, 
@@ -340,47 +405,42 @@ const styles = StyleSheet.create({
   textInput: {
     fontSize: 15,
   },
-  customView: {
-    flex: -1, 
-    marginTop: -20,
-    width: width - 40,
-    alignSelf:'center',
-    justifyContent: 'center',
-    flexDirection: 'column' 
-  },
   KeyboardAvoidingView: { 
-    flex: -1, 
-    marginTop: 20,
-    width: width - 40,
-    alignSelf:'center',
-    justifyContent: 'center',
+    flex: 10, 
+    // width: width,
+    //alignSelf:'center',
+    //justifyContent: 'space-between',
     flexDirection: 'column' 
   },
-  accountView: { 
+  titleView: { 
     flex: 1, 
-    flexDirection: 'column',
-    justifyContent: 'space-between',
-    margin: 10,
+    //marginTop: -10,
+    justifyContent: 'center',
+    // flexDirection: 'column',
+    // justifyContent: 'space-between',
   },
-  passwordView: { 
+  isPublicView:{ 
     flex: 1, 
-    flexDirection: 'column', 
-    margin: 10,
-    marginTop: 20,
-    marginBottom: 20,
+    flexDirection:'row',
+    // flexDirection: 'column',
+    alignItems: 'center',
+  },
+  contentView: { 
+    flex: 12, 
+    // flexDirection: 'column', 
   },
   submit: { 
-    flex: -1, 
-    height: 20,
-    margin: 10,
-    marginTop: 30,
-    marginBottom: 20,
+    // flex: -1, 
+    // height: 20,
+    // //margin: 10,
+    // marginTop: 30,
+    // marginBottom: 20,
   },
   submitButton:{
-    backgroundColor: accentColor,
-    height: 40,
-    alignItems: 'center',
-    justifyContent: 'center',
+    // backgroundColor: accentColor,
+    // height: 40,
+    // alignItems: 'center',
+    // justifyContent: 'center',
   },
   regist: { 
     flex: 1, 
