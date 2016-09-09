@@ -44,8 +44,6 @@ let toolbarActions = [
 
 let AnimatedKeyboardAvoidingView = Animated.createAnimatedComponent(KeyboardAvoidingView);
 
-let title = "创建约占";
-
 let screen = Dimensions.get('window');
 
 const { width:SCREEN_WIDTH, height:SCREEN_HEIGHT } = screen;
@@ -54,19 +52,19 @@ SCREEN_HEIGHT = SCREEN_HEIGHT - StatusBar.currentHeight;
 
 let CIRCLE_SIZE = 56;
 
-class NewTopic extends Component {
+class NewBattle extends Component {
 
   constructor(props) {
     super(props);
 
     this.state = {
-      title: '',
       isPublic: true,
-      content: '',
     }
   }
 
   _pressButton = () => {
+    this.title.clear();
+    this.content.clear();
     let { openVal, innerMarginTop } = this.props;
     let config = {tension: 30, friction: 7};
 
@@ -244,7 +242,7 @@ class NewTopic extends Component {
                 />
               </View>
             </TouchableNativeFeedback>
-            <Text style={{color: 'white', fontSize: 23, marginLeft:10, }}>{title}</Text>
+            <Text style={{color: 'white', fontSize: 23, marginLeft:10, }}>{this.props.title}</Text>
           </View>
 
         </Animated.View >
@@ -253,10 +251,11 @@ class NewTopic extends Component {
           flex: openVal.interpolate({inputRange: [0, 1], outputRange: [0 , 10]}), 
         }]} >
           <AnimatedKeyboardAvoidingView behavior={'height'} style={[styles.titleView,
-            {flex: openVal.interpolate({inputRange: [0, 1], outputRange: [0 , 1]}), }
+            //{flex: openVal.interpolate({inputRange: [0, 1], outputRange: [0 , 1]}), }
             ]}>
             <TextInput placeholder="标题" 
-              onChange={({nativeEvent})=>{ this.setState({title:nativeEvent.text})}}
+              ref={ref=>this.title=ref}
+              //onChange={({nativeEvent})=>{ this.setState({title:nativeEvent.text})}}
               style={[styles.textInput, { 
                 color:this.props.modeInfo.titleTextColor, 
                 textAlignVertical:'center', 
@@ -268,8 +267,8 @@ class NewTopic extends Component {
 
           <View style={{ height:1, opacity:0.5 ,backgroundColor: this.props.modeInfo.standardTextColor  }}/>
 
-          <AnimatedKeyboardAvoidingView behavior={'height'} style={[styles.isPublicView,{
-            flex: openVal.interpolate({inputRange: [0, 1], outputRange: [0 , 1]}),}
+          <AnimatedKeyboardAvoidingView behavior={'height'} style={[styles.isPublicView,
+            //{flex: openVal.interpolate({inputRange: [0, 1], outputRange: [0 , 1]}),}
             ]}>
             <Text style={[styles.mainFont,{color: this.props.modeInfo.standardTextColor,marginLeft:4}]}>权限 :</Text>
             <Picker 
@@ -292,8 +291,8 @@ class NewTopic extends Component {
           }]}>
             <TextInput placeholder="内容" 
               multiline={true}
-
-              onChange={({nativeEvent})=>{ this.setState({content:nativeEvent.text})}}
+              ref={ref=>this.content=ref}
+              //onChange={({nativeEvent})=>{ this.setState({content:nativeEvent.text})}}
               style={[styles.textInput, { 
                 color:this.props.modeInfo.titleTextColor,
                 textAlign: 'left',
@@ -455,4 +454,4 @@ const styles = StyleSheet.create({
 });
 
 
-export default NewTopic
+export default NewBattle

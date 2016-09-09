@@ -25,6 +25,8 @@ import PushWithoutAnimation from './utils/PushWithoutAnimation';
 import configureStore from './store/store.js'
 import App from './containers/App.js'
 
+import moment from './utils/moment';
+
 const store = configureStore();
 
 let _navigator;
@@ -78,8 +80,10 @@ class Root extends React.Component {
 	constructor(props){
 		super(props);
 
+		let hour = ~~moment().format('HH');
+
 		this.state = {
-			isNightMode: false,
+			isNightMode: hour >= 22 || hour < 7,
 		};
 
 		this.dayModeInfo = {

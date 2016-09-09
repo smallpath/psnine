@@ -588,6 +588,7 @@ class Toolbar extends Component {
               openVal={this.state.openTopicVal} 
               marginTop={this.state.marginTop}
               innerMarginTop={this.state.innerTopicMarginTop}
+              title={'创建讨论'}
               {...{navigator:this.props.navigator, modeInfo:this.props.modeInfo }}
           />
           <NewBattle 
@@ -595,6 +596,7 @@ class Toolbar extends Component {
               openVal={this.state.openBattleVal} 
               marginTop={this.state.marginTop}
               innerMarginTop={this.state.innerBattleMarginTop}
+              title={'创建约战'}
               {...{navigator:this.props.navigator, modeInfo:this.props.modeInfo }}
           />
           <NewGene
@@ -602,6 +604,7 @@ class Toolbar extends Component {
               openVal={this.state.openGeneVal} 
               marginTop={this.state.marginTop}
               innerMarginTop={this.state.innerGeneMarginTop}
+              title={'创建基因'}
               {...{navigator:this.props.navigator, modeInfo:this.props.modeInfo }}
           />
       </Animated.View>
