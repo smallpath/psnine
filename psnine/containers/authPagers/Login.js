@@ -51,6 +51,7 @@ class Login extends Component {
       password: '',
       accountMarginTop: new Animated.Value(0),
       passwordMarginTop: new Animated.Value(0),
+      avoidKeyboardMarginTop: new Animated.Value(0),
     }
   }
 
@@ -97,6 +98,11 @@ class Login extends Component {
   }
 
   onAccountTextFocus = () => {
+    Animated.spring(this.state.avoidKeyboardMarginTop,{
+      toValue: 1,
+      friction: 10
+    }).start();
+
     let text = this.accountTextInput._lastNativeText;
     if(typeof text !='undefined' && text!=='')
       return;
@@ -108,6 +114,7 @@ class Login extends Component {
   }
 
   onAccountTextBlur = () => {
+
     let text = this.accountTextInput._lastNativeText;
     if(typeof text !='undefined' && text!=='')
       return;
@@ -118,6 +125,11 @@ class Login extends Component {
   }
 
   onPasswordTextFocus = () => {
+    Animated.spring(this.state.avoidKeyboardMarginTop,{
+      toValue: 1,
+      friction: 10
+    }).start();
+
     let text = this.passwordTextInput._lastNativeText;
     if(typeof text !='undefined' && text!=='')
       return;
@@ -141,6 +153,13 @@ class Login extends Component {
   render() {
     // console.log('Loggin.js rendered');
     let marginLeft = 40;
+
+    let avoidKeyboardStyle = {
+      top: this.state.avoidKeyboardMarginTop.interpolate({
+          inputRange: [0 ,1], 
+          outputRange: [SCREEN_HEIGHT/10*4-marginLeft, marginLeft]
+      }),
+    }
 
     let accountTextStyle = {
       top: this.state.accountMarginTop.interpolate({
@@ -175,7 +194,10 @@ class Login extends Component {
             borderRadius: 30,
             backgroundColor: accentColor,
             position:'absolute',
-            top: SCREEN_HEIGHT/10*4 -56/2 ,
+            top: this.state.avoidKeyboardMarginTop.interpolate({
+                inputRange: [0 ,1], 
+                outputRange: [SCREEN_HEIGHT/10*4-marginLeft+28 , marginLeft+28 ]
+            }),
             right: 16,
             elevation: 6 ,
             zIndex: 1,
@@ -218,22 +240,23 @@ class Login extends Component {
         </TouchableNativeFeedback>
         </Animated.View>
 
-        <View style={{ backgroundColor:this.props.modeInfo.brighterLevelOne,              
+        <Animated.View behavior={'padding'} style={[{ backgroundColor:this.props.modeInfo.brighterLevelOne,              
               position: 'absolute',
               width: SCREEN_WIDTH-marginLeft*2,
               height: SCREEN_HEIGHT/10*6,
               marginLeft: marginLeft,
               bottom: marginLeft,
               borderRadius: 5,
+              elevation:6,
 
              
-           }}>
+           },avoidKeyboardStyle]}>
 
-          <View style={[styles.loginTextView,{marginLeft: marginLeft/2*1.5, marginTop:40 }]}>
+          <View style={[styles.loginTextView,{marginLeft: marginLeft/2*1.5, marginTop:27 }]}>
             <Text style={[styles.mainFont,{fontSize:30, marginLeft:0, marginBottom:0}]}>登录</Text>
           </View>
 
-          <KeyboardAvoidingView behavior={'padding'} style={[styles.KeyboardAvoidingView, {
+          <View behavior={'padding'} style={[styles.KeyboardAvoidingView, {
               width: SCREEN_WIDTH-marginLeft*3,
             }]} >
             <View style={[styles.accountView,{ marginTop: 5,}]}>
@@ -272,7 +295,7 @@ class Login extends Component {
             </View>
 
 
-          </KeyboardAvoidingView>
+          </View>
 
           <View style={[styles.customView,{
             width: SCREEN_WIDTH-marginLeft*3
@@ -299,7 +322,7 @@ class Login extends Component {
             </View>*/}
           </View>
 
-        </View>
+        </Animated.View>
 
       </View>
     );
