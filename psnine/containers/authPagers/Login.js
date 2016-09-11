@@ -157,7 +157,7 @@ class Login extends Component {
     let avoidKeyboardStyle = {
       top: this.state.avoidKeyboardMarginTop.interpolate({
           inputRange: [0 ,1], 
-          outputRange: [SCREEN_HEIGHT/10*4-marginLeft, marginLeft]
+          outputRange: [SCREEN_HEIGHT/10*4-marginLeft*1.5, marginLeft]
       }),
     }
 
