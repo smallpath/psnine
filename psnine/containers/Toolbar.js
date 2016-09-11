@@ -549,7 +549,7 @@ class Toolbar extends Component {
           
           <TouchableNativeFeedback 
             onPress={this.pressNew}
-            //delayPressIn={0}
+            delayPressIn={0}
             //activeOpacity={1}
             //underlayColor={accentColor}
             background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
