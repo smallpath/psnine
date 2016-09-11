@@ -98,10 +98,8 @@ class Login extends Component {
   }
 
   onAccountTextFocus = () => {
-    Animated.spring(this.state.avoidKeyboardMarginTop,{
-      toValue: 1,
-      friction: 10
-    }).start();
+
+    this.state.avoidKeyboardMarginTop.setValue(1);
 
     let text = this.accountTextInput._lastNativeText;
     if(typeof text !='undefined' && text!=='')
@@ -125,10 +123,8 @@ class Login extends Component {
   }
 
   onPasswordTextFocus = () => {
-    Animated.spring(this.state.avoidKeyboardMarginTop,{
-      toValue: 1,
-      friction: 10
-    }).start();
+
+    this.state.avoidKeyboardMarginTop.setValue(1);
 
     let text = this.passwordTextInput._lastNativeText;
     if(typeof text !='undefined' && text!=='')
@@ -168,7 +164,7 @@ class Login extends Component {
       }),
       color: this.state.accountMarginTop.interpolate({
           inputRange: [0 ,1], 
-          outputRange: [this.props.modeInfo.standardTextColor, this.props.modeInfo.deepColor]
+          outputRange: [this.props.modeInfo.standardTextColor, this.props.modeInfo.standardColor]
       }),
     }
 
@@ -179,7 +175,7 @@ class Login extends Component {
       }),
       color: this.state.passwordMarginTop.interpolate({
           inputRange: [0 ,1], 
-          outputRange: [this.props.modeInfo.standardTextColor, this.props.modeInfo.deepColor]
+          outputRange: [this.props.modeInfo.standardTextColor, this.props.modeInfo.standardColor]
       }),
     }
     return (
@@ -198,7 +194,7 @@ class Login extends Component {
                 inputRange: [0 ,1], 
                 outputRange: [SCREEN_HEIGHT/10*4-marginLeft+28 , marginLeft+28 ]
             }),
-            right: 16,
+            right: 12,
             elevation: 6 ,
             zIndex: 1,
         }}>
@@ -240,7 +236,7 @@ class Login extends Component {
         </TouchableNativeFeedback>
         </Animated.View>
 
-        <Animated.View behavior={'padding'} style={[{ backgroundColor:this.props.modeInfo.brighterLevelOne,              
+        <Animated.View style={[{ backgroundColor:this.props.modeInfo.brighterLevelOne,              
               position: 'absolute',
               width: SCREEN_WIDTH-marginLeft*2,
               height: SCREEN_HEIGHT/10*6,
@@ -256,7 +252,7 @@ class Login extends Component {
             <Text style={[styles.mainFont,{fontSize:30, marginLeft:0, marginBottom:0}]}>登录</Text>
           </View>
 
-          <View behavior={'padding'} style={[styles.KeyboardAvoidingView, {
+          <View style={[styles.KeyboardAvoidingView, {
               width: SCREEN_WIDTH-marginLeft*3,
             }]} >
             <View style={[styles.accountView,{ marginTop: 5,}]}>
