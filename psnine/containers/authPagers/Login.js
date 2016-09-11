@@ -49,6 +49,8 @@ class Login extends Component {
     this.state = {
       psnid: '',
       password: '',
+      accountMarginTop: new Animated.Value(0),
+      passwordMarginTop: new Animated.Value(0),
     }
   }
 
@@ -79,7 +81,7 @@ class Login extends Component {
 
       await AsyncStorage.removeItem('@psnid');
       const value = await AsyncStorage.getItem('@psnid');
-      ToastAndroid.show(`登录失败`,2000);
+      ToastAndroid.show(`登录失败,请检查账号与密码是否输入正确`,2000);
     }
 
   }
@@ -94,9 +96,73 @@ class Login extends Component {
               }).catch(err => {});
   }
 
+  onAccountTextFocus = () => {
+    let text = this.accountTextInput._lastNativeText;
+    if(typeof text !='undefined' && text!=='')
+      return;
+      
+    Animated.spring(this.state.accountMarginTop,{
+      toValue: 1,
+      friction: 10
+    }).start();
+  }
+
+  onAccountTextBlur = () => {
+    let text = this.accountTextInput._lastNativeText;
+    if(typeof text !='undefined' && text!=='')
+      return;
+    Animated.spring(this.state.accountMarginTop,{
+      toValue: 0,
+      friction: 10
+    }).start();
+  }
+
+  onPasswordTextFocus = () => {
+    let text = this.passwordTextInput._lastNativeText;
+    if(typeof text !='undefined' && text!=='')
+      return;
+      
+    Animated.spring(this.state.passwordMarginTop,{
+      toValue: 1,
+      friction: 10
+    }).start();
+  }
+
+  onPasswordTextBlur = () => {
+    let text = this.passwordTextInput._lastNativeText;
+    if(typeof text !='undefined' && text!=='')
+      return;
+    Animated.spring(this.state.passwordMarginTop,{
+      toValue: 0,
+      friction: 10
+    }).start();
+  }
+
   render() {
     // console.log('Loggin.js rendered');
     let marginLeft = 40;
+
+    let accountTextStyle = {
+      top: this.state.accountMarginTop.interpolate({
+          inputRange: [0 ,1], 
+          outputRange: [40, 0]
+      }),
+      color: this.state.accountMarginTop.interpolate({
+          inputRange: [0 ,1], 
+          outputRange: [this.props.modeInfo.standardTextColor, this.props.modeInfo.deepColor]
+      }),
+    }
+
+    let passwordTextStyle = {
+      top: this.state.passwordMarginTop.interpolate({
+          inputRange: [0 ,1], 
+          outputRange: [40, 0]
+      }),
+      color: this.state.passwordMarginTop.interpolate({
+          inputRange: [0 ,1], 
+          outputRange: [this.props.modeInfo.standardTextColor, this.props.modeInfo.deepColor]
+      }),
+    }
     return (
       <View style={{ flex: 1 , backgroundColor: this.props.modeInfo.standardColor }}>
 
@@ -109,7 +175,7 @@ class Login extends Component {
             borderRadius: 30,
             backgroundColor: accentColor,
             position:'absolute',
-            bottom: SCREEN_HEIGHT/10*5.5,
+            top: SCREEN_HEIGHT/10*4 -56/2 ,
             right: 16,
             elevation: 6 ,
             zIndex: 1,
@@ -168,25 +234,41 @@ class Login extends Component {
           </View>
 
           <KeyboardAvoidingView behavior={'padding'} style={[styles.KeyboardAvoidingView, {
-              width: SCREEN_WIDTH-marginLeft*3
+              width: SCREEN_WIDTH-marginLeft*3,
             }]} >
-            <View style={styles.accountView}>
-              {/*<Text style={styles.mainFont}>PSN ID :</Text>*/}
-              <TextInput placeholder="不是邮箱" underlineColorAndroid={accentColor}
+            <View style={[styles.accountView,{ marginTop: 5,}]}>
+              <Animated.Text
+                  style={[{color: this.props.modeInfo.standardTextColor, marginLeft:5},
+                    accountTextStyle
+                  ]}>
+                  {'PSN ID'}
+              </Animated.Text>
+              <TextInput underlineColorAndroid={accentColor}
                 onChange={({nativeEvent})=>{ this.setState({psnid:nativeEvent.text})}}
+                ref={ref=>this.accountTextInput = ref}
+                onFocus={this.onAccountTextFocus}
+                onBlur={this.onAccountTextBlur}
                 style={[styles.textInput, { color:this.props.modeInfo.standardTextColor }]}
                 placeholderTextColor={this.props.modeInfo.standardTextColor}
               />
             </View>
 
-            <View style={styles.passwordView}>
-              {/*<Text style={styles.mainFont}>密码 :</Text>*/}
-              <TextInput placeholder="你在本站完成认证时的密码" underlineColorAndroid={accentColor} secureTextEntry={true}
+            <View style={[styles.passwordView,{marginTop:5}]}>
+              <Animated.Text
+                  style={[{color: this.props.modeInfo.standardTextColor, marginLeft:5},
+                    passwordTextStyle
+                  ]}>
+                  {'密码'}
+              </Animated.Text>
+              <TextInput underlineColorAndroid={accentColor} secureTextEntry={true}
                 onChange={({nativeEvent})=>{ this.setState({password:nativeEvent.text})}}
+                ref={ref=>this.passwordTextInput = ref}
+                onFocus={this.onPasswordTextFocus}
+                onBlur={this.onPasswordTextBlur}
                 style={[styles.textInput, { color:this.props.modeInfo.standardTextColor }]}
                 placeholderTextColor={this.props.modeInfo.standardTextColor}
               />
-              <Text>忘记密码</Text>
+              <Text style={[styles.openURL,{marginTop: 10, color: this.props.modeInfo.standardColor }]}>忘记密码</Text>
             </View>
 
 

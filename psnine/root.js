@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import { Provider } from 'react-redux'
 import { 
+	accentColor,
 	deepColor, standardColor, tintColor,
 	nightDeepColor, nightStandardColor, nightTintColor,
 
@@ -26,6 +27,8 @@ import configureStore from './store/store.js'
 import App from './containers/App.js'
 
 import moment from './utils/moment';
+
+import Login from './containers/authPagers/Login'
 
 const store = configureStore();
 
@@ -88,6 +91,7 @@ class Root extends React.Component {
 
 		this.dayModeInfo = {
 			isNightMode: false,
+			accentColor: accentColor,
 			deepColor: deepColor, 
 			standardColor: standardColor, 
 			tintColor: tintColor,
@@ -99,6 +103,7 @@ class Root extends React.Component {
 
 		this.nightModeInfo = {
 			isNightMode: true,
+			accentColor: accentColor,
 			deepColor: nightDeepColor, 
 			standardColor: nightStandardColor, 
 			tintColor: nightTintColor,
