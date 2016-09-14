@@ -120,7 +120,7 @@ class NavigatorDrawer extends Component {
         params: {
           setLogin: this.setLogin,
         },
-        withoutAnimation: true,
+        withoutAnimation: false,
       })
     }else{
       ToastAndroid.show('您已登录, 请先退出', 2000);
