@@ -38,6 +38,8 @@ import { safeLogin, registURL } from '../../dao/login';
 import { fetchUser } from '../../dao/userParser';
 
 
+let title = '创建约战';
+
 let toolbarActions = [
 
 ];
@@ -52,36 +54,68 @@ SCREEN_HEIGHT = SCREEN_HEIGHT - StatusBar.currentHeight;
 
 let CIRCLE_SIZE = 56;
 
-class NewBattle extends Component {
+class NewTopic extends Component {
 
   constructor(props) {
     super(props);
 
     this.state = {
-      isPublic: true,
+      openVal: new Animated.Value(0),
+      innerMarginTop: new Animated.Value(0),
     }
+  }
+
+  componentDidMount = () => {
+    let config = {tension: 30, friction: 7};
+    Animated.spring(this.state.openVal, {toValue: 1, ...config}).start();
   }
 
   _pressButton = () => {
     this.title.clear();
     this.content.clear();
-    let { openVal, innerMarginTop } = this.props;
+
+    let { openVal, innerMarginTop } = this.state;
     let config = {tension: 30, friction: 7};
 
-      BackAndroid.clearAllListeners && BackAndroid.clearAllListeners();
-      BackAndroid.clearAllListeners && this.props.addDefaultBackAndroidListener();
+    this.removeListener && this.removeListener.remove  && this.removeListener.remove()
 
-    Animated.parallel([openVal,innerMarginTop].map((property,index) => {
-      if(index == 0){
-        return Animated.spring(property, {toValue: 0, ...config});
-      }else if(index == 1){
-        return Animated.spring(property, {toValue: 0, ...config});
-      }
-    })).start();
+    let value = this.state.innerMarginTop._value;
+    if (Math.abs(value) >= 50) {
+      Animated.spring(this.state.innerMarginTop, {toValue: 0, ...config}).start();
+      return;
+    }
+
+    this.props.navigator.pop();
+
+    // Animated.parallel([openVal,innerMarginTop].map((property,index) => {
+    //   if(index == 0){
+    //     return Animated.spring(property, {toValue: 0, ...config});
+    //   }else if(index == 1){
+    //     return Animated.spring(property, {toValue: 0, ...config});
+    //   }
+    // })).start(({finished})=>{
+    //   finished && this.props.navigator.pop();
+    // });
   }
 
+  componentWillUnmount = async () => {
+    let { openVal, innerMarginTop } = this.state;
+    let config = {tension: 30, friction: 7};
+    this.removeListener && this.removeListener.remove  && this.removeListener.remove();
+  }
 
   componentWillMount() {
+        this.removeListener = BackAndroid.addEventListener('hardwareBackPress',  () => {
+          let value = this.state.innerMarginTop._value;
+          if (Math.abs(value) >= 50) {
+            let config = {tension: 30, friction: 7};
+            Animated.spring(this.state.innerMarginTop, {toValue: 0, ...config}).start();
+            return true;
+          }else{
+            return false;
+          }
+        });
+
         this.panResponder = PanResponder.create({  
 
             onStartShouldSetPanResponderCapture: (e, gesture) =>{ 
@@ -94,13 +128,13 @@ class NewBattle extends Component {
             },
 
             onPanResponderGrant:(e, gesture) => {
-                this.props.innerMarginTop.setOffset(gesture.y0);
-                this.props.innerMarginTop.setValue(this.props.innerMarginTop._startingValue);
+                this.state.innerMarginTop.setOffset(gesture.y0);
+                this.state.innerMarginTop.setValue(this.state.innerMarginTop._startingValue);
             },
             onPanResponderMove: Animated.event([
               null,
               { 
-                  dy: this.props.innerMarginTop
+                  dy: this.state.innerMarginTop
               }
             ]), 
             
@@ -124,7 +158,7 @@ class NewBattle extends Component {
               let dy = gesture.dy;
               let vy = gesture.vy;
               
-              this.props.innerMarginTop.flattenOffset();
+              this.state.innerMarginTop.flattenOffset();
 
               let duration = 50; 
 
@@ -132,7 +166,7 @@ class NewBattle extends Component {
 
                 if(Math.abs(dy) <= CIRCLE_SIZE ){
 
-                  Animated.spring(this.props.innerMarginTop,{
+                  Animated.spring(this.state.innerMarginTop,{
                     toValue: SCREEN_HEIGHT- CIRCLE_SIZE,
                     duration,
                     easing: Easing.linear,
@@ -140,7 +174,7 @@ class NewBattle extends Component {
 
                 }else{
 
-                  Animated.spring(this.props.innerMarginTop,{
+                  Animated.spring(this.state.innerMarginTop,{
                     toValue: 0,
                     duration,
                     easing: Easing.linear,
@@ -152,7 +186,7 @@ class NewBattle extends Component {
 
                 if(Math.abs(dy) <= CIRCLE_SIZE){
 
-                  Animated.spring(this.props.innerMarginTop,{
+                  Animated.spring(this.state.innerMarginTop,{
                     toValue: 0,
                     duration,
                     easing: Easing.linear,
@@ -160,7 +194,7 @@ class NewBattle extends Component {
 
                 }else{
 
-                  Animated.spring(this.props.innerMarginTop,{
+                  Animated.spring(this.state.innerMarginTop,{
                     toValue: SCREEN_HEIGHT- CIRCLE_SIZE,
                     duration,
                     easing: Easing.linear,
@@ -175,21 +209,14 @@ class NewBattle extends Component {
   }
 
   render() {
-    let { openVal, marginTop } = this.props;
+    let { openVal, marginTop } = this.state;
 
-    this._reverseAnimatedValue = marginTop.interpolate({
-        inputRange: [-56, 0],
-        outputRange: [56, 0],
-        extrapolate: 'clamp'
-    });
-
-    let outerStyle = {
-        marginTop: Animated.add(this.props.innerMarginTop,this._reverseAnimatedValue).interpolate({
-          inputRange: [0, SCREEN_HEIGHT], 
-          outputRange: [0 ,SCREEN_HEIGHT]
-        }),
-    }
-
+    let outerStyle = { 
+      marginTop : this.state.innerMarginTop.interpolate({
+        inputRange: [0, SCREEN_HEIGHT], 
+        outputRange: [0 ,SCREEN_HEIGHT]
+      })
+    };
 
     let animatedStyle = {                              
         left: openVal.interpolate({inputRange: [0, 1], outputRange: [SCREEN_WIDTH - 56-16 , 0]}),
@@ -218,6 +245,7 @@ class NewBattle extends Component {
 
     return (
       <Animated.View 
+        ref={ref=>this.ref=ref}
         style={[
           styles.circle, styles.open, animatedStyle, outerStyle
         ]}
@@ -242,7 +270,7 @@ class NewBattle extends Component {
                 />
               </View>
             </TouchableNativeFeedback>
-            <Text style={{color: 'white', fontSize: 23, marginLeft:10, }}>{this.props.title}</Text>
+            <Text style={{color: 'white', fontSize: 23, marginLeft:10, }}>{title}</Text>
           </View>
 
         </Animated.View >
@@ -263,25 +291,6 @@ class NewBattle extends Component {
               placeholderTextColor={this.props.modeInfo.standardTextColor}
               underlineColorAndroid='rgba(0,0,0,0)'
             />
-          </AnimatedKeyboardAvoidingView >
-
-          <View style={{ height:1, opacity:0.5 ,backgroundColor: this.props.modeInfo.standardTextColor  }}/>
-
-          <AnimatedKeyboardAvoidingView behavior={'height'} style={[styles.isPublicView,
-            //{flex: openVal.interpolate({inputRange: [0, 1], outputRange: [0 , 1]}),}
-            ]}>
-            <Text style={[styles.mainFont,{color: this.props.modeInfo.standardTextColor,marginLeft:4}]}>权限 :</Text>
-            <Picker 
-              style={{ 
-                marginLeft:5, 
-                width: 140,
-                color:this.props.modeInfo.titleTextColor,
-              }}
-              selectedValue={this.state.isPublic}
-              onValueChange={(isPublic) => this.setState({isPublic: isPublic})}>
-              <Picker.Item label="完全开放" value="true" />
-              <Picker.Item label="仅自己可见" value="false" />
-            </Picker>
           </AnimatedKeyboardAvoidingView >
 
           <View style={{ height:1, opacity:0.5 ,backgroundColor: this.props.modeInfo.standardTextColor  }}/>
@@ -454,4 +463,4 @@ const styles = StyleSheet.create({
 });
 
 
-export default NewBattle
+export default NewTopic

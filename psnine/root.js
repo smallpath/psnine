@@ -131,11 +131,11 @@ class Root extends React.Component {
 					navigator={navigator} />
 	}
 	configureScene = (route) => {
-		// if(typeof route.withoutAnimation != 'undefined'){
-		// 	if(route.withoutAnimation == true){
-		// 		return CustomPushWithoutAnimation;
-		// 	}
-		// }
+		if(typeof route.withoutAnimation != 'undefined'){
+			if(route.withoutAnimation == true){
+				return CustomPushWithoutAnimation;
+			}
+		}
 		return CustomSceneConfig
 	}
 	render() {

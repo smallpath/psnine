@@ -16,7 +16,7 @@ let NoTransition = {
 const PushWithoutAnimation = {
     NONE: {
         ...Navigator.SceneConfigs.FadeAndroid,
-        defaultTransitionVelocity: 100000,
+        defaultTransitionVelocity: 999,
 
         animationInterpolators: {
             into: buildStyleInterpolator(NoTransition),

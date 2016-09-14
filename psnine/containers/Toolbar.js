@@ -383,66 +383,14 @@ class Toolbar extends Component {
 
   }
 
-  addDefaultBackAndroidListener = () =>{
-    const { navigator: _navigator } = this.props;
-    let backPressClickTimeStamp = 0;
-    BackAndroid.addEventListener('hardwareBackPress', function () {
-      if (_navigator && _navigator.getCurrentRoutes().length > 1) {
-
-        _navigator.pop();
-        return true;
-
-      }else{
-
-        let timestamp = new Date();
-
-        if(timestamp - backPressClickTimeStamp>2000){
-          backPressClickTimeStamp = timestamp;
-          ToastAndroid.show('再按一次退出程序',2000);
-          return true;
-        }else{
-          return false;
-        }
-
-      }
-    });
-  }
-
-  addSwitchBackListener = (AnimatedValue, MarginTopValue) =>{
-    let config = {tension: 30, friction: 7};
-
-    BackAndroid.addEventListener('hardwareBackPress', () => {
-      // if(AnimatedValue._value != 1)
-      //   return true;
-
-      Animated.parallel([AnimatedValue,MarginTopValue].map((property,index) => {
-          if(index == 0){
-            return Animated.spring(property, {toValue: 0, ...config});
-          }else if(index == 1){
-            return Animated.spring(property, {toValue: 0, ...config});
-          }
-      })).start(({ finished })=>{
-          if (!finished) return;
-
-          BackAndroid.clearAllListeners && BackAndroid.clearAllListeners();
-          BackAndroid.clearAllListeners && this.addDefaultBackAndroidListener();
-      });
-
-      return true;
-    });
-    
-  }
-
-  addEmptyBackListener = () =>{
-    BackAndroid.addEventListener('hardwareBackPress', () => true);
-  }
-
   pressNew = () => {
 
     const { segmentedIndex } = this.props.app;
 
-    if (segmentedIndex == 1 || segmentedIndex == 2)
+    if (segmentedIndex == 1 || segmentedIndex == 2){
+      console.log(`${segmentedIndex}`)
       return;
+    }
 
     const { navigator: _navigator } = this.props;
 
@@ -450,17 +398,11 @@ class Toolbar extends Component {
 
     switch (segmentedIndex) {
       case 0 : 
-        BackAndroid.clearAllListeners && BackAndroid.clearAllListeners();
-        BackAndroid.clearAllListeners && this.addSwitchBackListener(this.state.openTopicVal,this.state.innerTopicMarginTop);
 
-        setTimeout(() => {
-            Animated.spring(this.state.openTopicVal, {toValue: 1, ...config}).start(({ finished })=>{
-              if (!finished) return;
-
-              BackAndroid.clearAllListeners && BackAndroid.clearAllListeners();
-              BackAndroid.clearAllListeners && this.addSwitchBackListener(this.state.openTopicVal,this.state.innerTopicMarginTop);
-            });
-        }, 0);
+        _navigator.push({
+          component: NewTopic,
+          withoutAnimation: true
+        })
         
         break;
 
@@ -468,31 +410,19 @@ class Toolbar extends Component {
 
         break;
       case 3 : 
-        BackAndroid.clearAllListeners && BackAndroid.clearAllListeners();
-        BackAndroid.clearAllListeners && this.addSwitchBackListener(this.state.openBattleVal,this.state.innerBattleMarginTop);
 
-        setTimeout(() => {
-          Animated.spring(this.state.openBattleVal, {toValue: 1, ...config}).start(({ finished })=>{
-            if (!finished) return;
-
-            BackAndroid.clearAllListeners && BackAndroid.clearAllListeners();
-            BackAndroid.clearAllListeners && this.addSwitchBackListener(this.state.openBattleVal,this.state.innerBattleMarginTop);
-          });
-        }, 0);
+        _navigator.push({
+          component: NewBattle,
+          withoutAnimation: true
+        })
 
         break;
       case 4 : 
-        BackAndroid.clearAllListeners && BackAndroid.clearAllListeners();
-        BackAndroid.clearAllListeners && this.addSwitchBackListener(this.state.openGeneVal,this.state.innerGeneMarginTop);
 
-        setTimeout(() => {
-          Animated.spring(this.state.openGeneVal, {toValue: 1, ...config}).start(({ finished })=>{
-            if (!finished) return;
-
-            BackAndroid.clearAllListeners && BackAndroid.clearAllListeners();
-            BackAndroid.clearAllListeners && this.addSwitchBackListener(this.state.openGeneVal,this.state.innerGeneMarginTop);
-          });
-        }, 0);
+        _navigator.push({
+          component: NewGene,
+          withoutAnimation: true
+        })
 
         break;
         
@@ -522,9 +452,9 @@ class Toolbar extends Component {
           onIconClicked={this.props._callDrawer() }
           />
           {this._renderSegmentedView() }
-          <Animated.View 
+        <Animated.View 
             ref={float=>this.float=float}
-            collapsable ={true}
+            collapsable ={false}
             style={{
               width: 56,
               height: 56,
@@ -549,22 +479,20 @@ class Toolbar extends Component {
           
           <TouchableNativeFeedback 
             onPress={this.pressNew}
-            delayPressIn={0}
-            //activeOpacity={1}
-            //underlayColor={accentColor}
+            // delayPressIn={0}
             background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
-            // onPressIn={()=>{
-            //   this.float.setNativeProps({
-            //     style :{
-            //     elevation: 6,
-            //   }});
-            // }}
-            // onPressOut={()=>{
-            //   this.float.setNativeProps({
-            //     style :{
-            //     elevation: 12,
-            //   }});
-            // }}
+            onPressIn={()=>{
+              this.float.setNativeProps({
+                style :{
+                elevation: 12,
+              }});
+            }}
+            onPressOut={()=>{
+              this.float.setNativeProps({
+                style :{
+                elevation: 6,
+              }});
+            }}
             style={{
               width: 56,
               height: 56,
@@ -573,40 +501,18 @@ class Toolbar extends Component {
               zIndex: 1,
               backgroundColor: accentColor,
             }}>
-            <View style={{borderRadius: 30,}}>
+            <View style={{borderRadius: 30,flex:-1}}>
               <Image source={require('image!ic_add_white')}
                     style={{
                       left:0,
                       top:0,
+                      width: 56,
+                      height: 56,
                   }}
               />
             </View>
           </TouchableNativeFeedback>
-          </Animated.View>
-          <NewTopic 
-              addDefaultBackAndroidListener={this.addDefaultBackAndroidListener}
-              openVal={this.state.openTopicVal} 
-              marginTop={this.state.marginTop}
-              innerMarginTop={this.state.innerTopicMarginTop}
-              title={'创建讨论'}
-              {...{navigator:this.props.navigator, modeInfo:this.props.modeInfo }}
-          />
-          <NewBattle 
-              addDefaultBackAndroidListener={this.addDefaultBackAndroidListener}
-              openVal={this.state.openBattleVal} 
-              marginTop={this.state.marginTop}
-              innerMarginTop={this.state.innerBattleMarginTop}
-              title={'创建约战'}
-              {...{navigator:this.props.navigator, modeInfo:this.props.modeInfo }}
-          />
-          <NewGene
-              addDefaultBackAndroidListener={this.addDefaultBackAndroidListener} 
-              openVal={this.state.openGeneVal} 
-              marginTop={this.state.marginTop}
-              innerMarginTop={this.state.innerGeneMarginTop}
-              title={'创建基因'}
-              {...{navigator:this.props.navigator, modeInfo:this.props.modeInfo }}
-          />
+        </Animated.View>
       </Animated.View>
     )
   }
