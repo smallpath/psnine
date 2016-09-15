@@ -28,7 +28,7 @@ import App from './containers/App.js'
 
 import moment from './utils/moment';
 
-import Login from './containers/authPagers/Login'
+import About from './components/About'
 
 const store = configureStore();
 

@@ -30,6 +30,7 @@ import GeneTopic from '../components/GeneTopic';
 import HappyPlusOne from '../components/HappyPlusOne';
 import Store from '../components/Store';
 import Rank from '../components/Rank';
+import About from '../components/About';
 
 import Login from './authPagers/Login';
 import Message from './authPagers/Message';
@@ -447,6 +448,18 @@ class NavigatorDrawer extends Component {
               }
             });
             break;
+        case 7:
+
+            break;
+        case 8:
+            navigator.push({
+              component: About,
+              params: {
+
+              }
+            });
+            break;
+
       }
 
     }
@@ -460,7 +473,7 @@ class NavigatorDrawer extends Component {
           <View 
             style={{backgroundColor: 'rgba(0,0,0,0.1)', height: 1, }}
           />
-          <TouchableNativeFeedback>
+          <View>
             <View style={[styles.themeItem,{
               padding: 6, paddingLeft: 10,backgroundColor: this.props.modeInfo.brighterLevelOne
             }]}>
@@ -468,7 +481,7 @@ class NavigatorDrawer extends Component {
                 {rowData}
               </Text>
             </View>
-          </TouchableNativeFeedback>
+          </View>
         </View>
       )
     }
@@ -494,46 +507,6 @@ class NavigatorDrawer extends Component {
     );
   }
 
-  renderFooter = () =>{
-    rowData = ["设置","关于"];
-    icon = [settingIcon, aboutIcon];
-    return (
-      <View >
-        <View 
-          style={{backgroundColor: 'rgba(0,0,0,0.1)', height: 1}}
-        />
-        <TouchableNativeFeedback>
-          <View style={[styles.themeItem,{
-            padding: 6, paddingLeft: 10,backgroundColor: this.props.modeInfo.brighterLevelOne
-          }]}>
-            <Text style={[styles.themeName,{ fontSize:13 ,color: this.props.modeInfo.standardTextColor}]}>
-              {'系统选项'}
-            </Text>
-          </View>
-        </TouchableNativeFeedback>
-        <TouchableNativeFeedback>
-          <View style={[styles.themeItem,{
-            padding: 6,backgroundColor: this.props.modeInfo.brighterLevelOne
-          }]}>
-            <Image source={icon[0]} style={styles.themeIndicate}/>
-            <Text style={[styles.themeName,{color: this.props.modeInfo.titleTextColor}]}>
-              {rowData[0]}
-            </Text>
-          </View>
-        </TouchableNativeFeedback>
-        <TouchableNativeFeedback>
-          <View style={[styles.themeItem,{
-            padding: 6,backgroundColor: this.props.modeInfo.brighterLevelOne
-          }]}>
-            <Image source={icon[1]} style={styles.themeIndicate}/>
-            <Text style={[styles.themeName,{color: this.props.modeInfo.titleTextColor}]}>
-              {rowData[1]}
-            </Text>
-          </View>
-        </TouchableNativeFeedback>
-      </View>
-    )
-  }
 
   render = () => {
     // console.log('NavigatorDrawer.js rendered');
@@ -551,8 +524,6 @@ class NavigatorDrawer extends Component {
           keyboardDismissMode="on-drag"
           keyboardShouldPersistTaps={true}
           renderHeader={this.renderHeader}
-          // renderFooter={this.renderFooter}
-          // renderSeparator={this.renderSeparator}
           style={{flex:1, backgroundColor: this.props.modeInfo.brighterLevelOne}}
         />
       </View>
