@@ -281,12 +281,16 @@ class SegmentedView extends Component {
                     <View  style={styles.titleContainer}>
                         {items}
                     </View>
-                    <View style={[styles.barContainer,{backgroundColor: this.props.modeInfo.standardColor,}]}>
+                    <View 
+                        // onLayout={({nativeEvent})=>{
+                        //     console.log(nativeEvent.layout)
+                        // }}
+                        style={[styles.barContainer,{backgroundColor: this.props.modeInfo.standardColor,}]}>
                         <Animated.View  
                             style={[
                                 { left: this.state.fadeAnim}, 
                                 { width: this.props.titleWidth-this.props.restWidth*2},
-                                { height:4,backgroundColor: '#fff',}
+                                { marginTop:0.5, height:4,backgroundColor: this.props.modeInfo.backgroundColor,}
                             ]}> 
                         </Animated.View>
                     </View>

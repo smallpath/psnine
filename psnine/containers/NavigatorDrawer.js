@@ -40,22 +40,24 @@ import { safeLogout } from '../dao/logout';
 import { safeSignOn } from '../dao/signon';
 import { fetchUser } from '../dao/userParser';
 
-let settingIcon = require('image!ic_setting_blue');
-
 let signIcon = require('image!ic_assignment_blue');
 
-let imageArr = [
+let imageSrc = [
   require('image!home'),
   require('image!ic_game_blue'),
-  require('image!ic_message_blue'),
   require('image!ic_rank_blue'),
   require('image!ic_plus_blue'),
   require('image!ic_store_blue'),
   require('image!ic_business_blue'),
+  '',
+  require('image!ic_setting_blue'),
+  require('image!ic_about_blue'),
 ];
 
+let imageArr = imageSrc.slice(0);
+
 let items = [
-              "个人中心","我的游戏","我的消息","排行","游惠","Store","闲游",
+              "个人中心","我的游戏","排行","游惠","Store","闲游","系统选项","设置","关于"
 ];
 
 class NavigatorDrawer extends Component {
@@ -169,6 +171,7 @@ class NavigatorDrawer extends Component {
   }
 
   renderHeader = () => {
+      const { navigator, closeDrawer, switchModeOnRoot} = this.props;
       //let avatar = 
       let toolActions = [];
       let Touchable = TouchableWithoutFeedback;
@@ -245,6 +248,31 @@ class NavigatorDrawer extends Component {
                   style={{width: 30, height: 30}} />
                 <Text style={styles.menuText}>
                   帖子
+                </Text>
+              </View>
+            </Touchable>
+            <Touchable
+              onPress={()=>{
+                if(this.state.psnid == ''){
+                  return;
+                }
+
+                closeDrawer();
+                  
+                navigator.push({
+                  component: Message,
+                  params: {
+                    psnid: this.state.psnid,
+                  }
+                });
+              }}
+              >
+              <View style={styles.menuContainer}>
+              <Image
+                source={require('image!ic_message_white_small')}
+                style={{width: 30, height: 30,}} />
+                <Text style={styles.menuText}>
+                  消息
                 </Text>
               </View>
             </Touchable>
@@ -341,7 +369,7 @@ class NavigatorDrawer extends Component {
     let URL;
     if(sectionID == 's1'){
       let index = parseInt(rowID);
-      index = this.state.psnid == '' ? index +3 : index;
+      index = this.state.psnid == '' ? index +2 : index;
       switch (index) {
         case 0:
             if(this.state.psnid == ''){
@@ -376,19 +404,6 @@ class NavigatorDrawer extends Component {
             });
             break;
         case 2:
-            if(this.state.psnid == ''){
-              ToastAndroid.show('未登录',2000);
-              return;
-            }
-              
-            navigator.push({
-              component: Message,
-              params: {
-                psnid: this.state.psnid,
-              }
-            });
-            break;
-        case 3:
             URL = getRankURL();
 
             navigator.push({
@@ -400,7 +415,7 @@ class NavigatorDrawer extends Component {
             });
             break;
 
-        case 4:
+        case 3:
             URL = getHappyPlusOneURL();
 
             navigator.push({
@@ -411,7 +426,7 @@ class NavigatorDrawer extends Component {
               }
             });
             break;
-        case 5:
+        case 4:
             URL = getStoreURL();
             navigator.push({
               component: Store,
@@ -421,7 +436,7 @@ class NavigatorDrawer extends Component {
               }
             });
             break;
-        case 6:
+        case 5:
             URL = getDealURL();
             //URL = 'http://120.55.124.66/user/smallpath';
             navigator.push({
@@ -439,12 +454,25 @@ class NavigatorDrawer extends Component {
 
   renderRow = (rowData, sectionID, rowID, highlightRow) => {
     let icon = imageArr[rowID];
-    // if(this.state.psnid == ''){
-    //   console.log(this.state.psnid, typeof this.state.psnid,rowID, typeof rowID);
-    //   if([0,1,2].indexOf(parseInt(rowID)) != -1){
-    //     return null;
-    //   }
-    // }
+    if ( this.state.psnid == '' &&  rowID == 4  || this.state.psnid != '' && rowID == 6){
+      return (
+        <View style={{marginTop: 6}}>
+          <View 
+            style={{backgroundColor: 'rgba(0,0,0,0.1)', height: 1, }}
+          />
+          <TouchableNativeFeedback>
+            <View style={[styles.themeItem,{
+              padding: 6, paddingLeft: 10,backgroundColor: this.props.modeInfo.brighterLevelOne
+            }]}>
+              <Text style={[styles.themeName,{ fontSize:13 ,color: this.props.modeInfo.standardTextColor}]}>
+                {rowData}
+              </Text>
+            </View>
+          </TouchableNativeFeedback>
+        </View>
+      )
+    }
+
     return (
       <View>
         <TouchableNativeFeedback
@@ -457,7 +485,7 @@ class NavigatorDrawer extends Component {
             backgroundColor: this.props.modeInfo.brighterLevelOne
           }]}>
             <Image source={icon} style={styles.themeIndicate}/>
-            <Text style={[styles.themeName,{color: this.props.modeInfo.standardTextColor}]}>
+            <Text style={[styles.themeName,{color: this.props.modeInfo.titleTextColor}]}>
               {rowData}
             </Text>
           </View>
@@ -467,20 +495,39 @@ class NavigatorDrawer extends Component {
   }
 
   renderFooter = () =>{
-    rowData = "设置";
-    icon = settingIcon;
+    rowData = ["设置","关于"];
+    icon = [settingIcon, aboutIcon];
     return (
       <View >
-        {/*<View 
+        <View 
           style={{backgroundColor: 'rgba(0,0,0,0.1)', height: 1}}
-        />*/}
+        />
         <TouchableNativeFeedback>
           <View style={[styles.themeItem,{
-            padding: 10,backgroundColor: this.props.modeInfo.brighterLevelOne
+            padding: 6, paddingLeft: 10,backgroundColor: this.props.modeInfo.brighterLevelOne
           }]}>
-            <Image source={icon} style={styles.themeIndicate}/>
-            <Text style={[styles.themeName,{color: this.props.modeInfo.standardTextColor}]}>
-              {rowData}
+            <Text style={[styles.themeName,{ fontSize:13 ,color: this.props.modeInfo.standardTextColor}]}>
+              {'系统选项'}
+            </Text>
+          </View>
+        </TouchableNativeFeedback>
+        <TouchableNativeFeedback>
+          <View style={[styles.themeItem,{
+            padding: 6,backgroundColor: this.props.modeInfo.brighterLevelOne
+          }]}>
+            <Image source={icon[0]} style={styles.themeIndicate}/>
+            <Text style={[styles.themeName,{color: this.props.modeInfo.titleTextColor}]}>
+              {rowData[0]}
+            </Text>
+          </View>
+        </TouchableNativeFeedback>
+        <TouchableNativeFeedback>
+          <View style={[styles.themeItem,{
+            padding: 6,backgroundColor: this.props.modeInfo.brighterLevelOne
+          }]}>
+            <Image source={icon[1]} style={styles.themeIndicate}/>
+            <Text style={[styles.themeName,{color: this.props.modeInfo.titleTextColor}]}>
+              {rowData[1]}
             </Text>
           </View>
         </TouchableNativeFeedback>
@@ -490,16 +537,21 @@ class NavigatorDrawer extends Component {
 
   render = () => {
     // console.log('NavigatorDrawer.js rendered');
+    if (this.state.psnid == ''){
+      imageArr = imageSrc.slice(2);
+    }else{
+      imageArr = imageSrc.slice(0);
+    }
     return (
       <View style={styles.container} {...this.props}>
         <ListView
           ref="themeslistview"
-          dataSource={this.state.psnid != '' ? this.state.dataSource : this.state.dataSource.cloneWithRows(items.slice(3))}
+          dataSource={this.state.psnid != '' ? this.state.dataSource : this.state.dataSource.cloneWithRows(items.slice(2))}
           renderRow={this.renderRow}
           keyboardDismissMode="on-drag"
           keyboardShouldPersistTaps={true}
           renderHeader={this.renderHeader}
-          renderFooter={this.renderFooter}
+          // renderFooter={this.renderFooter}
           // renderSeparator={this.renderSeparator}
           style={{flex:1, backgroundColor: this.props.modeInfo.brighterLevelOne}}
         />
@@ -528,6 +580,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'space-around',
     marginLeft: 25,
     marginTop: -60,
   },
@@ -535,7 +588,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-around',
-    marginLeft: 12,
+    //marginLeft: 8,
     paddingTop: -10,
   },
   menuContainer: {
@@ -557,7 +610,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    padding: 8,
+    padding: 6,
   },
   themeName: {
     flex: 1,

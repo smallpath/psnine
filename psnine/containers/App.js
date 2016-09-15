@@ -23,7 +23,7 @@ import { standardColor } from '../config/colorConfig';
 
 
 let DRAWER_REF = 'drawer';
-let DRAWER_WIDTH_LEFT = 110;
+let DRAWER_WIDTH_LEFT = 90;
 
 class Psnine extends Component {
   constructor(props){

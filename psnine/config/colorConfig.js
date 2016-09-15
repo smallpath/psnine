@@ -5,7 +5,7 @@ let config =  {
     backgroundColor: '#fff',
     backgroundColorBrighterLevelOne: '#fff',
     standardTextColor: '#757575',
-    titleTextColor: '#000',
+    titleTextColor: '#202020',
 
     nightDeepColor: '#01579b',       //700
     nightStandardColor: '#0288d1',   //500
