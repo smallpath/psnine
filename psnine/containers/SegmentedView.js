@@ -305,15 +305,15 @@ class SegmentedView extends Component {
                 onPageScrollStateChanged={this.onPageScrollStateChanged}
                 onPageScroll={this.onPageScroll}
                 >
-                <View key={'s000'} style={{flex:1}}>
+                {/*<View key={'s000'} style={{flex:1}}>
                     <Text style={{flex:1,textAlign : 'center', textAlignVertical: 'center'}} >Middle</Text>
                 </View> 
                 <View key={'s001'}></View> 
                 <View key={'s002'}></View> 
                 <View key={'s003'}></View> 
-                <View key={'s004'}></View> 
+                <View key={'s004'}></View> */}
                   
-                    {/*<View key={`s00`}>
+                    <View key={`s00`}>
                         <Community 
                             index={0} 
                             ref={community=>this.community=community}
@@ -361,7 +361,7 @@ class SegmentedView extends Component {
                               }
                             } 
                         />
-                    </View>*/}
+                    </View>
                    
                 </ViewPagerAndroid>
             </View>

@@ -144,7 +144,7 @@ class Root extends React.Component {
 				 <View> 
 				 	<StatusBar translucent={false} backgroundColor={this.state.isNightMode ? nightDeepColor: deepColor} barStyle="light-content" />
 					<Navigator
-						initialRoute={{ component: App,  }}
+						initialRoute={{ component: App, shouldBeClickableUnderOtherRoutes: true  }}
 						configureScene={ this.configureScene }
 						renderScene={this.renderScene } 
 						style={{width:SCREEN_WIDTH, height:SCREEN_HEIGHT-StatusBar.currentHeight}}/>
