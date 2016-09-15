@@ -67,6 +67,7 @@ class NewTopic extends Component {
 
   componentDidMount = () => {
     let config = {tension: 30, friction: 7};
+    // Animated.timing(this.state.openVal, {toValue: 1, duration: 2000 ,...config}).start();
     Animated.spring(this.state.openVal, {toValue: 1, ...config}).start();
   }
 
@@ -361,7 +362,11 @@ class NewTopic extends Component {
                 </View>
 
               </Animated.View>
-              <View style={{elevation: 4, bottom:0, height: 100, backgroundColor: this.props.modeInfo.standardColor }} />
+              <Animated.View style={{
+                elevation: 4, bottom:0,  backgroundColor: this.props.modeInfo.standardColor,
+                height: 100,
+                opacity: openVal.interpolate({inputRange: [0, 0.9  ,1], outputRange: [0, 0, 1]}),
+             }} />
           </AnimatedKeyboardAvoidingView>
 
         </Animated.View>

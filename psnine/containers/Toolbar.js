@@ -388,11 +388,20 @@ class Toolbar extends Component {
     const { segmentedIndex } = this.props.app;
 
     if (segmentedIndex == 1 || segmentedIndex == 2){
-      console.log(`${segmentedIndex}`)
       return;
     }
 
     const { navigator: _navigator } = this.props;
+
+    let routes = _navigator.getCurrentRoutes();
+
+    let shouldForbidPressNew = routes.some(value=>{
+      return typeof value.shouldForbidPressNew !='undefined' && value.shouldForbidPressNew == true; 
+    });
+
+    if (shouldForbidPressNew==true){
+      return;
+    }
 
     let config = {tension: 30, friction: 7};
 
@@ -401,7 +410,8 @@ class Toolbar extends Component {
 
         _navigator.push({
           component: NewTopic,
-          withoutAnimation: true
+          withoutAnimation: true,
+          shouldForbidPressNew: true,
         })
         
         break;
@@ -413,7 +423,8 @@ class Toolbar extends Component {
 
         _navigator.push({
           component: NewBattle,
-          withoutAnimation: true
+          withoutAnimation: true,
+          shouldForbidPressNew: true,
         })
 
         break;
@@ -421,7 +432,8 @@ class Toolbar extends Component {
 
         _navigator.push({
           component: NewGene,
-          withoutAnimation: true
+          withoutAnimation: true,
+          shouldForbidPressNew: true,
         })
 
         break;
