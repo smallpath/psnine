@@ -78,8 +78,6 @@ class NewTopic extends Component {
     let { openVal, innerMarginTop } = this.state;
     let config = {tension: 30, friction: 7};
 
-    this.removeListener && this.removeListener.remove  && this.removeListener.remove()
-
     let value = this.state.innerMarginTop._value;
     if (Math.abs(value) >= 50) {
       Animated.spring(this.state.innerMarginTop, {toValue: 0, ...config}).start();
