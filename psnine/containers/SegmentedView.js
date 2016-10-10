@@ -167,6 +167,10 @@ class SegmentedView extends Component {
 
     }
 
+    onSegmentedViewChange = (segmentedIndex) =>{
+        this.viewPage.setPage(segmentedIndex); 
+    }
+
     _renderTitle(title, i) {
         return (
             <View style={[styles.title, {backgroundColor: this.props.modeInfo.standardColor,}]}>
@@ -178,13 +182,13 @@ class SegmentedView extends Component {
     renderTitle(title, i) {
         return (
             <View collapsable={false} key={i} ref={i} style={{ flex: this.props.stretch ? 1 : 0 }}>
-                <TouchableWithoutFeedback 
+                <TouchableNativeFeedback 
                     delayPressIn={0}
-                    delayPressOut={0}
+                    onPress={()=>this.onSegmentedViewChange(i)}
                     underlayColor={this.props.underlayColor} 
                     >
                     {this.props.renderTitle ? this.props.renderTitle(title, i) : this._renderTitle(title, i)}
-                </TouchableWithoutFeedback>
+                </TouchableNativeFeedback>
             </View>
         );
     }
@@ -263,7 +267,7 @@ class SegmentedView extends Component {
                 items.push(<View key={`s${i}`} style={styles.spacer} />);
             }
         }
-                //{...this.props.moveUpResponders.panHandlers}
+                //{...this.panResponder.panHandlers}
         return (
             <View 
                 style={{height: thisScreenHeightWitoutStatusBar }}
@@ -272,7 +276,7 @@ class SegmentedView extends Component {
                 <View
                     {...{navigator:this.props.navigator}} 
 
-                    {...this.panResponder.panHandlers} style={[styles.container, this.props.style, {
+                    style={[styles.container, this.props.style, {
                         elevation: 4,
                         height: segmentedHeight,
                     }]}>
