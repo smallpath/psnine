@@ -2,9 +2,9 @@
 Android App for [P9](http://psnine.com/) written by React Native
 
 # Sceenshot
-![alt](https://smallpath.me/static/upload/201609/ZPwgVS32uWok0h4NuZfFlVPe.gif)
+![alt](https://oebegwmfv.qnssl.com/static/upload/201609/ZPwgVS32uWok0h4NuZfFlVPe.gif)
 
-![alt](https://smallpath.me/static/upload/201609/uxCsfQYGiwVrkpH6fMxxNm2D.gif)
+![alt](https://oebegwmfv.qnssl.com/static/upload/201609/uxCsfQYGiwVrkpH6fMxxNm2D.gif)
 
 ## TODO
 - [x] 社区
