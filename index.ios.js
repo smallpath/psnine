@@ -12,7 +12,7 @@ import {
   View
 } from 'react-native';
 
-class Psnine extends Component {
+export default class Psnine extends Component {
   render() {
     return (
       <View style={styles.container}>

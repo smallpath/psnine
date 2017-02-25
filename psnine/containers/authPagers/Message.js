@@ -155,8 +155,8 @@ class Message extends Component {
             onMoveShouldSetResponder={() => false}
             >
               <ToolbarAndroid
-                navIcon={require('image!ic_back_white')}
-                overflowIcon={require('image!ic_more_white')}
+                navIcon={require('../../img/ic_back_white.png')}
+                overflowIcon={require('../../img/ic_more_white.png')}
                 title={'我的消息'}
                 style={[styles.toolbar, {backgroundColor: this.props.modeInfo.standardColor,}]}
                 actions={toolbarActions}

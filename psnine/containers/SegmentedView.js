@@ -51,8 +51,8 @@ let styles = StyleSheet.create({
         flex: 1,
         backgroundColor: standardColor,
         alignItems: 'center',
-        paddingHorizontal: 2,
-        paddingVertical: 8,
+        justifyContent: 'space-around',
+        paddingVertical: 16
     },
     spacer: {
         flex: 1,
@@ -173,8 +173,17 @@ class SegmentedView extends Component {
 
     _renderTitle(title, i) {
         return (
-            <View style={[styles.title, {backgroundColor: this.props.modeInfo.standardColor,}]}>
-                <Text style={[this.props.titleStyle, i === this.props.index && this.props.selectedTitleStyle]}>{title}</Text>
+            <View style={[styles.title, {
+                backgroundColor: this.props.modeInfo.standardColor, 
+                flexDirection: 'row'
+              }]
+            }>
+                <Text style={[this.props.titleStyle, { 
+                    flex:1, 
+                    height: 30,
+                    textAlign: 'center',
+                    lineHeight: 25
+                }]}>{title}</Text>
             </View>
         );
     }
@@ -322,8 +331,18 @@ class SegmentedView extends Component {
                 <View key={'s004'}></View> */}
                   
                     <View key={`s00`}>
-                        <Community 
+                        <Qa 
                             index={0} 
+                            ref={qa=>this.qa=qa}
+                            {...{navigator:this.props.navigator,modeInfo:this.props.modeInfo,}} 
+                            URL={'http://psnine.com/qa'}
+                        />
+
+                    </View>
+                     
+                    <View key={`s11`}>
+                        <Community 
+                            index={1} 
                             ref={community=>this.community=community}
                             {...{
                                 navigator:this.props.navigator, 
@@ -331,15 +350,6 @@ class SegmentedView extends Component {
                                 modeInfo:this.props.modeInfo,
                               }
                             } 
-                        />
-                    </View>
-                     
-                    <View key={`s11`}>
-                        <Qa 
-                            index={1} 
-                            ref={qa=>this.qa=qa}
-                            {...{navigator:this.props.navigator,modeInfo:this.props.modeInfo,}} 
-                            URL={'http://psnine.com/qa'}
                         />
                     </View>
                     <View key={`s22`}>

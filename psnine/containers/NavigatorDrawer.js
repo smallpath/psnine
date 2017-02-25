@@ -41,18 +41,18 @@ import { safeLogout } from '../dao/logout';
 import { safeSignOn } from '../dao/signon';
 import { fetchUser } from '../dao/userParser';
 
-let signIcon = require('image!ic_assignment_blue');
+let signIcon = require('../img/ic_assignment_blue.png');
 
 let imageSrc = [
-  require('image!home'),
-  require('image!ic_game_blue'),
-  require('image!ic_rank_blue'),
-  require('image!ic_plus_blue'),
-  require('image!ic_store_blue'),
-  require('image!ic_business_blue'),
+  require('../img/home.png'),
+  require('../img/ic_game_blue.png'),
+  require('../img/ic_rank_blue.png'),
+  require('../img/ic_plus_blue.png'),
+  require('../img/ic_store_blue.png'),
+  require('../img/ic_business_blue.png'),
   '',
-  require('image!ic_setting_blue'),
-  require('image!ic_about_blue'),
+  require('../img/ic_setting_blue.png'),
+  require('../img/ic_about_blue.png'),
 ];
 
 let imageArr = imageSrc.slice(0);
@@ -70,7 +70,7 @@ class NavigatorDrawer extends Component {
       this.state = {
           psnid: '',
           userInfo : {
-            avatar: require('image!comment_avatar'),
+            avatar: require('../img/comment_avatar.png'),
             platinum: '白',
             gold: '金',
             silver: '银',
@@ -137,7 +137,7 @@ class NavigatorDrawer extends Component {
     this.setState({
       psnid:'',          
       userInfo : {
-        avatar: require('image!comment_avatar'),
+        avatar: require('../img/comment_avatar.png'),
         platinum: '白',
         gold: '金',
         silver: '银',
@@ -186,7 +186,7 @@ class NavigatorDrawer extends Component {
                           justifyContent: 'center',
                           marginLeft: this.state.psnid == '' ? 90 : this.state.userInfo.isSigned ? 55 : 20,
                         }}>
-                          <Image source={require('image!ic_assignment_white')}            
+                          <Image source={require('../img/ic_assignment_white.png')}            
                                   style={{width: 20, height: 20}} />
                           <Text style={[styles.menuText,{marginTop:5}]}>
                             {this.props.modeInfo.isNightMode ? '日间' : '夜间'}
@@ -202,7 +202,7 @@ class NavigatorDrawer extends Component {
             <TouchableNativeFeedback>
               <View style={styles.menuContainer}>
               {/*<Image
-                  source={require('image!ic_favorites_white')}
+                  source={require('../img/ic_favorites_white.png')}
                   style={{width: 30, height: 30}} />*/}
                 <Text style={styles.platinum}>
                   {this.state.userInfo.platinum}
@@ -212,7 +212,7 @@ class NavigatorDrawer extends Component {
             <TouchableNativeFeedback>
               <View style={styles.menuContainer}>
               {/*<Image
-                source={require('image!ic_download_white')}
+                source={require('../img/ic_download_white.png')}
                 style={{width: 30, height: 30}} /> */}
                 <Text style={styles.gold}>
                   {this.state.userInfo.gold}
@@ -222,7 +222,7 @@ class NavigatorDrawer extends Component {
             <TouchableNativeFeedback>
               <View style={styles.menuContainer}>
               {/*<Image
-                source={require('image!ic_download_white')}
+                source={require('../img/ic_download_white.png')}
                 style={{width: 30, height: 30}} />*/}
                 <Text style={styles.silver}>
                   {this.state.userInfo.silver}
@@ -232,7 +232,7 @@ class NavigatorDrawer extends Component {
             <TouchableNativeFeedback>
               <View style={styles.menuContainer}>
               {/*<Image
-                source={require('image!ic_download_white')}
+                source={require('../img/ic_download_white.png')}
                 style={{width: 30, height: 30}} />*/}
                 <Text style={styles.bronze}>
                   {this.state.userInfo.bronze}
@@ -245,7 +245,7 @@ class NavigatorDrawer extends Component {
             <Touchable>
               <View style={styles.menuContainer}>
                 <Image
-                  source={require('image!ic_favorites_white')}
+                  source={require('../img/ic_favorites_white.png')}
                   style={{width: 30, height: 30}} />
                 <Text style={styles.menuText}>
                   帖子
@@ -270,7 +270,7 @@ class NavigatorDrawer extends Component {
               >
               <View style={styles.menuContainer}>
               <Image
-                source={require('image!ic_message_white_small')}
+                source={require('../img/ic_message_white_small.png')}
                 style={{width: 30, height: 30,}} />
                 <Text style={styles.menuText}>
                   消息
@@ -280,7 +280,7 @@ class NavigatorDrawer extends Component {
             <Touchable>
               <View style={styles.menuContainer}>
               <Image
-                source={require('image!ic_download_white')}
+                source={require('../img/ic_download_white.png')}
                 style={{width: 30, height: 30}} />
                 <Text style={styles.menuText}>
                   关注
@@ -290,7 +290,7 @@ class NavigatorDrawer extends Component {
             <Touchable>
               <View style={styles.menuContainer}>
               <Image
-                source={require('image!ic_download_white')}
+                source={require('../img/ic_download_white.png')}
                 style={{width: 30, height: 30}} />
                 <Text style={styles.menuText}>
                   收藏
@@ -306,7 +306,7 @@ class NavigatorDrawer extends Component {
                             onPress={this.pressSign}
                             >
                             <View style={{flexDirection: 'column',  justifyContent: 'center',marginLeft: 20}}>
-                              <Image source={require('image!ic_assignment_white')}            
+                              <Image source={require('../img/ic_assignment_white.png')}            
                                       style={{width: 20, height: 20}} />
                               <Text style={[styles.menuText,{marginTop:5}]}>
                                 签到
@@ -322,7 +322,7 @@ class NavigatorDrawer extends Component {
                     // onHideUnderlay={highlightRowFunc}
                     >
                     <View style={{flexDirection: 'column',  justifyContent: 'center',marginLeft: 20}}>
-                      <Image source={require('image!ic_exit_white')}            
+                      <Image source={require('../img/ic_exit_white.png')}            
                               style={{width: 20, height: 20}} />
                       <Text style={[styles.menuText,{marginTop:5}]}>
                         退出
@@ -522,7 +522,7 @@ class NavigatorDrawer extends Component {
           dataSource={this.state.psnid != '' ? this.state.dataSource : this.state.dataSource.cloneWithRows(items.slice(2))}
           renderRow={this.renderRow}
           keyboardDismissMode="on-drag"
-          keyboardShouldPersistTaps={true}
+          keyboardShouldPersistTaps="always"
           renderHeader={this.renderHeader}
           style={{flex:1, backgroundColor: this.props.modeInfo.brighterLevelOne}}
         />

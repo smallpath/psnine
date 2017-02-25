@@ -141,7 +141,7 @@ class Root extends React.Component {
 	render() {
 		return (
 			<Provider store={ store }>
-				 <View> 
+				 <View style={{flex:1}}> 
 				 	<StatusBar translucent={false} backgroundColor={this.state.isNightMode ? nightDeepColor: deepColor} barStyle="light-content" />
 					<Navigator
 						initialRoute={{ component: App, shouldBeClickableUnderOtherRoutes: true  }}

@@ -226,7 +226,7 @@ class Login extends Component {
             backgroundColor: accentColor,
           }}>
           <View style={{borderRadius: 30,}}>
-            <Image source={require('image!ic_add_white')}
+            <Image source={require('../../img/ic_add_white.png')}
                   style={{
                     left:0,
                     top:0,

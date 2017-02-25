@@ -22,7 +22,7 @@ import { connect } from 'react-redux';
 import { standardColor } from '../../config/colorConfig';
 
 let WEBVIEW_REF = `WEBVIEW_REF_GAME`;
-let back_image = require('image!ic_back_blue');
+let back_image = require('../../img/ic_back_blue.png');
 let imageSize = 48;
 
 class Game extends Component {

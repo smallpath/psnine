@@ -260,7 +260,7 @@ class NewTopic extends Component {
               >
               <View style={{ width: 50, height:50, marginLeft:0, borderRadius: 25}}>
                 <Image 
-                  source={require('image!ic_back_white_smaller')}
+                  source={require('../../img/ic_back_white_smaller.png')}
                   style={{ width: 50, height:50, }}
                 />
               </View>
@@ -325,7 +325,7 @@ class NewTopic extends Component {
                       >
                       <View style={{ width: 50, height:50, marginLeft:0, borderRadius: 25,}}>
                         <Image 
-                          source={require('image!ic_insert_emoticon_white')}
+                          source={require('../../img/ic_insert_emoticon_white.png')}
                           style={{ width: 50, height:50 }}
                         />
                       </View>
@@ -338,7 +338,7 @@ class NewTopic extends Component {
                       >
                       <View style={{ width: 50, height:50, marginLeft:0, borderRadius: 25,}}>
                         <Image 
-                          source={require('image!ic_insert_photo_white')}
+                          source={require('../../img/ic_insert_photo_white.png')}
                           style={{ width: 50, height:50 }}
                         />
                       </View>
@@ -352,7 +352,7 @@ class NewTopic extends Component {
                     >
                     <View style={{ width: 50, height:50, marginLeft:0, borderRadius: 25,}}>
                       <Image 
-                        source={require('image!ic_send_white')}
+                        source={require('../../img/ic_send_white.png')}
                         style={{ width: 50, height:50 }}
                       />
                     </View>

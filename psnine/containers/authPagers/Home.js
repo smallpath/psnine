@@ -23,9 +23,9 @@ import { connect } from 'react-redux';
 import { standardColor } from '../../config/colorConfig';
 
 let toolbarActions = [
-  {title: '关注', icon: require('image!ic_collect_white') ,show: 'always'},
-  {title: '感谢', icon: require('image!ic_refresh_white'), show: 'always'},
-  {title: '同步', icon: require('image!ic_refresh_white'), show: 'always'},
+  {title: '关注', icon: require('../../img/ic_collect_white.png') ,show: 'always'},
+  {title: '感谢', icon: require('../../img/ic_refresh_white.png'), show: 'always'},
+  {title: '同步', icon: require('../../img/ic_refresh_white.png'), show: 'always'},
   {title: '分享', show: 'never' },
 ];
 let title = "TOPIC";
@@ -83,8 +83,8 @@ class Home extends Component {
     return ( 
           <View style={{flex:1}}>
               <ToolbarAndroid
-                navIcon={require('image!ic_back_white')}
-                overflowIcon={require('image!ic_more_white')}
+                navIcon={require('../../img/ic_back_white.png')}
+                overflowIcon={require('../../img/ic_more_white.png')}
                 title={this.props.title}
                 style={styles.toolbar}
                 actions={toolbarActions}

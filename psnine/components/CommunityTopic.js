@@ -23,8 +23,8 @@ import { connect } from 'react-redux';
 import { standardColor } from '../config/colorConfig';
 
 let toolbarActions = [
-  {title: '收藏', icon: require('image!ic_collect_white') ,show: 'always'},
-  {title: '刷新', icon: require('image!ic_refresh_white'), show: 'always'},
+  {title: '收藏', icon: require('../img/ic_collect_white.png') ,show: 'always'},
+  {title: '刷新', icon: require('../img/ic_refresh_white.png'), show: 'always'},
   {title: '感谢', show: 'never'},
   {title: '分享', show: 'never' },
 ];
@@ -87,8 +87,8 @@ class CommunityTopic extends Component {
             onMoveShouldSetResponder={() => false}
             >
               <ToolbarAndroid
-                navIcon={require('image!ic_back_white')}
-                overflowIcon={require('image!ic_more_white')}
+                navIcon={require('../img/ic_back_white.png')}
+                overflowIcon={require('../img/ic_more_white.png')}
                 title={this.props.title}
                 style={[styles.toolbar, {backgroundColor: this.props.modeInfo.standardColor,}]}
                 actions={toolbarActions}
