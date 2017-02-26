@@ -75,10 +75,11 @@ class Community extends Component {
           onPress ={()=>{
             this._onRowPressed(rowData)
           }}
+          useForeground={true}
           delayPressIn={100}
           background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
           >
-          <View style={{ flex: 1, flexDirection: 'row',  padding: 12 }}>
+          <View accessible={false} style={{ flex: 1, flexDirection: 'row',  padding: 12 }}>
             <Image
               source={{ uri: rowData.avatar }}
               style={styles.avatar}
@@ -93,10 +94,10 @@ class Community extends Component {
               </Text>
 
               <View style={{ flex: 1.1, flexDirection: 'row', justifyContent :'space-between' }}>
-                <Text style={{ flex: -1, color: idColor,textAlign : 'center', textAlignVertical: 'center' }}>{rowData.psnid}</Text>
-                <Text style={{ flex: -1, color: this.props.modeInfo.standardTextColor,textAlign : 'center', textAlignVertical: 'center' }}>{rowData.date}</Text>
-                <Text style={{ flex: -1, color: this.props.modeInfo.standardTextColor,textAlign : 'center', textAlignVertical: 'center' }}>{rowData.count}回复</Text>
-                <Text style={{ flex: -1, color: this.props.modeInfo.standardTextColor,textAlign : 'center', textAlignVertical: 'center' }}>{rowData.type}</Text>
+                <Text selectable={false} style={{ flex: -1, color: idColor,textAlign : 'center', textAlignVertical: 'center' }}>{rowData.psnid}</Text>
+                <Text selectable={false} style={{ flex: -1, color: this.props.modeInfo.standardTextColor,textAlign : 'center', textAlignVertical: 'center' }}>{rowData.date}</Text>
+                <Text selectable={false} style={{ flex: -1, color: this.props.modeInfo.standardTextColor,textAlign : 'center', textAlignVertical: 'center' }}>{rowData.count}回复</Text>
+                <Text selectable={false} style={{ flex: -1, color: this.props.modeInfo.standardTextColor,textAlign : 'center', textAlignVertical: 'center' }}>{rowData.type}</Text>
               </View>
 
             </View>

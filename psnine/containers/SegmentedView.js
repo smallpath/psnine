@@ -315,9 +315,10 @@ class SegmentedView extends Component {
                     backgroundColor: '#FAFAFA',
                     alignItems: 'center',
                     paddingHorizontal: 2,
-                    paddingVertical: 8,}
+                    paddingVertical: 8}
                 }
                 ref={viewPager => {this.viewPage = viewPager;}}
+                keyboardDismissMode={"on-drag"}
                 onPageSelected={this._onPageSelected}
                 onPageScrollStateChanged={this.onPageScrollStateChanged}
                 onPageScroll={this.onPageScroll}
@@ -343,7 +344,7 @@ class SegmentedView extends Component {
                         />
                     </View>
                      
-                    {/*<View key={`s11`}>
+                    <View key={`s11`}>
                         <Qa 
                             index={1} 
                             ref={qa=>this.qa=qa}
@@ -378,7 +379,7 @@ class SegmentedView extends Component {
                               }
                             } 
                         />
-                    </View>*/}
+                    </View>
                    
                 </ViewPagerAndroid>
             </View>

@@ -11,12 +11,12 @@ function reducer(state = initialState, action){
         case ActionTypes.GET_GENES_SUCCESS:
             if(action.page === 1) {
                 newState = Object.assign({},state,{
-                    genes: action.value.data,
+                    genes: action.value,
                     genePage: 1,
                 });
             } else{
                 newState = Object.assign({},state,{
-                    genes: state.genes.concat(action.value.data),
+                    genes: state.genes.concat(action.value),
                     genePage: state.genePage + 1,
                 });
             }

@@ -52,7 +52,7 @@ BackAndroid.addEventListener('hardwareBackPress', function () {
 
 const { width:SCREEN_WIDTH, height:SCREEN_HEIGHT } = Dimensions.get('window');
 
-let BaseConfig = Navigator.SceneConfigs.FloatFromRight;
+let BaseConfig = Navigator.SceneConfigs.PushFromRight ;
 
 let FloatFromBottom = Navigator.SceneConfigs.FloatFromBottomAndroid;
 

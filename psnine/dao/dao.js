@@ -1,5 +1,6 @@
 'use strict';
 import topicParser from '../parser/community'
+import geneParser from '../parser/gene'
 
 const safeFetch = function(reqUrl) {
   return new Promise((resolve, reject) => {
@@ -30,7 +31,7 @@ const getGenesAPI = (page, type) => `${webHost}/gene?page=${page}&type=${type}`;
 
 export const fetchTopics = (page = 1,type = '') => safeFetch(getTopicsAPI(page,type)).then(res => topicParser(res));
 
-export const fetchGenes = (page = 1, type = 'all') => safeFetch(getGenesAPI(page,type));
+export const fetchGenes = (page = 1, type = 'all') => safeFetch(getGenesAPI(page,type)).then(res => geneParser(res));
 
 export const getTopicURL = id => webHost + '/topic/' + id; 
 

@@ -63,33 +63,12 @@ class Gene extends Component {
     highlightRow: (sectionID: number, rowID: number) => void
   ) => {
 
-    let uri;
-    if (rowData.profilepicture == '') {
-      let path = rowData.avatar.toString().replace('\\', '');
-      uri = `http://photo.d7vg.com/avatar/${path}.png@50w.png`;
-    } else {
-      uri = `http://photo.d7vg.com/avaself/${rowData.psnid}.png@50w.png`;
-    }
-    let time = parseInt(rowData.date);
-    time *= 1000;
-    let date = new Date(time);
-    let fromNow = moment(date).fromNow();
-
     let TouchableElement = TouchableNativeFeedback;
 
-    let imageArr = [];
+    let imageArr = Array.from(rowData.thumbs);
     let type = rowData.type;
 
-    if(rowData.photo != '' && type == 'photo'){
-      let arr = rowData.photo.split(',');
-      imageArr = arr.map(value=>'http://ww4.sinaimg.cn/thumb150/'+value+'.jpg');
-    }else if(rowData.plus.img != '' && type == 'video'){
-      imageArr = [rowData.plus.img];
-    }else if(rowData.plus.cover != '' && type == 'music'){
-      imageArr = [rowData.plus.cover];
-    }
-
-    imageArr.length >2 && imageArr.splice(2);
+    imageArr.length >3 && imageArr.splice(3);
 
     let imageItems = [];
     imageArr.forEach((value,index)=>imageItems.push(<Image key={rowData.id+''+index} source={{ uri: value }} style={styles.geneImage}/>));
@@ -109,7 +88,7 @@ class Gene extends Component {
           >
           <View style={{ flex: 1, flexDirection: 'row', padding: 12 }}>
             <Image
-              source={{ uri: uri }}
+              source={{ uri: rowData.avatar }}
               style={styles.avatar}
               />
 
@@ -122,10 +101,10 @@ class Gene extends Component {
                 {imageItems}
               </View>
               <View style={{ flex: 1, flexDirection: 'row', justifyContent :'space-between',  }}>
-                <Text style={{ flex: -1, color: idColor,textAlign : 'center', textAlignVertical: 'center' }}>{rowData.psnid}</Text>
-                <Text style={{ flex: -1,color: this.props.modeInfo.standardTextColor,textAlign : 'center', textAlignVertical: 'center' }}>{fromNow}</Text>
-                <Text style={{ flex: -1,color: this.props.modeInfo.standardTextColor,textAlign : 'center', textAlignVertical: 'center' }}>{rowData.count}回复</Text>
-                <Text style={{ flex: -1,color: this.props.modeInfo.standardTextColor,textAlign : 'center', textAlignVertical: 'center' }}>{rowData.views}浏览</Text>
+                <Text style={{ fontSize: 12, flex: -1, color: idColor,textAlign : 'center', textAlignVertical: 'center' }}>{rowData.psnid}</Text>
+                <Text style={{ fontSize: 12, flex: -1,color: this.props.modeInfo.standardTextColor,textAlign : 'center', textAlignVertical: 'center' }}>{rowData.date}</Text>
+                <Text style={{ fontSize: 12, flex: -1,color: this.props.modeInfo.standardTextColor,textAlign : 'center', textAlignVertical: 'center' }}>{rowData.count}回复</Text>
+                <Text style={{ fontSize: 12, flex: -1,color: this.props.modeInfo.standardTextColor,textAlign : 'center', textAlignVertical: 'center' }}>{rowData.circle}</Text>
               </View>
 
             </View>
@@ -246,8 +225,8 @@ const styles = StyleSheet.create({
   },
   geneImage: {
     margin: 3,
-    width: 120,
-    height: 120,
+    width: 100,
+    height: 100,
   }
 });
 
