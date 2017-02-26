@@ -9,6 +9,8 @@ export default function (html) {
     const img = $this.find('img').attr('src')
     const text = $this.text()
     const arr = text.split('\n').filter(item => item)
+    const matched = $this.find('.title a').attr('href').match(/\d+/)
+    const id = matched ? matched[0] :arr[1] + arr[2]
     const mock = {
       count: parseInt(arr[0]),
       views: 1,
@@ -16,7 +18,7 @@ export default function (html) {
       psnid: arr[2],
       date: arr[3],
       avatar: img,
-      id: arr[1] + arr[2],
+      id,
       type: arr[4]
     }
     result.push(mock)

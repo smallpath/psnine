@@ -343,7 +343,7 @@ class SegmentedView extends Component {
                         />
                     </View>
                      
-                    <View key={`s11`}>
+                    {/*<View key={`s11`}>
                         <Qa 
                             index={1} 
                             ref={qa=>this.qa=qa}
@@ -351,7 +351,7 @@ class SegmentedView extends Component {
                             URL={'http://psnine.com/qa'}
                         />
                     </View>
-                    {/*<View key={`s22`}>
+                    <View key={`s22`}>
                         <Game 
                             ref={game=>this.game=game}
                             index={2}

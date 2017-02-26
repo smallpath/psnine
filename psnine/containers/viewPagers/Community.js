@@ -73,7 +73,7 @@ class Community extends Component {
         }}>
         <TouchableElement  
           onPress ={()=>{
-            {/*this._onRowPressed(rowData)*/}
+            this._onRowPressed(rowData)
           }}
           delayPressIn={100}
           background={TouchableNativeFeedback.SelectableBackgroundBorderless()}

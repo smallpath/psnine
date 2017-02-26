@@ -24,7 +24,7 @@ const host = `http://120.55.124.66`;
 
 const webHost = `http://psnine.com`;
 
-const getTopicsAPI = (page, type) => `${webHost}/topic?page=${page}&node=${type}`;
+const getTopicsAPI = (page, type) => !type ? `${webHost}/topic?page=${page}&node=${type}` : `${webHost}/node/${type}?page=${page}`;
 
 const getGenesAPI = (page, type) => `${webHost}/gene?page=${page}&type=${type}`;
 
