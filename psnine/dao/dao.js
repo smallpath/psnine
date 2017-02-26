@@ -1,27 +1,21 @@
 'use strict';
+import topicParser from '../parser/community'
 
 const safeFetch = function(reqUrl) {
   return new Promise((resolve, reject) => {
     let timeout = setTimeout(reject, 2000);
     fetch(reqUrl)
       .then((response) => {
-        clearTimeout(timeout);
+          clearTimeout(timeout);
 
-        let data;
-        try{
-          data = response.json();
-        }catch(err){
-          data = { data:[] }
-        }
-          return data;
+          return response.text();
         })
       .then((responseData) => {
         resolve(responseData);
       })
       .catch((error) => {
         clearTimeout(timeout);
-        console.error(error);
-        resolve(null);
+        resolve([]);
       });
   });
 };
@@ -30,11 +24,11 @@ const host = `http://120.55.124.66`;
 
 const webHost = `http://psnine.com`;
 
-const getTopicsAPI = (page, type) => `${host}/topic?page=${page}&node=${type}`;
+const getTopicsAPI = (page, type) => `${webHost}/topic?page=${page}&node=${type}`;
 
-const getGenesAPI = (page, type) => `${host}/gene?page=${page}&type=${type}`;
+const getGenesAPI = (page, type) => `${webHost}/gene?page=${page}&type=${type}`;
 
-export const fetchTopics = (page = 1,type = '') => safeFetch(getTopicsAPI(page,type));
+export const fetchTopics = (page = 1,type = '') => safeFetch(getTopicsAPI(page,type)).then(res => topicParser(res));
 
 export const fetchGenes = (page = 1, type = 'all') => safeFetch(getGenesAPI(page,type));
 

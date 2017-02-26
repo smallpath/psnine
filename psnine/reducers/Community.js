@@ -11,12 +11,12 @@ function reducer(state = initialState, action){
         case ActionTypes.GET_TOPICS_SUCCESS:
             if(action.page === 1) {
                 newState = Object.assign({},state,{
-                    topics: action.value.data,
+                    topics: action.value,
                     topicPage: 1,
                 });
             } else{
                 newState = Object.assign({},state,{
-                    topics: state.topics.concat(action.value.data),
+                    topics: state.topics.concat(action.value),
                     topicPage: state.topicPage + 1,
                 });
             }

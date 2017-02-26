@@ -331,18 +331,8 @@ class SegmentedView extends Component {
                 <View key={'s004'}></View> */}
                   
                     <View key={`s00`}>
-                        <Qa 
-                            index={0} 
-                            ref={qa=>this.qa=qa}
-                            {...{navigator:this.props.navigator,modeInfo:this.props.modeInfo,}} 
-                            URL={'http://psnine.com/qa'}
-                        />
-
-                    </View>
-                     
-                    <View key={`s11`}>
                         <Community 
-                            index={1} 
+                            index={0} 
                             ref={community=>this.community=community}
                             {...{
                                 navigator:this.props.navigator, 
@@ -352,7 +342,16 @@ class SegmentedView extends Component {
                             } 
                         />
                     </View>
-                    <View key={`s22`}>
+                     
+                    <View key={`s11`}>
+                        <Qa 
+                            index={1} 
+                            ref={qa=>this.qa=qa}
+                            {...{navigator:this.props.navigator,modeInfo:this.props.modeInfo,}} 
+                            URL={'http://psnine.com/qa'}
+                        />
+                    </View>
+                    {/*<View key={`s22`}>
                         <Game 
                             ref={game=>this.game=game}
                             index={2}
@@ -379,7 +378,7 @@ class SegmentedView extends Component {
                               }
                             } 
                         />
-                    </View>
+                    </View>*/}
                    
                 </ViewPagerAndroid>
             </View>
