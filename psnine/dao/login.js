@@ -25,7 +25,7 @@ export const safeLogin = function(psnid, pass) {
             body: formBody,
         })
         .then((responseData) => {
-            resolve(responseData);
+            return resolve(responseData.text());
         })
     });
 };

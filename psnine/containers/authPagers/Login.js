@@ -68,8 +68,8 @@ class Login extends Component {
     }
 
     let data= await safeLogin(psnid,password);
-    let length = data.text().length;
-    
+    let length = data.length;
+
     if (length > 10000){
       await AsyncStorage.setItem('@psnid', psnid);
       const user = await fetchUser(psnid);

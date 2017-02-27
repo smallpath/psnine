@@ -3,6 +3,7 @@ import topicParser from '../parser/community'
 import geneParser from '../parser/gene'
 import battleParser from '../parser/battle'
 import userParser from '../parser/user'
+import messageParser from '../parser/message'
 
 const safeFetch = function(reqUrl) {
   return new Promise((resolve, reject) => {
@@ -42,9 +43,9 @@ export const getStoreURL = id => webHost + '/store';
 
 export const pngPrefix = 'http://photo.d7vg.com/'
 
-export const getMessagesAPI = id => host + '/user/' + id + '/notice';
+export const getMessagesAPI = id => webHost + '/my/notice';
 
-export const fetchMessages = id => safeFetch(getMessagesAPI(id));
+export const fetchMessages = id => safeFetch(getMessagesAPI(id)).then(res => messageParser(res));
 
 export const getBattlesAPI = id => webHost + '/battle';
 

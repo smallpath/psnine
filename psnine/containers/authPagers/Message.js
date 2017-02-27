@@ -45,35 +45,15 @@ class Message extends Component {
 
   _pressRow = (rowData) => {
     const { navigator } = this.props;
-    let URL;
-    let type = rowData.type;
-    switch (type) {
-      case 'topic':
-        URL = getTopicURL(rowData.tid);
-        navigator.push({
-          component: CommunityTopic,
-          params: {
-            URL,
-            title: rowData.content,
-            rowData
-          }
-        });
-        break;
-      case 'gene':
-        URL = getGeneURL(rowData.tid);
-        navigator.push({
-          component: GeneTopic,
-          params: {
-            URL,
-            title: rowData.content,
-            rowData
-          }
-        });
-        break;
-      default:
-        ToastAndroid.show(`type '${rowData.type}' not implement yet.`,2000);
-        break;
-    }
+    let URL = rowData.id;
+    navigator.push({
+      component: CommunityTopic,
+      params: {
+        URL,
+        title: rowData.content,
+        rowData
+      }
+    });
   }
 
 
@@ -82,18 +62,6 @@ class Message extends Component {
     rowID: number | string,
     highlightRow: (sectionID: number, rowID: number) => void
   ) => {
-
-    let uri;
-    if (rowData.profilepicture == '') {
-      let path = rowData.avatar.toString().replace('\\', '');
-      uri = `http://photo.d7vg.com/avatar/${path}.png@50w.png`;
-    } else {
-      uri = `http://photo.d7vg.com/avaself/${rowData.psnid}.png@50w.png`;
-    }
-    let time = parseInt(rowData.date);
-    time *= 1000;
-    let date = new Date(time);
-    let fromNow = moment(date).fromNow();
 
     let TouchableElement = TouchableNativeFeedback;
 
@@ -109,10 +77,10 @@ class Message extends Component {
           onPress={()=>this._pressRow(rowData)}
           >
           <View style={{ flex: 1, flexDirection: 'row',  padding: 12 }}>
-            <Image
+            {/*<Image
               source={{ uri: uri }}
               style={styles.avatar}
-              />
+              />*/}
 
             <View style={{ marginLeft: 10, flex: 1, flexDirection: 'column'}}>
               <Text
@@ -123,8 +91,8 @@ class Message extends Component {
               </Text>
 
               <View style={{ flex: 1.1, flexDirection: 'row', justifyContent :'space-between' }}>
-                <Text style={{ flex: -1, color: idColor,textAlign : 'center', textAlignVertical: 'center' }}>{rowData.psnid}</Text>
-                <Text style={{ flex: -1,color: this.props.modeInfo.titleTextColor,textAlign : 'center', textAlignVertical: 'center' }}>{fromNow}</Text>
+                <Text style={{ flex: -1, color: idColor,textAlign : 'center', textAlignVertical: 'center' }}>{rowData.from}</Text>
+                {/*<Text style={{ flex: -1,color: this.props.modeInfo.titleTextColor,textAlign : 'center', textAlignVertical: 'center' }}>{fromNow}</Text>*/}
               </View>
 
             </View>
@@ -142,7 +110,7 @@ class Message extends Component {
   async fetchMessages () {
     const data = await fetchMessages(this.props.psnid);
     this.setState({
-        messages: data.data,
+        messages: data,
     });
   }
 
