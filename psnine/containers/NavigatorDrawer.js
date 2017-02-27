@@ -58,7 +58,7 @@ let imageSrc = [
 let imageArr = imageSrc.slice(0);
 
 let items = [
-              "个人中心","我的游戏","排行","游惠","Store","闲游","系统选项","设置","关于"
+  "个人中心","我的游戏","排行","Store","闲游","系统选项","设置","关于"
 ];
 
 class NavigatorDrawer extends Component {
@@ -416,17 +416,6 @@ class NavigatorDrawer extends Component {
             break;
 
         case 3:
-            URL = getHappyPlusOneURL();
-
-            navigator.push({
-              component: HappyPlusOne,
-              params: {
-                URL,
-                title: '游惠',
-              }
-            });
-            break;
-        case 4:
             URL = getStoreURL();
             navigator.push({
               component: Store,
@@ -436,7 +425,7 @@ class NavigatorDrawer extends Component {
               }
             });
             break;
-        case 5:
+        case 4:
             URL = getDealURL();
             //URL = 'http://120.55.124.66/user/smallpath';
             navigator.push({
@@ -447,10 +436,10 @@ class NavigatorDrawer extends Component {
               }
             });
             break;
-        case 7:
+        case 6:
 
             break;
-        case 8:
+        case 7:
             navigator.push({
               component: About,
               params: {

@@ -146,6 +146,10 @@ class Login extends Component {
     }).start();
   }
 
+  onSubmit = () => {
+    this.login()
+  }
+
   render() {
     // console.log('Loggin.js rendered');
     let marginLeft = 40;
@@ -263,10 +267,12 @@ class Login extends Component {
                   {'PSN ID'}
               </Animated.Text>
               <TextInput underlineColorAndroid={accentColor}
+                autoFocus={true}
                 onChange={({nativeEvent})=>{ this.setState({psnid:nativeEvent.text})}}
                 ref={ref=>this.accountTextInput = ref}
                 onFocus={this.onAccountTextFocus}
                 onBlur={this.onAccountTextBlur}
+                onSubmitEditing={this.onSubmit}
                 style={[styles.textInput, { color:this.props.modeInfo.standardTextColor }]}
                 placeholderTextColor={this.props.modeInfo.standardTextColor}
               />
@@ -284,6 +290,7 @@ class Login extends Component {
                 ref={ref=>this.passwordTextInput = ref}
                 onFocus={this.onPasswordTextFocus}
                 onBlur={this.onPasswordTextBlur}
+                onSubmitEditing={this.onSubmit}
                 style={[styles.textInput, { color:this.props.modeInfo.standardTextColor }]}
                 placeholderTextColor={this.props.modeInfo.standardTextColor}
               />

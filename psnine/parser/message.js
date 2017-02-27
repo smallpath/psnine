@@ -12,15 +12,14 @@ export default function (html) {
     }))[1]
     const text = $this.text()
     let content = text.split('\n').map(item => item.replace(/\t/g, '')).filter(item => item)[1].replace(from, '')
-    const matched = $this.find('a').attr('href')
+    const id = $this.find('a').attr('href')
 
-    const id = matched ? matched[0] : 'not found'
     const mock = {
       content,
       from,
       id
     }
-        console.log(id)
+
     result.push(mock)
   })
   return result
