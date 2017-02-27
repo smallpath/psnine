@@ -30,7 +30,7 @@ import { pngPrefix, getDealURL, getHappyPlusOneURL, getStoreURL } from '../../da
 
 import { safeLogin, registURL } from '../../dao/login';
 
-import { fetchUser } from '../../dao/userParser';
+import { fetchUser } from '../../dao/dao';
 
 
 let screen = Dimensions.get('window');
@@ -68,7 +68,7 @@ class Login extends Component {
     }
 
     let data= await safeLogin(psnid,password);
-    let length = data._bodyInit.length;
+    let length = data.text().length;
     
     if (length > 10000){
       await AsyncStorage.setItem('@psnid', psnid);

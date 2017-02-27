@@ -2,23 +2,19 @@
 import topicParser from '../parser/community'
 import geneParser from '../parser/gene'
 import battleParser from '../parser/battle'
+import userParser from '../parser/user'
 
 const safeFetch = function(reqUrl) {
   return new Promise((resolve, reject) => {
     let timeout = setTimeout(reject, 2000);
-    fetch(reqUrl)
-      .then((response) => {
-          clearTimeout(timeout);
-
-          return response.text();
-        })
-      .then((responseData) => {
-        resolve(responseData);
-      })
-      .catch((error) => {
-        clearTimeout(timeout);
-        resolve([]);
-      });
+    fetch(reqUrl).then((response) => {
+      clearTimeout(timeout);
+      return resolve(response.text());
+    }).catch((error) => {
+      console.error(error)
+      clearTimeout(timeout);
+      resolve([]);
+    });
   });
 };
 
@@ -63,3 +59,5 @@ export const getHomeURL = id => `${webHost}/psnid/${id}`;
 export const getRankURL = () => `${webHost}/psnid`;
 
 export const getMyGameURL = id => `${webHost}/psnid/${id}/psngame`;
+
+export const fetchUser = id => safeFetch(getHomeURL(id)).then(res => userParser(res, id))

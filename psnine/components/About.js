@@ -35,9 +35,6 @@ import { pngPrefix, getDealURL, getHappyPlusOneURL, getStoreURL } from '../dao/d
 
 import { safeLogin, registURL } from '../dao/login';
 
-import { fetchUser } from '../dao/userParser';
-
-
 class About extends Component {
 
   constructor(props) {

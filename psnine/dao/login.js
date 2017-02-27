@@ -14,7 +14,6 @@ export const safeLogin = function(psnid, pass) {
         formBody.push(encodedKey + "=" + encodedValue);
     }
     formBody = formBody.join("&");
-    //console.log(formBody)
 
     return new Promise((resolve, reject) => {
         fetch(loginURL,{
@@ -30,16 +29,3 @@ export const safeLogin = function(psnid, pass) {
         })
     });
 };
-
-
-// fetch('https://mywebsite.com/endpoint/', {
-//   method: 'POST',
-//   headers: {
-//     'Accept': 'application/json',
-//     'Content-Type': 'application/json',
-//   },
-//   body: JSON.stringify({
-//     firstParam: 'yourValue',
-//     secondParam: 'yourOtherValue',
-//   })
-// })

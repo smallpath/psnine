@@ -35,8 +35,6 @@ import { pngPrefix, getDealURL, getHappyPlusOneURL, getStoreURL } from '../../da
 
 import { safeLogin, registURL } from '../../dao/login';
 
-import { fetchUser } from '../../dao/userParser';
-
 
 let title = '创建约战';
 

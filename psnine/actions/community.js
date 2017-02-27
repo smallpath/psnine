@@ -7,6 +7,7 @@ export function getTopicList(page = 1, type = '') {
     return dispatch => {
         return fetchTopics(page, type)
             .then(response => {
+                console.log(response.length)
                 dispatch(gotTopicList(response,page,type));
             }).catch(err => {
                 dispatch(gotTopicListError());

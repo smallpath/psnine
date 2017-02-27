@@ -39,7 +39,7 @@ import MyGame from './authPagers/MyGame';
 
 import { safeLogout } from '../dao/logout';
 import { safeSignOn } from '../dao/signon';
-import { fetchUser } from '../dao/userParser';
+import { fetchUser } from '../dao/dao';
 
 let signIcon = require('../img/ic_assignment_blue.png');
 
@@ -330,7 +330,6 @@ class NavigatorDrawer extends Component {
                     </View>
                   </TouchableNativeFeedback>)
         }  
-
 
       return (
       <View style={[styles.header, {
