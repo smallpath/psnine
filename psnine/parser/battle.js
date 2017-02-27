@@ -28,8 +28,8 @@ export default function (html) {
         count: arr[1].match(/\d+/)[0],
         title: arr[2],
         psnid,
-        date: arr[3],
-        game: arr[0],
+        date: arr[3].replace('开始', ''),
+        game: arr[0].replace(platform.join(''), ''),
         gameAvatar: thumbs[1],
         avatar: thumbs[0],
         num: numArr ? numArr[0]: arr[4],
@@ -39,6 +39,6 @@ export default function (html) {
       target.push(mock)
     })
   })
-
+  console.log()
   return result
 }

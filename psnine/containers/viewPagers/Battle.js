@@ -71,12 +71,6 @@ class Battle extends Component {
     highlightRow: (sectionID: number, rowID: number) => void
   ) => {
     // console.log(rowData)
-    let time = parseInt(rowData.startdate);
-    time *= 1000;
-    let date = new Date(time);
-    let startTime = moment(date).format('HH:mm');
-
-    let title = rowData.cnname == '' ? rowData.title : rowData.cnname;
 
     let TouchableElement = TouchableNativeFeedback;
 
@@ -93,22 +87,30 @@ class Battle extends Component {
           delayPressIn={100}
           background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
           >
-          <View style={{ flex: 1, flexDirection: 'row',  padding: 12 }}>
-            <Image
-              source={{ uri: rowData.gameAvatar }}
-              style={{
-                width: 91,
-                height: 50,
-                alignSelf: 'center',
-              }}
-              />
+          <View style={{ flex: -1, flexDirection: 'row',  padding: 12 }}>
+            <View style={{ 
+              flex: 1, 
+              flexDirection: 'column',
+              marginLeft: -2,
+              alignSelf: 'center'
+              }}>
+              <Image
+                source={{ uri: rowData.avatar }}
+                style={{
+                  width: 91,
+                  height: 50,
+                  alignSelf: 'center',
+                }}
+                />
+              <Text style={{ flex: -1, color: idColor, textAlign: 'center', textAlignVertical: 'center' }}>{rowData.game}</Text>
+            </View>
 
-            <View style={{ marginLeft: 10, flex: 1, flexDirection: 'column'}}>
+            <View style={{ marginLeft: 10, flex: 2, flexDirection: 'column'}}>
               <Text
                 ellipsizeMode={'tail'}
                 numberOfLines={1}
                 style={{ flex: -1,color: this.props.modeInfo.titleTextColor, fontSize: 15 }}>
-                { title }
+                { rowData.title }
               </Text>
 
               <Text>
@@ -123,14 +125,14 @@ class Battle extends Component {
 
               <View style={{ flex: 1, flexDirection: 'row', justifyContent :'space-between' }}>
                 <Text style={{ flex: -1,color: this.props.modeInfo.standardTextColor,textAlign : 'center', textAlignVertical: 'center' }}>{rowData.platform.join(' ')}</Text>
-                <Text style={{ flex: -1, color: idColor, marginTop: 5,marginRight: -60 , textAlignVertical: 'center' }}>{rowData.psnid}</Text>
+                <Text style={{ flex: -1, color: idColor, marginRight: -60 , textAlignVertical: 'center' }}>{rowData.psnid}</Text>
               </View>
 
             </View>
 
 
             <Image
-              source={{ uri: rowData.avatar }}
+              source={{ uri: rowData.gameAvatar }}
               style={[styles.avatar,{marginLeft: 10}]}
               />
 
