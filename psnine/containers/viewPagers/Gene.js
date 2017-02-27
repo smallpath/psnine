@@ -65,7 +65,7 @@ class Gene extends Component {
 
     let TouchableElement = TouchableNativeFeedback;
 
-    let imageArr = Array.from(rowData.thumbs);
+    let imageArr = rowData.thumbs;
     let type = rowData.type;
 
     imageArr.length >3 && imageArr.splice(3);

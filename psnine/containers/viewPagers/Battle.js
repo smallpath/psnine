@@ -70,14 +70,7 @@ class Battle extends Component {
     rowID: number | string,
     highlightRow: (sectionID: number, rowID: number) => void
   ) => {
-
-    let uri;
-    if (rowData.profilepicture == '') {
-      let path = rowData.avatar.toString().replace('\\', '');
-      uri = `http://photo.d7vg.com/avatar/${path}.png@50w.png`;
-    } else {
-      uri = `http://photo.d7vg.com/avaself/${rowData.psnid}.png@50w.png`;
-    }
+    // console.log(rowData)
     let time = parseInt(rowData.startdate);
     time *= 1000;
     let date = new Date(time);
@@ -102,7 +95,7 @@ class Battle extends Component {
           >
           <View style={{ flex: 1, flexDirection: 'row',  padding: 12 }}>
             <Image
-              source={{ uri: getGamePngURL(rowData.gid) }}
+              source={{ uri: rowData.gameAvatar }}
               style={{
                 width: 91,
                 height: 50,
@@ -119,7 +112,7 @@ class Battle extends Component {
               </Text>
 
               <Text>
-                <Text style={{ flex: -1,color: this.props.modeInfo.titleTextColor }} numberOfLines={1}>{startTime}</Text>
+                <Text style={{ flex: -1,color: this.props.modeInfo.titleTextColor }} numberOfLines={1}>{rowData.date}</Text>
                 <Text style={{ flex: -1, color: this.props.modeInfo.standardTextColor }} numberOfLines={1}> 开始</Text>
               </Text>
 
@@ -129,15 +122,15 @@ class Battle extends Component {
               </Text>
 
               <View style={{ flex: 1, flexDirection: 'row', justifyContent :'space-between' }}>
-                <Text style={{ flex: -1,color: this.props.modeInfo.standardTextColor,textAlign : 'center', textAlignVertical: 'center' }}>{rowData.platform.split(',').join(' ')}</Text>
-                <Text style={{ flex: -1, color: idColor, marginRight: -60 , textAlignVertical: 'center' }}>{rowData.psnid}</Text>
+                <Text style={{ flex: -1,color: this.props.modeInfo.standardTextColor,textAlign : 'center', textAlignVertical: 'center' }}>{rowData.platform.join(' ')}</Text>
+                <Text style={{ flex: -1, color: idColor, marginTop: 5,marginRight: -60 , textAlignVertical: 'center' }}>{rowData.psnid}</Text>
               </View>
 
             </View>
 
 
             <Image
-              source={{ uri: uri }}
+              source={{ uri: rowData.avatar }}
               style={[styles.avatar,{marginLeft: 10}]}
               />
 
@@ -153,7 +146,7 @@ class Battle extends Component {
         //backgroundColor: nodeColor,
         flex: -1, left:0,
         height:25, 
-        width:200,
+        width:300,
         elevation: 0, 
         marginTop: sectionID == 'day1'? 7: 14,
         marginLeft: 7,
@@ -193,6 +186,7 @@ class Battle extends Component {
   render(){
     const { battle: battleReducer } = this.props;
     let data = battleReducer.battles;
+
     let keys = Object.keys(data);
     let NUM_SECTIONS = keys.length;
 
@@ -203,15 +197,6 @@ class Battle extends Component {
     for (let i = 0; i < NUM_SECTIONS; i++) {
       let sectionName = keys[i];
       let localName = sectionName;
-      if (localName == 'day1'){
-        localName = '今天  ' + moment().format('YYYY年MM月DD日');
-      }else if(localName == 'day2'){
-        localName = '明天  '  + moment().add(1,'days').format('YYYY年MM月DD日');
-      }else if(localName == 'day3'){
-        localName = '后天  ' + moment().add(2,'days').format('YYYY年MM月DD日');
-      }else{
-        localName = moment().add(parseInt(localName.replace('day','')),'days').format('YYYY年MM月DD日');
-      }
       sectionIDs.push(sectionName);
       dataBlob[sectionName] = localName;
       rowIDs[i] = [];

@@ -1,6 +1,7 @@
 'use strict';
 import topicParser from '../parser/community'
 import geneParser from '../parser/gene'
+import battleParser from '../parser/battle'
 
 const safeFetch = function(reqUrl) {
   return new Promise((resolve, reject) => {
@@ -49,9 +50,9 @@ export const getMessagesAPI = id => host + '/user/' + id + '/notice';
 
 export const fetchMessages = id => safeFetch(getMessagesAPI(id));
 
-export const getBattlesAPI = id => host + '/battle';
+export const getBattlesAPI = id => webHost + '/battle';
 
-export const fetchBattles = () => safeFetch(getBattlesAPI());
+export const fetchBattles = () => safeFetch(getBattlesAPI()).then(res => battleParser(res));
 
 export const getBattleURL = id => webHost + '/battle/' + id;
 

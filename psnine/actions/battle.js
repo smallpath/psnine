@@ -7,8 +7,9 @@ export function getBattleList() {
     return dispatch => {
         return fetchBattles()
             .then(response => {
-                dispatch(gotBattleList(response.data));
+                dispatch(gotBattleList(response));
             }).catch(err => {
+                console.error(err)
                 dispatch(gotBattleListError());
                 ToastAndroid.show('网络错误',2000);
                 dispatch(gotBattleList([]));

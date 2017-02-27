@@ -8,9 +8,10 @@ export default function (html) {
   $('ul.list li').each(function(i, elem) {
     const $this = $(this)
     const img = $this.find('img').attr('src')
-    const thumbs = $this.find('img').map(function(i, elem) {
+    const thumbs = Array.from($this.find('img').map(function(i, elem) {
         return $(this).attr('src')
-    }).filter(index => !!index)
+    }).filter(index => !!index))
+
     const text = $this.text()
     const arr = text
                     .split('\n')
