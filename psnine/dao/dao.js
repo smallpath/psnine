@@ -7,10 +7,14 @@ import messageParser from '../parser/message'
 
 const safeFetch = function(reqUrl) {
   return new Promise((resolve, reject) => {
-    let timeout = setTimeout(reject, 2000);
+    let timeout = setTimeout(() => reject('request time out'), 20000);
     fetch(reqUrl).then((response) => {
+      console.log('here')
       clearTimeout(timeout);
-      return resolve(response.text());
+      console.log('timeout')
+      const text = response.text()
+      console.log('textlizer')
+      return resolve(text);
     }).catch((error) => {
       console.error(error)
       clearTimeout(timeout);

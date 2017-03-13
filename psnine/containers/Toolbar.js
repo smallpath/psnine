@@ -34,7 +34,7 @@ import NewBattle from '../components/new/NewBattle';
 import NewGene from '../components/new/NewGene';
 import NewTopic from '../components/new/NewTopic';
 
-import { changeSegmentIndex, changeCommunityType, changeGeneType } from '../actions/app';
+import { changeSegmentIndex, changeCommunityType, changeGeneType, changeScrollType } from '../actions/app';
 
 import { standardColor, accentColor } from '../config/colorConfig';
 
@@ -128,6 +128,8 @@ class Toolbar extends Component {
             toolbarDispatch: this.props.dispatch,
             segmentedIndex: this.props.app.segmentedIndex,
             modeInfo:this.props.modeInfo,
+            isScrolling: this.props.app.isScrolling,
+            setMarginTop: this.setMarginTop
         }} 
         titles={titlesArr}
         index={0}
@@ -167,7 +169,19 @@ class Toolbar extends Component {
 
   }
 
+  setMarginTop = (value, isFlatten) => {
+    value && console.log(value)
+    if (isFlatten) {
+      this.state.marginTop.flattenOffset();
+      return this.state.marginTop._value;
+    }
+    this.state.marginTop.setValue(value)
+  }
+
   componentWillMount() {
+    const { dispatch } = this.props;
+    const ref = this
+    let currentScrolling = false;
         this.panResponder = PanResponder.create({  
 
             onStartShouldSetPanResponderCapture: (e, gesture) =>{ 
@@ -179,100 +193,73 @@ class Toolbar extends Component {
               return shouldSet; 
             },
 
-            onPanResponderGrant:(e, gesture) => {
-
+            onPanResponderGrant: function(e, gesture) {
+              console.log(typeof this.listView)
+              if (currentScrolling === false) {
+                currentScrolling = true;
+                // dispatch(changeScrollType(true))
+              }
             },
             onPanResponderMove: (e, gesture) => {
               let dy = gesture.dy;
               let vy = gesture.vy;
               if(dy < 0){
                 dy = dy + releasedMarginTop;
-                if(-dy <= toolbarHeight){
-                  if(dy>0)
-                    return;
+                if(-dy <= toolbarHeight && dy <= 0){
                   this.state.marginTop.setValue(dy); 
+                } else {
+                  this.state.marginTop.setValue(-toolbarHeight); 
+                  if (currentScrolling === true) {
+                    currentScrolling = false;
+                    // dispatch(changeScrollType(false))
+                  }
                 }
               }else{
                 dy = dy + releasedMarginTop;
-                if(-dy <= toolbarHeight){
-                  if(dy>0)
-                    return;
+                if(-dy <= toolbarHeight && dy <= 0){
                   this.state.marginTop.setValue(dy); 
+                } else {
+                  this.state.marginTop.setValue(0); 
+                  if (currentScrolling === true) {
+                    currentScrolling = false;
+                    // dispatch(changeScrollType(false))
+                  }
                 }
               }
             }, 
             onPanResponderRelease: (e, gesture) => {
-
+              console.log('onPanResponderRelease\n======')
+              if (releasedMarginTop === 0 || releasedMarginTop === -toolbarHeight) {
+                if (currentScrolling === true) {
+                  currentScrolling = false;
+                  // dispatch(changeScrollType(false))
+                }
+              }
             },
             onPanResponderTerminationRequest : (evt, gesture) => {  
+              console.log('onPanResponderTerminationRequest')
               return true;
             },
             onPanResponderTerminate: (evt, gesture) => {  
-              
+              console.log('onPanResponderTerminate')
             },
             onShouldBlockNativeResponder: (evt, gesture) => {  
+              console.log('onShouldBlockNativeResponder')
               return true;
             },
             onPanResponderReject: (evt, gesture) => {  
+              console.log('onPanResponderReject')
               return false;
             },
             onPanResponderEnd: (evt, gesture) => {  
+              console.log('onPanResponderEnd')
               let dy = gesture.dy;
               let vy = gesture.vy;
               
               this.state.marginTop.flattenOffset();
 
               let value = this.state.marginTop._value;
-              let duration = 50; 
-
-              if(vy<0){
-
-                if(value <= -toolbarHeight/2 || -vy >= 2.0e-7){
-
-                  Animated.timing(this.state.marginTop,{
-                    toValue: -toolbarHeight,
-                    duration,
-                    easing: Easing.linear,
-                  }).start();
-
-                  releasedMarginTop = -toolbarHeight;
-
-                }else{
-
-                  Animated.timing(this.state.marginTop,{
-                    toValue: 0,
-                    duration,
-                    easing: Easing.linear,
-                  }).start();
-
-                  releasedMarginTop = 0;
-                }
-
-              }else{
-
-                if(value >= -toolbarHeight/2 || vy >= 2.0e-7){
-
-                  Animated.timing(this.state.marginTop,{
-                    toValue: 0,
-                    duration,
-                    easing: Easing.linear,
-                  }).start();
-
-                  releasedMarginTop = 0;
-
-                }else{
-
-                  Animated.timing(this.state.marginTop,{
-                    toValue: -toolbarHeight,
-                    duration,
-                    easing: Easing.linear,
-                  }).start();
-
-                  releasedMarginTop = -toolbarHeight;
-                }
-
-              }
-
+              releasedMarginTop = value
             },
 
         });

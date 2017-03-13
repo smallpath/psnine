@@ -280,7 +280,7 @@ class SegmentedView extends Component {
         return (
             <View 
                 style={{height: thisScreenHeightWitoutStatusBar }}
-                {...this.props.moveUpResponders.panHandlers}
+                
                 >
                 <View
                     {...{navigator:this.props.navigator}} 
@@ -331,7 +331,10 @@ class SegmentedView extends Component {
                 <View key={'s003'}></View> 
                 <View key={'s004'}></View> */}
                   
-                    <View key={`s00`}>
+                    <View key={`s00`} 
+                        style={{backgroundColor:'blue', height: 500}} 
+                        
+                        >
                         <Community 
                             index={0} 
                             ref={community=>this.community=community}
@@ -339,12 +342,15 @@ class SegmentedView extends Component {
                                 navigator:this.props.navigator, 
                                 communityType: this.props.communityType, 
                                 modeInfo:this.props.modeInfo,
+                                isScrolling: this.props.isScrolling,
+                                responder:this.props.moveUpResponders,
+                                setMarginTop: this.props.setMarginTop
+                                }
                               }
-                            } 
                         />
                     </View>
                      
-                    <View key={`s11`}>
+                    {/*<View key={`s11`}>
                         <Qa 
                             index={1} 
                             ref={qa=>this.qa=qa}
@@ -379,7 +385,7 @@ class SegmentedView extends Component {
                               }
                             } 
                         />
-                    </View>
+                    </View>*/}
                    
                 </ViewPagerAndroid>
             </View>

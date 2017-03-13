@@ -9,6 +9,8 @@ import {
   Dimensions,
   TouchableNativeFeedback,
   RefreshControl,
+  PanResponder,
+  Animated,
   InteractionManager,
 } from 'react-native';
 
@@ -20,6 +22,11 @@ import CommunityTopic from '../../components/CommunityTopic';
 
 import { getTopicURL } from '../../dao/dao';
 import moment from '../../utils/moment';
+
+import { changeScrollType } from '../../actions/app';
+
+let toolbarHeight = 56;
+let releasedMarginTop = 0;
 
 let dataSource = new ListView.DataSource({
   rowHasChanged: (row1, row2) => {
@@ -64,7 +71,6 @@ class Community extends Component {
   ) => {
 
     let TouchableElement = TouchableNativeFeedback;
-
     return (
       <View rowID={ rowID } style={{              
             marginTop: 7,
@@ -108,6 +114,112 @@ class Community extends Component {
     )
   }
 
+componentWillMount() {
+    const { dispatch } = this.props;
+    const ref = this
+    let currentScrolling = false;
+    const setMarginTop = this.props.setMarginTop
+        this.panResponder = PanResponder.create({  
+
+            onStartShouldSetPanResponderCapture: (e, gesture) =>{ 
+              return false; 
+            },
+
+            onMoveShouldSetPanResponderCapture:(e, gesture) =>{ 
+              let shouldSet = Math.abs(gesture.dy) >=4;
+              return shouldSet; 
+            },
+
+            onPanResponderGrant: (e, gesture) => {
+              if (currentScrolling === false) {
+                currentScrolling = true;
+                this.refreshControl._nativeRef.setNativeProps({
+                  enabled: false,
+                });
+                this.listView.setNativeProps({
+                  scrollEnabled: false,
+                });
+              }
+            },
+            onPanResponderMove: (e, gesture) => {
+              let dy = gesture.dy;
+              let vy = gesture.vy;
+              if(dy < 0){
+                dy = dy + releasedMarginTop;
+                if(-dy <= toolbarHeight && dy <= 0){
+                  setMarginTop(dy)
+                } else {
+                  setMarginTop(-toolbarHeight)
+                  if (currentScrolling === true) {
+                    currentScrolling = false;
+                    this.refreshControl._nativeRef.setNativeProps({
+                      enabled: true,
+                    });
+                    this.listView.setNativeProps({
+                      scrollEnabled: true,
+                    });
+                  }
+                }
+              }else{
+                dy = dy + releasedMarginTop;
+                if(-dy <= toolbarHeight && dy <= 0){ 
+                  setMarginTop(dy)
+                } else {
+                  setMarginTop(0)
+                  if (currentScrolling === true) {
+                    currentScrolling = false;
+                    // dispatch(changeScrollType(false))
+                    this.refreshControl._nativeRef.setNativeProps({
+                      enabled: true,
+                    });
+                    this.listView.setNativeProps({
+                      scrollEnabled: true,
+                    });
+                  }
+                }
+              }
+            }, 
+            onPanResponderRelease: (e, gesture) => {
+              console.log('onPanResponderRelease\n======')
+              if (releasedMarginTop === 0 || releasedMarginTop === -toolbarHeight) {
+                if (currentScrolling === true) {
+                  currentScrolling = false;
+                  // dispatch(changeScrollType(false))
+                    this.refreshControl._nativeRef.setNativeProps({
+                      enabled: true,
+                    });
+                    this.listView.setNativeProps({
+                      scrollEnabled: true,
+                    });
+                }
+              }
+            },
+            onPanResponderTerminationRequest : (evt, gesture) => {  
+              console.log('onPanResponderTerminationRequest')
+              return true;
+            },
+            onPanResponderTerminate: (evt, gesture) => {  
+              console.log('onPanResponderTerminate')
+            },
+            onShouldBlockNativeResponder: (evt, gesture) => {  
+              console.log('onShouldBlockNativeResponder')
+              return false;
+            },
+            onPanResponderReject: (evt, gesture) => {  
+              console.log('onPanResponderReject')
+              return false;
+            },
+            onPanResponderEnd: (evt, gesture) => {  
+              console.log('onPanResponderEnd')
+              let dy = gesture.dy;
+              let vy = gesture.vy;
+              
+              releasedMarginTop = setMarginTop(null, true)
+            },
+
+        });
+  }
+
   componentWillReceiveProps = (nextProps) => {
     if(this.props.communityType != nextProps.communityType){
       this.props.communityType = nextProps.communityType;
@@ -116,6 +228,22 @@ class Community extends Component {
       this.props.modeInfo == nextProps.modeInfo;
       dataSource = dataSource.cloneWithRows([]);
       this._onRefresh(nextProps.communityType);
+    } else if (this.props.isScrolling != nextProps.isScrolling) {
+      // const shouldEnableScroll = !(nextProps.isScrolling)
+      // console.log('社区页，　是否应该允许scroll', shouldEnableScroll)
+      // this.refreshControl._nativeRef.setNativeProps({
+      //   enabled: shouldEnableScroll,
+      // });
+      // this.listView._scrollComponent.setNativeProps({
+      //   scrollEnabled: shouldEnableScroll,
+      // });
+      // this.refreshControl._nativeRef.setNativeProps({
+      //   enabled: true
+      // });
+      // console.log('tyo', typeof this.listView.setNativeProps)
+      // this.listView.setNativeProps({
+      //   scrollEnabled: true
+      // });
     }
 
   }
@@ -149,28 +277,27 @@ class Community extends Component {
     });
 
     dispatch(getTopicList(1, type));
-
   }
 
   _scrollToTop = () => {
-    this.listView.scrollTo({y:0, animated: true});
+    // this.listView.scrollTo({y:0, animated: true});
   }
 
   _loadMoreData = () => {
-    const { community: communityReducer, dispatch, communityType } = this.props;
+    // const { community: communityReducer, dispatch, communityType } = this.props;
 
-    let page = communityReducer.topicPage + 1;
-    dispatch(getTopicList(page, communityType));
+    // let page = communityReducer.topicPage + 1;
+    // dispatch(getTopicList(page, communityType));
   }
 
   _onEndReached = () => {
-    const { community: communityReducer } = this.props;
+    // const { community: communityReducer } = this.props;
 
-    this.refreshControl._nativeRef.setNativeProps({
-      refreshing: true,
-    });
+    // this.refreshControl._nativeRef.setNativeProps({
+    //   refreshing: true,
+    // });
 
-    this._loadMoreData(this.props.type);
+    // this._loadMoreData(this.props.type);
 
   }
 
@@ -189,6 +316,7 @@ class Community extends Component {
               ref={ ref => this.refreshControl = ref}
               />
           }
+          {...this.panResponder.panHandlers/*{...this.props.responder.panHandlers}*/}
           ref={listView=>this.listView=listView}
           style={{backgroundColor: this.props.modeInfo.brighterLevelOne}}
           pageSize = {32}
@@ -199,6 +327,7 @@ class Community extends Component {
           onEndReachedThreshold={10}
           dataSource={ dataSource }
           renderRow={this._renderRow}
+
           onLayout={event => {
             this.listViewHeight = event.nativeEvent.layout.height
           }}
@@ -224,7 +353,7 @@ const styles = StyleSheet.create({
 
 function mapStateToProps(state) {
     return {
-      community: state.community,
+      community: state.community
     };
 }
 

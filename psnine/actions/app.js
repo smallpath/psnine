@@ -22,3 +22,10 @@ export function changeGeneType(argument) {
     }
 }
 
+export function changeScrollType(argument) {
+    return {
+        type: ActionTypes.CHANGE_SCROLL_TYPE,
+        value: argument
+    }
+}
+

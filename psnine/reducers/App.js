@@ -4,6 +4,7 @@ const initialState = {
     segmentedIndex: 0,
     communityType: '',
     geneType: '',
+    isScrolling: false
 }
 
 function reducer(state = initialState, action){
@@ -23,6 +24,12 @@ function reducer(state = initialState, action){
             newState = Object.assign({},state,{
                 geneType: action.value,
             });
+            return newState;
+        case ActionTypes.CHANGE_SCROLL_TYPE:
+            newState = Object.assign({},state,{
+                isScrolling: action.value,
+            });
+            console.log('isScrolling', action.value)
             return newState;
         default:
             return state;
