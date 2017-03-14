@@ -114,127 +114,6 @@ class Community extends Component {
     )
   }
 
-componentWillMount() {
-    const { dispatch } = this.props;
-    const ref = this
-    let currentScrolling = false;
-    const setMarginTop = this.props.setMarginTop
-    this.panResponder = PanResponder.create({  
-
-        onStartShouldSetPanResponderCapture: (e, gesture) =>{ 
-          return false; 
-        },
-
-        onMoveShouldSetPanResponderCapture:(e, gesture) =>{ 
-          let shouldSet = Math.abs(gesture.dy) >=4;
-          return shouldSet; 
-        },
-
-        onPanResponderGrant: (e, gesture) => {
-          if (currentScrolling === false) {
-            currentScrolling = true;
-            this.refreshControl._nativeRef.setNativeProps({
-              enabled: false,
-            });
-            this.listView.setNativeProps({
-              scrollEnabled: false,
-            });
-          }
-        },
-        onPanResponderMove: (e, gesture) => {
-          let dy = gesture.dy;
-          let vy = gesture.vy;
-          if(dy < 0){
-            dy = dy + setMarginTop(null, null, true);
-            if(-dy <= toolbarHeight && dy <= 0){
-              setMarginTop(dy)
-            } else {
-              setMarginTop(-toolbarHeight)
-              if (currentScrolling === true) {
-                currentScrolling = false;
-                this.refreshControl._nativeRef.setNativeProps({
-                  enabled: true,
-                });
-                this.listView.setNativeProps({
-                  scrollEnabled: true,
-                });
-              }
-            }
-          }else{
-            dy = dy + setMarginTop(null, null, true);
-            if(-dy <= toolbarHeight && dy <= 0){ 
-              setMarginTop(dy)
-            } else {
-              setMarginTop(0)
-              if (currentScrolling === true) {
-                currentScrolling = false;
-                // dispatch(changeScrollType(false))
-                this.refreshControl._nativeRef.setNativeProps({
-                  enabled: true,
-                });
-                this.listView.setNativeProps({
-                  scrollEnabled: true,
-                });
-              }
-            }
-          }
-        }, 
-        onPanResponderRelease: (e, gesture) => {
-          // console.log('onPanResponderRelease\n======')
-          const releasedMarginTop = setMarginTop(null, null, true)
-          if (releasedMarginTop === 0 || releasedMarginTop === -toolbarHeight) {
-            if (currentScrolling === true) {
-              currentScrolling = false;
-              // dispatch(changeScrollType(false))
-                this.refreshControl._nativeRef.setNativeProps({
-                  enabled: true,
-                });
-                this.listView.setNativeProps({
-                  scrollEnabled: true,
-                });
-            }
-          }
-        },
-        onPanResponderTerminationRequest : (evt, gesture) => {  
-          // console.log('onPanResponderTerminationRequest')
-          return true;
-        },
-        onPanResponderTerminate: (evt, gesture) => {  
-          // console.log('onPanResponderTerminate')
-        },
-        onShouldBlockNativeResponder: (evt, gesture) => {  
-          // console.log('onShouldBlockNativeResponder')
-          return false;
-        },
-        onPanResponderReject: (evt, gesture) => {  
-          // console.log('onPanResponderReject')
-          return false;
-        },
-        onPanResponderEnd: (evt, gesture) => {  
-          // console.log('onPanResponderEnd')
-          let dy = gesture.dy;
-          let vy = gesture.vy;
-          
-          setMarginTop(null, true)
-
-          const releasedMarginTop = setMarginTop(null, null, true)
-          if (releasedMarginTop === 0 || releasedMarginTop === -toolbarHeight) {
-            if (currentScrolling === true) {
-              currentScrolling = false;
-              // dispatch(changeScrollType(false))
-                this.refreshControl._nativeRef.setNativeProps({
-                  enabled: true,
-                });
-                this.listView.setNativeProps({
-                  scrollEnabled: true,
-                });
-            }
-          }
-        },
-
-    });
-  }
-
   componentWillReceiveProps = (nextProps) => {
     if(this.props.communityType != nextProps.communityType){
       this.props.communityType = nextProps.communityType;
@@ -315,7 +194,6 @@ componentWillMount() {
               ref={ ref => this.refreshControl = ref}
               />
           }
-          {...this.panResponder.panHandlers/*{...this.props.responder.panHandlers}*/}
           ref={listView=>this.listView=listView}
           style={{backgroundColor: this.props.modeInfo.brighterLevelOne}}
           pageSize = {32}

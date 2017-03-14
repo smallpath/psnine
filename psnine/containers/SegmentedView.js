@@ -343,11 +343,11 @@ class SegmentedView extends Component {
         return (
             <View
                 style={{ height: thisScreenHeightWitoutStatusBar }}
-
+                {...this.moveUpPanResponder.panHandlers}
             >
                 <View
                     {...{ navigator: this.props.navigator }}
-                    {...this.moveUpPanResponder.panHandlers}
+                    
                     style={[styles.container, this.props.style, {
                         elevation: 4,
                         height: segmentedHeight,
@@ -411,7 +411,7 @@ class SegmentedView extends Component {
                             URL={'http://psnine.com/qa'}
                         />
                     </View>
-                    {/*<View key={`s22`}>
+                    <View key={`s22`}>
                         <Game
                             ref={game => this.game = game}
                             index={2}
@@ -445,7 +445,7 @@ class SegmentedView extends Component {
                             }
                             }
                         />
-                    </View>*/}
+                    </View>
 
                 </ViewPagerAndroid>
             </View>
