@@ -88,6 +88,7 @@ class NewTopic extends Component {
   }
 
   componentWillUnmount = async () => {
+    // alert(this.props.navigator.getCurrentRoutes().length)
     let { openVal, innerMarginTop } = this.state;
     let config = {tension: 30, friction: 7};
     this.removeListener && this.removeListener.remove  && this.removeListener.remove();

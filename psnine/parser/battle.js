@@ -42,7 +42,7 @@ export default function (html) {
       const matched = $this.find('.pd10 p a').attr('href').match(/\d+/)
       const id = matched ? matched[0] :arr[1] + arr[2]
       const psnid = $this.find('.h-p a').attr('href').split('/').slice(-1).join('')
-      const numArr = arr[4].match(/\d+/)
+      const numArr = arr[4] ? arr[4].match(/\d+/) : ['2']
       const mock = {
         count: arr[1].match(/\d+/)[0],
         title: arr[2],

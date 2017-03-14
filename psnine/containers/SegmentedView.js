@@ -373,8 +373,7 @@ class SegmentedView extends Component {
                     alignItems: 'center',
                     paddingHorizontal: 2,
                     paddingVertical: 8
-                }
-                }
+                }}
                     ref={viewPager => { this.viewPage = viewPager; }}
                     keyboardDismissMode={"on-drag"}
                     onPageSelected={this._onPageSelected}

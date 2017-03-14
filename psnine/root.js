@@ -182,6 +182,7 @@ class Root extends React.Component {
 	renderScene = (route, navigator) => {
 		let Component = route.component;
 		_navigator = navigator;
+		global.topNavigator = navigator
 		return <Component {...route.params}
 			modeInfo={this.state.isNightMode ? this.nightModeInfo : this.dayModeInfo}
 			switchModeOnRoot={this.switchModeOnRoot}

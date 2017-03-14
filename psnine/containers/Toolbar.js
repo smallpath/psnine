@@ -33,6 +33,7 @@ import Gene from './viewPagers/Gene';
 import NewBattle from '../components/new/NewBattle';
 import NewGene from '../components/new/NewGene';
 import NewTopic from '../components/new/NewTopic';
+import NewToolbar from '../components/new/NewToolbar';
 
 import { changeSegmentIndex, changeCommunityType, changeGeneType, changeScrollType } from '../actions/app';
 
@@ -321,42 +322,14 @@ class Toolbar extends Component {
 
     let config = {tension: 30, friction: 7};
 
-    switch (segmentedIndex) {
-      case 0 : 
-
-        _navigator.push({
-          component: NewTopic,
-          withoutAnimation: true,
-          shouldForbidPressNew: true,
-        })
-        
-        break;
-
-      case 1 : 
-
-        break;
-      case 3 : 
-
-        _navigator.push({
-          component: NewBattle,
-          withoutAnimation: true,
-          shouldForbidPressNew: true,
-        })
-
-        break;
-      case 4 : 
-
-        _navigator.push({
-          component: NewGene,
-          withoutAnimation: true,
-          shouldForbidPressNew: true,
-        })
-
-        break;
-        
-    }
-
-
+    _navigator.push({
+      component: NewToolbar,
+      params: {
+        segmentedIndex: segmentedIndex
+      },
+      withoutAnimation: true,
+      shouldForbidPressNew: true,
+    })
   }
 
   render() {
