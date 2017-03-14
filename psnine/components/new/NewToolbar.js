@@ -77,7 +77,7 @@ class NewToolbar extends Component {
     switch (segmentedIndex) {
       case 0 : 
         this.close(() => {
-          navigator.replace({
+          navigator.push({
             component: NewTopic,
             withoutAnimation: true,
             shouldForbidPressNew: true,
@@ -90,7 +90,7 @@ class NewToolbar extends Component {
         break;
       case 3 : 
         this.close(() => {
-          navigator.replace({
+          navigator.push({
             component: NewBattle,
             withoutAnimation: true,
             shouldForbidPressNew: true,
@@ -100,7 +100,7 @@ class NewToolbar extends Component {
         break;
       case 4 : 
         this.close(() => {
-          navigator.replace({
+          navigator.push({
             component: NewGene,
             withoutAnimation: true,
             shouldForbidPressNew: true,
@@ -137,13 +137,10 @@ class NewToolbar extends Component {
   close = (cb) => {
     let config = {tension: 30, friction: 7};
     Animated.spring(this.state.openVal, {toValue: 0, ...config}).start(({finished})=>{
-      if (typeof cb === 'function') {
-        cb()
-        return
-      }
-
       if (finished) {
-        this.props.navigator.pop();
+        this.props.navigator.pop(() => {
+          typeof cb === 'function' && cb() 
+        });
       }
     });
   }
