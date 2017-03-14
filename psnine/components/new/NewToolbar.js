@@ -177,7 +177,7 @@ class NewToolbar extends Component {
                   borderRadius: 20,
                   backgroundColor: accentColor,
                   position:'absolute',
-                  bottom: openVal.interpolate({inputRange: [0, 1], outputRange: [24, 56 + 16 * 2]}),
+                  bottom: openVal.interpolate({inputRange: [0, 1], outputRange: [24, 56 + 10 + 16 * 2]}),
                   right: 24,
                   elevation: openVal.interpolate({
                     inputRange: [0, 0.5, 1],
@@ -232,7 +232,7 @@ class NewToolbar extends Component {
                   borderRadius: 20,
                   backgroundColor: accentColor,
                   position:'absolute',
-                  bottom: openVal.interpolate({inputRange: [0, 1], outputRange: [24,  56 + 16 * 2  + 56]}),
+                  bottom: openVal.interpolate({inputRange: [0, 1], outputRange: [24,  56 + 10 + 16 * 2  + 50]}),
                   right: 24,
                   elevation: openVal.interpolate({
                     inputRange: [0, 0.5, 1],
