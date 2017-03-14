@@ -370,17 +370,11 @@ class Toolbar extends Component {
         }]} 
       >
         <ToolbarAndroid
-          navIcon={ nativeImageSource({
-             android: 'ic_menu_white'
-            })
-          }
+          navIcon={ require('../img/ic_menu_white.png') }
           title={title}
           style={[styles.toolbar, {backgroundColor: this.props.modeInfo.standardColor}]}
           titleColor="white"
-          overflowIcon={ nativeImageSource({
-             android: 'ic_more_white'
-            }) 
-          }
+          overflowIcon={ require('../img/ic_more_white.png') }
           actions={toolbarActions[appReducer.segmentedIndex]}
           onActionSelected={this.onActionSelected}
           onIconClicked={this.props._callDrawer() }
