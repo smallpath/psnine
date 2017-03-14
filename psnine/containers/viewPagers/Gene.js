@@ -107,7 +107,7 @@ class Gene extends Component {
               <View style={{ flex: 1, flexDirection: 'row', justifyContent :'space-between',  }}>
                 <Text style={{ fontSize: 12, flex: -1, color: idColor,textAlign : 'center', textAlignVertical: 'center' }}>{rowData.psnid}</Text>
                 <Text style={{ fontSize: 12, flex: -1,color: this.props.modeInfo.standardTextColor,textAlign : 'center', textAlignVertical: 'center' }}>{rowData.date}</Text>
-                <Text style={{ fontSize: 12, flex: -1,color: this.props.modeInfo.standardTextColor,textAlign : 'center', textAlignVertical: 'center' }}>{rowData.count}回复</Text>
+                <Text style={{ fontSize: 12, flex: -1,color: this.props.modeInfo.standardTextColor,textAlign : 'center', textAlignVertical: 'center' }}>{rowData.count}</Text>
                 <Text style={{ fontSize: 12, flex: -1,color: this.props.modeInfo.standardTextColor,textAlign : 'center', textAlignVertical: 'center' }}>{rowData.circle}</Text>
               </View>
 

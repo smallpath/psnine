@@ -7,8 +7,6 @@ export function getTopicList(page = 1, type = '') {
     return dispatch => {
         return fetchTopics(page, type)
             .then(response => {
-                console.log(response.length)
-                console.log(response)
                 dispatch(gotTopicList(response,page,type));
             }).catch(err => {
                 console.error('communityError', err)

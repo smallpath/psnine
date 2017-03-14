@@ -29,7 +29,6 @@ function reducer(state = initialState, action){
             newState = Object.assign({},state,{
                 isScrolling: action.value,
             });
-            console.log('isScrolling', action.value)
             return newState;
         default:
             return state;

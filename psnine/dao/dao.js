@@ -9,11 +9,8 @@ const safeFetch = function(reqUrl) {
   return new Promise((resolve, reject) => {
     let timeout = setTimeout(() => reject('request time out'), 20000);
     fetch(reqUrl).then((response) => {
-      console.log('here')
       clearTimeout(timeout);
-      console.log('timeout')
       const text = response.text()
-      console.log('textlizer')
       return resolve(text);
     }).catch((error) => {
       console.error(error)

@@ -279,24 +279,24 @@ componentWillMount() {
   }
 
   _scrollToTop = () => {
-    // this.listView.scrollTo({y:0, animated: true});
+    this.listView.scrollTo({y:0, animated: true});
   }
 
   _loadMoreData = () => {
-    // const { community: communityReducer, dispatch, communityType } = this.props;
+    const { community: communityReducer, dispatch, communityType } = this.props;
 
-    // let page = communityReducer.topicPage + 1;
-    // dispatch(getTopicList(page, communityType));
+    let page = communityReducer.topicPage + 1;
+    dispatch(getTopicList(page, communityType));
   }
 
   _onEndReached = () => {
-    // const { community: communityReducer } = this.props;
+    const { community: communityReducer } = this.props;
 
-    // this.refreshControl._nativeRef.setNativeProps({
-    //   refreshing: true,
-    // });
+    this.refreshControl._nativeRef.setNativeProps({
+      refreshing: true,
+    });
 
-    // this._loadMoreData(this.props.type);
+    this._loadMoreData(this.props.type);
 
   }
 
