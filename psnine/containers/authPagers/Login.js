@@ -20,6 +20,7 @@ import {
   AsyncStorage,
   Linking,
   Animated,
+  Keyboard
 } from 'react-native';
 
 import { connect } from 'react-redux';
@@ -97,9 +98,27 @@ class Login extends Component {
               }).catch(err => {});
   }
 
-  onAccountTextFocus = () => {
+  componentWillMount = () => {
+    this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () => {
+      Animated.spring(this.state.avoidKeyboardMarginTop,{
+        toValue: 1,
+        friction: 10
+      }).start();
+    })
+    this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', () => {
+      Animated.spring(this.state.avoidKeyboardMarginTop,{
+        toValue: 0,
+        friction: 10
+      }).start();
+    })
+  }
 
-    this.state.avoidKeyboardMarginTop.setValue(1);
+  componentWillUnmount = () => {
+    this.keyboardDidHideListener.remove();
+    this.keyboardDidShowListener.remove();
+  }
+
+  onAccountTextFocus = () => {
 
     let text = this.accountTextInput._lastNativeText;
     if(typeof text !='undefined' && text!=='')
@@ -112,7 +131,6 @@ class Login extends Component {
   }
 
   onAccountTextBlur = () => {
-
     let text = this.accountTextInput._lastNativeText;
     if(typeof text !='undefined' && text!=='')
       return;
@@ -123,8 +141,6 @@ class Login extends Component {
   }
 
   onPasswordTextFocus = () => {
-
-    this.state.avoidKeyboardMarginTop.setValue(1);
 
     let text = this.passwordTextInput._lastNativeText;
     if(typeof text !='undefined' && text!=='')
@@ -164,22 +180,30 @@ class Login extends Component {
     let accountTextStyle = {
       top: this.state.accountMarginTop.interpolate({
           inputRange: [0 ,1], 
-          outputRange: [40, 0]
+          outputRange: [40, 15]
       }),
       color: this.state.accountMarginTop.interpolate({
           inputRange: [0 ,1], 
           outputRange: [this.props.modeInfo.standardTextColor, this.props.modeInfo.standardColor]
+      }),
+      fontSize: this.state.accountMarginTop.interpolate({
+          inputRange: [0 ,1], 
+          outputRange: [15, 12]
       }),
     }
 
     let passwordTextStyle = {
       top: this.state.passwordMarginTop.interpolate({
           inputRange: [0 ,1], 
-          outputRange: [40, 0]
+          outputRange: [40, 15]
       }),
       color: this.state.passwordMarginTop.interpolate({
           inputRange: [0 ,1], 
           outputRange: [this.props.modeInfo.standardTextColor, this.props.modeInfo.standardColor]
+      }),
+      fontSize: this.state.passwordMarginTop.interpolate({
+          inputRange: [0 ,1], 
+          outputRange: [15, 12]
       }),
     }
     return (
@@ -267,7 +291,6 @@ class Login extends Component {
                   {'PSN ID'}
               </Animated.Text>
               <TextInput underlineColorAndroid={accentColor}
-                autoFocus={true}
                 onChange={({nativeEvent})=>{ this.setState({psnid:nativeEvent.text})}}
                 ref={ref=>this.accountTextInput = ref}
                 onFocus={this.onAccountTextFocus}

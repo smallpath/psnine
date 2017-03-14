@@ -33,7 +33,7 @@ let screen = Dimensions.get('window');
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = screen;
 
 let statusBarHeight = StatusBar.currentHeight;
-let segmentedHeight = 44;
+let segmentedHeight = 38;
 let toolbarHeight = 56;
 
 let thisScreenHeightWitoutStatusBar = SCREEN_HEIGHT - statusBarHeight - segmentedHeight + toolbarHeight;
@@ -46,6 +46,8 @@ let styles = StyleSheet.create({
     },
     titleContainer: {
         flexDirection: 'row',
+        backgroundColor: '#f00',
+        height: segmentedHeight
     },
     title: {
         flex: 1,
@@ -228,10 +230,6 @@ class SegmentedView extends Component {
         });
     }
 
-    componentDidMount() {
-
-    }
-
     onSegmentedViewChange = (segmentedIndex) => {
         this.viewPage.setPage(segmentedIndex);
     }
@@ -354,21 +352,16 @@ class SegmentedView extends Component {
                         elevation: 4,
                         height: segmentedHeight,
                     }]}>
-                    <View style={[styles.barContainer, { backgroundColor: this.props.modeInfo.standardColor, }]}>
-                    </View>
                     <View style={styles.titleContainer}>
                         {items}
                     </View>
                     <View
-                        // onLayout={({nativeEvent})=>{
-                        //     console.log(nativeEvent.layout)
-                        // }}
-                        style={[styles.barContainer, { backgroundColor: this.props.modeInfo.standardColor, }]}>
+                        style={[styles.barContainer, { backgroundColor: 'transparent', position: 'absolute', bottom: -2, width: SCREEN_WIDTH}]}>
                         <Animated.View
                             style={[
                                 { left: this.state.fadeAnim },
-                                { width: this.props.titleWidth - this.props.restWidth * 2 },
-                                { marginTop: 0.5, height: 4, backgroundColor: this.props.modeInfo.backgroundColor, }
+                                { width: this.props.titleWidth - this.props.restWidth * 2  },
+                                { height: 4, backgroundColor: this.props.modeInfo.backgroundColor, }
                             ]}>
                         </Animated.View>
                     </View>
@@ -418,7 +411,7 @@ class SegmentedView extends Component {
                             URL={'http://psnine.com/qa'}
                         />
                     </View>
-                    <View key={`s22`}>
+                    {/*<View key={`s22`}>
                         <Game
                             ref={game => this.game = game}
                             index={2}
@@ -452,7 +445,7 @@ class SegmentedView extends Component {
                             }
                             }
                         />
-                    </View>
+                    </View>*/}
 
                 </ViewPagerAndroid>
             </View>
