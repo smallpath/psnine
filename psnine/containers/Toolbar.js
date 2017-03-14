@@ -144,7 +144,6 @@ class Toolbar extends Component {
         barColor='#fff'
         titleStyle={{ fontSize:15 }}
         titleWidth={Dimensions.get('window').width/titlesArr.length}
-        moveUpResponders = {this.panResponder}
         />
     )
   }
@@ -169,100 +168,21 @@ class Toolbar extends Component {
 
   }
 
-  setMarginTop = (value, isFlatten) => {
-    value && console.log(value)
+  setMarginTop = (value, isFlatten, isGetMarginTop) => {
+    // console.log(value, this.state.marginTop._offset)
+    if (typeof isGetMarginTop === 'boolean' && isGetMarginTop) {
+      return releasedMarginTop
+    }
     if (isFlatten) {
       this.state.marginTop.flattenOffset();
-      return this.state.marginTop._value;
+      releasedMarginTop = this.state.marginTop._value;
+      return;
     }
     this.state.marginTop.setValue(value)
   }
 
   componentWillMount() {
-    const { dispatch } = this.props;
-    const ref = this
-    let currentScrolling = false;
-        this.panResponder = PanResponder.create({  
 
-            onStartShouldSetPanResponderCapture: (e, gesture) =>{ 
-              return false; 
-            },
-
-            onMoveShouldSetPanResponderCapture:(e, gesture) =>{ 
-              let shouldSet = Math.abs(gesture.dy) >=4;
-              return shouldSet; 
-            },
-
-            onPanResponderGrant: function(e, gesture) {
-              console.log(typeof this.listView)
-              if (currentScrolling === false) {
-                currentScrolling = true;
-                // dispatch(changeScrollType(true))
-              }
-            },
-            onPanResponderMove: (e, gesture) => {
-              let dy = gesture.dy;
-              let vy = gesture.vy;
-              if(dy < 0){
-                dy = dy + releasedMarginTop;
-                if(-dy <= toolbarHeight && dy <= 0){
-                  this.state.marginTop.setValue(dy); 
-                } else {
-                  this.state.marginTop.setValue(-toolbarHeight); 
-                  if (currentScrolling === true) {
-                    currentScrolling = false;
-                    // dispatch(changeScrollType(false))
-                  }
-                }
-              }else{
-                dy = dy + releasedMarginTop;
-                if(-dy <= toolbarHeight && dy <= 0){
-                  this.state.marginTop.setValue(dy); 
-                } else {
-                  this.state.marginTop.setValue(0); 
-                  if (currentScrolling === true) {
-                    currentScrolling = false;
-                    // dispatch(changeScrollType(false))
-                  }
-                }
-              }
-            }, 
-            onPanResponderRelease: (e, gesture) => {
-              console.log('onPanResponderRelease\n======')
-              if (releasedMarginTop === 0 || releasedMarginTop === -toolbarHeight) {
-                if (currentScrolling === true) {
-                  currentScrolling = false;
-                  // dispatch(changeScrollType(false))
-                }
-              }
-            },
-            onPanResponderTerminationRequest : (evt, gesture) => {  
-              console.log('onPanResponderTerminationRequest')
-              return true;
-            },
-            onPanResponderTerminate: (evt, gesture) => {  
-              console.log('onPanResponderTerminate')
-            },
-            onShouldBlockNativeResponder: (evt, gesture) => {  
-              console.log('onShouldBlockNativeResponder')
-              return true;
-            },
-            onPanResponderReject: (evt, gesture) => {  
-              console.log('onPanResponderReject')
-              return false;
-            },
-            onPanResponderEnd: (evt, gesture) => {  
-              console.log('onPanResponderEnd')
-              let dy = gesture.dy;
-              let vy = gesture.vy;
-              
-              this.state.marginTop.flattenOffset();
-
-              let value = this.state.marginTop._value;
-              releasedMarginTop = value
-            },
-
-        });
   }
 
 

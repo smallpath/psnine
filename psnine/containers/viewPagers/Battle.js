@@ -10,6 +10,7 @@ import {
   TouchableNativeFeedback,
   RefreshControl,
   InteractionManager,
+  PanResponder
 } from 'react-native';
 
 import { connect } from 'react-redux';
@@ -20,6 +21,9 @@ import CommunityTopic from '../../components/CommunityTopic';
 
 import { getBattleURL, getGamePngURL } from '../../dao/dao';
 import moment from '../../utils/moment';
+
+let toolbarHeight = 56;
+let releasedMarginTop = 0;
 
 let getSectionData = (dataBlob, sectionID) => {
   return dataBlob[sectionID];
@@ -172,6 +176,126 @@ class Battle extends Component {
     }
   }
 
+  componentWillMount() {
+    const { dispatch } = this.props;
+    const ref = this
+    let currentScrolling = false;
+    const setMarginTop = this.props.setMarginTop
+    this.panResponder = PanResponder.create({  
+
+        onStartShouldSetPanResponderCapture: (e, gesture) =>{ 
+          return true; 
+        },
+
+        onMoveShouldSetPanResponderCapture:(e, gesture) =>{ 
+          let shouldSet = Math.abs(gesture.dy) >=4;
+          return shouldSet; 
+        },
+
+        onPanResponderGrant: (e, gesture) => {
+          if (currentScrolling === false) {
+            currentScrolling = true;
+            this.refreshControl._nativeRef.setNativeProps({
+              enabled: false,
+            });
+            this.listView.setNativeProps({
+              scrollEnabled: false,
+            });
+          }
+        },
+        onPanResponderMove: (e, gesture) => {
+          let dy = gesture.dy;
+          let vy = gesture.vy;
+          if(dy < 0){
+            dy = dy + setMarginTop(null, null, true);
+            if(-dy <= toolbarHeight && dy <= 0){
+              setMarginTop(dy)
+            } else {
+              setMarginTop(-toolbarHeight)
+              if (currentScrolling === true) {
+                currentScrolling = false;
+                this.refreshControl._nativeRef.setNativeProps({
+                  enabled: true,
+                });
+                this.listView.setNativeProps({
+                  scrollEnabled: true,
+                });
+              }
+            }
+          }else{
+            dy = dy + setMarginTop(null, null, true);
+            if(-dy <= toolbarHeight && dy <= 0){ 
+              setMarginTop(dy)
+            } else {
+              setMarginTop(0)
+              if (currentScrolling === true) {
+                currentScrolling = false;
+                // dispatch(changeScrollType(false))
+                this.refreshControl._nativeRef.setNativeProps({
+                  enabled: true,
+                });
+                this.listView.setNativeProps({
+                  scrollEnabled: true,
+                });
+              }
+            }
+          }
+        }, 
+        onPanResponderRelease: (e, gesture) => {
+          // console.log('onPanResponderRelease\n======')
+          const releasedMarginTop = setMarginTop(null, null, true)
+          if (releasedMarginTop === 0 || releasedMarginTop === -toolbarHeight) {
+            if (currentScrolling === true) {
+              currentScrolling = false;
+              // dispatch(changeScrollType(false))
+                this.refreshControl._nativeRef.setNativeProps({
+                  enabled: true,
+                });
+                this.listView.setNativeProps({
+                  scrollEnabled: true,
+                });
+            }
+          }
+        },
+        onPanResponderTerminationRequest : (evt, gesture) => {  
+          // console.log('onPanResponderTerminationRequest')
+          return true;
+        },
+        onPanResponderTerminate: (evt, gesture) => {  
+          // console.log('onPanResponderTerminate')
+        },
+        onShouldBlockNativeResponder: (evt, gesture) => {  
+          // console.log('onShouldBlockNativeResponder')
+          return false;
+        },
+        onPanResponderReject: (evt, gesture) => {  
+          // console.log('onPanResponderReject')
+          return false;
+        },
+        onPanResponderEnd: (evt, gesture) => {  
+          // console.log('onPanResponderEnd')
+          let dy = gesture.dy;
+          let vy = gesture.vy;
+          
+          setMarginTop(null, true)
+
+          const releasedMarginTop = setMarginTop(null, null, true)
+          if (releasedMarginTop === 0 || releasedMarginTop === -toolbarHeight) {
+            if (currentScrolling === true) {
+              currentScrolling = false;
+              // dispatch(changeScrollType(false))
+                this.refreshControl._nativeRef.setNativeProps({
+                  enabled: true,
+                });
+                this.listView.setNativeProps({
+                  scrollEnabled: true,
+                });
+            }
+          }
+        },
+
+    });
+  }
 
   componentDidMount = () => {
     const { battle: battleReducer } = this.props;
@@ -221,9 +345,12 @@ class Battle extends Component {
               refreshing={false}
               onRefresh={this._onRefresh}
               colors={[standardColor]}
+              ref={ ref => this.refreshControl = ref}
               progressBackgroundColor={this.props.modeInfo.backgroundColor}
               />
           }
+          {...this.panResponder.panHandlers}
+          ref={listView=>this.listView=listView}
           style={{backgroundColor: this.props.modeInfo.brighterLevelOne}}
           pageSize = {32}
           removeClippedSubviews={false}
