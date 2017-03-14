@@ -64,7 +64,7 @@ class Login extends Component {
     const { psnid, password } = this.state;
 
     if (psnid=='' || password == ''){
-      ToastAndroid.show('账号或密码未输入',2000);
+      global.toast && global.toast('账号或密码未输入',2000);
       return;
     }
 
@@ -76,14 +76,14 @@ class Login extends Component {
       const user = await fetchUser(psnid);
       await AsyncStorage.setItem('@userInfo', JSON.stringify(user));
       
-      ToastAndroid.show(`登录成功`,2000);
+      global.toast && global.toast(`登录成功`,2000);
       this.props.setLogin(psnid,user);
       this.props.navigator.pop();
     }else{
 
       await AsyncStorage.removeItem('@psnid');
       const value = await AsyncStorage.getItem('@psnid');
-      ToastAndroid.show(`登录失败,请检查账号与密码是否输入正确`,2000);
+      global.toast && global.toast(`登录失败,请检查账号与密码是否输入正确`,2000);
     }
 
   }
@@ -94,7 +94,7 @@ class Login extends Component {
                 if (supported)
                   Linking.openURL(registURL);
                 else
-                  ToastAndroid.show(`未找到浏览器, 如果您使用了冰箱, 请先解冻浏览器`,2000); 
+                  global.toast && global.toast(`未找到浏览器, 如果您使用了冰箱, 请先解冻浏览器`,2000); 
               }).catch(err => {});
   }
 

@@ -11,7 +11,7 @@ export function getBattleList() {
             }).catch(err => {
                 console.error(err)
                 dispatch(gotBattleListError());
-                ToastAndroid.show('网络错误',2000);
+                global.toast && global.toast('网络错误',2000);
                 dispatch(gotBattleList([]));
             });
     }

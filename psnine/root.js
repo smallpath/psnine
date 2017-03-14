@@ -6,6 +6,9 @@ import {
 	ToastAndroid,
 	StatusBar,
 	View,
+	Animated,
+	Text,
+	Easing
 } from 'react-native';
 import { Provider } from 'react-redux'
 import {
@@ -42,7 +45,7 @@ let backPressClickTimeStamp = 0;
 // 		let timestamp = new Date();
 // 	    if(timestamp - backPressClickTimeStamp>2000){
 // 	      backPressClickTimeStamp = timestamp;
-// 		  ToastAndroid.show('再按一次退出程序',2000);
+// 		  global.toast && global.toast('再按一次退出程序',2000);
 // 	      return true;
 // 	    }else{
 // 	      return false;
@@ -79,6 +82,9 @@ let CustomPushWithoutAnimation = Object.assign({}, PushWithoutAnimation.NONE, {
 	gestures: { pop: CustomGesture }
 })
 
+let toolbarHeight = 56
+const tipHeight = toolbarHeight * 0.8
+
 class Root extends React.Component {
 	constructor(props) {
 		super(props);
@@ -86,7 +92,9 @@ class Root extends React.Component {
 		let hour = ~~moment().format('HH');
 
 		this.state = {
+			text: '',
 			isNightMode: hour >= 22 || hour < 7,
+			tipBarMarginBottom: new Animated.Value(0)
 		};
 
 		this.dayModeInfo = {
@@ -114,30 +122,61 @@ class Root extends React.Component {
 		}
 	}
 
-	switchModeOnRoot = (isCallReplaceToast, toast) => {
-		if (isCallReplaceToast) {
-			const listeners = BackAndroid.addEventListener('hardwareBackPress', function () {
-				if (_navigator && _navigator.getCurrentRoutes().length > 1) {
-					_navigator.pop();
-					return true;
-				} else {
-					let timestamp = new Date();
-					if (timestamp - backPressClickTimeStamp > 2000) {
-						backPressClickTimeStamp = timestamp;
-						toast('再按一次退出程序');
-						return true;
-					} else {
-						return false;
-					}
-				}
-			});
-			return
-		}
+	switchModeOnRoot = () => {
 		let targetState = !this.state.isNightMode;
 		this.setState({
 			isNightMode: targetState,
 		});
 		return targetState;
+	}
+
+	componentWillMount() {
+		global.toast = this.toast
+		const listeners = BackAndroid.addEventListener('hardwareBackPress', function () {
+			if (_navigator && _navigator.getCurrentRoutes().length > 1) {
+				_navigator.pop();
+				return true;
+			} else {
+				let timestamp = new Date();
+				if (timestamp - backPressClickTimeStamp > 2000) {
+					backPressClickTimeStamp = timestamp;
+					global.toast && global.toast('再按一次退出程序');
+					return true;
+				} else {
+					return false;
+				}
+			}
+		});
+	}
+
+	toast = (text) => {
+		const value = this.state.tipBarMarginBottom._value
+		if (value === 0) {
+			this.setText(text)
+		} else {
+			setTimeout(() => {
+				this.toast(text)
+			}, 3000)
+		}
+	}
+
+	setText = (text) => {
+		this.setState({
+			text
+		})
+		Animated.timing(this.state.tipBarMarginBottom, {
+			toValue: this.state.tipBarMarginBottom._value === 1 ? 0 : 1,
+			duration: 200,
+			easing: Easing.ease,
+		}).start();
+
+		setTimeout(() => {
+			Animated.timing(this.state.tipBarMarginBottom, {
+				toValue: this.state.tipBarMarginBottom._value === 1 ? 0 : 1,
+				duration: 200,
+				easing: Easing.ease,
+			}).start();
+		}, 2000)
 	}
 
 	renderScene = (route, navigator) => {
@@ -146,6 +185,7 @@ class Root extends React.Component {
 		return <Component {...route.params}
 			modeInfo={this.state.isNightMode ? this.nightModeInfo : this.dayModeInfo}
 			switchModeOnRoot={this.switchModeOnRoot}
+			tipBarMarginBottom={this.state.tipBarMarginBottom}
 			navigator={navigator} />
 	}
 	configureScene = (route) => {
@@ -157,6 +197,7 @@ class Root extends React.Component {
 		return CustomSceneConfig
 	}
 	render() {
+		const modeInfo = this.state.isNightMode ? this.nightModeInfo : this.dayModeInfo
 		return (
 			<Provider store={store}>
 				<View style={{ flex: 1 }}>
@@ -166,6 +207,28 @@ class Root extends React.Component {
 						configureScene={this.configureScene}
 						renderScene={this.renderScene}
 						style={{ width: SCREEN_WIDTH, height: SCREEN_HEIGHT - StatusBar.currentHeight }} />
+					<Animated.View style={{
+						height: tipHeight,
+						position: 'absolute',
+						bottom: this.state.tipBarMarginBottom.interpolate({
+							inputRange: [0, 1],
+							outputRange: [-tipHeight, 0]
+						}),
+						elevation: 6,
+						width: SCREEN_WIDTH,
+						backgroundColor: modeInfo.backgroundColor
+					}}>
+						<View style={{
+							flex: 1,
+							justifyContent: 'center',
+							padding: 20
+						}}>
+							<Text style={{
+								fontSize: 15,
+								color: modeInfo.titleTextColor
+							}}>{this.state.text}</Text>
+						</View>
+					</Animated.View>
 				</View>
 			</Provider>
 		);

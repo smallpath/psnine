@@ -57,7 +57,12 @@ class Psnine extends Component {
             drawerPosition={DrawerLayoutAndroid.positions.Left} 
             renderNavigationView={this._renderNavigationView}>
             <Toolbar 
-              {...{navigator:this.props.navigator, modeInfo:this.props.modeInfo, switchModeOnRoot: this.props.switchModeOnRoot }}
+              {...{
+                navigator:this.props.navigator, 
+                modeInfo:this.props.modeInfo, 
+                switchModeOnRoot: this.props.switchModeOnRoot,
+                tipBarMarginBottom: this.props.tipBarMarginBottom
+              }}
               _callDrawer = {() => this.callDrawer.bind(this)}
             />
       </DrawerLayoutAndroid> 

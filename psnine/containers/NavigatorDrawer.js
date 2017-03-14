@@ -126,7 +126,7 @@ class NavigatorDrawer extends Component {
         withoutAnimation: false,
       })
     }else{
-      ToastAndroid.show('您已登录, 请先退出', 2000);
+      global.toast && global.toast('您已登录, 请先退出', 2000);
     }
   }
 
@@ -144,7 +144,7 @@ class NavigatorDrawer extends Component {
         bronze: '铜',
       },
     });
-    ToastAndroid.show('登出成功', 2000);
+    global.toast && global.toast('登出成功', 2000);
   }
 
   setLogin = (psnid,userInfo) => {
@@ -162,7 +162,7 @@ class NavigatorDrawer extends Component {
       userInfo: Object.assign({},this.state.userInfo,{ isSigned: true }),
     });
 
-    ToastAndroid.show(data,2000);
+    global.toast && global.toast(data,2000);
   }
 
   switch = () => {
@@ -373,7 +373,7 @@ class NavigatorDrawer extends Component {
       switch (index) {
         case 0:
             if(this.state.psnid == ''){
-              ToastAndroid.show('未登录',2000);
+              global.toast && global.toast('未登录',2000);
               return;
             }
 
@@ -389,7 +389,7 @@ class NavigatorDrawer extends Component {
             break;
         case 1:
             if(this.state.psnid == ''){
-              ToastAndroid.show('未登录',2000);
+              global.toast && global.toast('未登录',2000);
               return;
             }
 

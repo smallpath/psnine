@@ -11,7 +11,7 @@ export function getTopicList(page = 1, type = '') {
             }).catch(err => {
                 console.error('communityError', err)
                 dispatch(gotTopicListError());
-                ToastAndroid.show('网络错误',2000);
+                global.toast && global.toast('网络错误',2000);
             });
     }
 }

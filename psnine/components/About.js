@@ -76,7 +76,7 @@ class About extends Component {
         if (supported)
             Linking.openURL(this.state.sourceCodeURL);
         else
-            ToastAndroid.show(`未找到浏览器, 如果您使用了冰箱, 请先解冻浏览器`,2000); 
+            global.toast && global.toast(`未找到浏览器, 如果您使用了冰箱, 请先解冻浏览器`,2000); 
     }catch(err){}
   }
 

@@ -109,8 +109,6 @@ class Toolbar extends Component {
     super(props);
 
     this.state = {
-      text: '',
-      tipBarMarginBottom: new Animated.Value(0),
       rotation: new Animated.Value(1),
       scale: new Animated.Value(1),
       opacity: new Animated.Value(1),
@@ -151,36 +149,6 @@ class Toolbar extends Component {
         titleWidth={Dimensions.get('window').width/titlesArr.length}
         />
     )
-  }
-
-  toast = (text) => {
-    const value = this.state.tipBarMarginBottom._value
-    if (value === 0) {
-      this.setText(text)
-    } else {
-      setTimeout(() => {
-        this.setText(text)
-      }, 3000)
-    }
-  }
-
-  setText = (text) => {
-    this.setState({
-      text
-    })
-    Animated.timing(this.state.tipBarMarginBottom,{
-      toValue:  this.state.tipBarMarginBottom._value === 1 ? 0 : 1,
-      duration: 200,
-      easing: Easing.ease,
-    }).start();
-
-    setTimeout(() => {
-      Animated.timing(this.state.tipBarMarginBottom,{
-        toValue:  this.state.tipBarMarginBottom._value === 1 ? 0 : 1,
-        duration: 200,
-        easing: Easing.ease,
-      }).start();
-    }, 2000)
   }
 
   componentWillReceiveProps(nextProps) {
@@ -395,7 +363,6 @@ class Toolbar extends Component {
     const { app: appReducer, switchModeOnRoot } = this.props;
     const { segmentedIndex } = this.props.app;
     const tipHeight =  toolbarHeight * 0.8
-    switchModeOnRoot(true, this.toast)
     return (
       <Animated.View 
         style={[styles.container,{
@@ -428,7 +395,7 @@ class Toolbar extends Component {
               borderRadius: 30,
               backgroundColor: accentColor,
               position:'absolute',
-              bottom: this.state.tipBarMarginBottom.interpolate({
+              bottom: this.props.tipBarMarginBottom.interpolate({
                 inputRange: [0, 1], 
                 outputRange: [16 , 16 + tipHeight]
               }),
@@ -482,28 +449,6 @@ class Toolbar extends Component {
               />
             </View>
           </TouchableNativeFeedback>
-        </Animated.View>
-        <Animated.View style={{
-            height: tipHeight,
-            position:'absolute',
-            bottom: this.state.tipBarMarginBottom.interpolate({
-              inputRange: [0, 1], 
-              outputRange: [-tipHeight ,0]
-            }),
-            elevation: 6,
-            width: SCREEN_WIDTH,
-            backgroundColor: this.props.modeInfo.backgroundColor
-          }}>
-          <View style={{
-            flex: 1,
-            justifyContent: 'center',
-            padding: 20
-          }}>
-            <Text style={{
-              fontSize: 15,
-              color: this.props.modeInfo.titleTextColor
-            }}>{this.state.text}</Text>
-          </View>
         </Animated.View>
       </Animated.View>
     )
