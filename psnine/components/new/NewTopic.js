@@ -121,7 +121,6 @@ class NewTopic extends Component {
 
             onPanResponderGrant:(e, gesture) => {
                 this.state.innerMarginTop.setOffset(gesture.y0);
-                this.state.innerMarginTop.setValue(this.state.innerMarginTop._startingValue);
             },
             onPanResponderMove: Animated.event([
               null,
