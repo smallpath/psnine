@@ -38,6 +38,10 @@ import { changeSegmentIndex, changeCommunityType, changeGeneType, changeScrollTy
 
 import { standardColor, accentColor } from '../config/colorConfig';
 
+let screen = Dimensions.get('window');
+
+const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = screen;
+
 let title = "PSNINE";
 let isMounted = false;
 let indexWithFloatButton = [0,3,4];
@@ -105,6 +109,8 @@ class Toolbar extends Component {
     super(props);
 
     this.state = {
+      text: '',
+      tipBarMarginBottom: new Animated.Value(0),
       rotation: new Animated.Value(1),
       scale: new Animated.Value(1),
       opacity: new Animated.Value(1),
@@ -128,7 +134,6 @@ class Toolbar extends Component {
             toolbarDispatch: this.props.dispatch,
             segmentedIndex: this.props.app.segmentedIndex,
             modeInfo:this.props.modeInfo,
-            isScrolling: this.props.app.isScrolling,
             setMarginTop: this.setMarginTop
         }} 
         titles={titlesArr}
@@ -146,6 +151,36 @@ class Toolbar extends Component {
         titleWidth={Dimensions.get('window').width/titlesArr.length}
         />
     )
+  }
+
+  toast = (text) => {
+    const value = this.state.tipBarMarginBottom._value
+    if (value === 0) {
+      this.setText(text)
+    } else {
+      setTimeout(() => {
+        this.setText(text)
+      }, 3000)
+    }
+  }
+
+  setText = (text) => {
+    this.setState({
+      text
+    })
+    Animated.timing(this.state.tipBarMarginBottom,{
+      toValue:  this.state.tipBarMarginBottom._value === 1 ? 0 : 1,
+      duration: 200,
+      easing: Easing.ease,
+    }).start();
+
+    setTimeout(() => {
+      Animated.timing(this.state.tipBarMarginBottom,{
+        toValue:  this.state.tipBarMarginBottom._value === 1 ? 0 : 1,
+        duration: 200,
+        easing: Easing.ease,
+      }).start();
+    }, 2000)
   }
 
   componentWillReceiveProps(nextProps) {
@@ -357,9 +392,10 @@ class Toolbar extends Component {
   }
 
   render() {
-    const { app: appReducer } = this.props;
+    const { app: appReducer, switchModeOnRoot } = this.props;
     const { segmentedIndex } = this.props.app;
-    // console.log('Toolbar.js rendered');
+    const tipHeight =  toolbarHeight * 0.8
+    switchModeOnRoot(true, this.toast)
     return (
       <Animated.View 
         style={[styles.container,{
@@ -392,20 +428,23 @@ class Toolbar extends Component {
               borderRadius: 30,
               backgroundColor: accentColor,
               position:'absolute',
-              bottom: 16,
+              bottom: this.state.tipBarMarginBottom.interpolate({
+                inputRange: [0, 1], 
+                outputRange: [16 , 16 + tipHeight]
+              }),
               right: 16,
               elevation: 6 ,
               zIndex: 1,
               opacity: this.state.opacity,
 
               transform: [{
-                          scale: this.state.scale,                        
-                        },{
-                          rotateZ: this.state.rotation.interpolate({
-                            inputRange: [0,1],
-                            outputRange: ['0deg', '360deg']
-                          }),
-                        }]
+                scale: this.state.scale,                        
+              },{
+                rotateZ: this.state.rotation.interpolate({
+                  inputRange: [0,1],
+                  outputRange: ['0deg', '360deg']
+                }),
+              }]
           }}>
           
           <TouchableNativeFeedback 
@@ -443,6 +482,28 @@ class Toolbar extends Component {
               />
             </View>
           </TouchableNativeFeedback>
+        </Animated.View>
+        <Animated.View style={{
+            height: tipHeight,
+            position:'absolute',
+            bottom: this.state.tipBarMarginBottom.interpolate({
+              inputRange: [0, 1], 
+              outputRange: [-tipHeight ,0]
+            }),
+            elevation: 6,
+            width: SCREEN_WIDTH,
+            backgroundColor: this.props.modeInfo.backgroundColor
+          }}>
+          <View style={{
+            flex: 1,
+            justifyContent: 'center',
+            padding: 20
+          }}>
+            <Text style={{
+              fontSize: 15,
+              color: this.props.modeInfo.titleTextColor
+            }}>{this.state.text}</Text>
+          </View>
         </Animated.View>
       </Animated.View>
     )

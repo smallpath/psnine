@@ -8,7 +8,7 @@ import {
 	View,
 } from 'react-native';
 import { Provider } from 'react-redux'
-import { 
+import {
 	accentColor,
 	deepColor, standardColor, tintColor,
 	nightDeepColor, nightStandardColor, nightTintColor,
@@ -34,44 +34,44 @@ const store = configureStore();
 
 let _navigator;
 let backPressClickTimeStamp = 0;
-BackAndroid.addEventListener('hardwareBackPress', function () {
-	if (_navigator && _navigator.getCurrentRoutes().length > 1) {
-		_navigator.pop();
-		return true;
-	}else{
-		let timestamp = new Date();
-	    if(timestamp - backPressClickTimeStamp>2000){
-	      backPressClickTimeStamp = timestamp;
-		  ToastAndroid.show('再按一次退出程序',2000);
-	      return true;
-	    }else{
-	      return false;
-	    }
-	}
-});
+// const listeners = BackAndroid.addEventListener('hardwareBackPress', function () {
+// 	if (_navigator && _navigator.getCurrentRoutes().length > 1) {
+// 		_navigator.pop();
+// 		return true;
+// 	}else{
+// 		let timestamp = new Date();
+// 	    if(timestamp - backPressClickTimeStamp>2000){
+// 	      backPressClickTimeStamp = timestamp;
+// 		  ToastAndroid.show('再按一次退出程序',2000);
+// 	      return true;
+// 	    }else{
+// 	      return false;
+// 	    }
+// 	}
+// });
 
-const { width:SCREEN_WIDTH, height:SCREEN_HEIGHT } = Dimensions.get('window');
+const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
-let BaseConfig = Navigator.SceneConfigs.PushFromRight ;
+let BaseConfig = Navigator.SceneConfigs.PushFromRight;
 
 let FloatFromBottom = Navigator.SceneConfigs.FloatFromBottomAndroid;
 
-let CustomGesture = Object.assign({}, BaseConfig.gestures.pop, { 
+let CustomGesture = Object.assign({}, BaseConfig.gestures.pop, {
 	isDetachable: true,
-	snapVelocity: 8, 
+	snapVelocity: 8,
 	edgeHitWidth: SCREEN_WIDTH,
 	// set it from 3(Default) to 12 to ignore Navigator gestures being triggerred 
 	// because Navigator gesture will be triggerred first when there is another components
 	// which has scroll abiliy, such as ScrollView and WebView
-	gestureDetectMovement:12,	
-  	stillCompletionRatio: 3 / 10,
+	gestureDetectMovement: 12,
+	stillCompletionRatio: 3 / 10,
 	directionRatio: 2,
-	fullDistance: SCREEN_WIDTH/2,
+	fullDistance: SCREEN_WIDTH / 2,
 	direction: 'left-to-right',
 });
 
 
-let CustomSceneConfig = Object.assign({}, BaseConfig, {  
+let CustomSceneConfig = Object.assign({}, BaseConfig, {
 	gestures: { pop: CustomGesture }
 });
 
@@ -80,7 +80,7 @@ let CustomPushWithoutAnimation = Object.assign({}, PushWithoutAnimation.NONE, {
 })
 
 class Root extends React.Component {
-	constructor(props){
+	constructor(props) {
 		super(props);
 
 		let hour = ~~moment().format('HH');
@@ -92,8 +92,8 @@ class Root extends React.Component {
 		this.dayModeInfo = {
 			isNightMode: false,
 			accentColor: accentColor,
-			deepColor: deepColor, 
-			standardColor: standardColor, 
+			deepColor: deepColor,
+			standardColor: standardColor,
 			tintColor: tintColor,
 			backgroundColor: backgroundColor,
 			brighterLevelOne: backgroundColorBrighterLevelOne,
@@ -104,8 +104,8 @@ class Root extends React.Component {
 		this.nightModeInfo = {
 			isNightMode: true,
 			accentColor: accentColor,
-			deepColor: nightDeepColor, 
-			standardColor: nightStandardColor, 
+			deepColor: nightDeepColor,
+			standardColor: nightStandardColor,
 			tintColor: nightTintColor,
 			backgroundColor: nightBackgroundColor,
 			brighterLevelOne: nightBackgroundColorBrighterLevelOne,
@@ -114,7 +114,25 @@ class Root extends React.Component {
 		}
 	}
 
-	switchModeOnRoot = () => {
+	switchModeOnRoot = (isCallReplaceToast, toast) => {
+		if (isCallReplaceToast) {
+			const listeners = BackAndroid.addEventListener('hardwareBackPress', function () {
+				if (_navigator && _navigator.getCurrentRoutes().length > 1) {
+					_navigator.pop();
+					return true;
+				} else {
+					let timestamp = new Date();
+					if (timestamp - backPressClickTimeStamp > 2000) {
+						backPressClickTimeStamp = timestamp;
+						toast('再按一次退出程序');
+						return true;
+					} else {
+						return false;
+					}
+				}
+			});
+			return
+		}
 		let targetState = !this.state.isNightMode;
 		this.setState({
 			isNightMode: targetState,
@@ -122,17 +140,17 @@ class Root extends React.Component {
 		return targetState;
 	}
 
-	renderScene = (route, navigator)=> {
+	renderScene = (route, navigator) => {
 		let Component = route.component;
 		_navigator = navigator;
-		return <Component {...route.params} 
-					modeInfo={this.state.isNightMode ? this.nightModeInfo :this.dayModeInfo  } 
-					switchModeOnRoot={this.switchModeOnRoot}
-					navigator={navigator} />
+		return <Component {...route.params}
+			modeInfo={this.state.isNightMode ? this.nightModeInfo : this.dayModeInfo}
+			switchModeOnRoot={this.switchModeOnRoot}
+			navigator={navigator} />
 	}
 	configureScene = (route) => {
-		if(typeof route.withoutAnimation != 'undefined'){
-			if(route.withoutAnimation == true){
+		if (typeof route.withoutAnimation != 'undefined') {
+			if (route.withoutAnimation == true) {
 				return CustomPushWithoutAnimation;
 			}
 		}
@@ -140,15 +158,15 @@ class Root extends React.Component {
 	}
 	render() {
 		return (
-			<Provider store={ store }>
-				 <View style={{flex:1}}> 
-				 	<StatusBar translucent={false} backgroundColor={this.state.isNightMode ? nightDeepColor: deepColor} barStyle="light-content" />
+			<Provider store={store}>
+				<View style={{ flex: 1 }}>
+					<StatusBar translucent={false} backgroundColor={this.state.isNightMode ? nightDeepColor : deepColor} barStyle="light-content" />
 					<Navigator
-						initialRoute={{ component: App, shouldBeClickableUnderOtherRoutes: true  }}
-						configureScene={ this.configureScene }
-						renderScene={this.renderScene } 
-						style={{width:SCREEN_WIDTH, height:SCREEN_HEIGHT-StatusBar.currentHeight}}/>
-				 </View>
+						initialRoute={{ component: App, shouldBeClickableUnderOtherRoutes: true }}
+						configureScene={this.configureScene}
+						renderScene={this.renderScene}
+						style={{ width: SCREEN_WIDTH, height: SCREEN_HEIGHT - StatusBar.currentHeight }} />
+				</View>
 			</Provider>
 		);
 	}
