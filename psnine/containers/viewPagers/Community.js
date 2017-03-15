@@ -27,6 +27,7 @@ import { changeScrollType } from '../../actions/app';
 
 let toolbarHeight = 56;
 let releasedMarginTop = 0;
+let prevPosition = -1;
 
 let dataSource = new ListView.DataSource({
   rowHasChanged: (row1, row2) => {
@@ -211,8 +212,12 @@ class Community extends Component {
           onContentSizeChange={() => {
               if (communityReducer.topicPage == 1)
                 return;
-
-              this.listView.scrollTo({y: this.currentHeight + 60 - this.listViewHeight, animated: true})
+              const y = this.currentHeight + 60 - this.listViewHeight
+              if (y === prevPosition) {
+                return
+              }
+              prevPosition = y;
+              this.listView.scrollTo({y, animated: true})
             }}
           />
     )
