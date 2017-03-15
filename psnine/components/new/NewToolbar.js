@@ -54,6 +54,8 @@ const { width:SCREEN_WIDTH, height:SCREEN_HEIGHT } = screen;
 SCREEN_HEIGHT = SCREEN_HEIGHT - StatusBar.currentHeight;
 
 let CIRCLE_SIZE = 56;
+let config = {tension: 30, friction: 7, ease: Easing.ease, duration: 200};
+const timeout = 140
 
 class NewToolbar extends Component {
 
@@ -66,9 +68,7 @@ class NewToolbar extends Component {
   }
 
   componentDidMount = () => {
-    let config = {tension: 30, friction: 7};
-    // Animated.timing(this.state.openVal, {toValue: 1, duration: 2000 ,...config}).start();
-    Animated.spring(this.state.openVal, {toValue: 1, ...config}).start();
+    Animated.timing(this.state.openVal, {toValue: 1, ...config}).start();
   }
 
   _pressNew = () => {
@@ -114,35 +114,38 @@ class NewToolbar extends Component {
 
   componentWillUnmount = async () => {
     let { openVal, innerMarginTop } = this.state;
-    let config = {tension: 30, friction: 7};
     this.removeListener && this.removeListener.remove  && this.removeListener.remove();
   }
 
   componentWillMount() {
-    let config = {tension: 30, friction: 7};
     this.removeListener = BackAndroid.addEventListener('hardwareBackPress',  () => {
       let value = this.state.innerMarginTop._value;
       if (Math.abs(value) >= 50) {
-        Animated.spring(this.state.innerMarginTop, {toValue: 0, ...config}).start();
+        Animated.timing(this.state.innerMarginTop, {toValue: 0, ...config}).start();
         return true;
       }else{
-        Animated.spring(this.state.openVal, {toValue: 0, ...config}).start(({finished})=>{
-          finished && this.props.navigator.pop();
+        Animated.timing(this.state.openVal, {toValue: 0, ...config}).start(({finished})=>{
+          // finished && this.props.navigator.pop();
         });
+        setTimeout(() => {
+            this.props.navigator.pop();
+        }, timeout)
         return true;
       }
     });
   }
 
   close = (cb) => {
-    let config = {tension: 30, friction: 7};
-    Animated.spring(this.state.openVal, {toValue: 0, ...config}).start(({finished})=>{
+    Animated.timing(this.state.openVal, {toValue: 0, ...config}).start(({finished})=>{
       if (finished) {
+
+      }
+    });
+    setTimeout(() => {
         this.props.navigator.pop(() => {
           typeof cb === 'function' && cb() 
         });
-      }
-    });
+    }, timeout)
   }
 
   render() {
@@ -154,11 +157,11 @@ class NewToolbar extends Component {
         style={{
           flex: 1,
           flexDirection: 'column',
-          backgroundColor: 'rgba(52, 52, 52, 0)'
+          backgroundColor: 'rgba(52, 52, 52, 0.0)'
         }}
 
         >
-        <TouchableWithoutFeedback onPress={this.close}>
+        <TouchableNativeFeedback  onPress={this.close}>
           <View style={{
               flex: 1,
               flexDirection: 'column',
@@ -299,8 +302,8 @@ class NewToolbar extends Component {
                   opacity: this.state.opacity,
                   transform: [{
                     rotateZ: openVal.interpolate({
-                      inputRange: [0, 1],
-                      outputRange: ['0deg', '45deg']
+                      inputRange: [0, 0.5, 1],
+                      outputRange: ['0deg', '0deg', '45deg']
                     }),
                   }]
               }}>
@@ -330,7 +333,7 @@ class NewToolbar extends Component {
             </Animated.View>
 
           </View>
-        </TouchableWithoutFeedback>
+        </TouchableNativeFeedback>
       </View>
     );
   }
