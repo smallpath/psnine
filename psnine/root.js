@@ -198,7 +198,7 @@ class Root extends React.Component {
 		return CustomSceneConfig
 	}
 	render() {
-		const modeInfo = this.state.isNightMode ? this.nightModeInfo : this.dayModeInfo
+		const modeInfo = this.state.isNightMode ? this.dayModeInfo : this.nightModeInfo
 		return (
 			<Provider store={store}>
 				<View style={{ flex: 1 }}>
