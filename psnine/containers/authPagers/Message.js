@@ -77,7 +77,7 @@ class Message extends Component {
           background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
           onPress={()=>this._pressRow(rowData)}
           >
-          <View style={{ flex: 1, flexDirection: 'row',  padding: 12 }}>
+          <View pointerEvents='box-only' style={{ flex: 1, flexDirection: 'row',  padding: 12 }}>
             {/*<Image
               source={{ uri: uri }}
               style={styles.avatar}

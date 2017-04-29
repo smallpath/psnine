@@ -347,8 +347,9 @@ class Toolbar extends Component {
           navIconName="md-menu"
           title={title}
           style={[styles.toolbar, {backgroundColor: this.props.modeInfo.standardColor}]}
-          titleColor="white"
-          overflowIconName="md-more"                 iconColor={this.props.modeInfo.isNightMode ? '#000' : '#fff'}
+          titleColor={this.props.modeInfo.isNightMode ? '#000' : '#fff'}
+          overflowIconName="md-more"
+          iconColor={this.props.modeInfo.isNightMode ? '#000' : '#fff'}
           actions={toolbarActions[appReducer.segmentedIndex]}
           onActionSelected={this.onActionSelected}
           onIconClicked={this.props._callDrawer() }
