@@ -19,6 +19,7 @@ import {
   PanResponder,
   TouchableHighlight,
 } from 'react-native';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import nativeImageSource from 'nativeImageSource';
 
@@ -48,8 +49,10 @@ let isMounted = false;
 let indexWithFloatButton = [0,3,4];
 let indexWithoutFloatButton = [1,2];
 
+const searchAction = { title: '搜索', iconName: 'md-search', value: '', show: 'always' }
+
 let communityActions = [
-  { title: '搜索', icon: require('../img/ic_search_white.png'), value: '', show: 'always'},
+  searchAction,
   { title: '全部', value: '', show: 'never' },
   { title: '新闻', value: 'news',show: 'never' },
   { title: '攻略', value: 'guide',show: 'never' },
@@ -63,19 +66,19 @@ let communityActions = [
 ];
 
 let gameActions = [
-  { title: '搜索', icon: require('../img/ic_search_white.png') , show: 'always'},
+  searchAction,
 ];
 
 let rankActions = [
-  { title: '搜索', icon: require('../img/ic_search_white.png') , show: 'always'},
+  searchAction,
 ];
 
 let battleActions = [
-  { title: '搜索', icon: require('../img/ic_search_white.png') , show: 'always'},
+  searchAction,
 ];
 
 let geneActions = [
-  { title: '搜索', icon: require('../img/ic_search_white.png') ,value: '', show: 'always'},
+  searchAction,
   { title: '全部', value: 'all', show: 'never' },
   { title: '图文类',value: 'photo', show: 'never' },
   { title: '音乐类',value: 'music', show: 'never' },
@@ -120,6 +123,7 @@ class Toolbar extends Component {
       innerTopicMarginTop: new Animated.Value(0),
       innerBattleMarginTop: new Animated.Value(0),
       innerGeneMarginTop: new Animated.Value(0),
+      addIcon: false
     }
   }
 
@@ -185,8 +189,9 @@ class Toolbar extends Component {
     this.state.marginTop.setValue(value)
   }
 
-  componentWillMount() {
-
+  async componentWillMount() {
+    const source = await Ionicons.getImageSource('ios-add', 24, '#fff')
+    this.setState({ addIcon: source })
   }
 
 
@@ -342,12 +347,12 @@ class Toolbar extends Component {
           marginTop: this.state.marginTop,
         }]} 
       >
-        <ToolbarAndroid
-          navIcon={ require('../img/ic_menu_white.png') }
+        <Ionicons.ToolbarAndroid
+          navIconName="md-menu"
           title={title}
           style={[styles.toolbar, {backgroundColor: this.props.modeInfo.standardColor}]}
           titleColor="white"
-          overflowIcon={ require('../img/ic_more_white.png') }
+          overflowIconName="md-more"                 iconColor={this.props.modeInfo.isNightMode ? '#000' : '#fff'}
           actions={toolbarActions[appReducer.segmentedIndex]}
           onActionSelected={this.onActionSelected}
           onIconClicked={this.props._callDrawer() }
@@ -406,14 +411,14 @@ class Toolbar extends Component {
               backgroundColor: accentColor,
             }}>
             <View style={{borderRadius: 30,flex:-1}}>
-              <Image source={require('../img/ic_add_white.png')}
+              {this.state.addIcon && (<Image source={this.state.addIcon}
                     style={{
-                      left:0,
-                      top:0,
-                      width: 56,
-                      height: 56,
+                      marginLeft: 16,
+                      marginTop: 16,
+                      width: 24,
+                      height: 24
                   }}
-              />
+              />)}
             </View>
           </TouchableNativeFeedback>
         </Animated.View>

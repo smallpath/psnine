@@ -18,7 +18,7 @@ import { getTopicList } from '../../actions/community.js';
 import { standardColor, nodeColor, idColor  } from '../../config/colorConfig';
 
 import CommunityTopic from '../../components/CommunityTopic';
-
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import { getTopicURL, fetchMessages,  } from '../../dao/dao';
 import moment from '../../utils/moment';
 
@@ -33,6 +33,7 @@ class Message extends Component {
         super(props);
         this.state = {
             messages: [],
+            icon: false
         }
     }
 
@@ -122,9 +123,9 @@ class Message extends Component {
             onStartShouldSetResponder={() => false}
             onMoveShouldSetResponder={() => false}
             >
-              <ToolbarAndroid
-                navIcon={require('../../img/ic_back_white.png')}
-                overflowIcon={require('../../img/ic_more_white.png')}
+              <Ionicons.ToolbarAndroid
+                navIconName="md-arrow-back"
+                overflowIconName="md-more"                 iconColor={this.props.modeInfo.isNightMode ? '#000' : '#fff'}
                 title={'我的消息'}
                 style={[styles.toolbar, {backgroundColor: this.props.modeInfo.standardColor,}]}
                 actions={toolbarActions}

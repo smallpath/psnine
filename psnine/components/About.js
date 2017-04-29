@@ -28,7 +28,7 @@ import {
 } from 'react-native';
 
 import { connect } from 'react-redux';
-
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import { standardColor, accentColor } from '../config/colorConfig';
 
 import { pngPrefix, getDealURL, getHappyPlusOneURL, getStoreURL } from '../dao/dao';
@@ -43,6 +43,7 @@ class About extends Component {
     this.state = {
       checkUpdateTip: '点击检查更新',
       sourceCodeURL: 'https://github.com/Smallpath/Psnine',
+      icon: false
     }
   }
 

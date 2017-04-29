@@ -27,6 +27,8 @@ import {
   Picker,
 } from 'react-native';
 
+import Ionicons from 'react-native-vector-icons/Ionicons';
+
 import { connect } from 'react-redux';
 
 import { standardColor, accentColor } from '../../config/colorConfig';
@@ -64,6 +66,8 @@ class NewToolbar extends Component {
     this.state = {
       openVal: new Animated.Value(0),
       innerMarginTop: new Animated.Value(0),
+      addIcon: false,
+      jumpIcon: false
     }
   }
 
@@ -117,7 +121,7 @@ class NewToolbar extends Component {
     this.removeListener && this.removeListener.remove  && this.removeListener.remove();
   }
 
-  componentWillMount() {
+  async componentWillMount() {
     this.removeListener = BackAndroid.addEventListener('hardwareBackPress',  () => {
       let value = this.state.innerMarginTop._value;
       if (Math.abs(value) >= 50) {
@@ -133,6 +137,12 @@ class NewToolbar extends Component {
         return true;
       }
     });
+    const source = await Ionicons.getImageSource('ios-add', 24, '#fff')
+    const jumpSource = await Ionicons.getImageSource('ios-exit-outline', 24, '#fff')
+    this.setState({ 
+      addIcon: source,
+      jumpIcon: jumpSource
+    })
   }
 
   close = (cb) => {
@@ -214,14 +224,14 @@ class NewToolbar extends Component {
                     backgroundColor: accentColor,
                   }}>
                   <View style={{borderRadius: 20,flex:-1}}>
-                    <Image source={require('../../img/ic_add_white.png')}
+                    {this.state.addIcon && (<Image source={this.state.addIcon}
                           style={{
-                            left:0,
-                            top:0,
-                            width: 40,
-                            height: 40,
+                            marginLeft: 11,
+                            marginTop: 11,
+                            width: 18,
+                            height: 18
                         }}
-                    />
+                    />)}
                   </View>
                 </TouchableNativeFeedback>
             </Animated.View>
@@ -272,15 +282,14 @@ class NewToolbar extends Component {
                     backgroundColor: accentColor,
                   }}>
                   <View style={{borderRadius: 20,flex:-1}}>
-                    <Image source={require('../../img/ic_exit_white.png')}
+                    {this.state.jumpIcon && (<Image source={this.state.jumpIcon}
                           style={{
-                            left:9,
-                            top:0,
-                            marginTop: 9, 
-                            width: 22,
-                            height: 22,
+                            marginLeft: 11,
+                            marginTop: 11,
+                            width: 18,
+                            height: 18
                         }}
-                    />
+                    />)}
                     
                   </View>
                 </TouchableNativeFeedback>
@@ -320,14 +329,14 @@ class NewToolbar extends Component {
                     backgroundColor: accentColor,
                   }}>
                   <View style={{borderRadius: 30,flex:-1}}>
-                    <Image source={require('../../img/ic_add_white.png')}
+                    {this.state.addIcon && (<Image source={this.state.addIcon}
                           style={{
-                            left:0,
-                            top:0,
-                            width: 56,
-                            height: 56,
+                            marginLeft: 16,
+                            marginTop: 16,
+                            width: 24,
+                            height: 24
                         }}
-                    />
+                    />)}
                   </View>
                 </TouchableNativeFeedback>
             </Animated.View>

@@ -19,13 +19,13 @@ import {
 } from 'react-native';
 
 import { connect } from 'react-redux';
-
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import { standardColor } from '../../config/colorConfig';
 
 let toolbarActions = [
-  {title: '关注', icon: require('../../img/ic_collect_white.png') ,show: 'always'},
-  {title: '感谢', icon: require('../../img/ic_refresh_white.png'), show: 'always'},
-  {title: '同步', icon: require('../../img/ic_refresh_white.png'), show: 'always'},
+  {title: '关注', iconName: 'md-star' ,show: 'always'},
+  {title: '感谢', iconName: 'md-thumbs-up', show: 'always'},
+  {title: '同步', iconName: 'md-sync', show: 'always'},
   {title: '分享', show: 'never' },
 ];
 let title = "TOPIC";
@@ -38,6 +38,7 @@ class Home extends Component {
     this.state = {
       isLogIn: false,
       canGoBack: false,
+      icon: false
     }
   }
 
@@ -82,9 +83,9 @@ class Home extends Component {
     // console.log('Deal.js rendered');
     return ( 
           <View style={{flex:1}}>
-              <ToolbarAndroid
-                navIcon={require('../../img/ic_back_white.png')}
-                overflowIcon={require('../../img/ic_more_white.png')}
+              <Ionicons.ToolbarAndroid
+                navIconName="md-arrow-back"
+                overflowIconName="md-more"                 iconColor={this.props.modeInfo.isNightMode ? '#000' : '#fff'}
                 title={this.props.title}
                 style={styles.toolbar}
                 actions={toolbarActions}

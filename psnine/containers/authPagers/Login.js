@@ -23,6 +23,8 @@ import {
   Keyboard
 } from 'react-native';
 
+import Ionicons from 'react-native-vector-icons/Ionicons';
+
 import { connect } from 'react-redux';
 
 import { standardColor, accentColor } from '../../config/colorConfig';
@@ -53,6 +55,7 @@ class Login extends Component {
       accountMarginTop: new Animated.Value(0),
       passwordMarginTop: new Animated.Value(0),
       avoidKeyboardMarginTop: new Animated.Value(0),
+      addIcon: false
     }
   }
 
@@ -98,7 +101,7 @@ class Login extends Component {
               }).catch(err => {});
   }
 
-  componentWillMount = () => {
+  async componentWillMount() {
     this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () => {
       Animated.spring(this.state.avoidKeyboardMarginTop,{
         toValue: 1,
@@ -110,6 +113,10 @@ class Login extends Component {
         toValue: 0,
         friction: 10
       }).start();
+    })
+    const source = await Ionicons.getImageSource('ios-add', 24, '#fff')
+    this.setState({ 
+      addIcon: source
     })
   }
 
@@ -253,13 +260,15 @@ class Login extends Component {
             zIndex: 1,
             backgroundColor: accentColor,
           }}>
-          <View style={{borderRadius: 30,}}>
-            <Image source={require('../../img/ic_add_white.png')}
+          <View style={{borderRadius: 30}}>
+            {this.state.addIcon && (<Image source={this.state.addIcon}
                   style={{
-                    left:0,
-                    top:0,
+                    marginLeft: 16,
+                    marginTop: 16,
+                    width: 24,
+                    height: 24
                 }}
-            />
+            />)}
           </View>
         </TouchableNativeFeedback>
         </Animated.View>

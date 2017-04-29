@@ -24,6 +24,8 @@ import {
 } from '../dao/dao';
 import { standardColor } from '../config/colorConfig';
 
+import Ionicons from 'react-native-vector-icons/Ionicons';
+
 import CommunityTopic from '../components/CommunityTopic';
 import Deal from '../components/Deal';
 import GeneTopic from '../components/GeneTopic';
@@ -55,8 +57,6 @@ let imageSrc = [
   require('../img/ic_about_blue.png'),
 ];
 
-let imageArr = imageSrc.slice(0);
-
 let items = [
   "个人中心","我的游戏","排行","Store","闲游","系统选项","设置","关于"
 ];
@@ -77,12 +77,66 @@ class NavigatorDrawer extends Component {
             bronze: '铜',
             isSigned: true,
           },
+          iconObj: false,
+          listArr: false,
           dataSource:dataSource.cloneWithRows(items),
       }
   }
 
-  componentWillMount(){
-    this.checkLoginState();
+  async componentWillMount(){
+    await this.checkLoginState();
+    const obj = await Promise.all(
+      [
+        Ionicons.getImageSource('logo-playstation', 50, '#fff'),
+        Ionicons.getImageSource('md-sunny', 15, '#fff'),
+        Ionicons.getImageSource('md-moon', 15, '#fff'),
+        Ionicons.getImageSource('ios-exit-outline', 15, '#fff'),
+        Ionicons.getImageSource('md-notifications-outline', 15, '#fff'),
+        Ionicons.getImageSource('logo-steam', 20, '#03a9f4'),
+        Ionicons.getImageSource('md-home', 20, '#03a9f4'),
+        Ionicons.getImageSource('ios-game-controller-a', 20, '#03a9f4'),
+        Ionicons.getImageSource('md-list-box', 20, '#03a9f4'),
+        Ionicons.getImageSource('md-appstore', 20, '#03a9f4'),
+        Ionicons.getImageSource('md-options', 20, '#03a9f4'),
+        Ionicons.getImageSource('md-help-circle', 20, '#03a9f4'),
+        Ionicons.getImageSource('md-people', 15, '#fff'),
+        Ionicons.getImageSource('md-star', 15, '#fff'),
+        Ionicons.getImageSource('md-log-in', 15, '#fff')
+        // Ionicons.getImageSource('ios-exit-outline', 24, '#fff'),
+        // Ionicons.getImageSource('ios-exit-outline', 24, '#fff'),
+        // Ionicons.getImageSource('ios-exit-outline', 24, '#fff'),
+        // Ionicons.getImageSource('ios-exit-outline', 24, '#fff'),
+      ]
+    )
+    this.setState({
+      iconObj: {
+        avatarIcon: obj[0],
+        sunnyIcon: obj[1],
+        nightIcon: obj[2],
+        exitIcon: obj[3],
+        atIcon: obj[4],
+        steamIcon: obj[5],
+        homeIcon: obj[6],
+        gameIcon: obj[7],
+        rankIcon: obj[8],
+        storeIcon: obj[9],
+        settingIcon: obj[10],
+        aboutIcon: obj[11],
+        concernIcon: obj[12],
+        collectIcon: obj[13],
+        signIcon: obj[14]
+      },
+      listArr: [
+        obj[6],
+        obj[7],
+        obj[5],
+        obj[9],
+        obj[9],
+        obj[10],
+        obj[10],
+        obj[11]
+      ] 
+    })
   }
 
   checkLoginState = async () =>{
@@ -173,7 +227,7 @@ class NavigatorDrawer extends Component {
 
   renderHeader = () => {
       const { navigator, closeDrawer, switchModeOnRoot} = this.props;
-      //let avatar = 
+      const { iconObj: icon } = this.state
       let toolActions = [];
       let Touchable = TouchableWithoutFeedback;
 
@@ -186,8 +240,10 @@ class NavigatorDrawer extends Component {
                           justifyContent: 'center',
                           marginLeft: this.state.psnid == '' ? 90 : this.state.userInfo.isSigned ? 55 : 20,
                         }}>
-                          <Image source={require('../img/ic_assignment_white.png')}            
-                                  style={{width: 20, height: 20}} />
+                          <Image source={
+                            this.props.modeInfo.isNightMode ? 
+                                icon.sunnyIcon : icon.nightIcon}            
+                                  style={{width: 15, height: 15}} />
                           <Text style={[styles.menuText,{marginTop:5}]}>
                             {this.props.modeInfo.isNightMode ? '日间' : '夜间'}
                           </Text>
@@ -245,8 +301,8 @@ class NavigatorDrawer extends Component {
             <Touchable>
               <View style={styles.menuContainer}>
                 <Image
-                  source={require('../img/ic_favorites_white.png')}
-                  style={{width: 30, height: 30}} />
+                  source={icon.nightIcon}
+                  style={{width: 15, height: 15}} />
                 <Text style={styles.menuText}>
                   帖子
                 </Text>
@@ -270,8 +326,8 @@ class NavigatorDrawer extends Component {
               >
               <View style={styles.menuContainer}>
               <Image
-                source={require('../img/ic_message_white_small.png')}
-                style={{width: 30, height: 30,}} />
+                source={icon.atIcon}
+                style={{width: 15, height: 15}} />
                 <Text style={styles.menuText}>
                   消息
                 </Text>
@@ -280,8 +336,8 @@ class NavigatorDrawer extends Component {
             <Touchable>
               <View style={styles.menuContainer}>
               <Image
-                source={require('../img/ic_download_white.png')}
-                style={{width: 30, height: 30}} />
+                source={icon.concernIcon}
+                style={{width: 15, height: 15}} />
                 <Text style={styles.menuText}>
                   关注
                 </Text>
@@ -290,8 +346,8 @@ class NavigatorDrawer extends Component {
             <Touchable>
               <View style={styles.menuContainer}>
               <Image
-                source={require('../img/ic_download_white.png')}
-                style={{width: 30, height: 30}} />
+                source={icon.collectIcon}
+                style={{width: 15, height: 15}} />
                 <Text style={styles.menuText}>
                   收藏
                 </Text>
@@ -306,8 +362,8 @@ class NavigatorDrawer extends Component {
                             onPress={this.pressSign}
                             >
                             <View style={{flexDirection: 'column',  justifyContent: 'center',marginLeft: 20}}>
-                              <Image source={require('../img/ic_assignment_white.png')}            
-                                      style={{width: 20, height: 20}} />
+                              <Image source={icon.signIcon}            
+                                      style={{width: 15, height: 15}} />
                               <Text style={[styles.menuText,{marginTop:5}]}>
                                 签到
                               </Text>
@@ -322,8 +378,8 @@ class NavigatorDrawer extends Component {
                     // onHideUnderlay={highlightRowFunc}
                     >
                     <View style={{flexDirection: 'column',  justifyContent: 'center',marginLeft: 20}}>
-                      <Image source={require('../img/ic_exit_white.png')}            
-                              style={{width: 20, height: 20}} />
+                      <Image source={icon.exitIcon}            
+                              style={{width: 15, height: 15}} />
                       <Text style={[styles.menuText,{marginTop:5}]}>
                         退出
                       </Text>
@@ -454,7 +510,7 @@ class NavigatorDrawer extends Component {
   }
 
   renderRow = (rowData, sectionID, rowID, highlightRow) => {
-    let icon = imageArr[rowID];
+    let icon = this.state.listArr[rowID];
     if ( this.state.psnid == '' &&  rowID == 4  || this.state.psnid != '' && rowID == 6){
       return (
         <View style={{marginTop: 6}}>
@@ -554,7 +610,9 @@ const styles = StyleSheet.create({
     flex:1,
     flexDirection: 'row',
     alignItems: 'center',
-    padding: 0,
+    justifyContent: 'space-around',
+    paddingLeft: 2,
+    paddingRight: 0
   },
   menuText: {
     fontSize: 14,
@@ -569,7 +627,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    padding: 6,
+    padding: 12,
   },
   themeName: {
     flex: 1,
@@ -578,8 +636,8 @@ const styles = StyleSheet.create({
   },
   themeIndicate: {
     marginLeft: 16,
-    width: 30,
-    height: 30,
+    width: 20,
+    height: 20,
   },
   separator: {
     height: 1,
