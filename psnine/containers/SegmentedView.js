@@ -37,7 +37,7 @@ let segmentedHeight = 38;
 let toolbarHeight = 56;
 
 let thisScreenHeightWitoutStatusBar = SCREEN_HEIGHT - statusBarHeight - segmentedHeight + toolbarHeight;
-let viewPagerHeight = SCREEN_HEIGHT - statusBarHeight - segmentedHeight
+let viewPagerHeight = SCREEN_HEIGHT - statusBarHeight - segmentedHeight + 1
 
 
 let styles = StyleSheet.create({
