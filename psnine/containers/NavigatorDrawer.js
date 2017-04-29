@@ -43,20 +43,6 @@ import { safeLogout } from '../dao/logout';
 import { safeSignOn } from '../dao/signon';
 import { fetchUser } from '../dao/dao';
 
-let signIcon = require('../img/ic_assignment_blue.png');
-
-let imageSrc = [
-  require('../img/home.png'),
-  require('../img/ic_game_blue.png'),
-  require('../img/ic_rank_blue.png'),
-  require('../img/ic_plus_blue.png'),
-  require('../img/ic_store_blue.png'),
-  require('../img/ic_business_blue.png'),
-  '',
-  require('../img/ic_setting_blue.png'),
-  require('../img/ic_about_blue.png'),
-];
-
 let items = [
   "个人中心","我的游戏","排行","Store","闲游","系统选项","设置","关于"
 ];
@@ -125,17 +111,25 @@ class NavigatorDrawer extends Component {
         concernIcon: obj[12],
         collectIcon: obj[13],
         signIcon: obj[14]
-      },
-      listArr: [
-        obj[6],
-        obj[7],
-        obj[5],
-        obj[9],
-        obj[9],
-        obj[10],
-        obj[10],
-        obj[11]
-      ] 
+      }
+    })
+    let imageArr = [
+      obj[6],
+      obj[7],
+      obj[5],
+      obj[9],
+      obj[9],
+      obj[10],
+      obj[10],
+      obj[11]
+    ] 
+    if (this.state.psnid == ''){
+      imageArr = imageArr.slice(2);
+    }else{
+      imageArr = imageArr.slice(0);
+    }
+    this.setState({
+      listArr: imageArr
     })
   }
 
@@ -554,11 +548,6 @@ class NavigatorDrawer extends Component {
 
   render = () => {
     // console.log('NavigatorDrawer.js rendered');
-    if (this.state.psnid == ''){
-      imageArr = imageSrc.slice(2);
-    }else{
-      imageArr = imageSrc.slice(0);
-    }
     return (
       <View style={styles.container} {...this.props}>
         <ListView

@@ -102,10 +102,6 @@ let clamp = (value,min, max) => {
 let toolbarHeight = 56;
 let releasedMarginTop = 0;
 
-const moreImage = require('../img/ic_menu_white.png')
-
-const flowImage = require('../img/ic_more_white.png')
-
 class Toolbar extends Component {
 
 
