@@ -23,7 +23,7 @@ import { connect } from 'react-redux';
 import { standardColor } from '../../config/colorConfig';
 
 let WEBVIEW_REF = `WEBVIEW_REF_GAME`;
-let back_image = require('../../img/ic_back_blue.png');
+
 let imageSize = 48;
 
 let toolbarHeight = 56;
@@ -64,7 +64,7 @@ class Game extends Component {
     // console.log('Game.js rendered');
     return ( 
         <View style={{flex:3}} ref={(a)=>this.listView = a}>
-            <View style={{
+            {/*<View style={{
                     position: 'absolute',
                     bottom: 20,
                     right: 20,
@@ -75,14 +75,8 @@ class Game extends Component {
                 <TouchableNativeFeedback
                     onPress={this._pressButton}
                 >
-                <View style={{width:imageSize, height:imageSize}}>
-                    <Image 
-                        style={{width:imageSize, height:imageSize}}
-                        source={back_image}
-                    />
-                    </View>
                 </TouchableNativeFeedback>
-            </View>
+            </View>*/}
             <KeyboardAvoidingView
               behavior={'padding'}
               style={{flex:3}}

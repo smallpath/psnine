@@ -95,114 +95,131 @@ class NewTopic extends Component {
     this.removeListener && this.removeListener.remove  && this.removeListener.remove();
   }
 
-  componentWillMount() {
-        let config = {tension: 30, friction: 7};
-        this.removeListener = BackAndroid.addEventListener('hardwareBackPress',  () => {
-          let value = this.state.innerMarginTop._value;
-          if (Math.abs(value) >= 50) {
-            Animated.spring(this.state.innerMarginTop, {toValue: 0, ...config}).start();
-            return true;
-          }else{
-            Animated.spring(this.state.openVal, {toValue: 0, ...config}).start(({finished})=>{
-              finished && this.props.navigator.pop();
-            });
-            return true;
+  componentWillMount = async () => {
+
+    let config = {tension: 30, friction: 7};
+    this.removeListener = BackAndroid.addEventListener('hardwareBackPress',  () => {
+      let value = this.state.innerMarginTop._value;
+      if (Math.abs(value) >= 50) {
+        Animated.spring(this.state.innerMarginTop, {toValue: 0, ...config}).start();
+        return true;
+      }else{
+        Animated.spring(this.state.openVal, {toValue: 0, ...config}).start(({finished})=>{
+          finished && this.props.navigator.pop();
+        });
+        return true;
+      }
+    });
+
+    this.panResponder = PanResponder.create({  
+
+        onStartShouldSetPanResponderCapture: (e, gesture) =>{ 
+          return false; 
+        },
+
+        onMoveShouldSetPanResponderCapture:(e, gesture) =>{ 
+          let shouldSet = Math.abs(gesture.dy) >=4;
+          return shouldSet; 
+        },
+
+        onPanResponderGrant:(e, gesture) => {
+            this.state.innerMarginTop.setOffset(gesture.y0);
+        },
+        onPanResponderMove: Animated.event([
+          null,
+          { 
+              dy: this.state.innerMarginTop
           }
-        });
+        ]), 
+        
+        onPanResponderRelease: (e, gesture) => {
 
-        this.panResponder = PanResponder.create({  
+        },
+        onPanResponderTerminationRequest : (evt, gesture) => {  
+          return true;
+        },
+        onPanResponderTerminate: (evt, gesture) => {  
+          
+        },
+        onShouldBlockNativeResponder: (evt, gesture) => {  
+          return true;
+        },
+        onPanResponderReject: (evt, gesture) => {  
+          return false;
+        },
+        onPanResponderEnd: (evt, gesture) => {  
 
-            onStartShouldSetPanResponderCapture: (e, gesture) =>{ 
-              return false; 
-            },
+          let dy = gesture.dy;
+          let vy = gesture.vy;
+          
+          this.state.innerMarginTop.flattenOffset();
 
-            onMoveShouldSetPanResponderCapture:(e, gesture) =>{ 
-              let shouldSet = Math.abs(gesture.dy) >=4;
-              return shouldSet; 
-            },
+          let duration = 50; 
 
-            onPanResponderGrant:(e, gesture) => {
-                this.state.innerMarginTop.setOffset(gesture.y0);
-            },
-            onPanResponderMove: Animated.event([
-              null,
-              { 
-                  dy: this.state.innerMarginTop
-              }
-            ]), 
-            
-            onPanResponderRelease: (e, gesture) => {
+          if(vy<0){
 
-            },
-            onPanResponderTerminationRequest : (evt, gesture) => {  
-              return true;
-            },
-            onPanResponderTerminate: (evt, gesture) => {  
-              
-            },
-            onShouldBlockNativeResponder: (evt, gesture) => {  
-              return true;
-            },
-            onPanResponderReject: (evt, gesture) => {  
-              return false;
-            },
-            onPanResponderEnd: (evt, gesture) => {  
+            if(Math.abs(dy) <= CIRCLE_SIZE ){
 
-              let dy = gesture.dy;
-              let vy = gesture.vy;
-              
-              this.state.innerMarginTop.flattenOffset();
+              Animated.spring(this.state.innerMarginTop,{
+                toValue: SCREEN_HEIGHT- CIRCLE_SIZE,
+                duration,
+                easing: Easing.linear,
+              }).start();
 
-              let duration = 50; 
+            }else{
 
-              if(vy<0){
+              Animated.spring(this.state.innerMarginTop,{
+                toValue: 0,
+                duration,
+                easing: Easing.linear,
+              }).start();
 
-                if(Math.abs(dy) <= CIRCLE_SIZE ){
+            }
 
-                  Animated.spring(this.state.innerMarginTop,{
-                    toValue: SCREEN_HEIGHT- CIRCLE_SIZE,
-                    duration,
-                    easing: Easing.linear,
-                  }).start();
+          }else{
 
-                }else{
+            if(Math.abs(dy) <= CIRCLE_SIZE){
 
-                  Animated.spring(this.state.innerMarginTop,{
-                    toValue: 0,
-                    duration,
-                    easing: Easing.linear,
-                  }).start();
+              Animated.spring(this.state.innerMarginTop,{
+                toValue: 0,
+                duration,
+                easing: Easing.linear,
+              }).start();
 
-                }
+            }else{
 
-              }else{
+              Animated.spring(this.state.innerMarginTop,{
+                toValue: SCREEN_HEIGHT- CIRCLE_SIZE,
+                duration,
+                easing: Easing.linear,
+              }).start();
+            }
 
-                if(Math.abs(dy) <= CIRCLE_SIZE){
+          }
 
-                  Animated.spring(this.state.innerMarginTop,{
-                    toValue: 0,
-                    duration,
-                    easing: Easing.linear,
-                  }).start();
+        },
 
-                }else{
+    });
 
-                  Animated.spring(this.state.innerMarginTop,{
-                    toValue: SCREEN_HEIGHT- CIRCLE_SIZE,
-                    duration,
-                    easing: Easing.linear,
-                  }).start();
-                }
+    const icon = await Promise.all([
+      Ionicons.getImageSource('md-arrow-back', 20, '#fff'),
+      Ionicons.getImageSource('md-happy', 50, '#fff'),
+      Ionicons.getImageSource('md-photos', 50, '#fff'),
+      Ionicons.getImageSource('md-send', 50, '#fff')
+    ])
+    this.setState({ 
+      icon: {
+        backIcon: icon[0],
+        emotionIcon: icon[1],
+        photoIcon: icon[2],
+        sendIcon: icon[3]
+      }
+    })
 
-              }
-
-            },
-
-        });
   }
 
   render() {
-    let { openVal, marginTop } = this.state;
+    let { openVal, marginTop, icon } = this.state;
 
     let outerStyle = { 
       marginTop : this.state.innerMarginTop.interpolate({
@@ -257,10 +274,10 @@ class NewTopic extends Component {
               style={{ borderRadius: 25}}
               >
               <View style={{ width: 50, height:50, marginLeft:0, borderRadius: 25}}>
-                <Image 
-                  source={require('../../img/ic_back_white_smaller.png')}
-                  style={{ width: 50, height:50, }}
-                />
+                { icon && <Image 
+                  source={icon.backIcon}
+                  style={{ width: 20, height:20, marginTop: 15, marginLeft: 15 }}
+                />}
               </View>
             </TouchableNativeFeedback>
             <Text style={{color: 'white', fontSize: 23, marginLeft:10, }}>{title}</Text>
@@ -321,11 +338,11 @@ class NewTopic extends Component {
                       background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
                       style={{ borderRadius: 25}}
                       >
-                      <View style={{ width: 50, height:50, marginLeft:0, borderRadius: 25,}}>
-                        <Image 
-                          source={require('../../img/ic_insert_emoticon_white.png')}
-                          style={{ width: 50, height:50 }}
-                        />
+                      <View style={{ width: 50, height:50, marginLeft:0, borderRadius: 25 }}>
+                        { icon && <Image 
+                          source={icon.emotionIcon}
+                          style={{ width: 25, height:25, marginTop: 12.5, marginLeft: 12.5 }}
+                        />}
                       </View>
                     </TouchableNativeFeedback>
                     <TouchableNativeFeedback
@@ -335,10 +352,10 @@ class NewTopic extends Component {
                       style={{ borderRadius: 25}}
                       >
                       <View style={{ width: 50, height:50, marginLeft:0, borderRadius: 25,}}>
-                        <Image 
-                          source={require('../../img/ic_insert_photo_white.png')}
-                          style={{ width: 50, height:50 }}
-                        />
+                        { icon && <Image 
+                          source={icon.photoIcon}
+                          style={{ width: 25, height:25, marginTop: 12.5, marginLeft: 12.5 }}
+                        />}
                       </View>
                     </TouchableNativeFeedback>
                   </View>
@@ -349,10 +366,10 @@ class NewTopic extends Component {
                     style={{ borderRadius: 25}}
                     >
                     <View style={{ width: 50, height:50, marginLeft:0, borderRadius: 25,}}>
-                      <Image 
-                        source={require('../../img/ic_send_white.png')}
-                        style={{ width: 50, height:50 }}
-                      />
+                      { icon && <Image 
+                        source={icon.sendIcon}
+                        style={{ width: 25, height:25, marginTop: 12.5, marginLeft: 12.5 }}
+                      />}
                     </View>
                   </TouchableNativeFeedback>
                 </View>
