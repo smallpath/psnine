@@ -380,7 +380,7 @@ class SegmentedView extends Component {
                     onPageScrollStateChanged={this.onPageScrollStateChanged}
                     onPageScroll={this.onPageScroll}
                 >
-
+{/*
                     <View key={`s00`}
                         style={{ backgroundColor: 'blue', height: 500 }}
 
@@ -444,7 +444,7 @@ class SegmentedView extends Component {
                             }
                             }
                         />
-                    </View>
+                    </View>*/}
 
                 </ViewPagerAndroid>
             </View>

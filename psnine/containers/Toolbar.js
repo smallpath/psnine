@@ -20,7 +20,7 @@ import {
   TouchableHighlight,
   TouchableWithoutFeedback
 } from 'react-native';
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 import nativeImageSource from 'nativeImageSource';
 
@@ -118,9 +118,7 @@ class Toolbar extends Component {
       opacity: new Animated.Value(1),
       marginTop: new Animated.Value(0),
       openVal: new Animated.Value(0),
-      innerMarginTop: new Animated.Value(0),
-      addIcon: false,
-      jumpIcon: false
+      innerMarginTop: new Animated.Value(0)
     }
   }
 
@@ -185,16 +183,6 @@ class Toolbar extends Component {
     }
     this.state.marginTop.setValue(value)
   }
-
-  async componentWillMount() {
-    const addSource = await Ionicons.getImageSource('ios-add', 24, '#fff')
-    const jumpSource = await Ionicons.getImageSource('ios-exit-outline', 24, '#fff')
-    this.setState({ 
-      addIcon: addSource,
-      jumpIcon: jumpSource
-    })
-  }
-
 
   parallelFadeOut = (toValue) => {
     let spring = Animated.spring;
@@ -417,7 +405,7 @@ class Toolbar extends Component {
           marginTop: this.state.marginTop,
         }]} 
       >
-        <Ionicons.ToolbarAndroid
+        <Icon.ToolbarAndroid
           navIconName="md-menu"
           title={title}
           style={[styles.toolbar, {backgroundColor: this.props.modeInfo.standardColor}]}
@@ -496,15 +484,8 @@ class Toolbar extends Component {
                     zIndex: 1,
                     backgroundColor: accentColor,
                   }}>
-                  <View style={{borderRadius: 20,flex:-1}}>
-                    {this.state.addIcon && (<Image source={this.state.addIcon}
-                          style={{
-                            marginLeft: 11,
-                            marginTop: 11,
-                            width: 18,
-                            height: 18
-                        }}
-                    />)}
+                  <View style={{borderRadius: 20,width: 40,height: 40,justifyContent: 'center',alignItems: 'center',}}>
+                    <Icon name="ios-add" size={30} color='#fff'/>
                   </View>
                 </TouchableNativeFeedback>
             </Animated.View>
@@ -557,16 +538,8 @@ class Toolbar extends Component {
                     zIndex: 1,
                     backgroundColor: accentColor,
                   }}>
-                  <View style={{borderRadius: 20,flex:-1}}>
-                    {this.state.jumpIcon && (<Image source={this.state.jumpIcon}
-                          style={{
-                            marginLeft: 11,
-                            marginTop: 11,
-                            width: 18,
-                            height: 18
-                        }}
-                    />)}
-                    
+                  <View style={{borderRadius: 20,width: 40,height: 40,justifyContent: 'center',alignItems: 'center',}}>
+                    <Icon name="ios-exit-outline" size={25} color='#fff'/>
                   </View>
                 </TouchableNativeFeedback>
             </Animated.View>
@@ -623,15 +596,8 @@ class Toolbar extends Component {
               zIndex: 1,
               backgroundColor: accentColor,
             }}>
-            <View style={{borderRadius: 30,flex:-1}}>
-              {this.state.addIcon && (<Image source={this.state.addIcon}
-                    style={{
-                      marginLeft: 16,
-                      marginTop: 16,
-                      width: 24,
-                      height: 24
-                  }}
-              />)}
+            <View style={{borderRadius: 30,width: 56,height: 56,flex:-1,justifyContent: 'center',alignItems: 'center',}}>
+              <Icon name="ios-add" size={40} color='#fff'/>
             </View>
           </TouchableNativeFeedback>
         </Animated.View>

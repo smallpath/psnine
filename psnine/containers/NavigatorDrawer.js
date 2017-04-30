@@ -24,7 +24,7 @@ import {
 } from '../dao/dao';
 import { standardColor } from '../config/colorConfig';
 
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 import CommunityTopic from '../components/CommunityTopic';
 import Deal from '../components/Deal';
@@ -43,9 +43,20 @@ import { safeLogout } from '../dao/logout';
 import { safeSignOn } from '../dao/signon';
 import { fetchUser } from '../dao/dao';
 
-let items = [
+const items = [
   "个人中心","我的游戏","排行","Store","闲游","系统选项","设置","关于"
 ];
+
+const iconNameArr = [
+  'md-home',
+  'md-game-controller-b',
+  'md-analytics',
+  'md-appstore',
+  'md-basket',
+  'md-options',
+  'ios-add',
+  'md-help-circle'
+]
 
 class NavigatorDrawer extends Component {
   constructor(props){
@@ -63,74 +74,12 @@ class NavigatorDrawer extends Component {
             bronze: '铜',
             isSigned: true,
           },
-          iconObj: false,
-          listArr: false,
           dataSource:dataSource.cloneWithRows(items),
       }
   }
 
   async componentWillMount(){
     await this.checkLoginState();
-    const obj = await Promise.all(
-      [
-        Ionicons.getImageSource('logo-playstation', 50, '#fff'),
-        Ionicons.getImageSource('md-sunny', 15, '#fff'),
-        Ionicons.getImageSource('md-moon', 15, '#fff'),
-        Ionicons.getImageSource('ios-exit-outline', 15, '#fff'),
-        Ionicons.getImageSource('md-notifications-outline', 15, '#fff'),
-        Ionicons.getImageSource('logo-steam', 20, '#03a9f4'),
-        Ionicons.getImageSource('md-home', 20, '#03a9f4'),
-        Ionicons.getImageSource('ios-game-controller-a', 20, '#03a9f4'),
-        Ionicons.getImageSource('md-list-box', 20, '#03a9f4'),
-        Ionicons.getImageSource('md-appstore', 20, '#03a9f4'),
-        Ionicons.getImageSource('md-options', 20, '#03a9f4'),
-        Ionicons.getImageSource('md-help-circle', 20, '#03a9f4'),
-        Ionicons.getImageSource('md-people', 15, '#fff'),
-        Ionicons.getImageSource('md-star', 15, '#fff'),
-        Ionicons.getImageSource('md-log-in', 15, '#fff')
-        // Ionicons.getImageSource('ios-exit-outline', 24, '#fff'),
-        // Ionicons.getImageSource('ios-exit-outline', 24, '#fff'),
-        // Ionicons.getImageSource('ios-exit-outline', 24, '#fff'),
-        // Ionicons.getImageSource('ios-exit-outline', 24, '#fff'),
-      ]
-    )
-    this.setState({
-      iconObj: {
-        avatarIcon: obj[0],
-        sunnyIcon: obj[1],
-        nightIcon: obj[2],
-        exitIcon: obj[3],
-        atIcon: obj[4],
-        steamIcon: obj[5],
-        homeIcon: obj[6],
-        gameIcon: obj[7],
-        rankIcon: obj[8],
-        storeIcon: obj[9],
-        settingIcon: obj[10],
-        aboutIcon: obj[11],
-        concernIcon: obj[12],
-        collectIcon: obj[13],
-        signIcon: obj[14]
-      }
-    })
-    let imageArr = [
-      obj[6],
-      obj[7],
-      obj[5],
-      obj[9],
-      obj[9],
-      obj[10],
-      obj[10],
-      obj[11]
-    ] 
-    if (this.state.psnid == ''){
-      imageArr = imageArr.slice(2);
-    }else{
-      imageArr = imageArr.slice(0);
-    }
-    this.setState({
-      listArr: imageArr
-    })
   }
 
   checkLoginState = async () =>{
@@ -225,24 +174,25 @@ class NavigatorDrawer extends Component {
       let toolActions = [];
       let Touchable = TouchableWithoutFeedback;
 
-      toolActions.push(<TouchableNativeFeedback
-                        key={'changeStyle'}
-                        onPress={this.switch}
-                        >
-                        <View style={{
-                          flexDirection: 'column',  
-                          justifyContent: 'center',
-                          marginLeft: this.state.psnid == '' ? 90 : this.state.userInfo.isSigned ? 55 : 20,
-                        }}>
-                          <Image source={
-                            this.props.modeInfo.isNightMode ? 
-                                icon.sunnyIcon : icon.nightIcon}            
-                                  style={{width: 15, height: 15}} />
-                          <Text style={[styles.menuText,{marginTop:5}]}>
-                            {this.props.modeInfo.isNightMode ? '日间' : '夜间'}
-                          </Text>
-                        </View>
-                      </TouchableNativeFeedback>);
+      toolActions.push(
+        <TouchableNativeFeedback
+          key={'changeStyle'}
+          onPress={this.switch}
+          >
+          <View style={{
+            flexDirection: 'column',  
+            justifyContent: 'center',
+            marginLeft: this.state.psnid == '' ? 90 : this.state.userInfo.isSigned ? 55 : 20,
+          }}>
+            { this.props.modeInfo.isNightMode && 
+                <Icon name="md-sunny" size={20} style={{ marginLeft: 6}} color='#fff' /> ||
+                <Icon name="md-moon" size={20} style={{ marginLeft: 6}} color='#fff' />}
+            <Text style={[styles.menuText,{ marginTop:5 }]}>
+              {this.props.modeInfo.isNightMode ? '日间' : '夜间'}
+            </Text>
+          </View>
+        </TouchableNativeFeedback>
+      );
 
       let rows = [];
 
@@ -294,9 +244,7 @@ class NavigatorDrawer extends Component {
         rows.push(<View key={'rows'} style={styles.row}>
             <Touchable>
               <View style={styles.menuContainer}>
-                <Image
-                  source={icon.nightIcon}
-                  style={{width: 15, height: 15}} />
+                <Icon name="md-text" size={20} color='#fff' />
                 <Text style={styles.menuText}>
                   帖子
                 </Text>
@@ -319,9 +267,7 @@ class NavigatorDrawer extends Component {
               }}
               >
               <View style={styles.menuContainer}>
-              <Image
-                source={icon.atIcon}
-                style={{width: 15, height: 15}} />
+              <Icon name="md-notifications" size={20} color='#fff' />
                 <Text style={styles.menuText}>
                   消息
                 </Text>
@@ -329,9 +275,7 @@ class NavigatorDrawer extends Component {
             </Touchable>
             <Touchable>
               <View style={styles.menuContainer}>
-              <Image
-                source={icon.concernIcon}
-                style={{width: 15, height: 15}} />
+              <Icon name="ios-people" size={20} color='#fff' />
                 <Text style={styles.menuText}>
                   关注
                 </Text>
@@ -339,9 +283,7 @@ class NavigatorDrawer extends Component {
             </Touchable>
             <Touchable>
               <View style={styles.menuContainer}>
-              <Image
-                source={icon.collectIcon}
-                style={{width: 15, height: 15}} />
+              <Icon name="md-star" size={20} color='#fff' />
                 <Text style={styles.menuText}>
                   收藏
                 </Text>
@@ -351,35 +293,35 @@ class NavigatorDrawer extends Component {
         
 
         if(this.state.userInfo.isSigned == false){
-          toolActions.push(<TouchableNativeFeedback
-                            key={'sign'}
-                            onPress={this.pressSign}
-                            >
-                            <View style={{flexDirection: 'column',  justifyContent: 'center',marginLeft: 20}}>
-                              <Image source={icon.signIcon}            
-                                      style={{width: 15, height: 15}} />
-                              <Text style={[styles.menuText,{marginTop:5}]}>
-                                签到
-                              </Text>
-                            </View>
-                          </TouchableNativeFeedback>)
+          toolActions.push(
+            <TouchableNativeFeedback
+              key={'sign'}
+              onPress={this.pressSign}
+              >
+              <View style={{flexDirection: 'column',  justifyContent: 'center',marginLeft: 20}}>
+                <Icon name="md-log-in" size={20} style={{ marginLeft: 6}} color='#fff' />
+                <Text style={[styles.menuText,{marginTop:5}]}>
+                  签到
+                </Text>
+              </View>
+            </TouchableNativeFeedback>
+          )
         }
 
-        toolActions.push(<TouchableNativeFeedback
-                     onPress={this.pressLogout}
-                     key={'exitApp'}
-                    // onShowUnderlay={highlightRowFunc}
-                    // onHideUnderlay={highlightRowFunc}
-                    >
-                    <View style={{flexDirection: 'column',  justifyContent: 'center',marginLeft: 20}}>
-                      <Image source={icon.exitIcon}            
-                              style={{width: 15, height: 15}} />
-                      <Text style={[styles.menuText,{marginTop:5}]}>
-                        退出
-                      </Text>
-                    </View>
-                  </TouchableNativeFeedback>)
-        }  
+        toolActions.push(
+          <TouchableNativeFeedback
+              onPress={this.pressLogout}
+              key={'exitApp'}
+            >
+            <View style={{flexDirection: 'column',  justifyContent: 'center',marginLeft: 20}}>
+              <Icon name="md-log-out" size={20} style={{ marginLeft: 6}} color='#fff' />
+              <Text style={[styles.menuText,{marginTop:5}]}>
+                退出
+              </Text>
+            </View>
+          </TouchableNativeFeedback>
+        )
+      }  
 
       return (
       <View style={[styles.header, {
@@ -504,7 +446,8 @@ class NavigatorDrawer extends Component {
   }
 
   renderRow = (rowData, sectionID, rowID, highlightRow) => {
-    let icon = this.state.listArr[rowID];
+    let iconName = iconNameArr[rowID]
+    const icon = <Icon name={iconName} size={25} style={{ marginLeft: 6}} color='#03a9f4' />
     if ( this.state.psnid == '' &&  rowID == 4  || this.state.psnid != '' && rowID == 6){
       return (
         <View style={{marginTop: 6}}>
@@ -529,13 +472,11 @@ class NavigatorDrawer extends Component {
         <TouchableNativeFeedback
            onPress={()=>this.onSelectItem(sectionID,rowID)}
            delayPressIn={0}
-          // onShowUnderlay={highlightRowFunc}
-          // onHideUnderlay={highlightRowFunc}
           >
           <View style={[styles.themeItem,{
             backgroundColor: this.props.modeInfo.brighterLevelOne
           }]}>
-            <Image source={icon} style={styles.themeIndicate}/>
+            { icon }
             <Text style={[styles.themeName,{color: this.props.modeInfo.titleTextColor}]}>
               {rowData}
             </Text>
@@ -585,7 +526,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-around',
-    marginLeft: 25,
+    marginLeft: 5,
     marginTop: -60,
   },
   row: {
@@ -626,7 +567,7 @@ const styles = StyleSheet.create({
   themeIndicate: {
     marginLeft: 16,
     width: 20,
-    height: 20,
+    height: 20
   },
   separator: {
     height: 1,
