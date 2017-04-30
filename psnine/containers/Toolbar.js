@@ -46,8 +46,8 @@ const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = screen;
 
 let title = "PSNINE";
 let isMounted = false;
-let indexWithFloatButton = [0,3,4];
-let indexWithoutFloatButton = [1,2];
+let indexWithFloatButton = [0,1,3,4];
+let indexWithoutFloatButton = [2];
 
 const searchAction = { title: '搜索', iconName: 'md-search', value: '', show: 'always' }
 

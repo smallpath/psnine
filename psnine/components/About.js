@@ -42,7 +42,7 @@ class About extends Component {
 
     this.state = {
       checkUpdateTip: '点击检查更新',
-      sourceCodeURL: 'https://github.com/Smallpath/Psnine',
+      sourceCodeURL: 'https://github.com/smallpath/psnine',
       icon: false
     }
   }

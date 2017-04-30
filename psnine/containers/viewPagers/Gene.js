@@ -10,7 +10,8 @@ import {
   TouchableNativeFeedback,
   RefreshControl,
   InteractionManager,
-  PanResponder
+  PanResponder,
+  ScrollView
 } from 'react-native';
 
 import { connect } from 'react-redux';
@@ -90,7 +91,7 @@ class Gene extends Component {
           delayPressIn={100}
           background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
           >
-          <View pointerEvents='box-only' style={{ flex: 1, flexDirection: 'row', padding: 12 }}>
+          <View style={{ flex: 1, flexDirection: 'row', padding: 12 }}>
             <Image
               source={{ uri: rowData.avatar }}
               style={styles.avatar}
@@ -101,7 +102,7 @@ class Gene extends Component {
                 style={{ flex: -1,color: this.props.modeInfo.titleTextColor, }}>
                 {rowData.content}
               </Text>
-              <View style={{flex:-1, flexDirection: 'row', marginTop: 5, marginBottom: 5 ,}}>
+              <View style={{flex:-1, flexDirection: 'row', marginTop: 5, marginBottom: 5 }}>
                 {imageItems}
               </View>
               <View style={{ flex: 1, flexDirection: 'row', justifyContent :'space-between',  }}>

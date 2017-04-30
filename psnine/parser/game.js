@@ -10,7 +10,7 @@ export default function (html) {
     const img = $this.find('img').attr('src')
 
     const text = $this.text()
-    const arr = text.split('\n').map(item => item.replace(/\t/g, '')).filter(item => item.trim())
+    const arr = text.split('\n').map(item => item.replace(/\t/g, '').trim()).filter(item => item.trim())
 
     const title = $this.find('td p a').text()
     const matched = img.match(/\/(\d+)\./)

@@ -167,16 +167,14 @@ class Root extends React.Component {
 		Animated.timing(this.state.tipBarMarginBottom, {
 			toValue: this.state.tipBarMarginBottom._value === 1 ? 0 : 1,
 			duration: 200,
-			easing: Easing.ease,
-			useNativeDriver: true
+			easing: Easing.ease
 		}).start();
 
 		setTimeout(() => {
 			Animated.timing(this.state.tipBarMarginBottom, {
 				toValue: this.state.tipBarMarginBottom._value === 1 ? 0 : 1,
 				duration: 200,
-				easing: Easing.ease,
-				useNativeDriver: true
+				easing: Easing.ease
 			}).start();
 		}, 2000)
 	}

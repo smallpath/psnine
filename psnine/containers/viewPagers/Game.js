@@ -160,7 +160,7 @@ class Game extends Component {
           <Picker.Item label="无DLC" value="nodlc" />
         </Picker>
         <Picker style={{
-            flex: 1,
+            flex: 1.5,
             color: this.props.modeInfo.standardTextColor
           }}
           prompt='排序'
@@ -248,7 +248,7 @@ class Game extends Component {
     // console.log('Community.js rendered');
     dataSource = dataSource.cloneWithRows(gameReducer.games);
     return (
-      <View style={{backgroundColor: this.props.modeInfo.backgroundColor}}>
+      <View style={{backgroundColor: this.props.modeInfo.backgroundColor, flex:1}}>
         { this._renderHeader() }
         <ListView
           refreshControl={
@@ -261,7 +261,7 @@ class Game extends Component {
               />
           }
           ref={listView=>this.listView=listView}
-          style={{backgroundColor: this.props.modeInfo.brighterLevelOne}}
+          style={{backgroundColor: this.props.modeInfo.brighterLevelOne, flex:10}}
           pageSize = {32}
           initialListSize = {32}
           removeClippedSubviews={false}

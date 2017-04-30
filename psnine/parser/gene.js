@@ -13,44 +13,21 @@ export default function (html) {
     }).filter(index => !!index))
 
     const text = $this.text()
-    const arr = text
-                    .split('\n')
-                    .map(item => item.replace(/\s+/g, ''))
-                    .filter(item => item)
-                    .reduce((prev, curr, index, origin) => {
-                        const len = origin.length
-                        switch (true) {
-                            case index === 0:
-                                prev[index] = curr;
-                                break;
-                            case index === len - 1:
-                                prev[4] = curr;
-                                break;
-                            case index === len - 2:
-                                prev[3] = curr;
-                                break;
-                            case index === len - 3:
-                                prev[2] = curr;
-                                break;
-                            default:
-                                prev[1] = prev[1] ? prev[1] + curr : curr
-                                break;
-                        }
-                        return prev
-                    }, [])
+    const arr = text.split('\n').map(item => item.replace(/\t/g, '').trim()).filter(item => item)
+
     const matched = $this.find('.content')[0].parent.attribs.onclick.match(/\d+/)
     const id = matched ? matched[0] :arr[1] + arr[2]
-
+    const nextArr = arr.slice(-3)
     const mock = {
       circle: arr[0].split('：')[1],
-      content: arr[1],
-      psnid: arr[2],
-      date: arr[3],
+      content: arr.slice(1, -3).join('\n'),
+      psnid: nextArr[0],
+      date: nextArr[1],
       avatar: img,
       id,
       thumbs,
-      count: arr[4],
-      type: arr[4]
+      count: nextArr[2],
+      type: nextArr[2]
     }
     result.push(mock)
   })

@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "cheerio-without-node-native": "^0.20.2",
+    "lodash.debounce": "^4.0.8",
     "react": "^16.0.0-alpha.6",
     "react-native": "^0.43.4",
     "react-native-vector-icons": "^4.0.1",

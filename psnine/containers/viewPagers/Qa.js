@@ -232,7 +232,7 @@ class Qa extends Component {
     // console.log('Community.js rendered');
     dataSource = dataSource.cloneWithRows(qaReducer.qas);
     return (
-      <View style={{backgroundColor: this.props.modeInfo.backgroundColor}}>
+      <View style={{backgroundColor: this.props.modeInfo.backgroundColor, flex:1}}>
         { this._renderHeader() }
         <ListView
           refreshControl={
@@ -245,7 +245,7 @@ class Qa extends Component {
               />
           }
           ref={listView=>this.listView=listView}
-          style={{backgroundColor: this.props.modeInfo.brighterLevelOne}}
+          style={{backgroundColor: this.props.modeInfo.brighterLevelOne, flex: 10}}
           pageSize = {32}
           initialListSize = {32}
           removeClippedSubviews={false}
@@ -260,6 +260,7 @@ class Qa extends Component {
           onContentSizeChange={() => {
               if (qaReducer.page == 1)
                 return;
+
               const y = this.currentHeight + 60 - this.listViewHeight
               if (y === prevPosition) {
                 return

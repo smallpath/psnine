@@ -20,6 +20,22 @@ Android App for [P9](http://psnine.com/) written by React Native
 - [x] 上滑隐藏工具栏
 - [x] 新建讨论/约战/基因及其动画
 - [ ] cheerios爬取数据
-- [ ] Native化Topic/Battle/Gene的主题页面
+  - [x] 社区
+  - [x] 基因
+  - [x] 约战
+  - [x] 问答
+  - [x] 游戏
+  - [x] 用户数据
+  - [x] 消息
+  - [ ] 个人中心
+  - [ ] 我的游戏
+  - [ ] 排行
+  - [ ] 商店
+  - [ ] 闲游
+  - [ ] 系统选项
+  - [ ] 我的帖子
+  - [ ] 关注
+  - [ ] 收藏
+  - [ ] topic主题
 
 
