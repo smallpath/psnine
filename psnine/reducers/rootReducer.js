@@ -4,13 +4,15 @@ import battle from './Battle';
 import community from './Community';
 import gene from './Gene';
 import qa from './Qa';
+import game from './Game';
 
 const rootReducer = combineReducers({
     app,
     battle,
     community,
     gene,
-    qa
+    qa,
+    game
 });
 
 export default rootReducer;

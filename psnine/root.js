@@ -168,6 +168,7 @@ class Root extends React.Component {
 			toValue: this.state.tipBarMarginBottom._value === 1 ? 0 : 1,
 			duration: 200,
 			easing: Easing.ease,
+			useNativeDriver: true
 		}).start();
 
 		setTimeout(() => {
@@ -175,6 +176,7 @@ class Root extends React.Component {
 				toValue: this.state.tipBarMarginBottom._value === 1 ? 0 : 1,
 				duration: 200,
 				easing: Easing.ease,
+				useNativeDriver: true
 			}).start();
 		}, 2000)
 	}

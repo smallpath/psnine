@@ -5,6 +5,7 @@ import battleParser from '../parser/battle'
 import userParser from '../parser/user'
 import messageParser from '../parser/message'
 import qaParser from '../parser/qa'
+import gamesParser from '../parser/game'
 
 const safeFetch = function(reqUrl) {
   return new Promise((resolve, reject) => {
@@ -70,3 +71,9 @@ export const getQasAPI = (page, type, sort) => webHost + `/qa?page=${page}&type=
 export const fetchQuestion = (page = 1, type = 'all', sort = 'obdate') => safeFetch(getQasAPI(page, type, sort)).then(res => qaParser(res));
 
 export const getQAUrl = id => `${webHost}/qa/${id}`
+
+export const fetchGames = (page = 1, sort = 'newest', pf = 'all', dlc = 'all') => safeFetch(getGamesAPI(page, sort, pf, dlc)).then(res => gamesParser(res));
+
+export const getGamesAPI = (page, sort, pf, dlc) => `${webHost}/psngame?page=${page}&ob=${sort}&pf=${pf}&dlc=${dlc}`
+
+export const getGameUrl = id => `${webHost}/psngame/${id}`

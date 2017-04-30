@@ -42,12 +42,7 @@ class Qa extends Component {
 
         this.state = {
           type: 'all',
-          sort: 'obdate',
-          selected1: 'key1',
-          selected2: 'key1',
-          selected3: 'key1',
-          color: 'red',
-          mode: Picker.MODE_DIALOG
+          sort: 'obdate'
         }
     }
 
@@ -237,7 +232,7 @@ class Qa extends Component {
     // console.log('Community.js rendered');
     dataSource = dataSource.cloneWithRows(qaReducer.qas);
     return (
-      <View>
+      <View style={{backgroundColor: this.props.modeInfo.backgroundColor}}>
         { this._renderHeader() }
         <ListView
           refreshControl={
