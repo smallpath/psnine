@@ -4,6 +4,7 @@ import geneParser from '../parser/gene'
 import battleParser from '../parser/battle'
 import userParser from '../parser/user'
 import messageParser from '../parser/message'
+import qaParser from '../parser/qa'
 
 const safeFetch = function(reqUrl) {
   return new Promise((resolve, reject) => {
@@ -63,3 +64,9 @@ export const getRankURL = () => `${webHost}/psnid`;
 export const getMyGameURL = id => `${webHost}/psnid/${id}/psngame`;
 
 export const fetchUser = id => safeFetch(getHomeURL(id)).then(res => userParser(res, id))
+
+export const getQasAPI = (page, type, sort) => webHost + `/qa?page=${page}&type=${type}&ob=${sort}`
+
+export const fetchQuestion = (page = 1, type = 'all', sort = 'obdate') => safeFetch(getQasAPI(page, type, sort)).then(res => qaParser(res));
+
+export const getQAUrl = id => `${webHost}/qa/${id}`

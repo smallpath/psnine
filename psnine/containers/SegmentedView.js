@@ -380,8 +380,8 @@ class SegmentedView extends Component {
                     onPageScrollStateChanged={this.onPageScrollStateChanged}
                     onPageScroll={this.onPageScroll}
                 >
-{/*
-                    <View key={`s00`}
+
+                    {/*<View key={`s00`}
                         style={{ backgroundColor: 'blue', height: 500 }}
 
                     >
@@ -396,11 +396,11 @@ class SegmentedView extends Component {
                             }
                             }
                         />
-                    </View>
+                    </View>*/}
 
-                    <View key={`s11`}>
+                    <View key={`s00`}>
                         <Qa
-                            index={1}
+                            index={0}
                             ref={qa => this.qa = qa}
                             {...{
                                 navigator: this.props.navigator,
@@ -410,7 +410,7 @@ class SegmentedView extends Component {
                             URL={'http://psnine.com/qa'}
                         />
                     </View>
-                    <View key={`s22`}>
+                    {/*<View key={`s22`}>
                         <Game
                             ref={game => this.game = game}
                             index={2}
