@@ -12,12 +12,13 @@ import {
   PanResponder,
   Animated,
   InteractionManager,
+  Picker
 } from 'react-native';
 
 import { connect } from 'react-redux';
 import { getQAList } from '../../actions/qa.js';
 import { standardColor, nodeColor, idColor  } from '../../config/colorConfig';
-
+import Icon from 'react-native-vector-icons/Ionicons';
 import CommunityTopic from '../../components/CommunityTopic';
 
 import { getQAUrl } from '../../dao/dao';
@@ -41,7 +42,12 @@ class Qa extends Component {
 
         this.state = {
           type: 'all',
-          sort: 'obdate'
+          sort: 'obdate',
+          selected1: 'key1',
+          selected2: 'key1',
+          selected3: 'key1',
+          color: 'red',
+          mode: Picker.MODE_DIALOG
         }
     }
 
@@ -120,6 +126,51 @@ class Qa extends Component {
     )
   }
 
+  _renderHeader = () => {
+    return (
+      <View style={{
+        flex: -1,
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: 40,
+        paddingTop: 3,
+        backgroundColor: this.props.modeInfo.backgroundColor
+      }}>
+        <Picker style={{
+            flex: 1,
+            borderWidth: 1,
+            color: this.props.modeInfo.standardTextColor
+          }}
+          prompt='选择类型'
+          selectedValue={this.state.type}
+          onValueChange={this.onValueChange.bind(this, 'type')}>
+          <Picker.Item label="全部" value="all" />
+          <Picker.Item label="PSN游戏" value="psngame" />
+          <Picker.Item label="节点" value="node" />
+        </Picker>
+        <Picker style={{
+            flex: 1,
+            color: this.props.modeInfo.standardTextColor
+          }}
+          prompt='排序'
+          selectedValue={this.state.sort}
+          onValueChange={this.onValueChange.bind(this, 'sort')}>
+          <Picker.Item label="综合排序" value="obdate" />
+          <Picker.Item label="最新" value="date" />
+        </Picker>
+      </View>
+    )
+  }
+
+  onValueChange = (key: string, value: string) => {
+    const newState = {};
+    newState[key] = value;
+    this.setState(newState, () => {
+      this._onRefresh()
+    });
+  };
+
   componentWillReceiveProps = (nextProps) => {
     if(this.props.modeInfo.isNightMode != nextProps.modeInfo.isNightMode ){
       this.props.modeInfo == nextProps.modeInfo;
@@ -172,13 +223,13 @@ class Qa extends Component {
   }
 
   _onEndReached = () => {
-    // const { qa: qaReducer } = this.props;
+    const { qa: qaReducer } = this.props;
 
-    // this.refreshControl._nativeRef.setNativeProps({
-    //   refreshing: true,
-    // });
+    this.refreshControl._nativeRef.setNativeProps({
+      refreshing: true,
+    });
 
-    // this._loadMoreData();
+    this._loadMoreData();
   }
 
   render(){
@@ -186,6 +237,8 @@ class Qa extends Component {
     // console.log('Community.js rendered');
     dataSource = dataSource.cloneWithRows(qaReducer.qas);
     return (
+      <View>
+        { this._renderHeader() }
         <ListView
           refreshControl={
             <RefreshControl
@@ -206,7 +259,6 @@ class Qa extends Component {
           onEndReachedThreshold={10}
           dataSource={ dataSource }
           renderRow={this._renderRow}
-
           onLayout={event => {
             this.listViewHeight = event.nativeEvent.layout.height
           }}
@@ -221,6 +273,7 @@ class Qa extends Component {
               this.listView.scrollTo({y, animated: true})
             }}
           />
+      </View>
     )
   }
 
