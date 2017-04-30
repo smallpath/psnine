@@ -18,6 +18,7 @@ import {
   Easing,
   PanResponder,
   TouchableHighlight,
+  TouchableWithoutFeedback
 } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
@@ -399,6 +400,11 @@ class Toolbar extends Component {
     }
   }
 
+  closeMask = () => {
+    this.removeListener && this.removeListener.remove  && this.removeListener.remove();
+    this._animateToolbar(0)
+  }
+
   render() {
     const { app: appReducer, switchModeOnRoot } = this.props;
     const { segmentedIndex } = this.props.app;
@@ -423,6 +429,21 @@ class Toolbar extends Component {
           onIconClicked={this.props._callDrawer() }
           />
           {this._renderSegmentedView() }
+          <TouchableWithoutFeedback onPress={this.closeMask}>
+            <Animated.View 
+                ref={mask=>this.mask=mask}
+                collapsable ={false}
+                style={{
+                  opacity: openVal.interpolate({
+                    inputRange: [0, 1],
+                    outputRange: [1, 1]
+                  }),
+                  width:openVal.interpolate({inputRange: [0, 1], outputRange: [0, SCREEN_WIDTH]}),
+                  height:openVal.interpolate({inputRange: [0, 1], outputRange: [0, SCREEN_HEIGHT]}),
+                  position:'absolute',
+                  zIndex: 1
+              }}/>
+            </TouchableWithoutFeedback>
            <Animated.View 
                 ref={float=>this.float1=float}
                 collapsable ={false}
