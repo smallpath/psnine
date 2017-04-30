@@ -47,7 +47,7 @@ let screen = Dimensions.get('window');
 
 const { width:SCREEN_WIDTH, height:SCREEN_HEIGHT } = screen;
 
-SCREEN_HEIGHT = SCREEN_HEIGHT - StatusBar.currentHeight;
+SCREEN_HEIGHT = SCREEN_HEIGHT - StatusBar.currentHeight + 1;
 
 let CIRCLE_SIZE = 56;
 

@@ -34,7 +34,6 @@ import Gene from './viewPagers/Gene';
 import NewBattle from '../components/new/NewBattle';
 import NewGene from '../components/new/NewGene';
 import NewTopic from '../components/new/NewTopic';
-import NewToolbar from '../components/new/NewToolbar';
 
 import { changeSegmentIndex, changeCommunityType, changeGeneType, changeScrollType } from '../actions/app';
 
@@ -101,6 +100,10 @@ let clamp = (value,min, max) => {
 
 let toolbarHeight = 56;
 let releasedMarginTop = 0;
+let config = {tension: 30, friction: 7, ease: Easing.ease, duration: 200};
+const timeout = 190
+const delay = 50
+
 
 class Toolbar extends Component {
 
@@ -113,13 +116,10 @@ class Toolbar extends Component {
       scale: new Animated.Value(1),
       opacity: new Animated.Value(1),
       marginTop: new Animated.Value(0),
-      openTopicVal: new Animated.Value(0),
-      openBattleVal: new Animated.Value(0),
-      openGeneVal: new Animated.Value(0),
-      innerTopicMarginTop: new Animated.Value(0),
-      innerBattleMarginTop: new Animated.Value(0),
-      innerGeneMarginTop: new Animated.Value(0),
-      addIcon: false
+      openVal: new Animated.Value(0),
+      innerMarginTop: new Animated.Value(0),
+      addIcon: false,
+      jumpIcon: false
     }
   }
 
@@ -186,8 +186,12 @@ class Toolbar extends Component {
   }
 
   async componentWillMount() {
-    const source = await Ionicons.getImageSource('ios-add', 24, '#fff')
-    this.setState({ addIcon: source })
+    const addSource = await Ionicons.getImageSource('ios-add', 24, '#fff')
+    const jumpSource = await Ionicons.getImageSource('ios-exit-outline', 24, '#fff')
+    this.setState({ 
+      addIcon: addSource,
+      jumpIcon: jumpSource
+    })
   }
 
 
@@ -268,13 +272,11 @@ class Toolbar extends Component {
         this.state.opacity.setValue(1-value);
         this.state.rotation.setValue(1-value);
         this.state.scale.setValue(1-value);
-
       }else{
 
         this.state.opacity.setValue(value);
         this.state.rotation.setValue(1-value);
         this.state.scale.setValue(value);
-
       }
 
     }else if(indexWithoutFloatButton.indexOf(fromIndex) != -1 && indexWithFloatButton.indexOf(toIndex) !=-1){
@@ -301,14 +303,72 @@ class Toolbar extends Component {
 
   }
 
-  pressNew = () => {
+  _animateToolbar = (value, cb) => {
+    const ratationPreValue = this.state.rotation._value
+
+    const rotationValue = value === 0 ? ratationPreValue - 3/8 : ratationPreValue + 3/8
+    const scaleAnimation = Animated.timing(this.state.rotation, {toValue: rotationValue, ...config})
+    const moveAnimation = Animated.timing(this.state.openVal, {toValue: value, ...config})
+    const delayAnimation = Animated.delay(delay)
+    const target = [
+      moveAnimation
+    ]
+    if (value === 1) target.unshift(delayAnimation)
+    if (value !== 0 || value !== 1) target.unshift(scaleAnimation)
+
+    Animated.parallel(target).start(() => typeof cb === 'function' && cb())
+  }  
+
+  _pressToolbarNew = () => {
+    const { navigator } = this.props;
+    const { segmentedIndex } = this.props.app;
+
+    switch (segmentedIndex) {
+      case 0 : 
+        this.pressNew(() => {
+          navigator.push({
+            component: NewTopic,
+            withoutAnimation: true,
+            shouldForbidPressNew: true,
+          })
+        });
+        break;
+
+      case 1 : 
+
+        break;
+      case 3 : 
+        this.pressNew(() => {
+          navigator.push({
+            component: NewBattle,
+            withoutAnimation: true,
+            shouldForbidPressNew: true,
+          })
+        });
+
+        break;
+      case 4 : 
+        this.pressNew(() => {
+          navigator.push({
+            component: NewGene,
+            withoutAnimation: true,
+            shouldForbidPressNew: true,
+          })
+        });
+
+        break;
+        
+    }
+  }
+
+  pressNew = (cb) => {
 
     const { segmentedIndex } = this.props.app;
 
     if (segmentedIndex == 1 || segmentedIndex == 2){
       return;
     }
-
+    
     const { navigator: _navigator } = this.props;
 
     let routes = _navigator.getCurrentRoutes();
@@ -321,22 +381,30 @@ class Toolbar extends Component {
       return;
     }
 
-    let config = {tension: 30, friction: 7};
-
-    _navigator.push({
-      component: NewToolbar,
-      params: {
-        segmentedIndex: segmentedIndex
-      },
-      withoutAnimation: true,
-      shouldForbidPressNew: true,
-    })
+    if (this.state.openVal._value === 0) {
+      this.removeListener = BackAndroid.addEventListener('hardwareBackPress',  () => {
+        let value = this.state.innerMarginTop._value;
+        if (Math.abs(value) >= 50) {
+          Animated.timing(this.state.innerMarginTop, {toValue: 0, ...config}).start();
+        }else{
+          this.removeListener && this.removeListener.remove  && this.removeListener.remove();
+          this._animateToolbar(0)
+        }
+        return true;
+      });
+      this._animateToolbar(1, cb)
+    } else {
+      this.removeListener && this.removeListener.remove  && this.removeListener.remove();
+      this._animateToolbar(0, cb)
+    }
   }
 
   render() {
     const { app: appReducer, switchModeOnRoot } = this.props;
     const { segmentedIndex } = this.props.app;
+    const { openVal } = this.state
     const tipHeight =  toolbarHeight * 0.8
+
     return (
       <Animated.View 
         style={[styles.container,{
@@ -355,6 +423,133 @@ class Toolbar extends Component {
           onIconClicked={this.props._callDrawer() }
           />
           {this._renderSegmentedView() }
+           <Animated.View 
+                ref={float=>this.float1=float}
+                collapsable ={false}
+                style={{
+                  opacity: openVal.interpolate({
+                    inputRange: [0, 1],
+                    outputRange: [1, 1]
+                  }),
+                  width: 40,
+                  height: 40,
+                  borderRadius: 20,
+                  backgroundColor: accentColor,
+                  position:'absolute',
+                  bottom: Animated.add(
+                    openVal.interpolate({inputRange: [0, 1], outputRange: [24,  56 + 10 + 16 * 2]}),
+                    this.props.tipBarMarginBottom.interpolate({
+                      inputRange: [0, 1], 
+                      outputRange: [0 , tipHeight]
+                    })
+                  ),
+                  right: 24,
+                  elevation: openVal.interpolate({
+                    inputRange: [0, 0.5, 1],
+                    outputRange: [0, 0, 1]
+                  }) ,
+                  zIndex: 1,
+                  opacity: Animated.multiply(this.state.openVal, this.state.opacity)
+              }}>
+                
+                <TouchableNativeFeedback 
+                  onPress={this._pressToolbarNew}
+                  background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
+                  onPressIn={()=>{
+                    this.float1.setNativeProps({
+                      style :{
+                      elevation: 12,
+                    }});
+                  }}
+                  onPressOut={()=>{
+                    this.float1.setNativeProps({
+                      style :{
+                      elevation: 6,
+                    }});
+                  }}
+                  style={{
+                    width: 40,
+                    height: 40,
+                    borderRadius: 20,
+                    flex:1,
+                    zIndex: 1,
+                    backgroundColor: accentColor,
+                  }}>
+                  <View style={{borderRadius: 20,flex:-1}}>
+                    {this.state.addIcon && (<Image source={this.state.addIcon}
+                          style={{
+                            marginLeft: 11,
+                            marginTop: 11,
+                            width: 18,
+                            height: 18
+                        }}
+                    />)}
+                  </View>
+                </TouchableNativeFeedback>
+            </Animated.View>
+
+            <Animated.View 
+                ref={float=>this.float2=float}
+                collapsable ={false}
+                style={{
+                  width: 40,
+                  height: 40,
+                  borderRadius: 20,
+                  backgroundColor: accentColor,
+                  position:'absolute',
+                  bottom: Animated.add(
+                    openVal.interpolate({inputRange: [0, 1], outputRange: [24,  56 + 10 + 16 * 2  + 50]}),
+                    this.props.tipBarMarginBottom.interpolate({
+                      inputRange: [0, 1], 
+                      outputRange: [0 , tipHeight]
+                    })
+                  ),
+                  right: 24,
+                  elevation: openVal.interpolate({
+                    inputRange: [0, 0.5, 1],
+                    outputRange: [0, 0, 1]
+                  }) ,
+                  zIndex: 1,
+                  opacity: Animated.multiply(this.state.openVal, this.state.opacity)
+              }}>
+                
+                <TouchableNativeFeedback 
+                  onPress={this.pressNew}
+                  background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
+                  onPressIn={()=>{
+                    this.float2.setNativeProps({
+                      style :{
+                      elevation: 12,
+                    }});
+                  }}
+                  onPressOut={()=>{
+                    this.float2.setNativeProps({
+                      style :{
+                      elevation: 6,
+                    }});
+                  }}
+                  style={{
+                    width: 40,
+                    height: 40,
+                    borderRadius: 20,
+                    flex:1,
+                    zIndex: 1,
+                    backgroundColor: accentColor,
+                  }}>
+                  <View style={{borderRadius: 20,flex:-1}}>
+                    {this.state.jumpIcon && (<Image source={this.state.jumpIcon}
+                          style={{
+                            marginLeft: 11,
+                            marginTop: 11,
+                            width: 18,
+                            height: 18
+                        }}
+                    />)}
+                    
+                  </View>
+                </TouchableNativeFeedback>
+            </Animated.View>
+
         <Animated.View 
             ref={float=>this.float=float}
             collapsable ={false}
@@ -377,7 +572,7 @@ class Toolbar extends Component {
                 scale: this.state.scale,                        
               },{
                 rotateZ: this.state.rotation.interpolate({
-                  inputRange: [0,1],
+                  inputRange: [0, 1],
                   outputRange: ['0deg', '360deg']
                 }),
               }]
