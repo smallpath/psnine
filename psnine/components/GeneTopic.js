@@ -16,6 +16,8 @@ import {
   RefreshControl,
   WebView,
   KeyboardAvoidingView,
+  InteractionManager,
+  ActivityIndicator,
   ScrollView
 } from 'react-native';
 
@@ -42,9 +44,8 @@ class GeneTopic extends Component {
     super(props);
     this.state = {
       data: false,
-      isLogIn: false,
-      canGoBack: false,
-      icon: false
+      isLoading: true,
+      mainContent: false
     }
   }
 
@@ -62,10 +63,14 @@ class GeneTopic extends Component {
   }
 
   componentWillMount = async () => {
-    const data = await getGeneAPI(this.props.URL)
-    this.setState({
-      data
-    })
+    InteractionManager.runAfterInteractions(() => {
+      const data =  getGeneAPI(this.props.URL).then(data => {
+        this.setState({
+          data,
+          isLoading: false
+        })
+      })
+    });
   }
 
   renderHeader = () => {
@@ -244,13 +249,26 @@ class GeneTopic extends Component {
                 }}
                 onActionSelected={this._onActionSelected}
               />
-              <ScrollView scrollEnabled={true} style={{
+              { this.state.isLoading && (
+                  <ActivityIndicator
+                    animating={this.state.isLoading}
+                    style={{
+                      flex: 999,
+                      justifyContent: 'center',
+                      alignItems: 'center'
+                    }}
+                    color={accentColor}
+                    size="large"
+                  />
+              )}
+              { !this.state.isLoading && <ScrollView scrollEnabled={true} style={{
                 backgroundColor: this.props.modeInfo.standardColor
               }}>
                 { this.state.data && this.renderHeader() }
                 { this.state.data && this.renderContent() }
                 { this.state.data && this.renderComment() }
               </ScrollView>
+              }
           </View>
     );
   }

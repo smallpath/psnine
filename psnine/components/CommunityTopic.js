@@ -17,6 +17,9 @@ import {
   WebView,
   KeyboardAvoidingView,
   TouchableHighlight,
+  InteractionManager,
+  ActivityIndicator,
+  StatusBar,
   ScrollView
 } from 'react-native';
 
@@ -27,6 +30,8 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import { standardColor, nodeColor, idColor, accentColor  } from '../config/colorConfig';
 
 import { getTopicAPI, getTopicContentAPI } from '../dao/dao'
+
+let screen = Dimensions.get('window');
 
 let toolbarActions = [
   {title: '回复', iconName: 'md-create', show: 'always'},
@@ -43,9 +48,7 @@ class CommunityTopic extends Component {
     super(props);
     this.state = {
       data: false,
-      isLogIn: false,
-      canGoBack: false,
-      icon: false,
+      isLoading: true,
       mainContent: false
     }
   }
@@ -63,12 +66,16 @@ class CommunityTopic extends Component {
     }
   }
 
-  componentWillMount = async () => {
-    const data = await getTopicAPI(this.props.URL)
-    this.setState({
-      data,
-      mainContent: data.contentInfo.html
-    })
+  componentWillMount = () => {
+    InteractionManager.runAfterInteractions(() => {
+      const data =  getTopicAPI(this.props.URL).then(data => {
+        this.setState({
+          data,
+          mainContent: data.contentInfo.html,
+          isLoading: false
+        })
+      })
+    });
   }
 
   renderHeader = () => {
@@ -215,7 +222,7 @@ class CommunityTopic extends Component {
     }
     return (
       <View>
-        { readMore &&<View style={{elevation: 1, margin: 5, marginTop: 0, marginBottom: 0, backgroundColor:this.props.modeInfo.backgroundColor }}>{ readMore }</View> } 
+        { readMore &&<View style={{elevation: 1, margin: 5, marginTop: 0, marginBottom: 5, backgroundColor:this.props.modeInfo.backgroundColor }}>{ readMore }</View> } 
         <View style={{elevation: 1, margin: 5, marginTop: 0, backgroundColor:this.props.modeInfo.backgroundColor }}>
           { list }
         </View>
@@ -229,9 +236,16 @@ class CommunityTopic extends Component {
     for (const item of page) {
       const thisJSX = (
         <TouchableNativeFeedback key={item.url} onPress={() => {
+            if (this.state.isLoading === true) {
+              return
+            }
+            this.setState({
+              isLoading: true
+            })
             getTopicContentAPI(item.url).then(data => {
               this.setState({
-                mainContent: data.contentInfo.html
+                mainContent: data.contentInfo.html,
+                isLoading: false
               })
             })
           }}>
@@ -274,14 +288,28 @@ class CommunityTopic extends Component {
                 }}
                 onActionSelected={this._onActionSelected}
               />
-              <ScrollView style={{
+              { this.state.isLoading && (
+                  <ActivityIndicator
+                    animating={this.state.isLoading}
+                    style={{
+                      flex: 999,
+                      justifyContent: 'center',
+                      alignItems: 'center'
+                    }}
+                    color={accentColor}
+                    size="large"
+                  />
+              )}
+              { !this.state.isLoading && <ScrollView style={{
+                flex: -1,
                 backgroundColor: this.props.modeInfo.standardColor
               }}>
-                { this.state.data && this.renderHeader() }
-                { this.state.data && this.state.data.contentInfo.page.length !== 0 && this.renderPage() }
-                { this.state.data && this.renderContent() }
-                { this.state.data && this.renderComment() }
+                { !this.state.isLoading && this.renderHeader() }
+                { !this.state.isLoading && this.state.data.contentInfo.page.length !== 0 && this.renderPage() }
+                { !this.state.isLoading && this.renderContent() }
+                { !this.state.isLoading && this.renderComment() }
               </ScrollView>
+              }
           </View>
     );
   }

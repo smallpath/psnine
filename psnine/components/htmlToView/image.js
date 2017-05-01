@@ -39,6 +39,11 @@ class ResizableImage extends Component {
         width: w, 
         height: h
       })
+    }, (err) => {
+      this.setState({
+        width: 0, 
+        height: 0
+      })
     })
   }
 

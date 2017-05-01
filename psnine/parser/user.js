@@ -15,7 +15,7 @@ export default function (html, psnid) {
   const backgroundImage = $('.header').next().attr('style').match(/\((.*?)\)/)
   
   const reg = new RegExp(`${psnid}`, 'gmi')
-  const isSigned = html.indexOf('class="btn" style="color:white;">') !== -1
+  const isSigned = !html.includes('onclick="qidao(this)')
   const result = {
     backgroundImage: backgroundImage[1].replace(/\'/g, ''),
     avatar: { uri: avatar },

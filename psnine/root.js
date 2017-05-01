@@ -8,7 +8,8 @@ import {
 	View,
 	Animated,
 	Text,
-	Easing
+	Easing,
+	InteractionManager
 } from 'react-native';
 import { Provider } from 'react-redux'
 import {
@@ -75,11 +76,11 @@ let CustomGesture = Object.assign({}, BaseConfig.gestures.pop, {
 
 
 let CustomSceneConfig = Object.assign({}, BaseConfig, {
-	gestures: { /*pop: CustomGesture*/ }
+	gestures: { pop: CustomGesture }
 });
 
 let CustomPushWithoutAnimation = Object.assign({}, PushWithoutAnimation.NONE, {
-	gestures: { /*pop: CustomGesture*/ }
+	gestures: { pop: CustomGesture }
 })
 
 let toolbarHeight = 56
@@ -164,18 +165,24 @@ class Root extends React.Component {
 		this.setState({
 			text
 		})
-		Animated.timing(this.state.tipBarMarginBottom, {
-			toValue: this.state.tipBarMarginBottom._value === 1 ? 0 : 1,
-			duration: 200,
-			easing: Easing.ease
-		}).start();
-
-		setTimeout(() => {
+		InteractionManager.runAfterInteractions(() => {
 			Animated.timing(this.state.tipBarMarginBottom, {
 				toValue: this.state.tipBarMarginBottom._value === 1 ? 0 : 1,
 				duration: 200,
 				easing: Easing.ease
 			}).start();
+		});
+
+
+		setTimeout(() => {
+			InteractionManager.runAfterInteractions(() => {
+				Animated.timing(this.state.tipBarMarginBottom, {
+					toValue: this.state.tipBarMarginBottom._value === 1 ? 0 : 1,
+					duration: 200,
+					easing: Easing.ease
+				}).start();
+			});
+
 		}, 2000)
 	}
 
