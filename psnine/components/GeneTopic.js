@@ -16,15 +16,20 @@ import {
   RefreshControl,
   WebView,
   KeyboardAvoidingView,
+  ScrollView
 } from 'react-native';
+
+import HTMLView from './htmlToView';
 
 import { connect } from 'react-redux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { standardColor } from '../config/colorConfig';
+import { standardColor, nodeColor, idColor, accentColor  } from '../config/colorConfig';
+
+import { getGeneAPI } from '../dao/dao'
 
 let toolbarActions = [
+  {title: '回复', iconName: 'md-create', show: 'always'},
   {title: '收藏', iconName: 'md-star' ,show: 'always'},
-  {title: '刷新', iconName: 'md-refresh', show: 'always'},
   {title: '感谢', iconName: 'md-thumbs-up', show: 'never'},
   {title: '分享', show: 'never' },
 ];
@@ -36,6 +41,7 @@ class GeneTopic extends Component {
   constructor(props){
     super(props);
     this.state = {
+      data: false,
       isLogIn: false,
       canGoBack: false,
       icon: false
@@ -55,59 +61,185 @@ class GeneTopic extends Component {
     }
   }
 
-  _pressButton = () => {
-    if(this.state.canGoBack)
-      this.refs[WEBVIEW_REF].goBack();
-    else
-      this.props.navigator.pop();
+  componentWillMount = async () => {
+    const data = await getGeneAPI(this.props.URL)
+    this.setState({
+      data
+    })
   }
 
-  onNavigationStateChange = (navState) => {
-    if(navState.url.indexOf(this.props.URL) !== -1 ){
-      this.setState({
-        canGoBack: navState.canGoBack,
-      });
-    }else{
-      // let replyFloorURL = ``;
-      // let replyMainURL = ``;
-      // let emotionURL = ``;
-      // console.log('Target URL:',navState);
-      this.setState({
-        canGoBack: navState.canGoBack,
-      });
-      this.refs[WEBVIEW_REF].stopLoading();
-    }//return false;
+  renderHeader = () => {
+    const { data: { titleInfo } } = this.state
+
+    const nodeStyle = { flex: -1, color: this.props.modeInfo.standardTextColor,textAlign : 'center', textAlignVertical: 'center' }
+    const textStyle = { flex: -1, color: this.props.modeInfo.standardTextColor,textAlign : 'center', textAlignVertical: 'center' }
+    return (
+      <View key={'header'} style={{
+            flex: 1,              
+            backgroundColor: this.props.modeInfo.backgroundColor,
+            elevation: 1,
+            margin: 5,
+            marginBottom: 0,
+            marginTop: 0
+        }}>
+        <TouchableNativeFeedback  
+          useForeground={true}
+          delayPressIn={100}
+          background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
+          >
+          <View pointerEvents='box-only' style={{ flex: 1, flexDirection: 'row', justifyContent:'center', alignItems: 'center' ,padding: 5 }}>
+            <Image
+              source={{ uri: this.props.rowData.avatar.replace('@50w.png', '@75w.png') }}
+              style={{ width: 75, height: 75}}
+              />
+
+            <View style={{ flex: 1, flexDirection: 'column', padding: 5}}>
+              <Text
+                style={{ flex: 2.5,color: this.props.modeInfo.titleTextColor, fontSize: 16 }}>
+                {titleInfo.title}
+              </Text>
+
+              <View style={{ flex: 1.1, flexDirection: 'row', justifyContent :'space-between' }}>
+                <Text selectable={false} style={{ flex: -1, color: idColor,textAlign : 'center', textAlignVertical: 'center' }}>{titleInfo.psnid}</Text>
+                <Text selectable={false} style={textStyle}>{titleInfo.date}</Text>
+                <Text selectable={false} style={textStyle}>{titleInfo.reply}</Text>
+              </View>
+            </View>
+
+          </View>
+        </TouchableNativeFeedback>
+      </View>
+    )
   }
 
+  renderContent = () => {
+    const { data: { contentInfo } } = this.state
+    return (
+      <View key={'content'} style={{             
+            elevation: 1,
+            margin: 5,
+            marginTop: 0,
+            backgroundColor: this.props.modeInfo.backgroundColor,
+            padding: 10
+        }}>
+        <HTMLView
+          value={contentInfo.html}
+          stylesheet={styles}
+          onLinkPress={(url) => console.log('clicked link: ', url)}
+          imagePaddingOffset={30}
+        />
+      </View>
+    )
+  }
+
+  
+  renderComment = () => {
+    const { data: { commentList } } = this.state
+    const list = []
+    let readMore = null
+    for (const rowData of commentList) {
+      if (rowData.isGettingMoreComment === false) {
+        list.push(
+          <View key={ rowData.id } style={{              
+                backgroundColor: this.props.modeInfo.backgroundColor
+            }}>
+            <TouchableNativeFeedback  
+              onPress ={()=>{
+
+              }}
+              useForeground={true}
+              delayPressIn={100}
+              background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
+              >
+              <View pointerEvents='box-only' style={{ flex: 1, flexDirection: 'row',  padding: 12 }}>
+                <Image
+                  source={{ uri: rowData.img }}
+                  style={styles.avatar}
+                  />
+
+                <View style={{ marginLeft: 10, flex: 1, flexDirection: 'column'}}>
+                  <HTMLView
+                    value={rowData.content}
+                    stylesheet={styles}
+                    onLinkPress={(url) => console.log('clicked link: ', url)}
+                    imagePaddingOffset={30}
+                  />
+
+                  <View style={{ flex: 1.1, flexDirection: 'row', justifyContent :'space-between' }}>
+                    <Text selectable={false} style={{ flex: -1, color: this.props.modeInfo.standardTextColor ,textAlign : 'center', textAlignVertical: 'center' }}>{rowData.psnid}</Text>
+                    <Text selectable={false} style={{ flex: -1, color: this.props.modeInfo.standardTextColor,textAlign : 'center', textAlignVertical: 'center' }}>{rowData.date}</Text>
+                  </View>
+
+                </View>
+
+              </View>
+            </TouchableNativeFeedback>
+          </View>
+        )
+      } else {
+        readMore = (
+          <View key={ 'readmore' } style={{              
+                backgroundColor: this.props.modeInfo.backgroundColor,
+                elevation: 1
+            }}>
+            <TouchableNativeFeedback  
+              onPress ={()=>{
+
+              }}
+              useForeground={true}
+              delayPressIn={100}
+              background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
+              >
+              <View pointerEvents='box-only' style={{ flex: 1, flexDirection: 'row',  padding: 12 }}>
+
+                <View style={{ flex: 1, flexDirection: 'column', justifyContent:'center', alignItems: 'center'}}>
+                  <Text style={{ flex: 2.5,color: accentColor}}>{'阅读更多评论'}</Text>
+
+                </View>
+
+              </View>
+            </TouchableNativeFeedback>
+          </View>
+        )
+      }
+    }
+    return (
+      <View>
+        { readMore &&<View style={{elevation: 1, margin: 5, marginTop: 0, backgroundColor:this.props.modeInfo.backgroundColor }}>{ readMore }</View> } 
+        <View style={{elevation: 1, margin: 5, marginTop: 0, backgroundColor:this.props.modeInfo.backgroundColor }}>
+          { list }
+        </View>
+      </View>
+    )
+  }
 
   render() {
-    // console.log('GeneTopic.js rendered');
+    // console.log('CommunityTopic.js rendered');
     return ( 
-          <View style={{flex:1}}>
+          <View 
+            style={{flex:1, backgroundColor: this.props.modeInfo.backgroundColor}}
+            onStartShouldSetResponder={() => false}
+            onMoveShouldSetResponder={() => false}
+            >
               <Ionicons.ToolbarAndroid
                 navIconName="md-arrow-back"
-                overflowIconName="md-more"                 iconColor={this.props.modeInfo.isNightMode ? '#000' : '#fff'}
-                title={this.props.title}
-                style={[styles.toolbar, {backgroundColor: this.props.modeInfo.standardColor,}]}
+                overflowIconName="md-more"                 
+                iconColor={this.props.modeInfo.isNightMode ? '#000' : '#fff'}
+                title={`No.${this.props.rowData.id}`}
+                style={[styles.toolbar, {backgroundColor: this.props.modeInfo.standardColor}]}
                 actions={toolbarActions}
-                onIconClicked={this._pressButton}
+                onIconClicked={() => {
+                  this.props.navigator.pop()
+                }}
                 onActionSelected={this._onActionSelected}
               />
-              <KeyboardAvoidingView
-                behavior={'padding'}
-                style={{flex:3}}
-                >
-                <WebView
-                    ref={WEBVIEW_REF}
-                    source={{uri: this.props.URL}} 
-                    style={{flex:3}}
-                    scalesPageToFit={true}
-                    domStorageEnabled={true}
-                    onNavigationStateChange={this.onNavigationStateChange}
-                    startInLoadingState={true}  
-                    injectedJavaScript={`$('.header').hide()`}
-                />
-              </KeyboardAvoidingView>
+              <ScrollView style={{
+                backgroundColor: this.props.modeInfo.standardColor
+              }}>
+                { this.state.data && this.renderHeader() }
+                { this.state.data && this.renderContent() }
+                { this.state.data && this.renderComment() }
+              </ScrollView>
           </View>
     );
   }

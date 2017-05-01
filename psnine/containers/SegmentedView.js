@@ -397,7 +397,7 @@ class SegmentedView extends Component {
                             }
                         />
                     </View>
-{/*
+
                     <View key={`s11`}>
                         <Qa
                             index={1}
@@ -444,7 +444,7 @@ class SegmentedView extends Component {
                             }
                             }
                         />
-                    </View>*/}
+                    </View>
 
                 </ViewPagerAndroid>
             </View>

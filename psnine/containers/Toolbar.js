@@ -458,7 +458,10 @@ class Toolbar extends Component {
                     outputRange: [0, 0, 1]
                   }) ,
                   zIndex: 1,
-                  opacity: Animated.multiply(this.state.openVal, this.state.opacity)
+                  opacity: Animated.multiply(this.state.openVal.interpolate({
+                    inputRange: [0, 0.5, 1],
+                    outputRange: [0, 1, 1]
+                  }), this.state.opacity)
               }}>
                 
                 <TouchableNativeFeedback 
@@ -512,7 +515,10 @@ class Toolbar extends Component {
                     outputRange: [0, 0, 1]
                   }) ,
                   zIndex: 1,
-                  opacity: Animated.multiply(this.state.openVal, this.state.opacity)
+                  opacity: Animated.multiply(this.state.openVal.interpolate({
+                    inputRange: [0, 0.5, 1],
+                    outputRange: [0, 1, 1]
+                  }), this.state.opacity)
               }}>
                 
                 <TouchableNativeFeedback 

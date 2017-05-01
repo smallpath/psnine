@@ -11,16 +11,16 @@ export default function (html) {
   const titleInfo = {
     title: titleText,
     psnid: titleArr[1],
-    date: titleArr[2],
+    date: titleArr[2].replace('编辑', ''),
     reply: titleArr[3],
-    node: titleArr.slice(5).join(' ')
+    node: titleArr.slice(5)
   }
 
   const body = all.children().filter(function(i, el) {
     return $(this).attr('class') === 'content pd10';
   })
   const contentInfo = {
-    html: body.html()
+    html: `<div>${body.html()}</div>`
   }
   
   const commentList = []

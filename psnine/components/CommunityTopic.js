@@ -19,15 +19,17 @@ import {
   ScrollView
 } from 'react-native';
 
+import HTMLView from './htmlToView';
+
 import { connect } from 'react-redux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { standardColor, nodeColor, idColor  } from '../config/colorConfig';
+import { standardColor, nodeColor, idColor, accentColor  } from '../config/colorConfig';
 
 import { getTopicAPI } from '../dao/dao'
 
 let toolbarActions = [
+  {title: '回复', iconName: 'md-create', show: 'always'},
   {title: '收藏', iconName: 'md-star' ,show: 'always'},
-  {title: '刷新', iconName: 'md-refresh', show: 'always'},
   {title: '感谢', iconName: 'md-thumbs-up', show: 'never'},
   {title: '分享', show: 'never' },
 ];
@@ -69,35 +71,39 @@ class CommunityTopic extends Component {
   renderHeader = () => {
     const { data: { titleInfo } } = this.state
 
+    const nodeStyle = { flex: -1, color: this.props.modeInfo.standardTextColor,textAlign : 'center', textAlignVertical: 'center' }
+    const textStyle = { flex: -1, color: this.props.modeInfo.standardTextColor,textAlign : 'center', textAlignVertical: 'center' }
     return (
-      <View key={'header'} style={{              
-            marginTop: 7,
+      <View key={'header'} style={{
+            flex: 1,              
             backgroundColor: this.props.modeInfo.backgroundColor,
             elevation: 1,
-            flex: 1
+            margin: 5,
+            marginBottom: 0,
+            marginTop: 0
         }}>
         <TouchableNativeFeedback  
           useForeground={true}
           delayPressIn={100}
           background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
           >
-          <View pointerEvents='box-only' style={{ flex: 1, flexDirection: 'row',  padding: 12 }}>
+          <View pointerEvents='box-only' style={{ flex: 1, flexDirection: 'row', justifyContent:'center', alignItems: 'center' ,padding: 5 }}>
+            <Image
+              source={{ uri: this.props.rowData.avatar.replace('@50w.png', '@75w.png') }}
+              style={{ width: 75, height: 75}}
+              />
 
-            <View style={{ marginLeft: 10, flex: 1, flexDirection: 'column'}}>
+            <View style={{ flex: 1, flexDirection: 'column', padding: 5}}>
               <Text
-                ellipsizeMode={'tail'}
-                numberOfLines={3}
-                style={{ flex: 2.5,color: this.props.modeInfo.titleTextColor, }}>
+                style={{ flex: 2.5,color: this.props.modeInfo.titleTextColor, fontSize: 16 }}>
                 {titleInfo.title}
               </Text>
 
               <View style={{ flex: 1.1, flexDirection: 'row', justifyContent :'space-between' }}>
                 <Text selectable={false} style={{ flex: -1, color: idColor,textAlign : 'center', textAlignVertical: 'center' }}>{titleInfo.psnid}</Text>
-                <Text selectable={false} style={{ flex: -1, color: this.props.modeInfo.standardTextColor,textAlign : 'center', textAlignVertical: 'center' }}>{titleInfo.date}</Text>
-                <Text selectable={false} style={{ flex: -1, color: this.props.modeInfo.standardTextColor,textAlign : 'center', textAlignVertical: 'center' }}>{titleInfo.reply}回复</Text>
-                <Text selectable={false} style={{ flex: -1, color: this.props.modeInfo.standardTextColor,textAlign : 'center', textAlignVertical: 'center' }}>{titleInfo.node}</Text>
+                <Text selectable={false} style={textStyle}>{titleInfo.date}</Text>
+                <Text selectable={false} style={textStyle}>{titleInfo.reply}</Text>
               </View>
-
             </View>
 
           </View>
@@ -109,15 +115,19 @@ class CommunityTopic extends Component {
   renderContent = () => {
     const { data: { contentInfo } } = this.state
     return (
-      <View key={'content'} style={{              
-            marginTop: 7,
-            backgroundColor: this.props.modeInfo.backgroundColor,
+      <View key={'content'} style={{             
             elevation: 1,
-            padding: 7
+            margin: 5,
+            marginTop: 0,
+            backgroundColor: this.props.modeInfo.backgroundColor,
+            padding: 10
         }}>
-        <Text>
-          { contentInfo.html }
-        </Text>
+        <HTMLView
+          value={contentInfo.html}
+          stylesheet={styles}
+          imagePaddingOffset={30}
+          onLinkPress={(url) => console.log('clicked link: ', url)}
+        />
       </View>
     )
   }
@@ -125,6 +135,7 @@ class CommunityTopic extends Component {
   renderComment = () => {
     const { data: { commentList } } = this.state
     const list = []
+    let readMore = null
     for (const rowData of commentList) {
       if (rowData.isGettingMoreComment === false) {
         list.push(
@@ -146,15 +157,15 @@ class CommunityTopic extends Component {
                   />
 
                 <View style={{ marginLeft: 10, flex: 1, flexDirection: 'column'}}>
-                  <Text
-                    ellipsizeMode={'tail'}
-                    numberOfLines={3}
-                    style={{ flex: 2.5,color: this.props.modeInfo.titleTextColor, }}>
-                    {rowData.content}
-                  </Text>
+                  <HTMLView
+                    value={rowData.content}
+                    stylesheet={styles}
+                    onLinkPress={(url) => console.log('clicked link: ', url)}
+                    imagePaddingOffset={30}
+                  />
 
                   <View style={{ flex: 1.1, flexDirection: 'row', justifyContent :'space-between' }}>
-                    <Text selectable={false} style={{ flex: -1, color: idColor,textAlign : 'center', textAlignVertical: 'center' }}>{rowData.psnid}</Text>
+                    <Text selectable={false} style={{ flex: -1, color: this.props.modeInfo.standardTextColor ,textAlign : 'center', textAlignVertical: 'center' }}>{rowData.psnid}</Text>
                     <Text selectable={false} style={{ flex: -1, color: this.props.modeInfo.standardTextColor,textAlign : 'center', textAlignVertical: 'center' }}>{rowData.date}</Text>
                   </View>
 
@@ -165,9 +176,10 @@ class CommunityTopic extends Component {
           </View>
         )
       } else {
-        list.push(
-          <View key={ rowData.id } style={{              
-                backgroundColor: this.props.modeInfo.backgroundColor
+        readMore = (
+          <View key={ 'readmore' } style={{              
+                backgroundColor: this.props.modeInfo.backgroundColor,
+                elevation: 1
             }}>
             <TouchableNativeFeedback  
               onPress ={()=>{
@@ -179,11 +191,8 @@ class CommunityTopic extends Component {
               >
               <View pointerEvents='box-only' style={{ flex: 1, flexDirection: 'row',  padding: 12 }}>
 
-                <View style={{ marginLeft: 10, flex: 1, flexDirection: 'column'}}>
-                  <Text
-                    ellipsizeMode={'tail'}
-                    numberOfLines={3}
-                    style={{ flex: 2.5,color: this.props.modeInfo.titleTextColor, }}>{'阅读更多评论'}</Text>
+                <View style={{ flex: 1, flexDirection: 'column', justifyContent:'center', alignItems: 'center'}}>
+                  <Text style={{ flex: 2.5,color: accentColor}}>{'阅读更多评论'}</Text>
 
                 </View>
 
@@ -194,8 +203,11 @@ class CommunityTopic extends Component {
       }
     }
     return (
-      <View style={{flex:10, elevation: 1, margin: 5 }}>
-        { list }
+      <View>
+        { readMore &&<View style={{elevation: 1, margin: 5, marginTop: 0, backgroundColor:this.props.modeInfo.backgroundColor }}>{ readMore }</View> } 
+        <View style={{elevation: 1, margin: 5, marginTop: 0, backgroundColor:this.props.modeInfo.backgroundColor }}>
+          { list }
+        </View>
       </View>
     )
   }
@@ -212,7 +224,7 @@ class CommunityTopic extends Component {
                 navIconName="md-arrow-back"
                 overflowIconName="md-more"                 
                 iconColor={this.props.modeInfo.isNightMode ? '#000' : '#fff'}
-                title={this.props.title}
+                title={`No.${this.props.rowData.id}`}
                 style={[styles.toolbar, {backgroundColor: this.props.modeInfo.standardColor}]}
                 actions={toolbarActions}
                 onIconClicked={() => {
@@ -220,7 +232,9 @@ class CommunityTopic extends Component {
                 }}
                 onActionSelected={this._onActionSelected}
               />
-              <ScrollView>
+              <ScrollView style={{
+                backgroundColor: this.props.modeInfo.standardColor
+              }}>
                 { this.state.data && this.renderHeader() }
                 { this.state.data && this.renderContent() }
                 { this.state.data && this.renderComment() }
@@ -249,7 +263,11 @@ const styles = StyleSheet.create({
   avatar: {
     width: 50,
     height: 50,
-  }
+  },
+  a: {
+    fontWeight: '300',
+    color: idColor, // make links coloured pink
+  },
 });
 
 
