@@ -75,7 +75,7 @@ class HtmlView extends Component {
     return (
         <WebView 
           startInLoadingState={true}
-          style={{flex:-1, padding: 0, height: this.state.height}}
+          style={{flex:1, padding: 0, height: this.state.height}}
           scrollEnable={true}
           injectedJavaScript={'<script>window.location.hash = 1;document.title = document.height;</script>'}
           onNavigationStateChange={(navState) => {

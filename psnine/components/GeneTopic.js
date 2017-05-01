@@ -122,13 +122,14 @@ class GeneTopic extends Component {
   renderContent = () => {
     const { data: { contentInfo } } = this.state
     // console.log(this.props.rowData)
+    const unit = this.state.data.contentInfo.html ? 5 : 0
     return (
       <View key={'content'} style={{             
             elevation: 1,
             margin: 5,
             marginTop: 0,
             backgroundColor: this.props.modeInfo.backgroundColor,
-            padding: 10
+            padding: unit * 2
         }}>
         <HTMLView
           value={contentInfo.html}

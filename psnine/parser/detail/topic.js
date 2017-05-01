@@ -32,7 +32,7 @@ export default function (html) {
   })
 
   const contentInfo = {
-    html: `<div>${body.html().trim()}</div>`,
+    html: `<div>${(body.html() || '').trim()}</div>`,
     page: page
   }
   
