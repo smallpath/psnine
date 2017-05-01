@@ -55,7 +55,7 @@ class CommunityTopic extends Component {
       case 0 :
         return;
       case 1 :
-        return this.refs[WEBVIEW_REF].reload();
+        // return this.refs[WEBVIEW_REF].reload();
       case 2 :
         return;
       case 3 :
@@ -90,17 +90,24 @@ class CommunityTopic extends Component {
           delayPressIn={100}
           background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
           >
-          <View pointerEvents='box-only' style={{ flex: 1, flexDirection: 'row', justifyContent:'center', alignItems: 'center' ,padding: 5 }}>
+          <View style={{ flex: 1, flexDirection: 'row', justifyContent:'center', alignItems: 'center' ,padding: 5 }}>
             <Image
               source={{ uri: this.props.rowData.avatar.replace('@50w.png', '@75w.png') }}
               style={{ width: 75, height: 75}}
               />
 
             <View style={{ flex: 1, flexDirection: 'column', padding: 5}}>
-              <Text
+              {/*<Text
                 style={{ flex: 2.5,color: this.props.modeInfo.titleTextColor, fontSize: 16 }}>
                 {titleInfo.title}
-              </Text>
+              </Text>*/}
+              <HTMLView
+                value={titleInfo.title}
+                defaultTextColor={ this.props.modeInfo.standardTextColor }
+                stylesheet={styles}
+                onLinkPress={(url) => console.log('clicked link: ', url)}
+                imagePaddingOffset={30}
+              />
 
               <View style={{ flex: 1.1, flexDirection: 'row', justifyContent :'space-between' }}>
                 <Text selectable={false} style={{ flex: -1, color: idColor,textAlign : 'center', textAlignVertical: 'center' }}>{titleInfo.psnid}</Text>
@@ -126,6 +133,7 @@ class CommunityTopic extends Component {
         }}>
         <HTMLView
           value={this.state.mainContent}
+          defaultTextColor={ this.props.modeInfo.standardTextColor }
           stylesheet={styles}
           imagePaddingOffset={30}
           onLinkPress={(url) => console.log('clicked link: ', url)}
@@ -152,7 +160,7 @@ class CommunityTopic extends Component {
               delayPressIn={100}
               background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
               >
-              <View pointerEvents='box-only' style={{ flex: 1, flexDirection: 'row',  padding: 12 }}>
+              <View style={{ flex: 1, flexDirection: 'row',  padding: 12 }}>
                 <Image
                   source={{ uri: rowData.img }}
                   style={styles.avatar}
@@ -161,6 +169,7 @@ class CommunityTopic extends Component {
                 <View style={{ marginLeft: 10, flex: 1, flexDirection: 'column'}}>
                   <HTMLView
                     value={rowData.content}
+                    defaultTextColor={ this.props.modeInfo.standardTextColor }
                     stylesheet={styles}
                     onLinkPress={(url) => console.log('clicked link: ', url)}
                     imagePaddingOffset={30}
@@ -239,7 +248,6 @@ class CommunityTopic extends Component {
             backgroundColor:this.props.modeInfo.backgroundColor,
             padding: 5
           }}>
-          <Text>{'目录: '}</Text>
           { list }
         </View>
       </View>
@@ -247,7 +255,7 @@ class CommunityTopic extends Component {
   }
 
   render() {
-    console.log('CommunityTopic.js rendered');
+    // console.log('CommunityTopic.js rendered');
     return ( 
           <View 
             style={{flex:1, backgroundColor: this.props.modeInfo.backgroundColor}}

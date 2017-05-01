@@ -75,11 +75,11 @@ let CustomGesture = Object.assign({}, BaseConfig.gestures.pop, {
 
 
 let CustomSceneConfig = Object.assign({}, BaseConfig, {
-	gestures: { pop: CustomGesture }
+	gestures: { /*pop: CustomGesture*/ }
 });
 
 let CustomPushWithoutAnimation = Object.assign({}, PushWithoutAnimation.NONE, {
-	gestures: { pop: CustomGesture }
+	gestures: { /*pop: CustomGesture*/ }
 })
 
 let toolbarHeight = 56

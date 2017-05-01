@@ -4,6 +4,7 @@ import {
   Linking,
   StyleSheet,
   Text,
+  WebView
 } from 'react-native'
 
 const boldStyle = {fontWeight: '500'}
@@ -28,6 +29,7 @@ class HtmlView extends Component {
     super()
     this.state = {
       element: null,
+      height: null
     }
   }
 
@@ -69,8 +71,28 @@ class HtmlView extends Component {
     })
   }
 
+  _renderWebView = () => {
+    return (
+        <WebView 
+          startInLoadingState={true}
+          style={{flex:-1, padding: 0, height: this.state.height}}
+          scrollEnable={true}
+          injectedJavaScript={'<script>window.location.hash = 1;document.title = document.height;</script>'}
+          onNavigationStateChange={(navState) => {
+            this.setState({
+              height: parseInt((navState.title.match(/\sheight=\"(\d+)\"/) || [0, 0])[1])
+            });
+          }}
+          source={{html: this.props.value}} />
+    );
+  }
+
   render() {
-    if (this.state.element) {
+    if (this.props.value.indexOf('embed') === 1) {
+      return this._renderWebView()
+    } else if (this.props.value.indexOf('iframe') === 1) {
+      return this._renderWebView()
+    } else if (this.state.element) {
       return <Text style={{color: this.props.defaultTextColor}} children={this.state.element} />
     }
     return <Text />

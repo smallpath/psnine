@@ -53,7 +53,7 @@ class GeneTopic extends Component {
       case 0 :
         return;
       case 1 :
-        return this.refs[WEBVIEW_REF].reload();
+        // return this.refs[WEBVIEW_REF].reload();
       case 2 :
         return;
       case 3 :
@@ -94,10 +94,17 @@ class GeneTopic extends Component {
               />
 
             <View style={{ flex: 1, flexDirection: 'column', padding: 5}}>
-              <Text
+              {/*<Text
                 style={{ flex: 2.5,color: this.props.modeInfo.titleTextColor, fontSize: 16 }}>
                 {titleInfo.title}
-              </Text>
+              </Text>*/}
+              <HTMLView
+                value={titleInfo.title}
+                defaultTextColor={ this.props.modeInfo.standardTextColor }
+                stylesheet={styles}
+                onLinkPress={(url) => console.log('clicked link: ', url)}
+                imagePaddingOffset={30}
+              />
 
               <View style={{ flex: 1.1, flexDirection: 'row', justifyContent :'space-between' }}>
                 <Text selectable={false} style={{ flex: -1, color: idColor,textAlign : 'center', textAlignVertical: 'center' }}>{titleInfo.psnid}</Text>
@@ -114,6 +121,7 @@ class GeneTopic extends Component {
 
   renderContent = () => {
     const { data: { contentInfo } } = this.state
+    // console.log(this.props.rowData)
     return (
       <View key={'content'} style={{             
             elevation: 1,
@@ -124,6 +132,7 @@ class GeneTopic extends Component {
         }}>
         <HTMLView
           value={contentInfo.html}
+          defaultTextColor={ this.props.modeInfo.standardTextColor }
           stylesheet={styles}
           onLinkPress={(url) => console.log('clicked link: ', url)}
           imagePaddingOffset={30}
@@ -151,7 +160,7 @@ class GeneTopic extends Component {
               delayPressIn={100}
               background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
               >
-              <View pointerEvents='box-only' style={{ flex: 1, flexDirection: 'row',  padding: 12 }}>
+              <View style={{ flex: 1, flexDirection: 'row',  padding: 12 }}>
                 <Image
                   source={{ uri: rowData.img }}
                   style={styles.avatar}
@@ -163,6 +172,7 @@ class GeneTopic extends Component {
                     stylesheet={styles}
                     onLinkPress={(url) => console.log('clicked link: ', url)}
                     imagePaddingOffset={30}
+                    defaultTextColor={ this.props.modeInfo.standardTextColor }
                   />
 
                   <View style={{ flex: 1.1, flexDirection: 'row', justifyContent :'space-between' }}>
@@ -233,7 +243,7 @@ class GeneTopic extends Component {
                 }}
                 onActionSelected={this._onActionSelected}
               />
-              <ScrollView style={{
+              <ScrollView scrollEnabled={true} style={{
                 backgroundColor: this.props.modeInfo.standardColor
               }}>
                 { this.state.data && this.renderHeader() }
@@ -264,7 +274,11 @@ const styles = StyleSheet.create({
   avatar: {
     width: 50,
     height: 50,
-  }
+  },
+  a: {
+    fontWeight: '300',
+    color: idColor, // make links coloured pink
+  },
 });
 
 

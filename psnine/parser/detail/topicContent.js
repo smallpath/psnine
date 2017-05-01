@@ -13,7 +13,7 @@ export default function (html) {
   const page = []
 
   const contentInfo = {
-    html: `<div>${body.html()}</div>`
+    html: `<div>${body.html().trim()}</div>`
   }
 
   return {

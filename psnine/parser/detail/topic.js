@@ -32,7 +32,7 @@ export default function (html) {
   })
 
   const contentInfo = {
-    html: `<div>${body.html()}</div>`,
+    html: `<div>${body.html().trim()}</div>`,
     page: page
   }
   
@@ -47,7 +47,9 @@ export default function (html) {
       return
     }
     const img = $this.find('img').attr('src')
-    const psnid = $this.find('.meta a').text().replace('顶回复', '')
+    const psnid = $this.find('.meta a').filter(function(i, elem) {
+      return $(this).attr('class') === 'psnnode'
+    }).text()
     let content = $this.find('.content').length ? 
         $this.find('.content').html().replace(/\<br\>/igm, '\n').replace('\n', '').replace(/\t/igm, '') : 'not found'
     const date = $this.find('.meta').text().split('\n').map(item => item.replace(/\t/g, '')).filter(item => item.trim()).pop()
