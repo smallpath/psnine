@@ -127,6 +127,7 @@ class Game extends Component {
     return (
       <View style={{
         flex: -1,
+        elevation: 2,
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
