@@ -19,8 +19,21 @@ export default function (html) {
   const body = all.children().filter(function(i, el) {
     return $(this).attr('class') === 'content pd10';
   })
+  const page = []
+
+  all.find('.page a').each(function(i, elem) {
+    const $this = $(this)
+    const url = 'http://psnine.com' + $this.attr('href')
+    const text = $this.text()
+    page.push({
+      url,
+      text
+    })
+  })
+
   const contentInfo = {
-    html: `<div>${body.html()}</div>`
+    html: `<div>${body.html()}</div>`,
+    page: page
   }
   
   const commentList = []

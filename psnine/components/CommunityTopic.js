@@ -16,6 +16,7 @@ import {
   RefreshControl,
   WebView,
   KeyboardAvoidingView,
+  TouchableHighlight,
   ScrollView
 } from 'react-native';
 
@@ -25,7 +26,7 @@ import { connect } from 'react-redux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { standardColor, nodeColor, idColor, accentColor  } from '../config/colorConfig';
 
-import { getTopicAPI } from '../dao/dao'
+import { getTopicAPI, getTopicContentAPI } from '../dao/dao'
 
 let toolbarActions = [
   {title: '回复', iconName: 'md-create', show: 'always'},
@@ -44,7 +45,8 @@ class CommunityTopic extends Component {
       data: false,
       isLogIn: false,
       canGoBack: false,
-      icon: false
+      icon: false,
+      mainContent: false
     }
   }
 
@@ -64,7 +66,8 @@ class CommunityTopic extends Component {
   componentWillMount = async () => {
     const data = await getTopicAPI(this.props.URL)
     this.setState({
-      data
+      data,
+      mainContent: data.contentInfo.html
     })
   }
 
@@ -113,7 +116,6 @@ class CommunityTopic extends Component {
   }
 
   renderContent = () => {
-    const { data: { contentInfo } } = this.state
     return (
       <View key={'content'} style={{             
             elevation: 1,
@@ -123,7 +125,7 @@ class CommunityTopic extends Component {
             padding: 10
         }}>
         <HTMLView
-          value={contentInfo.html}
+          value={this.state.mainContent}
           stylesheet={styles}
           imagePaddingOffset={30}
           onLinkPress={(url) => console.log('clicked link: ', url)}
@@ -204,7 +206,7 @@ class CommunityTopic extends Component {
     }
     return (
       <View>
-        { readMore &&<View style={{elevation: 1, margin: 5, marginTop: 0, backgroundColor:this.props.modeInfo.backgroundColor }}>{ readMore }</View> } 
+        { readMore &&<View style={{elevation: 1, margin: 5, marginTop: 0, marginBottom: 0, backgroundColor:this.props.modeInfo.backgroundColor }}>{ readMore }</View> } 
         <View style={{elevation: 1, margin: 5, marginTop: 0, backgroundColor:this.props.modeInfo.backgroundColor }}>
           { list }
         </View>
@@ -212,8 +214,40 @@ class CommunityTopic extends Component {
     )
   }
 
+  renderPage() {
+    const { data: { contentInfo: { page } } } = this.state
+    const list = [] 
+    for (const item of page) {
+      const thisJSX = (
+        <TouchableNativeFeedback key={item.url} onPress={() => {
+            getTopicContentAPI(item.url).then(data => {
+              this.setState({
+                mainContent: data.contentInfo.html
+              })
+            })
+          }}>
+          <Text style={{color: idColor}}>{item.text}</Text>
+        </TouchableNativeFeedback>
+      )
+      list.push(thisJSX)
+    }
+    return (
+      <View style={{elevation: 1,margin: 5, marginTop: 0, marginBottom: 0, backgroundColor:this.props.modeInfo.backgroundColor}}>
+        <View style={{
+            elevation: 2,
+            margin: 5,
+            backgroundColor:this.props.modeInfo.backgroundColor,
+            padding: 5
+          }}>
+          <Text>{'目录: '}</Text>
+          { list }
+        </View>
+      </View>
+    )
+  }
+
   render() {
-    // console.log('CommunityTopic.js rendered');
+    console.log('CommunityTopic.js rendered');
     return ( 
           <View 
             style={{flex:1, backgroundColor: this.props.modeInfo.backgroundColor}}
@@ -236,6 +270,7 @@ class CommunityTopic extends Component {
                 backgroundColor: this.props.modeInfo.standardColor
               }}>
                 { this.state.data && this.renderHeader() }
+                { this.state.data && this.state.data.contentInfo.page.length !== 0 && this.renderPage() }
                 { this.state.data && this.renderContent() }
                 { this.state.data && this.renderComment() }
               </ScrollView>
