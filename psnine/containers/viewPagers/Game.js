@@ -154,7 +154,7 @@ class Game extends Component {
             color: this.props.modeInfo.standardTextColor
           }}
           prompt='选择DLC'
-          selectedValue={this.state.type}
+          selectedValue={this.state.dlc}
           onValueChange={this.onValueChange.bind(this, 'dlc')}>
           <Picker.Item label="全部" value="all" />
           <Picker.Item label="有DLC" value="dlc" />

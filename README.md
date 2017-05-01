@@ -36,6 +36,7 @@ Android App for [P9](http://psnine.com/) written by React Native
   - [ ] 我的帖子
   - [ ] 关注
   - [ ] 收藏
-  - [ ] topic主题
+  - [x] 社区主题
+  - [x] 基因主题
 
 
