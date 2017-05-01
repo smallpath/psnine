@@ -6,14 +6,14 @@ export default function (html) {
   })
 
   const all = $('.main .box')
-  const titleArr = all.children().first().text().split('\n').map(item => item.replace(/\t/g, '').trim()).filter(item => item)
+  const titleArr = all.children().first().text().split('\n').map(item => item.replace(/\t/g, '').replace(/\&nbsp;/igm, '').trim()).filter(item => item)
   const titleText =  all.find('.pd10').first().children().first().html().replace(/\<br\>/igm, '\n')
   const titleInfo = {
     title: titleText,
     psnid: titleArr[1],
     date: titleArr[2],
     reply: titleArr[3],
-    node: titleArr.slice(4).join(' ')
+    node: titleArr.slice(5).join(' ')
   }
 
   const body = all.children().filter(function(i, el) {
@@ -23,25 +23,28 @@ export default function (html) {
     html: body.html()
   }
   
-  const commentList = all.last().find('.post').map(function(i, elem) {
+  const commentList = []
+  all.last().find('.post').each(function(i, elem) {
     const $this = $(this)
     const id = $this.attr('id')
+    if (!id) return
     const img = $this.find('img').attr('src')
-    const psnid = $this.find('.meta a').text()
-    const content = $this.find('.content').html().replace(/\<br\>/igm, '\n')
-    const date = $this.find('.meta').text().split('\n').filter(item => item.trim()).pop().replace(/\t/g, '')
-    return {
+    const psnid = $this.find('.meta a').text().replace('顶回复', '')
+    let content = $this.find('.content').length ? 
+        $this.find('.content').html().replace(/\<br\>/igm, '\n').replace('\n', '').replace(/\t/igm, '') : 'not found'
+    const date = $this.find('.meta').text().split('\n').map(item => item.replace(/\t/g, '')).filter(item => item.trim()).pop()
+    commentList.push({
       id,
       img,
       psnid,
       content,
       date
-    }
+    })
   })
 
   return {
     titleInfo,
     contentInfo,
-    commentList: Array.from(commentList)
+    commentList: commentList
   }
 }

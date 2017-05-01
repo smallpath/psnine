@@ -72,6 +72,7 @@ class Community extends Component {
   ) => {
 
     let TouchableElement = TouchableNativeFeedback;
+
     return (
       <View rowID={ rowID } style={{              
             marginTop: 7,

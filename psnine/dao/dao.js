@@ -6,6 +6,8 @@ import userParser from '../parser/user'
 import messageParser from '../parser/message'
 import qaParser from '../parser/qa'
 import gamesParser from '../parser/game'
+import topicApiParser from '../parser/detail/topic'
+import geneApiParser from '../parser/detail/gene'
 
 const safeFetch = function(reqUrl) {
   return new Promise((resolve, reject) => {
@@ -33,6 +35,10 @@ const getGenesAPI = (page, type) => `${webHost}/gene?page=${page}&type=${type}`;
 export const fetchTopics = (page = 1,type = '') => safeFetch(getTopicsAPI(page,type)).then(res => topicParser(res));
 
 export const fetchGenes = (page = 1, type = 'all') => safeFetch(getGenesAPI(page,type)).then(res => geneParser(res));
+
+export const getTopicAPI = uri => safeFetch(uri).then(res => topicApiParser(res))
+
+export const getGeneAPI = uri => safeFetch(uri).then(res => geneApiParser(res))
 
 export const getTopicURL = id => webHost + '/topic/' + id; 
 
