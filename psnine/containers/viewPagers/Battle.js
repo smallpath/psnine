@@ -171,8 +171,6 @@ class Battle extends Component {
   componentWillReceiveProps(nextProps) {
     if(this.props.modeInfo.isNightMode != nextProps.modeInfo.isNightMode ){
       this.props.modeInfo == nextProps.modeInfo;
-      dataSource = dataSource.cloneWithRows([]);
-      this._onRefresh();
     }
   }
 
@@ -228,6 +226,7 @@ class Battle extends Component {
               progressBackgroundColor={this.props.modeInfo.backgroundColor}
               />
           }
+          key={this.props.modeInfo.isNightMode} 
           ref={listView=>this.listView=listView}
           style={{backgroundColor: this.props.modeInfo.brighterLevelOne}}
           pageSize = {32}

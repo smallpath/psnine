@@ -158,7 +158,7 @@ export default function htmlToElement(rawHtml, opts, done) {
                     alignCenter={opts.alignCenter}
                     imagePaddingOffset={opts.imagePaddingOffset} />
           );
-        } else if (node.name === 'embed' || node.type === 'iframe') {
+        } else if (node.name === 'embed' || node.name === 'iframe') {
           return (
             <Web key={index} attribs={node.attribs} name={node.name}/>
           )

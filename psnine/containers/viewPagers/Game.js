@@ -186,8 +186,6 @@ class Game extends Component {
   componentWillReceiveProps = (nextProps) => {
     if(this.props.modeInfo.isNightMode != nextProps.modeInfo.isNightMode ){
       this.props.modeInfo == nextProps.modeInfo;
-      dataSource = dataSource.cloneWithRows([]);
-      this._onRefresh();
     }
   }
 
@@ -261,6 +259,7 @@ class Game extends Component {
               ref={ ref => this.refreshControl = ref}
               />
           }
+          key={this.props.modeInfo.isNightMode} 
           ref={listView=>this.listView=listView}
           style={{backgroundColor: this.props.modeInfo.brighterLevelOne, flex:10}}
           pageSize = {32}

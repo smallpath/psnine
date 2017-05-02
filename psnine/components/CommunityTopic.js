@@ -146,6 +146,58 @@ class CommunityTopic extends Component {
     )
   }
 
+  renderGameTable = () => {
+    const { data: { contentInfo : { gameTable } } } = this.state
+    const list = []
+    for (const rowData of gameTable) {
+      list.push(
+        <View key={ rowData.id } style={{              
+              backgroundColor: this.props.modeInfo.backgroundColor
+          }}>
+          <TouchableNativeFeedback
+            onPress ={()=>{
+
+            }}
+            useForeground={true}
+            delayPressIn={100}
+            background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
+            >
+            <View pointerEvents='box-only' style={{ flex: 1, flexDirection: 'row',  padding: 12 }}>
+              <Image
+                source={{ uri: rowData.avatar }}
+                style={[styles.avatar, { width: 91 }]}
+                />                
+
+              <View style={{ marginLeft: 10, flex: 1, flexDirection: 'column'}}>
+                <Text
+                  ellipsizeMode={'tail'}
+                  numberOfLines={3}
+                  style={{ flex: 2.5,color: this.props.modeInfo.titleTextColor, }}>
+                  {rowData.title}
+                </Text>
+
+                <View style={{ flex: 1.1, flexDirection: 'row', justifyContent :'space-between' }}>
+                  <Text selectable={false} style={{ flex: -1, color: idColor,textAlign : 'center', textAlignVertical: 'center' }}>{rowData.platform}</Text>
+                  <Text selectable={false} style={{ flex: -1, color: this.props.modeInfo.standardTextColor,textAlign : 'center', textAlignVertical: 'center' }}>{rowData.region}</Text>
+                  <Text selectable={false} style={{ flex: -1, color: this.props.modeInfo.standardTextColor,textAlign : 'center', textAlignVertical: 'center' }}>{
+                    rowData.platium + rowData.gold + rowData.selver + rowData.bronze
+                  }</Text>
+                </View>
+
+              </View>
+
+            </View>
+          </TouchableNativeFeedback>
+        </View>
+      )
+    }
+    return (
+      <View style={{elevation: 1, margin: 5, marginTop: 0, backgroundColor:this.props.modeInfo.backgroundColor }}>
+        { list }
+      </View>
+    )
+  }
+
   renderComment = () => {
     const { data: { commentList } } = this.state
     const list = []
@@ -313,6 +365,8 @@ class CommunityTopic extends Component {
                 { !this.state.isLoading && this.renderHeader() }
                 { !this.state.isLoading && this.state.data.contentInfo.page.length !== 0 && this.renderPage() }
                 { !this.state.isLoading && this.renderContent() }
+                { !this.state.isLoadding && this.state.data.contentInfo.gameTable 
+                      && this.state.data.contentInfo.gameTable.length !== 0 && this.renderGameTable()}
                 { !this.state.isLoading && this.renderComment() }
               </ScrollView>
               }

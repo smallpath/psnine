@@ -126,8 +126,6 @@ class Gene extends Component {
       this._onRefresh(nextProps.geneType);
     }else if(this.props.modeInfo.isNightMode != nextProps.modeInfo.isNightMode ){
       this.props.modeInfo == nextProps.modeInfo;
-      dataSource = dataSource.cloneWithRows([]);
-      this._onRefresh(nextProps.geneType);
     }
   }
 
@@ -199,6 +197,7 @@ class Gene extends Component {
             progressBackgroundColor={this.props.modeInfo.backgroundColor}
             />
         }
+        key={this.props.modeInfo.isNightMode} 
         style={{backgroundColor: this.props.modeInfo.brighterLevelOne}}
         ref={listView=>this.listView=listView}
         pageSize = {32}

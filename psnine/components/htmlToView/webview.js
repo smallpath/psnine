@@ -10,25 +10,38 @@ import {
   PixelRatio
 } from 'react-native'
 
-var { width } = Dimensions.get('window')
+var { width, height: SCEEN_HEIGHT } = Dimensions.get('window')
 
 var pixelRate = PixelRatio.get()
 
 class HtmlView extends Component {
   constructor(props) {
     super(props)
+    let height = this.props.style.height || '100%'
+    if (height === '100%') {
+      height = SCEEN_HEIGHT - 100
+    }
     this.state = {
       width: this.props.style.width || '100%',
-      height: (this.props.style.height / 1 ) || 1
+      height: height
     }
   }
+
 
   render() {
     return (
       <WebView 
         startInLoadingState={true}
         mixedContentMode={'always'}
+        automaticallyAdjustContentInsets={true}
         style={{flex:1, padding: 0, height: this.state.height}}
+        scrollEnable={true}
+        injectedJavaScript={'<script>window.location.hash = 1;document.title = document.height;</script>'}
+        onNavigationStateChange={(navState) => {
+          //this.setState({
+          //  height: parseInt((navState.title.match(/\sheight=\"(\d+)\"/) || [0, 0])[1])
+          //});
+        }}
         scrollEnable={true}
         source={{uri: this.props.url}} />
     );

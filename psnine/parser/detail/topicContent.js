@@ -10,7 +10,6 @@ export default function (html) {
   const body = all.children().filter(function(i, el) {
     return $(this).attr('class') === 'content pd10';
   })
-  const page = []
 
   const contentInfo = {
     html: `<div>${body.html().trim()}</div>`
