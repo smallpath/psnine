@@ -8,6 +8,7 @@ import qaParser from '../parser/qa'
 import gamesParser from '../parser/game'
 import topicApiParser from '../parser/detail/topic'
 import topicContentApiParser from '../parser/detail/topicContent'
+import topicCommentApiParser from '../parser/detail/topicComment'
 import geneApiParser from '../parser/detail/gene'
 
 const safeFetch = function(reqUrl) {
@@ -40,6 +41,8 @@ export const fetchGenes = (page = 1, type = 'all') => safeFetch(getGenesAPI(page
 export const getTopicAPI = uri => safeFetch(uri).then(res => topicApiParser(res))
 
 export const getTopicContentAPI = uri => safeFetch(uri).then(res => topicContentApiParser(res))
+
+export const getTopicCommentAPI = uri => safeFetch(uri).then(res => topicCommentApiParser(res))
 
 export const getGeneAPI = uri => safeFetch(uri).then(res => geneApiParser(res))
 

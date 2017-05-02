@@ -24,7 +24,7 @@ import {
 } from 'react-native';
 
 import HTMLView from './htmlToView';
-
+import CommentList from './CommentList'
 import { connect } from 'react-redux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { standardColor, nodeColor, idColor, accentColor  } from '../config/colorConfig';
@@ -158,7 +158,7 @@ class CommunityTopic extends Component {
             }}>
             <TouchableNativeFeedback  
               onPress ={()=>{
-
+                
               }}
               useForeground={true}
               delayPressIn={100}
@@ -198,7 +198,7 @@ class CommunityTopic extends Component {
             }}>
             <TouchableNativeFeedback  
               onPress ={()=>{
-
+                this._readMore(`${this.props.URL}/comment?page=1`)
               }}
               useForeground={true}
               delayPressIn={100}
@@ -225,6 +225,15 @@ class CommunityTopic extends Component {
         </View>
       </View>
     )
+  }
+
+  _readMore = (URL) => {
+    this.props.navigator.push({
+      component: CommentList,
+      params: {
+        URL
+      }
+    })
   }
 
   renderPage() {

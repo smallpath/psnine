@@ -26,7 +26,7 @@ import HTMLView from './htmlToView';
 import { connect } from 'react-redux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { standardColor, nodeColor, idColor, accentColor  } from '../config/colorConfig';
-
+import CommentList from './CommentList'
 import { getGeneAPI } from '../dao/dao'
 
 let toolbarActions = [
@@ -202,7 +202,12 @@ class GeneTopic extends Component {
             }}>
             <TouchableNativeFeedback  
               onPress ={()=>{
-
+                this.props.navigator.push({
+                  component: CommentList,
+                  params: {
+                    URL: `${this.props.URL}/comment?page=1`
+                  }
+                })
               }}
               useForeground={true}
               delayPressIn={100}
