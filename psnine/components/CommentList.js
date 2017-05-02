@@ -82,7 +82,7 @@ class CommentList extends Component {
           <View style={{ marginLeft: 10, flex: 1, flexDirection: 'column'}}>
               <HTMLView
               value={rowData.content}
-              defaultTextColor={ this.props.modeInfo.standardTextColor }
+              modeInfo={ this.props.modeInfo }
               stylesheet={styles}
               onLinkPress={(url) => console.log('clicked link: ', url)}
               imagePaddingOffset={30}

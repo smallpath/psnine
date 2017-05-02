@@ -129,7 +129,7 @@ export default function htmlToElement(rawHtml, opts, done) {
         }
 
         return (
-          <Text key={index} onPress={linkPressHandler} style={[{ color: opts.defaultTextColor }, parent ? opts.styles[parent.name] : null]}>
+          <Text key={index} onPress={linkPressHandler} style={[{ color: opts.modeInfo.standardTextColor }, parent ? opts.styles[parent.name] : null]}>
 
               { parent && parent.name == 'pre'? LINE_BREAK : null }
               { parent && parent.name == "li"? BULLET : null }
@@ -208,8 +208,31 @@ export default function htmlToElement(rawHtml, opts, done) {
           }
         }
 
+        const classStyle = {}
+        if (node.type === 'tag' && node.name === 'div') {
+          const classNameArr = (node.attribs.class || '').split(' ')
+          for (const name of classNameArr) {
+            switch (name) {
+              case 'pd10':
+                classStyle.padding = 10;
+                break;
+              case 't4':
+              case 't3':
+              case 't2':
+              case 't1':
+                classStyle.elevation = 1
+                classStyle.marginBottom = 2
+                classStyle.backgroundColor = opts.modeInfo.brighterLevelOne
+                break;
+              default: 
+                // console.log(name)
+                break;
+            }
+          }
+        }
+
         return (
-          <View key={index} onPress={linkPressHandler}  style={[parent ? opts.styles[parent.name] : null]}>
+          <View key={index} onPress={linkPressHandler}  style={[parent ? opts.styles[parent.name] : null, classStyle]}>
             {domToElement(node.children, node)}
             {shouldSetLineAfter && linebreakAfter && <Text key={index} onPress={linkPressHandler} style={parent ? opts.styles[parent.name] : null}>{linebreakAfter}</Text>}
           </View>

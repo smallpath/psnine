@@ -66,7 +66,7 @@ class HtmlView extends Component {
       styles: Object.assign({}, baseStyles, this.props.stylesheet),
       customRenderer: this.props.renderNode,
       imagePaddingOffset: this.props.imagePaddingOffset,
-      defaultTextColor: this.props.defaultTextColor,
+      modeInfo: this.props.modeInfo,
       shouldShowLoadingIndicator: this.props.shouldShowLoadingIndicator,
       alignCenter: this.props.alignCenter
     }
@@ -97,7 +97,7 @@ HtmlView.propTypes = {
   onLinkPress: PropTypes.func,
   onError: PropTypes.func,
   renderNode: PropTypes.func,
-  defaultTextColor: PropTypes.string,
+  modeInfo: PropTypes.object,
   shouldShowLoadingIndicator: PropTypes.bool,
   alignCenter: PropTypes.bool
 }
@@ -105,7 +105,7 @@ HtmlView.propTypes = {
 HtmlView.defaultProps = {
   onLinkPress: url => Linking.openURL(url),
   onError: console.error.bind(console),
-  defaultTextColor:'#000',
+  modeInfo: {},
   shouldShowLoadingIndicator: false,
   alignCenter: false
 }

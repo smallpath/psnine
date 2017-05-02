@@ -99,13 +99,9 @@ class GeneTopic extends Component {
               />
 
             <View style={{ flex: 1, flexDirection: 'column', padding: 5}}>
-              {/*<Text
-                style={{ flex: 2.5,color: this.props.modeInfo.titleTextColor, fontSize: 16 }}>
-                {titleInfo.title}
-              </Text>*/}
               <HTMLView
                 value={titleInfo.title}
-                defaultTextColor={ this.props.modeInfo.standardTextColor }
+                modeInfo={ this.props.modeInfo }
                 stylesheet={styles}
                 onLinkPress={(url) => console.log('clicked link: ', url)}
                 imagePaddingOffset={30 + 75 + 10}
@@ -138,7 +134,7 @@ class GeneTopic extends Component {
         }}>
         <HTMLView
           value={contentInfo.html}
-          defaultTextColor={ this.props.modeInfo.standardTextColor }
+          modeInfo={ this.props.modeInfo }
           shouldShowLoadingIndicator={true}
           stylesheet={styles}
           alignCenter={true}
@@ -180,7 +176,7 @@ class GeneTopic extends Component {
                     stylesheet={styles}
                     onLinkPress={(url) => console.log('clicked link: ', url)}
                     imagePaddingOffset={30 + 50 + 10}
-                    defaultTextColor={ this.props.modeInfo.standardTextColor }
+                    modeInfo={ this.props.modeInfo }
                   />
 
                   <View style={{ flex: 1.1, flexDirection: 'row', justifyContent :'space-between' }}>

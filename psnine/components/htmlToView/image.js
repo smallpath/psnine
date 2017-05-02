@@ -35,7 +35,10 @@ class ResizableImage extends Component {
 
   componentDidMount = () => {
     if (this.props.style.width || this.props.style.height) {
-      return
+      this.setState({
+        isLoading: false
+      })
+      return 
     }
     Image.getSize(this.props.source.uri, (w, h) => {
       this.setState({
@@ -70,12 +73,13 @@ class ResizableImage extends Component {
       source = Object.assign(source, this.props.source, finalSize)
     }
 
-    const alignSelf = this.state.alignCenter ? { alignContent: 'center' } : {} 
+    const alignSelf = this.state.alignCenter ? { alignContent: 'center' } : {}
 
     return (
       <TouchableNativeFeedback onPress={this.props.linkPressHandler} style={[{justifyContent:'center',alignItems:'center'}, alignSelf]}>
         <View style={{width: source.width, height: source.height}}>
-          { this.state.isLoading &&           
+          {
+            this.state.isLoading &&           
             <ActivityIndicator 
               animating={true}                     
               style={{
@@ -85,9 +89,12 @@ class ResizableImage extends Component {
                 height: source.height,
                 width: source.width
               }}
-              color={accentColor}/> ||          
+              color={accentColor}/>
+          }
+          { !this.state.isLoading &&                 
             <Image
               resizeMode={'contain'}
+              onError={(e) => console.error(e)}
               key={`${source.width}:${source.height}`}
               source={source} />
           }
