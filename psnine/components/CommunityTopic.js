@@ -104,10 +104,6 @@ class CommunityTopic extends Component {
               />
 
             <View style={{ flex: 1, flexDirection: 'column', padding: 5}}>
-              {/*<Text
-                style={{ flex: 2.5,color: this.props.modeInfo.titleTextColor, fontSize: 16 }}>
-                {titleInfo.title}
-              </Text>*/}
               <HTMLView
                 value={titleInfo.title}
                 defaultTextColor={ this.props.modeInfo.standardTextColor }
@@ -141,6 +137,7 @@ class CommunityTopic extends Component {
         <HTMLView
           value={this.state.mainContent}
           defaultTextColor={ this.props.modeInfo.standardTextColor }
+          shouldShowLoadingIndicator={true}
           stylesheet={styles}
           imagePaddingOffset={30}
           onLinkPress={(url) => console.log('clicked link: ', url)}

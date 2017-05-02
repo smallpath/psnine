@@ -4,12 +4,13 @@ import {
   Linking,
   StyleSheet,
   Text,
-  WebView
+  WebView,
+  View
 } from 'react-native'
 
-const boldStyle = {fontWeight: '500'}
-const italicStyle = {fontStyle: 'italic'}
-const codeStyle = {fontFamily: 'Menlo'}
+const boldStyle = {fontWeight: '500'};
+const italicStyle = {fontStyle: 'italic'};
+const codeStyle = {fontFamily: 'Menlo'};
 
 const baseStyles = StyleSheet.create({
   b: boldStyle,
@@ -22,7 +23,14 @@ const baseStyles = StyleSheet.create({
     fontWeight: '500',
     color: '#007AFF',
   },
-})
+  h1: {fontWeight: '500', fontSize: 36},
+  h2: {fontWeight: '500', fontSize: 30},
+  h3: {fontWeight: '500', fontSize: 24},
+  h4: {fontWeight: '500', fontSize: 18},
+  h5: {fontWeight: '500', fontSize: 14},
+  h6: {fontWeight: '500', fontSize: 12},
+});
+
 
 class HtmlView extends Component {
   constructor() {
@@ -57,7 +65,10 @@ class HtmlView extends Component {
       linkHandler: this.props.onLinkPress,
       styles: Object.assign({}, baseStyles, this.props.stylesheet),
       customRenderer: this.props.renderNode,
-      imagePaddingOffset: this.props.imagePaddingOffset
+      imagePaddingOffset: this.props.imagePaddingOffset,
+      defaultTextColor: this.props.defaultTextColor,
+      shouldShowLoadingIndicator: this.props.shouldShowLoadingIndicator,
+      alignCenter: this.props.alignCenter
     }
 
     htmlToElement(value, opts, (err, element) => {
@@ -71,31 +82,12 @@ class HtmlView extends Component {
     })
   }
 
-  _renderWebView = () => {
-    return (
-        <WebView 
-          startInLoadingState={true}
-          style={{flex:1, padding: 0, height: this.state.height}}
-          scrollEnable={true}
-          injectedJavaScript={'<script>window.location.hash = 1;document.title = document.height;</script>'}
-          onNavigationStateChange={(navState) => {
-            this.setState({
-              height: parseInt((navState.title.match(/\sheight=\"(\d+)\"/) || [0, 0])[1])
-            });
-          }}
-          source={{html: this.props.value}} />
-    );
-  }
-
   render() {
-    if (this.props.value.indexOf('embed') === 1) {
-      return this._renderWebView()
-    } else if (this.props.value.indexOf('iframe') === 1) {
-      return this._renderWebView()
-    } else if (this.state.element) {
-      return <Text style={{color: this.props.defaultTextColor}} children={this.state.element} />
+    if (this.state.element) {
+      const alignSelf = this.props.alignCenter ? { justifyContent: 'center' } : {} 
+      return <View children={this.state.element} style={[this.props.style, { flexDirection: 'row', flexWrap:'wrap' }, alignSelf]} />;
     }
-    return <Text />
+    return <View style={this.props.style} />;
   }
 }
 
@@ -105,13 +97,17 @@ HtmlView.propTypes = {
   onLinkPress: PropTypes.func,
   onError: PropTypes.func,
   renderNode: PropTypes.func,
-  defaultTextColor: PropTypes.string
+  defaultTextColor: PropTypes.string,
+  shouldShowLoadingIndicator: PropTypes.bool,
+  alignCenter: PropTypes.bool
 }
 
 HtmlView.defaultProps = {
   onLinkPress: url => Linking.openURL(url),
   onError: console.error.bind(console),
   defaultTextColor:'#000',
+  shouldShowLoadingIndicator: false,
+  alignCenter: false
 }
 
 export default HtmlView

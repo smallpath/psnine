@@ -3,9 +3,14 @@ import {
   StyleSheet,
   Image,
   Dimensions,
+  ActivityIndicator,
   Text,
-  PixelRatio
+  PixelRatio,
+  View,
+  TouchableNativeFeedback
 } from 'react-native';
+
+import { standardColor, nodeColor, idColor, accentColor  } from '../../config/colorConfig';
 
 var { width } = Dimensions.get('window')
 
@@ -18,9 +23,12 @@ var baseStyle = {
 class ResizableImage extends Component {
   constructor(props) {
     super(props)
+    const maxWidth = width - this.props.source.imagePaddingOffset
     this.state = {
-      width: this.props.style.width || 1,
-      height: this.props.style.height || 1
+      width: this.props.style.width || maxWidth,
+      height: this.props.style.height || (maxWidth / 16 * 9),
+      isLoading: this.props.isLoading || true,
+      alignCenter: this.props.alignCenter || false
     }
   }
 
@@ -30,33 +38,30 @@ class ResizableImage extends Component {
       return
     }
     Image.getSize(this.props.source.uri, (w, h) => {
-      // if (w === 33 && h === 30) h = 36 // why alu emotion size is incorrect ??
-      if (w < 40 && h < 40) {
-        w = w * pixelRate /1.5
-        h = h * pixelRate /1.5
-      }
       this.setState({
         width: w, 
-        height: h
+        height: h,
+        isLoading: false
       })
     }, (err) => {
       this.setState({
         width: 0, 
-        height: 0
+        height: 0,
+        isLoading: false
       })
     })
   }
 
   render() {
-    var finalSize = {}
+    const finalSize = {}
     const maxWidth = width - this.props.source.imagePaddingOffset
-    if (this.state.width > maxWidth * pixelRate) {
-      finalSize.width = maxWidth * pixelRate
-      var ratio = maxWidth * pixelRate / this.state.width
+    if (this.state.width > maxWidth) {
+      finalSize.width = maxWidth
+      var ratio = maxWidth / this.state.width
       finalSize.height = this.state.height * ratio
     }
-    var style = Object.assign(baseStyle, this.props.style, this.state, finalSize)
-    var source = {
+    const style = Object.assign(baseStyle, this.props.style, this.state, finalSize)
+    let source = {
       alignSelf: 'center'
     }
     if (!finalSize.width || !finalSize.height) {
@@ -65,16 +70,29 @@ class ResizableImage extends Component {
       source = Object.assign(source, this.props.source, finalSize)
     }
 
-    // what happened ?  why the size is reversed?
-    const tmep = source.width
-    source.width = source.height
-    source.height = tmep
+    const alignSelf = this.state.alignCenter ? { alignContent: 'center' } : {} 
 
     return (
-      <Image
-        resizeMode={'contain'}
-        key={`${source.width}:${source.height}`}
-        source={source} />
+      <TouchableNativeFeedback onPress={this.props.linkPressHandler} style={[{justifyContent:'center',alignItems:'center'}, alignSelf]}>
+        <View style={{width: source.width, height: source.height}}>
+          { this.state.isLoading &&           
+            <ActivityIndicator 
+              animating={true}                     
+              style={{
+                justifyContent: 'center',
+                alignItems: 'center',
+                marginBottom: 4,
+                height: source.height,
+                width: source.width
+              }}
+              color={accentColor}/> ||          
+            <Image
+              resizeMode={'contain'}
+              key={`${source.width}:${source.height}`}
+              source={source} />
+          }
+        </View>
+      </TouchableNativeFeedback>
     )
   }
 }

@@ -20,7 +20,7 @@ export default function (html) {
     return $(this).attr('align') === 'center';
   })
   const contentInfo = {
-    html: (body.html() || '').trim()
+    html: `<div>${(body.html() || '').trim()}</div>`
   }
   
   const commentList = []

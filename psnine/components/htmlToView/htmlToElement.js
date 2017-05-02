@@ -1,84 +1,230 @@
-var React = require('react')
-var ReactNative = require('react-native')
-var htmlparser = require('htmlparser2-without-node-native')
-var entities = require('entities')
-
-var {
+import React from 'react';
+import {
   Text,
-} = ReactNative
+  View,
+  TouchableNativeFeedback
+} from 'react-native';
+import htmlparser from 'htmlparser2-without-node-native';
+import entities from 'entities';
 
-var Image = require('./image')
+import AutoSizedImage from './image';
+import AutoSizedWebview from './webview';
 
+const LINE_BREAK = '\n';
+const PARAGRAPH_BREAK = '\n\n';
+const BULLET = '\u2022 ';
+const inlineElements = ['a','span','em','font','label','b','strong','i','small'];
+const lineElements = ['pre', 'p', 'br', 'h1', 'h2', 'h3', 'h4', 'h5']
 
-var LINE_BREAK = '\n'
-var PARAGRAPH_BREAK = '\n\n'
-var BULLET = '\u2022 '
+const Img = props => {
+  const width = Number(props.attribs['width']) || Number(props.attribs['data-width']) || 0;
+  const height = Number(props.attribs['height']) || Number(props.attribs['data-height']) || 0;
 
-function htmlToElement(rawHtml, opts, done) {
+  const imgStyle = {
+    width,
+    height,
+  };
+  const source = {
+    uri: props.attribs.src,
+    width,
+    height,
+    imagePaddingOffset: props.imagePaddingOffset
+  };
+  return (
+    <AutoSizedImage source={source} style={imgStyle} isLoading={props.isLoading} alignCenter={props.alignCenter} linkPressHandler={props.linkPressHandler} />
+  );
+};
+
+const Web = props => {
+  const width = Number(props.attribs['width']) || Number(props.attribs['data-width']) || 0;
+  const height = Number(props.attribs['height']) || Number(props.attribs['data-height']) || 0;
+
+  const imgStyle = {
+    width,
+    height,
+  };
+
+  const value = `<html><head></head><body><${props.name} ` + Object.keys(props.attribs).map(name => `${name}="${props.attribs[name]}"`).join(' ') + '/></body></html>'
+
+  return (
+    <AutoSizedWebview value={value} style={imgStyle} url={props.attribs.src} />
+  );
+};
+
+export default function htmlToElement(rawHtml, opts, done) {
   function domToElement(dom, parent) {
-    if (!dom) return null
+    if (!dom) return null;
 
-    return dom.map((node, index, list) => {
-      if (opts.customRenderer) {
-        var rendered = opts.customRenderer(node, index, list)
-        if (rendered || rendered === null) return rendered
+
+    let domLen = dom.length;
+    let domTemp = {};
+
+    let getNodeData = function(node){
+      let nodeData = null;
+      if(node.children.length){
+        let nodeChild = node.children[0];
+        if(nodeChild && nodeChild.data){
+          nodeData = nodeChild.data;
+        } else {
+          nodeData = getNodeData(nodeChild);
+        }
+      }
+      return nodeData;
+    };
+
+    let renderInlineNode = function(index){
+      let thisIndex = index + 1;
+      if(thisIndex < domLen){
+        let nextNode = dom[thisIndex];
+        if(inlineElements.includes(nextNode.name)){
+          domTemp[thisIndex] = true;
+          let linkPressHandler = null;
+          if (nextNode.name === 'a' && nextNode.attribs && nextNode.attribs.href) {
+            linkPressHandler = () => opts.linkHandler(entities.decodeHTML(nextNode.attribs.href))
+          }
+          let nodeData = getNodeData(nextNode);
+          if (!nodeData && nextNode.children && nextNode.children[0] && nextNode.children[0].name === 'img') {
+            // 安卓上不允许text中嵌套图片, 因此将domTemp此位置设置为false, 让这个图片跳出renderInlineNode函数
+            // 转而让dom.map函数中处理tag的语句来生成图片, 此时返回一个空字符串做跳过
+            domTemp[thisIndex] = false;
+            return (
+              <Text/>
+            )
+          }
+          return (
+            <Text key={index} onPress={linkPressHandler} style={ opts.styles[nextNode.name]}>
+              { entities.decodeHTML(nodeData) }
+              { renderInlineNode(thisIndex)}
+            </Text>
+          )
+        }
+        if (nextNode.type === 'text'){
+          domTemp[thisIndex] = true;
+          return (
+            <Text style={ opts.styles['span'] } onPress={()=>null}>
+              { entities.decodeHTML(nextNode.data) }
+              { renderInlineNode(thisIndex)}
+            </Text>
+          )
+        }
       }
 
+      return null;
+    };
 
-      if (node.type == 'text') {
+    return dom.map((node, index, list) => {
+      if(domTemp[index] === true){
+        return;
+      }
+
+      if (opts.customRenderer) {
+        const rendered = opts.customRenderer(node, index, list, parent, domToElement);
+        if (rendered || rendered === null) return rendered;
+      }
+
+      if (node.type == 'text' && node.data.trim() !== '') {
+        let linkPressHandler = null;
+        if (parent && parent.name == 'a' && parent.attribs && parent.attribs.href) {
+          linkPressHandler = () => opts.linkHandler(entities.decodeHTML(parent.attribs.href))
+        }
+
         return (
-          <Text key={index} style={parent ? opts.styles[parent.name] : null}>
-            {entities.decodeHTML(node.data)}
+          <Text key={index} onPress={linkPressHandler} style={[{ color: opts.defaultTextColor }, parent ? opts.styles[parent.name] : null]}>
+
+              { parent && parent.name == 'pre'? LINE_BREAK : null }
+              { parent && parent.name == "li"? BULLET : null }
+              { parent && parent.name == 'br'? LINE_BREAK : null }
+              { parent && parent.name == 'p' && index < list.length - 1 ? PARAGRAPH_BREAK : null }
+              { parent && parent.name == 'h1' || parent && parent.name == 'h2' || parent && parent.name == 'h3' || parent && parent.name == 'h4' || parent && parent.name == 'h5'? PARAGRAPH_BREAK :null }
+
+              { entities.decodeHTML(node.data) }
+
+              { renderInlineNode(index) }
+
           </Text>
         )
       }
 
-      if (node.type == 'tag') {
-        if (node.name == 'img') {
-          var img_w = +node.attribs['width'] || +node.attribs['data-width'] || 0
-          var img_h = +node.attribs['height'] || +node.attribs['data-height'] || 0
-
-          var img_style = {
-            width: img_w,
-            height: img_h,
-          }
-          var source = {
-            uri: node.attribs.src,
-            width: img_w,
-            height: img_h,
-            imagePaddingOffset: opts.imagePaddingOffset
+      if (node.type === 'tag') {
+        if (node.name === 'img') {
+          let linkPressHandler = null;
+          if (node.attribs && node.attribs.src) {
+            linkPressHandler = () => opts.linkHandler(entities.decodeHTML(node.attribs.src));
           }
           return (
-            <Image key={index} source={source} style={img_style} />
+              <Img key={index} attribs={node.attribs} 
+                    isLoading={opts.shouldShowLoadingIndicator}
+                    linkPressHandler={linkPressHandler}
+                    alignCenter={opts.alignCenter}
+                    imagePaddingOffset={opts.imagePaddingOffset} />
+          );
+        } else if (node.name === 'embed' || node.type === 'iframe') {
+          return (
+            <Web key={index} attribs={node.attribs} name={node.name}/>
           )
         }
 
-        var linkPressHandler = null
-        if (node.name == 'a' && node.attribs && node.attribs.href) {
-          linkPressHandler = () => opts.linkHandler(entities.decodeHTML(node.attribs.href))
+        let linkPressHandler = null;
+        if (node.name === 'a' && node.attribs && node.attribs.href) {
+          linkPressHandler = () => opts.linkHandler(entities.decodeHTML(node.attribs.href));
+        }
+
+        let linebreakBefore = null;
+        let linebreakAfter = null;
+        if (lineElements.includes(node.name)) {
+          switch (node.name) {
+            case 'pre':
+              linebreakBefore = LINE_BREAK;
+              break;
+            case 'p':
+              if (index < list.length - 1) {
+                linebreakAfter = PARAGRAPH_BREAK;
+              }
+              break;
+            case 'br':
+            case 'h1':
+            case 'h2':
+            case 'h3':
+            case 'h4':
+            case 'h5':
+              linebreakAfter = LINE_BREAK;
+              break;
+          }
+        }
+
+        let listItemPrefix = null;
+        if (node.name == 'li') {
+          if (parent.name == 'ol') {
+            listItemPrefix = `${index + 1}. `;
+          } else if (parent.name == 'ul') {
+            listItemPrefix = BULLET;
+          }
+        }
+
+        let shouldSetLineAfter = false
+        if (node.name === 'br') {
+          if (node.prev && node.prev.name === 'br') {
+            shouldSetLineAfter = true
+          }
         }
 
         return (
-          <Text key={index} onPress={linkPressHandler}>
-            {node.name == 'pre' ? LINE_BREAK : null}
-            {node.name == 'li' ? BULLET : null}
+          <View key={index} onPress={linkPressHandler}  style={[parent ? opts.styles[parent.name] : null]}>
             {domToElement(node.children, node)}
-            {node.name == 'br' || node.name == 'li' ? LINE_BREAK : null}
-            {node.name == 'p' && index < list.length - 1 ? PARAGRAPH_BREAK : null}
-            {node.name == 'h1' || node.name == 'h2' || node.name == 'h3' || node.name == 'h4' || node.name == 'h5' ? LINE_BREAK : null}
-          </Text>
+            {shouldSetLineAfter && linebreakAfter && <Text key={index} onPress={linkPressHandler} style={parent ? opts.styles[parent.name] : null}>{linebreakAfter}</Text>}
+          </View>
         )
       }
-    })
+    });
   }
 
-  var handler = new htmlparser.DomHandler(function(err, dom) {
-    if (err) done(err)
-    done(null, domToElement(dom))
-  })
-  var parser = new htmlparser.Parser(handler)
-  parser.write(rawHtml)
-  parser.done()
-}
+  let indexT = 0
 
-module.exports = htmlToElement
+  const handler = new htmlparser.DomHandler(function(err, dom) {
+    if (err) done(err);
+    done(null, domToElement(dom));
+  });
+  const parser = new htmlparser.Parser(handler);
+  parser.write(rawHtml);
+  parser.done();
+}
