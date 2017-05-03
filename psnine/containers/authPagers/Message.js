@@ -33,6 +33,7 @@ class Message extends Component {
         super(props);
         this.state = {
             messages: [],
+            isLoading: true,
             icon: false
         }
     }
@@ -108,44 +109,47 @@ class Message extends Component {
       this.fetchMessages();
   }
 
-  async fetchMessages () {
+  fetchMessages = async () => {
     const data = await fetchMessages(this.props.psnid);
     this.setState({
         messages: data,
+        isLoading: false
     });
   }
 
   render(){
     // console.log('Message.js rendered');
     return (
-          <View 
-            style={{flex:1,backgroundColor:this.props.modeInfo.backgroundColor}}
-            onStartShouldSetResponder={() => false}
-            onMoveShouldSetResponder={() => false}
-            >
-              <Ionicons.ToolbarAndroid
-                navIconName="md-arrow-back"
-                overflowIconName="md-more"                 iconColor={this.props.modeInfo.isNightMode ? '#000' : '#fff'}
-                title={'我的消息'}
-                style={[styles.toolbar, {backgroundColor: this.props.modeInfo.standardColor,}]}
-                actions={toolbarActions}
-                onIconClicked={this.onNavClicked}
-              />
-              <ListView
-                refreshControl={
-                  <RefreshControl
-                    refreshing={this.state.messages.length == 0 ? true : false}
-                    colors={[standardColor]}
-                    progressBackgroundColor={this.props.modeInfo.backgroundColor}
-                    />
-                }
-                pageSize = {32}
-                removeClippedSubviews={false}
-                enableEmptySections={true}
-                dataSource={ ds.cloneWithRows(this.state.messages) }
-                renderRow={this._renderRow}
+      <View 
+        style={{flex:1,backgroundColor:this.props.modeInfo.backgroundColor}}
+        onStartShouldSetResponder={() => false}
+        onMoveShouldSetResponder={() => false}
+        >
+          <Ionicons.ToolbarAndroid
+            navIconName="md-arrow-back"
+            overflowIconName="md-more"
+            iconColor={this.props.modeInfo.isNightMode ? '#000' : '#fff'}
+            title={'我的消息'}
+            style={[styles.toolbar, {backgroundColor: this.props.modeInfo.standardColor}]}
+            actions={toolbarActions}
+            onIconClicked={this.onNavClicked}
+          />
+          <ListView
+            refreshControl={
+              <RefreshControl
+                refreshing={this.state.isLoading}
+                onRefresh={this.fetchMessages}
+                colors={[standardColor]}
+                progressBackgroundColor={this.props.modeInfo.backgroundColor}
                 />
-         </View>     
+            }
+            pageSize = {32}
+            removeClippedSubviews={false}
+            enableEmptySections={true}
+            dataSource={ ds.cloneWithRows(this.state.messages) }
+            renderRow={this._renderRow}
+            />
+      </View>     
     )
   }
 
