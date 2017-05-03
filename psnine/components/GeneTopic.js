@@ -93,10 +93,10 @@ class GeneTopic extends Component {
           background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
           >
           <View pointerEvents='box-only' style={{ flex: 1, flexDirection: 'row', justifyContent:'center', alignItems: 'center' ,padding: 5 }}>
-            <Image
+            {/*<Image
               source={{ uri: this.props.rowData.avatar.replace('@50w.png', '@75w.png') }}
               style={{ width: 75, height: 75, alignSelf: 'flex-start'}}
-              />
+              />*/}
 
             <View style={{ flex: 1, flexDirection: 'column', padding: 5}}>
               <HTMLView
@@ -104,7 +104,7 @@ class GeneTopic extends Component {
                 modeInfo={ this.props.modeInfo }
                 stylesheet={styles}
                 onLinkPress={(url) => console.log('clicked link: ', url)}
-                imagePaddingOffset={30 + 75 + 10}
+                imagePaddingOffset={30}
               />
 
               <View style={{ flex: 1.1, flexDirection: 'row', justifyContent :'space-between' }}>

@@ -83,6 +83,7 @@ class CommunityTopic extends Component {
 
     const nodeStyle = { flex: -1, color: this.props.modeInfo.standardTextColor,textAlign : 'center', textAlignVertical: 'center' }
     const textStyle = { flex: -1, color: this.props.modeInfo.standardTextColor,textAlign : 'center', textAlignVertical: 'center' }
+    const shouldRenderAvatar = !!(this.props.rowData && this.props.rowData.avatar)
     return (
       <View key={'header'} style={{
             flex: 1,              
@@ -98,10 +99,11 @@ class CommunityTopic extends Component {
           background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
           >
           <View style={{ flex: 1, flexDirection: 'row', justifyContent:'center', alignItems: 'center' ,padding: 5 }}>
-            <Image
+            { shouldRenderAvatar && <Image
               source={{ uri: this.props.rowData.avatar.replace('@50w.png', '@75w.png') }}
               style={{ width: 75, height: 75}}
               />
+            }
 
             <View style={{ flex: 1, flexDirection: 'column', padding: 5}}>
               <HTMLView
@@ -109,7 +111,7 @@ class CommunityTopic extends Component {
                 modeInfo={ this.props.modeInfo }
                 stylesheet={styles}
                 onLinkPress={(url) => console.log('clicked link: ', url)}
-                imagePaddingOffset={30}
+                imagePaddingOffset={shouldRenderAvatar ? 30 + 75 + 10 : 30}
               />
 
               <View style={{ flex: 1.1, flexDirection: 'row', justifyContent :'space-between' }}>
