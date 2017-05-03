@@ -94,7 +94,7 @@ class ResizableImage extends Component {
           { !this.state.isLoading &&                 
             <Image
               resizeMode={'contain'}
-              onError={(e) => console.error(e)}
+              onError={(e) => console.log(e)}
               key={`${source.width}:${source.height}`}
               source={source} />
           }

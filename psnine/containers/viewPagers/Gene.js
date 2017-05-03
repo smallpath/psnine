@@ -18,7 +18,7 @@ import { connect } from 'react-redux';
 import { standardColor, nodeColor, idColor  } from '../../config/colorConfig';
 import { getGeneList } from '../../actions/gene.js';
 
-import GeneTopic from '../../components/GeneTopic';
+import CommunityTopic from '../../components/CommunityTopic';
 
 import { getGeneURL } from '../../dao/dao';
 import moment from '../../utils/moment';
@@ -51,11 +51,12 @@ class Gene extends Component {
     const URL = getGeneURL(rowData.id);
     if (navigator) {
       navigator.push({
-        component: GeneTopic,
+        component: CommunityTopic,
         params: {
           URL,
           title: rowData.content,
-          rowData
+          rowData,
+          type: 'gene'
         }
       });
     }

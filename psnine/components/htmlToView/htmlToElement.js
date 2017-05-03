@@ -242,31 +242,35 @@ export default function htmlToElement(rawHtml, opts, done) {
         const classStyle = {}
         if (node.type === 'tag' && node.name === 'div') {
           if (node.attribs.align === 'center') {
+            classStyle.alignItems = 'center'
             classStyle.justifyContent = 'center'
+            classStyle.flex = 1
           }
-          const classNameArr = (node.attribs.class || '').split(' ')
-          for (const name of classNameArr) {
-            switch (name) {
-              case 'ml64':
-                classStyle.paddingLeft = 10
-                classStyle.flex = 5
-                classStyle.flexWrap = 'wrap'
-              case 'pd10':
-                classStyle.padding = 8;
-                break;
-              case 't4':
-              case 't3':
-              case 't2':
-              case 't1':
-                classStyle.maxWidth = SCEEN_WIDTH - opts.imagePaddingOffset
-                classStyle.flexDirection = 'row'
-                classStyle.justifyContent = 'center'
-                classStyle.alignItems = 'center'
-                classStyle.elevation = 1
-                classStyle.marginTop = 2
-                classStyle.marginBottom = 2
-                classStyle.backgroundColor = opts.modeInfo.brighterLevelOne
-                break;
+          if (node.attribs.class) {
+            const classNameArr = node.attribs.class.split(' ')
+            for (const name of classNameArr) {
+              switch (name) {
+                case 'ml64':
+                  classStyle.paddingLeft = 10
+                  classStyle.flex = 5
+                  classStyle.flexWrap = 'wrap'
+                case 'pd10':
+                  classStyle.padding = 8;
+                  break;
+                case 't4':
+                case 't3':
+                case 't2':
+                case 't1':
+                  classStyle.maxWidth = SCEEN_WIDTH - opts.imagePaddingOffset
+                  classStyle.flexDirection = 'row'
+                  classStyle.justifyContent = 'center'
+                  classStyle.alignItems = 'center'
+                  classStyle.elevation = 1
+                  classStyle.marginTop = 2
+                  classStyle.marginBottom = 2
+                  classStyle.backgroundColor = opts.modeInfo.brighterLevelOne
+                  break;
+              }
             }
           }
         } else if (node.type === 'tag' && inlineElements.includes(node.name) === false) {
@@ -290,7 +294,6 @@ export default function htmlToElement(rawHtml, opts, done) {
               break;
           }
         }
-
         return (
           <View key={index} onPress={linkPressHandler}  style={[
               parent ? opts.styles[parent.name] : null,

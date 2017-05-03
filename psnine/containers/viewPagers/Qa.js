@@ -64,7 +64,8 @@ class Qa extends Component {
         params: {
           URL,
           title: rowData.title,
-          rowData
+          rowData,
+          type: 'qa'
         }
       });
     }

@@ -58,7 +58,8 @@ class Community extends Component {
         params: {
           URL,
           title: rowData.title,
-          rowData
+          rowData,
+          type: 'community'
         }
       });
     }

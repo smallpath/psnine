@@ -28,7 +28,6 @@ import Icon from 'react-native-vector-icons/Ionicons';
 
 import CommunityTopic from '../components/CommunityTopic';
 import Deal from '../components/Deal';
-import GeneTopic from '../components/GeneTopic';
 import HappyPlusOne from '../components/HappyPlusOne';
 import Store from '../components/Store';
 import Rank from '../components/Rank';

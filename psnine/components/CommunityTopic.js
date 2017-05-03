@@ -20,6 +20,7 @@ import {
   InteractionManager,
   ActivityIndicator,
   StatusBar,
+  FlatList,
   ScrollView
 } from 'react-native';
 
@@ -83,7 +84,8 @@ class CommunityTopic extends Component {
 
     const nodeStyle = { flex: -1, color: this.props.modeInfo.standardTextColor,textAlign : 'center', textAlignVertical: 'center' }
     const textStyle = { flex: -1, color: this.props.modeInfo.standardTextColor,textAlign : 'center', textAlignVertical: 'center' }
-    const shouldRenderAvatar = !!(this.props.rowData && this.props.rowData.avatar)
+    const isNotGene = this.props.type !== 'gene'
+    const shouldRenderAvatar = isNotGene && !!(this.props.rowData && this.props.rowData.avatar)
     return (
       <View key={'header'} style={{
             flex: 1,              
@@ -128,7 +130,10 @@ class CommunityTopic extends Component {
   }
 
   renderContent = () => {
-    return (
+    const content = this.state.mainContent
+    const html = this.props.type !== 'gene' ? content : content.replace('<div>', '<div align="center">')
+    const emptyHTML = this.props.type !== 'gene' ? '<div></div>' : '<div align="center"></div>'
+    return html !== emptyHTML ? (
       <View key={'content'} style={{             
             elevation: 1,
             margin: 5,
@@ -137,7 +142,7 @@ class CommunityTopic extends Component {
             padding: 10
         }}>
         <HTMLView
-          value={this.state.mainContent}
+          value={html}
           modeInfo={ this.props.modeInfo }
           shouldShowLoadingIndicator={true}
           stylesheet={styles}
@@ -145,7 +150,7 @@ class CommunityTopic extends Component {
           onLinkPress={(url) => console.log('clicked link: ', url)}
         />
       </View>
-    )
+    ) : undefined
   }
 
   renderGameTable = () => {
@@ -232,7 +237,7 @@ class CommunityTopic extends Component {
                     modeInfo={ this.props.modeInfo }
                     stylesheet={styles}
                     onLinkPress={(url) => console.log('clicked link: ', url)}
-                    imagePaddingOffset={30}
+                    imagePaddingOffset={30 + 75 + 10}
                   />
 
                   <View style={{ flex: 1.1, flexDirection: 'row', justifyContent :'space-between' }}>
@@ -273,14 +278,14 @@ class CommunityTopic extends Component {
         )
       }
     }
-    return (
+    return list.length !== 0 ?(
       <View>
         { readMore &&<View style={{elevation: 1, margin: 5, marginTop: 0, marginBottom: 5, backgroundColor:this.props.modeInfo.backgroundColor }}>{ readMore }</View> } 
         <View style={{elevation: 1, margin: 5, marginTop: 0, backgroundColor:this.props.modeInfo.backgroundColor }}>
           { list }
         </View>
       </View>
-    )
+    ) : undefined
   }
 
   _readMore = (URL) => {
@@ -316,7 +321,7 @@ class CommunityTopic extends Component {
       )
       list.push(thisJSX)
     }
-    return (
+    return list.length !== 0 ? (
       <View style={{elevation: 1,margin: 5, marginTop: 0, marginBottom: 0, backgroundColor:this.props.modeInfo.backgroundColor}}>
         <View style={{
             elevation: 2,
@@ -327,7 +332,7 @@ class CommunityTopic extends Component {
           { list }
         </View>
       </View>
-    )
+    ) : undefined
   }
 
   render() {
@@ -362,7 +367,45 @@ class CommunityTopic extends Component {
                     size="large"
                   />
               )}
-              { !this.state.isLoading && <ScrollView style={{
+              { !this.state.isLoading && <FlatList style={{
+                flex: -1,
+                backgroundColor: this.props.modeInfo.standardColor
+              }}
+                data={
+                  [
+                    this.state.data.titleInfo,
+                    this.state.data.contentInfo.page,
+                    this.state.data.contentInfo.html,
+                    this.state.data.contentInfo.gameTable,
+                    this.state.data.commentList
+                  ]
+                }
+                keyExtractor={(item, index) => item.id || index}
+                renderItem={({ item, index }) => {
+                  switch (index) {
+                    case 0:
+                      return this.renderHeader()
+                    case 1:
+                      return this.renderPage()
+                    case 2:
+                      return this.renderContent()
+                    case 3:
+                      return this.renderGameTable()
+                    case 4:
+                      return this.renderComment()
+                  }
+                  return <Text>{index}</Text>
+                }}
+                >
+                {/*{ !this.state.isLoading && this.renderHeader() }
+                { !this.state.isLoading && this.state.data.contentInfo.page.length !== 0 && this.renderPage() }
+                { !this.state.isLoading && this.renderContent() }
+                { !this.state.isLoadding && this.state.data.contentInfo.gameTable 
+                      && this.state.data.contentInfo.gameTable.length !== 0 && this.renderGameTable()}
+                { !this.state.isLoading && this.renderComment() }*/}
+              </FlatList>
+              }
+              {/*{ !this.state.isLoading && <ScrollView style={{
                 flex: -1,
                 backgroundColor: this.props.modeInfo.standardColor
               }}>
@@ -373,7 +416,7 @@ class CommunityTopic extends Component {
                       && this.state.data.contentInfo.gameTable.length !== 0 && this.renderGameTable()}
                 { !this.state.isLoading && this.renderComment() }
               </ScrollView>
-              }
+              }*/}
           </View>
     );
   }
