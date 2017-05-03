@@ -2,7 +2,8 @@ import React from 'react';
 import {
   Text,
   View,
-  TouchableNativeFeedback
+  TouchableNativeFeedback,
+  Dimensions
 } from 'react-native';
 import htmlparser from 'htmlparser2-without-node-native';
 import entities from 'entities';
@@ -15,6 +16,7 @@ const PARAGRAPH_BREAK = '\n\n';
 const BULLET = '\u2022 ';
 const inlineElements = ['a','span','em','font','label','b','strong','i','small'];
 const lineElements = ['pre', 'p', 'br', 'h1', 'h2', 'h3', 'h4', 'h5']
+const { width: SCEEN_WIDTH } = Dimensions.get('window')
 
 const Img = props => {
   const width = Number(props.attribs['width']) || Number(props.attribs['data-width']) || 0;
@@ -72,6 +74,28 @@ export default function htmlToElement(rawHtml, opts, done) {
       return nodeData;
     };
 
+    let renderInlineStyle = function(parent, styleObj) {
+      // p9目前只有span的嵌套, 因此暂时只处理span
+      if (parent && inlineElements.includes(parent.name)) {
+        const classNameArr = (parent.attribs.class || '').split(' ')
+        for (const name of classNameArr) {
+          switch (name) {
+            case 'font12':
+              styleObj.fontSize = 12;
+              break;
+          }
+        }
+        const styles = (parent.attribs.style || '').split(';')
+        for (const style of styles) {
+          if (!style) continue
+          const splited = style.split(':')
+          if (splited.length !== 2) continue
+          styleObj[splited[0]] = splited[1]
+        }
+        renderInlineStyle(parent.parent, styleObj)
+      }
+    }
+
     let renderInlineNode = function(index){
       let thisIndex = index + 1;
       if(thisIndex < domLen){
@@ -124,18 +148,25 @@ export default function htmlToElement(rawHtml, opts, done) {
 
       if (node.type == 'text' && node.data.trim() !== '') {
         let linkPressHandler = null;
-        if (parent && parent.name == 'a' && parent.attribs && parent.attribs.href) {
+        if (parent && parent.name === 'a' && parent.attribs && parent.attribs.href) {
           linkPressHandler = () => opts.linkHandler(entities.decodeHTML(parent.attribs.href))
         }
 
-        return (
-          <Text key={index} onPress={linkPressHandler} style={[{ color: opts.modeInfo.standardTextColor }, parent ? opts.styles[parent.name] : null]}>
+        const classStyle = {}
+        renderInlineStyle(parent, classStyle)
 
-              { parent && parent.name == 'pre'? LINE_BREAK : null }
-              { parent && parent.name == "li"? BULLET : null }
-              { parent && parent.name == 'br'? LINE_BREAK : null }
-              { parent && parent.name == 'p' && index < list.length - 1 ? PARAGRAPH_BREAK : null }
-              { parent && parent.name == 'h1' || parent && parent.name == 'h2' || parent && parent.name == 'h3' || parent && parent.name == 'h4' || parent && parent.name == 'h5'? PARAGRAPH_BREAK :null }
+        return (
+          <Text key={index} onPress={linkPressHandler} style={[
+              { color: opts.modeInfo.standardTextColor },
+              parent ? opts.styles[parent.name] : null,
+              classStyle
+            ]}>
+              { parent && parent.name === 'pre'? LINE_BREAK : null }
+              { parent && parent.name === "li"? BULLET : null }
+              { parent && parent.name === 'br'? LINE_BREAK : null }
+              { parent && parent.name === 'p' && index < list.length - 1 ? PARAGRAPH_BREAK : null }
+              { parent && parent.name === 'h1' || parent && parent.name === 'h2' || parent && parent.name === 'h3' 
+                || parent && parent.name === 'h4' || parent && parent.name === 'h5'? PARAGRAPH_BREAK :null }
 
               { entities.decodeHTML(node.data) }
 
@@ -210,23 +241,35 @@ export default function htmlToElement(rawHtml, opts, done) {
 
         const classStyle = {}
         if (node.type === 'tag' && node.name === 'div') {
+          if (node.attribs.align === 'center') {
+            classStyle.justifyContent = 'center'
+          }
           const classNameArr = (node.attribs.class || '').split(' ')
           for (const name of classNameArr) {
             switch (name) {
+              case 'ml64':
+                classStyle.paddingLeft = 10
+                classStyle.flex = 5
+                classStyle.flexWrap = 'wrap'
               case 'pd10':
-                classStyle.padding = 10;
+                classStyle.padding = 8;
                 break;
               case 't4':
               case 't3':
               case 't2':
               case 't1':
+                classStyle.maxWidth = SCEEN_WIDTH - opts.imagePaddingOffset
+                classStyle.flexDirection = 'row'
+                classStyle.justifyContent = 'center'
+                classStyle.alignItems = 'center'
                 classStyle.elevation = 1
+                classStyle.marginTop = 2
                 classStyle.marginBottom = 2
                 classStyle.backgroundColor = opts.modeInfo.brighterLevelOne
                 break;
             }
           }
-        } else if (node.type === 'tag') {
+        } else if (node.type === 'tag' && inlineElements.includes(node.name) === false) {
           switch (node.name) {
             case 'table':
               classStyle.backgroundColor = '#eec'
@@ -243,13 +286,16 @@ export default function htmlToElement(rawHtml, opts, done) {
               classStyle.borderBottomColor = classStyle.borderRightColor = opts.modeInfo.backgroundColor
               break;
             default: 
-              console.log(node.name, node.children.length)
+              // console.log(node.name, node.children.length)
               break;
           }
         }
 
         return (
-          <View key={index} onPress={linkPressHandler}  style={[parent ? opts.styles[parent.name] : null, classStyle]}>
+          <View key={index} onPress={linkPressHandler}  style={[
+              parent ? opts.styles[parent.name] : null,
+              classStyle
+            ]}>
             {domToElement(node.children, node)}
             {shouldSetLineAfter && linebreakAfter && <Text key={index} onPress={linkPressHandler} style={parent ? opts.styles[parent.name] : null}>{linebreakAfter}</Text>}
           </View>
