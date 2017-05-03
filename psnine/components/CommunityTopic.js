@@ -425,6 +425,14 @@ class CommunityTopic extends Component {
                 renderItem={({ item, index }) => {
                   return renderFuncArr[index](item)
                 }}
+                extraData={this.state}
+                windowSize={999}
+                disableVirtualization={true}
+                viewabilityConfig={{
+                  minimumViewTime: 3000,
+                  viewAreaCoveragePercentThreshold: 100,
+                  waitForInteraction: true
+                }}
                 >
               </FlatList>
               }
@@ -618,10 +626,10 @@ class CommunityTopic extends Component {
   pressToolbar = type => {
     if (type === 'up') {
       if (this.index === 0) return
-      this.flatlist && this.flatlist.scrollToIndex({viewPosition: 0, index: --this.index})
+      this.flatlist && this.flatlist.scrollToIndex({animated: true, viewPosition: 0, index: --this.index})
     } else {
       if (this.index === this.maxIndex) return
-      this.flatlist && this.flatlist.scrollToIndex({viewPosition: 0, index: ++this.index})
+      this.flatlist && this.flatlist.scrollToIndex({animated: true, viewPosition: 0, index: ++this.index})
     }
   }
 
