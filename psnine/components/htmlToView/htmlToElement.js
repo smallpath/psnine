@@ -49,7 +49,7 @@ const Web = props => {
   const value = `<html><head></head><body><${props.name} ` + Object.keys(props.attribs).map(name => `${name}="${props.attribs[name]}"`).join(' ') + '/></body></html>'
 
   return (
-    <AutoSizedWebview value={value} style={imgStyle} url={props.attribs.src} />
+    <AutoSizedWebview value={value} style={imgStyle} imagePaddingOffset={props.imagePaddingOffset} url={props.attribs.src} />
   );
 };
 
@@ -191,7 +191,7 @@ export default function htmlToElement(rawHtml, opts, done) {
           );
         } else if (node.name === 'embed' || node.name === 'iframe') {
           return (
-            <Web key={index} attribs={node.attribs} name={node.name}/>
+            <Web key={index} attribs={node.attribs} imagePaddingOffset={opts.imagePaddingOffset} name={node.name}/>
           )
         }
 

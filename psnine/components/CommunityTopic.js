@@ -20,6 +20,9 @@ import {
   InteractionManager,
   ActivityIndicator,
   StatusBar,
+  TouchableWithoutFeedback,
+  Animated,
+  Easing,
   FlatList,
   ScrollView
 } from 'react-native';
@@ -33,6 +36,7 @@ import { standardColor, nodeColor, idColor, accentColor  } from '../config/color
 import { getTopicAPI, getTopicContentAPI } from '../dao/dao'
 
 let screen = Dimensions.get('window');
+const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = screen;
 
 let toolbarActions = [
   {title: '回复', iconName: 'md-create', show: 'always'},
@@ -43,6 +47,12 @@ let toolbarActions = [
 let title = "TOPIC";
 let WEBVIEW_REF = `WEBVIEW_REF`;
 
+let toolbarHeight = 56;
+let releasedMarginTop = 0;
+let config = {tension: 30, friction: 7, ease: Easing.ease, duration: 200};
+const timeout = 190
+const delay = 50
+
 class CommunityTopic extends Component {
 
   constructor(props){
@@ -50,7 +60,11 @@ class CommunityTopic extends Component {
     this.state = {
       data: false,
       isLoading: true,
-      mainContent: false
+      mainContent: false,
+      rotation: new Animated.Value(1),
+      scale: new Animated.Value(1),
+      opacity: new Animated.Value(1),
+      openVal: new Animated.Value(0)
     }
   }
 
@@ -70,18 +84,25 @@ class CommunityTopic extends Component {
   componentWillMount = () => {
     InteractionManager.runAfterInteractions(() => {
       const data =  getTopicAPI(this.props.URL).then(data => {
+
+        const content = data.contentInfo.html
+        const html = this.props.type !== 'gene' ? content : content.replace('<div>', '<div align="center">')
+        const emptyHTML = this.props.type !== 'gene' ? '<div></div>' : '<div align="center"></div>'
+        this.hasContent = html !== emptyHTML
+        this.hasGameTable = data.contentInfo.gameTable.length !== 0
+        this.hasComment = data.commentList.length !== 0
+        this.hasReadMore = this.hasComment ? data.commentList[0].isGettingMoreComment === true ? true : false : false
+        this.hasPage = data.contentInfo.page.length !== 0
         this.setState({
           data,
-          mainContent: data.contentInfo.html,
+          mainContent: html,
           isLoading: false
         })
       })
     });
   }
 
-  renderHeader = () => {
-    const { data: { titleInfo } } = this.state
-
+  renderHeader = (titleInfo) => {
     const nodeStyle = { flex: -1, color: this.props.modeInfo.standardTextColor,textAlign : 'center', textAlignVertical: 'center' }
     const textStyle = { flex: -1, color: this.props.modeInfo.standardTextColor,textAlign : 'center', textAlignVertical: 'center' }
     const isNotGene = this.props.type !== 'gene'
@@ -129,11 +150,9 @@ class CommunityTopic extends Component {
     )
   }
 
-  renderContent = () => {
-    const content = this.state.mainContent
-    const html = this.props.type !== 'gene' ? content : content.replace('<div>', '<div align="center">')
-    const emptyHTML = this.props.type !== 'gene' ? '<div></div>' : '<div align="center"></div>'
-    return html !== emptyHTML ? (
+  hasContent = false
+  renderContent = (html) => {
+    return (
       <View key={'content'} style={{             
             elevation: 1,
             margin: 5,
@@ -150,11 +169,11 @@ class CommunityTopic extends Component {
           onLinkPress={(url) => console.log('clicked link: ', url)}
         />
       </View>
-    ) : undefined
+    )
   }
 
-  renderGameTable = () => {
-    const { data: { contentInfo : { gameTable } } } = this.state
+  hasGameTable = false
+  renderGameTable = (gameTable) => {
     const list = []
     for (const rowData of gameTable) {
       list.push(
@@ -205,8 +224,9 @@ class CommunityTopic extends Component {
     )
   }
 
-  renderComment = () => {
-    const { data: { commentList } } = this.state
+  hasComment = false
+  hasReadMore = false
+  renderComment = (commentList) => {
     const list = []
     let readMore = null
     for (const rowData of commentList) {
@@ -278,14 +298,14 @@ class CommunityTopic extends Component {
         )
       }
     }
-    return list.length !== 0 ?(
+    return (
       <View>
         { readMore &&<View style={{elevation: 1, margin: 5, marginTop: 0, marginBottom: 5, backgroundColor:this.props.modeInfo.backgroundColor }}>{ readMore }</View> } 
         <View style={{elevation: 1, margin: 5, marginTop: 0, backgroundColor:this.props.modeInfo.backgroundColor }}>
           { list }
         </View>
       </View>
-    ) : undefined
+    )
   }
 
   _readMore = (URL) => {
@@ -297,8 +317,8 @@ class CommunityTopic extends Component {
     })
   }
 
-  renderPage() {
-    const { data: { contentInfo: { page } } } = this.state
+  hasPage = false
+  renderPage(page) {
     const list = [] 
     for (const item of page) {
       const thisJSX = (
@@ -321,7 +341,7 @@ class CommunityTopic extends Component {
       )
       list.push(thisJSX)
     }
-    return list.length !== 0 ? (
+    return (
       <View style={{elevation: 1,margin: 5, marginTop: 0, marginBottom: 0, backgroundColor:this.props.modeInfo.backgroundColor}}>
         <View style={{
             elevation: 2,
@@ -332,11 +352,38 @@ class CommunityTopic extends Component {
           { list }
         </View>
       </View>
-    ) : undefined
+    )
   }
 
   render() {
     // console.log('CommunityTopic.js rendered');
+    const { data: source } = this.state 
+    const data = []
+    const renderFuncArr = []
+    const isLoading = !this.state.isLoading
+    if (isLoading) {
+      data.push(source.titleInfo)
+      renderFuncArr.push(this.renderHeader)
+    }
+    if (isLoading && this.hasPage) {
+      data.push(source.contentInfo.page)
+      renderFuncArr.push(this.renderPage)
+    }
+    if (isLoading && this.hasContent) {
+      data.push(this.state.mainContent)
+      renderFuncArr.push(this.renderContent)
+    }
+    if (isLoading && this.hasGameTable) {
+      data.push(source.contentInfo.gameTable)
+      renderFuncArr.push(this.renderGameTable)
+    }
+    if (isLoading && this.hasComment) {
+      data.push(source.commentList)
+      renderFuncArr.push(this.renderComment)
+    }
+
+    this.maxIndex = data.length - 1
+
     return ( 
           <View 
             style={{flex:1, backgroundColor: this.props.modeInfo.backgroundColor}}
@@ -367,58 +414,252 @@ class CommunityTopic extends Component {
                     size="large"
                   />
               )}
+              { this.renderToolbar() }
               { !this.state.isLoading && <FlatList style={{
                 flex: -1,
                 backgroundColor: this.props.modeInfo.standardColor
               }}
-                data={
-                  [
-                    this.state.data.titleInfo,
-                    this.state.data.contentInfo.page,
-                    this.state.data.contentInfo.html,
-                    this.state.data.contentInfo.gameTable,
-                    this.state.data.commentList
-                  ]
-                }
+                ref={flatlist => this.flatlist = flatlist}
+                data={data}
                 keyExtractor={(item, index) => item.id || index}
                 renderItem={({ item, index }) => {
-                  switch (index) {
-                    case 0:
-                      return this.renderHeader()
-                    case 1:
-                      return this.renderPage()
-                    case 2:
-                      return this.renderContent()
-                    case 3:
-                      return this.renderGameTable()
-                    case 4:
-                      return this.renderComment()
-                  }
-                  return <Text>{index}</Text>
+                  return renderFuncArr[index](item)
                 }}
                 >
-                {/*{ !this.state.isLoading && this.renderHeader() }
-                { !this.state.isLoading && this.state.data.contentInfo.page.length !== 0 && this.renderPage() }
-                { !this.state.isLoading && this.renderContent() }
-                { !this.state.isLoadding && this.state.data.contentInfo.gameTable 
-                      && this.state.data.contentInfo.gameTable.length !== 0 && this.renderGameTable()}
-                { !this.state.isLoading && this.renderComment() }*/}
               </FlatList>
               }
-              {/*{ !this.state.isLoading && <ScrollView style={{
-                flex: -1,
-                backgroundColor: this.props.modeInfo.standardColor
-              }}>
-                { !this.state.isLoading && this.renderHeader() }
-                { !this.state.isLoading && this.state.data.contentInfo.page.length !== 0 && this.renderPage() }
-                { !this.state.isLoading && this.renderContent() }
-                { !this.state.isLoadding && this.state.data.contentInfo.gameTable 
-                      && this.state.data.contentInfo.gameTable.length !== 0 && this.renderGameTable()}
-                { !this.state.isLoading && this.renderComment() }
-              </ScrollView>
-              }*/}
           </View>
     );
+  }
+
+  renderToolbar = () => {
+    const { openVal } = this.state
+    const tipHeight =  toolbarHeight * 0.8
+    return (
+      <View style={{position: 'absolute', left:0, top:0, width:SCREEN_WIDTH, height:SCREEN_HEIGHT - toolbarHeight / 2}}>
+        <TouchableWithoutFeedback onPress={this.closeMask}>
+          <Animated.View 
+              ref={mask=>this.mask=mask}
+              collapsable ={false}
+              style={{
+                opacity: openVal.interpolate({
+                  inputRange: [0, 1],
+                  outputRange: [1, 1]
+                }),
+                width:openVal.interpolate({inputRange: [0, 1], outputRange: [0, SCREEN_WIDTH]}),
+                height:openVal.interpolate({inputRange: [0, 1], outputRange: [0, SCREEN_HEIGHT]}),
+                position:'absolute',
+                zIndex: 1
+            }}/>
+        </TouchableWithoutFeedback>
+        <Animated.View 
+            ref={float=>this.float1=float}
+            collapsable ={false}
+            style={{
+              opacity: openVal.interpolate({
+                inputRange: [0, 1],
+                outputRange: [1, 1]
+              }),
+              width: 40,
+              height: 40,
+              borderRadius: 20,
+              backgroundColor: accentColor,
+              position:'absolute',
+              bottom: Animated.add(
+                openVal.interpolate({inputRange: [0, 1], outputRange: [24,  56 + 10 + 16 * 2]}),
+                this.props.tipBarMarginBottom.interpolate({
+                  inputRange: [0, 1], 
+                  outputRange: [0 , tipHeight]
+                })
+              ),
+              right: 24,
+              elevation: 1,
+              zIndex: 1,
+              opacity: 1
+          }}>
+          <TouchableNativeFeedback 
+            onPress={() => this.pressToolbar('down')}
+            background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
+            onPressIn={()=>{
+              this.float1.setNativeProps({
+                style :{
+                elevation: 12,
+              }});
+            }}
+            onPressOut={()=>{
+              this.float1.setNativeProps({
+                style :{
+                elevation: 6,
+              }});
+            }}
+            style={{
+              width: 40,
+              height: 40,
+              borderRadius: 20,
+              flex:1,
+              zIndex: 1,
+              backgroundColor: accentColor,
+            }}>
+            <View style={{borderRadius: 20,width: 40,height: 40,justifyContent: 'center',alignItems: 'center',}}>
+              <Ionicons name="md-arrow-down" size={20} color='#fff'/>
+            </View>
+          </TouchableNativeFeedback>
+        </Animated.View>
+        <Animated.View 
+            ref={float=>this.float2=float}
+            collapsable ={false}
+            style={{
+              width: 40,
+              height: 40,
+              borderRadius: 20,
+              backgroundColor: accentColor,
+              position:'absolute',
+              bottom: Animated.add(
+                openVal.interpolate({inputRange: [0, 1], outputRange: [24,  56 + 10 + 16 * 2  + 50]}),
+                this.props.tipBarMarginBottom.interpolate({
+                  inputRange: [0, 1], 
+                  outputRange: [0 , tipHeight]
+                })
+              ),
+              right: 24,
+              elevation: 1,
+              zIndex: 1,
+              opacity: 1
+          }}>
+            <TouchableNativeFeedback 
+              onPress={() => this.pressToolbar('up')}
+              background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
+              onPressIn={()=>{
+                this.float2.setNativeProps({
+                  style :{
+                  elevation: 12,
+                }});
+              }}
+              onPressOut={()=>{
+                this.float2.setNativeProps({
+                  style :{
+                  elevation: 6,
+                }});
+              }}
+              style={{
+                width: 40,
+                height: 40,
+                borderRadius: 20,
+                flex:1,
+                zIndex: 1,
+                backgroundColor: accentColor,
+              }}>
+              <View style={{borderRadius: 20,width: 40,height: 40,justifyContent: 'center',alignItems: 'center',}}>
+                <Ionicons name="md-arrow-up" size={20} color='#fff'/>
+              </View>
+            </TouchableNativeFeedback>
+        </Animated.View>
+        <Animated.View 
+            ref={float=>this.float=float}
+            collapsable ={false}
+            style={{
+              width: 56,
+              height: 56,
+              borderRadius: 30,
+              backgroundColor: accentColor,
+              position:'absolute',
+              bottom: this.props.tipBarMarginBottom.interpolate({
+                inputRange: [0, 1], 
+                outputRange: [16 , 16 + tipHeight]
+              }),
+              right: 16,
+              elevation: 6 ,
+              zIndex: 1,
+              opacity: this.state.opacity,
+
+              transform: [{
+                scale: this.state.scale,                        
+              },{
+                rotateZ: this.state.rotation.interpolate({
+                  inputRange: [0, 1],
+                  outputRange: ['0deg', '360deg']
+                }),
+              }]
+          }}>
+          <TouchableNativeFeedback 
+            onPress={this.pressNew}
+            background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
+            onPressIn={()=>{
+              this.float.setNativeProps({
+                style :{
+                elevation: 12,
+              }});
+            }}
+            onPressOut={()=>{
+              this.float.setNativeProps({
+                style :{
+                elevation: 6,
+              }});
+            }}
+            style={{
+              width: 56,
+              height: 56,
+              borderRadius: 30,
+              flex:1,
+              zIndex: 1,
+              backgroundColor: accentColor,
+            }}>
+            <View style={{borderRadius: 30,width: 56,height: 56,flex:-1,justifyContent: 'center',alignItems: 'center',}}>
+              <Ionicons name="ios-add" size={40} color='#fff'/>
+            </View>
+          </TouchableNativeFeedback>
+        </Animated.View>
+      </View>
+      )
+  }
+
+  index = 0
+
+  pressToolbar = type => {
+    if (type === 'up') {
+      if (this.index === 0) return
+      this.flatlist && this.flatlist.scrollToIndex({viewPosition: 0, index: --this.index})
+    } else {
+      if (this.index === this.maxIndex) return
+      this.flatlist && this.flatlist.scrollToIndex({viewPosition: 0, index: ++this.index})
+    }
+  }
+
+  _animateToolbar = (value, cb) => {
+    const ratationPreValue = this.state.rotation._value
+
+    const rotationValue = value === 0 ? ratationPreValue - 3/8 : ratationPreValue + 3/8
+    const scaleAnimation = Animated.timing(this.state.rotation, {toValue: rotationValue, ...config})
+    const moveAnimation = Animated.timing(this.state.openVal, {toValue: value, ...config})
+    const delayAnimation = Animated.delay(delay)
+    const target = [
+      moveAnimation
+    ]
+    if (value === 1) target.unshift(delayAnimation)
+    if (value !== 0 || value !== 1) target.unshift(scaleAnimation)
+
+    Animated.parallel(target).start(() => typeof cb === 'function' && cb())
+  }  
+
+  pressNew = (cb) => {
+    const { navigator: _navigator } = this.props;
+
+    if (this.state.openVal._value === 0) {
+      this.removeListener = BackAndroid.addEventListener('hardwareBackPress',  () => {
+        this.removeListener && this.removeListener.remove  && this.removeListener.remove();
+        this._animateToolbar(0)
+        return true;
+      });
+      this._animateToolbar(1, cb)
+    } else {
+      this.removeListener && this.removeListener.remove  && this.removeListener.remove();
+      this._animateToolbar(0, cb)
+    }
+  }
+
+  closeMask = () => {
+    this.removeListener && this.removeListener.remove  && this.removeListener.remove();
+    this._animateToolbar(0)
   }
 }
 

@@ -36,7 +36,6 @@ import About from './components/About'
 
 const store = configureStore();
 
-let _navigator;
 let backPressClickTimeStamp = 0;
 // const listeners = BackAndroid.addEventListener('hardwareBackPress', function () {
 // 	if (_navigator && _navigator.getCurrentRoutes().length > 1) {
@@ -131,11 +130,11 @@ class Root extends React.Component {
 		return targetState;
 	}
 
-	componentWillMount() {
+	componentWillMount = () => {
 		global.toast = this.toast
-		const listeners = BackAndroid.addEventListener('hardwareBackPress', function () {
-			if (_navigator && _navigator.getCurrentRoutes().length > 1) {
-				_navigator.pop();
+		const listeners = BackAndroid.addEventListener('hardwareBackPress', () => {
+			if (this.navigator && this.navigator.getCurrentRoutes().length > 1) {
+				this.navigator.pop();
 				return true;
 			} else {
 				let timestamp = new Date();
@@ -188,8 +187,6 @@ class Root extends React.Component {
 
 	renderScene = (route, navigator) => {
 		let Component = route.component;
-		_navigator = navigator;
-		global.topNavigator = navigator
 		return <Component {...route.params}
 			modeInfo={this.state.isNightMode ? this.nightModeInfo : this.dayModeInfo}
 			switchModeOnRoot={this.switchModeOnRoot}
@@ -211,6 +208,7 @@ class Root extends React.Component {
 				<View style={{ flex: 1 }}>
 					<StatusBar translucent={false} backgroundColor={this.state.isNightMode ? nightDeepColor : deepColor} barStyle="light-content" />
 					<Navigator
+            ref={f => this.navigator=f }
 						initialRoute={{ component: App, shouldBeClickableUnderOtherRoutes: true }}
 						configureScene={this.configureScene}
 						renderScene={this.renderScene}

@@ -32,11 +32,9 @@ class HtmlView extends Component {
     return (
       <WebView 
         startInLoadingState={true}
-        mixedContentMode={'always'}
-        automaticallyAdjustContentInsets={true}
-        style={{flex:1, padding: 0, height: this.state.height}}
-        scrollEnable={true}
-        injectedJavaScript={'<script>window.location.hash = 1;document.title = document.height;</script>'}
+        style={{flex:1, padding: 0, width: width - this.props.imagePaddingOffset , height: this.state.height}}
+        injectedJavaScript={'<script>document.title = document.height;window.location = "smallpath.me";</script>'}
+        javaScriptEnabled={true}
         onNavigationStateChange={(navState) => {
           //this.setState({
           //  height: parseInt((navState.title.match(/\sheight=\"(\d+)\"/) || [0, 0])[1])
