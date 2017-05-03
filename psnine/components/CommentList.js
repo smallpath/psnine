@@ -5,13 +5,20 @@ import {
   View,
   ListView,
   Image,
+  Picker,
   ToastAndroid,
   Dimensions,
   TouchableNativeFeedback,
   RefreshControl,
   InteractionManager,
-  ToolbarAndroid
+  ToolbarAndroid,
+  Modal,
+  Slider
 } from 'react-native';
+
+const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
+
+import MyDialog from './dialog'
 
 import HTMLView from './htmlToView';
 import { connect } from 'react-redux';
@@ -25,7 +32,10 @@ const ds = new ListView.DataSource({
   rowHasChanged: (row1, row2) => row1.id !== row2.id,
 });
 
-let toolbarActions = [];
+let toolbarActions = [
+  {title: '回复', iconName: 'md-create', show: 'always'},
+  {title: '跳页', iconName: 'md-map' ,show: 'always'},
+];
 
 class CommentList extends Component {
     constructor(props){
@@ -36,7 +46,8 @@ class CommentList extends Component {
         numPages: 1,
         commentTotal: 1, 
         currentPage: 1,
-        isLoading: true
+        isLoading: true,
+        modalVisible: false
       }
     }
 
@@ -112,13 +123,20 @@ class CommentList extends Component {
       InteractionManager.runAfterInteractions(() => {
         getTopicCommentAPI(url).then(data => {
           let thisList = []
-          if (type === 'down') {
+          let cb = () => {}
+          if (this.state.currentPage === 1 && type === 'up') {
+            cb = () => this.listView.scrollTo({y:0, animated: true});
+            thisList = data.commentList
+          } else if (type === 'down') {
             thisList = this.state.list.concat(data.commentList)
           } else if (type === 'up') {
-            thisList = this.state.list.unshift(data.commentList)
+            thisList = this.state.list.slice()
+            thisList.unshift(...data.commentList)
           } else if (type === 'jump') {
+            cb = () => this.listView.scrollTo({y:0, animated: true});
             thisList = data.commentList
           }
+          
           this.setState({
             list: thisList,
             numberPerPage: data.numberPerPage,
@@ -126,7 +144,7 @@ class CommentList extends Component {
             commentTotal: data.len, 
             currentPage: parseInt(url.match(/\?page=(\d+)/)[1]),
             isLoading: false
-          });
+          }, cb);
         })
       })
     })
@@ -135,44 +153,41 @@ class CommentList extends Component {
   
   _onRefresh = () => {
     const { URL } = this.props;
-    const type = this.state.currentPage === 1 ? 'jump' : 'up'
     const currentPage = this.state.currentPage
-    const targetPage = Math.max(currentPage - 1, 1)
-
-    this.fetchMessages(URL.replace('page=' + currentPage, 'page=' + targetPage), type);
+    const type = currentPage === 1 ? 'jump' : 'up'
+    let targetPage = currentPage - 1
+    if (type === 'jump') {
+      targetPage = 1
+    }
+    this.fetchMessages(URL.split('=').slice(0, -1).concat(targetPage).join('='), type);
   }
 
   _onEndReached = () => {
     const { URL } = this.props;
     const currentPage = this.state.currentPage
     const targetPage = currentPage + 1
-
     if (targetPage > this.state.numPages) return
-
-    this.fetchMessages(URL.replace('page=' + currentPage, 'page=' + targetPage), 'down');
+    if (this.state.isLoading === true) return alert('caonima onEndReached')
+    this.fetchMessages(URL.split('=').slice(0, -1).concat(targetPage).join('='), 'down');
 
   }
 
-
-  _renderHeader = () => {
-    return (
-      <View style={{
-        flex: -1,
-        elevation: 2,
-        flexDirection: 'row',
-        justifyContent: 'space-around',
-        alignItems: 'center',
-        height: 40,
-        paddingTop: 3,
-        backgroundColor: this.props.modeInfo.backgroundColor
-      }}>
-        <Text style={{color: this.props.modeInfo.standardTextColor}}>当前页: {this.state.currentPage}</Text>
-        <Text style={{color: this.props.modeInfo.standardTextColor}}>总页数: {this.state.numPages}</Text>
-        <Text style={{color: this.props.modeInfo.standardTextColor}}>评论总数: {this.state.commentTotal}</Text>
-      </View>
-    )
+  onActionSelected = (index) => {
+    switch(index){
+      case 0 :
+        return;
+      case 1 :
+        this.setState({
+          modalVisible: true
+        })
+      case 2 :
+        return;
+      case 3 :
+        return;
+    }
   }
 
+  sliderValue = 1
   render(){
     // console.log('Message.js rendered');
     ds = ds.cloneWithRows(this.state.list)
@@ -191,8 +206,8 @@ class CommentList extends Component {
                 style={[styles.toolbar, {backgroundColor: this.props.modeInfo.standardColor}]}
                 actions={toolbarActions}
                 onIconClicked={this.onNavClicked}
+                onActionSelected={this.onActionSelected}
               />
-              { this._renderHeader() }
               <ListView
                 refreshControl={
                   <RefreshControl
@@ -203,6 +218,7 @@ class CommentList extends Component {
                     progressBackgroundColor={this.props.modeInfo.backgroundColor}
                     />
                 }
+                ref={listView=>this.listView=listView}
                 pageSize = {60}
                 removeClippedSubviews={false}
                 enableEmptySections={true}
@@ -214,6 +230,53 @@ class CommentList extends Component {
                   this.listViewHeight = event.nativeEvent.layout.height
                 }}
                 />
+                { this.state.modalVisible && (
+                    <MyDialog modeInfo={this.props.modeInfo}
+                      modalVisible={this.state.modalVisible}
+                      onDismiss={() => { console.log(229); this.setState({ modalVisible:false }) }}
+                      onRequestClose={() => { console.log(230); this.setState({ modalVisible:false }) }}
+                      renderContent={() => (
+                        <View style={{
+                          justifyContent:'center',
+                          alignItems: 'center',
+                          backgroundColor: this.props.modeInfo.standardColor,
+                          paddingVertical: 30,
+                          paddingHorizontal: 40,
+                          elevation: 4,
+                          opacity: 1
+                        }} borderRadius={2}>
+                          <Text style={{alignSelf:'flex-start',fontSize: 18}}>选择页数: </Text>
+                            <View style={{flexDirection: 'row', alignItems: 'center', justifyContent:'space-between'}}>
+                              <Text>{this.state.currentPage}</Text>
+                              <Slider
+                                maximumValue={this.state.numPages}
+                                minimumValue={1}
+                                step={1}
+                                style={{
+                                  width: 200,
+                                  height: 50
+                                }}
+                                value={this.state.currentPage}
+                                onValueChange={(value) => {
+                                  this.sliderValue = value
+                                }}
+                              />
+                              <Text>{this.state.numPages}</Text>
+                            </View>
+                          <Text style={{alignSelf:'flex-end',color: this.props.modeInfo.titleTextColor }}
+                            onPress={() => {
+                            this.setState({
+                              modalVisible:false,
+                              isLoading: true
+                            }, () => {
+                              const currentPage = this.state.currentPage
+                              const targetPage = this.props.URL.split('=').slice(0, -1).concat(this.sliderValue).join('=')
+                              this.fetchMessages(targetPage, 'jump');                                
+                            })
+                          }}>确定</Text>
+                      </View>
+                    )}/>
+                )}
          </View>     
     )
   }
