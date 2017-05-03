@@ -224,10 +224,27 @@ export default function htmlToElement(rawHtml, opts, done) {
                 classStyle.marginBottom = 2
                 classStyle.backgroundColor = opts.modeInfo.brighterLevelOne
                 break;
-              default: 
-                // console.log(name)
-                break;
             }
+          }
+        } else if (node.type === 'tag') {
+          switch (node.name) {
+            case 'table':
+              classStyle.backgroundColor = '#eec'
+              break;
+            case 'tr':
+              classStyle.flexDirection = 'row'
+              classStyle.flexWrap = 'wrap'
+              classStyle.justifyContent = 'space-between'
+              classStyle.alignItems = 'stretch'
+              break;
+            case 'td':
+              classStyle.flex = index === 1 ? 2 : 1
+              classStyle.borderBottomWidth = classStyle.borderRightWidth = 1
+              classStyle.borderBottomColor = classStyle.borderRightColor = opts.modeInfo.backgroundColor
+              break;
+            default: 
+              console.log(node.name, node.children.length)
+              break;
           }
         }
 

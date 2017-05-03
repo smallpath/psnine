@@ -206,7 +206,9 @@ class CommunityTopic extends Component {
       if (rowData.isGettingMoreComment === false) {
         list.push(
           <View key={ rowData.id } style={{              
-                backgroundColor: this.props.modeInfo.backgroundColor
+                backgroundColor: this.props.modeInfo.backgroundColor,
+                borderBottomWidth: 1,
+                borderBottomColor: this.props.modeInfo.brighterLevelOne
             }}>
             <TouchableNativeFeedback  
               onPress ={()=>{
@@ -232,7 +234,7 @@ class CommunityTopic extends Component {
                   />
 
                   <View style={{ flex: 1.1, flexDirection: 'row', justifyContent :'space-between' }}>
-                    <Text selectable={false} style={{ flex: -1, color: this.props.modeInfo.standardTextColor ,textAlign : 'center', textAlignVertical: 'center' }}>{rowData.psnid}</Text>
+                    <Text selectable={false} style={{ flex: -1, color: idColor ,textAlign : 'center', textAlignVertical: 'center' }}>{rowData.psnid}</Text>
                     <Text selectable={false} style={{ flex: -1, color: this.props.modeInfo.standardTextColor,textAlign : 'center', textAlignVertical: 'center' }}>{rowData.date}</Text>
                   </View>
 

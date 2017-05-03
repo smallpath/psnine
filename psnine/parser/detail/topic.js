@@ -33,7 +33,7 @@ export default function (html) {
 
   const gameTable = []
 
-  all.find('table tr').each(function(i, elem) {
+  all.find('.list').find('table tr').each(function(i, elem) {
 
     const $this = $(this)
     const img = $this.find('img').attr('src')
