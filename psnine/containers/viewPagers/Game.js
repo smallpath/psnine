@@ -261,7 +261,7 @@ class Game extends Component {
           }
           key={this.props.modeInfo.isNightMode} 
           ref={listView=>this.listView=listView}
-          style={{backgroundColor: this.props.modeInfo.brighterLevelOne, flex:10}}
+          style={{backgroundColor: this.props.modeInfo.backgroundColor, flex:10}}
           pageSize = {32}
           initialListSize = {32}
           removeClippedSubviews={false}

@@ -228,7 +228,7 @@ class Battle extends Component {
           }
           key={this.props.modeInfo.isNightMode} 
           ref={listView=>this.listView=listView}
-          style={{backgroundColor: this.props.modeInfo.brighterLevelOne}}
+          style={{backgroundColor: this.props.modeInfo.backgroundColor}}
           pageSize = {32}
           removeClippedSubviews={false}
           enableEmptySections={true}

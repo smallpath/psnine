@@ -119,7 +119,7 @@ class Message extends Component {
     // console.log('Message.js rendered');
     return (
           <View 
-            style={{flex:1,backgroundColor:this.props.modeInfo.brighterLevelOne}}
+            style={{flex:1,backgroundColor:this.props.modeInfo.backgroundColor}}
             onStartShouldSetResponder={() => false}
             onMoveShouldSetResponder={() => false}
             >

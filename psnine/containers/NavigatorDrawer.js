@@ -455,7 +455,7 @@ class NavigatorDrawer extends Component {
           />
           <View>
             <View style={[styles.themeItem,{
-              padding: 6, paddingLeft: 10,backgroundColor: this.props.modeInfo.brighterLevelOne
+              padding: 6, paddingLeft: 10,backgroundColor: this.props.modeInfo.backgroundColor
             }]}>
               <Text style={[styles.themeName,{ fontSize:13 ,color: this.props.modeInfo.standardTextColor}]}>
                 {rowData}
@@ -473,7 +473,7 @@ class NavigatorDrawer extends Component {
            delayPressIn={0}
           >
           <View style={[styles.themeItem,{
-            backgroundColor: this.props.modeInfo.brighterLevelOne
+            backgroundColor: this.props.modeInfo.backgroundColor
           }]}>
             { icon }
             <Text style={[styles.themeName,{color: this.props.modeInfo.titleTextColor}]}>
@@ -497,7 +497,7 @@ class NavigatorDrawer extends Component {
           keyboardDismissMode="on-drag"
           keyboardShouldPersistTaps="always"
           renderHeader={this.renderHeader}
-          style={{flex:1, backgroundColor: this.props.modeInfo.brighterLevelOne}}
+          style={{flex:1, backgroundColor: this.props.modeInfo.backgroundColor}}
         />
       </View>
     );

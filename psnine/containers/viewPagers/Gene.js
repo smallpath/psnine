@@ -199,7 +199,7 @@ class Gene extends Component {
             />
         }
         key={this.props.modeInfo.isNightMode} 
-        style={{backgroundColor: this.props.modeInfo.brighterLevelOne}}
+        style={{backgroundColor: this.props.modeInfo.backgroundColor}}
         ref={listView=>this.listView=listView}
         pageSize = {32}
         removeClippedSubviews={false}

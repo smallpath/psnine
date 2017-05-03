@@ -268,7 +268,7 @@ export default function htmlToElement(rawHtml, opts, done) {
                   classStyle.elevation = 1
                   classStyle.marginTop = 2
                   classStyle.marginBottom = 2
-                  classStyle.backgroundColor = opts.modeInfo.brighterLevelOne
+                  classStyle.backgroundColor = opts.modeInfo.backgroundColor
                   break;
               }
             }

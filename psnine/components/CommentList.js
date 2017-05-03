@@ -73,8 +73,8 @@ class CommentList extends Component {
 
     return (
       <View key={ rowData.id } style={{     
-          marginTop: 7,         
-          backgroundColor: this.props.modeInfo.backgroundColor
+          borderBottomWidth: StyleSheet.hairlineWidth,      
+          borderBottomColor: this.props.modeInfo.brighterLevelOne
       }}>
       <TouchableNativeFeedback  
           onPress ={()=>{
@@ -194,7 +194,7 @@ class CommentList extends Component {
 
     return (
           <View 
-            style={{flex:1,backgroundColor:this.props.modeInfo.brighterLevelOne}}
+            style={{flex:1,backgroundColor:this.props.modeInfo.backgroundColor}}
             onStartShouldSetResponder={() => false}
             onMoveShouldSetResponder={() => false}
             >

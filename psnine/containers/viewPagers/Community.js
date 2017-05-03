@@ -197,7 +197,7 @@ class Community extends Component {
           }
           ref={listView=>this.listView=listView}
           key={this.props.modeInfo.isNightMode} 
-          style={{backgroundColor: this.props.modeInfo.brighterLevelOne}}
+          style={{backgroundColor: this.props.modeInfo.backgroundColor}}
           pageSize = {32}
           initialListSize = {32}
           removeClippedSubviews={false}

@@ -273,7 +273,7 @@ class Login extends Component {
         </TouchableNativeFeedback>
         </Animated.View>
 
-        <Animated.View style={[{ backgroundColor:this.props.modeInfo.brighterLevelOne,              
+        <Animated.View style={[{ backgroundColor:this.props.modeInfo.backgroundColor,              
               position: 'absolute',
               width: SCREEN_WIDTH-marginLeft*2,
               height: SCREEN_HEIGHT/10*6,
@@ -340,7 +340,7 @@ class Login extends Component {
                 onPress={this.login}
                 >
                 <View style={styles.submitButton}>
-                  <Text style={[styles.textInput, { color:this.props.modeInfo.brighterLevelOne }]}>提交</Text>
+                  <Text style={[styles.textInput, { color:this.props.modeInfo.backgroundColor }]}>提交</Text>
                 </View>
               </TouchableNativeFeedback>
             </View>

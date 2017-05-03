@@ -234,7 +234,7 @@ class CommunityTopic extends Component {
         list.push(
           <View key={ rowData.id } style={{              
                 backgroundColor: this.props.modeInfo.backgroundColor,
-                borderBottomWidth: 1,
+                borderBottomWidth: StyleSheet.hairlineWidth,
                 borderBottomColor: this.props.modeInfo.brighterLevelOne
             }}>
             <TouchableNativeFeedback  

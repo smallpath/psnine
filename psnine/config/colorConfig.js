@@ -3,7 +3,7 @@ let config =  {
     standardColor: '#03a9f4',   //500
     tintColor: '#e1f5fe',
     backgroundColor: '#fff',
-    backgroundColorBrighterLevelOne: '#fff',
+    backgroundColorBrighterLevelOne: '#ddd',
     standardTextColor: '#757575',
     titleTextColor: '#202020',
 
