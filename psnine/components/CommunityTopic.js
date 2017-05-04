@@ -368,7 +368,8 @@ class CommunityTopic extends Component {
       </View>
     )
   }
-
+  viewTopIndex = 0
+  viewBottomIndex = 0
   render() {
     // console.log('CommunityTopic.js rendered');
     const { data: source } = this.state 
@@ -394,9 +395,10 @@ class CommunityTopic extends Component {
     if (shouldPushData && this.hasComment) {
       data.push(source.commentList)
       renderFuncArr.push(this.renderComment)
+
     }
 
-    this.maxIndex = data.length - 1
+    this.viewBottomIndex = Math.max(data.length - 1, 0)
 
     return ( 
           <View 
@@ -429,7 +431,7 @@ class CommunityTopic extends Component {
                     size={50}
                   />
               )}
-              { !this.state.isLoading && this.renderToolbar() }
+              { this.props.type === 'community' && !this.state.isLoading && this.renderToolbar() }
               { !this.state.isLoading && <FlatList style={{
                 flex: -1,
                 backgroundColor: this.props.modeInfo.standardColor
@@ -455,128 +457,70 @@ class CommunityTopic extends Component {
     );
   }
 
+
+  renderToolbarItem = (props, index, maxLength) => (
+    <Animated.View 
+        ref={float => this[`float${index}`] = float}
+        collapsable ={false}
+        key={index}
+        style={{
+          width: 40,
+          height: 40,
+          borderRadius: 20,
+          backgroundColor: this.props.modeInfo.accentColor,
+          position:'absolute',
+          bottom: props.openVal.interpolate({inputRange: [0, 1], outputRange: [24,  56 + 10 + 16 * 2 + index * 50]}),
+          right: 24,
+          elevation: 1,
+          zIndex: 1,
+          opacity: 1
+      }}>
+      <TouchableNativeFeedback 
+        onPress={() => this.pressToolbar(maxLength - index - 1)}
+        background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
+        onPressIn={()=>{
+          this.float1.setNativeProps({
+            style :{
+            elevation: 12,
+          }});
+        }}
+        onPressOut={()=>{
+          this.float1.setNativeProps({
+            style :{
+            elevation: 6,
+          }});
+        }}
+        style={{
+          width: 40,
+          height: 40,
+          borderRadius: 20,
+          flex:1,
+          zIndex: 1,
+          backgroundColor: accentColor,
+        }}>
+        <View style={{borderRadius: 20,width: 40,height: 40,justifyContent: 'center',alignItems: 'center',}}>
+          <Ionicons name={props.iconName} size={20} color='#fff'/>
+        </View>
+      </TouchableNativeFeedback>
+    </Animated.View>
+  )
+
   renderToolbar = () => {
     const { openVal } = this.state
     const tipHeight =  toolbarHeight * 0.8
+    const list = []
+    const iconNameArr = ["md-arrow-down", "md-arrow-up"]
+    for (let i=0; i<iconNameArr.length; i++) {
+      list.push(
+        this.renderToolbarItem({
+          iconName: iconNameArr[i],
+          openVal: openVal
+        }, i, iconNameArr.length)
+      )
+    }
     return (
       <View style={{position: 'absolute', left:0, top:0, width:SCREEN_WIDTH, height:SCREEN_HEIGHT - toolbarHeight / 2}}>
-        <TouchableWithoutFeedback onPress={this.closeMask}>
-          <Animated.View 
-              ref={mask=>this.mask=mask}
-              collapsable ={false}
-              style={{
-                opacity: openVal.interpolate({
-                  inputRange: [0, 1],
-                  outputRange: [1, 1]
-                }),
-                width:openVal.interpolate({inputRange: [0, 1], outputRange: [0, SCREEN_WIDTH]}),
-                height:openVal.interpolate({inputRange: [0, 1], outputRange: [0, SCREEN_HEIGHT]}),
-                position:'absolute',
-                zIndex: 1
-            }}/>
-        </TouchableWithoutFeedback>
-        <Animated.View 
-            ref={float=>this.float1=float}
-            collapsable ={false}
-            style={{
-              opacity: openVal.interpolate({
-                inputRange: [0, 1],
-                outputRange: [1, 1]
-              }),
-              width: 40,
-              height: 40,
-              borderRadius: 20,
-              backgroundColor: accentColor,
-              position:'absolute',
-              bottom: Animated.add(
-                openVal.interpolate({inputRange: [0, 1], outputRange: [24,  56 + 10 + 16 * 2]}),
-                this.props.tipBarMarginBottom.interpolate({
-                  inputRange: [0, 1], 
-                  outputRange: [0 , tipHeight]
-                })
-              ),
-              right: 24,
-              elevation: 1,
-              zIndex: 1,
-              opacity: 1
-          }}>
-          <TouchableNativeFeedback 
-            onPress={() => this.pressToolbar('down')}
-            background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
-            onPressIn={()=>{
-              this.float1.setNativeProps({
-                style :{
-                elevation: 12,
-              }});
-            }}
-            onPressOut={()=>{
-              this.float1.setNativeProps({
-                style :{
-                elevation: 6,
-              }});
-            }}
-            style={{
-              width: 40,
-              height: 40,
-              borderRadius: 20,
-              flex:1,
-              zIndex: 1,
-              backgroundColor: accentColor,
-            }}>
-            <View style={{borderRadius: 20,width: 40,height: 40,justifyContent: 'center',alignItems: 'center',}}>
-              <Ionicons name="md-arrow-down" size={20} color='#fff'/>
-            </View>
-          </TouchableNativeFeedback>
-        </Animated.View>
-        <Animated.View 
-            ref={float=>this.float2=float}
-            collapsable ={false}
-            style={{
-              width: 40,
-              height: 40,
-              borderRadius: 20,
-              backgroundColor: accentColor,
-              position:'absolute',
-              bottom: Animated.add(
-                openVal.interpolate({inputRange: [0, 1], outputRange: [24,  56 + 10 + 16 * 2  + 50]}),
-                this.props.tipBarMarginBottom.interpolate({
-                  inputRange: [0, 1], 
-                  outputRange: [0 , tipHeight]
-                })
-              ),
-              right: 24,
-              elevation: 1,
-              zIndex: 1,
-              opacity: 1
-          }}>
-            <TouchableNativeFeedback 
-              onPress={() => this.pressToolbar('up')}
-              background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
-              onPressIn={()=>{
-                this.float2.setNativeProps({
-                  style :{
-                  elevation: 12,
-                }});
-              }}
-              onPressOut={()=>{
-                this.float2.setNativeProps({
-                  style :{
-                  elevation: 6,
-                }});
-              }}
-              style={{
-                width: 40,
-                height: 40,
-                borderRadius: 20,
-                flex:1,
-                zIndex: 1,
-                backgroundColor: accentColor,
-              }}>
-              <View style={{borderRadius: 20,width: 40,height: 40,justifyContent: 'center',alignItems: 'center',}}>
-                <Ionicons name="md-arrow-up" size={20} color='#fff'/>
-              </View>
-            </TouchableNativeFeedback>
-        </Animated.View>
+        { list }
         <Animated.View 
             ref={float=>this.float=float}
             collapsable ={false}
@@ -586,18 +530,12 @@ class CommunityTopic extends Component {
               borderRadius: 30,
               backgroundColor: accentColor,
               position:'absolute',
-              bottom: this.props.tipBarMarginBottom.interpolate({
-                inputRange: [0, 1], 
-                outputRange: [16 , 16 + tipHeight]
-              }),
+              bottom: 16,
               right: 16,
               elevation: 6 ,
               zIndex: 1,
               opacity: this.state.opacity,
-
               transform: [{
-                scale: this.state.scale,                        
-              },{
                 rotateZ: this.state.rotation.interpolate({
                   inputRange: [0, 1],
                   outputRange: ['0deg', '360deg']
@@ -608,13 +546,13 @@ class CommunityTopic extends Component {
             onPress={this.pressNew}
             background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
             onPressIn={()=>{
-              this.float.setNativeProps({
+              this[`float${index}`].setNativeProps({
                 style :{
                 elevation: 12,
               }});
             }}
             onPressOut={()=>{
-              this.float.setNativeProps({
+              this[`float${index}`].setNativeProps({
                 style :{
                 elevation: 6,
               }});
@@ -638,14 +576,9 @@ class CommunityTopic extends Component {
 
   index = 0
 
-  pressToolbar = type => {
-    if (type === 'up') {
-      if (this.index === 0) return
-      this.flatlist && this.flatlist.scrollToIndex({animated: true, viewPosition: 0, index: --this.index})
-    } else {
-      if (this.index === this.maxIndex) return
-      this.flatlist && this.flatlist.scrollToIndex({animated: true, viewPosition: 0, index: ++this.index})
-    }
+  pressToolbar = index => {
+    const target = index === 0 ? this.viewTopIndex : this.viewBottomIndex
+    this.flatlist && this.flatlist.scrollToIndex({animated: true, viewPosition: 0, index: target})
   }
 
   _animateToolbar = (value, cb) => {
@@ -664,24 +597,11 @@ class CommunityTopic extends Component {
   }  
 
   pressNew = (cb) => {
-    const { navigator: _navigator } = this.props;
-
     if (this.state.openVal._value === 0) {
-      this.removeListener = BackAndroid.addEventListener('hardwareBackPress',  () => {
-        this.removeListener && this.removeListener.remove  && this.removeListener.remove();
-        this._animateToolbar(0)
-        return true;
-      });
       this._animateToolbar(1, cb)
     } else {
-      this.removeListener && this.removeListener.remove  && this.removeListener.remove();
       this._animateToolbar(0, cb)
     }
-  }
-
-  closeMask = () => {
-    this.removeListener && this.removeListener.remove  && this.removeListener.remove();
-    this._animateToolbar(0)
   }
 }
 

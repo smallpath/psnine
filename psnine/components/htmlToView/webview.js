@@ -24,7 +24,7 @@ let toolbarActions = [
 ];
 let title = "TOPIC";
 
-class HtmlView extends Component {
+export default class HtmlView extends Component {
   constructor(props) {
     super(props)
     let height = this.props.style.height || '100%'
@@ -164,5 +164,3 @@ HtmlView.defaultProps = {
   onError: console.error.bind(console),
   defaultTextColor:'#000',
 }
-
-export default HtmlView

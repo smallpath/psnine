@@ -20,7 +20,7 @@ const baseStyle = {
   backgroundColor: 'transparent'
 }
 
-class ResizableImage extends Component {
+export default class ResizableImage extends Component {
   constructor(props) {
     super(props)
     const maxWidth = width - this.props.source.imagePaddingOffset
@@ -104,5 +104,3 @@ class ResizableImage extends Component {
     )
   }
 }
-
-module.exports = ResizableImage

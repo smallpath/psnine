@@ -369,7 +369,7 @@ class SegmentedView extends Component {
                 <ViewPagerAndroid style={{
                     height: viewPagerHeight,
                     flexDirection: 'row',
-                    backgroundColor: '#FAFAFA',
+                    backgroundColor: this.props.modeInfo.backgroundColor,
                     alignItems: 'center',
                     paddingHorizontal: 2,
                     paddingVertical: 8
