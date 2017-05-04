@@ -298,12 +298,14 @@ class CommunityTopic extends Component {
         )
       }
     }
+    const shouldMarginTop = !this.hasContent && !this.hasGameTable && !this.hasPage
     return (
-      <View>
+      <View style={{ marginTop: shouldMarginTop ? 5 : 0 }}>
         { readMore &&<View style={{elevation: 1, margin: 5, marginTop: 0, marginBottom: 5, backgroundColor:this.props.modeInfo.backgroundColor }}>{ readMore }</View> } 
         <View style={{elevation: 1, margin: 5, marginTop: 0, backgroundColor:this.props.modeInfo.backgroundColor }}>
           { list }
         </View>
+        { readMore &&<View style={{elevation: 1, margin: 5, marginTop: 0, marginBottom: 5, backgroundColor:this.props.modeInfo.backgroundColor }}>{ readMore }</View> }
       </View>
     )
   }
@@ -318,7 +320,7 @@ class CommunityTopic extends Component {
   }
 
   hasPage = false
-  renderPage(page) {
+  renderPage = (page) => {
     const list = [] 
     for (const item of page) {
       const thisJSX = (
