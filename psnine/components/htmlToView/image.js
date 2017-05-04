@@ -24,6 +24,7 @@ class ResizableImage extends Component {
   constructor(props) {
     super(props)
     const maxWidth = width - this.props.source.imagePaddingOffset
+    this.maxWidth = maxWidth
     this.state = {
       width: this.props.style.width || maxWidth,
       height: this.props.style.height || (maxWidth / 16 * 9),
@@ -52,15 +53,7 @@ class ResizableImage extends Component {
           isLoading: false
         })
       }
-    }, (err) => {
-      if (this.mounted !== false) {
-        this.setState({
-          width: 0, 
-          height: 0,
-          isLoading: false
-        })
-      }
-    })
+    }, () => {})
   }
 
   render() {
@@ -102,7 +95,7 @@ class ResizableImage extends Component {
           { !this.state.isLoading &&                 
             <Image
               resizeMode={'contain'}
-              onError={(e) => console.log(e)}
+              onError={(e) => {}}
               key={`${source.width}:${source.height}`}
               source={source} />
           }
