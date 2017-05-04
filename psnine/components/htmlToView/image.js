@@ -32,8 +32,12 @@ class ResizableImage extends Component {
     }
   }
 
+  componentWillUnmount() {
+    this.mounted = false;
+  }
 
   componentDidMount = () => {
+    this.mounted = true
     if (this.props.style.width || this.props.style.height) {
       this.setState({
         isLoading: false
@@ -41,17 +45,21 @@ class ResizableImage extends Component {
       return 
     }
     Image.getSize(this.props.source.uri, (w, h) => {
-      this.setState({
-        width: w, 
-        height: h,
-        isLoading: false
-      })
+      if (this.mounted !== false) {
+        this.setState({
+          width: w, 
+          height: h,
+          isLoading: false
+        })
+      }
     }, (err) => {
-      this.setState({
-        width: 0, 
-        height: 0,
-        isLoading: false
-      })
+      if (this.mounted !== false) {
+        this.setState({
+          width: 0, 
+          height: 0,
+          isLoading: false
+        })
+      }
     })
   }
 
