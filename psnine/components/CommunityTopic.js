@@ -34,6 +34,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import { standardColor, nodeColor, idColor, accentColor  } from '../config/colorConfig';
 
 import { getTopicAPI, getTopicContentAPI } from '../dao/dao'
+import ImageViewer from './imageViewer'
 
 let screen = Dimensions.get('window');
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = screen;
@@ -102,6 +103,15 @@ class CommunityTopic extends Component {
     });
   }
 
+  handleImageOnclick = (url) => this.props.navigator.push({
+    component: ImageViewer,
+    params: {
+      images: [
+        { url }
+      ]
+    }
+  })
+
   renderHeader = (titleInfo) => {
     const nodeStyle = { flex: -1, color: this.props.modeInfo.standardTextColor,textAlign : 'center', textAlignVertical: 'center' }
     const textStyle = { flex: -1, color: this.props.modeInfo.standardTextColor,textAlign : 'center', textAlignVertical: 'center' }
@@ -133,7 +143,7 @@ class CommunityTopic extends Component {
                 value={titleInfo.title}
                 modeInfo={ this.props.modeInfo }
                 stylesheet={styles}
-                onLinkPress={(url) => console.log('clicked link: ', url)}
+                onLinkPress={this.handleImageOnclick}
                 imagePaddingOffset={shouldRenderAvatar ? 30 + 75 + 10 : 30}
               />
 
@@ -166,7 +176,7 @@ class CommunityTopic extends Component {
           shouldShowLoadingIndicator={true}
           stylesheet={styles}
           imagePaddingOffset={30}
-          onLinkPress={(url) => console.log('clicked link: ', url)}
+          onLinkPress={this.handleImageOnclick}
         />
       </View>
     )
@@ -256,7 +266,7 @@ class CommunityTopic extends Component {
                     value={rowData.content}
                     modeInfo={ this.props.modeInfo }
                     stylesheet={styles}
-                    onLinkPress={(url) => console.log('clicked link: ', url)}
+                    onLinkPress={this.handleImageOnclick}
                     imagePaddingOffset={30 + 75 + 10}
                   />
 

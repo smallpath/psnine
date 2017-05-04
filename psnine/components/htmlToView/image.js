@@ -12,11 +12,11 @@ import {
 
 import { standardColor, nodeColor, idColor, accentColor  } from '../../config/colorConfig';
 
-var { width } = Dimensions.get('window')
+const { width } = Dimensions.get('window')
 
-var pixelRate = PixelRatio.get()
+const pixelRate = PixelRatio.get()
 
-var baseStyle = {
+const baseStyle = {
   backgroundColor: 'transparent'
 }
 
@@ -77,7 +77,7 @@ class ResizableImage extends Component {
     const alignSelf = this.state.alignCenter ? { alignContent: 'center' } : {}
 
     return (
-      <TouchableNativeFeedback onPress={this.props.linkPressHandler} style={[{justifyContent:'center',alignItems:'center'}, alignSelf]}>
+      <TouchableNativeFeedback onLongPress={this.props.linkPressHandler} style={[{justifyContent:'center',alignItems:'center'}, alignSelf]}>
         <View style={{width: source.width, height: source.height}}>
           {
             this.state.isLoading &&           

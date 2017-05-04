@@ -27,6 +27,7 @@ import { standardColor, nodeColor, idColor  } from '../config/colorConfig';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { getTopicCommentAPI } from '../dao/dao';
 import moment from '../utils/moment';
+import ImageViewer from './imageViewer'
 
 const ds = new ListView.DataSource({
   rowHasChanged: (row1, row2) => row1.id !== row2.id,
@@ -96,7 +97,14 @@ class CommentList extends Component {
               value={rowData.content}
               modeInfo={ this.props.modeInfo }
               stylesheet={styles}
-              onLinkPress={(url) => console.log('clicked link: ', url)}
+              onLinkPress={(url) => this.props.navigator.push({
+                component: ImageViewer,
+                params: {
+                  images: [
+                    { url }
+                  ]
+                }
+              })}
               imagePaddingOffset={30}
               />
 
