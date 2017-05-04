@@ -47,7 +47,8 @@ class CommentList extends Component {
         commentTotal: 1, 
         currentPage: 1,
         isLoading: true,
-        modalVisible: false
+        modalVisible: false,
+        sliderValue: 1
       }
     }
 
@@ -234,44 +235,52 @@ class CommentList extends Component {
                 { this.state.modalVisible && (
                     <MyDialog modeInfo={this.props.modeInfo}
                       modalVisible={this.state.modalVisible}
-                      onDismiss={() => { console.log(229); this.setState({ modalVisible:false }) }}
-                      onRequestClose={() => { console.log(230); this.setState({ modalVisible:false }) }}
+                      onDismiss={() => { this.setState({ modalVisible:false }); this.isValueChanged = false }}
+                      onRequestClose={() => { this.setState({ modalVisible:false }); this.this.isValueChanged = false }}
                       renderContent={() => (
                         <View style={{
                           justifyContent:'center',
                           alignItems: 'center',
-                          backgroundColor: this.props.modeInfo.standardColor,
+                          backgroundColor: this.props.modeInfo.backgroundColor,
                           paddingVertical: 30,
                           paddingHorizontal: 40,
                           elevation: 4,
                           opacity: 1
                         }} borderRadius={2}>
-                          <Text style={{alignSelf:'flex-start',fontSize: 18}}>选择页数: </Text>
+                          <Text style={{alignSelf:'flex-start',fontSize: 18}}>选择页数: {
+                              this.isValueChanged ? this.state.sliderValue : this.state.currentPage
+                            }</Text>
                             <View style={{flexDirection: 'row', alignItems: 'center', justifyContent:'space-between'}}>
                               <Text>{this.state.currentPage}</Text>
                               <Slider
                                 maximumValue={this.state.numPages}
                                 minimumValue={1}
+                                maximumTrackTintColor={this.props.modeInfo.accentColor}
+                                minimumTrackTintColor={this.props.modeInfo.standardTextColor}
+                                thumbTintColor={this.props.modeInfo.accentColor}
                                 step={1}
                                 style={{
-                                  width: 200,
+                                  paddingHorizontal: 90,
                                   height: 50
                                 }}
                                 value={this.state.currentPage}
                                 onValueChange={(value) => {
-                                  this.sliderValue = value
+                                  this.isValueChanged = true
+                                  this.setState({
+                                    sliderValue: value
+                                  })
                                 }}
                               />
                               <Text>{this.state.numPages}</Text>
                             </View>
-                          <Text style={{alignSelf:'flex-end',color: this.props.modeInfo.titleTextColor }}
+                          <Text style={{alignSelf:'flex-end',color: '#009688' }}
                             onPress={() => {
                             this.setState({
                               modalVisible:false,
                               isLoading: true
                             }, () => {
                               const currentPage = this.state.currentPage
-                              const targetPage = this.props.URL.split('=').slice(0, -1).concat(this.sliderValue).join('=')
+                              const targetPage = this.props.URL.split('=').slice(0, -1).concat(this.state.sliderValue).join('=')
                               this.fetchMessages(targetPage, 'jump');                                
                             })
                           }}>确定</Text>
