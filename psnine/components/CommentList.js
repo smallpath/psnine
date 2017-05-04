@@ -206,6 +206,7 @@ class CommentList extends Component {
                 iconColor={this.props.modeInfo.isNightMode ? '#000' : '#fff'}
                 title={'所有评论'}
                 style={[styles.toolbar, {backgroundColor: this.props.modeInfo.standardColor}]}
+                titleColor={this.props.modeInfo.isNightMode ? '#000' : '#fff'}
                 actions={toolbarActions}
                 onIconClicked={this.onNavClicked}
                 onActionSelected={this.onActionSelected}
@@ -236,7 +237,7 @@ class CommentList extends Component {
                     <MyDialog modeInfo={this.props.modeInfo}
                       modalVisible={this.state.modalVisible}
                       onDismiss={() => { this.setState({ modalVisible:false }); this.isValueChanged = false }}
-                      onRequestClose={() => { this.setState({ modalVisible:false }); this.this.isValueChanged = false }}
+                      onRequestClose={() => { this.setState({ modalVisible:false }); this.isValueChanged = false }}
                       renderContent={() => (
                         <View style={{
                           justifyContent:'center',

@@ -34,7 +34,13 @@ const Img = props => {
     imagePaddingOffset: props.imagePaddingOffset
   };
   return (
-    <AutoSizedImage source={source} style={imgStyle} isLoading={props.isLoading} alignCenter={props.alignCenter} linkPressHandler={props.linkPressHandler} />
+    <AutoSizedImage 
+      source={source}
+      style={imgStyle}
+      isLoading={props.isLoading}
+      alignCenter={props.alignCenter}
+      modeInfo={props.modeInfo}
+      linkPressHandler={props.linkPressHandler}/>
   );
 };
 
@@ -50,7 +56,13 @@ const Web = props => {
   const value = `<html><head></head><body><${props.name} ` + Object.keys(props.attribs).map(name => `${name}="${props.attribs[name]}"`).join(' ') + '/></body></html>'
 
   return (
-    <AutoSizedWebview value={value} style={imgStyle} imagePaddingOffset={props.imagePaddingOffset} url={props.attribs.src} />
+    <AutoSizedWebview
+      value={value}
+      style={imgStyle}
+      imagePaddingOffset={props.imagePaddingOffset}
+      url={props.attribs.src}
+      modeInfo={props.modeInfo}
+      />
   );
 };
 
@@ -194,11 +206,12 @@ export default function htmlToElement(rawHtml, opts, done) {
                     isLoading={opts.shouldShowLoadingIndicator}
                     linkPressHandler={linkPressHandler}
                     alignCenter={opts.alignCenter}
+                    modeInfo={opts.modeInfo}
                     imagePaddingOffset={opts.imagePaddingOffset} />
           );
         } else if (node.name === 'embed' || node.name === 'iframe') {
           return (
-            <Web key={index} attribs={node.attribs} imagePaddingOffset={opts.imagePaddingOffset} name={node.name}/>
+            <Web key={index} attribs={node.attribs} imagePaddingOffset={opts.imagePaddingOffset} modeInfo={opts.modeInfo} name={node.name}/>
           )
         }
 

@@ -399,6 +399,7 @@ class CommunityTopic extends Component {
                 overflowIconName="md-more"                 
                 iconColor={this.props.modeInfo.isNightMode ? '#000' : '#fff'}
                 title={`No.${this.props.rowData.id}`}
+                titleColor={this.props.modeInfo.isNightMode ? '#000' : '#fff'}
                 style={[styles.toolbar, {backgroundColor: this.props.modeInfo.standardColor}]}
                 actions={toolbarActions}
                 onIconClicked={() => {
