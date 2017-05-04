@@ -74,10 +74,7 @@ class Gene extends Component {
     let imageArr = rowData.thumbs;
     let type = rowData.type;
 
-    imageArr.length >3 && imageArr.splice(3);
-
-    let imageItems = [];
-    imageArr.forEach((value,index)=>imageItems.push(<Image key={rowData.id+''+index} source={{ uri: value }} style={styles.geneImage}/>));
+    const imageItems = imageArr.map((value,index)=>(<Image key={rowData.id+''+index} source={{ uri: value }} style={styles.geneImage}/>));
 
     return (
       <View rowID={ rowID } style={{              
@@ -103,7 +100,7 @@ class Gene extends Component {
                 style={{ flex: -1,color: this.props.modeInfo.titleTextColor, }}>
                 {rowData.content}
               </Text>
-              <View style={{flex:-1, flexDirection: 'row', marginTop: 5, marginBottom: 5 }}>
+              <View style={{flex:-1, flexDirection: 'row', flexWrap: 'wrap', marginTop: 5, marginBottom: 5 }}>
                 {imageItems}
               </View>
               <View style={{ flex: 1, flexDirection: 'row', justifyContent :'space-between',  }}>
@@ -231,7 +228,7 @@ const styles = StyleSheet.create({
   geneImage: {
     margin: 3,
     width: 100,
-    height: 100,
+    height: 100
   }
 });
 
