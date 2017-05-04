@@ -130,7 +130,9 @@ export default function htmlToElement(rawHtml, opts, done) {
         if (nextNode.type === 'text'){
           domTemp[thisIndex] = true;
           return (
-            <Text style={ opts.styles['span'] } onPress={()=>null}>
+            <Text style={ [opts.styles['span'], {
+              color: opts.modeInfo.standardTextColor
+            }] } onPress={()=>null}>
               { entities.decodeHTML(nextNode.data) }
               { renderInlineNode(thisIndex)}
             </Text>
