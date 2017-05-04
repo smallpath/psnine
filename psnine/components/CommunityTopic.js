@@ -33,8 +33,9 @@ import { connect } from 'react-redux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { standardColor, nodeColor, idColor, accentColor  } from '../config/colorConfig';
 
-import { getTopicAPI, getTopicContentAPI } from '../dao/dao'
+import { getTopicAPI, getTopicContentAPI, getTopiCommentSnapshotAPI } from '../dao/dao'
 import ImageViewer from './imageViewer'
+import Reply from './new/Reply'
 
 let screen = Dimensions.get('window');
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = screen;
@@ -69,12 +70,40 @@ class CommunityTopic extends Component {
     }
   }
 
+  _refreshComment = () => {
+    if (this.state.isLoading === true) {
+      return
+    }
+    this.setState({
+      isLoading: true
+    })
+    getTopiCommentSnapshotAPI(this.props.URL).then(data => {
+      this.setState({
+        isLoading: false,
+        commentList: data.commentList
+      })
+    })
+  }
+
   _onActionSelected = (index) => {
     switch(index){
       case 0 :
+        this._animateToolbar(0, () => {
+          this.props.navigator.push({
+            component: Reply,
+            withoutAnimation: true,
+            shouldForbidPressNew: true,
+            params: {
+              type: this.props.type,
+              id: this.props.rowData.id,
+              callback: this._refreshComment
+            }
+          })
+        }, true)
         return;
       case 1 :
-        // return this.refs[WEBVIEW_REF].reload();
+        this._refreshComment()
+        return
       case 2 :
         return;
       case 3 :
@@ -97,6 +126,7 @@ class CommunityTopic extends Component {
         this.setState({
           data,
           mainContent: html,
+          commentList: data.commentList,
           isLoading: false
         })
       })
@@ -393,7 +423,7 @@ class CommunityTopic extends Component {
       renderFuncArr.push(this.renderGameTable)
     }
     if (shouldPushData && this.hasComment) {
-      data.push(source.commentList)
+      data.push(this.state.commentList)
       renderFuncArr.push(this.renderComment)
 
     }
@@ -546,13 +576,13 @@ class CommunityTopic extends Component {
             onPress={this.pressNew}
             background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
             onPressIn={()=>{
-              this[`float${index}`].setNativeProps({
+              this.float.setNativeProps({
                 style :{
                 elevation: 12,
               }});
             }}
             onPressOut={()=>{
-              this[`float${index}`].setNativeProps({
+              this.float.setNativeProps({
                 style :{
                 elevation: 6,
               }});
@@ -584,7 +614,7 @@ class CommunityTopic extends Component {
   _animateToolbar = (value, cb) => {
     const ratationPreValue = this.state.rotation._value
 
-    const rotationValue = value === 0 ? ratationPreValue - 3/8 : ratationPreValue + 3/8
+    const rotationValue = value === 0 ? 0 : ratationPreValue + 3/8
     const scaleAnimation = Animated.timing(this.state.rotation, {toValue: rotationValue, ...config})
     const moveAnimation = Animated.timing(this.state.openVal, {toValue: value, ...config})
     const target = [
@@ -593,7 +623,10 @@ class CommunityTopic extends Component {
     if (value !== 0 || value !== 1) target.unshift(scaleAnimation)
 
     const type = value === 1 ? 'sequence' : 'parallel'
-    Animated[type](target).start(() => typeof cb === 'function' && cb())
+    Animated[type](target).start()
+    setTimeout(() => {
+      typeof cb === 'function' && cb()
+    }, 200)
   }  
 
   pressNew = (cb) => {

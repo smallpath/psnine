@@ -345,7 +345,7 @@ class Toolbar extends Component {
 
     const { segmentedIndex } = this.props.app;
 
-    if (indexWithFloatButton.includes(segmentedIndex)) {
+    if (indexWithoutFloatButton.includes(segmentedIndex)) {
       return;
     }
 

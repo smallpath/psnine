@@ -61,6 +61,7 @@ class Qa extends Component {
     if (navigator) {
       navigator.push({
         component: CommunityTopic,
+        shouldBeClickableUnderOtherRoutes: true,
         params: {
           URL,
           title: rowData.title,
