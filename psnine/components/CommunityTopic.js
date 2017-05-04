@@ -338,7 +338,9 @@ class CommunityTopic extends Component {
               })
             })
           }}>
-          <Text style={{color: idColor}}>{item.text}</Text>
+          <View style={{flex: -1, padding: 2}}>
+            <Text style={{color: idColor}}>{item.text}</Text>
+          </View>
         </TouchableNativeFeedback>
       )
       list.push(thisJSX)
@@ -362,24 +364,24 @@ class CommunityTopic extends Component {
     const { data: source } = this.state 
     const data = []
     const renderFuncArr = []
-    const isLoading = !this.state.isLoading
-    if (isLoading) {
+    const shouldPushData = !this.state.isLoading
+    if (shouldPushData) {
       data.push(source.titleInfo)
       renderFuncArr.push(this.renderHeader)
     }
-    if (isLoading && this.hasPage) {
+    if (shouldPushData && this.hasPage) {
       data.push(source.contentInfo.page)
       renderFuncArr.push(this.renderPage)
     }
-    if (isLoading && this.hasContent) {
+    if (shouldPushData && this.hasContent) {
       data.push(this.state.mainContent)
       renderFuncArr.push(this.renderContent)
     }
-    if (isLoading && this.hasGameTable) {
+    if (shouldPushData && this.hasGameTable) {
       data.push(source.contentInfo.gameTable)
       renderFuncArr.push(this.renderGameTable)
     }
-    if (isLoading && this.hasComment) {
+    if (shouldPushData && this.hasComment) {
       data.push(source.commentList)
       renderFuncArr.push(this.renderComment)
     }
@@ -413,10 +415,10 @@ class CommunityTopic extends Component {
                       alignItems: 'center'
                     }}
                     color={accentColor}
-                    size="large"
+                    size={50}
                   />
               )}
-              { this.renderToolbar() }
+              { !this.state.isLoading && this.renderToolbar() }
               { !this.state.isLoading && <FlatList style={{
                 flex: -1,
                 backgroundColor: this.props.modeInfo.standardColor

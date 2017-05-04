@@ -3,7 +3,8 @@ import {
   Text,
   View,
   TouchableNativeFeedback,
-  Dimensions
+  Dimensions,
+  StyleSheet
 } from 'react-native';
 import htmlparser from 'htmlparser2-without-node-native';
 import entities from 'entities';
@@ -90,6 +91,10 @@ export default function htmlToElement(rawHtml, opts, done) {
           if (!style) continue
           const splited = style.split(':')
           if (splited.length !== 2) continue
+          splited[0] = splited[0].replace(/\-([a-z])/,(matched) => matched[1].toUpperCase())
+          if (splited[1].includes('px')) {
+            splited[1] = parseInt(splited[1])
+          }
           styleObj[splited[0]] = splited[1]
         }
         renderInlineStyle(parent.parent, styleObj)
@@ -294,11 +299,18 @@ export default function htmlToElement(rawHtml, opts, done) {
               break;
           }
         }
+
+        const flattenStyles = StyleSheet.flatten([
+          parent ? opts.styles[parent.name] : null,
+          classStyle
+        ])
+
+        if (flattenStyles.fontSize) delete flattenStyles.fontSize
+        if (flattenStyles.fontFamily) delete flattenStyles.fontFamily
+        if (flattenStyles.fontWeight) delete flattenStyles.fontWeight
+
         return (
-          <View key={index} onPress={linkPressHandler}  style={[
-              parent ? opts.styles[parent.name] : null,
-              classStyle
-            ]}>
+          <View key={index} onPress={linkPressHandler}  style={flattenStyles}>
             {domToElement(node.children, node)}
             {shouldSetLineAfter && linebreakAfter && <Text key={index} onPress={linkPressHandler} style={parent ? opts.styles[parent.name] : null}>{linebreakAfter}</Text>}
           </View>
