@@ -49,7 +49,7 @@ let WEBVIEW_REF = `WEBVIEW_REF`;
 
 let toolbarHeight = 56;
 let releasedMarginTop = 0;
-let config = {tension: 30, friction: 7, ease: Easing.ease, duration: 200};
+let config = {tension: 30, friction: 7, ease: Easing.in(Easing.ease(1,0,1,1)), duration: 200};
 const timeout = 190
 const delay = 50
 
@@ -643,14 +643,13 @@ class CommunityTopic extends Component {
     const rotationValue = value === 0 ? ratationPreValue - 3/8 : ratationPreValue + 3/8
     const scaleAnimation = Animated.timing(this.state.rotation, {toValue: rotationValue, ...config})
     const moveAnimation = Animated.timing(this.state.openVal, {toValue: value, ...config})
-    const delayAnimation = Animated.delay(delay)
     const target = [
       moveAnimation
     ]
-    if (value === 1) target.unshift(delayAnimation)
     if (value !== 0 || value !== 1) target.unshift(scaleAnimation)
 
-    Animated.parallel(target).start(() => typeof cb === 'function' && cb())
+    const type = value === 1 ? 'sequence' : 'parallel'
+    Animated[type](target).start(() => typeof cb === 'function' && cb())
   }  
 
   pressNew = (cb) => {
