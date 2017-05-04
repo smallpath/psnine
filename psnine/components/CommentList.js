@@ -123,26 +123,26 @@ class CommentList extends Component {
       InteractionManager.runAfterInteractions(() => {
         getTopicCommentAPI(url).then(data => {
           let thisList = []
+          const thisPage = parseInt(url.match(/\?page=(\d+)/)[1])
           let cb = () => {}
-          if (this.state.currentPage === 1 && type === 'up') {
-            cb = () => this.listView.scrollTo({y:0, animated: true});
-            thisList = data.commentList
-          } else if (type === 'down') {
+          if (type === 'down') {
             thisList = this.state.list.concat(data.commentList)
+            this.pageArr.push(thisPage)
           } else if (type === 'up') {
             thisList = this.state.list.slice()
             thisList.unshift(...data.commentList)
+            this.pageArr.unshift(thisPage)
           } else if (type === 'jump') {
             cb = () => this.listView.scrollTo({y:0, animated: true});
             thisList = data.commentList
+            this.pageArr = [this.pageArr]
           }
-          
           this.setState({
             list: thisList,
             numberPerPage: data.numberPerPage,
             numPages: data.numPages,
             commentTotal: data.len, 
-            currentPage: parseInt(url.match(/\?page=(\d+)/)[1]),
+            currentPage: thisPage,
             isLoading: false
           }, cb);
         })
@@ -150,15 +150,16 @@ class CommentList extends Component {
     })
   }
 
-  
+  pageArr = [1]
   _onRefresh = () => {
     const { URL } = this.props;
     const currentPage = this.state.currentPage
-    const type = currentPage === 1 ? 'jump' : 'up'
+    let type = currentPage === 1 ? 'jump' : 'up'
     let targetPage = currentPage - 1
     if (type === 'jump') {
       targetPage = 1
     }
+    if (this.pageArr.includes(targetPage)) type = 'jump'
     this.fetchMessages(URL.split('=').slice(0, -1).concat(targetPage).join('='), type);
   }
 
