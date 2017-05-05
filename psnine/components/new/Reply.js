@@ -17,6 +17,7 @@ import {
   RefreshControl,
   WebView,
   KeyboardAvoidingView,
+  Keyboard,
   TextInput,
   AsyncStorage,
   Linking,
@@ -83,7 +84,7 @@ export default class Reply extends Component {
       Animated.spring(this.state.innerMarginTop, {toValue: 0, ...config}).start();
       return;
     }
-
+    Keyboard.dismiss()
     Animated.spring(this.state.openVal, {toValue: 0, ...config}).start(({finished})=>{
       finished && this.props.navigator.pop();
     });
@@ -98,7 +99,6 @@ export default class Reply extends Component {
   }
 
   componentWillMount = async () => {
-
     let config = {tension: 30, friction: 7};
     this.removeListener = BackAndroid.addEventListener('hardwareBackPress',  () => {
       let value = this.state.innerMarginTop._value;
@@ -221,27 +221,35 @@ export default class Reply extends Component {
   }
 
   sendReply = () => {
+    const type = this.props.type === 'community' ? 'topic' : this.props.type
     const form = {
-      type: this.props.type,
+      type: type,
       param: this.props.id,
       old: 'yes', // what???
       content: this.state.content,
       com: ''
     }
-    postReply(form).then(res => {
-      console.log(res)
-      console.log(res.text())
-      this._pressButton()
+    postReply(form).then(res => res.text()).then(text => {
+      if (text.includes('玩脱了')) {
+        const arr = text.match(/\<title\>(.*?)\<\/title\>/)
+        if (arr && arr[1]) {
+          const msg = `评论失败: ${arr[1]}`
+          ToastAndroid.show(msg, ToastAndroid.SHORT);
+          return
+        }
+      }
+      ToastAndroid.show('评论成功', ToastAndroid.SHORT);
       this.props.callback && this.props.callback()
-    }).catch(err => {
       this._pressButton()
-      console.error(err)
+    }).catch(err => {
+      const msg = `评论失败: ${arr[1]}`
+      ToastAndroid.show(msg, ToastAndroid.SHORT);
     })
   }
 
   render() {
     let { openVal, marginTop, icon } = this.state;
-
+     
     let outerStyle = { 
       marginTop : this.state.innerMarginTop.interpolate({
         inputRange: [0, SCREEN_HEIGHT], 
@@ -260,7 +268,7 @@ export default class Reply extends Component {
         zIndex : openVal.interpolate({inputRange: [0 ,1], outputRange: [0, 3]}),
         backgroundColor: openVal.interpolate({
           inputRange: [0 ,1], 
-          outputRange: [accentColor, this.props.modeInfo.brighterLevelOne]
+          outputRange: [accentColor, this.props.modeInfo.backgroundColor]
         }),
         //elevation : openVal.interpolate({inputRange: [0 ,1], outputRange: [0, 8]})
     };

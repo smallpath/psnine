@@ -88,7 +88,7 @@ class CommunityTopic extends Component {
   _onActionSelected = (index) => {
     switch(index){
       case 0 :
-        this._animateToolbar(0, () => {
+        const cb = () => {
           this.props.navigator.push({
             component: Reply,
             withoutAnimation: true,
@@ -99,7 +99,12 @@ class CommunityTopic extends Component {
               callback: this._refreshComment
             }
           })
-        }, true)
+        }
+        if (this.state.openVal._value === 1) {
+          this._animateToolbar(0, cb)
+        } else if (this.state.openVal._value === 0) {
+          cb()
+        }
         return;
       case 1 :
         this._refreshComment()

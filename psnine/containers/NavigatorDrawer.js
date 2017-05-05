@@ -371,7 +371,7 @@ class NavigatorDrawer extends Component {
             URL = getHomeURL(this.state.psnid);
 
             navigator.push({
-              component: HappyPlusOne,
+              component: Home,
               params: {
                 URL,
                 title: this.state.psnid,

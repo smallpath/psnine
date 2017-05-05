@@ -63,20 +63,9 @@ class Home extends Component {
   }
 
   onNavigationStateChange = (navState) => {
-    if(navState.url.indexOf(this.props.URL) !== -1 ){
-      this.setState({
-        canGoBack: navState.canGoBack,
-      });
-    }else{
-      // let replyFloorURL = ``;
-      // let replyMainURL = ``;
-      // let emotionURL = ``;
-      // console.log('Target URL:',navState);
-      this.setState({
-        canGoBack: navState.canGoBack,
-      });
-      // this.refs[WEBVIEW_REF].stopLoading();
-    }//return false;
+    this.setState({
+      canGoBack: navState.canGoBack,
+    });
   }
 
   render() {
@@ -85,7 +74,8 @@ class Home extends Component {
           <View style={{flex:1}}>
               <Ionicons.ToolbarAndroid
                 navIconName="md-arrow-back"
-                overflowIconName="md-more"                 iconColor={this.props.modeInfo.isNightMode ? '#000' : '#fff'}
+                overflowIconName="md-more"                 
+                iconColor={this.props.modeInfo.isNightMode ? '#000' : '#fff'}
                 title={this.props.title}
                 style={styles.toolbar}
                 actions={toolbarActions}
@@ -104,7 +94,7 @@ class Home extends Component {
                     domStorageEnabled={true}
                     onNavigationStateChange={this.onNavigationStateChange}
                     startInLoadingState={true}  
-                    injectedJavaScript={`$('.header').hide()`}
+                    injectedJavaScript={`$('.header').hide();`}
                 />
               </KeyboardAvoidingView>
           </View>
