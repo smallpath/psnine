@@ -9,6 +9,7 @@ import {
   Dimensions,
   TouchableNativeFeedback,
   KeyboardAvoidingView,
+  InteractionManager,
   Keyboard,
   TextInput,
   Animated,
@@ -49,149 +50,21 @@ export default class Reply extends Component {
     super(props);
 
     this.state = {
-      openVal: new Animated.Value(0),
-      innerMarginTop: new Animated.Value(0),
       icon: false,
       content: ''
     }
   }
 
   componentDidMount = () => {
-    let config = {tension: 30, friction: 7};
-    // Animated.timing(this.state.openVal, {toValue: 1, duration: 2000 ,...config}).start();
-    Animated.spring(this.state.openVal, {toValue: 1, ...config}).start();
+    this.props.componentDidMountCallback()
   }
 
   _pressButton = () => {
     this.content.clear();
-
-    let { openVal, innerMarginTop } = this.state;
-    let config = {tension: 30, friction: 7};
-
-    let value = this.state.innerMarginTop._value;
-    if (Math.abs(value) >= 50) {
-      Animated.spring(this.state.innerMarginTop, {toValue: 0, ...config}).start();
-      return;
-    }
-    Keyboard.dismiss()
-    Animated.spring(this.state.openVal, {toValue: 0, ...config}).start(({finished})=>{
-      finished && this.props.navigation.goBack();
-    });
-
-  }
-
-  componentWillUnmount = async () => {
-    // alert(this.props.navigator.getCurrentRoutes().length)
-    let { openVal, innerMarginTop } = this.state;
-    let config = {tension: 30, friction: 7};
-    this.removeListener && this.removeListener.remove  && this.removeListener.remove();
+    this.props.onRequestClose()
   }
 
   componentWillMount = async () => {
-    let config = {tension: 30, friction: 7};
-    this.removeListener = BackHandler.addEventListener('hardwareBackPress',  () => {
-      let value = this.state.innerMarginTop._value;
-      if (Math.abs(value) >= 50) {
-        Animated.spring(this.state.innerMarginTop, {toValue: 0, ...config}).start();
-        return true;
-      }else{
-        Animated.spring(this.state.openVal, {toValue: 0, ...config}).start(({finished})=>{
-          finished && this.props.navigation.goBack();
-        });
-        return true;
-      }
-    });
-
-    this.panResponder = PanResponder.create({  
-
-        onStartShouldSetPanResponderCapture: (e, gesture) =>{ 
-          return false; 
-        },
-
-        onMoveShouldSetPanResponderCapture:(e, gesture) =>{ 
-          let shouldSet = Math.abs(gesture.dy) >=4;
-          return shouldSet; 
-        },
-
-        onPanResponderGrant:(e, gesture) => {
-            this.state.innerMarginTop.setOffset(gesture.y0);
-        },
-        onPanResponderMove: Animated.event([
-          null,
-          { 
-              dy: this.state.innerMarginTop
-          }
-        ]), 
-        
-        onPanResponderRelease: (e, gesture) => {
-
-        },
-        onPanResponderTerminationRequest : (evt, gesture) => {  
-          return true;
-        },
-        onPanResponderTerminate: (evt, gesture) => {  
-          
-        },
-        onShouldBlockNativeResponder: (evt, gesture) => {  
-          return true;
-        },
-        onPanResponderReject: (evt, gesture) => {  
-          return false;
-        },
-        onPanResponderEnd: (evt, gesture) => {  
-
-          let dy = gesture.dy;
-          let vy = gesture.vy;
-          
-          this.state.innerMarginTop.flattenOffset();
-
-          let duration = 50; 
-
-          if(vy<0){
-
-            if(Math.abs(dy) <= CIRCLE_SIZE ){
-
-              Animated.spring(this.state.innerMarginTop,{
-                toValue: SCREEN_HEIGHT- CIRCLE_SIZE,
-                duration,
-                easing: Easing.linear,
-              }).start();
-
-            }else{
-
-              Animated.spring(this.state.innerMarginTop,{
-                toValue: 0,
-                duration,
-                easing: Easing.linear,
-              }).start();
-
-            }
-
-          }else{
-
-            if(Math.abs(dy) <= CIRCLE_SIZE){
-
-              Animated.spring(this.state.innerMarginTop,{
-                toValue: 0,
-                duration,
-                easing: Easing.linear,
-              }).start();
-
-            }else{
-
-              Animated.spring(this.state.innerMarginTop,{
-                toValue: SCREEN_HEIGHT- CIRCLE_SIZE,
-                duration,
-                easing: Easing.linear,
-              }).start();
-            }
-
-          }
-
-        },
-
-    });
-
     const icon = await Promise.all([
       Ionicons.getImageSource('md-arrow-back', 20, '#fff'),
       Ionicons.getImageSource('md-happy', 50, '#fff'),
@@ -210,7 +83,7 @@ export default class Reply extends Component {
   }
 
   sendReply = () => {
-    const { params } = this.props.navigation.state
+    const { params } = this.props
     const type = params.type === 'community' ? 'topic' : params.type
     const form = {
       type: type,
@@ -228,9 +101,11 @@ export default class Reply extends Component {
           return
         }
       }
-      ToastAndroid.show('评论成功', ToastAndroid.SHORT);
-      params.callback && params.callback()
-      this._pressButton()
+      InteractionManager.runAfterInteractions(() => {
+        ToastAndroid.show('评论成功', ToastAndroid.SHORT);
+        params.callback && params.callback()
+        this._pressButton()
+      })
     }).catch(err => {
       const msg = `评论失败: ${arr[1]}`
       ToastAndroid.show(msg, ToastAndroid.SHORT);
@@ -238,10 +113,11 @@ export default class Reply extends Component {
   }
 
   render() {
-    let { openVal, marginTop, icon } = this.state;
-    const { modeInfo } = this.props.screenProps
+    let { openVal, marginTop } = this.props;
+    const { icon } = this.state
+    const { modeInfo } = this.props
     let outerStyle = { 
-      marginTop : this.state.innerMarginTop.interpolate({
+      marginTop : this.props.innerMarginTop.interpolate({
         inputRange: [0, SCREEN_HEIGHT], 
         outputRange: [0 ,SCREEN_HEIGHT]
       })
@@ -280,7 +156,7 @@ export default class Reply extends Component {
         ]}
         
         >
-        <Animated.View {...this.panResponder.panHandlers} style={[styles.toolbar ,animatedToolbarStyle]}>
+        <Animated.View {...this.props.topicPanResponder.panHandlers} style={[styles.toolbar ,animatedToolbarStyle]}>
           <View style={{    
               flex: 1, 
               flexDirection: 'row' , 

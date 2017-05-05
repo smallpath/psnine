@@ -20,7 +20,8 @@ import {
   TouchableHighlight,
   TouchableWithoutFeedback,
   StatusBar,
-  Modal
+  Modal,
+  Keyboard
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import MyDialog from '../components/dialog'
@@ -382,6 +383,7 @@ class Toolbar extends Component {
   }
 
   renderModal = () => {
+    if (this.state.modalVisible === false) return
     const { app: appReducer, switchModeOnRoot, modeInfo } = this.props;
     const { segmentedIndex } = this.props.app;
     const { openVal } = this.state
@@ -398,6 +400,7 @@ class Toolbar extends Component {
         Animated.spring(this.state.topicMarginTop, { toValue: 0, ...config }).start();
         return true;
       } else {
+        Keyboard.dismiss()
         Animated.spring(this.state.modalOpenVal, { toValue: 0, ...config }).start(({ finished }) => {
           this.setState({
             modalVisible: false
@@ -425,7 +428,7 @@ class Toolbar extends Component {
       ]),
 
       onPanResponderRelease: (e, gesture) => {
-        
+
       },
       onPanResponderTerminationRequest: (evt, gesture) => {
         return false;
@@ -497,22 +500,22 @@ class Toolbar extends Component {
       this.state.topicMarginTop.setValue(0)
       Animated.spring(this.state.modalOpenVal, { toValue: 1, ...config }).start();
     }
-    return this.state.modalVisible === true ? (
-      <Modal 
+    return (
+      <Modal
         animationType={'fade'}
         transparent={true}
         visible={true}
         onRequestClose={onRequestClose}
       >
-        <NewTopic 
+        <NewTopic
           openVal={this.state.modalOpenVal}
           innerMarginTop={this.state.topicMarginTop}
           componentDidMountCallback={componentDidMountCallback}
           topicPanResponder={topicPanResponder}
           onRequestClose={onRequestClose}
-          modeInfo={modeInfo}/>
+          modeInfo={modeInfo} />
       </Modal>
-    ) : undefined
+    )
   }
 
   render() {
@@ -523,7 +526,7 @@ class Toolbar extends Component {
 
     const toolbarList = []
     const iconNameArr = ["ios-add", "ios-exit-outline"]
-    for (let i=0; i<iconNameArr.length; i++) {
+    for (let i = 0; i < iconNameArr.length; i++) {
       toolbarList.push(
         this.renderToolbarItem({
           iconName: iconNameArr[i],
@@ -539,7 +542,7 @@ class Toolbar extends Component {
           marginTop: this.state.marginTop,
         }]}
       >
-        { this.renderModal() }
+        {this.renderModal()}
         <Icon.ToolbarAndroid
           navIconName="md-menu"
           title={title}
@@ -567,7 +570,7 @@ class Toolbar extends Component {
               zIndex: 1
             }} />
         </TouchableWithoutFeedback>
-        { toolbarList }
+        {toolbarList}
         <Animated.View
           ref={float => this.float = float}
           collapsable={false}
