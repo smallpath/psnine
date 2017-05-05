@@ -24,7 +24,7 @@ class Dialog extends Component {
     return (
       <Modal
         animationType={"fade"}
-        transparent={true}
+        transparent={this.props.transparent || true}
         visible={this.props.modalVisible}
         onRequestClose={onRequestClose}
       >
@@ -37,7 +37,7 @@ class Dialog extends Component {
             width: SCREEN_WIDTH,
             alignItems: 'center',
             backgroundColor: '#000',
-            opacity: 0.1
+            opacity: this.props.backgroundOpacity || 0.1
           }} />
         </TouchableNativeFeedback>
         <View style={{

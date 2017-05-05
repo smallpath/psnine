@@ -18,7 +18,9 @@ import {
   Easing,
   PanResponder,
   TouchableHighlight,
-  TouchableWithoutFeedback
+  TouchableWithoutFeedback,
+  StatusBar,
+  Modal
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import MyDialog from '../components/dialog'
@@ -30,6 +32,7 @@ import SegmentedView from './SegmentedView';
 
 import Community from './viewPagers/Community';
 import Gene from './viewPagers/Gene';
+import NewTopic from '../components/new/NewTopic';
 
 import { changeSegmentIndex, changeCommunityType, changeGeneType, changeScrollType } from '../actions/app';
 
@@ -38,6 +41,8 @@ import { standardColor, accentColor } from '../config/colorConfig';
 let screen = Dimensions.get('window');
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = screen;
+
+const ACTUAL_SCREEN_HEIGHT = SCREEN_HEIGHT - StatusBar.currentHeight + 1;
 
 let title = "PSNINE";
 let isMounted = false;
@@ -103,7 +108,6 @@ const delay = 50
 
 class Toolbar extends Component {
 
-
   constructor(props) {
     super(props);
 
@@ -113,7 +117,10 @@ class Toolbar extends Component {
       opacity: new Animated.Value(1),
       marginTop: new Animated.Value(0),
       openVal: new Animated.Value(0),
-      innerMarginTop: new Animated.Value(0)
+      innerMarginTop: new Animated.Value(0),
+      modalVisible: false,
+      modalOpenVal: new Animated.Value(0),
+      topicMarginTop: new Animated.Value(0)
     }
   }
 
@@ -304,9 +311,8 @@ class Toolbar extends Component {
     switch (segmentedIndex) {
       case 0:
         this.pressNew(() => {
-          navigation.navigate('NewTopic', {
-            withoutAnimation: true,
-            shouldForbidPressNew: true
+          this.setState({
+            modalVisible: true
           })
         });
         break;
@@ -316,17 +322,15 @@ class Toolbar extends Component {
         break;
       case 3:
         this.pressNew(() => {
-          navigation.navigate('NewTopic', {
-            withoutAnimation: true,
-            shouldForbidPressNew: true
+          this.setState({
+            modalVisible: true
           })
         });
         break;
       case 4:
         this.pressNew(() => {
-          navigation.navigate('NewTopic', {
-            withoutAnimation: true,
-            shouldForbidPressNew: true
+          this.setState({
+            modalVisible: true
           })
         });
         break;
@@ -377,6 +381,140 @@ class Toolbar extends Component {
     this._animateToolbar(0)
   }
 
+  renderModal = () => {
+    const { app: appReducer, switchModeOnRoot, modeInfo } = this.props;
+    const { segmentedIndex } = this.props.app;
+    const { openVal } = this.state
+    const tipHeight = toolbarHeight * 0.8
+    let config = { tension: 30, friction: 7 };
+    const onClose = () => {
+      this.setState({
+        modalVisible: false
+      })
+    }
+    const onRequestClose = () => {
+      let value = this.state.topicMarginTop._value;
+      if (Math.abs(value) >= 50) {
+        Animated.spring(this.state.topicMarginTop, { toValue: 0, ...config }).start();
+        return true;
+      } else {
+        Animated.spring(this.state.modalOpenVal, { toValue: 0, ...config }).start(({ finished }) => {
+          this.setState({
+            modalVisible: false
+          }, () => {
+            this.state.modalOpenVal.setValue(1)
+          })
+        });
+      }
+    }
+    let CIRCLE_SIZE = 56;
+    const topicPanResponder = PanResponder.create({
+
+      onStartShouldSetPanResponderCapture: (e, gesture) => {
+        return e.nativeEvent.pageX <= 56 ? false : true;
+      },
+      onPanResponderGrant: (e, gesture) => {
+        const target = gesture.y0 <= 56 ? 0 : ACTUAL_SCREEN_HEIGHT - 56
+        this.state.topicMarginTop.setOffset(target);
+      },
+      onPanResponderMove: Animated.event([
+        null,
+        {
+          dy: this.state.topicMarginTop
+        }
+      ]),
+
+      onPanResponderRelease: (e, gesture) => {
+        
+      },
+      onPanResponderTerminationRequest: (evt, gesture) => {
+        return false;
+      },
+      onPanResponderTerminate: (evt, gesture) => {
+
+      },
+      onShouldBlockNativeResponder: (evt, gesture) => {
+        return true;
+      },
+      onPanResponderReject: (evt, gesture) => {
+        return false;
+      },
+      onPanResponderEnd: (evt, gesture) => {
+        let dy = gesture.dy;
+        let vy = gesture.vy;
+
+        this.state.topicMarginTop.flattenOffset();
+
+        let duration = 50;
+
+        if (vy < 0) {
+
+          if (Math.abs(dy) <= CIRCLE_SIZE) {
+
+            Animated.spring(this.state.topicMarginTop, {
+              toValue: ACTUAL_SCREEN_HEIGHT - CIRCLE_SIZE,
+              duration,
+              easing: Easing.linear,
+            }).start();
+
+          } else {
+
+            Animated.spring(this.state.topicMarginTop, {
+              toValue: 0,
+              duration,
+              easing: Easing.linear,
+            }).start();
+
+          }
+
+        } else {
+
+          if (Math.abs(dy) <= CIRCLE_SIZE) {
+
+            Animated.spring(this.state.topicMarginTop, {
+              toValue: 0,
+              duration,
+              easing: Easing.linear,
+            }).start();
+
+          } else {
+
+            Animated.spring(this.state.topicMarginTop, {
+              toValue: ACTUAL_SCREEN_HEIGHT - CIRCLE_SIZE,
+              duration,
+              easing: Easing.linear,
+            }).start();
+          }
+
+        }
+
+      },
+
+    });
+    const componentDidMountCallback = () => {
+      let config = { tension: 30, friction: 7 };
+      this.state.modalOpenVal.setValue(0)
+      this.state.topicMarginTop.setValue(0)
+      Animated.spring(this.state.modalOpenVal, { toValue: 1, ...config }).start();
+    }
+    return this.state.modalVisible === true ? (
+      <Modal 
+        animationType={'fade'}
+        transparent={true}
+        visible={true}
+        onRequestClose={onRequestClose}
+      >
+        <NewTopic 
+          openVal={this.state.modalOpenVal}
+          innerMarginTop={this.state.topicMarginTop}
+          componentDidMountCallback={componentDidMountCallback}
+          topicPanResponder={topicPanResponder}
+          onRequestClose={onRequestClose}
+          modeInfo={modeInfo}/>
+      </Modal>
+    ) : undefined
+  }
+
   render() {
     const { app: appReducer, switchModeOnRoot, modeInfo } = this.props;
     const { segmentedIndex } = this.props.app;
@@ -401,6 +539,7 @@ class Toolbar extends Component {
           marginTop: this.state.marginTop,
         }]}
       >
+        { this.renderModal() }
         <Icon.ToolbarAndroid
           navIconName="md-menu"
           title={title}

@@ -210,11 +210,11 @@ class Root extends React.Component {
 			<Provider store={store}>
 				<View style={{ flex: 1 }}>
 					<StatusBar translucent={false} backgroundColor={this.state.isNightMode ? nightDeepColor : deepColor} barStyle="light-content" />
-					<Navigator screenProps={{
-            modeInfo: this.state.isNightMode ? this.nightModeInfo : this.dayModeInfo,
-            switchModeOnRoot: this.switchModeOnRoot,
-            tipBarMarginBottom: this.state.tipBarMarginBottom
-          }}/>
+					<Navigator onNavigationStateChange={null} screenProps={{
+						modeInfo: this.state.isNightMode ? this.nightModeInfo : this.dayModeInfo,
+						switchModeOnRoot: this.switchModeOnRoot,
+						tipBarMarginBottom: this.state.tipBarMarginBottom
+					}}/>
 					<Animated.View style={{
 						height: tipHeight,
 						position: 'absolute',

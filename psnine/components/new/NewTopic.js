@@ -46,150 +46,21 @@ class NewTopic extends Component {
     super(props);
 
     this.state = {
-      openVal: new Animated.Value(0),
-      innerMarginTop: new Animated.Value(0),
       icon: false
     }
   }
 
   componentDidMount = () => {
-    let config = { tension: 30, friction: 7 };
-    // Animated.timing(this.state.openVal, {toValue: 1, duration: 2000 ,...config}).start();
-    Animated.spring(this.state.openVal, { toValue: 1, ...config }).start();
+    this.props.componentDidMountCallback()
   }
 
   _pressButton = () => {
     this.title.clear();
     this.content.clear();
-
-    let { openVal, innerMarginTop } = this.state;
-    let config = { tension: 30, friction: 7 };
-
-    let value = this.state.innerMarginTop._value;
-    if (Math.abs(value) >= 50) {
-      Animated.spring(this.state.innerMarginTop, { toValue: 0, ...config }).start();
-      return;
-    }
-
-    Animated.spring(this.state.openVal, { toValue: 0, ...config }).start(({ finished }) => {
-      finished && this.props.navigation.goBack();
-    });
-
-  }
-
-  componentWillUnmount = async () => {
-    // alert(this.props.navigator.getCurrentRoutes().length)
-    let { openVal, innerMarginTop } = this.state;
-    let config = { tension: 30, friction: 7 };
-    this.removeListener && this.removeListener.remove && this.removeListener.remove();
+    this.props.onRequestClose()
   }
 
   componentWillMount = async () => {
-
-    let config = { tension: 30, friction: 7 };
-    this.removeListener = BackHandler.addEventListener('hardwareBackPress', () => {
-      let value = this.state.innerMarginTop._value;
-      if (Math.abs(value) >= 50) {
-        Animated.spring(this.state.innerMarginTop, { toValue: 0, ...config }).start();
-        return true;
-      } else {
-        Animated.spring(this.state.openVal, { toValue: 0, ...config }).start(({ finished }) => {
-          finished && this.props.navigation.goBack();
-        });
-        return true;
-      }
-    });
-
-    this.panResponder = PanResponder.create({
-
-      onStartShouldSetPanResponderCapture: (e, gesture) => {
-        return false;
-      },
-
-      onMoveShouldSetPanResponderCapture: (e, gesture) => {
-        let shouldSet = Math.abs(gesture.dy) >= 4;
-        return shouldSet;
-      },
-
-      onPanResponderGrant: (e, gesture) => {
-        this.state.innerMarginTop.setOffset(gesture.y0);
-      },
-      onPanResponderMove: Animated.event([
-        null,
-        {
-          dy: this.state.innerMarginTop
-        }
-      ]),
-
-      onPanResponderRelease: (e, gesture) => {
-
-      },
-      onPanResponderTerminationRequest: (evt, gesture) => {
-        return true;
-      },
-      onPanResponderTerminate: (evt, gesture) => {
-
-      },
-      onShouldBlockNativeResponder: (evt, gesture) => {
-        return true;
-      },
-      onPanResponderReject: (evt, gesture) => {
-        return false;
-      },
-      onPanResponderEnd: (evt, gesture) => {
-
-        let dy = gesture.dy;
-        let vy = gesture.vy;
-
-        this.state.innerMarginTop.flattenOffset();
-
-        let duration = 50;
-
-        if (vy < 0) {
-
-          if (Math.abs(dy) <= CIRCLE_SIZE) {
-
-            Animated.spring(this.state.innerMarginTop, {
-              toValue: SCREEN_HEIGHT - CIRCLE_SIZE,
-              duration,
-              easing: Easing.linear,
-            }).start();
-
-          } else {
-
-            Animated.spring(this.state.innerMarginTop, {
-              toValue: 0,
-              duration,
-              easing: Easing.linear,
-            }).start();
-
-          }
-
-        } else {
-
-          if (Math.abs(dy) <= CIRCLE_SIZE) {
-
-            Animated.spring(this.state.innerMarginTop, {
-              toValue: 0,
-              duration,
-              easing: Easing.linear,
-            }).start();
-
-          } else {
-
-            Animated.spring(this.state.innerMarginTop, {
-              toValue: SCREEN_HEIGHT - CIRCLE_SIZE,
-              duration,
-              easing: Easing.linear,
-            }).start();
-          }
-
-        }
-
-      },
-
-    });
-
     const icon = await Promise.all([
       Ionicons.getImageSource('md-arrow-back', 20, '#fff'),
       Ionicons.getImageSource('md-happy', 50, '#fff'),
@@ -208,11 +79,12 @@ class NewTopic extends Component {
   }
 
   render() {
-    let { openVal, marginTop, icon } = this.state;
-    const { modeInfo } = this.props.screenProps
+    let { marginTop, openVal } = this.props;
+    const { icon } = this.state
+    const { modeInfo } = this.props.screenProps || this.props
 
     let outerStyle = {
-      marginTop: this.state.innerMarginTop.interpolate({
+      marginTop: this.props.innerMarginTop.interpolate({
         inputRange: [0, SCREEN_HEIGHT],
         outputRange: [0, SCREEN_HEIGHT]
       })
@@ -229,7 +101,7 @@ class NewTopic extends Component {
       zIndex: openVal.interpolate({ inputRange: [0, 1], outputRange: [0, 3] }),
       backgroundColor: openVal.interpolate({
         inputRange: [0, 1],
-        outputRange: [accentColor, modeInfo.brighterLevelOne]
+        outputRange: [accentColor, modeInfo.backgroundColor]
       }),
       //elevation : openVal.interpolate({inputRange: [0 ,1], outputRange: [0, 8]})
     };
@@ -251,7 +123,7 @@ class NewTopic extends Component {
         ]}
 
       >
-        <Animated.View {...this.panResponder.panHandlers} style={[styles.toolbar, animatedToolbarStyle]}>
+        <Animated.View {...this.props.topicPanResponder.panHandlers} style={[styles.toolbar, animatedToolbarStyle]}>
           <View style={{
             flex: 1,
             flexDirection: 'row',
@@ -270,7 +142,7 @@ class NewTopic extends Component {
                 />}
               </View>
             </TouchableNativeFeedback>
-            <Text style={{ color: 'white', fontSize: 23, marginLeft: 10, }}>{title}</Text>
+            <Text style={{ color: 'white', fontSize: 23, marginLeft: 10, padding: 1}}>{title}</Text>
           </View>
 
         </Animated.View >
