@@ -49,7 +49,7 @@ class Gene extends Component {
       URL,
       title: rowData.title,
       rowData,
-      type: 'community',
+      type: 'gene',
       shouldBeClickableUnderOtherRoutes: true
     })
   }
