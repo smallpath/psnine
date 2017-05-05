@@ -199,7 +199,7 @@ export default function htmlToElement(rawHtml, opts, done) {
         if (node.name === 'img') {
           let linkPressHandler = null;
           if (node.attribs && node.attribs.src) {
-            linkPressHandler = () => opts.linkHandler(entities.decodeHTML(node.attribs.src));
+            linkPressHandler = () => opts.onImageLongPress(entities.decodeHTML(node.attribs.src));
           }
           return (
               <Img key={index} attribs={node.attribs} 

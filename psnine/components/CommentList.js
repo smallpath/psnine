@@ -97,7 +97,7 @@ class CommentList extends Component {
               value={rowData.content}
               modeInfo={ this.props.modeInfo }
               stylesheet={styles}
-              onLinkPress={(url) => this.props.navigator.push({
+              onImageLongPress={(url) => this.props.navigator.push({
                 component: ImageViewer,
                 params: {
                   images: [

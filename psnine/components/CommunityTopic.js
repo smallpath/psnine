@@ -178,7 +178,7 @@ class CommunityTopic extends Component {
                 value={titleInfo.title}
                 modeInfo={ this.props.modeInfo }
                 stylesheet={styles}
-                onLinkPress={this.handleImageOnclick}
+                onImageLongPress={this.handleImageOnclick}
                 imagePaddingOffset={shouldRenderAvatar ? 30 + 75 + 10 : 30}
               />
 
@@ -211,7 +211,7 @@ class CommunityTopic extends Component {
           shouldShowLoadingIndicator={true}
           stylesheet={styles}
           imagePaddingOffset={30}
-          onLinkPress={this.handleImageOnclick}
+          onImageLongPress={this.handleImageOnclick}
         />
       </View>
     )
@@ -301,7 +301,7 @@ class CommunityTopic extends Component {
                     value={rowData.content}
                     modeInfo={ this.props.modeInfo }
                     stylesheet={styles}
-                    onLinkPress={this.handleImageOnclick}
+                    onImageLongPress={this.handleImageOnclick}
                     imagePaddingOffset={30 + 75 + 10}
                   />
 

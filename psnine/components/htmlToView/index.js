@@ -68,7 +68,8 @@ class HtmlView extends Component {
       imagePaddingOffset: this.props.imagePaddingOffset,
       modeInfo: this.props.modeInfo,
       shouldShowLoadingIndicator: this.props.shouldShowLoadingIndicator,
-      alignCenter: this.props.alignCenter
+      alignCenter: this.props.alignCenter,
+      onImageLongPress: this.props.onImageLongPress
     }
 
     htmlToElement(value, opts, (err, element) => {
@@ -95,6 +96,7 @@ HtmlView.propTypes = {
   value: PropTypes.string,
   stylesheet: PropTypes.object,
   onLinkPress: PropTypes.func,
+  onImageLongPress: PropTypes.func,
   onError: PropTypes.func,
   renderNode: PropTypes.func,
   modeInfo: PropTypes.object,
@@ -104,6 +106,7 @@ HtmlView.propTypes = {
 
 HtmlView.defaultProps = {
   onLinkPress: url => Linking.openURL(url),
+  onImageLongPress: url => Linking.openURL(url),
   onError: console.error.bind(console),
   modeInfo: {},
   shouldShowLoadingIndicator: false,
