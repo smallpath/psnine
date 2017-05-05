@@ -5,18 +5,14 @@ import {
   View,
   ListView,
   Image,
-  ToastAndroid,
-  Dimensions,
   TouchableNativeFeedback,
   RefreshControl,
-  PanResponder,
-  Animated,
-  InteractionManager,
+  InteractionManager
 } from 'react-native';
 
 import { connect } from 'react-redux';
 import { getTopicList } from '../../actions/community.js';
-import { standardColor, nodeColor, idColor  } from '../../config/colorConfig';
+import { standardColor, nodeColor, idColor } from '../../config/colorConfig';
 
 import CommunityTopic from '../../components/CommunityTopic';
 
@@ -36,34 +32,29 @@ let dataSource = new ListView.DataSource({
 });
 
 class Community extends Component {
-    constructor(props){
-        super(props);
-    }
+  constructor(props) {
+    super(props);
+  }
 
   _renderSeparator(sectionID: number, rowID: number, adjacentRowHighlighted: bool) {
     return (
       <View
         key={`${sectionID}-${rowID}`}
-        style={{ height: 1,backgroundColor: 'rgba(0, 0, 0, 0.1)',marginLeft:10,marginRight:10}}
-        />
+        style={{ height: 1, backgroundColor: 'rgba(0, 0, 0, 0.1)', marginLeft: 10, marginRight: 10 }}
+      />
     );
   }
 
   _onRowPressed = (rowData) => {
-    const { navigator } = this.props;
+    const { navigation } = this.props;
     const URL = getTopicURL(rowData.id);
-    if (navigator) {
-      navigator.push({
-        component: CommunityTopic,
-        shouldBeClickableUnderOtherRoutes: true,
-        params: {
-          URL,
-          title: rowData.title,
-          rowData,
-          type: 'community'
-        }
-      });
-    }
+    navigation.navigate('CommunityTopic', {
+      URL,
+      title: rowData.title,
+      rowData,
+      type: 'community',
+      shouldBeClickableUnderOtherRoutes: true
+    })
   }
 
 
@@ -72,42 +63,42 @@ class Community extends Component {
     rowID: number | string,
     highlightRow: (sectionID: number, rowID: number) => void
   ) => {
-
+    const { modeInfo } = this.props
     let TouchableElement = TouchableNativeFeedback;
 
     return (
-      <View rowID={ rowID } style={{              
-            marginTop: 7,
-            backgroundColor: this.props.modeInfo.backgroundColor,
-            elevation: 1,
-        }}>
-        <TouchableElement  
-          onPress ={()=>{
+      <View rowID={rowID} style={{
+        marginTop: 7,
+        backgroundColor: modeInfo.backgroundColor,
+        elevation: 1,
+      }}>
+        <TouchableElement
+          onPress={() => {
             this._onRowPressed(rowData)
           }}
           useForeground={true}
           delayPressIn={100}
           background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
-          >
-          <View pointerEvents='box-only' style={{ flex: 1, flexDirection: 'row',  padding: 12 }}>
+        >
+          <View pointerEvents='box-only' style={{ flex: 1, flexDirection: 'row', padding: 12 }}>
             <Image
               source={{ uri: rowData.avatar }}
               style={styles.avatar}
-              />
+            />
 
-            <View style={{ marginLeft: 10, flex: 1, flexDirection: 'column'}}>
+            <View style={{ marginLeft: 10, flex: 1, flexDirection: 'column' }}>
               <Text
                 ellipsizeMode={'tail'}
                 numberOfLines={3}
-                style={{ flex: 2.5,color: this.props.modeInfo.titleTextColor, }}>
+                style={{ flex: 2.5, color: modeInfo.titleTextColor, }}>
                 {rowData.title}
               </Text>
 
-              <View style={{ flex: 1.1, flexDirection: 'row', justifyContent :'space-between' }}>
-                <Text selectable={false} style={{ flex: -1, color: idColor,textAlign : 'center', textAlignVertical: 'center' }}>{rowData.psnid}</Text>
-                <Text selectable={false} style={{ flex: -1, color: this.props.modeInfo.standardTextColor,textAlign : 'center', textAlignVertical: 'center' }}>{rowData.date}</Text>
-                <Text selectable={false} style={{ flex: -1, color: this.props.modeInfo.standardTextColor,textAlign : 'center', textAlignVertical: 'center' }}>{rowData.count}回复</Text>
-                <Text selectable={false} style={{ flex: -1, color: this.props.modeInfo.standardTextColor,textAlign : 'center', textAlignVertical: 'center' }}>{rowData.type}</Text>
+              <View style={{ flex: 1.1, flexDirection: 'row', justifyContent: 'space-between' }}>
+                <Text selectable={false} style={{ flex: -1, color: idColor, textAlign: 'center', textAlignVertical: 'center' }}>{rowData.psnid}</Text>
+                <Text selectable={false} style={{ flex: -1, color: modeInfo.standardTextColor, textAlign: 'center', textAlignVertical: 'center' }}>{rowData.date}</Text>
+                <Text selectable={false} style={{ flex: -1, color: modeInfo.standardTextColor, textAlign: 'center', textAlignVertical: 'center' }}>{rowData.count}回复</Text>
+                <Text selectable={false} style={{ flex: -1, color: modeInfo.standardTextColor, textAlign: 'center', textAlignVertical: 'center' }}>{rowData.type}</Text>
               </View>
 
             </View>
@@ -119,10 +110,10 @@ class Community extends Component {
   }
 
   componentWillReceiveProps = (nextProps) => {
-    if(this.props.communityType != nextProps.communityType){
+    if (this.props.communityType != nextProps.communityType) {
       this.props.communityType = nextProps.communityType;
       this._onRefresh(nextProps.communityType);
-    }else if(this.props.modeInfo.isNightMode != nextProps.modeInfo.isNightMode ){
+    } else if (this.props.modeInfo.isNightMode != nextProps.modeInfo.isNightMode) {
       this.props.modeInfo == nextProps.modeInfo;
     }
 
@@ -131,9 +122,9 @@ class Community extends Component {
   componentDidUpdate = () => {
     const { community: communityReducer } = this.props;
 
-    if(communityReducer.topicPage == 1){
+    if (communityReducer.topicPage == 1) {
       this._scrollToTop()
-    }else{
+    } else {
       this.currentHeight = this.listView.getMetrics().contentLength;
     }
 
@@ -144,11 +135,11 @@ class Community extends Component {
 
   componentDidMount = () => {
     const { community: communityReducer } = this.props;
-    if (communityReducer.topicPage == 0){
+    if (communityReducer.topicPage == 0) {
       this._onRefresh();
     }
   }
-  
+
   _onRefresh = (type = '') => {
     const { community: communityReducer, dispatch } = this.props;
 
@@ -160,7 +151,7 @@ class Community extends Component {
   }
 
   _scrollToTop = () => {
-    this.listView.scrollTo({y:0, animated: true});
+    this.listView.scrollTo({ y: 0, animated: true });
   }
 
   _loadMoreData = () => {
@@ -181,47 +172,47 @@ class Community extends Component {
 
   }
 
-  render(){
-    const { community: communityReducer } = this.props;
+  render() {
+    const { community: communityReducer, modeInfo } = this.props;
     // console.log('Community.js rendered');
     dataSource = dataSource.cloneWithRows(communityReducer.topics);
     return (
-        <ListView
-          refreshControl={
-            <RefreshControl
-              refreshing={false}
-              onRefresh={this._onRefresh}
-              colors={[standardColor]}
-              progressBackgroundColor={this.props.modeInfo.backgroundColor}
-              ref={ ref => this.refreshControl = ref}
-              />
-          }
-          ref={listView=>this.listView=listView}
-          key={this.props.modeInfo.isNightMode} 
-          style={{backgroundColor: this.props.modeInfo.backgroundColor}}
-          pageSize = {32}
-          initialListSize = {32}
-          removeClippedSubviews={false}
-          enableEmptySections={true}
-          onEndReached={this._onEndReached}
-          onEndReachedThreshold={10}
-          dataSource={ dataSource }
-          renderRow={this._renderRow}
-
-          onLayout={event => {
-            this.listViewHeight = event.nativeEvent.layout.height
-          }}
-          onContentSizeChange={() => {
-              if (communityReducer.topicPage == 1)
-                return;
-              const y = this.currentHeight + 60 - this.listViewHeight
-              if (y === prevPosition) {
-                return
-              }
-              prevPosition = y;
-              this.listView.scrollTo({y, animated: true})
-            }}
+      <ListView
+        refreshControl={
+          <RefreshControl
+            refreshing={false}
+            onRefresh={this._onRefresh}
+            colors={[standardColor]}
+            progressBackgroundColor={modeInfo.backgroundColor}
+            ref={ref => this.refreshControl = ref}
           />
+        }
+        ref={listView => this.listView = listView}
+        key={modeInfo.isNightMode}
+        style={{ backgroundColor: modeInfo.backgroundColor }}
+        pageSize={32}
+        initialListSize={32}
+        removeClippedSubviews={false}
+        enableEmptySections={true}
+        onEndReached={this._onEndReached}
+        onEndReachedThreshold={10}
+        dataSource={dataSource}
+        renderRow={this._renderRow}
+
+        onLayout={event => {
+          this.listViewHeight = event.nativeEvent.layout.height
+        }}
+        onContentSizeChange={() => {
+          if (communityReducer.topicPage == 1)
+            return;
+          const y = this.currentHeight + 60 - this.listViewHeight
+          if (y === prevPosition) {
+            return
+          }
+          prevPosition = y;
+          this.listView.scrollTo({ y, animated: true })
+        }}
+      />
     )
   }
 
@@ -234,11 +225,10 @@ const styles = StyleSheet.create({
   }
 });
 
-
 function mapStateToProps(state) {
-    return {
-      community: state.community
-    };
+  return {
+    community: state.community
+  };
 }
 
 export default connect(

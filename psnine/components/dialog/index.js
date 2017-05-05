@@ -3,31 +3,23 @@ import {
   StyleSheet,
   Text,
   View,
-  ListView,
-  Image,
-  Picker,
-  ToastAndroid,
   Dimensions,
   TouchableNativeFeedback,
-  RefreshControl,
-  InteractionManager,
-  ToolbarAndroid,
-  Modal,
-  Slider
+  Modal
 } from 'react-native';
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
-import { standardColor, nodeColor, idColor  } from '../../config/colorConfig';
+import { standardColor, nodeColor, idColor } from '../../config/colorConfig';
 
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 class Dialog extends Component {
-  constructor(props){
+  constructor(props) {
     super(props);
   }
 
-  render(){
+  render() {
     const { modeInfo, renderContent, onRequestClose, onDismiss } = this.props
     return (
       <Modal
@@ -35,29 +27,29 @@ class Dialog extends Component {
         transparent={true}
         visible={this.props.modalVisible}
         onRequestClose={onRequestClose}
-        >
+      >
         <TouchableNativeFeedback onPress={onDismiss}>
           <View style={{
-              flex: -1,
-              position: 'absolute',
-              justifyContent:'center',
-              height: SCREEN_HEIGHT,
-              width: SCREEN_WIDTH,
-              alignItems: 'center',
-              backgroundColor: '#000',
-              opacity: 0.1
-            }}/>
-        </TouchableNativeFeedback>
-        <View style={{
             flex: -1,
-            justifyContent:'center',
+            position: 'absolute',
+            justifyContent: 'center',
             height: SCREEN_HEIGHT,
             width: SCREEN_WIDTH,
-            alignItems: 'center'
-          }}>
-          { renderContent() }
+            alignItems: 'center',
+            backgroundColor: '#000',
+            opacity: 0.1
+          }} />
+        </TouchableNativeFeedback>
+        <View style={{
+          flex: -1,
+          justifyContent: 'center',
+          height: SCREEN_HEIGHT,
+          width: SCREEN_WIDTH,
+          alignItems: 'center'
+        }}>
+          {renderContent()}
         </View>
-      </Modal>   
+      </Modal>
     )
   }
 

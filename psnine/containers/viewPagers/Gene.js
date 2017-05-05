@@ -5,17 +5,13 @@ import {
   View,
   ListView,
   Image,
-  ToastAndroid,
-  Dimensions,
   TouchableNativeFeedback,
   RefreshControl,
-  InteractionManager,
-  PanResponder,
-  ScrollView
+  InteractionManager
 } from 'react-native';
 
 import { connect } from 'react-redux';
-import { standardColor, nodeColor, idColor  } from '../../config/colorConfig';
+import { standardColor, nodeColor, idColor } from '../../config/colorConfig';
 import { getGeneList } from '../../actions/gene.js';
 
 import CommunityTopic from '../../components/CommunityTopic';
@@ -27,7 +23,7 @@ let toolbarHeight = 56;
 let releasedMarginTop = 0;
 
 let dataSource = new ListView.DataSource({
-  rowHasChanged:  (row1, row2) => {
+  rowHasChanged: (row1, row2) => {
     return row1.id !== row2.id || row1.views !== row2.views || row1.count !== row2.count;
   },
 });
@@ -41,25 +37,21 @@ class Gene extends Component {
     return (
       <View
         key={`${sectionID}-${rowID}`}
-        style={{ height: 1,backgroundColor: 'rgba(0, 0, 0, 0.1)',marginLeft:10,marginRight:10}}
-        />
+        style={{ height: 1, backgroundColor: 'rgba(0, 0, 0, 0.1)', marginLeft: 10, marginRight: 10 }}
+      />
     );
   }
 
   _onRowPressed = (rowData) => {
-    const { navigator } = this.props;
+    const { navigation } = this.props;
     const URL = getGeneURL(rowData.id);
-    if (navigator) {
-      navigator.push({
-        component: CommunityTopic,
-        params: {
-          URL,
-          title: rowData.content,
-          rowData,
-          type: 'gene'
-        }
-      });
-    }
+    navigation.navigate('CommunityTopic', {
+      URL,
+      title: rowData.title,
+      rowData,
+      type: 'community',
+      shouldBeClickableUnderOtherRoutes: true
+    })
   }
 
 
@@ -68,46 +60,46 @@ class Gene extends Component {
     rowID: number | string,
     highlightRow: (sectionID: number, rowID: number) => void
   ) => {
-
+    const { modeInfo } = this.props
     let TouchableElement = TouchableNativeFeedback;
 
     let imageArr = rowData.thumbs;
     let type = rowData.type;
 
-    const imageItems = imageArr.map((value,index)=>(<Image key={rowData.id+''+index} source={{ uri: value }} style={styles.geneImage}/>));
+    const imageItems = imageArr.map((value, index) => (<Image key={rowData.id + '' + index} source={{ uri: value }} style={styles.geneImage} />));
 
     return (
-      <View rowID={ rowID } style={{              
-            marginTop: 7,
-            marginLeft: 7,
-            marginRight: 7,
-            backgroundColor: this.props.modeInfo.backgroundColor,
-            elevation: 2,
-        }}>
-        <TouchableElement  
-          onPress ={()=>{this._onRowPressed(rowData)}}
+      <View rowID={rowID} style={{
+        marginTop: 7,
+        marginLeft: 7,
+        marginRight: 7,
+        backgroundColor: modeInfo.backgroundColor,
+        elevation: 2,
+      }}>
+        <TouchableElement
+          onPress={() => { this._onRowPressed(rowData) }}
           delayPressIn={100}
           background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
-          >
+        >
           <View style={{ flex: 1, flexDirection: 'row', padding: 12 }}>
             <Image
               source={{ uri: rowData.avatar }}
               style={styles.avatar}
-              />
+            />
 
             <View style={{ marginLeft: 10, flex: 1, flexDirection: 'column', }}>
               <Text
-                style={{ flex: -1,color: this.props.modeInfo.titleTextColor, }}>
+                style={{ flex: -1, color: modeInfo.titleTextColor, }}>
                 {rowData.content}
               </Text>
-              <View style={{flex:-1, flexDirection: 'row', flexWrap: 'wrap', marginTop: 5, marginBottom: 5 }}>
+              <View style={{ flex: -1, flexDirection: 'row', flexWrap: 'wrap', marginTop: 5, marginBottom: 5 }}>
                 {imageItems}
               </View>
-              <View style={{ flex: 1, flexDirection: 'row', justifyContent :'space-between',  }}>
-                <Text style={{ fontSize: 12, flex: -1, color: idColor,textAlign : 'center', textAlignVertical: 'center' }}>{rowData.psnid}</Text>
-                <Text style={{ fontSize: 12, flex: -1,color: this.props.modeInfo.standardTextColor,textAlign : 'center', textAlignVertical: 'center' }}>{rowData.date}</Text>
-                <Text style={{ fontSize: 12, flex: -1,color: this.props.modeInfo.standardTextColor,textAlign : 'center', textAlignVertical: 'center' }}>{rowData.count}</Text>
-                <Text style={{ fontSize: 12, flex: -1,color: this.props.modeInfo.standardTextColor,textAlign : 'center', textAlignVertical: 'center' }}>{rowData.circle}</Text>
+              <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between', }}>
+                <Text style={{ fontSize: 12, flex: -1, color: idColor, textAlign: 'center', textAlignVertical: 'center' }}>{rowData.psnid}</Text>
+                <Text style={{ fontSize: 12, flex: -1, color: modeInfo.standardTextColor, textAlign: 'center', textAlignVertical: 'center' }}>{rowData.date}</Text>
+                <Text style={{ fontSize: 12, flex: -1, color: modeInfo.standardTextColor, textAlign: 'center', textAlignVertical: 'center' }}>{rowData.count}</Text>
+                <Text style={{ fontSize: 12, flex: -1, color: modeInfo.standardTextColor, textAlign: 'center', textAlignVertical: 'center' }}>{rowData.circle}</Text>
               </View>
 
             </View>
@@ -119,10 +111,10 @@ class Gene extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if(this.props.geneType != nextProps.geneType){
+    if (this.props.geneType != nextProps.geneType) {
       this.props.geneType = nextProps.geneType;
       this._onRefresh(nextProps.geneType);
-    }else if(this.props.modeInfo.isNightMode != nextProps.modeInfo.isNightMode ){
+    } else if (this.props.modeInfo.isNightMode != nextProps.modeInfo.isNightMode) {
       this.props.modeInfo == nextProps.modeInfo;
     }
   }
@@ -130,9 +122,9 @@ class Gene extends Component {
   componentDidUpdate = () => {
     const { gene: geneReducer } = this.props;
 
-    if(geneReducer.genePage == 1){
+    if (geneReducer.genePage == 1) {
       this._scrollToTop();
-    }else{
+    } else {
       this.currentHeight = this.listView.getMetrics().contentLength;
     }
 
@@ -160,7 +152,7 @@ class Gene extends Component {
   }
 
   _scrollToTop = () => {
-    this.listView.scrollTo({y:0, animated: true});
+    this.listView.scrollTo({ y: 0, animated: true });
   }
 
   _loadMoreData = () => {
@@ -182,7 +174,7 @@ class Gene extends Component {
 
   render() {
     // console.log('Gene.js rendered');
-    const { gene: geneReducer } = this.props;
+    const { gene: geneReducer, modeInfo } = this.props;
     dataSource = dataSource.cloneWithRows(geneReducer.genes);
     return (
       <ListView
@@ -191,30 +183,30 @@ class Gene extends Component {
             refreshing={false}
             onRefresh={this._onRefresh}
             colors={[standardColor]}
-            ref={ ref => this.refreshControl = ref}
-            progressBackgroundColor={this.props.modeInfo.backgroundColor}
-            />
+            ref={ref => this.refreshControl = ref}
+            progressBackgroundColor={modeInfo.backgroundColor}
+          />
         }
-        key={this.props.modeInfo.isNightMode} 
-        style={{backgroundColor: this.props.modeInfo.backgroundColor}}
-        ref={listView=>this.listView=listView}
-        pageSize = {32}
+        key={modeInfo.isNightMode}
+        style={{ backgroundColor: modeInfo.backgroundColor }}
+        ref={listView => this.listView = listView}
+        pageSize={32}
         removeClippedSubviews={false}
         enableEmptySections={true}
         onEndReached={this._onEndReached}
         onEndReachedThreshold={10}
-        dataSource={ dataSource }
+        dataSource={dataSource}
         renderRow={this._renderRow}
         onLayout={event => {
           this.listViewHeight = event.nativeEvent.layout.height
         }}
         onContentSizeChange={() => {
-            if (geneReducer.genePage == 1)
-              return;
+          if (geneReducer.genePage == 1)
+            return;
 
-            this.listView.scrollTo({y: this.currentHeight + 60 - this.listViewHeight, animated: true})
+          this.listView.scrollTo({ y: this.currentHeight + 60 - this.listViewHeight, animated: true })
         }}
-        />
+      />
     )
   }
 
@@ -233,9 +225,9 @@ const styles = StyleSheet.create({
 });
 
 function mapStateToProps(state) {
-    return {
-      gene: state.gene,
-    };
+  return {
+    gene: state.gene,
+  };
 }
 
 export default connect(

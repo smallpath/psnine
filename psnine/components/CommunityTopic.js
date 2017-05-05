@@ -4,27 +4,15 @@ import {
   StyleSheet,
   Text,
   View,
-  ListView,
   Image,
-  DrawerLayoutAndroid,
-  ToolbarAndroid,
-  ToastAndroid,
-  BackAndroid,
-  TouchableOpacity,
   Dimensions,
   TouchableNativeFeedback,
-  RefreshControl,
-  WebView,
-  KeyboardAvoidingView,
-  TouchableHighlight,
   InteractionManager,
   ActivityIndicator,
   StatusBar,
-  TouchableWithoutFeedback,
   Animated,
   Easing,
   FlatList,
-  ScrollView
 } from 'react-native';
 
 import HTMLView from './htmlToView';
@@ -77,7 +65,7 @@ class CommunityTopic extends Component {
     this.setState({
       isLoading: true
     })
-    getTopiCommentSnapshotAPI(this.props.URL).then(data => {
+    getTopiCommentSnapshotAPI(this.props.navigation.state.params.URL).then(data => {
       this.setState({
         isLoading: false,
         commentList: data.commentList
@@ -86,18 +74,16 @@ class CommunityTopic extends Component {
   }
 
   _onActionSelected = (index) => {
+    const { params } = this.props.navigation.state
     switch(index){
       case 0 :
         const cb = () => {
-          this.props.navigator.push({
-            component: Reply,
+          this.props.navigation.navigate('Reply', {
             withoutAnimation: true,
             shouldForbidPressNew: true,
-            params: {
-              type: this.props.type,
-              id: this.props.rowData.id,
-              callback: this._refreshComment
-            }
+            type: params.type,
+            id: params.rowData.id,
+            callback: this._refreshComment
           })
         }
         if (this.state.openVal._value === 1) {
@@ -117,12 +103,13 @@ class CommunityTopic extends Component {
   }
 
   componentWillMount = () => {
+    const { params } = this.props.navigation.state
     InteractionManager.runAfterInteractions(() => {
-      const data =  getTopicAPI(this.props.URL).then(data => {
+      const data =  getTopicAPI(params.URL).then(data => {
 
         const content = data.contentInfo.html
-        const html = this.props.type !== 'gene' ? content : content.replace('<div>', '<div align="center">')
-        const emptyHTML = this.props.type !== 'gene' ? '<div></div>' : '<div align="center"></div>'
+        const html = params.type !== 'gene' ? content : content.replace('<div>', '<div align="center">')
+        const emptyHTML = params.type !== 'gene' ? '<div></div>' : '<div align="center"></div>'
         this.hasContent = html !== emptyHTML
         this.hasGameTable = data.contentInfo.gameTable.length !== 0
         this.hasComment = data.commentList.length !== 0
@@ -138,24 +125,23 @@ class CommunityTopic extends Component {
     });
   }
 
-  handleImageOnclick = (url) => this.props.navigator.push({
-    component: ImageViewer,
-    params: {
-      images: [
-        { url }
-      ]
-    }
+  handleImageOnclick = (url) => this.props.navigation.navigate('ImageViewer', {
+    images: [
+      { url }
+    ]
   })
 
   renderHeader = (titleInfo) => {
-    const nodeStyle = { flex: -1, color: this.props.modeInfo.standardTextColor,textAlign : 'center', textAlignVertical: 'center' }
-    const textStyle = { flex: -1, color: this.props.modeInfo.standardTextColor,textAlign : 'center', textAlignVertical: 'center' }
-    const isNotGene = this.props.type !== 'gene'
-    const shouldRenderAvatar = isNotGene && !!(this.props.rowData && this.props.rowData.avatar)
+    const { modeInfo } = this.props.screenProps
+    const { params } = this.props.navigation.state
+    const nodeStyle = { flex: -1, color: modeInfo.standardTextColor,textAlign : 'center', textAlignVertical: 'center' }
+    const textStyle = { flex: -1, color: modeInfo.standardTextColor,textAlign : 'center', textAlignVertical: 'center' }
+    const isNotGene = params.type !== 'gene'
+    const shouldRenderAvatar = isNotGene && !!(params.rowData && params.rowData.avatar)
     return (
       <View key={'header'} style={{
             flex: 1,              
-            backgroundColor: this.props.modeInfo.backgroundColor,
+            backgroundColor: modeInfo.backgroundColor,
             elevation: 1,
             margin: 5,
             marginBottom: 0,
@@ -168,7 +154,7 @@ class CommunityTopic extends Component {
           >
           <View style={{ flex: 1, flexDirection: 'row', justifyContent:'center', alignItems: 'center' ,padding: 5 }}>
             { shouldRenderAvatar && <Image
-              source={{ uri: this.props.rowData.avatar.replace('@50w.png', '@75w.png') }}
+              source={{ uri: params.rowData.avatar.replace('@50w.png', '@75w.png') }}
               style={{ width: 75, height: 75}}
               />
             }
@@ -176,7 +162,7 @@ class CommunityTopic extends Component {
             <View style={{ flex: 1, flexDirection: 'column', padding: 5}}>
               <HTMLView
                 value={titleInfo.title}
-                modeInfo={ this.props.modeInfo }
+                modeInfo={ modeInfo }
                 stylesheet={styles}
                 onImageLongPress={this.handleImageOnclick}
                 imagePaddingOffset={shouldRenderAvatar ? 30 + 75 + 10 : 30}
@@ -197,17 +183,18 @@ class CommunityTopic extends Component {
 
   hasContent = false
   renderContent = (html) => {
+    const { modeInfo } = this.props.screenProps
     return (
       <View key={'content'} style={{             
             elevation: 1,
             margin: 5,
             marginTop: 0,
-            backgroundColor: this.props.modeInfo.backgroundColor,
+            backgroundColor: modeInfo.backgroundColor,
             padding: 10
         }}>
         <HTMLView
           value={html}
-          modeInfo={ this.props.modeInfo }
+          modeInfo={ modeInfo }
           shouldShowLoadingIndicator={true}
           stylesheet={styles}
           imagePaddingOffset={30}
@@ -219,11 +206,12 @@ class CommunityTopic extends Component {
 
   hasGameTable = false
   renderGameTable = (gameTable) => {
+    const { modeInfo } = this.props.screenProps
     const list = []
     for (const rowData of gameTable) {
       list.push(
         <View key={ rowData.id } style={{              
-              backgroundColor: this.props.modeInfo.backgroundColor
+              backgroundColor: modeInfo.backgroundColor
           }}>
           <TouchableNativeFeedback
             onPress ={()=>{
@@ -243,14 +231,14 @@ class CommunityTopic extends Component {
                 <Text
                   ellipsizeMode={'tail'}
                   numberOfLines={3}
-                  style={{ flex: 2.5,color: this.props.modeInfo.titleTextColor, }}>
+                  style={{ flex: 2.5,color: modeInfo.titleTextColor, }}>
                   {rowData.title}
                 </Text>
 
                 <View style={{ flex: 1.1, flexDirection: 'row', justifyContent :'space-between' }}>
                   <Text selectable={false} style={{ flex: -1, color: idColor,textAlign : 'center', textAlignVertical: 'center' }}>{rowData.platform}</Text>
-                  <Text selectable={false} style={{ flex: -1, color: this.props.modeInfo.standardTextColor,textAlign : 'center', textAlignVertical: 'center' }}>{rowData.region}</Text>
-                  <Text selectable={false} style={{ flex: -1, color: this.props.modeInfo.standardTextColor,textAlign : 'center', textAlignVertical: 'center' }}>{
+                  <Text selectable={false} style={{ flex: -1, color: modeInfo.standardTextColor,textAlign : 'center', textAlignVertical: 'center' }}>{rowData.region}</Text>
+                  <Text selectable={false} style={{ flex: -1, color: modeInfo.standardTextColor,textAlign : 'center', textAlignVertical: 'center' }}>{
                     rowData.platium + rowData.gold + rowData.selver + rowData.bronze
                   }</Text>
                 </View>
@@ -263,7 +251,7 @@ class CommunityTopic extends Component {
       )
     }
     return (
-      <View style={{elevation: 1, margin: 5, marginTop: 0, backgroundColor:this.props.modeInfo.backgroundColor }}>
+      <View style={{elevation: 1, margin: 5, marginTop: 0, backgroundColor:modeInfo.backgroundColor }}>
         { list }
       </View>
     )
@@ -272,15 +260,16 @@ class CommunityTopic extends Component {
   hasComment = false
   hasReadMore = false
   renderComment = (commentList) => {
+    const { modeInfo } = this.props.screenProps
     const list = []
     let readMore = null
     for (const rowData of commentList) {
       if (rowData.isGettingMoreComment === false) {
         list.push(
           <View key={ rowData.id } style={{              
-                backgroundColor: this.props.modeInfo.backgroundColor,
+                backgroundColor: modeInfo.backgroundColor,
                 borderBottomWidth: StyleSheet.hairlineWidth,
-                borderBottomColor: this.props.modeInfo.brighterLevelOne
+                borderBottomColor: modeInfo.brighterLevelOne
             }}>
             <TouchableNativeFeedback  
               onPress ={()=>{
@@ -299,7 +288,7 @@ class CommunityTopic extends Component {
                 <View style={{ marginLeft: 10, flex: 1, flexDirection: 'column'}}>
                   <HTMLView
                     value={rowData.content}
-                    modeInfo={ this.props.modeInfo }
+                    modeInfo={ modeInfo }
                     stylesheet={styles}
                     onImageLongPress={this.handleImageOnclick}
                     imagePaddingOffset={30 + 75 + 10}
@@ -307,7 +296,7 @@ class CommunityTopic extends Component {
 
                   <View style={{ flex: 1.1, flexDirection: 'row', justifyContent :'space-between' }}>
                     <Text selectable={false} style={{ flex: -1, color: idColor ,textAlign : 'center', textAlignVertical: 'center' }}>{rowData.psnid}</Text>
-                    <Text selectable={false} style={{ flex: -1, color: this.props.modeInfo.standardTextColor,textAlign : 'center', textAlignVertical: 'center' }}>{rowData.date}</Text>
+                    <Text selectable={false} style={{ flex: -1, color: modeInfo.standardTextColor,textAlign : 'center', textAlignVertical: 'center' }}>{rowData.date}</Text>
                   </View>
 
                 </View>
@@ -319,12 +308,12 @@ class CommunityTopic extends Component {
       } else {
         readMore = (
           <View key={ 'readmore' } style={{              
-                backgroundColor: this.props.modeInfo.backgroundColor,
+                backgroundColor: modeInfo.backgroundColor,
                 elevation: 1
             }}>
             <TouchableNativeFeedback  
               onPress ={()=>{
-                this._readMore(`${this.props.URL}/comment?page=1`)
+                this._readMore(`${this.props.navigation.state.params.URL}/comment?page=1`)
               }}
               useForeground={true}
               delayPressIn={100}
@@ -346,26 +335,24 @@ class CommunityTopic extends Component {
     const shouldMarginTop = !this.hasContent && !this.hasGameTable && !this.hasPage
     return (
       <View style={{ marginTop: shouldMarginTop ? 5 : 0 }}>
-        { readMore &&<View style={{elevation: 1, margin: 5, marginTop: 0, marginBottom: 5, backgroundColor:this.props.modeInfo.backgroundColor }}>{ readMore }</View> } 
-        <View style={{elevation: 1, margin: 5, marginTop: 0, backgroundColor:this.props.modeInfo.backgroundColor }}>
+        { readMore &&<View style={{elevation: 1, margin: 5, marginTop: 0, marginBottom: 5, backgroundColor:modeInfo.backgroundColor }}>{ readMore }</View> } 
+        <View style={{elevation: 1, margin: 5, marginTop: 0, backgroundColor:modeInfo.backgroundColor }}>
           { list }
         </View>
-        { readMore &&<View style={{elevation: 1, margin: 5, marginTop: 0, marginBottom: 5, backgroundColor:this.props.modeInfo.backgroundColor }}>{ readMore }</View> }
+        { readMore &&<View style={{elevation: 1, margin: 5, marginTop: 0, marginBottom: 5, backgroundColor:modeInfo.backgroundColor }}>{ readMore }</View> }
       </View>
     )
   }
 
   _readMore = (URL) => {
-    this.props.navigator.push({
-      component: CommentList,
-      params: {
-        URL
-      }
+    this.props.navigation.navigate('CommentList', {
+      URL
     })
   }
 
   hasPage = false
   renderPage = (page) => {
+    const { modeInfo } = this.props.screenProps
     const list = [] 
     for (const item of page) {
       const thisJSX = (
@@ -391,11 +378,11 @@ class CommunityTopic extends Component {
       list.push(thisJSX)
     }
     return (
-      <View style={{elevation: 1,margin: 5, marginTop: 0, marginBottom: 0, backgroundColor:this.props.modeInfo.backgroundColor}}>
+      <View style={{elevation: 1,margin: 5, marginTop: 0, marginBottom: 0, backgroundColor:modeInfo.backgroundColor}}>
         <View style={{
             elevation: 2,
             margin: 5,
-            backgroundColor:this.props.modeInfo.backgroundColor,
+            backgroundColor:modeInfo.backgroundColor,
             padding: 5
           }}>
           { list }
@@ -406,7 +393,9 @@ class CommunityTopic extends Component {
   viewTopIndex = 0
   viewBottomIndex = 0
   render() {
+    const { params } = this.props.navigation.state
     // console.log('CommunityTopic.js rendered');
+    const { modeInfo } = this.props.screenProps
     const { data: source } = this.state 
     const data = []
     const renderFuncArr = []
@@ -437,20 +426,20 @@ class CommunityTopic extends Component {
 
     return ( 
           <View 
-            style={{flex:1, backgroundColor: this.props.modeInfo.backgroundColor}}
+            style={{flex:1, backgroundColor: modeInfo.backgroundColor}}
             onStartShouldSetResponder={() => false}
             onMoveShouldSetResponder={() => false}
             >
               <Ionicons.ToolbarAndroid
                 navIconName="md-arrow-back"
                 overflowIconName="md-more"                 
-                iconColor={this.props.modeInfo.isNightMode ? '#000' : '#fff'}
-                title={`No.${this.props.rowData.id}`}
-                titleColor={this.props.modeInfo.isNightMode ? '#000' : '#fff'}
-                style={[styles.toolbar, {backgroundColor: this.props.modeInfo.standardColor}]}
+                iconColor={modeInfo.isNightMode ? '#000' : '#fff'}
+                title={`No.${params.rowData.id}`}
+                titleColor={modeInfo.isNightMode ? '#000' : '#fff'}
+                style={[styles.toolbar, {backgroundColor: modeInfo.standardColor}]}
                 actions={toolbarActions}
                 onIconClicked={() => {
-                  this.props.navigator.pop()
+                  this.props.navigation.goBack()
                 }}
                 onActionSelected={this._onActionSelected}
               />
@@ -466,10 +455,10 @@ class CommunityTopic extends Component {
                     size={50}
                   />
               )}
-              { this.props.type === 'community' && !this.state.isLoading && this.renderToolbar() }
+              { params.type === 'community' && !this.state.isLoading && this.renderToolbar() }
               { !this.state.isLoading && <FlatList style={{
                 flex: -1,
-                backgroundColor: this.props.modeInfo.standardColor
+                backgroundColor: modeInfo.standardColor
               }}
                 ref={flatlist => this.flatlist = flatlist}
                 data={data}
@@ -493,54 +482,58 @@ class CommunityTopic extends Component {
   }
 
 
-  renderToolbarItem = (props, index, maxLength) => (
-    <Animated.View 
-        ref={float => this[`float${index}`] = float}
-        collapsable ={false}
-        key={index}
-        style={{
-          width: 40,
-          height: 40,
-          borderRadius: 20,
-          backgroundColor: this.props.modeInfo.accentColor,
-          position:'absolute',
-          bottom: props.openVal.interpolate({inputRange: [0, 1], outputRange: [24,  56 + 10 + 16 * 2 + index * 50]}),
-          right: 24,
-          elevation: 1,
-          zIndex: 1,
-          opacity: 1
-      }}>
-      <TouchableNativeFeedback 
-        onPress={() => this.pressToolbar(maxLength - index - 1)}
-        background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
-        onPressIn={()=>{
-          this.float1.setNativeProps({
-            style :{
-            elevation: 12,
-          }});
-        }}
-        onPressOut={()=>{
-          this.float1.setNativeProps({
-            style :{
-            elevation: 6,
-          }});
-        }}
-        style={{
-          width: 40,
-          height: 40,
-          borderRadius: 20,
-          flex:1,
-          zIndex: 1,
-          backgroundColor: accentColor,
+  renderToolbarItem = (props, index, maxLength) => {
+    const { modeInfo } = this.props.screenProps
+    return (
+      <Animated.View 
+          ref={float => this[`float${index}`] = float}
+          collapsable ={false}
+          key={index}
+          style={{
+            width: 40,
+            height: 40,
+            borderRadius: 20,
+            backgroundColor: modeInfo.accentColor,
+            position:'absolute',
+            bottom: props.openVal.interpolate({inputRange: [0, 1], outputRange: [24,  56 + 10 + 16 * 2 + index * 50]}),
+            right: 24,
+            elevation: 1,
+            zIndex: 1,
+            opacity: 1
         }}>
-        <View style={{borderRadius: 20,width: 40,height: 40,justifyContent: 'center',alignItems: 'center',}}>
-          <Ionicons name={props.iconName} size={20} color='#fff'/>
-        </View>
-      </TouchableNativeFeedback>
-    </Animated.View>
-  )
+        <TouchableNativeFeedback 
+          onPress={() => this.pressToolbar(maxLength - index - 1)}
+          background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
+          onPressIn={()=>{
+            this.float1.setNativeProps({
+              style :{
+              elevation: 12,
+            }});
+          }}
+          onPressOut={()=>{
+            this.float1.setNativeProps({
+              style :{
+              elevation: 6,
+            }});
+          }}
+          style={{
+            width: 40,
+            height: 40,
+            borderRadius: 20,
+            flex:1,
+            zIndex: 1,
+            backgroundColor: accentColor,
+          }}>
+          <View style={{borderRadius: 20,width: 40,height: 40,justifyContent: 'center',alignItems: 'center',}}>
+            <Ionicons name={props.iconName} size={20} color='#fff'/>
+          </View>
+        </TouchableNativeFeedback>
+      </Animated.View>
+    )
+  }
 
   renderToolbar = () => {
+    const { modeInfo } = this.props.screenProps
     const { openVal } = this.state
     const tipHeight =  toolbarHeight * 0.8
     const list = []

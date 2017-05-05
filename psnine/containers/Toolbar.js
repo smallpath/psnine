@@ -8,7 +8,7 @@ import {
   DrawerLayoutAndroid,
   ToolbarAndroid,
   ToastAndroid,
-  BackAndroid,
+  BackHandler,
   TouchableOpacity,
   Dimensions,
   TouchableNativeFeedback,
@@ -26,15 +26,10 @@ import nativeImageSource from 'nativeImageSource';
 
 import { connect } from 'react-redux';
 
-import NavigatorDrawer from './NavigatorDrawer';
 import SegmentedView from './SegmentedView';
 
 import Community from './viewPagers/Community';
 import Gene from './viewPagers/Gene';
-
-import NewBattle from '../components/new/NewBattle';
-import NewGene from '../components/new/NewGene';
-import NewTopic from '../components/new/NewTopic';
 
 import { changeSegmentIndex, changeCommunityType, changeGeneType, changeScrollType } from '../actions/app';
 
@@ -128,7 +123,7 @@ class Toolbar extends Component {
         {...{
           communityType: this.props.app.communityType,
           geneType: this.props.app.geneType,
-          navigator: this.props.navigator,
+          navigation: this.props.navigation,
           toolbarDispatch: this.props.dispatch,
           segmentedIndex: this.props.app.segmentedIndex,
           modeInfo: this.props.modeInfo,
@@ -303,16 +298,15 @@ class Toolbar extends Component {
   }
 
   _pressToolbarNew = index => {
-    const { navigator } = this.props;
+    const { navigation } = this.props;
     const { segmentedIndex } = this.props.app;
 
     switch (segmentedIndex) {
       case 0:
         this.pressNew(() => {
-          navigator.push({
-            component: NewTopic,
+          navigation.navigate('NewTopic', {
             withoutAnimation: true,
-            shouldForbidPressNew: true,
+            shouldForbidPressNew: true
           })
         });
         break;
@@ -322,19 +316,17 @@ class Toolbar extends Component {
         break;
       case 3:
         this.pressNew(() => {
-          navigator.push({
-            component: NewBattle,
+          navigation.navigate('NewTopic', {
             withoutAnimation: true,
-            shouldForbidPressNew: true,
+            shouldForbidPressNew: true
           })
         });
         break;
       case 4:
         this.pressNew(() => {
-          navigator.push({
-            component: NewGene,
+          navigation.navigate('NewTopic', {
             withoutAnimation: true,
-            shouldForbidPressNew: true,
+            shouldForbidPressNew: true
           })
         });
         break;
@@ -349,20 +341,21 @@ class Toolbar extends Component {
       return;
     }
 
-    const { navigator: _navigator } = this.props;
+    // TODO: forbid press the toolbar while new topic is showing
+    // const { navigator: _navigator } = this.props;
 
-    let routes = _navigator.getCurrentRoutes();
+    // let routes = _navigator.getCurrentRoutes();
 
-    let shouldForbidPressNew = routes.some(value => {
-      return typeof value.shouldForbidPressNew != 'undefined' && value.shouldForbidPressNew == true;
-    });
+    // let shouldForbidPressNew = routes.some(value => {
+    //   return typeof value.shouldForbidPressNew != 'undefined' && value.shouldForbidPressNew == true;
+    // });
 
-    if (shouldForbidPressNew == true) {
-      return;
-    }
+    // if (shouldForbidPressNew == true) {
+    //   return;
+    // }
 
     if (this.state.openVal._value === 0) {
-      this.removeListener = BackAndroid.addEventListener('hardwareBackPress', () => {
+      this.removeListener = BackHandler.addEventListener('hardwareBackPress', () => {
         let value = this.state.innerMarginTop._value;
         if (Math.abs(value) >= 50) {
           Animated.timing(this.state.innerMarginTop, { toValue: 0, ...config }).start();
@@ -385,7 +378,7 @@ class Toolbar extends Component {
   }
 
   render() {
-    const { app: appReducer, switchModeOnRoot } = this.props;
+    const { app: appReducer, switchModeOnRoot, modeInfo } = this.props;
     const { segmentedIndex } = this.props.app;
     const { openVal } = this.state
     const tipHeight = toolbarHeight * 0.8
@@ -411,10 +404,10 @@ class Toolbar extends Component {
         <Icon.ToolbarAndroid
           navIconName="md-menu"
           title={title}
-          style={[styles.toolbar, { backgroundColor: this.props.modeInfo.standardColor }]}
-          titleColor={this.props.modeInfo.isNightMode ? '#000' : '#fff'}
+          style={[styles.toolbar, { backgroundColor: modeInfo.standardColor }]}
+          titleColor={modeInfo.isNightMode ? '#000' : '#fff'}
           overflowIconName="md-more"
-          iconColor={this.props.modeInfo.isNightMode ? '#000' : '#fff'}
+          iconColor={modeInfo.isNightMode ? '#000' : '#fff'}
           actions={toolbarActions[appReducer.segmentedIndex]}
           onActionSelected={this.onActionSelected}
           onIconClicked={this.props._callDrawer()}

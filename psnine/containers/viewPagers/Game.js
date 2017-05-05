@@ -5,19 +5,15 @@ import {
   View,
   ListView,
   Image,
-  ToastAndroid,
-  Dimensions,
   TouchableNativeFeedback,
   RefreshControl,
-  PanResponder,
-  Animated,
   InteractionManager,
   Picker
 } from 'react-native';
 
 import { connect } from 'react-redux';
 import { getGameList } from '../../actions/game.js';
-import { standardColor, nodeColor, idColor  } from '../../config/colorConfig';
+import { standardColor, nodeColor, idColor } from '../../config/colorConfig';
 import Icon from 'react-native-vector-icons/Ionicons';
 import CommunityTopic from '../../components/CommunityTopic';
 
@@ -37,38 +33,35 @@ let dataSource = new ListView.DataSource({
 });
 
 class Game extends Component {
-    constructor(props){
-        super(props);
+  constructor(props) {
+    super(props);
 
-        this.state = {
-          pf: 'all',
-          sort: 'newest',
-          dlc: 'all'
-        }
+    this.state = {
+      pf: 'all',
+      sort: 'newest',
+      dlc: 'all'
     }
+  }
 
   _renderSeparator(sectionID: number, rowID: number, adjacentRowHighlighted: bool) {
     return (
       <View
         key={`${sectionID}-${rowID}`}
-        style={{ height: 1,backgroundColor: 'rgba(0, 0, 0, 0.1)',marginLeft:10,marginRight:10}}
-        />
+        style={{ height: 1, backgroundColor: 'rgba(0, 0, 0, 0.1)', marginLeft: 10, marginRight: 10 }}
+      />
     );
   }
 
   _onRowPressed = (rowData) => {
-    const { navigator } = this.props;
+    const { navigation } = this.props;
     const URL = getGameUrl(rowData.id);
-    if (navigator) {
-      navigator.push({
-        component: CommunityTopic,
-        params: {
-          URL,
-          title: rowData.title,
-          rowData
-        }
-      });
-    }
+    navigation.navigate('CommunityTopic', {
+      URL,
+      title: rowData.title,
+      rowData,
+      type: 'community',
+      shouldBeClickableUnderOtherRoutes: true
+    })
   }
 
 
@@ -80,37 +73,37 @@ class Game extends Component {
 
     let TouchableElement = TouchableNativeFeedback;
     return (
-      <View rowID={ rowID } style={{              
-            marginTop: 7,
-            backgroundColor: this.props.modeInfo.backgroundColor,
-            elevation: 1,
-        }}>
-        <TouchableElement  
-          onPress ={()=>{
+      <View rowID={rowID} style={{
+        marginTop: 7,
+        backgroundColor: this.props.modeInfo.backgroundColor,
+        elevation: 1,
+      }}>
+        <TouchableElement
+          onPress={() => {
             this._onRowPressed(rowData)
           }}
           useForeground={true}
           delayPressIn={100}
           background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
-          >
-          <View pointerEvents='box-only' style={{ flex: 1, flexDirection: 'row',  padding: 12 }}>
+        >
+          <View pointerEvents='box-only' style={{ flex: 1, flexDirection: 'row', padding: 12 }}>
             <Image
               source={{ uri: rowData.avatar }}
               style={[styles.avatar, { width: 91 }]}
-              />                
+            />
 
-            <View style={{ marginLeft: 10, flex: 1, flexDirection: 'column'}}>
+            <View style={{ marginLeft: 10, flex: 1, flexDirection: 'column' }}>
               <Text
                 ellipsizeMode={'tail'}
                 numberOfLines={3}
-                style={{ flex: 2.5,color: this.props.modeInfo.titleTextColor, }}>
+                style={{ flex: 2.5, color: this.props.modeInfo.titleTextColor, }}>
                 {rowData.title}
               </Text>
 
-              <View style={{ flex: 1.1, flexDirection: 'row', justifyContent :'space-between' }}>
-                <Text selectable={false} style={{ flex: -1, color: idColor,textAlign : 'center', textAlignVertical: 'center' }}>{rowData.platform}</Text>
-                <Text selectable={false} style={{ flex: -1, color: this.props.modeInfo.standardTextColor,textAlign : 'center', textAlignVertical: 'center' }}>{rowData.region}</Text>
-                <Text selectable={false} style={{ flex: -1, color: this.props.modeInfo.standardTextColor,textAlign : 'center', textAlignVertical: 'center' }}>{
+              <View style={{ flex: 1.1, flexDirection: 'row', justifyContent: 'space-between' }}>
+                <Text selectable={false} style={{ flex: -1, color: idColor, textAlign: 'center', textAlignVertical: 'center' }}>{rowData.platform}</Text>
+                <Text selectable={false} style={{ flex: -1, color: this.props.modeInfo.standardTextColor, textAlign: 'center', textAlignVertical: 'center' }}>{rowData.region}</Text>
+                <Text selectable={false} style={{ flex: -1, color: this.props.modeInfo.standardTextColor, textAlign: 'center', textAlignVertical: 'center' }}>{
                   rowData.platium + rowData.gold + rowData.selver + rowData.bronze
                 }</Text>
               </View>
@@ -136,10 +129,10 @@ class Game extends Component {
         backgroundColor: this.props.modeInfo.backgroundColor
       }}>
         <Picker style={{
-            flex: 1,
-            borderWidth: 1,
-            color: this.props.modeInfo.standardTextColor
-          }}
+          flex: 1,
+          borderWidth: 1,
+          color: this.props.modeInfo.standardTextColor
+        }}
           prompt='选择平台'
           selectedValue={this.state.pf}
           onValueChange={this.onValueChange.bind(this, 'pf')}>
@@ -149,10 +142,10 @@ class Game extends Component {
           <Picker.Item label="PS4" value="ps4" />
         </Picker>
         <Picker style={{
-            flex: 1,
-            borderWidth: 1,
-            color: this.props.modeInfo.standardTextColor
-          }}
+          flex: 1,
+          borderWidth: 1,
+          color: this.props.modeInfo.standardTextColor
+        }}
           prompt='选择DLC'
           selectedValue={this.state.dlc}
           onValueChange={this.onValueChange.bind(this, 'dlc')}>
@@ -161,9 +154,9 @@ class Game extends Component {
           <Picker.Item label="无DLC" value="nodlc" />
         </Picker>
         <Picker style={{
-            flex: 1.5,
-            color: this.props.modeInfo.standardTextColor
-          }}
+          flex: 1.5,
+          color: this.props.modeInfo.standardTextColor
+        }}
           prompt='排序'
           selectedValue={this.state.sort}
           onValueChange={this.onValueChange.bind(this, 'sort')}>
@@ -184,7 +177,7 @@ class Game extends Component {
   };
 
   componentWillReceiveProps = (nextProps) => {
-    if(this.props.modeInfo.isNightMode != nextProps.modeInfo.isNightMode ){
+    if (this.props.modeInfo.isNightMode != nextProps.modeInfo.isNightMode) {
       this.props.modeInfo == nextProps.modeInfo;
     }
   }
@@ -192,9 +185,9 @@ class Game extends Component {
   componentDidUpdate = () => {
     const { game: gameReducer } = this.props;
 
-    if(gameReducer.page == 1){
+    if (gameReducer.page == 1) {
       this._scrollToTop()
-    }else{
+    } else {
       this.currentHeight = this.listView.getMetrics().contentLength;
     }
 
@@ -205,11 +198,11 @@ class Game extends Component {
 
   componentDidMount = () => {
     const { game: gameReducer } = this.props;
-    if (gameReducer.page === 0){
+    if (gameReducer.page === 0) {
       this._onRefresh();
     }
   }
-  
+
   _onRefresh = () => {
     const { game: gameReducer, dispatch } = this.props;
 
@@ -222,7 +215,7 @@ class Game extends Component {
   }
 
   _scrollToTop = () => {
-    this.listView.scrollTo({y:0, animated: true});
+    this.listView.scrollTo({ y: 0, animated: true });
   }
 
   _loadMoreData = () => {
@@ -242,48 +235,48 @@ class Game extends Component {
     this._loadMoreData();
   }
 
-  render(){
-    const { game: gameReducer } = this.props;
+  render() {
+    const { game: gameReducer, modeInfo } = this.props;
     // console.log('Community.js rendered');
     dataSource = dataSource.cloneWithRows(gameReducer.games);
     return (
-      <View style={{backgroundColor: this.props.modeInfo.backgroundColor, flex:1}}>
-        { this._renderHeader() }
+      <View style={{ backgroundColor: modeInfo.backgroundColor, flex: 1 }}>
+        {this._renderHeader()}
         <ListView
           refreshControl={
             <RefreshControl
               refreshing={false}
               onRefresh={this._onRefresh}
               colors={[standardColor]}
-              progressBackgroundColor={this.props.modeInfo.backgroundColor}
-              ref={ ref => this.refreshControl = ref}
-              />
+              progressBackgroundColor={modeInfo.backgroundColor}
+              ref={ref => this.refreshControl = ref}
+            />
           }
-          key={this.props.modeInfo.isNightMode} 
-          ref={listView=>this.listView=listView}
-          style={{backgroundColor: this.props.modeInfo.backgroundColor, flex:10}}
-          pageSize = {32}
-          initialListSize = {32}
+          key={modeInfo.isNightMode}
+          ref={listView => this.listView = listView}
+          style={{ backgroundColor: modeInfo.backgroundColor, flex: 10 }}
+          pageSize={32}
+          initialListSize={32}
           removeClippedSubviews={false}
           enableEmptySections={true}
           onEndReached={this._onEndReached}
           onEndReachedThreshold={10}
-          dataSource={ dataSource }
+          dataSource={dataSource}
           renderRow={this._renderRow}
           onLayout={event => {
             this.listViewHeight = event.nativeEvent.layout.height
           }}
           onContentSizeChange={() => {
-              if (gameReducer.page == 1)
-                return;
-              const y = this.currentHeight + 60 - this.listViewHeight
-              if (y === prevPosition) {
-                return
-              }
-              prevPosition = y;
-              this.listView.scrollTo({y, animated: true})
-            }}
-          />
+            if (gameReducer.page == 1)
+              return;
+            const y = this.currentHeight + 60 - this.listViewHeight
+            if (y === prevPosition) {
+              return
+            }
+            prevPosition = y;
+            this.listView.scrollTo({ y, animated: true })
+          }}
+        />
       </View>
     )
   }
@@ -299,9 +292,9 @@ const styles = StyleSheet.create({
 
 
 function mapStateToProps(state) {
-    return {
-      game: state.game
-    };
+  return {
+    game: state.game
+  };
 }
 
 export default connect(

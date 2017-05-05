@@ -9,7 +9,7 @@ import {
   DrawerLayoutAndroid,
   ToolbarAndroid,
   ToastAndroid,
-  BackAndroid,
+  BackHandler,
   TouchableOpacity,
   Dimensions,
   TouchableNativeFeedback,
@@ -26,46 +26,46 @@ let DRAWER_REF = 'drawer';
 let DRAWER_WIDTH_LEFT = 90;
 
 class Psnine extends Component {
-  constructor(props){
+  constructor(props) {
     super(props);
   }
 
-  _renderNavigationView = ()=>{
-    return (<NavigatorDrawer {...{
-          closeDrawer: this.closeDrawer,
-          navigator:this.props.navigator, 
-          modeInfo:this.props.modeInfo,
-          switchModeOnRoot: this.props.switchModeOnRoot
-        }}/>)
-  }
-
-  callDrawer=()=>{
+  callDrawer = () => {
     this.refs[DRAWER_REF].openDrawer()
   }
 
-  closeDrawer=()=>{
+  closeDrawer = () => {
     this.refs[DRAWER_REF].closeDrawer()
   }
 
   render() {
     const { reducer } = this.props;
     // console.log('App.js rendered');
-    return ( 
-      <DrawerLayoutAndroid 
-            ref={DRAWER_REF}
-            drawerWidth={Dimensions.get('window').width - DRAWER_WIDTH_LEFT} 
-            drawerPosition={DrawerLayoutAndroid.positions.Left} 
-            renderNavigationView={this._renderNavigationView}>
-            <Toolbar 
-              {...{
-                navigator:this.props.navigator, 
-                modeInfo:this.props.modeInfo, 
-                switchModeOnRoot: this.props.switchModeOnRoot,
-                tipBarMarginBottom: this.props.tipBarMarginBottom
-              }}
-              _callDrawer = {() => this.callDrawer.bind(this)}
-            />
-      </DrawerLayoutAndroid> 
+    const { navigation: { state }, screenProps } = this.props;
+    return (
+      <DrawerLayoutAndroid
+        ref={DRAWER_REF}
+        drawerWidth={Dimensions.get('window').width - DRAWER_WIDTH_LEFT}
+        drawerPosition={DrawerLayoutAndroid.positions.Left}
+        renderNavigationView={() => (
+          <NavigatorDrawer {...{
+            closeDrawer: this.closeDrawer,
+            navigation: this.props.navigation,
+            modeInfo: screenProps.modeInfo,
+            switchModeOnRoot: screenProps.switchModeOnRoot,
+            tipBarMarginBottom: screenProps.tipBarMarginBottom
+          }} />
+        )}>
+        <Toolbar
+          {...{
+            navigation: this.props.navigation,
+            modeInfo: screenProps.modeInfo,
+            switchModeOnRoot: screenProps.switchModeOnRoot,
+            tipBarMarginBottom: screenProps.tipBarMarginBottom
+          }}
+          _callDrawer={() => this.callDrawer.bind(this)}
+        />
+      </DrawerLayoutAndroid>
     );
   }
 }
@@ -81,7 +81,7 @@ const styles = StyleSheet.create({
     backgroundColor: standardColor,
     height: 56,
   },
-  selectedTitle:{
+  selectedTitle: {
     //backgroundColor: '#00ffff'
     //fontSize: 20
   },

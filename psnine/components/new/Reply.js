@@ -1,31 +1,20 @@
 import React, { Component } from 'react';
 import {
-  AppRegistry,
   StyleSheet,
   Text,
   View,
-  ListView,
   Image,
-  DrawerLayoutAndroid,
-  ToolbarAndroid,
   ToastAndroid,
-  BackAndroid,
-  TouchableOpacity,
+  BackHandler,
   Dimensions,
   TouchableNativeFeedback,
-  TouchableWithoutFeedback,
-  RefreshControl,
-  WebView,
   KeyboardAvoidingView,
   Keyboard,
   TextInput,
-  AsyncStorage,
-  Linking,
   Animated,
   Easing,
   PanResponder,
-  StatusBar,
-  Picker,
+  StatusBar
 } from 'react-native';
 
 import { connect } from 'react-redux';
@@ -86,7 +75,7 @@ export default class Reply extends Component {
     }
     Keyboard.dismiss()
     Animated.spring(this.state.openVal, {toValue: 0, ...config}).start(({finished})=>{
-      finished && this.props.navigator.pop();
+      finished && this.props.navigation.goBack();
     });
 
   }
@@ -100,14 +89,14 @@ export default class Reply extends Component {
 
   componentWillMount = async () => {
     let config = {tension: 30, friction: 7};
-    this.removeListener = BackAndroid.addEventListener('hardwareBackPress',  () => {
+    this.removeListener = BackHandler.addEventListener('hardwareBackPress',  () => {
       let value = this.state.innerMarginTop._value;
       if (Math.abs(value) >= 50) {
         Animated.spring(this.state.innerMarginTop, {toValue: 0, ...config}).start();
         return true;
       }else{
         Animated.spring(this.state.openVal, {toValue: 0, ...config}).start(({finished})=>{
-          finished && this.props.navigator.pop();
+          finished && this.props.navigation.goBack();
         });
         return true;
       }
@@ -221,10 +210,11 @@ export default class Reply extends Component {
   }
 
   sendReply = () => {
-    const type = this.props.type === 'community' ? 'topic' : this.props.type
+    const { params } = this.props.navigation.state
+    const type = params.type === 'community' ? 'topic' : params.type
     const form = {
       type: type,
-      param: this.props.id,
+      param: params.id,
       old: 'yes', // what???
       content: this.state.content,
       com: ''
@@ -239,7 +229,7 @@ export default class Reply extends Component {
         }
       }
       ToastAndroid.show('评论成功', ToastAndroid.SHORT);
-      this.props.callback && this.props.callback()
+      params.callback && params.callback()
       this._pressButton()
     }).catch(err => {
       const msg = `评论失败: ${arr[1]}`
@@ -249,7 +239,7 @@ export default class Reply extends Component {
 
   render() {
     let { openVal, marginTop, icon } = this.state;
-     
+    const { modeInfo } = this.props.screenProps
     let outerStyle = { 
       marginTop : this.state.innerMarginTop.interpolate({
         inputRange: [0, SCREEN_HEIGHT], 
@@ -268,7 +258,7 @@ export default class Reply extends Component {
         zIndex : openVal.interpolate({inputRange: [0 ,1], outputRange: [0, 3]}),
         backgroundColor: openVal.interpolate({
           inputRange: [0 ,1], 
-          outputRange: [accentColor, this.props.modeInfo.backgroundColor]
+          outputRange: [accentColor, modeInfo.backgroundColor]
         }),
         //elevation : openVal.interpolate({inputRange: [0 ,1], outputRange: [0, 8]})
     };
@@ -279,7 +269,7 @@ export default class Reply extends Component {
 
     let animatedToolbarStyle = {
       height: openVal.interpolate({inputRange: [0, 0.9 ,1], outputRange: [0, 0, 56]}),
-      backgroundColor: this.props.modeInfo.standardColor,
+      backgroundColor: modeInfo.standardColor,
     }
 
     return (
@@ -325,12 +315,12 @@ export default class Reply extends Component {
               ref={ref=>this.content=ref}
               onChange={({nativeEvent})=>{ this.setState({content:nativeEvent.text})}}
               style={[styles.textInput, { 
-                color:this.props.modeInfo.titleTextColor,
+                color:modeInfo.titleTextColor,
                 textAlign: 'left',
                 textAlignVertical: 'top',
                 flex:1,
               }]}
-              placeholderTextColor={this.props.modeInfo.standardTextColor}
+              placeholderTextColor={modeInfo.standardTextColor}
               // underlineColorAndroid={accentColor}
               underlineColorAndroid='rgba(0,0,0,0)'
             />
@@ -388,7 +378,7 @@ export default class Reply extends Component {
 
               </Animated.View>
               <Animated.View style={{
-                elevation: 4, bottom:0,  backgroundColor: this.props.modeInfo.standardColor,
+                elevation: 4, bottom:0,  backgroundColor: modeInfo.standardColor,
                 height: 100,
                 opacity: openVal.interpolate({inputRange: [0, 0.9  ,1], outputRange: [0, 0, 1]}),
              }} />

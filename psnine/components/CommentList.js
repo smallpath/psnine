@@ -6,12 +6,10 @@ import {
   ListView,
   Image,
   Picker,
-  ToastAndroid,
   Dimensions,
   TouchableNativeFeedback,
   RefreshControl,
   InteractionManager,
-  ToolbarAndroid,
   Modal,
   Slider
 } from 'react-native';
@@ -22,7 +20,7 @@ import MyDialog from './dialog'
 
 import HTMLView from './htmlToView';
 import { connect } from 'react-redux';
-import { standardColor, nodeColor, idColor  } from '../config/colorConfig';
+import { standardColor, nodeColor, idColor } from '../config/colorConfig';
 
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { getTopicCommentAPI } from '../dao/dao';
@@ -34,30 +32,28 @@ const ds = new ListView.DataSource({
 });
 
 let toolbarActions = [
-  {title: '回复', iconName: 'md-create', show: 'always'},
-  {title: '跳页', iconName: 'md-map' ,show: 'always'},
+  { title: '回复', iconName: 'md-create', show: 'always' },
+  { title: '跳页', iconName: 'md-map', show: 'always' },
 ];
 
 class CommentList extends Component {
-    constructor(props){
-      super(props);
-      this.state = {
-        list: [],
-        numberPerPage: 60,
-        numPages: 1,
-        commentTotal: 1, 
-        currentPage: 1,
-        isLoading: true,
-        modalVisible: false,
-        sliderValue: 1
-      }
+  constructor(props) {
+    super(props);
+    this.state = {
+      list: [],
+      numberPerPage: 60,
+      numPages: 1,
+      commentTotal: 1,
+      currentPage: 1,
+      isLoading: true,
+      modalVisible: false,
+      sliderValue: 1
     }
+  }
 
   onNavClicked = (rowData) => {
-    const { navigator } = this.props;
-    if (navigator) {
-      navigator.pop();
-    }
+    const { navigation } = this.props;
+    navigation.goBack();
   }
 
   _pressRow = (rowData) => {
@@ -70,59 +66,57 @@ class CommentList extends Component {
     rowID: number | string,
     highlightRow: (sectionID: number, rowID: number) => void
   ) => {
-
+    const { modeInfo } = this.props.screenProps
     let TouchableElement = TouchableNativeFeedback;
 
     return (
-      <View key={ rowData.id } style={{     
-          borderBottomWidth: StyleSheet.hairlineWidth,      
-          borderBottomColor: this.props.modeInfo.brighterLevelOne
+      <View key={rowData.id} style={{
+        borderBottomWidth: StyleSheet.hairlineWidth,
+        borderBottomColor: modeInfo.brighterLevelOne
       }}>
-      <TouchableNativeFeedback  
-          onPress ={()=>{
-          
+        <TouchableNativeFeedback
+          onPress={() => {
+
           }}
           useForeground={true}
           delayPressIn={100}
           background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
-          >
-          <View style={{ flex: 1, flexDirection: 'row',  padding: 12 }}>
-          <Image
+        >
+          <View style={{ flex: 1, flexDirection: 'row', padding: 12 }}>
+            <Image
               source={{ uri: rowData.img }}
               style={styles.avatar}
-              />
+            />
 
-          <View style={{ marginLeft: 10, flex: 1, flexDirection: 'column'}}>
+            <View style={{ marginLeft: 10, flex: 1, flexDirection: 'column' }}>
               <HTMLView
-              value={rowData.content}
-              modeInfo={ this.props.modeInfo }
-              stylesheet={styles}
-              onImageLongPress={(url) => this.props.navigator.push({
-                component: ImageViewer,
-                params: {
+                value={rowData.content}
+                modeInfo={modeInfo}
+                stylesheet={styles}
+                onImageLongPress={(url) => this.props.navigation.navigate('ImageViewer', {
                   images: [
                     { url }
                   ]
-                }
-              })}
-              imagePaddingOffset={30}
+                })}
+                imagePaddingOffset={30}
               />
 
-              <View style={{ flex: 1.1, flexDirection: 'row', justifyContent :'space-between' }}>
-              <Text selectable={false} style={{ flex: -1, color: this.props.modeInfo.standardTextColor ,textAlign : 'center', textAlignVertical: 'center' }}>{rowData.psnid}</Text>
-              <Text selectable={false} style={{ flex: -1, color: this.props.modeInfo.standardTextColor,textAlign : 'center', textAlignVertical: 'center' }}>{rowData.date}</Text>
+              <View style={{ flex: 1.1, flexDirection: 'row', justifyContent: 'space-between' }}>
+                <Text selectable={false} style={{ flex: -1, color: modeInfo.standardTextColor, textAlign: 'center', textAlignVertical: 'center' }}>{rowData.psnid}</Text>
+                <Text selectable={false} style={{ flex: -1, color: modeInfo.standardTextColor, textAlign: 'center', textAlignVertical: 'center' }}>{rowData.date}</Text>
               </View>
 
-          </View>
+            </View>
 
           </View>
-      </TouchableNativeFeedback>
+        </TouchableNativeFeedback>
       </View>
     )
   }
 
   componentWillMount = async () => {
-    this.fetchMessages(this.props.URL, 'jump');
+    const { params } = this.props.navigation.state
+    this.fetchMessages(params.URL, 'jump');
   }
 
   fetchMessages = (url, type = 'down') => {
@@ -133,7 +127,7 @@ class CommentList extends Component {
         getTopicCommentAPI(url).then(data => {
           let thisList = []
           const thisPage = parseInt(url.match(/\?page=(\d+)/)[1])
-          let cb = () => {}
+          let cb = () => { }
           if (type === 'down') {
             thisList = this.state.list.concat(data.commentList)
             this.pageArr.push(thisPage)
@@ -142,7 +136,7 @@ class CommentList extends Component {
             thisList.unshift(...data.commentList)
             this.pageArr.unshift(thisPage)
           } else if (type === 'jump') {
-            cb = () => this.listView.scrollTo({y:0, animated: true});
+            cb = () => this.listView.scrollTo({ y: 0, animated: true });
             thisList = data.commentList
             this.pageArr = [this.pageArr]
           }
@@ -150,7 +144,7 @@ class CommentList extends Component {
             list: thisList,
             numberPerPage: data.numberPerPage,
             numPages: data.numPages,
-            commentTotal: data.len, 
+            commentTotal: data.len,
             currentPage: thisPage,
             isLoading: false
           }, cb);
@@ -161,7 +155,7 @@ class CommentList extends Component {
 
   pageArr = [1]
   _onRefresh = () => {
-    const { URL } = this.props;
+    const { URL } = this.props.navigation.state.params;
     const currentPage = this.state.currentPage
     let type = currentPage === 1 ? 'jump' : 'up'
     let targetPage = currentPage - 1
@@ -173,7 +167,7 @@ class CommentList extends Component {
   }
 
   _onEndReached = () => {
-    const { URL } = this.props;
+    const { URL } = this.props.navigation.state.params;
     const currentPage = this.state.currentPage
     const targetPage = currentPage + 1
     if (targetPage > this.state.numPages) return
@@ -183,120 +177,122 @@ class CommentList extends Component {
   }
 
   onActionSelected = (index) => {
-    switch(index){
-      case 0 :
+    switch (index) {
+      case 0:
         return;
-      case 1 :
+      case 1:
         this.setState({
           modalVisible: true
         })
-      case 2 :
+      case 2:
         return;
-      case 3 :
+      case 3:
         return;
     }
   }
 
   sliderValue = 1
-  render(){
+  render() {
+    const { modeInfo } = this.props.screenProps
+    const { params } = this.props.navigation.state
     // console.log('Message.js rendered');
     ds = ds.cloneWithRows(this.state.list)
 
     return (
-          <View 
-            style={{flex:1,backgroundColor:this.props.modeInfo.backgroundColor}}
-            onStartShouldSetResponder={() => false}
-            onMoveShouldSetResponder={() => false}
-            >
-              <Ionicons.ToolbarAndroid
-                navIconName="md-arrow-back"
-                overflowIconName="md-more"                 
-                iconColor={this.props.modeInfo.isNightMode ? '#000' : '#fff'}
-                title={'所有评论'}
-                style={[styles.toolbar, {backgroundColor: this.props.modeInfo.standardColor}]}
-                titleColor={this.props.modeInfo.isNightMode ? '#000' : '#fff'}
-                actions={toolbarActions}
-                onIconClicked={this.onNavClicked}
-                onActionSelected={this.onActionSelected}
-              />
-              <ListView
-                refreshControl={
-                  <RefreshControl
-                    refreshing={this.state.isLoading}
-                    onRefresh={this._onRefresh}
-                    colors={[standardColor]}
-                    ref={ ref => this.refreshControl = ref}
-                    progressBackgroundColor={this.props.modeInfo.backgroundColor}
-                    />
-                }
-                ref={listView=>this.listView=listView}
-                pageSize = {60}
-                removeClippedSubviews={false}
-                enableEmptySections={true}
-                dataSource={ ds }
-                renderRow={this._renderRow}
-                onEndReached={this._onEndReached}
-                onEndReachedThreshold={10}
-                onLayout={event => {
-                  this.listViewHeight = event.nativeEvent.layout.height
-                }}
-                />
-                { this.state.modalVisible && (
-                    <MyDialog modeInfo={this.props.modeInfo}
-                      modalVisible={this.state.modalVisible}
-                      onDismiss={() => { this.setState({ modalVisible:false }); this.isValueChanged = false }}
-                      onRequestClose={() => { this.setState({ modalVisible:false }); this.isValueChanged = false }}
-                      renderContent={() => (
-                        <View style={{
-                          justifyContent:'center',
-                          alignItems: 'center',
-                          backgroundColor: this.props.modeInfo.backgroundColor,
-                          paddingVertical: 30,
-                          paddingHorizontal: 40,
-                          elevation: 4,
-                          opacity: 1
-                        }} borderRadius={2}>
-                          <Text style={{alignSelf:'flex-start',fontSize: 18}}>选择页数: {
-                              this.isValueChanged ? this.state.sliderValue : this.state.currentPage
-                            }</Text>
-                            <View style={{flexDirection: 'row', alignItems: 'center', justifyContent:'space-between'}}>
-                              <Text>{this.state.currentPage}</Text>
-                              <Slider
-                                maximumValue={this.state.numPages}
-                                minimumValue={1}
-                                maximumTrackTintColor={this.props.modeInfo.accentColor}
-                                minimumTrackTintColor={this.props.modeInfo.standardTextColor}
-                                thumbTintColor={this.props.modeInfo.accentColor}
-                                step={1}
-                                style={{
-                                  paddingHorizontal: 90,
-                                  height: 50
-                                }}
-                                value={this.state.currentPage}
-                                onValueChange={(value) => {
-                                  this.isValueChanged = true
-                                  this.setState({
-                                    sliderValue: value
-                                  })
-                                }}
-                              />
-                              <Text>{this.state.numPages}</Text>
-                            </View>
-                          <Text style={{alignSelf:'flex-end',color: '#009688' }}
-                            onPress={() => {
-                            this.setState({
-                              modalVisible:false,
-                              isLoading: true
-                            }, () => {
-                              const currentPage = this.state.currentPage
-                              const targetPage = this.props.URL.split('=').slice(0, -1).concat(this.state.sliderValue).join('=')
-                              this.fetchMessages(targetPage, 'jump');                                
-                            })
-                          }}>确定</Text>
-                      </View>
-                    )}/>
-                )}
-         </View>     
+      <View
+        style={{ flex: 1, backgroundColor: modeInfo.backgroundColor }}
+        onStartShouldSetResponder={() => false}
+        onMoveShouldSetResponder={() => false}
+      >
+        <Ionicons.ToolbarAndroid
+          navIconName="md-arrow-back"
+          overflowIconName="md-more"
+          iconColor={modeInfo.isNightMode ? '#000' : '#fff'}
+          title={'所有评论'}
+          style={[styles.toolbar, { backgroundColor: modeInfo.standardColor }]}
+          titleColor={modeInfo.isNightMode ? '#000' : '#fff'}
+          actions={toolbarActions}
+          onIconClicked={this.onNavClicked}
+          onActionSelected={this.onActionSelected}
+        />
+        <ListView
+          refreshControl={
+            <RefreshControl
+              refreshing={this.state.isLoading}
+              onRefresh={this._onRefresh}
+              colors={[standardColor]}
+              ref={ref => this.refreshControl = ref}
+              progressBackgroundColor={modeInfo.backgroundColor}
+            />
+          }
+          ref={listView => this.listView = listView}
+          pageSize={60}
+          removeClippedSubviews={false}
+          enableEmptySections={true}
+          dataSource={ds}
+          renderRow={this._renderRow}
+          onEndReached={this._onEndReached}
+          onEndReachedThreshold={10}
+          onLayout={event => {
+            this.listViewHeight = event.nativeEvent.layout.height
+          }}
+        />
+        {this.state.modalVisible && (
+          <MyDialog modeInfo={modeInfo}
+            modalVisible={this.state.modalVisible}
+            onDismiss={() => { this.setState({ modalVisible: false }); this.isValueChanged = false }}
+            onRequestClose={() => { this.setState({ modalVisible: false }); this.isValueChanged = false }}
+            renderContent={() => (
+              <View style={{
+                justifyContent: 'center',
+                alignItems: 'center',
+                backgroundColor: modeInfo.backgroundColor,
+                paddingVertical: 30,
+                paddingHorizontal: 40,
+                elevation: 4,
+                opacity: 1
+              }} borderRadius={2}>
+                <Text style={{ alignSelf: 'flex-start', fontSize: 18 }}>选择页数: {
+                  this.isValueChanged ? this.state.sliderValue : this.state.currentPage
+                }</Text>
+                <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+                  <Text>{this.state.currentPage}</Text>
+                  <Slider
+                    maximumValue={this.state.numPages}
+                    minimumValue={1}
+                    maximumTrackTintColor={modeInfo.accentColor}
+                    minimumTrackTintColor={modeInfo.standardTextColor}
+                    thumbTintColor={modeInfo.accentColor}
+                    step={1}
+                    style={{
+                      paddingHorizontal: 90,
+                      height: 50
+                    }}
+                    value={this.state.currentPage}
+                    onValueChange={(value) => {
+                      this.isValueChanged = true
+                      this.setState({
+                        sliderValue: value
+                      })
+                    }}
+                  />
+                  <Text>{this.state.numPages}</Text>
+                </View>
+                <Text style={{ alignSelf: 'flex-end', color: '#009688' }}
+                  onPress={() => {
+                    this.setState({
+                      modalVisible: false,
+                      isLoading: true
+                    }, () => {
+                      const currentPage = this.state.currentPage
+                      const targetPage = params.URL.split('=').slice(0, -1).concat(this.state.sliderValue).join('=')
+                      this.fetchMessages(targetPage, 'jump');
+                    })
+                  }}>确定</Text>
+              </View>
+            )} />
+        )}
+      </View>
     )
   }
 
@@ -314,7 +310,7 @@ const styles = StyleSheet.create({
     height: 56,
     elevation: 4,
   },
-  selectedTitle:{
+  selectedTitle: {
     //backgroundColor: '#00ffff'
     //fontSize: 20
   },

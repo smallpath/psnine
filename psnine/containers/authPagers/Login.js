@@ -1,20 +1,12 @@
 import React, { Component } from 'react';
 import {
-  AppRegistry,
   StyleSheet,
   Text,
   View,
-  ListView,
   Image,
-  DrawerLayoutAndroid,
-  ToolbarAndroid,
   ToastAndroid,
-  BackAndroid,
-  TouchableOpacity,
   Dimensions,
   TouchableNativeFeedback,
-  RefreshControl,
-  WebView,
   KeyboardAvoidingView,
   TextInput,
   AsyncStorage,
@@ -38,7 +30,7 @@ import { fetchUser } from '../../dao/dao';
 
 let screen = Dimensions.get('window');
 
-const { width:SCREEN_WIDTH, height:SCREEN_HEIGHT } = screen;
+const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = screen;
 
 let toolbarActions = [
 
@@ -60,62 +52,61 @@ class Login extends Component {
   }
 
   _pressButton = () => {
-    this.props.navigator.pop();
+    this.props.navigation.goBack();
   }
 
   login = async () => {
     const { psnid, password } = this.state;
 
-    if (psnid=='' || password == ''){
-      global.toast && global.toast('账号或密码未输入',2000);
+    if (psnid == '' || password == '') {
+      global.toast && global.toast('账号或密码未输入', 2000);
       return;
     }
 
-    let data= await safeLogin(psnid,password);
+    let data = await safeLogin(psnid, password);
     let length = data.length;
 
-    if (length > 10000){
+    if (length > 10000) {
       await AsyncStorage.setItem('@psnid', psnid);
       const user = await fetchUser(psnid);
       await AsyncStorage.setItem('@userInfo', JSON.stringify(user));
-      
-      global.toast && global.toast(`登录成功`,2000);
-      this.props.setLogin(psnid,user);
-      this.props.navigator.pop();
-    }else{
+
+      global.toast && global.toast(`登录成功`, 2000);
+      this.props.navigation.state.params.setLogin(psnid, user);
+      this.props.navigation.goBack();
+    } else {
 
       await AsyncStorage.removeItem('@psnid');
       const value = await AsyncStorage.getItem('@psnid');
-      global.toast && global.toast(`登录失败,请检查账号与密码是否输入正确`,2000);
+      global.toast && global.toast(`登录失败,请检查账号与密码是否输入正确`, 2000);
     }
 
   }
 
   regist = () => {
-      Linking.canOpenURL(registURL)
-              .then(supported => { 
-                if (supported)
-                  Linking.openURL(registURL);
-                else
-                  global.toast && global.toast(`未找到浏览器, 如果您使用了冰箱, 请先解冻浏览器`,2000); 
-              }).catch(err => {});
+    Linking.canOpenURL(registURL).then(supported => {
+      if (supported)
+        Linking.openURL(registURL);
+      else
+        global.toast && global.toast(`未找到浏览器, 如果您使用了冰箱, 请先解冻浏览器`, 2000);
+    }).catch(err => { });
   }
 
   async componentWillMount() {
     this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () => {
-      Animated.spring(this.state.avoidKeyboardMarginTop,{
+      Animated.spring(this.state.avoidKeyboardMarginTop, {
         toValue: 1,
         friction: 10
       }).start();
     })
     this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', () => {
-      Animated.spring(this.state.avoidKeyboardMarginTop,{
+      Animated.spring(this.state.avoidKeyboardMarginTop, {
         toValue: 0,
         friction: 10
       }).start();
     })
     const source = await Ionicons.getImageSource('ios-add', 24, '#fff')
-    this.setState({ 
+    this.setState({
       addIcon: source
     })
   }
@@ -128,10 +119,10 @@ class Login extends Component {
   onAccountTextFocus = () => {
 
     let text = this.accountTextInput._lastNativeText;
-    if(typeof text !='undefined' && text!=='')
+    if (typeof text != 'undefined' && text !== '')
       return;
-      
-    Animated.spring(this.state.accountMarginTop,{
+
+    Animated.spring(this.state.accountMarginTop, {
       toValue: 1,
       friction: 10
     }).start();
@@ -139,9 +130,9 @@ class Login extends Component {
 
   onAccountTextBlur = () => {
     let text = this.accountTextInput._lastNativeText;
-    if(typeof text !='undefined' && text!=='')
+    if (typeof text != 'undefined' && text !== '')
       return;
-    Animated.spring(this.state.accountMarginTop,{
+    Animated.spring(this.state.accountMarginTop, {
       toValue: 0,
       friction: 10
     }).start();
@@ -150,10 +141,10 @@ class Login extends Component {
   onPasswordTextFocus = () => {
 
     let text = this.passwordTextInput._lastNativeText;
-    if(typeof text !='undefined' && text!=='')
+    if (typeof text != 'undefined' && text !== '')
       return;
-      
-    Animated.spring(this.state.passwordMarginTop,{
+
+    Animated.spring(this.state.passwordMarginTop, {
       toValue: 1,
       friction: 10
     }).start();
@@ -161,9 +152,9 @@ class Login extends Component {
 
   onPasswordTextBlur = () => {
     let text = this.passwordTextInput._lastNativeText;
-    if(typeof text !='undefined' && text!=='')
+    if (typeof text != 'undefined' && text !== '')
       return;
-    Animated.spring(this.state.passwordMarginTop,{
+    Animated.spring(this.state.passwordMarginTop, {
       toValue: 0,
       friction: 10
     }).start();
@@ -177,184 +168,160 @@ class Login extends Component {
     // console.log('Loggin.js rendered');
     let marginLeft = 40;
 
+    const { modeInfo } = this.props.screenProps
+
     let avoidKeyboardStyle = {
       top: this.state.avoidKeyboardMarginTop.interpolate({
-          inputRange: [0 ,1], 
-          outputRange: [SCREEN_HEIGHT/10*4-marginLeft*1.5, marginLeft]
+        inputRange: [0, 1],
+        outputRange: [SCREEN_HEIGHT / 10 * 4 - marginLeft * 1.5, marginLeft]
       }),
     }
 
     let accountTextStyle = {
       top: this.state.accountMarginTop.interpolate({
-          inputRange: [0 ,1], 
-          outputRange: [40, 15]
+        inputRange: [0, 1],
+        outputRange: [40, 15]
       }),
       color: this.state.accountMarginTop.interpolate({
-          inputRange: [0 ,1], 
-          outputRange: [this.props.modeInfo.standardTextColor, this.props.modeInfo.standardColor]
+        inputRange: [0, 1],
+        outputRange: [modeInfo.standardTextColor, modeInfo.standardColor]
       }),
       fontSize: this.state.accountMarginTop.interpolate({
-          inputRange: [0 ,1], 
-          outputRange: [15, 12]
+        inputRange: [0, 1],
+        outputRange: [15, 12]
       }),
     }
 
     let passwordTextStyle = {
       top: this.state.passwordMarginTop.interpolate({
-          inputRange: [0 ,1], 
-          outputRange: [40, 15]
+        inputRange: [0, 1],
+        outputRange: [40, 15]
       }),
       color: this.state.passwordMarginTop.interpolate({
-          inputRange: [0 ,1], 
-          outputRange: [this.props.modeInfo.standardTextColor, this.props.modeInfo.standardColor]
+        inputRange: [0, 1],
+        outputRange: [modeInfo.standardTextColor, modeInfo.standardColor]
       }),
       fontSize: this.state.passwordMarginTop.interpolate({
-          inputRange: [0 ,1], 
-          outputRange: [15, 12]
+        inputRange: [0, 1],
+        outputRange: [15, 12]
       }),
     }
     return (
-      <View style={{ flex: 1 , backgroundColor: this.props.modeInfo.standardColor }}>
+      <View style={{ flex: 1, backgroundColor: modeInfo.standardColor }}>
 
-        <Animated.View 
-          ref={float=>this.float=float}
-          collapsable ={true}
+        <Animated.View
+          ref={float => this.float = float}
+          collapsable={true}
           style={{
             width: 56,
             height: 56,
             borderRadius: 30,
             backgroundColor: accentColor,
-            position:'absolute',
+            position: 'absolute',
             top: this.state.avoidKeyboardMarginTop.interpolate({
-                inputRange: [0 ,1], 
-                outputRange: [SCREEN_HEIGHT/10*4-marginLeft+28 , marginLeft+28 ]
+              inputRange: [0, 1],
+              outputRange: [SCREEN_HEIGHT / 10 * 4 - marginLeft + 28, marginLeft + 28]
             }),
             right: 12,
-            elevation: 6 ,
+            elevation: 6,
             zIndex: 1,
-        }}>
-        
-        <TouchableNativeFeedback 
-          onPress={this.regist}
-          delayPressIn={0}
-          //activeOpacity={1}
-          //underlayColor={accentColor}
-          background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
-          // onPressIn={()=>{
-          //   this.float.setNativeProps({
-          //     style :{
-          //     elevation: 6,
-          //   }});
-          // }}
-          // onPressOut={()=>{
-          //   this.float.setNativeProps({
-          //     style :{
-          //     elevation: 12,
-          //   }});
-          // }}
-          style={{
-            width: 56,
-            height: 56,
-            borderRadius: 30,
-            flex:1,
-            zIndex: 1,
-            backgroundColor: accentColor,
           }}>
-          <View style={{borderRadius: 30}}>
-            {this.state.addIcon && (<Image source={this.state.addIcon}
-                  style={{
-                    marginLeft: 16,
-                    marginTop: 16,
-                    width: 24,
-                    height: 24
+
+          <TouchableNativeFeedback
+            onPress={this.regist}
+            delayPressIn={0}
+            background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
+            style={{
+              width: 56,
+              height: 56,
+              borderRadius: 30,
+              flex: 1,
+              zIndex: 1,
+              backgroundColor: accentColor,
+            }}>
+            <View style={{ borderRadius: 30 }}>
+              {this.state.addIcon && (<Image source={this.state.addIcon}
+                style={{
+                  marginLeft: 16,
+                  marginTop: 16,
+                  width: 24,
+                  height: 24
                 }}
-            />)}
-          </View>
-        </TouchableNativeFeedback>
+              />)}
+            </View>
+          </TouchableNativeFeedback>
         </Animated.View>
 
-        <Animated.View style={[{ backgroundColor:this.props.modeInfo.backgroundColor,              
-              position: 'absolute',
-              width: SCREEN_WIDTH-marginLeft*2,
-              height: SCREEN_HEIGHT/10*6,
-              marginLeft: marginLeft,
-              bottom: marginLeft,
-              borderRadius: 5,
-              elevation:6,
+        <Animated.View style={[{
+          backgroundColor: modeInfo.backgroundColor,
+          position: 'absolute',
+          width: SCREEN_WIDTH - marginLeft * 2,
+          height: SCREEN_HEIGHT / 10 * 6,
+          marginLeft: marginLeft,
+          bottom: marginLeft,
+          borderRadius: 5,
+          elevation: 6,
+        }, avoidKeyboardStyle]}>
 
-             
-           },avoidKeyboardStyle]}>
-
-          <View style={[styles.loginTextView,{marginLeft: marginLeft/2*1.5, marginTop:27 }]}>
-            <Text style={[styles.mainFont,{fontSize:30, marginLeft:0, marginBottom:0}]}>登录</Text>
+          <View style={[styles.loginTextView, { marginLeft: marginLeft / 2 * 1.5, marginTop: 27 }]}>
+            <Text style={[styles.mainFont, { fontSize: 30, marginLeft: 0, marginBottom: 0 }]}>登录</Text>
           </View>
 
           <View style={[styles.KeyboardAvoidingView, {
-              width: SCREEN_WIDTH-marginLeft*3,
-            }]} >
-            <View style={[styles.accountView,{ marginTop: 5,}]}>
+            width: SCREEN_WIDTH - marginLeft * 3,
+          }]} >
+            <View style={[styles.accountView, { marginTop: 5, }]}>
               <Animated.Text
-                  style={[{color: this.props.modeInfo.standardTextColor, marginLeft:5},
-                    accountTextStyle
-                  ]}>
-                  {'PSN ID'}
+                style={[{ color: modeInfo.standardTextColor, marginLeft: 5 },
+                  accountTextStyle
+                ]}>
+                {'PSN ID'}
               </Animated.Text>
               <TextInput underlineColorAndroid={accentColor}
-                onChange={({nativeEvent})=>{ this.setState({psnid:nativeEvent.text})}}
-                ref={ref=>this.accountTextInput = ref}
+                onChange={({ nativeEvent }) => { this.setState({ psnid: nativeEvent.text }) }}
+                ref={ref => this.accountTextInput = ref}
                 onFocus={this.onAccountTextFocus}
                 onBlur={this.onAccountTextBlur}
                 onSubmitEditing={this.onSubmit}
-                style={[styles.textInput, { color:this.props.modeInfo.standardTextColor }]}
-                placeholderTextColor={this.props.modeInfo.standardTextColor}
+                style={[styles.textInput, { color: modeInfo.standardTextColor }]}
+                placeholderTextColor={modeInfo.standardTextColor}
               />
             </View>
 
-            <View style={[styles.passwordView,{marginTop:5}]}>
+            <View style={[styles.passwordView, { marginTop: 5 }]}>
               <Animated.Text
-                  style={[{color: this.props.modeInfo.standardTextColor, marginLeft:5},
-                    passwordTextStyle
-                  ]}>
-                  {'密码'}
+                style={[{ color: modeInfo.standardTextColor, marginLeft: 5 },
+                  passwordTextStyle
+                ]}>
+                {'密码'}
               </Animated.Text>
               <TextInput underlineColorAndroid={accentColor} secureTextEntry={true}
-                onChange={({nativeEvent})=>{ this.setState({password:nativeEvent.text})}}
-                ref={ref=>this.passwordTextInput = ref}
+                onChange={({ nativeEvent }) => { this.setState({ password: nativeEvent.text }) }}
+                ref={ref => this.passwordTextInput = ref}
                 onFocus={this.onPasswordTextFocus}
                 onBlur={this.onPasswordTextBlur}
                 onSubmitEditing={this.onSubmit}
-                style={[styles.textInput, { color:this.props.modeInfo.standardTextColor }]}
-                placeholderTextColor={this.props.modeInfo.standardTextColor}
+                style={[styles.textInput, { color: modeInfo.standardTextColor }]}
+                placeholderTextColor={modeInfo.standardTextColor}
               />
-              <Text style={[styles.openURL,{marginTop: 10, color: this.props.modeInfo.standardColor }]}>忘记密码</Text>
+              <Text style={[styles.openURL, { marginTop: 10, color: modeInfo.standardColor }]}>忘记密码</Text>
             </View>
 
 
           </View>
 
-          <View style={[styles.customView,{
-            width: SCREEN_WIDTH-marginLeft*3
+          <View style={[styles.customView, {
+            width: SCREEN_WIDTH - marginLeft * 3
           }]}>
             <View style={styles.submit}>
               <TouchableNativeFeedback
                 onPress={this.login}
-                >
+              >
                 <View style={styles.submitButton}>
-                  <Text style={[styles.textInput, { color:this.props.modeInfo.backgroundColor }]}>提交</Text>
+                  <Text style={[styles.textInput, { color: modeInfo.backgroundColor }]}>提交</Text>
                 </View>
               </TouchableNativeFeedback>
             </View>
-
-            {/*<View style={styles.regist}>
-              <Text style={[styles.textInput, { color:this.props.modeInfo.standardTextColor }]}>如果是第一次使用PSNINE，请先完成</Text>
-              <TouchableNativeFeedback
-                onPress={this.regist}
-              >
-                <View>
-                <Text style={styles.openURL}>PSNID认证</Text>
-                </View>
-              </TouchableNativeFeedback>
-            </View>*/}
           </View>
 
         </Animated.View>
@@ -374,76 +341,76 @@ const styles = StyleSheet.create({
     elevation: 4,
   },
   mainFont: {
-    fontSize: 15, 
-    color:accentColor
+    fontSize: 15,
+    color: accentColor
   },
   textInput: {
     fontSize: 15,
   },
   customView: {
-    flex: -1, 
+    flex: -1,
     marginTop: -20,
     width: width - 40,
-    alignSelf:'center',
+    alignSelf: 'center',
     justifyContent: 'center',
-    flexDirection: 'column' 
+    flexDirection: 'column'
   },
-  KeyboardAvoidingView: { 
-    flex: -1, 
+  KeyboardAvoidingView: {
+    flex: -1,
     marginTop: 0,
     width: width - 40,
-    alignSelf:'center',
+    alignSelf: 'center',
     justifyContent: 'space-between',
-    flexDirection: 'column' 
+    flexDirection: 'column'
   },
-  loginTextView: { 
+  loginTextView: {
 
     flexDirection: 'column',
     justifyContent: 'space-between',
 
     margin: 10,
-    marginTop:20,
-    marginBottom:0,
+    marginTop: 20,
+    marginBottom: 0,
   },
-  accountView: { 
+  accountView: {
 
     flexDirection: 'column',
     justifyContent: 'space-between',
 
     marginLeft: 10,
     marginRight: 10,
-    marginTop:20,
+    marginTop: 20,
   },
-  passwordView: { 
+  passwordView: {
 
-    flexDirection: 'column', 
+    flexDirection: 'column',
     marginLeft: 10,
     marginRight: 10,
     marginTop: 20,
     marginBottom: 20,
   },
-  submit: { 
-    flex: -1, 
+  submit: {
+    flex: -1,
     height: 30,
     margin: 10,
     marginTop: 40,
     marginBottom: 20,
   },
-  submitButton:{
+  submitButton: {
     backgroundColor: accentColor,
     height: 40,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  regist: { 
-    flex: 1, 
-    flexDirection: 'row' , 
+  regist: {
+    flex: 1,
+    flexDirection: 'row',
     marginTop: 20,
     margin: 10,
   },
   openURL: {
-    color:accentColor, 
-    textDecorationLine:'underline',
+    color: accentColor,
+    textDecorationLine: 'underline',
   },
 });
 

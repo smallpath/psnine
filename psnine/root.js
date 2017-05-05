@@ -1,17 +1,20 @@
 import React from 'react'
 import {
-	Navigator,
-	BackAndroid,
+	BackHandler,
 	Dimensions,
 	ToastAndroid,
 	StatusBar,
 	View,
 	Animated,
+	Button,
 	Text,
 	Easing,
 	InteractionManager
 } from 'react-native';
 import { Provider } from 'react-redux'
+import {
+	StackNavigator,
+} from 'react-navigation';
 import {
 	accentColor,
 	deepColor, standardColor, tintColor,
@@ -25,65 +28,86 @@ import {
 
 } from './config/colorConfig';
 
-import PushWithoutAnimation from './utils/PushWithoutAnimation';
-
 import configureStore from './store/store.js'
-import App from './containers/App.js'
-
 import moment from './utils/moment';
-
-import About from './components/About'
 
 const store = configureStore();
 
-let backPressClickTimeStamp = 0;
-// const listeners = BackAndroid.addEventListener('hardwareBackPress', function () {
-// 	if (_navigator && _navigator.getCurrentRoutes().length > 1) {
-// 		_navigator.pop();
-// 		return true;
-// 	}else{
-// 		let timestamp = new Date();
-// 	    if(timestamp - backPressClickTimeStamp>2000){
-// 	      backPressClickTimeStamp = timestamp;
-// 		  global.toast && global.toast('再按一次退出程序',2000);
-// 	      return true;
-// 	    }else{
-// 	      return false;
-// 	    }
-// 	}
-// });
-
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
-
-let BaseConfig = Navigator.SceneConfigs.PushFromRight;
-
-let FloatFromBottom = Navigator.SceneConfigs.FloatFromBottomAndroid;
-
-let CustomGesture = Object.assign({}, BaseConfig.gestures.pop, {
-	isDetachable: true,
-	snapVelocity: 8,
-	edgeHitWidth: SCREEN_WIDTH,
-	// set it from 3(Default) to 12 to ignore Navigator gestures being triggerred 
-	// because Navigator gesture will be triggerred first when there is another components
-	// which has scroll abiliy, such as ScrollView and WebView
-	gestureDetectMovement: 12,
-	stillCompletionRatio: 3 / 10,
-	directionRatio: 2,
-	fullDistance: SCREEN_WIDTH / 2,
-	direction: 'left-to-right',
-});
-
-
-let CustomSceneConfig = Object.assign({}, BaseConfig, {
-	gestures: { pop: CustomGesture }
-});
-
-let CustomPushWithoutAnimation = Object.assign({}, PushWithoutAnimation.NONE, {
-	gestures: { pop: CustomGesture }
-})
 
 let toolbarHeight = 56
 const tipHeight = toolbarHeight * 0.8
+
+import App from './containers/App.js'
+
+import Home from './containers/authPagers/Home'
+import Login from './containers/authPagers/Login'
+import Message from './containers/authPagers/Message'
+
+import CommentList from './components/CommentList'
+import CommunityTopic from './components/CommunityTopic'
+import Reply from './components/new/Reply'
+
+import Webview from './components/Webview'
+import About from './components/About'
+import ImageViewer from './components/imageViewer'
+
+import NewTopic from './components/new/NewTopic'
+
+const enableGesture = ({ navigation }) => {
+	return {
+		gesturesEnabled: true
+	}
+}
+
+const Navigator = StackNavigator({
+	Main: {
+		screen: App
+	},
+  Login: {
+		screen: Login,
+    navigationOptions: enableGesture
+	},
+  Message: {
+		screen: Message,
+		navigationOptions: enableGesture
+	},
+  CommentList: {
+		screen: CommentList,
+    navigationOptions: enableGesture
+	},
+  CommunityTopic: {
+		screen: CommunityTopic,
+    navigationOptions: enableGesture
+	},
+	Reply: {
+		screen: Reply
+	},
+  NewTopic: {
+    screen: NewTopic
+  },
+  About: {
+		screen: About,
+    navigationOptions: enableGesture
+	},
+  Webview: {
+		screen: Webview
+	},
+	ImageViewer: {
+		screen: ImageViewer
+	}
+}, {
+  initialRouteName: 'Main',
+  headerMode: 'none',
+  mode: 'card',
+  navigationOptions: {
+    cardStack: {
+      gesturesEnabled: true,
+    }
+  },
+});
+
+let backPressClickTimeStamp = 0
 
 class Root extends React.Component {
 	constructor(props) {
@@ -132,20 +156,15 @@ class Root extends React.Component {
 
 	componentWillMount = () => {
 		global.toast = this.toast
-		const listeners = BackAndroid.addEventListener('hardwareBackPress', () => {
-			if (this.navigator && this.navigator.getCurrentRoutes().length > 1) {
-				this.navigator.pop();
-				return true;
-			} else {
-				let timestamp = new Date();
-				if (timestamp - backPressClickTimeStamp > 2000) {
-					backPressClickTimeStamp = timestamp;
-					global.toast && global.toast('再按一次退出程序');
-					return true;
-				} else {
-					return false;
-				}
-			}
+		const listeners = BackHandler.addEventListener('hardwareBackPress', () => {
+      let timestamp = new Date();
+      if (timestamp - backPressClickTimeStamp > 2000) {
+        backPressClickTimeStamp = timestamp;
+        global.toast && global.toast('再按一次退出程序');
+        return true;
+      } else {
+        return false;
+      }
 		});
 	}
 
@@ -185,34 +204,17 @@ class Root extends React.Component {
 		}, 2000)
 	}
 
-	renderScene = (route, navigator) => {
-		let Component = route.component;
-		return <Component {...route.params}
-			modeInfo={this.state.isNightMode ? this.nightModeInfo : this.dayModeInfo}
-			switchModeOnRoot={this.switchModeOnRoot}
-			tipBarMarginBottom={this.state.tipBarMarginBottom}
-			navigator={navigator} />
-	}
-	configureScene = (route) => {
-		if (typeof route.withoutAnimation != 'undefined') {
-			if (route.withoutAnimation == true) {
-				return CustomPushWithoutAnimation;
-			}
-		}
-		return CustomSceneConfig
-	}
 	render() {
 		const modeInfo = this.state.isNightMode ? this.dayModeInfo : this.nightModeInfo
 		return (
 			<Provider store={store}>
 				<View style={{ flex: 1 }}>
 					<StatusBar translucent={false} backgroundColor={this.state.isNightMode ? nightDeepColor : deepColor} barStyle="light-content" />
-					<Navigator
-            ref={f => this.navigator=f }
-						initialRoute={{ component: App, shouldBeClickableUnderOtherRoutes: true }}
-						configureScene={this.configureScene}
-						renderScene={this.renderScene}
-						style={{ width: SCREEN_WIDTH, height: SCREEN_HEIGHT - StatusBar.currentHeight }} />
+					<Navigator screenProps={{
+            modeInfo: this.state.isNightMode ? this.nightModeInfo : this.dayModeInfo,
+            switchModeOnRoot: this.switchModeOnRoot,
+            tipBarMarginBottom: this.state.tipBarMarginBottom
+          }}/>
 					<Animated.View style={{
 						height: tipHeight,
 						position: 'absolute',
@@ -241,4 +243,4 @@ class Root extends React.Component {
 	}
 }
 
-export default Root;
+export default Root

@@ -10,6 +10,7 @@ export function getGeneList(page = 1, type = '') {
                 dispatch(gotGeneList(response,page,type));
             }).catch(err => {
                 dispatch(gotGeneListError());
+                console.log(err)
                 global.toast && global.toast('网络错误',2000);
             });
     }

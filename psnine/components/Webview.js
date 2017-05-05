@@ -8,18 +8,18 @@ import {
 
 import { connect } from 'react-redux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { standardColor } from '../../config/colorConfig';
+import { standardColor } from '../config/colorConfig';
 
 let toolbarActions = [
-  { title: '关注', iconName: 'md-star', show: 'always' },
-  { title: '感谢', iconName: 'md-thumbs-up', show: 'always' },
-  { title: '同步', iconName: 'md-sync', show: 'always' },
+  { title: '收藏', iconName: 'md-star', show: 'always' },
+  { title: '刷新', iconName: 'md-refresh', show: 'always' },
+  { title: '感谢', iconName: 'md-thumbs-up', show: 'never' },
   { title: '分享', show: 'never' },
 ];
 let title = "TOPIC";
 let WEBVIEW_REF = `WEBVIEW_REF`;
 
-class Home extends Component {
+class Deal extends Component {
 
   constructor(props) {
     super(props);
@@ -57,17 +57,16 @@ class Home extends Component {
   }
 
   render() {
+    // console.log('Deal.js rendered');
     const { modeInfo } = this.props.screenProps
     const { params } = this.props.navigation.state
-    // console.log('Deal.js rendered');
     return (
       <View style={{ flex: 1 }}>
         <Ionicons.ToolbarAndroid
           navIconName="md-arrow-back"
-          overflowIconName="md-more"
-          iconColor={modeInfo.isNightMode ? '#000' : '#fff'}
+          overflowIconName="md-more" iconColor={modeInfo.isNightMode ? '#000' : '#fff'}
           title={params.title}
-          style={styles.toolbar}
+          style={[styles.toolbar, { backgroundColor: modeInfo.standardColor, }]}
           actions={toolbarActions}
           onIconClicked={this._pressButton}
           onActionSelected={this._onActionSelected}
@@ -84,7 +83,7 @@ class Home extends Component {
             domStorageEnabled={true}
             onNavigationStateChange={this.onNavigationStateChange}
             startInLoadingState={true}
-            injectedJavaScript={`$('.header').hide();`}
+            injectedJavaScript={`$('.header').hide()`}
           />
         </KeyboardAvoidingView>
       </View>
@@ -115,4 +114,4 @@ const styles = StyleSheet.create({
 });
 
 
-export default Home
+export default Deal

@@ -4,13 +4,12 @@ import {
   Image,
   Dimensions,
   ActivityIndicator,
-  Text,
   PixelRatio,
   View,
   TouchableNativeFeedback
 } from 'react-native';
 
-import { standardColor, nodeColor, idColor, accentColor  } from '../../config/colorConfig';
+import { standardColor, nodeColor, idColor, accentColor } from '../../config/colorConfig';
 
 const { width } = Dimensions.get('window')
 
@@ -43,17 +42,17 @@ export default class ResizableImage extends Component {
       this.setState({
         isLoading: false
       })
-      return 
+      return
     }
     Image.getSize(this.props.source.uri, (w, h) => {
       if (this.mounted !== false) {
         this.setState({
-          width: w, 
+          width: w,
           height: h,
           isLoading: false
         })
       }
-    }, () => {})
+    }, () => { })
   }
 
   render() {
@@ -77,12 +76,12 @@ export default class ResizableImage extends Component {
     const alignSelf = this.state.alignCenter ? { alignContent: 'center' } : {}
 
     return (
-      <TouchableNativeFeedback onLongPress={this.props.linkPressHandler} style={[{justifyContent:'center',alignItems:'center'}, alignSelf]}>
-        <View style={{width: source.width, height: source.height}}>
+      <TouchableNativeFeedback onLongPress={this.props.linkPressHandler} style={[{ justifyContent: 'center', alignItems: 'center' }, alignSelf]}>
+        <View style={{ width: source.width, height: source.height }}>
           {
-            this.state.isLoading &&           
-            <ActivityIndicator 
-              animating={true}                     
+            this.state.isLoading &&
+            <ActivityIndicator
+              animating={true}
               style={{
                 justifyContent: 'center',
                 alignItems: 'center',
@@ -90,12 +89,12 @@ export default class ResizableImage extends Component {
                 height: source.height,
                 width: source.width
               }}
-              color={accentColor}/>
+              color={accentColor} />
           }
-          { !this.state.isLoading &&                 
+          {!this.state.isLoading &&
             <Image
               resizeMode={'contain'}
-              onError={(e) => {}}
+              onError={(e) => { }}
               key={`${source.width}:${source.height}`}
               source={source} />
           }

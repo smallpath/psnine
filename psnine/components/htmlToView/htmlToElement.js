@@ -2,7 +2,6 @@ import React from 'react';
 import {
   Text,
   View,
-  TouchableNativeFeedback,
   Dimensions,
   StyleSheet
 } from 'react-native';
@@ -15,7 +14,7 @@ import AutoSizedWebview from './webview';
 const LINE_BREAK = '\n';
 const PARAGRAPH_BREAK = '\n\n';
 const BULLET = '\u2022 ';
-const inlineElements = ['a','span','em','font','label','b','strong','i','small'];
+const inlineElements = ['a', 'span', 'em', 'font', 'label', 'b', 'strong', 'i', 'small'];
 const lineElements = ['pre', 'p', 'br', 'h1', 'h2', 'h3', 'h4', 'h5']
 const { width: SCEEN_WIDTH } = Dimensions.get('window')
 
@@ -34,13 +33,13 @@ const Img = props => {
     imagePaddingOffset: props.imagePaddingOffset
   };
   return (
-    <AutoSizedImage 
+    <AutoSizedImage
       source={source}
       style={imgStyle}
       isLoading={props.isLoading}
       alignCenter={props.alignCenter}
       modeInfo={props.modeInfo}
-      linkPressHandler={props.linkPressHandler}/>
+      linkPressHandler={props.linkPressHandler} />
   );
 };
 
@@ -62,7 +61,7 @@ const Web = props => {
       imagePaddingOffset={props.imagePaddingOffset}
       url={props.attribs.src}
       modeInfo={props.modeInfo}
-      />
+    />
   );
 };
 
@@ -74,11 +73,11 @@ export default function htmlToElement(rawHtml, opts, done) {
     let domLen = dom.length;
     let domTemp = {};
 
-    let getNodeData = function(node){
+    let getNodeData = function (node) {
       let nodeData = null;
-      if(node.children.length){
+      if (node.children.length) {
         let nodeChild = node.children[0];
-        if(nodeChild && nodeChild.data){
+        if (nodeChild && nodeChild.data) {
           nodeData = nodeChild.data;
         } else {
           nodeData = getNodeData(nodeChild);
@@ -87,7 +86,7 @@ export default function htmlToElement(rawHtml, opts, done) {
       return nodeData;
     };
 
-    let renderInlineStyle = function(parent, styleObj) {
+    let renderInlineStyle = function (parent, styleObj) {
       // p9目前只有span的嵌套, 因此暂时只处理span
       if (parent && inlineElements.includes(parent.name)) {
         const classNameArr = (parent.attribs.class || '').split(' ')
@@ -103,7 +102,7 @@ export default function htmlToElement(rawHtml, opts, done) {
           if (!style) continue
           const splited = style.split(':')
           if (splited.length !== 2) continue
-          splited[0] = splited[0].replace(/\-([a-z])/,(matched) => matched[1].toUpperCase())
+          splited[0] = splited[0].replace(/\-([a-z])/, (matched) => matched[1].toUpperCase())
           if (splited[1].includes('px')) {
             splited[1] = parseInt(splited[1])
           }
@@ -113,11 +112,11 @@ export default function htmlToElement(rawHtml, opts, done) {
       }
     }
 
-    let renderInlineNode = function(index){
+    let renderInlineNode = function (index) {
       let thisIndex = index + 1;
-      if(thisIndex < domLen){
+      if (thisIndex < domLen) {
         let nextNode = dom[thisIndex];
-        if(inlineElements.includes(nextNode.name)){
+        if (inlineElements.includes(nextNode.name)) {
           domTemp[thisIndex] = true;
           let linkPressHandler = null;
           if (nextNode.name === 'a' && nextNode.attribs && nextNode.attribs.href) {
@@ -129,24 +128,24 @@ export default function htmlToElement(rawHtml, opts, done) {
             // 转而让dom.map函数中处理tag的语句来生成图片, 此时返回一个空字符串做跳过
             domTemp[thisIndex] = false;
             return (
-              <Text/>
+              <Text />
             )
           }
           return (
-            <Text key={index} onPress={linkPressHandler} style={ opts.styles[nextNode.name]}>
-              { entities.decodeHTML(nodeData) }
-              { renderInlineNode(thisIndex)}
+            <Text key={index} onPress={linkPressHandler} style={opts.styles[nextNode.name]}>
+              {entities.decodeHTML(nodeData)}
+              {renderInlineNode(thisIndex)}
             </Text>
           )
         }
-        if (nextNode.type === 'text'){
+        if (nextNode.type === 'text') {
           domTemp[thisIndex] = true;
           return (
-            <Text style={ [opts.styles['span'], {
+            <Text style={[opts.styles['span'], {
               color: opts.modeInfo.standardTextColor
-            }] } onPress={()=>null}>
-              { entities.decodeHTML(nextNode.data) }
-              { renderInlineNode(thisIndex)}
+            }]} onPress={() => null}>
+              {entities.decodeHTML(nextNode.data)}
+              {renderInlineNode(thisIndex)}
             </Text>
           )
         }
@@ -156,7 +155,7 @@ export default function htmlToElement(rawHtml, opts, done) {
     };
 
     return dom.map((node, index, list) => {
-      if(domTemp[index] === true){
+      if (domTemp[index] === true) {
         return;
       }
 
@@ -176,20 +175,20 @@ export default function htmlToElement(rawHtml, opts, done) {
 
         return (
           <Text key={index} onPress={linkPressHandler} style={[
-              { color: opts.modeInfo.standardTextColor },
-              parent ? opts.styles[parent.name] : null,
-              classStyle
-            ]}>
-              { parent && parent.name === 'pre'? LINE_BREAK : null }
-              { parent && parent.name === "li"? BULLET : null }
-              { parent && parent.name === 'br'? LINE_BREAK : null }
-              { parent && parent.name === 'p' && index < list.length - 1 ? PARAGRAPH_BREAK : null }
-              { parent && parent.name === 'h1' || parent && parent.name === 'h2' || parent && parent.name === 'h3' 
-                || parent && parent.name === 'h4' || parent && parent.name === 'h5'? PARAGRAPH_BREAK :null }
+            { color: opts.modeInfo.standardTextColor },
+            parent ? opts.styles[parent.name] : null,
+            classStyle
+          ]}>
+            {parent && parent.name === 'pre' ? LINE_BREAK : null}
+            {parent && parent.name === "li" ? BULLET : null}
+            {parent && parent.name === 'br' ? LINE_BREAK : null}
+            {parent && parent.name === 'p' && index < list.length - 1 ? PARAGRAPH_BREAK : null}
+            {parent && parent.name === 'h1' || parent && parent.name === 'h2' || parent && parent.name === 'h3'
+              || parent && parent.name === 'h4' || parent && parent.name === 'h5' ? PARAGRAPH_BREAK : null}
 
-              { entities.decodeHTML(node.data) }
+            {entities.decodeHTML(node.data)}
 
-              { renderInlineNode(index) }
+            {renderInlineNode(index)}
 
           </Text>
         )
@@ -202,16 +201,16 @@ export default function htmlToElement(rawHtml, opts, done) {
             linkPressHandler = () => opts.onImageLongPress(entities.decodeHTML(node.attribs.src));
           }
           return (
-              <Img key={index} attribs={node.attribs} 
-                    isLoading={opts.shouldShowLoadingIndicator}
-                    linkPressHandler={linkPressHandler}
-                    alignCenter={opts.alignCenter}
-                    modeInfo={opts.modeInfo}
-                    imagePaddingOffset={opts.imagePaddingOffset} />
+            <Img key={index} attribs={node.attribs}
+              isLoading={opts.shouldShowLoadingIndicator}
+              linkPressHandler={linkPressHandler}
+              alignCenter={opts.alignCenter}
+              modeInfo={opts.modeInfo}
+              imagePaddingOffset={opts.imagePaddingOffset} />
           );
         } else if (node.name === 'embed' || node.name === 'iframe') {
           return (
-            <Web key={index} attribs={node.attribs} imagePaddingOffset={opts.imagePaddingOffset} modeInfo={opts.modeInfo} name={node.name}/>
+            <Web key={index} attribs={node.attribs} imagePaddingOffset={opts.imagePaddingOffset} modeInfo={opts.modeInfo} name={node.name} />
           )
         }
 
@@ -309,7 +308,7 @@ export default function htmlToElement(rawHtml, opts, done) {
               classStyle.borderBottomWidth = classStyle.borderRightWidth = 1
               classStyle.borderBottomColor = classStyle.borderRightColor = opts.modeInfo.backgroundColor
               break;
-            default: 
+            default:
               // console.log(node.name, node.children.length)
               break;
           }
@@ -325,7 +324,7 @@ export default function htmlToElement(rawHtml, opts, done) {
         if (flattenStyles.fontWeight) delete flattenStyles.fontWeight
 
         return (
-          <View key={index} onPress={linkPressHandler}  style={flattenStyles}>
+          <View key={index} onPress={linkPressHandler} style={flattenStyles}>
             {domToElement(node.children, node)}
             {shouldSetLineAfter && linebreakAfter && <Text key={index} onPress={linkPressHandler} style={parent ? opts.styles[parent.name] : null}>{linebreakAfter}</Text>}
           </View>
@@ -336,7 +335,7 @@ export default function htmlToElement(rawHtml, opts, done) {
 
   let indexT = 0
 
-  const handler = new htmlparser.DomHandler(function(err, dom) {
+  const handler = new htmlparser.DomHandler(function (err, dom) {
     if (err) done(err);
     done(null, domToElement(dom));
   });

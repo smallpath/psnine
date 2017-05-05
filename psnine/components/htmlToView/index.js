@@ -1,16 +1,15 @@
-import React, {Component, PropTypes} from 'react'
+import React, { Component, PropTypes } from 'react'
 import htmlToElement from './htmlToElement'
 import {
   Linking,
   StyleSheet,
   Text,
-  WebView,
   View
 } from 'react-native'
 
-const boldStyle = {fontWeight: '500'};
-const italicStyle = {fontStyle: 'italic'};
-const codeStyle = {fontFamily: 'Menlo'};
+const boldStyle = { fontWeight: '500' };
+const italicStyle = { fontStyle: 'italic' };
+const codeStyle = { fontFamily: 'Menlo' };
 
 const baseStyles = StyleSheet.create({
   b: boldStyle,
@@ -23,12 +22,12 @@ const baseStyles = StyleSheet.create({
     fontWeight: '500',
     color: '#007AFF',
   },
-  h1: {fontWeight: '500', fontSize: 36},
-  h2: {fontWeight: '500', fontSize: 30},
-  h3: {fontWeight: '500', fontSize: 24},
-  h4: {fontWeight: '500', fontSize: 18},
-  h5: {fontWeight: '500', fontSize: 14},
-  h6: {fontWeight: '500', fontSize: 12},
+  h1: { fontWeight: '500', fontSize: 36 },
+  h2: { fontWeight: '500', fontSize: 30 },
+  h3: { fontWeight: '500', fontSize: 24 },
+  h4: { fontWeight: '500', fontSize: 18 },
+  h5: { fontWeight: '500', fontSize: 14 },
+  h6: { fontWeight: '500', fontSize: 12 },
 });
 
 
@@ -58,7 +57,7 @@ class HtmlView extends Component {
 
   startHtmlRender(value) {
     if (!value) {
-      this.setState({element: null})
+      this.setState({ element: null })
     }
 
     const opts = {
@@ -78,15 +77,15 @@ class HtmlView extends Component {
       }
 
       if (this.mounted) {
-        this.setState({element})
+        this.setState({ element })
       }
     })
   }
 
   render() {
     if (this.state.element) {
-      const alignSelf = this.props.alignCenter ? { justifyContent: 'center' } : {} 
-      return <View children={this.state.element} style={[this.props.style, { flexDirection: 'row', flexWrap:'wrap' }, alignSelf]} />;
+      const alignSelf = this.props.alignCenter ? { justifyContent: 'center' } : {}
+      return <View children={this.state.element} style={[this.props.style, { flexDirection: 'row', flexWrap: 'wrap' }, alignSelf]} />;
     }
     return <View style={this.props.style} />;
   }
