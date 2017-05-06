@@ -27,6 +27,7 @@ import { pngPrefix, getDealURL, getHappyPlusOneURL, getStoreURL } from '../../da
 import { safeLogin, registURL } from '../../dao/login';
 import { postReply } from '../../dao/post';
 
+import Emotion from '../emotion'
 
 let title = '回复';
 
@@ -38,11 +39,13 @@ let AnimatedKeyboardAvoidingView = Animated.createAnimatedComponent(KeyboardAvoi
 
 let screen = Dimensions.get('window');
 
-const { width:SCREEN_WIDTH, height:SCREEN_HEIGHT } = screen;
+const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = screen;
 
 SCREEN_HEIGHT = SCREEN_HEIGHT - StatusBar.currentHeight + 1;
 
 let CIRCLE_SIZE = 56;
+
+const emotionToolbarHeight = 190
 
 export default class Reply extends Component {
 
@@ -51,7 +54,8 @@ export default class Reply extends Component {
 
     this.state = {
       icon: false,
-      content: ''
+      content: '',
+      toolbarOpenVal: new Animated.Value(0)
     }
   }
 
@@ -64,14 +68,44 @@ export default class Reply extends Component {
     this.props.onRequestClose(typeof callback === 'function' ? callback : null)
   }
 
+  _pressEmotion = () => {
+    let config = { tension: 30, friction: 7 };
+    const target = this.state.toolbarOpenVal._value === 1 ? 0 : 1
+    if (target === 1 && this.isKeyboardShowing === true) {
+      this.shouldShowEmotion = true
+      Keyboard.dismiss()
+      return
+    }
+    Animated.spring(this.state.toolbarOpenVal, { toValue: target, ...config }).start();
+  }
+
+  componentWillUnmount = () => {
+    this.keyboardDidHideListener.remove();
+    this.keyboardDidShowListener.remove();
+  }
+
   componentWillMount = async () => {
+    this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () => {
+      this.isKeyboardShowing = true
+      this.state.toolbarOpenVal.setValue(0)
+    })
+    this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', () => {
+      this.isKeyboardShowing = false
+      this.shouldShowEmotion === true && Animated.spring(this.state.toolbarOpenVal, {
+        toValue: 1,
+        friction: 10
+      }).start(() => {
+        this.shouldShowEmotion = false
+      });
+    })
+
     const icon = await Promise.all([
       Ionicons.getImageSource('md-arrow-back', 20, '#fff'),
       Ionicons.getImageSource('md-happy', 50, '#fff'),
       Ionicons.getImageSource('md-photos', 50, '#fff'),
       Ionicons.getImageSource('md-send', 50, '#fff')
     ])
-    this.setState({ 
+    this.setState({
       icon: {
         backIcon: icon[0],
         emotionIcon: icon[1],
@@ -113,156 +147,178 @@ export default class Reply extends Component {
 
   render() {
     let { openVal, marginTop } = this.props;
-    const { icon } = this.state
+    const { icon, toolbarOpenVal } = this.state
     const { modeInfo } = this.props
-    let outerStyle = { 
-      marginTop : this.props.innerMarginTop.interpolate({
-        inputRange: [0, SCREEN_HEIGHT], 
-        outputRange: [0 ,SCREEN_HEIGHT]
+    let outerStyle = {
+      marginTop: this.props.innerMarginTop.interpolate({
+        inputRange: [0, SCREEN_HEIGHT],
+        outputRange: [0, SCREEN_HEIGHT]
       })
     };
 
-    let animatedStyle = {                              
-        left: openVal.interpolate({inputRange: [0, 1], outputRange: [SCREEN_WIDTH - 56-16 , 0]}),
-        top: openVal.interpolate({inputRange: [0, 1], outputRange: [SCREEN_HEIGHT - 16-56 , 0]}),
-        width: openVal.interpolate({inputRange: [0, 1], outputRange: [CIRCLE_SIZE, SCREEN_WIDTH]}),
-        height: openVal.interpolate({inputRange: [0, 1], outputRange: [CIRCLE_SIZE, SCREEN_HEIGHT+100]}),
-        borderWidth: openVal.interpolate({inputRange: [0, 0.5 ,1], outputRange: [2, 2, 0]}),
-        borderRadius: openVal.interpolate({inputRange: [-0.15, 0, 0.5, 1], outputRange: [0, CIRCLE_SIZE / 2, CIRCLE_SIZE * 1.3, 0]}),
-        opacity : openVal.interpolate({inputRange: [0, 0.1 ,1], outputRange: [0, 1, 1]}),
-        zIndex : openVal.interpolate({inputRange: [0 ,1], outputRange: [0, 3]}),
-        backgroundColor: openVal.interpolate({
-          inputRange: [0 ,1], 
-          outputRange: [accentColor, modeInfo.backgroundColor]
-        }),
-        //elevation : openVal.interpolate({inputRange: [0 ,1], outputRange: [0, 8]})
+    let animatedStyle = {
+      left: openVal.interpolate({ inputRange: [0, 1], outputRange: [SCREEN_WIDTH - 56 - 16, 0] }),
+      top: openVal.interpolate({ inputRange: [0, 1], outputRange: [SCREEN_HEIGHT - 16 - 56, 0] }),
+      width: openVal.interpolate({ inputRange: [0, 1], outputRange: [CIRCLE_SIZE, SCREEN_WIDTH] }),
+      height: openVal.interpolate({ inputRange: [0, 1], outputRange: [CIRCLE_SIZE, SCREEN_HEIGHT + 100] }),
+      borderWidth: openVal.interpolate({ inputRange: [0, 0.5, 1], outputRange: [2, 2, 0] }),
+      borderRadius: openVal.interpolate({ inputRange: [-0.15, 0, 0.5, 1], outputRange: [0, CIRCLE_SIZE / 2, CIRCLE_SIZE * 1.3, 0] }),
+      opacity: openVal.interpolate({ inputRange: [0, 0.1, 1], outputRange: [0, 1, 1] }),
+      zIndex: openVal.interpolate({ inputRange: [0, 1], outputRange: [0, 3] }),
+      backgroundColor: openVal.interpolate({
+        inputRange: [0, 1],
+        outputRange: [accentColor, modeInfo.backgroundColor]
+      }),
+      //elevation : openVal.interpolate({inputRange: [0 ,1], outputRange: [0, 8]})
     };
 
     let animatedSubmitStyle = {
-      height: openVal.interpolate({inputRange: [0, 0.9 ,1], outputRange: [0, 0, 40]}),
+      height: openVal.interpolate({ inputRange: [0, 0.9, 1], outputRange: [0, 0, 40] }),
     }
 
     let animatedToolbarStyle = {
-      height: openVal.interpolate({inputRange: [0, 0.9 ,1], outputRange: [0, 0, 56]}),
+      height: openVal.interpolate({ inputRange: [0, 0.9, 1], outputRange: [0, 0, 56] }),
       backgroundColor: modeInfo.standardColor,
     }
 
     return (
-      <Animated.View 
-        ref={ref=>this.ref=ref}
+      <Animated.View
+        ref={ref => this.ref = ref}
         style={[
           styles.circle, styles.open, animatedStyle, outerStyle
         ]}
-        
-        >
-        <Animated.View {...this.props.topicPanResponder.panHandlers} style={[styles.toolbar ,animatedToolbarStyle]}>
-          <View style={{    
-              flex: 1, 
-              flexDirection: 'row' , 
-              alignItems: 'center',
-            }}>
+
+      >
+        <Animated.View {...this.props.topicPanResponder.panHandlers} style={[styles.toolbar, animatedToolbarStyle]}>
+          <View style={{
+            flex: 1,
+            flexDirection: 'row',
+            alignItems: 'center',
+          }}>
             <TouchableNativeFeedback
               onPress={this._pressButton}
               delayPressIn={0}
               background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
-              style={{ borderRadius: 25}}
-              >
-              <View style={{ width: 50, height:50, marginLeft:0, borderRadius: 25}}>
-                { icon && <Image 
+              style={{ borderRadius: 25 }}
+            >
+              <View style={{ width: 50, height: 50, marginLeft: 0, borderRadius: 25 }}>
+                {icon && <Image
                   source={icon.backIcon}
-                  style={{ width: 20, height:20, marginTop: 15, marginLeft: 15 }}
+                  style={{ width: 20, height: 20, marginTop: 15, marginLeft: 15 }}
                 />}
               </View>
             </TouchableNativeFeedback>
-            <Text style={{color: 'white', fontSize: 23, marginLeft:10, }}>{title}</Text>
+            <Text style={{ color: 'white', fontSize: 23, marginLeft: 10, }}>{title}</Text>
           </View>
 
         </Animated.View >
 
-        <Animated.View  style={[styles.KeyboardAvoidingView, {
-          flex: openVal.interpolate({inputRange: [0, 1], outputRange: [0 , 10]}), 
+        <Animated.View style={[styles.KeyboardAvoidingView, {
+          flex: openVal.interpolate({ inputRange: [0, 1], outputRange: [0, 10] }),
         }]} >
-          <AnimatedKeyboardAvoidingView behavior={'padding'} style={[styles.contentView,{
-            flex: openVal.interpolate({inputRange: [0, 1], outputRange: [0 , 12]}),
+          <AnimatedKeyboardAvoidingView behavior={'padding'} style={[styles.contentView, {
+            flex: openVal.interpolate({ inputRange: [0, 1], outputRange: [0, 12] }),
           }]}>
-            <TextInput placeholder="输入回复" 
+            <TextInput placeholder="输入回复"
               multiline={true}
-              ref={ref=>this.content=ref}
-              onChange={({nativeEvent})=>{ this.setState({content:nativeEvent.text})}}
-              style={[styles.textInput, { 
-                color:modeInfo.titleTextColor,
+              ref={ref => this.content = ref}
+              onChange={({ nativeEvent }) => { this.setState({ content: nativeEvent.text }) }}
+              value={this.state.content}
+              style={[styles.textInput, {
+                color: modeInfo.titleTextColor,
                 textAlign: 'left',
                 textAlignVertical: 'top',
-                flex:1,
+                flex: 1,
               }]}
               placeholderTextColor={modeInfo.standardTextColor}
               // underlineColorAndroid={accentColor}
               underlineColorAndroid='rgba(0,0,0,0)'
             />
-            <Animated.View style={[{    
-                  elevation: 4,
-                },animatedToolbarStyle]}>
-                <View style={{    
-                    flex: 1, 
-                    flexDirection: 'row' , 
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                  }}>
-                  <View style={{flexDirection: 'row' ,  }}>
-                    <TouchableNativeFeedback
-                      onPress={this._pressButton}
-                      delayPressIn={0}
-                      background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
-                      style={{ borderRadius: 25}}
-                      >
-                      <View style={{ width: 50, height:50, marginLeft:0, borderRadius: 25 }}>
-                        { icon && <Image 
-                          source={icon.emotionIcon}
-                          style={{ width: 25, height:25, marginTop: 12.5, marginLeft: 12.5 }}
-                        />}
-                      </View>
-                    </TouchableNativeFeedback>
-                    <TouchableNativeFeedback
-                      onPress={this._pressButton}
-                      delayPressIn={0}
-                      background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
-                      style={{ borderRadius: 25}}
-                      >
-                      <View style={{ width: 50, height:50, marginLeft:0, borderRadius: 25,}}>
-                        { icon && <Image 
-                          source={icon.photoIcon}
-                          style={{ width: 25, height:25, marginTop: 12.5, marginLeft: 12.5 }}
-                        />}
-                      </View>
-                    </TouchableNativeFeedback>
-                  </View>
+            <Animated.View style={[{
+              elevation: 4,
+              bottom: 0 //toolbarOpenVal.interpolate({ inputRange: [0, 1], outputRange: [0, 1] })
+            }, animatedToolbarStyle]}>
+              <View style={{
+                flex: 1,
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+              }}>
+                <View style={{ flexDirection: 'row', }}>
                   <TouchableNativeFeedback
-                    onPress={this.sendReply}
+                    onPress={this._pressEmotion}
                     delayPressIn={0}
                     background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
-                    style={{ borderRadius: 25}}
-                    >
-                    <View style={{ width: 50, height:50, marginLeft:0, borderRadius: 25,}}>
-                      { icon && <Image 
-                        source={icon.sendIcon}
-                        style={{ width: 25, height:25, marginTop: 12.5, marginLeft: 12.5 }}
+                    style={{ borderRadius: 25 }}
+                  >
+                    <View style={{ width: 50, height: 50, marginLeft: 0, borderRadius: 25 }}>
+                      {icon && <Image
+                        source={icon.emotionIcon}
+                        style={{ width: 25, height: 25, marginTop: 12.5, marginLeft: 12.5 }}
+                      />}
+                    </View>
+                  </TouchableNativeFeedback>
+                  <TouchableNativeFeedback
+                    onPress={this._pressButton}
+                    delayPressIn={0}
+                    background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
+                    style={{ borderRadius: 25 }}
+                  >
+                    <View style={{ width: 50, height: 50, marginLeft: 0, borderRadius: 25, }}>
+                      {icon && <Image
+                        source={icon.photoIcon}
+                        style={{ width: 25, height: 25, marginTop: 12.5, marginLeft: 12.5 }}
                       />}
                     </View>
                   </TouchableNativeFeedback>
                 </View>
-
-              </Animated.View>
-              <Animated.View style={{
-                elevation: 4, bottom:0,  backgroundColor: modeInfo.standardColor,
-                height: 100,
-                opacity: openVal.interpolate({inputRange: [0, 0.9  ,1], outputRange: [0, 0, 1]}),
-             }} />
+                <TouchableNativeFeedback
+                  onPress={this.sendReply}
+                  delayPressIn={0}
+                  background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
+                  style={{ borderRadius: 25 }}
+                >
+                  <View style={{ width: 50, height: 50, marginLeft: 0, borderRadius: 25, }}>
+                    {icon && <Image
+                      source={icon.sendIcon}
+                      style={{ width: 25, height: 25, marginTop: 12.5, marginLeft: 12.5 }}
+                    />}
+                  </View>
+                </TouchableNativeFeedback>
+              </View>
+            </Animated.View>
+            {/* 表情 */}
+            <Animated.View style={{
+              elevation: 4,
+              bottom: 0, //toolbarOpenVal.interpolate({ inputRange: [0, 1], outputRange: [0, 100] }),
+              backgroundColor: modeInfo.standardColor,
+              height: toolbarOpenVal.interpolate({ inputRange: [0, 1], outputRange: [0, emotionToolbarHeight] }),
+              opacity: openVal.interpolate({ inputRange: [0, 0.9, 1], outputRange: [0, 0, 1] }),
+            }} >
+              <Emotion
+                modeInfo={modeInfo}
+                onPress={this.onPressEmotion}
+              />
+            </Animated.View>
+            <Animated.View style={{
+              elevation: 4, 
+              bottom: 0, 
+              backgroundColor: modeInfo.standardColor,
+              height: 100,
+              opacity: openVal.interpolate({ inputRange: [0, 0.9, 1], outputRange: [0, 0, 1] }),
+            }} />
           </AnimatedKeyboardAvoidingView>
 
         </Animated.View>
 
       </Animated.View>
     );
+  }
+
+  onPressEmotion = ({ text, url }) => {
+    this.setState({
+      content: this.state.content + text
+    })
   }
 }
 
@@ -271,9 +327,9 @@ const width = Dimensions.get('window').width;
 
 const styles = StyleSheet.create({
   circle: {
-    flex: 1, 
+    flex: 1,
     position: 'absolute',
-    backgroundColor:'white',
+    backgroundColor: 'white',
     width: CIRCLE_SIZE,
     height: CIRCLE_SIZE,
     borderRadius: CIRCLE_SIZE / 2,
@@ -298,57 +354,57 @@ const styles = StyleSheet.create({
     flex: -1,
   },
   mainFont: {
-    fontSize: 15, 
-    color:accentColor
+    fontSize: 15,
+    color: accentColor
   },
   textInput: {
     fontSize: 15,
   },
-  KeyboardAvoidingView: { 
-    flex: 10, 
+  KeyboardAvoidingView: {
+    flex: 10,
     // width: width,
     //alignSelf:'center',
     //justifyContent: 'space-between',
-    flexDirection: 'column' 
+    flexDirection: 'column'
   },
-  titleView: { 
-    flex: 1, 
+  titleView: {
+    flex: 1,
     //marginTop: -10,
     justifyContent: 'center',
     // flexDirection: 'column',
     // justifyContent: 'space-between',
   },
-  isPublicView:{ 
-    flex: 1, 
-    flexDirection:'row',
+  isPublicView: {
+    flex: 1,
+    flexDirection: 'row',
     // flexDirection: 'column',
     alignItems: 'center',
   },
-  contentView: { 
-    flex: 12, 
+  contentView: {
+    flex: 12,
     // flexDirection: 'column', 
   },
-  submit: { 
+  submit: {
     // flex: -1, 
     // height: 20,
     // //margin: 10,
     // marginTop: 30,
     // marginBottom: 20,
   },
-  submitButton:{
+  submitButton: {
     // backgroundColor: accentColor,
     // height: 40,
     // alignItems: 'center',
     // justifyContent: 'center',
   },
-  regist: { 
-    flex: 1, 
-    flexDirection: 'row' , 
+  regist: {
+    flex: 1,
+    flexDirection: 'row',
     marginTop: 20,
     margin: 10,
   },
   openURL: {
-    color:accentColor, 
-    textDecorationLine:'underline',
+    color: accentColor,
+    textDecorationLine: 'underline',
   },
 })
