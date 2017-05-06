@@ -65,18 +65,17 @@ export default class InlineImage extends Component {
     } else {
       source = Object.assign(source, this.props.source, finalSize)
     }
-
-    style.width = source.width
-    style.height = source.height
     return (
       <Image
-        blurRadius={50}
-        resizeMode={'center'}
+        resizeMode={'contain'}
         resizeMethod={'scale'}
         onError={(e) => { }}
         key={`${source.width}:${source.height}`}
         source={source}
-        style={style} />
+        style={{
+          width: source.width,
+          height: source.height
+        }}/>
     )
   }
 }

@@ -3,7 +3,8 @@ import {
   Text,
   View,
   Dimensions,
-  StyleSheet
+  StyleSheet,
+  Image
 } from 'react-native';
 import htmlparser from 'htmlparser2-without-node-native';
 import entities from 'entities';
@@ -66,13 +67,13 @@ const InlineImgComponent = props => {
 
   return (
     <Text onLongPress={props.linkPressHandler}>
-      <InlineImage
-        source={source}
-        style={imgStyle}
-        isLoading={props.isLoading}
-        alignCenter={props.alignCenter}
-        modeInfo={props.modeInfo}
-        linkPressHandler={props.linkPressHandler} />
+       <InlineImage
+         source={source}
+         style={imgStyle}
+         isLoading={props.isLoading}
+         alignCenter={props.alignCenter}
+         modeInfo={props.modeInfo}
+         linkPressHandler={props.linkPressHandler} />
     </Text>
   );
 };
@@ -167,7 +168,7 @@ export default function htmlToElement(rawHtml, opts, done) {
           domTemp[thisIndex] = true;
 
           result.push(
-            <Text selectable={true} key={index}>
+            <Text key={index}>
             { domToElement([nextNode], nextNode.parent, false) }
             </Text>
           )
@@ -205,7 +206,7 @@ export default function htmlToElement(rawHtml, opts, done) {
         }
 
         return (
-          <Text selectable={true} key={index} onPress={linkPressHandler} style={[
+          <Text key={index} onPress={linkPressHandler} style={[
             { color: opts.modeInfo.standardTextColor },
             parent ? opts.styles[parent.name] : null,
             classStyle
@@ -253,7 +254,6 @@ export default function htmlToElement(rawHtml, opts, done) {
           }
 
           const ImageComponent = inInsideView ? ResizableImgComponent : InlineImgComponent
-          // return undefined
           return (
             <ImageComponent key={index} attribs={node.attribs}
                 isLoading={opts.shouldShowLoadingIndicator}
@@ -356,7 +356,7 @@ export default function htmlToElement(rawHtml, opts, done) {
         } else if (inlineElements.includes(node.name) === false) {
           switch (node.name) {
             case 'table':
-              classStyle.backgroundColor = '#eec'
+              classStyle.backgroundColor = opts.modeInfo.brighterLevelOne
               break;
             case 'tr':
               classStyle.flexDirection =  'row'
@@ -366,6 +366,7 @@ export default function htmlToElement(rawHtml, opts, done) {
               break;
             case 'td':
               classStyle.flex = index === 1 ? 2 : 1
+              classStyle.padding = 2
               classStyle.borderBottomWidth = classStyle.borderRightWidth = 1
               classStyle.borderBottomColor = classStyle.borderRightColor = opts.modeInfo.backgroundColor
               break;
@@ -406,7 +407,7 @@ export default function htmlToElement(rawHtml, opts, done) {
           let inlineNode = renderInlineNode(index, [], true)
 
           return (
-            <Text key={index} selectable={true} style={flattenStyles}>{domToElement(node.children, node, false)}
+            <Text key={index} style={flattenStyles}>{domToElement(node.children, node, false)}
               {inlineNode.length !== 0 && inlineNode}
             </Text>
           )
