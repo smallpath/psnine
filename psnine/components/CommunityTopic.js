@@ -499,7 +499,7 @@ class CommunityTopic extends Component {
         modalVisible: false
       })
     }
-    const onRequestClose = () => {
+    const onRequestClose = (cb) => {
       let value = topicMarginTop._value;
       if (Math.abs(value) >= 50) {
         Animated.spring(topicMarginTop, { toValue: 0, ...config }).start();
@@ -507,13 +507,11 @@ class CommunityTopic extends Component {
       } else {
         Keyboard.dismiss()
         Animated.spring(modalOpenVal, { toValue: 0, ...config }).start(() => {
+          typeof cb === 'function' && cb()
           this.setState({
             modalVisible: false
           })
         });
-        // setTimeout(() => {
-
-        // }, 300)
       }
     }
     let CIRCLE_SIZE = 56;

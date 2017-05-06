@@ -59,9 +59,9 @@ export default class Reply extends Component {
     this.props.componentDidMountCallback()
   }
 
-  _pressButton = () => {
+  _pressButton = (callback) => {
     this.content.clear();
-    this.props.onRequestClose()
+    this.props.onRequestClose(typeof callback === 'function' ? callback : null)
   }
 
   componentWillMount = async () => {
@@ -103,8 +103,7 @@ export default class Reply extends Component {
       }
       InteractionManager.runAfterInteractions(() => {
         ToastAndroid.show('评论成功', ToastAndroid.SHORT);
-        params.callback && params.callback()
-        this._pressButton()
+        this._pressButton(() => params.callback && params.callback())
       })
     }).catch(err => {
       const msg = `评论失败: ${arr[1]}`
