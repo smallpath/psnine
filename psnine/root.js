@@ -117,7 +117,7 @@ class Root extends React.Component {
 
 		this.state = {
 			text: '',
-			isNightMode: false,// hour >= 22 || hour < 7,
+			isNightMode: hour >= 22 || hour < 7,
 			tipBarMarginBottom: new Animated.Value(0)
 		};
 

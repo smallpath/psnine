@@ -220,7 +220,13 @@ export default class Reply extends Component {
             flex: openVal.interpolate({ inputRange: [0, 1], outputRange: [0, 12] }),
           }]}>
             <TextInput placeholder="输入回复"
+              autoCorrect={false}
               multiline={true}
+              keyboardType="default"
+              returnKeyType='go'
+              returnKeyLabel='go'
+              blurOnSubmit={true}
+              numberOfLines={100}
               ref={ref => this.content = ref}
               onChange={({ nativeEvent }) => { this.setState({ content: nativeEvent.text }) }}
               value={this.state.content}
