@@ -8,17 +8,21 @@ import {
 import htmlparser from 'htmlparser2-without-node-native';
 import entities from 'entities';
 
-import AutoSizedImage from './image';
+import AutoSizedImage from './resizableImage';
+import InlineImage from './inlineImage';
 import AutoSizedWebview from './webview';
 
 const LINE_BREAK = '\n';
 const PARAGRAPH_BREAK = '\n\n';
 const BULLET = '\u2022 ';
-const inlineElements = ['a', 'span', 'em', 'font', 'label', 'b', 'strong', 'i', 'small'];
-const lineElements = ['pre', 'p', 'br', 'h1', 'h2', 'h3', 'h4', 'h5']
+const inlineElements = ['a', 'span', 'em', 'font', 'label', 'b', 'strong', 'i', 'small', 'img', 'u'];
+const blockLevelElements = ['pre', 'p', 'br', 'h1', 'h2', 'h3', 'h4', 'h5', 'blockquote']
 const { width: SCEEN_WIDTH } = Dimensions.get('window')
 
-const Img = props => {
+// 安卓不允许Text中嵌套View, 只允许嵌套Text和Image, 因此将图片分为第一层的外联图片和其他层的内联图片
+
+// 外联图片组件, 支持Loading动画
+const ResizableImgComponent = props => {
   const width = Number(props.attribs['width']) || Number(props.attribs['data-width']) || 0;
   const height = Number(props.attribs['height']) || Number(props.attribs['data-height']) || 0;
 
@@ -32,6 +36,7 @@ const Img = props => {
     height,
     imagePaddingOffset: props.imagePaddingOffset
   };
+
   return (
     <AutoSizedImage
       source={source}
@@ -43,6 +48,36 @@ const Img = props => {
   );
 };
 
+// 内联图片组件
+const InlineImgComponent = props => {
+  const width = Number(props.attribs['width']) || Number(props.attribs['data-width']) || 0;
+  const height = Number(props.attribs['height']) || Number(props.attribs['data-height']) || 0;
+
+  const imgStyle = {
+    width,
+    height,
+  };
+  const source = {
+    uri: props.attribs.src,
+    width,
+    height,
+    imagePaddingOffset: props.imagePaddingOffset
+  };
+
+  return (
+    <Text onLongPress={props.linkPressHandler}>
+      <InlineImage
+        source={source}
+        style={imgStyle}
+        isLoading={props.isLoading}
+        alignCenter={props.alignCenter}
+        modeInfo={props.modeInfo}
+        linkPressHandler={props.linkPressHandler} />
+    </Text>
+  );
+};
+
+// 显示embed和iframe内容的Modal组件
 const Web = props => {
   const width = Number(props.attribs['width']) || Number(props.attribs['data-width']) || 0;
   const height = Number(props.attribs['height']) || Number(props.attribs['data-height']) || 0;
@@ -66,13 +101,16 @@ const Web = props => {
 };
 
 export default function htmlToElement(rawHtml, opts, done) {
-  function domToElement(dom, parent) {
+  function domToElement(dom, parent, inInsideView = true) {
+    // isFisrtStage为是否为第一层, 是第一层则图片外联并且支持返回View组件, 否则只支持返回Text和内联图片组件
     if (!dom) return null;
 
 
     let domLen = dom.length;
+    // 缓存是否已经被内联渲染的对象数组
     let domTemp = {};
 
+    // 获得嵌套标签的子内容, 仅支持其中第一个子组件
     let getNodeData = function (node) {
       let nodeData = null;
       if (node.children.length) {
@@ -86,6 +124,7 @@ export default function htmlToElement(rawHtml, opts, done) {
       return nodeData;
     };
 
+    // 向parent递归查找class和style, 最终得到文字应有的样式
     let renderInlineStyle = function (parent, styleObj) {
       // p9目前只有span的嵌套, 因此暂时只处理span
       if (parent && inlineElements.includes(parent.name)) {
@@ -95,6 +134,9 @@ export default function htmlToElement(rawHtml, opts, done) {
             case 'font12':
               styleObj.fontSize = 12;
               break;
+            case 'mark':
+              styleObj.backgroundColor = '#333'
+              styleObj.color = '#333'
           }
         }
         const styles = (parent.attribs.style || '').split(';')
@@ -112,58 +154,42 @@ export default function htmlToElement(rawHtml, opts, done) {
       }
     }
 
-    let renderInlineNode = function (index) {
+    // 渲染可以被内联的组件
+    let renderInlineNode = function (index, result = [], debug = false) {
       let thisIndex = index + 1;
       if (thisIndex < domLen) {
         let nextNode = dom[thisIndex];
-        if (inlineElements.includes(nextNode.name)) {
-          domTemp[thisIndex] = true;
-          let linkPressHandler = null;
-          if (nextNode.name === 'a' && nextNode.attribs && nextNode.attribs.href) {
-            linkPressHandler = () => opts.linkHandler(entities.decodeHTML(nextNode.attribs.href))
-          }
-          let nodeData = getNodeData(nextNode);
-          if (!nodeData && nextNode.children && nextNode.children[0] && nextNode.children[0].name === 'img') {
-            // 安卓上不允许text中嵌套图片, 因此将domTemp此位置设置为false, 让这个图片跳出renderInlineNode函数
-            // 转而让dom.map函数中处理tag的语句来生成图片, 此时返回一个空字符串做跳过
-            domTemp[thisIndex] = false;
-            return (
-              <Text />
-            )
-          }
-          return (
-            <Text key={index} onPress={linkPressHandler} style={opts.styles[nextNode.name]}>
-              {entities.decodeHTML(nodeData)}
-              {renderInlineNode(thisIndex)}
-            </Text>
-          )
+        if (domTemp[thisIndex] === true) {
+          return result
         }
-        if (nextNode.type === 'text') {
+        if (inlineElements.includes(nextNode.name) || nextNode.type === 'text') {
+          // 设置缓存标识
           domTemp[thisIndex] = true;
-          return (
-            <Text style={[opts.styles['span'], {
-              color: opts.modeInfo.standardTextColor
-            }]} onPress={() => null}>
-              {entities.decodeHTML(nextNode.data)}
-              {renderInlineNode(thisIndex)}
+
+          result.push(
+            <Text selectable={true} key={index}>
+            { domToElement([nextNode], nextNode.parent, false) }
             </Text>
           )
+        } else if (nextNode.name === 'br') {
+          // 内联的换行, 由于内联只存在文字和图片, 因此不用考虑其他标签
+          domTemp[thisIndex] = true;
+          result.push(<Text key={index}>{LINE_BREAK}</Text>)
+        }
+        if (nextNode.next && nextNode.name !== 'div') {
+          const name = nextNode.next.name
+          const type = nextNode.next.type
+          // console.log(name , type)
+          if (type === 'text' || inlineElements.includes(name) || name === 'br') {
+            renderInlineNode(thisIndex, result)
+          }
         }
       }
 
-      return null;
+      return result;
     };
 
-    return dom.map((node, index, list) => {
-      if (domTemp[index] === true) {
-        return;
-      }
-
-      if (opts.customRenderer) {
-        const rendered = opts.customRenderer(node, index, list, parent, domToElement);
-        if (rendered || rendered === null) return rendered;
-      }
-
+    let renderText = (node, index, parent, shouldRenderInline = false) => {
       if (node.type == 'text' && node.data.trim() !== '') {
         let linkPressHandler = null;
         if (parent && parent.name === 'a' && parent.attribs && parent.attribs.href) {
@@ -173,13 +199,17 @@ export default function htmlToElement(rawHtml, opts, done) {
         const classStyle = {}
         renderInlineStyle(parent, classStyle)
 
+        let inlineArr = undefined
+        if (shouldRenderInline) {
+          inlineArr = renderInlineNode(index)
+        }
+
         return (
-          <Text key={index} onPress={linkPressHandler} style={[
+          <Text selectable={true} key={index} onPress={linkPressHandler} style={[
             { color: opts.modeInfo.standardTextColor },
             parent ? opts.styles[parent.name] : null,
             classStyle
-          ]}>
-            {parent && parent.name === 'pre' ? LINE_BREAK : null}
+          ]}>{parent && parent.name === 'pre' ? LINE_BREAK : null}
             {parent && parent.name === "li" ? BULLET : null}
             {parent && parent.name === 'br' ? LINE_BREAK : null}
             {parent && parent.name === 'p' && index < list.length - 1 ? PARAGRAPH_BREAK : null}
@@ -188,30 +218,65 @@ export default function htmlToElement(rawHtml, opts, done) {
 
             {entities.decodeHTML(node.data)}
 
-            {renderInlineNode(index)}
+            {inlineArr}
 
           </Text>
         )
+      } 
+      return null
+    }
+
+    return dom.map((node, index, list) => {
+
+      if (domTemp[index] === true) {
+        return;
       }
+
+      if (opts.customRenderer) {
+        const rendered = opts.customRenderer(node, index, list, parent, domToElement);
+        if (rendered || rendered === null) return rendered;
+      }
+
+      const textComponent = renderText(node, index, parent, true)
+      if (textComponent) return textComponent
 
       if (node.type === 'tag') {
         if (node.name === 'img') {
           let linkPressHandler = null;
-          if (node.attribs && node.attribs.src) {
+          if (parent && parent.name === 'a' && parent.attribs.href) {
+            const parentHref = parent.attribs.href
+            const imgSrc = node.attribs.src
+            const type = imgSrc === parentHref ? 'onImageLongPress' : 'linkHandler'
+            linkPressHandler = () => opts[type](entities.decodeHTML(parentHref));
+          } else if (node.attribs && node.attribs.src) {
             linkPressHandler = () => opts.onImageLongPress(entities.decodeHTML(node.attribs.src));
           }
+
+          const ImageComponent = inInsideView ? ResizableImgComponent : InlineImgComponent
+          // return undefined
           return (
-            <Img key={index} attribs={node.attribs}
-              isLoading={opts.shouldShowLoadingIndicator}
-              linkPressHandler={linkPressHandler}
-              alignCenter={opts.alignCenter}
-              modeInfo={opts.modeInfo}
-              imagePaddingOffset={opts.imagePaddingOffset} />
-          );
+            <ImageComponent key={index} attribs={node.attribs}
+                isLoading={opts.shouldShowLoadingIndicator}
+                linkPressHandler={linkPressHandler}
+                alignCenter={opts.alignCenter}
+                modeInfo={opts.modeInfo}
+                imagePaddingOffset={opts.imagePaddingOffset} />
+            );
         } else if (node.name === 'embed' || node.name === 'iframe') {
-          return (
-            <Web key={index} attribs={node.attribs} imagePaddingOffset={opts.imagePaddingOffset} modeInfo={opts.modeInfo} name={node.name} />
-          )
+          if (inInsideView) {
+            return (
+              <Web key={index} attribs={node.attribs} imagePaddingOffset={opts.imagePaddingOffset} modeInfo={opts.modeInfo} name={node.name} />
+            )
+          } else {
+            return (
+              <Text style={{
+                color: opts.modeInfo.accentColor,
+                textDecorationLine: 'underline'
+                }} onPress={() => opts.linkHandler(entities.decodeHTML(node.attribs.src))}>
+                打开网页
+              </Text>
+            )
+          }
         }
 
         let linkPressHandler = null;
@@ -221,8 +286,9 @@ export default function htmlToElement(rawHtml, opts, done) {
 
         let linebreakBefore = null;
         let linebreakAfter = null;
-        if (lineElements.includes(node.name)) {
+        if (blockLevelElements.includes(node.name)) {
           switch (node.name) {
+            case 'blockquote':
             case 'pre':
               linebreakBefore = LINE_BREAK;
               break;
@@ -252,14 +318,9 @@ export default function htmlToElement(rawHtml, opts, done) {
         }
 
         let shouldSetLineAfter = false
-        if (node.name === 'br') {
-          if (node.prev && node.prev.name === 'br') {
-            shouldSetLineAfter = true
-          }
-        }
 
         const classStyle = {}
-        if (node.type === 'tag' && node.name === 'div') {
+        if (node.name === 'div') {
           if (node.attribs.align === 'center') {
             classStyle.alignItems = 'center'
             classStyle.justifyContent = 'center'
@@ -292,16 +353,16 @@ export default function htmlToElement(rawHtml, opts, done) {
               }
             }
           }
-        } else if (node.type === 'tag' && inlineElements.includes(node.name) === false) {
+        } else if (inlineElements.includes(node.name) === false) {
           switch (node.name) {
             case 'table':
               classStyle.backgroundColor = '#eec'
               break;
             case 'tr':
-              classStyle.flexDirection = 'row'
-              classStyle.flexWrap = 'wrap'
+              classStyle.flexDirection =  'row'
+              classStyle.flexWrap =  'wrap'
               classStyle.justifyContent = 'space-between'
-              classStyle.alignItems = 'stretch'
+              classStyle.alignItems =  'stretch'
               break;
             case 'td':
               classStyle.flex = index === 1 ? 2 : 1
@@ -319,21 +380,40 @@ export default function htmlToElement(rawHtml, opts, done) {
           classStyle
         ])
 
-        if (flattenStyles.fontSize) delete flattenStyles.fontSize
-        if (flattenStyles.fontFamily) delete flattenStyles.fontFamily
-        if (flattenStyles.fontWeight) delete flattenStyles.fontWeight
+        if (inInsideView && inlineElements.includes(node.name) === false) {
+          if (node.name === 'br') {
+            // P9内容的换行规则
+            if (node.prev && ['br'].includes(node.prev.name)) {
+              shouldSetLineAfter = true
+            }
+          }
+          if (flattenStyles.fontSize) delete flattenStyles.fontSize
+          if (flattenStyles.fontFamily) delete flattenStyles.fontFamily
+          if (flattenStyles.fontWeight) delete flattenStyles.fontWeight
+          if (node.children && node.children.length === 0) {
+            if (node.prev && inlineElements.includes(node.prev.name)) {
+              return
+            }
+            return <Text key={index}>{'\n'}</Text>
+          }
+          return (
+            <View key={index} style={flattenStyles}>
+              {domToElement(node.children, node, inInsideView)}
+              {shouldSetLineAfter && linebreakAfter && <Text key={index} onPress={linkPressHandler} style={parent ? opts.styles[parent.name] : null}>{linebreakAfter}</Text>}
+            </View>
+          )
+        } else {
+          let inlineNode = renderInlineNode(index, [], true)
 
-        return (
-          <View key={index} onPress={linkPressHandler} style={flattenStyles}>
-            {domToElement(node.children, node)}
-            {shouldSetLineAfter && linebreakAfter && <Text key={index} onPress={linkPressHandler} style={parent ? opts.styles[parent.name] : null}>{linebreakAfter}</Text>}
-          </View>
-        )
+          return (
+            <Text key={index} selectable={true} style={flattenStyles}>{domToElement(node.children, node, false)}
+              {inlineNode.length !== 0 && inlineNode}
+            </Text>
+          )
+        }
       }
     });
   }
-
-  let indexT = 0
 
   const handler = new htmlparser.DomHandler(function (err, dom) {
     if (err) done(err);

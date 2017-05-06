@@ -1,3 +1,4 @@
 {
-  "presets": ["react-native"]
+  "presets": ["react-native"],
+  "plugins": ["transform-react-jsx-source"] // disable on production
 }

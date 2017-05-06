@@ -38,7 +38,7 @@ export default class ResizableImage extends Component {
 
   componentDidMount = () => {
     this.mounted = true
-    if (this.props.style.width || this.props.style.height) {
+    if (this.props.style.width !== 0 && this.props.style.height !== 0) {
       this.setState({
         isLoading: false
       })
@@ -63,7 +63,7 @@ export default class ResizableImage extends Component {
       var ratio = maxWidth / this.state.width
       finalSize.height = this.state.height * ratio
     }
-    const style = Object.assign(baseStyle, this.props.style, this.state, finalSize)
+    const style = Object.assign({}, baseStyle, this.props.style, this.state, finalSize)
     let source = {
       alignSelf: 'center'
     }
@@ -94,6 +94,7 @@ export default class ResizableImage extends Component {
           {!this.state.isLoading &&
             <Image
               resizeMode={'contain'}
+              resizeMethod={'scale'}
               onError={(e) => { }}
               key={`${source.width}:${source.height}`}
               source={source} />

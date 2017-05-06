@@ -70,7 +70,7 @@ export default function (html) {
     page: page,
     gameTable
   }
-  
+  // console.log(body.html())
   const commentList = []
   all.last().find('.post').each(function(i, elem) {
     const $this = $(this)

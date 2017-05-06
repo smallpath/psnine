@@ -1,3 +1,8 @@
+if (__DEV__) {
+  window.requestIdleCallback = null
+  window.cancelIdleCallback = null
+}
+
 import React, { Component } from 'react';
 import { AppRegistry } from 'react-native';
 

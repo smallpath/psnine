@@ -22,12 +22,19 @@ const baseStyles = StyleSheet.create({
     fontWeight: '500',
     color: '#007AFF',
   },
+  u: { textDecorationLine: 'underline' },
   h1: { fontWeight: '500', fontSize: 36 },
   h2: { fontWeight: '500', fontSize: 30 },
   h3: { fontWeight: '500', fontSize: 24 },
   h4: { fontWeight: '500', fontSize: 18 },
   h5: { fontWeight: '500', fontSize: 14 },
   h6: { fontWeight: '500', fontSize: 12 },
+  blockquote: {
+    backgroundColor: '#eec',
+    paddingVertical: 6,
+    paddingHorizontal: 6,
+    margin: 10
+  }
 });
 
 
@@ -85,7 +92,7 @@ class HtmlView extends Component {
   render() {
     if (this.state.element) {
       const alignSelf = this.props.alignCenter ? { justifyContent: 'center' } : {}
-      return <View children={this.state.element} style={[this.props.style, { flexDirection: 'row', flexWrap: 'wrap' }, alignSelf]} />;
+      return <View children={this.state.element} style={[this.props.style, { flexDirection: 'column', flexWrap: 'wrap' }, alignSelf]} />;
     }
     return <View style={this.props.style} />;
   }

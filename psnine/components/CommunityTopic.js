@@ -425,7 +425,6 @@ class CommunityTopic extends Component {
     if (shouldPushData && this.hasComment) {
       data.push(this.state.commentList)
       renderFuncArr.push(this.renderComment)
-
     }
 
     this.viewBottomIndex = Math.max(data.length - 1, 0)
