@@ -87,8 +87,7 @@ class Emotion extends Component {
     })
     return (
       <View style={{
-        height: viewPagerHeight,
-        margin: 1
+        height: viewPagerHeight
       }}>
         <ViewPagerAndroid style={{
           height: viewPagerHeight,

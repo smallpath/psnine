@@ -90,6 +90,8 @@ class CommunityTopic extends Component {
         const cb = () => {
           this.setState({
             modalVisible: true
+          }, () => {
+            // alert('wws')
           })
         }
         if (this.state.openVal._value === 1) {
@@ -604,7 +606,7 @@ class CommunityTopic extends Component {
       topicMarginTop.setValue(0)
       Animated.spring(modalOpenVal, { toValue: 1, ...config }).start();
     }
-    return this.state.modalVisible === true ? (
+    return (
       <Modal
         animationType={'fade'}
         transparent={true}
@@ -624,7 +626,7 @@ class CommunityTopic extends Component {
           onRequestClose={onRequestClose}
           modeInfo={modeInfo} />
       </Modal>
-    ) : undefined
+    )
   }
 
 
