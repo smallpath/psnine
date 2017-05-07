@@ -47,7 +47,8 @@ class Message extends Component {
     navigation.navigate('CommunityTopic', {
       URL,
       title: rowData.content,
-      rowData
+      rowData,
+      shouldBeSawBackground: true
     });
   }
 

@@ -45,7 +45,7 @@ let releasedMarginTop = 0;
 const ACTUAL_SCREEN_HEIGHT = SCREEN_HEIGHT - StatusBar.currentHeight + 1;
 
 let CIRCLE_SIZE = 56;
-
+let config = { tension: 30, friction: 7, ease: Easing.in(Easing.ease(1, 0, 1, 1)), duration: 200 };
 
 class CommunityTopic extends Component {
 
@@ -66,6 +66,9 @@ class CommunityTopic extends Component {
   }
 
   _refreshComment = () => {
+    if (this.isReplyShowing === true) {
+      this.isReplyShowing = false
+    }
     if (this.state.isLoading === true) {
       return
     }
@@ -80,7 +83,9 @@ class CommunityTopic extends Component {
     })
   }
 
+  isReplyShowing = false
   onCommentLongPress = (rowData) => {
+    if (this.isReplyShowing === true) return
     const { params } = this.props.navigation.state
     const cb = () => {
       this.props.navigation.navigate('Reply', {
@@ -95,11 +100,13 @@ class CommunityTopic extends Component {
     const { params } = this.props.navigation.state
     switch (index) {
       case 0:
+        if (this.isReplyShowing === true) return
         const cb = () => {
           this.props.navigation.navigate('Reply', {
             type: params.type,
             id: params.rowData.id,
-            callback: this._refreshComment
+            callback: this._refreshComment,
+            shouldSeeBackground: true
           })
         }
         if (this.state.openVal._value === 1) {

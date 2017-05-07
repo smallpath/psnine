@@ -53,7 +53,7 @@ class Community extends Component {
       title: rowData.title,
       rowData,
       type: 'community',
-      shouldBeClickableUnderOtherRoutes: true
+      shouldBeSawBackground: true
     })
   }
 

@@ -50,7 +50,7 @@ class Gene extends Component {
       title: rowData.title,
       rowData,
       type: 'gene',
-      shouldBeClickableUnderOtherRoutes: true
+      shouldBeSawBackground: true
     })
   }
 

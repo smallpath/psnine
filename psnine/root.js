@@ -54,6 +54,8 @@ import ImageViewer from './components/imageViewer'
 
 import NewTopic from './components/new/NewTopic'
 
+import transitionConfig from './utils/transitionConfig'
+
 const enableGesture = ({ navigation }) => {
 	return {
 		gesturesEnabled: true
@@ -81,14 +83,7 @@ const Navigator = StackNavigator({
     navigationOptions: enableGesture
 	},
 	Reply: {
-		screen: Reply,
-    // navigationOptions: ({ navigation }) => {
-    //   return {
-    //     cardStyle: {
-    //       backgroundColor: '#f00'
-    //     }
-    //   }
-    // }
+		screen: Reply
 	},
   NewTopic: {
     screen: NewTopic
@@ -111,7 +106,12 @@ const Navigator = StackNavigator({
     cardStack: {
       gesturesEnabled: true,
     }
-  }
+  },
+  cardStyle: {
+    backgroundColor: 'transparent',
+    // opacity: 0.99
+  },
+  transitionConfig
 });
 
 let backPressClickTimeStamp = 0

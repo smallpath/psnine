@@ -59,7 +59,7 @@ class Qa extends Component {
       title: rowData.title,
       rowData,
       type: 'qa',
-      shouldBeClickableUnderOtherRoutes: true,
+      shouldBeSawBackground: true
     });
   }
 

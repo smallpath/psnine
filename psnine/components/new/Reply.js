@@ -84,6 +84,7 @@ export default class Reply extends Component {
   }
   isKeyboardShowing = false
   _pressEmotion = () => {
+    let config = { tension: 30, friction: 7 };
     const target = this.state.toolbarOpenVal._value === 1 ? 0 : 1
     if (target === 1 && this.isKeyboardShowing === true) {
       this.shouldShowEmotion = true
@@ -100,6 +101,7 @@ export default class Reply extends Component {
   }
 
   componentWillMount = async () => {
+    let config = { tension: 30, friction: 7 };
     const { openVal, marginTop } = this.state
     const { callback } = this.props.navigation.state.params
     const { params } = this.props.navigation.state
@@ -207,6 +209,7 @@ export default class Reply extends Component {
     })
 
     this.removeListener = BackHandler.addEventListener('hardwareBackPress', () => {
+      let config = { tension: 30, friction: 7 };
       let value = marginTop._value;
       if (Math.abs(value) >= 50) {
         Animated.spring(marginTop, { toValue: 0, ...config }).start();
