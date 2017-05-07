@@ -56,7 +56,7 @@ export default class Reply extends Component {
 
     this.state = {
       icon: false,
-      content: '',
+      content: this.props.navigation.state.params.at || '',
       openVal: new Animated.Value(0),
       marginTop: new Animated.Value(0),
       toolbarOpenVal: new Animated.Value(0)

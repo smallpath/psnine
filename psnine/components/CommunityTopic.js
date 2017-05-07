@@ -83,19 +83,6 @@ class CommunityTopic extends Component {
     })
   }
 
-  isReplyShowing = false
-  onCommentLongPress = (rowData) => {
-    if (this.isReplyShowing === true) return
-    const { params } = this.props.navigation.state
-    const cb = () => {
-      this.props.navigation.navigate('Reply', {
-        type: params.type,
-        id: params.rowData.id,
-        at: rowData.psnid
-      })
-    }
-  }
-
   _onActionSelected = (index) => {
     const { params } = this.props.navigation.state
     switch (index) {
@@ -155,7 +142,7 @@ class CommunityTopic extends Component {
   })
 
 
-  shouldComponentUpdate = (nextProp, nextState, nani) => {
+  shouldComponentUpdate = (nextProp, nextState) => {
     return true
   }
 
@@ -301,8 +288,8 @@ class CommunityTopic extends Component {
             borderBottomColor: modeInfo.brighterLevelOne
           }}>
             <TouchableNativeFeedback
-              onPress={() => {
-
+              onLongPress={() => {
+                this.onCommentLongPress(rowData)
               }}
               useForeground={true}
               delayPressIn={100}
@@ -372,6 +359,25 @@ class CommunityTopic extends Component {
         {readMore && <View style={{ elevation: 1, margin: 5, marginTop: 0, marginBottom: 5, backgroundColor: modeInfo.backgroundColor }}>{readMore}</View>}
       </View>
     )
+  }
+
+  isReplyShowing = false
+
+  onCommentLongPress = (rowData) => {
+    if (this.isReplyShowing === true) return
+    const { params } = this.props.navigation.state
+    const cb = () => {
+      this.props.navigation.navigate('Reply', {
+        type: params.type,
+        id: params.rowData.id,
+        at: rowData.psnid
+      })
+    }
+    if (this.state.openVal._value === 1) {
+      this._animateToolbar(0, cb)
+    } else if (this.state.openVal._value === 0) {
+      cb()
+    }
   }
 
   _readMore = (URL) => {
