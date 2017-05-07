@@ -81,7 +81,14 @@ const Navigator = StackNavigator({
     navigationOptions: enableGesture
 	},
 	Reply: {
-		screen: Reply
+		screen: Reply,
+    // navigationOptions: ({ navigation }) => {
+    //   return {
+    //     cardStyle: {
+    //       backgroundColor: '#f00'
+    //     }
+    //   }
+    // }
 	},
   NewTopic: {
     screen: NewTopic
@@ -104,7 +111,7 @@ const Navigator = StackNavigator({
     cardStack: {
       gesturesEnabled: true,
     }
-  },
+  }
 });
 
 let backPressClickTimeStamp = 0

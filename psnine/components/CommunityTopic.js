@@ -26,7 +26,6 @@ import { standardColor, nodeColor, idColor, accentColor } from '../config/colorC
 
 import { getTopicAPI, getTopicContentAPI, getTopiCommentSnapshotAPI } from '../dao/dao'
 import ImageViewer from './imageViewer'
-import Reply from './new/Reply'
 
 let screen = Dimensions.get('window');
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = screen;
@@ -42,9 +41,6 @@ let WEBVIEW_REF = `WEBVIEW_REF`;
 
 let toolbarHeight = 56;
 let releasedMarginTop = 0;
-let config = { tension: 30, friction: 7, ease: Easing.in(Easing.ease(1, 0, 1, 1)), duration: 200 };
-const timeout = 190
-const delay = 50
 
 const ACTUAL_SCREEN_HEIGHT = SCREEN_HEIGHT - StatusBar.currentHeight + 1;
 
@@ -84,14 +80,26 @@ class CommunityTopic extends Component {
     })
   }
 
+  onCommentLongPress = (rowData) => {
+    const { params } = this.props.navigation.state
+    const cb = () => {
+      this.props.navigation.navigate('Reply', {
+        type: params.type,
+        id: params.rowData.id,
+        at: rowData.psnid
+      })
+    }
+  }
+
   _onActionSelected = (index) => {
+    const { params } = this.props.navigation.state
     switch (index) {
       case 0:
         const cb = () => {
-          this.setState({
-            modalVisible: true
-          }, () => {
-            // alert('wws')
+          this.props.navigation.navigate('Reply', {
+            type: params.type,
+            id: params.rowData.id,
+            callback: this._refreshComment
           })
         }
         if (this.state.openVal._value === 1) {
@@ -437,7 +445,6 @@ class CommunityTopic extends Component {
         onStartShouldSetResponder={() => false}
         onMoveShouldSetResponder={() => false}
       >
-        { this.renderModal() }
         <Ionicons.ToolbarAndroid
           navIconName="md-arrow-back"
           overflowIconName="md-more"
@@ -488,147 +495,6 @@ class CommunityTopic extends Component {
       </View>
     );
   }
-
-
-  renderModal = () => {
-    const { params } = this.props.navigation.state
-    const { modeInfo } = this.props.screenProps;
-    const { topicMarginTop, modalOpenVal } = this.state
-    const tipHeight = toolbarHeight * 0.8
-    let config = { tension: 30, friction: 7 };
-    const onClose = () => {
-      this.setState({
-        modalVisible: false
-      })
-    }
-    const onRequestClose = (cb) => {
-      let value = topicMarginTop._value;
-      if (Math.abs(value) >= 50) {
-        Animated.spring(topicMarginTop, { toValue: 0, ...config }).start();
-        return true;
-      } else {
-        Keyboard.dismiss()
-        Animated.spring(modalOpenVal, { toValue: 0, ...config }).start(() => {
-          typeof cb === 'function' && cb()
-          this.setState({
-            modalVisible: false
-          })
-        });
-      }
-    }
-    let CIRCLE_SIZE = 56;
-    const topicPanResponder = PanResponder.create({
-
-      onStartShouldSetPanResponderCapture: (e, gesture) => {
-        return e.nativeEvent.pageX <= 56 ? false : true;
-      },
-      onPanResponderGrant: (e, gesture) => {
-        const target = gesture.y0 <= 56 ? 0 : ACTUAL_SCREEN_HEIGHT - 56
-        topicMarginTop.setOffset(target);
-      },
-      onPanResponderMove: Animated.event([
-        null,
-        {
-          dy: topicMarginTop
-        }
-      ]),
-
-      onPanResponderRelease: (e, gesture) => {
-
-      },
-      onPanResponderTerminationRequest: (evt, gesture) => {
-        return false;
-      },
-      onPanResponderTerminate: (evt, gesture) => {
-
-      },
-      onShouldBlockNativeResponder: (evt, gesture) => {
-        return true;
-      },
-      onPanResponderReject: (evt, gesture) => {
-        return false;
-      },
-      onPanResponderEnd: (evt, gesture) => {
-        let dy = gesture.dy;
-        let vy = gesture.vy;
-
-        topicMarginTop.flattenOffset();
-
-        let duration = 50;
-
-        if (vy < 0) {
-
-          if (Math.abs(dy) <= CIRCLE_SIZE) {
-
-            Animated.spring(topicMarginTop, {
-              toValue: ACTUAL_SCREEN_HEIGHT - CIRCLE_SIZE,
-              duration,
-              easing: Easing.linear,
-            }).start();
-
-          } else {
-
-            Animated.spring(topicMarginTop, {
-              toValue: 0,
-              duration,
-              easing: Easing.linear,
-            }).start();
-
-          }
-
-        } else {
-
-          if (Math.abs(dy) <= CIRCLE_SIZE) {
-
-            Animated.spring(topicMarginTop, {
-              toValue: 0,
-              duration,
-              easing: Easing.linear,
-            }).start();
-
-          } else {
-
-            Animated.spring(topicMarginTop, {
-              toValue: ACTUAL_SCREEN_HEIGHT - CIRCLE_SIZE,
-              duration,
-              easing: Easing.linear,
-            }).start();
-          }
-
-        }
-
-      },
-
-    });
-    const componentDidMountCallback = () => {
-      let config = { tension: 30, friction: 7 };
-      modalOpenVal.setValue(0)
-      topicMarginTop.setValue(0)
-      Animated.spring(modalOpenVal, { toValue: 1, ...config }).start();
-    }
-    return (
-      <Modal
-        animationType={'fade'}
-        transparent={true}
-        visible={this.state.modalVisible}
-        onRequestClose={onRequestClose}
-      >
-        <Reply
-          params={{
-            type: params.type,
-            id: params.rowData.id,
-            callback: this._refreshComment
-          }}
-          openVal={this.state.modalOpenVal}
-          innerMarginTop={this.state.topicMarginTop}
-          componentDidMountCallback={componentDidMountCallback}
-          topicPanResponder={topicPanResponder}
-          onRequestClose={onRequestClose}
-          modeInfo={modeInfo} />
-      </Modal>
-    )
-  }
-
 
   renderToolbarItem = (props, index, maxLength) => {
     const { modeInfo } = this.props.screenProps

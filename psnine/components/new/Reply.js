@@ -47,6 +47,8 @@ let CIRCLE_SIZE = 56;
 
 const emotionToolbarHeight = 190
 
+let config = { tension: 30, friction: 7, ease: Easing.in(Easing.ease(1, 0, 1, 1)), duration: 200 };
+
 export default class Reply extends Component {
 
   constructor(props) {
@@ -55,21 +57,33 @@ export default class Reply extends Component {
     this.state = {
       icon: false,
       content: '',
+      openVal: new Animated.Value(0),
+      marginTop: new Animated.Value(0),
       toolbarOpenVal: new Animated.Value(0)
     }
   }
 
   componentDidMount = () => {
-    this.props.componentDidMountCallback()
+    let config = { tension: 30, friction: 7 };
+    Animated.spring(this.state.openVal, { toValue: 1, ...config }).start();
   }
 
   _pressButton = (callback) => {
+    const { marginTop, openVal } = this.state
+    let value = marginTop._value;
+    if (Math.abs(value) >= 50) {
+      Animated.spring(marginTop, { toValue: 0, ...config }).start();
+      return true;
+    } 
     this.content.clear();
-    this.props.onRequestClose(typeof callback === 'function' ? callback : null)
+    Keyboard.dismiss()
+    Animated.spring(openVal, { toValue: 0, ...config }).start(() => {
+      typeof callback === 'function' && callback()
+    });
+    this.props.navigation.goBack()
   }
-
+  isKeyboardShowing = false
   _pressEmotion = () => {
-    let config = { tension: 30, friction: 7 };
     const target = this.state.toolbarOpenVal._value === 1 ? 0 : 1
     if (target === 1 && this.isKeyboardShowing === true) {
       this.shouldShowEmotion = true
@@ -82,9 +96,102 @@ export default class Reply extends Component {
   componentWillUnmount = () => {
     this.keyboardDidHideListener.remove();
     this.keyboardDidShowListener.remove();
+    this.removeListener && this.removeListener.remove()
   }
 
   componentWillMount = async () => {
+    const { openVal, marginTop } = this.state
+    const { callback } = this.props.navigation.state.params
+    const { params } = this.props.navigation.state
+    if (params.at) {
+      this.setState({
+        content: `@${params.at} `
+      })
+    }
+    this.PanResponder = PanResponder.create({
+
+      onStartShouldSetPanResponderCapture: (e, gesture) => {
+        return e.nativeEvent.pageX <= 56 ? false : true;
+      },
+      onPanResponderGrant: (e, gesture) => {
+        Keyboard.dismiss()
+        const target = gesture.y0 <= 56 ? 0 : SCREEN_HEIGHT - 56
+        marginTop.setOffset(target);
+      },
+      onPanResponderMove: Animated.event([
+        null,
+        {
+          dy: marginTop
+        }
+      ]),
+
+      onPanResponderRelease: (e, gesture) => {
+
+      },
+      onPanResponderTerminationRequest: (evt, gesture) => {
+        return false;
+      },
+      onPanResponderTerminate: (evt, gesture) => {
+
+      },
+      onShouldBlockNativeResponder: (evt, gesture) => {
+        return true;
+      },
+      onPanResponderReject: (evt, gesture) => {
+        return false;
+      },
+      onPanResponderEnd: (evt, gesture) => {
+        let dy = gesture.dy;
+        let vy = gesture.vy;
+
+        marginTop.flattenOffset();
+
+        let duration = 50;
+
+        if (vy < 0) {
+
+          if (Math.abs(dy) <= CIRCLE_SIZE) {
+
+            Animated.spring(marginTop, {
+              toValue: SCREEN_HEIGHT - CIRCLE_SIZE,
+              duration,
+              easing: Easing.linear,
+            }).start();
+
+          } else {
+
+            Animated.spring(marginTop, {
+              toValue: 0,
+              duration,
+              easing: Easing.linear,
+            }).start();
+
+          }
+
+        } else {
+
+          if (Math.abs(dy) <= CIRCLE_SIZE) {
+
+            Animated.spring(marginTop, {
+              toValue: 0,
+              duration,
+              easing: Easing.linear,
+            }).start();
+
+          } else {
+
+            Animated.spring(marginTop, {
+              toValue: SCREEN_HEIGHT - CIRCLE_SIZE,
+              duration,
+              easing: Easing.linear,
+            }).start();
+          }
+
+        }
+
+      },
+
+    });
     this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () => {
       this.isKeyboardShowing = true
       this.state.toolbarOpenVal.setValue(0)
@@ -97,6 +204,20 @@ export default class Reply extends Component {
       }).start(() => {
         this.shouldShowEmotion = false
       });
+    })
+
+    this.removeListener = BackHandler.addEventListener('hardwareBackPress', () => {
+      let value = marginTop._value;
+      if (Math.abs(value) >= 50) {
+        Animated.spring(marginTop, { toValue: 0, ...config }).start();
+        return true;
+      } else {
+        Keyboard.dismiss()
+        Animated.spring(openVal, { toValue: 0, ...config }).start(() => {
+          
+        });
+        return false
+      }
     })
 
     const icon = await Promise.all([
@@ -117,12 +238,12 @@ export default class Reply extends Component {
   }
 
   sendReply = () => {
-    const { params } = this.props
+    const { params } = this.props.navigation.state
     const type = params.type === 'community' ? 'topic' : params.type
     const form = {
       type: type,
       param: params.id,
-      old: 'yes', // what???
+      old: 'yes',
       content: this.state.content,
       com: ''
     }
@@ -146,11 +267,11 @@ export default class Reply extends Component {
   }
 
   render() {
-    let { openVal, marginTop } = this.props;
+    let { openVal, marginTop } = this.state;
     const { icon, toolbarOpenVal } = this.state
-    const { modeInfo } = this.props
+    const { modeInfo } = this.props.screenProps
     let outerStyle = {
-      marginTop: this.props.innerMarginTop.interpolate({
+      marginTop: marginTop.interpolate({
         inputRange: [0, SCREEN_HEIGHT],
         outputRange: [0, SCREEN_HEIGHT]
       })
@@ -189,7 +310,7 @@ export default class Reply extends Component {
         ]}
 
       >
-        <Animated.View {...this.props.topicPanResponder.panHandlers} style={[styles.toolbar, animatedToolbarStyle]}>
+        <Animated.View {...this.PanResponder.panHandlers} style={[styles.toolbar, animatedToolbarStyle]}>
           <View style={{
             flex: 1,
             flexDirection: 'row',
@@ -298,7 +419,7 @@ export default class Reply extends Component {
               elevation: 4,
               bottom: 0, //toolbarOpenVal.interpolate({ inputRange: [0, 1], outputRange: [0, 100] }),
               backgroundColor: modeInfo.standardColor,
-              height: toolbarOpenVal.interpolate({ inputRange: [0, 1], outputRange: [0, emotionToolbarHeight] }),
+              height: toolbarOpenVal.interpolate({ inputRange: [-1, 0, 1], outputRange: [0, 0, emotionToolbarHeight] }),
               opacity: openVal.interpolate({ inputRange: [0, 0.9, 1], outputRange: [0, 0, 1] }),
             }} >
               <Emotion
