@@ -154,6 +154,11 @@ class CommunityTopic extends Component {
     ]
   })
 
+
+  shouldComponentUpdate = (nextProp, nextState, nani) => {
+    return true
+  }
+
   renderHeader = (titleInfo) => {
     const { modeInfo } = this.props.screenProps
     const { params } = this.props.navigation.state

@@ -46,6 +46,11 @@ class Emotion extends Component {
     })
   }
 
+  shouldComponentUpdate = (nextProp, nextState) => {
+    if (nextState.index !== this.state.index) return true
+    return false
+  }
+
   render() {
     const { modeInfo } = this.props
     const { index } = this.state
