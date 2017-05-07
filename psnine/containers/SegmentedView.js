@@ -381,7 +381,7 @@ class SegmentedView extends Component {
           onPageScroll={this.onPageScroll}
         >
 
-          {/*<View key={`s00`}
+          <View key={`s00`}
             style={{ backgroundColor: 'blue', height: 500 }}
 
           >
@@ -395,9 +395,9 @@ class SegmentedView extends Component {
                 setMarginTop: this.props.setMarginTop
               }}
             />
-          </View>*/}
+          </View>
 
-          {/*<View key={`s11`}>
+          <View key={`s11`}>
             <Qa
               index={1}
               ref={qa => this.qa = qa}
@@ -420,10 +420,10 @@ class SegmentedView extends Component {
               }}
               URL={'http://psnine.com/psngame'}
             />
-          </View>*/}
+          </View>
           <View key={`s33`}>
             <Battle
-              index={0}
+              index={3}
               ref={battle => this.battle = battle}
               {...{
                 navigation: this.props.navigation,
@@ -433,7 +433,7 @@ class SegmentedView extends Component {
               URL={'http://psnine.com/battle'}
             />
           </View>
-          {/*<View key={`s44`}>
+          <View key={`s44`}>
             <Gene
               ref={gene => this.gene = gene}
               index={4}
@@ -445,7 +445,7 @@ class SegmentedView extends Component {
               }
               }
             />
-          </View>*/}
+          </View>
 
         </ViewPagerAndroid>
       </View>

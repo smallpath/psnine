@@ -55,11 +55,12 @@ class Game extends Component {
   _onRowPressed = (rowData) => {
     const { navigation } = this.props;
     const URL = getGameUrl(rowData.id);
-    navigation.navigate('CommunityTopic', {
+    navigation.navigate('GamePage', {
+      // URL: 'http://psnine.com/psngame/5424?psnid=Smallpath',
       URL,
       title: rowData.title,
       rowData,
-      type: 'community',
+      type: 'game',
       shouldBeSawBackground: true
     })
   }
