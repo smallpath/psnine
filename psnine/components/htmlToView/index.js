@@ -75,7 +75,8 @@ class HtmlView extends Component {
       modeInfo: this.props.modeInfo,
       shouldShowLoadingIndicator: this.props.shouldShowLoadingIndicator,
       alignCenter: this.props.alignCenter,
-      onImageLongPress: this.props.onImageLongPress
+      onImageLongPress: this.props.onImageLongPress,
+      shouldForceInline: this.props.shouldForceInline
     }
 
     htmlToElement(value, opts, (err, element) => {
@@ -90,11 +91,13 @@ class HtmlView extends Component {
   }
 
   render() {
+    const TargetView = this.props.shouldForceInline ? Text : View
     if (this.state.element) {
       const alignSelf = this.props.alignCenter ? { justifyContent: 'center' } : {}
-      return <View children={this.state.element} style={[this.props.style, { flexDirection: 'column', flexWrap: 'wrap' }, alignSelf]} />;
+      Object.assign(alignSelf, { flexDirection: 'column', flexWrap: 'wrap' })
+      return <TargetView children={this.state.element} style={[this.props.style, this.props.shouldForceInline ? null : alignSelf]} />;
     }
-    return <View style={this.props.style} />;
+    return <TargetView style={this.props.style} />;
   }
 }
 
@@ -107,7 +110,8 @@ HtmlView.propTypes = {
   renderNode: PropTypes.func,
   modeInfo: PropTypes.object,
   shouldShowLoadingIndicator: PropTypes.bool,
-  alignCenter: PropTypes.bool
+  alignCenter: PropTypes.bool,
+  shouldForceInline: PropTypes.bool
 }
 
 HtmlView.defaultProps = {
@@ -116,7 +120,8 @@ HtmlView.defaultProps = {
   onError: console.error.bind(console),
   modeInfo: {},
   shouldShowLoadingIndicator: false,
-  alignCenter: false
+  alignCenter: false,
+  shouldForceInline: false
 }
 
 export default HtmlView

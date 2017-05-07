@@ -192,6 +192,7 @@ class CommunityTopic extends Component {
                 value={titleInfo.title}
                 modeInfo={modeInfo}
                 stylesheet={styles}
+                shouldForceInline={true}
                 onImageLongPress={this.handleImageOnclick}
                 imagePaddingOffset={shouldRenderAvatar ? 30 + 75 + 10 : 30}
               />
@@ -320,6 +321,7 @@ class CommunityTopic extends Component {
                     stylesheet={styles}
                     onImageLongPress={this.handleImageOnclick}
                     imagePaddingOffset={30 + 75 + 10}
+                    shouldForceInline={true}
                   />
 
                   <View style={{ flex: 1.1, flexDirection: 'row', justifyContent: 'space-between' }}>

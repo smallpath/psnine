@@ -103,7 +103,7 @@ const Web = props => {
 
 export default function htmlToElement(rawHtml, opts, done) {
   function domToElement(dom, parent, inInsideView = true) {
-    // isFisrtStage为是否为第一层, 是第一层则图片外联并且支持返回View组件, 否则只支持返回Text和内联图片组件
+    // inInsideView为是否为第一层, 是第一层则图片外联并且支持返回View组件, 否则只支持返回Text和内联图片组件
     if (!dom) return null;
 
 
@@ -418,7 +418,7 @@ export default function htmlToElement(rawHtml, opts, done) {
 
   const handler = new htmlparser.DomHandler(function (err, dom) {
     if (err) done(err);
-    done(null, domToElement(dom));
+    done(null, domToElement(dom, null, !opts.shouldForceInline));
   });
   const parser = new htmlparser.Parser(handler);
   parser.write(rawHtml);
