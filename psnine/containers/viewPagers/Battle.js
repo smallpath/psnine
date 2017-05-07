@@ -53,11 +53,11 @@ class Battle extends Component {
   _onRowPressed = (rowData) => {
     const { navigation } = this.props;
     const URL = getBattleURL(rowData.id);
-    navigation.navigate('CommunityTopic', {
+    navigation.navigate('BattleTopic', {
       URL,
       title: rowData.title,
       rowData,
-      type: 'community',
+      type: 'battle',
       shouldBeSawBackground: true
     })
   }

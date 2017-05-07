@@ -46,6 +46,7 @@ import Message from './containers/authPagers/Message'
 
 import CommentList from './components/CommentList'
 import CommunityTopic from './components/CommunityTopic'
+import BattleTopic from './components/BattleTopic'
 import Reply from './components/new/Reply'
 
 import Webview from './components/Webview'
@@ -66,53 +67,57 @@ const Navigator = StackNavigator({
 	Main: {
 		screen: App
 	},
-  Login: {
+	Login: {
 		screen: Login,
-    navigationOptions: enableGesture
+		navigationOptions: enableGesture
 	},
-  Message: {
+	Message: {
 		screen: Message,
 		navigationOptions: enableGesture
 	},
-  CommentList: {
+	CommentList: {
 		screen: CommentList,
-    navigationOptions: enableGesture
+		navigationOptions: enableGesture
 	},
-  CommunityTopic: {
+	CommunityTopic: {
 		screen: CommunityTopic,
-    navigationOptions: enableGesture
+		navigationOptions: enableGesture
+	},
+	BattleTopic: {
+		screen: BattleTopic,
+		navigationOptions: enableGesture
 	},
 	Reply: {
 		screen: Reply
 	},
-  NewTopic: {
-    screen: NewTopic
-  },
-  About: {
-		screen: About,
-    navigationOptions: enableGesture
+	NewTopic: {
+		screen: NewTopic
 	},
-  Webview: {
+	About: {
+		screen: About,
+		navigationOptions: enableGesture
+	},
+	Webview: {
 		screen: Webview
 	},
 	ImageViewer: {
 		screen: ImageViewer
 	}
 }, {
-  initialRouteName: 'Main',
-  headerMode: 'none',
-  mode: 'card',
-  navigationOptions: {
-    cardStack: {
-      gesturesEnabled: true,
-    }
-  },
-  cardStyle: {
-    backgroundColor: 'transparent',
-    // opacity: 0.99
-  },
-  transitionConfig
-});
+		initialRouteName: 'Main',
+		headerMode: 'none',
+		mode: 'card',
+		navigationOptions: {
+			cardStack: {
+				gesturesEnabled: true,
+			}
+		},
+		cardStyle: {
+			backgroundColor: 'transparent',
+			// opacity: 0.99
+		},
+		transitionConfig
+	});
 
 let backPressClickTimeStamp = 0
 
@@ -164,14 +169,14 @@ class Root extends React.Component {
 	componentWillMount = () => {
 		global.toast = this.toast
 		const listeners = BackHandler.addEventListener('hardwareBackPress', () => {
-      let timestamp = new Date();
-      if (timestamp - backPressClickTimeStamp > 2000) {
-        backPressClickTimeStamp = timestamp;
-        global.toast && global.toast('再按一次退出程序');
-        return true;
-      } else {
-        return false;
-      }
+			let timestamp = new Date();
+			if (timestamp - backPressClickTimeStamp > 2000) {
+				backPressClickTimeStamp = timestamp;
+				global.toast && global.toast('再按一次退出程序');
+				return true;
+			} else {
+				return false;
+			}
 		});
 	}
 
@@ -221,7 +226,7 @@ class Root extends React.Component {
 						modeInfo: this.state.isNightMode ? this.nightModeInfo : this.dayModeInfo,
 						switchModeOnRoot: this.switchModeOnRoot,
 						tipBarMarginBottom: this.state.tipBarMarginBottom
-					}}/>
+					}} />
 					<Animated.View style={{
 						height: tipHeight,
 						position: 'absolute',

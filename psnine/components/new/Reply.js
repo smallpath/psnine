@@ -246,9 +246,11 @@ export default class Reply extends Component {
     const form = {
       type: type,
       param: params.id,
-      old: 'yes',
       content: this.state.content,
       com: ''
+    }
+    if (params.type !== 'qa') {
+      form.old = 'yes'
     }
     postReply(form).then(res => res.text()).then(text => {
       if (text.includes('玩脱了')) {

@@ -213,7 +213,7 @@ export default function htmlToElement(rawHtml, opts, done) {
           ]}>{parent && parent.name === 'pre' ? LINE_BREAK : null}
             {parent && parent.name === "li" ? BULLET : null}
             {parent && parent.name === 'br' ? LINE_BREAK : null}
-            {parent && parent.name === 'p' && index < list.length - 1 ? PARAGRAPH_BREAK : null}
+            {parent && parent.name === 'p' && index < parent.length - 1 ? PARAGRAPH_BREAK : null}
             {parent && parent.name === 'h1' || parent && parent.name === 'h2' || parent && parent.name === 'h3'
               || parent && parent.name === 'h4' || parent && parent.name === 'h5' ? PARAGRAPH_BREAK : null}
 
@@ -319,6 +319,7 @@ export default function htmlToElement(rawHtml, opts, done) {
 
         let shouldSetLineAfter = false
 
+
         const classStyle = {}
         if (node.name === 'div') {
           if (node.attribs.align === 'center') {
@@ -388,6 +389,7 @@ export default function htmlToElement(rawHtml, opts, done) {
               shouldSetLineAfter = true
             }
           }
+
           if (flattenStyles.fontSize) delete flattenStyles.fontSize
           if (flattenStyles.fontFamily) delete flattenStyles.fontFamily
           if (flattenStyles.fontWeight) delete flattenStyles.fontWeight

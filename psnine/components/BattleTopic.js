@@ -25,9 +25,6 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import { standardColor, nodeColor, idColor, accentColor } from '../config/colorConfig';
 
 import {
-  getTopicAPI,
-  getTopicContentAPI,
-  getTopicCommentSnapshotAPI,
   getBattleAPI
 } from '../dao/dao'
 import ImageViewer from './imageViewer'
@@ -52,12 +49,6 @@ const ACTUAL_SCREEN_HEIGHT = SCREEN_HEIGHT - StatusBar.currentHeight + 1;
 let CIRCLE_SIZE = 56;
 let config = { tension: 30, friction: 7, ease: Easing.in(Easing.ease(1, 0, 1, 1)), duration: 200 };
 
-const ApiMapper = {
-  'community' : getTopicAPI,
-  'gene' : getTopicAPI,
-  'battle' : getBattleAPI
-}
-
 class CommunityTopic extends Component {
 
   constructor(props) {
@@ -76,49 +67,20 @@ class CommunityTopic extends Component {
     }
   }
 
-  _refreshComment = () => {
-    const { params } = this.props.navigation.state
-    if (['community', 'gene'].includes(params.type) === false) {
-      return
-    }
-    if (this.isReplyShowing === true) {
-      this.isReplyShowing = false
-    }
-    if (this.state.isLoading === true) {
-      return
-    }
-    this.setState({
-      isLoading: true
-    })
-    getTopicCommentSnapshotAPI(params.URL).then(data => {
-      this.setState({
-        isLoading: false,
-        commentList: data.commentList
-      })
-    })
-  }
-
   _onActionSelected = (index) => {
     const { params } = this.props.navigation.state
     switch (index) {
       case 0:
         if (this.isReplyShowing === true) return
-        const cb = () => {
-          this.props.navigation.navigate('Reply', {
-            type: params.type,
-            id: params.rowData.id,
-            callback: this._refreshComment,
-            shouldSeeBackground: true
-          })
-        }
-        if (this.state.openVal._value === 1) {
-          this._animateToolbar(0, cb)
-        } else if (this.state.openVal._value === 0) {
-          cb()
-        }
+        this.props.navigation.navigate('Reply', {
+          type: params.type,
+          id: params.rowData.id,
+          callback: this.preFetch(),
+          shouldSeeBackground: true
+        })
         return;
       case 1:
-        this._refreshComment()
+        this.preFetch()
         return
       case 2:
         return;
@@ -128,19 +90,23 @@ class CommunityTopic extends Component {
   }
 
   componentWillMount = () => {
-    const { params } = this.props.navigation.state
-    InteractionManager.runAfterInteractions(() => {
-      const API = ApiMapper[params.type] || getTopicAPI
-      const data = API(params.URL).then(data => {
+    this.preFetch()
+  }
 
-        const content = data.contentInfo.html
-        const html = params.type !== 'gene' ? content : content.replace('<div>', '<div align="center">')
-        const emptyHTML = params.type !== 'gene' ? '<div></div>' : '<div align="center"></div>'
+  preFetch = () => {
+    const { params } = this.props.navigation.state
+    this.setState({
+      isLoading: true
+    })
+    InteractionManager.runAfterInteractions(() => {
+      const data = getBattleAPI(params.URL).then(data => {
+
+        const html = data.contentInfo.html
+        const emptyHTML = '<div></div>' 
         this.hasContent = html !== emptyHTML
-        this.hasGameTable = data.contentInfo.gameTable.length !== 0
+        this.hasTrophyTable = data.contentInfo.trophyTable.length !== 0
         this.hasComment = data.commentList.length !== 0
         this.hasReadMore = this.hasComment ? data.commentList[0].isGettingMoreComment === true ? true : false : false
-        this.hasPage = data.contentInfo.page.length !== 0
         this.setState({
           data,
           mainContent: html,
@@ -156,62 +122,6 @@ class CommunityTopic extends Component {
       { url }
     ]
   })
-
-
-  shouldComponentUpdate = (nextProp, nextState) => {
-    return true
-  }
-
-  renderHeader = (titleInfo) => {
-    const { modeInfo } = this.props.screenProps
-    const { params } = this.props.navigation.state
-    const nodeStyle = { flex: -1, color: modeInfo.standardTextColor, textAlign: 'center', textAlignVertical: 'center' }
-    const textStyle = { flex: -1, color: modeInfo.standardTextColor, textAlign: 'center', textAlignVertical: 'center' }
-    const isNotGene = params.type !== 'gene'
-    const shouldRenderAvatar = isNotGene && !!(params.rowData && params.rowData.avatar)
-    return ['battle'].includes(params.type) ? undefined : (
-      <View key={'header'} style={{
-        flex: 1,
-        backgroundColor: modeInfo.backgroundColor,
-        elevation: 1,
-        margin: 5,
-        marginBottom: 0,
-        marginTop: 0
-      }}>
-        <TouchableNativeFeedback
-          useForeground={true}
-          delayPressIn={100}
-          background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
-        >
-          <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', padding: 5 }}>
-            {shouldRenderAvatar && <Image
-              source={{ uri: params.rowData.avatar.replace('@50w.png', '@75w.png') }}
-              style={{ width: 75, height: 75 }}
-            />
-            }
-
-            <View style={{ flex: 1, flexDirection: 'column', padding: 5 }}>
-              <HTMLView
-                value={titleInfo.title}
-                modeInfo={modeInfo}
-                stylesheet={styles}
-                shouldForceInline={true}
-                onImageLongPress={this.handleImageOnclick}
-                imagePaddingOffset={shouldRenderAvatar ? 30 + 75 + 10 : 30}
-              />
-
-              <View style={{ flex: 1.1, flexDirection: 'row', justifyContent: 'space-between' }}>
-                <Text selectable={false} style={{ flex: -1, color: idColor, textAlign: 'center', textAlignVertical: 'center' }}>{titleInfo.psnid}</Text>
-                <Text selectable={false} style={textStyle}>{titleInfo.date}</Text>
-                <Text selectable={false} style={textStyle}>{titleInfo.reply}</Text>
-              </View>
-            </View>
-
-          </View>
-        </TouchableNativeFeedback>
-      </View>
-    )
-  }
 
   hasContent = false
   renderContent = (html) => {
@@ -236,13 +146,12 @@ class CommunityTopic extends Component {
     )
   }
 
-  hasGameTable = false
-  renderGameTable = (gameTable) => {
+  renderGame = (rowData) => {
     const { modeInfo } = this.props.screenProps
-    const list = []
-    for (const rowData of gameTable) {
-      list.push(
-        <View key={rowData.id} style={{
+
+    return (
+      <View style={{ elevation: 1, margin: 5, marginTop: 0, backgroundColor: modeInfo.backgroundColor }}>
+        <View style={{
           backgroundColor: modeInfo.backgroundColor
         }}>
           <TouchableNativeFeedback
@@ -268,11 +177,74 @@ class CommunityTopic extends Component {
                 </Text>
 
                 <View style={{ flex: 1.1, flexDirection: 'row', justifyContent: 'space-between' }}>
-                  <Text selectable={false} style={{ flex: -1, color: idColor, textAlign: 'center', textAlignVertical: 'center' }}>{rowData.platform}</Text>
-                  <Text selectable={false} style={{ flex: -1, color: modeInfo.standardTextColor, textAlign: 'center', textAlignVertical: 'center' }}>{rowData.region}</Text>
-                  <Text selectable={false} style={{ flex: -1, color: modeInfo.standardTextColor, textAlign: 'center', textAlignVertical: 'center' }}>{
-                    rowData.platium + rowData.gold + rowData.selver + rowData.bronze
-                  }</Text>
+                  <Text selectable={false} style={{ flex: -1, color: idColor, textAlign: 'center', textAlignVertical: 'center' }}>{rowData.psnid}</Text>
+                  <Text selectable={false} style={{ flex: -1, color: modeInfo.standardTextColor, textAlign: 'center', textAlignVertical: 'center' }}>{rowData.date}</Text>
+                </View>
+
+              </View>
+
+            </View>
+          </TouchableNativeFeedback>
+        </View>
+      </View>
+    )
+  }
+
+  hasTrophyTable = false
+  renderTrophyTable = (trophyTable) => {
+    const { modeInfo } = this.props.screenProps
+    const list = []
+    for (const rowData of trophyTable) {
+      list.push(
+        <View key={rowData.id} style={{
+          backgroundColor: modeInfo.backgroundColor
+        }}>
+          <TouchableNativeFeedback
+            onPress={() => {
+
+            }}
+            useForeground={true}
+            delayPressIn={100}
+            background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
+          >
+            <View pointerEvents='box-only' style={{ flex: 1, flexDirection: 'row', padding: 12 }}>
+              <Image
+                source={{ uri: rowData.avatar }}
+                style={[styles.avatar, { width: 91 }]}
+              />
+
+              <View style={{ marginLeft: 10, flex: 1, flexDirection: 'column', alignContent:'center'  }}>
+                <View style={{flexDirection:'row', alignItems: 'flex-start'}}>
+                  <Text
+                    ellipsizeMode={'tail'}
+                    style={{ flex: -1, color: modeInfo.titleTextColor, }}>
+                    {rowData.title}
+                  </Text>
+                  <Text selectable={false} style={{
+                    flex: -1,
+                    marginLeft: 5,
+                    color: idColor, 
+                    textAlign: 'center', 
+                    textAlignVertical: 'center' 
+                    }}>{rowData.tip}</Text>
+                </View>
+
+                <View style={{ flex: 1.1, flexDirection: 'row', justifyContent: 'space-between' }}>
+                  {/*<Text selectable={false} style={{ flex: -1, color: idColor, textAlign: 'center', textAlignVertical: 'center' }}>{rowData.text}</Text>*/}
+                  <Text selectable={false} style={{
+                    flex: -1,
+                    color: modeInfo.standardTextColor,
+                    textAlign: 'center',
+                    textAlignVertical: 'center',
+                    fontSize: 10
+                    }}>{rowData.text}</Text>
+                  <Text selectable={false} style={{
+                    flex: 1,
+                    color: modeInfo.standardTextColor,
+                    textAlign: 'center', 
+                    textAlignVertical: 'center' ,
+                    fontSize: 10
+                    }}>{rowData.rare}</Text>
                 </View>
 
               </View>
@@ -365,7 +337,7 @@ class CommunityTopic extends Component {
         )
       }
     }
-    const shouldMarginTop = !this.hasContent && !this.hasGameTable && !this.hasPage
+    const shouldMarginTop = !this.hasContent && !this.hasTrophyTable
     return (
       <View style={{ marginTop: shouldMarginTop ? 5 : 0 }}>
         {readMore && <View style={{ elevation: 1, margin: 5, marginTop: 0, marginBottom: 5, backgroundColor: modeInfo.backgroundColor }}>{readMore}</View>}
@@ -378,7 +350,6 @@ class CommunityTopic extends Component {
   }
 
   isReplyShowing = false
-
   onCommentLongPress = (rowData) => {
     if (this.isReplyShowing === true) return
     const { params } = this.props.navigation.state
@@ -402,48 +373,6 @@ class CommunityTopic extends Component {
     })
   }
 
-  hasPage = false
-  renderPage = (page) => {
-    const { modeInfo } = this.props.screenProps
-    const list = []
-    for (const item of page) {
-      const thisJSX = (
-        <TouchableNativeFeedback key={item.url} onPress={() => {
-          if (this.state.isLoading === true) {
-            return
-          }
-          this.setState({
-            isLoading: true
-          })
-          getTopicContentAPI(item.url).then(data => {
-            this.setState({
-              mainContent: data.contentInfo.html,
-              isLoading: false
-            })
-          })
-        }}>
-          <View style={{ flex: -1, padding: 2 }}>
-            <Text style={{ color: idColor }}>{item.text}</Text>
-          </View>
-        </TouchableNativeFeedback>
-      )
-      list.push(thisJSX)
-    }
-    return (
-      <View style={{ elevation: 1, margin: 5, marginTop: 0, marginBottom: 0, backgroundColor: modeInfo.backgroundColor }}>
-        <View style={{
-          elevation: 2,
-          margin: 5,
-          backgroundColor: modeInfo.backgroundColor,
-          padding: 5
-        }}>
-          {list}
-        </View>
-      </View>
-    )
-  }
-  viewTopIndex = 0
-  viewBottomIndex = 0
   render() {
     const { params } = this.props.navigation.state
     // console.log('CommunityTopic.js rendered');
@@ -453,20 +382,16 @@ class CommunityTopic extends Component {
     const renderFuncArr = []
     const shouldPushData = !this.state.isLoading
     if (shouldPushData) {
-      data.push(source.titleInfo)
-      renderFuncArr.push(this.renderHeader)
+      data.push(source.contentInfo.game)
+      renderFuncArr.push(this.renderGame)
     }
-    if (shouldPushData && this.hasPage) {
-      data.push(source.contentInfo.page)
-      renderFuncArr.push(this.renderPage)
+    if (shouldPushData && this.hasTrophyTable) {
+      data.push(source.contentInfo.trophyTable)
+      renderFuncArr.push(this.renderTrophyTable)
     }
     if (shouldPushData && this.hasContent) {
       data.push(this.state.mainContent)
       renderFuncArr.push(this.renderContent)
-    }
-    if (shouldPushData && this.hasGameTable) {
-      data.push(source.contentInfo.gameTable)
-      renderFuncArr.push(this.renderGameTable)
     }
     if (shouldPushData && this.hasComment) {
       data.push(this.state.commentList)
@@ -506,7 +431,6 @@ class CommunityTopic extends Component {
             size={50}
           />
         )}
-        {params.type === 'community' && !this.state.isLoading && this.renderToolbar()}
         {!this.state.isLoading && <FlatList style={{
           flex: -1,
           backgroundColor: modeInfo.standardColor
@@ -530,163 +454,6 @@ class CommunityTopic extends Component {
         }
       </View>
     );
-  }
-
-  renderToolbarItem = (props, index, maxLength) => {
-    const { modeInfo } = this.props.screenProps
-    return (
-      <Animated.View
-        ref={float => this[`float${index}`] = float}
-        collapsable={false}
-        key={index}
-        style={{
-          width: 40,
-          height: 40,
-          borderRadius: 20,
-          backgroundColor: modeInfo.accentColor,
-          position: 'absolute',
-          bottom: props.openVal.interpolate({ inputRange: [0, 1], outputRange: [24, 56 + 10 + 16 * 2 + index * 50] }),
-          right: 24,
-          elevation: 1,
-          zIndex: 1,
-          opacity: 1
-        }}>
-        <TouchableNativeFeedback
-          onPress={() => this.pressToolbar(maxLength - index - 1)}
-          background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
-          onPressIn={() => {
-            this.float1.setNativeProps({
-              style: {
-                elevation: 12,
-              }
-            });
-          }}
-          onPressOut={() => {
-            this.float1.setNativeProps({
-              style: {
-                elevation: 6,
-              }
-            });
-          }}
-          style={{
-            width: 40,
-            height: 40,
-            borderRadius: 20,
-            flex: 1,
-            zIndex: 1,
-            backgroundColor: accentColor,
-          }}>
-          <View style={{ borderRadius: 20, width: 40, height: 40, justifyContent: 'center', alignItems: 'center', }}>
-            <Ionicons name={props.iconName} size={20} color='#fff' />
-          </View>
-        </TouchableNativeFeedback>
-      </Animated.View>
-    )
-  }
-
-  renderToolbar = () => {
-    const { modeInfo } = this.props.screenProps
-    const { openVal } = this.state
-    const tipHeight = toolbarHeight * 0.8
-    const list = []
-    const iconNameArr = ["md-arrow-down", "md-arrow-up"]
-    for (let i = 0; i < iconNameArr.length; i++) {
-      list.push(
-        this.renderToolbarItem({
-          iconName: iconNameArr[i],
-          openVal: openVal
-        }, i, iconNameArr.length)
-      )
-    }
-    return (
-      <View style={{ position: 'absolute', left: 0, top: 0, width: SCREEN_WIDTH, height: SCREEN_HEIGHT - toolbarHeight / 2 }}>
-        {list}
-        <Animated.View
-          ref={float => this.float = float}
-          collapsable={false}
-          style={{
-            width: 56,
-            height: 56,
-            borderRadius: 30,
-            backgroundColor: accentColor,
-            position: 'absolute',
-            bottom: 16,
-            right: 16,
-            elevation: 6,
-            zIndex: 1,
-            opacity: this.state.opacity,
-            transform: [{
-              rotateZ: this.state.rotation.interpolate({
-                inputRange: [0, 1],
-                outputRange: ['0deg', '360deg']
-              }),
-            }]
-          }}>
-          <TouchableNativeFeedback
-            onPress={this.pressNew}
-            background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
-            onPressIn={() => {
-              this.float.setNativeProps({
-                style: {
-                  elevation: 12,
-                }
-              });
-            }}
-            onPressOut={() => {
-              this.float.setNativeProps({
-                style: {
-                  elevation: 6,
-                }
-              });
-            }}
-            style={{
-              width: 56,
-              height: 56,
-              borderRadius: 30,
-              flex: 1,
-              zIndex: 1,
-              backgroundColor: accentColor,
-            }}>
-            <View style={{ borderRadius: 30, width: 56, height: 56, flex: -1, justifyContent: 'center', alignItems: 'center', }}>
-              <Ionicons name="ios-add" size={40} color='#fff' />
-            </View>
-          </TouchableNativeFeedback>
-        </Animated.View>
-      </View>
-    )
-  }
-
-  index = 0
-
-  pressToolbar = index => {
-    const target = index === 0 ? this.viewTopIndex : this.viewBottomIndex
-    this.flatlist && this.flatlist.scrollToIndex({ animated: true, viewPosition: 0, index: target })
-  }
-
-  _animateToolbar = (value, cb) => {
-    const ratationPreValue = this.state.rotation._value
-
-    const rotationValue = value === 0 ? 0 : ratationPreValue + 3 / 8
-    const scaleAnimation = Animated.timing(this.state.rotation, { toValue: rotationValue, ...config })
-    const moveAnimation = Animated.timing(this.state.openVal, { toValue: value, ...config })
-    const target = [
-      moveAnimation
-    ]
-    if (value !== 0 || value !== 1) target.unshift(scaleAnimation)
-
-    const type = value === 1 ? 'sequence' : 'parallel'
-    Animated[type](target).start()
-    setTimeout(() => {
-      typeof cb === 'function' && cb()
-    }, 200)
-  }
-
-  pressNew = (cb) => {
-    if (this.state.openVal._value === 0) {
-      this._animateToolbar(1, cb)
-    } else {
-      this._animateToolbar(0, cb)
-    }
   }
 }
 

@@ -39,7 +39,7 @@ export default function (html) {
         }
         return prev
       }, [])
-      const matched = $this.find('.pdd15 a').attr('href').match(/\d+/)
+      const matched = $this.find('.pd15 p a').attr('href').match(/\d+/)
       const id = matched ? matched[0] :arr[1] + arr[2]
       const psnid = $this.find('.h-p a').attr('href').split('/').slice(-1).join('')
       const numArr = arr[4] ? arr[4].match(/\d+/) : ['2']
