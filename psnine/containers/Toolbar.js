@@ -37,7 +37,7 @@ import NewTopic from '../components/new/NewTopic';
 
 import { changeSegmentIndex, changeCommunityType, changeGeneType, changeScrollType } from '../actions/app';
 
-import { standardColor, accentColor } from '../config/colorConfig';
+import { standardColor, accentColor } from '../constants/colorConfig';
 
 let screen = Dimensions.get('window');
 

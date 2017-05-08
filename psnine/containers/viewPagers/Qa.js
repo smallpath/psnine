@@ -13,7 +13,7 @@ import {
 
 import { connect } from 'react-redux';
 import { getQAList } from '../../actions/qa.js';
-import { standardColor, nodeColor, idColor } from '../../config/colorConfig';
+import { standardColor, nodeColor, idColor } from '../../constants/colorConfig';
 import Icon from 'react-native-vector-icons/Ionicons';
 import CommunityTopic from '../../components/CommunityTopic';
 

@@ -19,7 +19,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import { connect } from 'react-redux';
 
-import { standardColor, accentColor } from '../../config/colorConfig';
+import { standardColor, accentColor } from '../../constants/colorConfig';
 
 import { pngPrefix, getDealURL, getHappyPlusOneURL, getStoreURL } from '../../dao/dao';
 

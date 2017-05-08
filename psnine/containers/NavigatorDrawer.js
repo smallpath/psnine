@@ -22,7 +22,7 @@ import {
   getRankURL,
   getMyGameURL,
 } from '../dao/dao';
-import { standardColor } from '../config/colorConfig';
+import { standardColor } from '../constants/colorConfig';
 
 import Icon from 'react-native-vector-icons/Ionicons';
 
@@ -72,10 +72,7 @@ class navigationDrawer extends Component {
   checkLoginState = async () => {
     const psnid = await AsyncStorage.getItem('@psnid');
 
-    if (psnid == null)
-      return;
-
-    if (psnid == '')
+    if (!psnid == null)
       return;
 
     const userInfo = await fetchUser(psnid)
@@ -349,7 +346,6 @@ class navigationDrawer extends Component {
           }
 
           URL = getHomeURL(this.state.psnid);
-
           navigation.navigate('Home', {
             URL,
             title: this.state.psnid

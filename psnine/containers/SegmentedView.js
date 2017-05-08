@@ -26,7 +26,7 @@ import Game from './viewPagers/Game';
 import Battle from './viewPagers/Battle';
 import Gene from './viewPagers/Gene';
 
-import { standardColor } from '../config/colorConfig';
+import { standardColor } from '../constants/colorConfig';
 
 let screen = Dimensions.get('window');
 

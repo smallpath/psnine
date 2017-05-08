@@ -8,7 +8,7 @@ import {
 
 import { connect } from 'react-redux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { standardColor } from '../config/colorConfig';
+import { standardColor } from '../constants/colorConfig';
 
 let toolbarActions = [
   { title: '收藏', iconName: 'md-star', show: 'always' },

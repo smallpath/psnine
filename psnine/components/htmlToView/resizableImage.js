@@ -9,7 +9,7 @@ import {
   TouchableNativeFeedback
 } from 'react-native';
 
-import { standardColor, nodeColor, idColor, accentColor } from '../../config/colorConfig';
+import { standardColor, nodeColor, idColor, accentColor } from '../../constants/colorConfig';
 
 const { width } = Dimensions.get('window')
 

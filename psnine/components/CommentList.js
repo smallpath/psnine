@@ -20,7 +20,7 @@ import MyDialog from './dialog'
 
 import HTMLView from './htmlToView';
 import { connect } from 'react-redux';
-import { standardColor, nodeColor, idColor } from '../config/colorConfig';
+import { standardColor, nodeColor, idColor } from '../constants/colorConfig';
 
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { getTopicCommentAPI } from '../dao/dao';

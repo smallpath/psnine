@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 
 import { connect } from 'react-redux';
-import { standardColor, nodeColor, idColor } from '../../config/colorConfig';
+import { standardColor, nodeColor, idColor } from '../../constants/colorConfig';
 import { getGeneList } from '../../actions/gene.js';
 
 import CommunityTopic from '../../components/CommunityTopic';

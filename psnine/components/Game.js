@@ -22,7 +22,7 @@ import HTMLView from './htmlToView';
 import CommentList from './CommentList'
 import { connect } from 'react-redux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { standardColor, nodeColor, idColor, accentColor } from '../config/colorConfig';
+import { standardColor, nodeColor, idColor, accentColor } from '../constants/colorConfig';
 
 import {
   getGameAPI
@@ -401,7 +401,7 @@ export default class GamePage extends Component {
           navIconName="md-arrow-back"
           overflowIconName="md-more"
           iconColor={modeInfo.isNightMode ? '#000' : '#fff'}
-          title={`No.${params.rowData.id}`}
+          title={`No.${params.rowData.id || params.title || params.rowData.title}`}
           titleColor={modeInfo.isNightMode ? '#000' : '#fff'}
           style={[styles.toolbar, { backgroundColor: modeInfo.standardColor }]}
           actions={toolbarActions}

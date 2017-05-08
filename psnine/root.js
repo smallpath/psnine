@@ -26,7 +26,7 @@ import {
   standardTextColor, nightStandardTextColor,
   titleTextColor, nightTitleTextColor
 
-} from './config/colorConfig';
+} from './constants/colorConfig';
 
 import configureStore from './store/store.js'
 import moment from './utils/moment';
@@ -40,7 +40,7 @@ const tipHeight = toolbarHeight * 0.8
 
 import App from './containers/App.js'
 
-import Home from './containers/authPagers/Home'
+import Home from './components/Home'
 import Login from './containers/authPagers/Login'
 import Message from './containers/authPagers/Message'
 
@@ -91,6 +91,9 @@ const Navigator = StackNavigator({
   GamePage: {
     screen: GamePage,
     navigationOptions: enableGesture
+  },
+  Home: {
+    screen: Home
   },
   Reply: {
     screen: Reply

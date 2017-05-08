@@ -22,7 +22,7 @@ import HTMLView from './htmlToView';
 import CommentList from './CommentList'
 import { connect } from 'react-redux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { standardColor, nodeColor, idColor, accentColor } from '../config/colorConfig';
+import { standardColor, nodeColor, idColor, accentColor } from '../constants/colorConfig';
 
 import {
   getBattleAPI

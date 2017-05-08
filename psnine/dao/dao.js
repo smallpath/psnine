@@ -12,6 +12,7 @@ import topicContentApiParser from '../parser/topic/topicContent'
 import topicCommentApiParser from '../parser/topic/topicComment'
 import topicCommentSnapshotApiParser from '../parser/topic/topicCommentSnapshot'
 import gameParser from '../parser/game/game'
+import homeParser from '../parser/user/home'
 
 const safeFetch = function(reqUrl) {
   return new Promise((resolve, reject) => {
@@ -21,7 +22,7 @@ const safeFetch = function(reqUrl) {
       const text = response.text()
       return resolve(text);
     }).catch((error) => {
-      console.error(error)
+      console.warn(error)
       clearTimeout(timeout);
       resolve([]);
     });
@@ -45,6 +46,8 @@ export const getTopicAPI = uri => safeFetch(uri).then(res => topicApiParser(res)
 export const getBattleAPI = uri => safeFetch(uri).then(res => battleTopicParser(res))
 
 export const getGameAPI = uri => safeFetch(uri).then(res => gameParser(res))
+
+export const getHomeAPI = uri => safeFetch(uri).then(res => homeParser(res, uri.split('/').pop()))
 
 export const getTopicContentAPI = uri => safeFetch(uri).then(res => topicContentApiParser(res))
 

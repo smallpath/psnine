@@ -19,7 +19,7 @@ import {
 import NavigatorDrawer from './NavigatorDrawer';
 import Toolbar from './Toolbar';
 
-import { standardColor } from '../config/colorConfig';
+import { standardColor } from '../constants/colorConfig';
 
 
 let DRAWER_REF = 'drawer';

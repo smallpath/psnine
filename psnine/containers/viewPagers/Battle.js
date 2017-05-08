@@ -12,7 +12,7 @@ import {
 
 import { connect } from 'react-redux';
 import { getBattleList } from '../../actions/battle.js';
-import { standardColor, nodeColor, idColor, accentColor } from '../../config/colorConfig';
+import { standardColor, nodeColor, idColor, accentColor } from '../../constants/colorConfig';
 
 import CommunityTopic from '../../components/CommunityTopic';
 
