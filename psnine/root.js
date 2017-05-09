@@ -219,9 +219,12 @@ class Root extends React.Component {
           toValue: this.state.tipBarMarginBottom._value === 1 ? 0 : 1,
           duration: 200,
           easing: Easing.ease
-        }).start();
+        }).start(() => {
+          this.setState({
+            text: ''
+          })
+        });
       });
-
     }, 2000)
   }
 
@@ -234,7 +237,8 @@ class Root extends React.Component {
           <Navigator onNavigationStateChange={null} screenProps={{
             modeInfo: this.state.isNightMode ? this.nightModeInfo : this.dayModeInfo,
             switchModeOnRoot: this.switchModeOnRoot,
-            tipBarMarginBottom: this.state.tipBarMarginBottom
+            tipBarMarginBottom: this.state.tipBarMarginBottom,
+            bottomText: this.state.text
           }} />
           <Animated.View style={{
             height: tipHeight,

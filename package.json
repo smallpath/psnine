@@ -4,6 +4,8 @@
   "private": true,
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
+    "install": "react-native run-android",
+    "log": "react-native log-android",
     "test": "jest"
   },
   "dependencies": {

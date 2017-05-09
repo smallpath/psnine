@@ -13,6 +13,8 @@ import topicCommentApiParser from '../parser/topic/topicComment'
 import topicCommentSnapshotApiParser from '../parser/topic/topicCommentSnapshot'
 import gameParser from '../parser/game/game'
 import homeParser from '../parser/user/home'
+import trophyParser from '../parser/game/trophy'
+import myGameParser from '../parser/user/game'
 
 const safeFetch = function(reqUrl) {
   return new Promise((resolve, reject) => {
@@ -46,6 +48,10 @@ export const getTopicAPI = uri => safeFetch(uri).then(res => topicApiParser(res)
 export const getBattleAPI = uri => safeFetch(uri).then(res => battleTopicParser(res))
 
 export const getGameAPI = uri => safeFetch(uri).then(res => gameParser(res))
+
+export const getTrophyAPI = uri => safeFetch(uri).then(res => trophyParser(res, uri.split('/').pop()))
+
+export const getMyGameAPI = uri => safeFetch(uri).then(res => myGameParser(res, uri.split('/').pop()))
 
 export const getHomeAPI = uri => safeFetch(uri).then(res => homeParser(res, uri.split('/').pop()))
 

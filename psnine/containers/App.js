@@ -38,6 +38,13 @@ class Psnine extends Component {
     this.refs[DRAWER_REF].closeDrawer()
   }
 
+  shouldComponentUpdate(nextProp, nextState) {
+    if (nextProp.screenProps.bottomText !== this.props.screenProps.bottomText) {
+      return false
+    }
+    return true
+  }
+
   render() {
     const { reducer } = this.props;
     // console.log('App.js rendered');
