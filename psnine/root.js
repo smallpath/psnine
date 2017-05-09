@@ -56,7 +56,7 @@ import ImageViewer from './components/imageViewer'
 
 import NewTopic from './components/new/NewTopic'
 
-import transitionConfig from './utils/transitionConfig'
+import { transitionConfig, onTransitionStart } from './utils/transitionConfig'
 
 const enableGesture = ({ navigation }) => {
   return {
@@ -124,7 +124,8 @@ const Navigator = StackNavigator({
       backgroundColor: 'transparent',
       // opacity: 0.99
     },
-    transitionConfig
+    transitionConfig,
+    onTransitionStart
   });
 
 let backPressClickTimeStamp = 0

@@ -79,8 +79,9 @@ export default class Reply extends Component {
     Keyboard.dismiss()
     Animated.spring(openVal, { toValue: 0, ...config }).start(() => {
       typeof callback === 'function' && callback()
+      this.props.navigation.goBack()
     });
-    this.props.navigation.goBack()
+
   }
   isKeyboardShowing = false
   _pressEmotion = () => {

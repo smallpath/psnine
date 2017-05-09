@@ -18,7 +18,18 @@ function forInitial(props) {
   };
 }
 
-export default function (
+const hack = {
+  transitionProps: {},
+  prevTransitionProps: {}
+}
+
+export function onTransitionStart (transitionProps,prevTransitionProps) {
+  // console.log(prevTransitionProps)
+  hack.transitionProps = transitionProps
+  hack.prevTransitionProps = prevTransitionProps
+}
+
+export function transitionConfig (
   transitionProps,
   prevTransitionProps,
   isModal,
@@ -43,7 +54,8 @@ export default function (
 
       let index = scene.index;
 
-      const prev = prevTransitionProps.scenes && prevTransitionProps.scenes[index + 1]
+      // transitionConfig拿不到上一次的过渡属性, 得靠onTransitionStart来hack一下
+      const prev = hack.prevTransitionProps.scenes && hack.prevTransitionProps.scenes[index + 1]
       if (scene && scene.isStable && prev && prev.route) {
         if (prev.route.params.shouldSeeBackground === true) {
           return {

@@ -386,7 +386,8 @@ class CommunityTopic extends Component {
       this.props.navigation.navigate('Reply', {
         type: params.type,
         id: params.rowData.id,
-        at: rowData.psnid
+        at: rowData.psnid,
+        shouldSeeBackground: true
       })
     }
     if (this.state.openVal._value === 1) {
