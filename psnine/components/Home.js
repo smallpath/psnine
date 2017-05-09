@@ -49,6 +49,12 @@ const ACTUAL_SCREEN_HEIGHT = SCREEN_HEIGHT - StatusBar.currentHeight + 1;
 let CIRCLE_SIZE = 56;
 let config = { tension: 30, friction: 7, ease: Easing.in(Easing.ease(1, 0, 1, 1)), duration: 200 };
 
+const iconMapper = {
+  '同步': 'md-sync',
+  '关注': 'md-star-half',
+  '感谢': 'md-thumbs-up'
+}
+
 export default class Home extends Component {
 
   constructor(props) {
@@ -56,6 +62,7 @@ export default class Home extends Component {
     this.state = {
       data: false,
       isLoading: true,
+      toolbar: [],
       mainContent: false,
       rotation: new Animated.Value(1),
       scale: new Animated.Value(1),
@@ -97,6 +104,9 @@ export default class Home extends Component {
         this.hasGameTable = data.gameTable.length !== 0
         this.setState({
           data,
+          toolbar: data.psnButtonInfo.reverse().map(item => {
+            return { title: item.text, iconName: iconMapper[item.text], show: 'always' }
+          }),
           isLoading: false
         })
       })
@@ -129,23 +139,23 @@ export default class Home extends Component {
             style={{ 
               width: SCREEN_WIDTH, 
               height: SCREEN_WIDTH / 16 * 13,
-              top: 0,
+              top: -1, // why??
             }}
           />
         </View>
 
-        <View style={{ flexDirection: 'row', justifyContent:'space-around', alignItems: 'center', flex: 1  }}>
+        <View style={{ flexDirection: 'row', justifyContent:'space-around', alignItems: 'center', flex: 1, padding: 5  }}>
           <View style={{ justifyContent:'center', alignItems: 'center', flex: 2  }}>
-            <Text style={{ flex: -1, color: modeInfo.backgroundColor, }}>{rowData.psnid}</Text>
-            <Text style={{ flex: -1, color: modeInfo.backgroundColor, fontSize: 12 }}>{rowData.description}</Text>
+            <Text style={{ flex: -1, color: modeInfo.titleTextColor, }}>{rowData.psnid}</Text>
+            <Text style={{ flex: -1, color: modeInfo.titleTextColor, fontSize: 12 }}>{rowData.description}</Text>
           </View>
           <View style={{ justifyContent:'center', alignItems: 'center', flex: 1  }}>
-            <Text style={{ flex: -1, color: modeInfo.backgroundColor, }}>{rowData.exp.split('经验')[0]}</Text>
-            <Text style={{ flex: -1, color: modeInfo.backgroundColor, fontSize: 12 }}>{rowData.exp.split('经验')[1]}</Text>
+            <Text style={{ flex: -1, color: modeInfo.titleTextColor, }}>{rowData.exp.split('经验')[0]}</Text>
+            <Text style={{ flex: -1, color: modeInfo.titleTextColor, fontSize: 12 }}>{rowData.exp.split('经验')[1]}</Text>
           </View>
-          <View style={{ justifyContent:'center', alignItems: 'center', flex: 4  }}>
-            <Text style={{ flex: -1, color: modeInfo.backgroundColor, }}>{rowData.ranking}</Text>
-            <Text style={{ flex: -1, color: modeInfo.backgroundColor, fontSize: 12 }}>所在服排名</Text>
+          <View style={{ justifyContent:'center', alignItems: 'center', flex: 1  }}>
+            <Text style={{ flex: -1, color: modeInfo.titleTextColor, }}>{rowData.ranking}</Text>
+            <Text style={{ flex: -1, color: modeInfo.titleTextColor, fontSize: 12 }}>所在服排名</Text>
           </View>
         </View>
 
@@ -153,50 +163,43 @@ export default class Home extends Component {
           <View style={{ justifyContent:'center', alignItems: 'center', alignSelf: 'center', flex: 5  }}>
             <View>
               <Image
-                source={rowData.avatar}
+                source={{ uri: rowData.avatar}}
                 style={[styles.avatar, { width: 100, height: 100 }]}
               />
             </View>
           </View>
-          <View style={{ justifyContent:'space-around', alignItems: 'center', alignContent: 'flex-end', flex: 1  }}>
-            { psnButtonInfo.map((item, index) => (
-              <TouchableNativeFeedback key={index} onPress={() => item.url}>
-                <View>
-                  <Text style={{ flex: -1, color: modeInfo.backgroundColor, }}>{item.text}</Text>
-                </View>
-              </TouchableNativeFeedback>
-            ))}
-          </View>
         </View>
 
-        <View style={{ flexDirection: 'row', justifyContent:'space-around', alignItems: 'center', flex: 1  }}>
-          <Text style={{ flex: 1, color: modeInfo.backgroundColor, }}>{rowData.platinum}</Text>
-          <Text style={{ flex: 1, color: modeInfo.backgroundColor, }}>{rowData.gold}</Text>
-          <Text style={{ flex: 1, color: modeInfo.backgroundColor, }}>{rowData.silver}</Text>
-          <Text style={{ flex: 1, color: modeInfo.backgroundColor, }}>{rowData.gold}</Text>
-          <Text style={{ flex: 1, color: modeInfo.backgroundColor, }}>{rowData.all}</Text>
+        <View style={{ flexDirection: 'row', justifyContent:'center', alignItems: 'center', flex: 1, padding: 5  }}>
+          <Text>
+            <Text style={{ flex: 1, color: modeInfo.titleTextColor, marginVertical: 2, textAlign:'center' }}>{rowData.platinum + ' '}</Text>
+            <Text style={{ flex: 1, color: modeInfo.titleTextColor, marginVertical: 2, textAlign:'center' }}>{rowData.gold + ' '}</Text>
+            <Text style={{ flex: 1, color: modeInfo.titleTextColor, marginVertical: 2, textAlign:'center' }}>{rowData.silver + ' '}</Text>
+            <Text style={{ flex: 1, color: modeInfo.titleTextColor, marginVertical: 2, textAlign:'center' }}>{rowData.gold + ' '}</Text>
+            <Text style={{ flex: 1, color: modeInfo.titleTextColor, marginVertical: 2, textAlign:'center' }}>{rowData.all + ' '}</Text>
+          </Text>
         </View>
 
-        <View style={{ flexDirection: 'row', justifyContent:'space-around', alignItems: 'center', flex: 1  }}>
+        <View style={{ flexDirection: 'row', justifyContent:'space-around', alignItems: 'center', flex: 1, padding: 5  }}>
           <View style={{ justifyContent:'center', alignItems: 'center', flex: 1  }}>
-            <Text style={{ flex: -1, color: modeInfo.backgroundColor, }}>{rowData. allGames}</Text>
-            <Text style={{ flex: -1, color: modeInfo.backgroundColor, }}>总游戏</Text>
-          </View>
-          <View style={{ justifyContent:'center', alignItems: 'center', flex: 4  }}>
-            <Text style={{ flex: -1, color: modeInfo.backgroundColor, }}>{rowData.perfectGames}</Text>
-            <Text style={{ flex: -1, color: modeInfo.backgroundColor, }}>完美数</Text>
+            <Text style={{ flex: 1, color: modeInfo.titleTextColor, textAlign:'center' }}>{rowData. allGames}</Text>
+            <Text style={{ flex: 1, color: modeInfo.titleTextColor, textAlign:'center' }}>总游戏</Text>
           </View>
           <View style={{ justifyContent:'center', alignItems: 'center', flex: 1  }}>
-            <Text style={{ flex: -1, color: modeInfo.backgroundColor, }}>{rowData.hole}</Text>
-            <Text style={{ flex: -1, color: modeInfo.backgroundColor, }}>坑数</Text>
-          </View>
-          <View style={{ justifyContent:'center', alignItems: 'center', flex: 4  }}>
-            <Text style={{ flex: -1, color: modeInfo.backgroundColor, }}>{(rowData.ratio || '').replace('完成率', '')}</Text>
-            <Text style={{ flex: -1, color: modeInfo.backgroundColor, }}>完成率</Text>
+            <Text style={{ flex: 1, color: modeInfo.titleTextColor, textAlign:'center' }}>{rowData.perfectGames}</Text>
+            <Text style={{ flex: 1, color: modeInfo.titleTextColor, textAlign:'center' }}>完美数</Text>
           </View>
           <View style={{ justifyContent:'center', alignItems: 'center', flex: 1  }}>
-            <Text style={{ flex: -1, color: modeInfo.backgroundColor, }}>{rowData.followed}</Text>
-            <Text style={{ flex: -1, color: modeInfo.backgroundColor, }}>被关注</Text>
+            <Text style={{ flex: 1, color: modeInfo.titleTextColor, textAlign:'center' }}>{rowData.hole}</Text>
+            <Text style={{ flex: 1, color: modeInfo.titleTextColor, textAlign:'center' }}>坑数</Text>
+          </View>
+          <View style={{ justifyContent:'center', alignItems: 'center', flex: 1  }}>
+            <Text style={{ flex: 1, color: modeInfo.titleTextColor, textAlign:'center' }}>{(rowData.ratio || '').replace('完成率', '')}</Text>
+            <Text style={{ flex: 1, color: modeInfo.titleTextColor, textAlign:'center' }}>完成率</Text>
+          </View>
+          <View style={{ justifyContent:'center', alignItems: 'center', flex: 1  }}>
+            <Text style={{ flex: -1, color: modeInfo.titleTextColor, }}>{rowData.followed}</Text>
+            <Text style={{ flex: -1, color: modeInfo.titleTextColor, }}>被关注</Text>
           </View>
         </View>
       </View>
@@ -238,7 +241,7 @@ export default class Home extends Component {
             shouldBeSawBackground: true
           })
         }}>
-        <View style={{
+        <View pointerEvents={'box-only'} style={{
           backgroundColor: modeInfo.backgroundColor,
           flexDirection: 'row',
           borderBottomWidth: StyleSheet.hairlineWidth,
@@ -249,35 +252,34 @@ export default class Home extends Component {
           <View style={{ flex: -1, flexDirection: 'row', padding: 12 }}>
             <Image
               source={{ uri: rowData.avatar }}
-              style={[styles.avatar, { width: 54, height: 54 }]}
+              style={[styles.avatar, { width: 91, height: 54 }]}
             />
           </View>
-          <View style={{ justifyContent: 'space-around', flex: 3 }}>
-            <Text
-              ellipsizeMode={'tail'}
-              style={{ flex: -1, color: modeInfo.titleTextColor, }}>
-              {rowData.title}
-            </Text>
-            { rowData.platform && <Text style={{ color: modeInfo.standardTextColor, marginLeft: 2  }}>{' '+ rowData.platform.join(' ')}</Text> }
-            { rowData.syncTime && <Text style={{ color: modeInfo.standardColor ,fontSize: 12, marginLeft: 2 }}>{rowData.syncTime}</Text> }
-          </View>
-          <View style={{ flex: 1, justifyContent: 'center' }}>
-            <Text selectable={false} style={{
-              flex: -1,
-              color: modeInfo.standardTextColor,
-              textAlign: 'center',
-              textAlignVertical: 'center',
-            }}>{rowData.allTime}</Text>
-            <Text selectable={false} style={{
-              flex: -1,
-              color: modeInfo.standardTextColor,
-              textAlign: 'center',
-              textAlignVertical: 'center',
-              fontSize: 10
-            }}>{ rowData.allTime ? '总耗时' : ''}</Text>
+          <View style={{ justifyContent: 'center', flex: 3 }}>
+            <View>
+              <Text
+                ellipsizeMode={'tail'}
+                style={{ flex: -1, color: modeInfo.titleTextColor, }}>
+                {rowData.title}
+              </Text>
+            </View>
+            { rowData.platform && <View><Text style={{ color: modeInfo.standardTextColor, marginLeft: 2  }}>{rowData.platform.join(' ')}</Text></View> }
+            { rowData.syncTime && (<View style={{ flex: -1, flexDirection: 'row' }}>
+                <Text style={{ color: modeInfo.standardColor ,fontSize: 12, marginLeft: 2 }}>{rowData.syncTime + ' '}</Text>
+                <Text selectable={false} style={{
+                  flex: -1,
+                  color: modeInfo.standardTextColor,
+                  fontSize: 12
+                }}>{ rowData.allTime ? '总耗时 ' : ''}</Text>
+                <Text selectable={false} style={{
+                  flex: -1,
+                  fontSize: 12,
+                  color: modeInfo.standardTextColor,
+                }}>{rowData.allTime}</Text>
+              </View>)}
           </View>
           { rowData.alert && (
-            <View style={{ flex: 1, justifyContent: 'center' }}>
+            <View style={{ flex: 1, justifyContent: 'center', padding: 2 }}>
               <Text selectable={false}             
                 style={{ 
                   flex: -1,             
@@ -296,7 +298,7 @@ export default class Home extends Component {
             </View>
             )
           }
-          <View style={{ flex: 1, justifyContent: 'center' }}>
+          <View style={{ flex: 1, justifyContent: 'center', padding: 2 }}>
             <Text selectable={false}             
               style={{ 
                 flex: -1,             
@@ -365,7 +367,7 @@ export default class Home extends Component {
           title={`${params.title}`}
           titleColor={modeInfo.isNightMode ? '#000' : '#fff'}
           style={[styles.toolbar, { backgroundColor: modeInfo.standardColor }]}
-          actions={toolbarActions}
+          actions={this.state.toolbar}
           onIconClicked={() => {
             this.props.navigation.goBack()
           }}

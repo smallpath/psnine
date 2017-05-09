@@ -200,10 +200,10 @@ export default class GamePage extends Component {
           <Text style={{ color: modeInfo.titleTextColor, textAlign:'center' }}>{rowData.last}</Text>
           <Text style={{ color: modeInfo.standardTextColor, textAlign:'center', fontSize: 12 }}>最后杯</Text>
         </View>
-        <View style={{ flex: 1 }}>
+        { rowData.time && (<View style={{ flex: 1 }}>
           <Text style={{ color: modeInfo.titleTextColor, textAlign:'center' }}>{rowData.time}</Text>
           <Text style={{ color: modeInfo.standardTextColor, textAlign:'center', fontSize: 12 }}>总耗时</Text>
-        </View>
+        </View>)}
       </View>
     )
   }
@@ -310,7 +310,7 @@ export default class GamePage extends Component {
           </Text>
         </View>
         { rowData.time &&(
-            <View style={{ flex: 1, justifyContent: 'center' }}>
+            <View style={{ flex: 1, justifyContent: 'center', padding: 2 }}>
               <Text selectable={false} style={{
                 flex: -1,
                 color: modeInfo.standardTextColor,
@@ -321,7 +321,7 @@ export default class GamePage extends Component {
             </View>
           )
         }
-        <View style={{ flex: 1, justifyContent: 'center' }}>
+        <View style={{ flex: 1, justifyContent: 'center', padding: 2 }}>
           <Text selectable={false}             
             style={{ 
               flex: -1,             
@@ -390,7 +390,7 @@ export default class GamePage extends Component {
     }
 
     this.viewBottomIndex = Math.max(data.length - 1, 0)
-
+    const title = params.rowData.id ? `No.${params.rowData.id}` : (params.title || params.rowData.title)
     return (
       <View
         style={{ flex: 1, backgroundColor: modeInfo.backgroundColor }}
@@ -401,7 +401,7 @@ export default class GamePage extends Component {
           navIconName="md-arrow-back"
           overflowIconName="md-more"
           iconColor={modeInfo.isNightMode ? '#000' : '#fff'}
-          title={`No.${params.rowData.id || params.title || params.rowData.title}`}
+          title={title}
           titleColor={modeInfo.isNightMode ? '#000' : '#fff'}
           style={[styles.toolbar, { backgroundColor: modeInfo.standardColor }]}
           actions={toolbarActions}

@@ -18,7 +18,7 @@ export default function (html, psnid) {
   const isSigned = !html.includes('onclick="qidao(this)')
   const playerInfo = {
     backgroundImage: backgroundImage[1].replace(/\'/g, ''),
-    avatar: { uri: avatar },
+    avatar: avatar ,
     psnid: arr[0].match(reg) ? arr[0].match(reg)[0] : psnid,
     description: arr[0].replace(reg, ''),
     exp: arr[1],
@@ -37,10 +37,10 @@ export default function (html, psnid) {
   }
 
   const psnButtonInfo = []
-  $('.psnbtn').each(function(i, elem) {
+  $('.psnbtn a').each(function(i, elem) {
     psnButtonInfo.push({
       psnid,
-      text: $(this).find('a').text()
+      text: $(this).text()
     })
   })
 

@@ -148,5 +148,5 @@ function formatTime(text) {
   arr.splice(7, 0, '月')
   arr.splice(10, 0, '日')
   arr.splice(13, 0, '分')
-  return arr.concat('秒').join('')
+  return arr.join('')
 }
