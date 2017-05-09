@@ -33,6 +33,10 @@ let dataSource = new ListView.DataSource({
 });
 
 class Qa extends Component {
+  static navigationOptions = {
+    drawerLabel: '问答'
+  };
+
   constructor(props) {
     super(props);
 
@@ -52,7 +56,7 @@ class Qa extends Component {
   }
 
   _onRowPressed = (rowData) => {
-    const { navigation } = this.props;
+    const { navigation } = this.props.screenProps;
     const URL = getQAUrl(rowData.id);
     navigation.navigate('CommunityTopic', {
       URL,
@@ -69,7 +73,7 @@ class Qa extends Component {
     rowID: number | string,
     highlightRow: (sectionID: number, rowID: number) => void
   ) => {
-    const { modeInfo } = this.props
+    const { modeInfo } = this.props.screenProps
 
     let TouchableElement = TouchableNativeFeedback;
     return (
@@ -116,7 +120,7 @@ class Qa extends Component {
   }
 
   _renderHeader = () => {
-    const { modeInfo } = this.props
+    const { modeInfo } = this.props.screenProps
     return (
       <View style={{
         flex: -1,
@@ -163,8 +167,8 @@ class Qa extends Component {
   };
 
   componentWillReceiveProps = (nextProps) => {
-    if (this.props.modeInfo.isNightMode != nextProps.modeInfo.isNightMode) {
-      this.props.modeInfo == nextProps.modeInfo;
+    if (this.props.screenProps.modeInfo.isNightMode != nextProps.screenProps.modeInfo.isNightMode) {
+      this.props.screenProps.modeInfo = nextProps.screenProps.modeInfo;
     }
   }
 
@@ -222,7 +226,8 @@ class Qa extends Component {
   }
 
   render() {
-    const { qa: qaReducer, modeInfo } = this.props;
+    const { qa: qaReducer } = this.props;
+    const { modeInfo } = this.props.screenProps
     // console.log('Community.js rendered');
     dataSource = dataSource.cloneWithRows(qaReducer.qas);
     return (

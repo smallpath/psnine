@@ -21,7 +21,6 @@ import Toolbar from './Toolbar';
 
 import { standardColor } from '../constants/colorConfig';
 
-
 let DRAWER_REF = 'drawer';
 let DRAWER_WIDTH_LEFT = 90;
 
@@ -75,6 +74,7 @@ class Psnine extends Component {
       </DrawerLayoutAndroid>
     );
   }
+
 }
 
 

@@ -32,6 +32,10 @@ let dataSource = new ListView.DataSource({
 });
 
 class Community extends Component {
+  static navigationOptions = {
+    drawerLabel: '社区'
+  };
+
   constructor(props) {
     super(props);
   }
@@ -46,7 +50,7 @@ class Community extends Component {
   }
 
   _onRowPressed = (rowData) => {
-    const { navigation } = this.props;
+    const { navigation } = this.props.screenProps;
     const URL = getTopicURL(rowData.id);
     navigation.navigate('CommunityTopic', {
       URL,
@@ -63,7 +67,7 @@ class Community extends Component {
     rowID: number | string,
     highlightRow: (sectionID: number, rowID: number) => void
   ) => {
-    const { modeInfo } = this.props
+    const { modeInfo } = this.props.screenProps
     let TouchableElement = TouchableNativeFeedback;
 
     return (
@@ -110,11 +114,11 @@ class Community extends Component {
   }
 
   componentWillReceiveProps = (nextProps) => {
-    if (this.props.communityType != nextProps.communityType) {
-      this.props.communityType = nextProps.communityType;
-      this._onRefresh(nextProps.communityType);
-    } else if (this.props.modeInfo.isNightMode != nextProps.modeInfo.isNightMode) {
-      this.props.modeInfo == nextProps.modeInfo;
+    if (this.props.screenProps.communityType != nextProps.screenProps.communityType) {
+      this.props.screenProps.communityType = nextProps.screenProps.communityType;
+      this._onRefresh(nextProps.screenProps.communityType);
+    } else if (this.props.screenProps.modeInfo.isNightMode != nextProps.screenProps.modeInfo.isNightMode) {
+      this.props.screenProps.modeInfo = nextProps.screenProps.modeInfo;
     }
 
   }
@@ -155,7 +159,8 @@ class Community extends Component {
   }
 
   _loadMoreData = () => {
-    const { community: communityReducer, dispatch, communityType } = this.props;
+    const { community: communityReducer, dispatch } = this.props;
+    const { communityType } = this.props.screenProps
 
     let page = communityReducer.topicPage + 1;
     dispatch(getTopicList(page, communityType));
@@ -168,12 +173,13 @@ class Community extends Component {
       refreshing: true,
     });
 
-    this._loadMoreData(this.props.type);
+    this._loadMoreData(this.props.screenProps.type);
 
   }
 
   render() {
-    const { community: communityReducer, modeInfo } = this.props;
+    const { community: communityReducer } = this.props;
+    const { modeInfo } = this.props.screenProps
     // console.log('Community.js rendered');
     dataSource = dataSource.cloneWithRows(communityReducer.topics);
     return (

@@ -37,6 +37,10 @@ let dataSource = new ListView.DataSource({
 });
 
 class Battle extends Component {
+  static navigationOptions = {
+    drawerLabel: '约战'
+  };
+
   constructor(props) {
     super(props);
   }
@@ -51,7 +55,7 @@ class Battle extends Component {
   }
 
   _onRowPressed = (rowData) => {
-    const { navigation } = this.props;
+    const { navigation } = this.props.screenProps;
     const URL = getBattleURL(rowData.id);
     navigation.navigate('BattleTopic', {
       URL,
@@ -69,7 +73,7 @@ class Battle extends Component {
     highlightRow: (sectionID: number, rowID: number) => void
   ) => {
     // console.log(rowData)
-    const { modeInfo } = this.props
+    const { modeInfo } = this.props.screenProps
 
     let TouchableElement = TouchableNativeFeedback;
 
@@ -156,8 +160,8 @@ class Battle extends Component {
 
 
   componentWillReceiveProps(nextProps) {
-    if (this.props.modeInfo.isNightMode != nextProps.modeInfo.isNightMode) {
-      this.props.modeInfo == nextProps.modeInfo;
+    if (this.props.screenProps.modeInfo.isNightMode != nextProps.screenProps.modeInfo.isNightMode) {
+      this.props.screenProps.modeInfo = nextProps.screenProps.modeInfo;
     }
   }
 
@@ -174,7 +178,8 @@ class Battle extends Component {
   }
 
   render() {
-    const { battle: battleReducer, modeInfo } = this.props;
+    const { battle: battleReducer } = this.props;
+    const { modeInfo } = this.props.screenProps
     let data = battleReducer.battles;
 
     let keys = Object.keys(data);

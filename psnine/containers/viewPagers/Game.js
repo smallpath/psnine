@@ -33,6 +33,10 @@ let dataSource = new ListView.DataSource({
 });
 
 class Game extends Component {
+  static navigationOptions = {
+    drawerLabel: '游戏'
+  }
+
   constructor(props) {
     super(props);
 
@@ -53,7 +57,7 @@ class Game extends Component {
   }
 
   _onRowPressed = (rowData) => {
-    const { navigation } = this.props;
+    const { navigation } = this.props.screenProps;
     const URL = getGameUrl(rowData.id);
     navigation.navigate('GamePage', {
       // URL: 'http://psnine.com/psngame/5424?psnid=Smallpath',
@@ -71,12 +75,12 @@ class Game extends Component {
     rowID: number | string,
     highlightRow: (sectionID: number, rowID: number) => void
   ) => {
-
+    const { modeInfo } = this.props.screenProps
     let TouchableElement = TouchableNativeFeedback;
     return (
       <View rowID={rowID} style={{
         marginTop: 7,
-        backgroundColor: this.props.modeInfo.backgroundColor,
+        backgroundColor: modeInfo.backgroundColor,
         elevation: 1,
       }}>
         <TouchableElement
@@ -97,14 +101,14 @@ class Game extends Component {
               <Text
                 ellipsizeMode={'tail'}
                 numberOfLines={3}
-                style={{ flex: 2.5, color: this.props.modeInfo.titleTextColor, }}>
+                style={{ flex: 2.5, color: modeInfo.titleTextColor, }}>
                 {rowData.title}
               </Text>
 
               <View style={{ flex: 1.1, flexDirection: 'row', justifyContent: 'space-between' }}>
                 <Text selectable={false} style={{ flex: -1, color: idColor, textAlign: 'center', textAlignVertical: 'center' }}>{rowData.platform}</Text>
-                <Text selectable={false} style={{ flex: -1, color: this.props.modeInfo.standardTextColor, textAlign: 'center', textAlignVertical: 'center' }}>{rowData.region}</Text>
-                <Text selectable={false} style={{ flex: -1, color: this.props.modeInfo.standardTextColor, textAlign: 'center', textAlignVertical: 'center' }}>{
+                <Text selectable={false} style={{ flex: -1, color: modeInfo.standardTextColor, textAlign: 'center', textAlignVertical: 'center' }}>{rowData.region}</Text>
+                <Text selectable={false} style={{ flex: -1, color: modeInfo.standardTextColor, textAlign: 'center', textAlignVertical: 'center' }}>{
                   rowData.platium + rowData.gold + rowData.selver + rowData.bronze
                 }</Text>
               </View>
@@ -118,6 +122,7 @@ class Game extends Component {
   }
 
   _renderHeader = () => {
+    const { modeInfo } = this.props.screenProps
     return (
       <View style={{
         flex: -1,
@@ -127,12 +132,12 @@ class Game extends Component {
         alignItems: 'center',
         height: 40,
         paddingTop: 3,
-        backgroundColor: this.props.modeInfo.backgroundColor
+        backgroundColor: modeInfo.backgroundColor
       }}>
         <Picker style={{
           flex: 1,
           borderWidth: 1,
-          color: this.props.modeInfo.standardTextColor
+          color: modeInfo.standardTextColor
         }}
           prompt='选择平台'
           selectedValue={this.state.pf}
@@ -145,7 +150,7 @@ class Game extends Component {
         <Picker style={{
           flex: 1,
           borderWidth: 1,
-          color: this.props.modeInfo.standardTextColor
+          color: modeInfo.standardTextColor
         }}
           prompt='选择DLC'
           selectedValue={this.state.dlc}
@@ -156,7 +161,7 @@ class Game extends Component {
         </Picker>
         <Picker style={{
           flex: 1.5,
-          color: this.props.modeInfo.standardTextColor
+          color: modeInfo.standardTextColor
         }}
           prompt='排序'
           selectedValue={this.state.sort}
@@ -178,8 +183,9 @@ class Game extends Component {
   };
 
   componentWillReceiveProps = (nextProps) => {
-    if (this.props.modeInfo.isNightMode != nextProps.modeInfo.isNightMode) {
-      this.props.modeInfo == nextProps.modeInfo;
+    const { modeInfo } = this.props.screenProps
+    if (modeInfo.isNightMode != nextProps.screenProps.modeInfo.isNightMode) {
+      this.props.screenProps.modeInfo = nextProps.screenProps.modeInfo;
     }
   }
 
@@ -237,7 +243,8 @@ class Game extends Component {
   }
 
   render() {
-    const { game: gameReducer, modeInfo } = this.props;
+    const { game: gameReducer } = this.props;
+    const { modeInfo } = this.props.screenProps
     // console.log('Community.js rendered');
     dataSource = dataSource.cloneWithRows(gameReducer.games);
     return (

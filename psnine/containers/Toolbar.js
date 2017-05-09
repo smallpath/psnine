@@ -29,8 +29,6 @@ import nativeImageSource from 'nativeImageSource';
 
 import { connect } from 'react-redux';
 
-import SegmentedView from './SegmentedView';
-
 import Community from './viewPagers/Community';
 import Gene from './viewPagers/Gene';
 import NewTopic from '../components/new/NewTopic';
@@ -38,6 +36,8 @@ import NewTopic from '../components/new/NewTopic';
 import { changeSegmentIndex, changeCommunityType, changeGeneType, changeScrollType } from '../actions/app';
 
 import { standardColor, accentColor } from '../constants/colorConfig';
+
+import RightDrawer from './RightDrawer'
 
 let screen = Dimensions.get('window');
 
@@ -127,30 +127,15 @@ class Toolbar extends Component {
 
   _renderSegmentedView = () => {
     return (
-      <SegmentedView
-        {...{
-          communityType: this.props.app.communityType,
-          geneType: this.props.app.geneType,
-          navigation: this.props.navigation,
-          toolbarDispatch: this.props.dispatch,
-          segmentedIndex: this.props.app.segmentedIndex,
-          modeInfo: this.props.modeInfo,
-          setMarginTop: this.setMarginTop
-        }}
-        titles={titlesArr}
-        index={0}
-        style={styles.segmentedView}
-        stretch
-        switchTo={this.switchTo}
-        scrollTo={this.scrollTo}
-        duration={200}
-        restWidth={10}
-        barPosition='bottom'
-        underlayColor='#000'
-        barColor='#fff'
-        titleStyle={{ fontSize: 15 }}
-        titleWidth={Dimensions.get('window').width / titlesArr.length}
-      />
+      <RightDrawer onNavigationStateChange={null} screenProps={{
+        communityType: this.props.app.communityType,
+        geneType: this.props.app.geneType,
+        navigation: this.props.navigation,
+        toolbarDispatch: this.props.dispatch,
+        segmentedIndex: this.props.app.segmentedIndex,
+        modeInfo: this.props.modeInfo,
+        setMarginTop: this.setMarginTop
+      }}/>
     )
   }
 

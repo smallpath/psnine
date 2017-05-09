@@ -29,6 +29,10 @@ let dataSource = new ListView.DataSource({
 });
 
 class Gene extends Component {
+  static navigationOptions = {
+    drawerLabel: '基因'
+  };
+
   constructor(props) {
     super(props);
   }
@@ -43,7 +47,7 @@ class Gene extends Component {
   }
 
   _onRowPressed = (rowData) => {
-    const { navigation } = this.props;
+    const { navigation } = this.props.screenProps;
     const URL = getGeneURL(rowData.id);
     navigation.navigate('CommunityTopic', {
       URL,
@@ -60,7 +64,7 @@ class Gene extends Component {
     rowID: number | string,
     highlightRow: (sectionID: number, rowID: number) => void
   ) => {
-    const { modeInfo } = this.props
+    const { modeInfo } = this.props.screenProps
     let TouchableElement = TouchableNativeFeedback;
 
     let imageArr = rowData.thumbs;
@@ -111,11 +115,11 @@ class Gene extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (this.props.geneType != nextProps.geneType) {
-      this.props.geneType = nextProps.geneType;
-      this._onRefresh(nextProps.geneType);
-    } else if (this.props.modeInfo.isNightMode != nextProps.modeInfo.isNightMode) {
-      this.props.modeInfo == nextProps.modeInfo;
+    if (this.props.screenProps.geneType != nextProps.screenProps.geneType) {
+      this.props.screenProps.geneType = nextProps.screenProps.geneType;
+      this._onRefresh(nextProps.screenProps.geneType);
+    } else if (this.props.screenProps.modeInfo.isNightMode != nextProps.screenProps.modeInfo.isNightMode) {
+      this.props.screenProps.modeInfo = nextProps.screenProps.modeInfo;
     }
   }
 
@@ -156,7 +160,8 @@ class Gene extends Component {
   }
 
   _loadMoreData = () => {
-    const { gene: geneReducer, dispatch, geneType } = this.props;
+    const { gene: geneReducer, dispatch } = this.props;
+    const { geneType } = this.props.screenProps
     let page = geneReducer.genePage + 1;
     dispatch(getGeneList(page, geneType));
   }
@@ -174,7 +179,8 @@ class Gene extends Component {
 
   render() {
     // console.log('Gene.js rendered');
-    const { gene: geneReducer, modeInfo } = this.props;
+    const { gene: geneReducer } = this.props;
+    const { modeInfo } = this.props.screenProps
     dataSource = dataSource.cloneWithRows(geneReducer.genes);
     return (
       <ListView
