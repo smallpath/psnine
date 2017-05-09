@@ -208,10 +208,14 @@ export default class Reply extends Component {
         this.shouldShowEmotion = false
       });
     })
-
+    this.isToolbarShowing = false
     this.removeListener = BackHandler.addEventListener('hardwareBackPress', () => {
       let config = { tension: 30, friction: 7 };
-      let value = marginTop._value;
+      if (this.state.toolbarOpenVal._value !== 0) {
+        Animated.spring(this.state.toolbarOpenVal, { toValue: 0, ...config }).start();
+        return true;
+      }
+      let value = this.state.marginTop._value
       if (Math.abs(value) >= 50) {
         Animated.spring(marginTop, { toValue: 0, ...config }).start();
         return true;

@@ -19,14 +19,13 @@ function forInitial(props) {
 }
 
 const hack = {
-  transitionProps: {},
   prevTransitionProps: {}
 }
 
+const hackIndex = 0
+
 export function onTransitionStart (transitionProps,prevTransitionProps) {
-  // console.log(prevTransitionProps)
-  hack.transitionProps = transitionProps
-  hack.prevTransitionProps = prevTransitionProps
+  hack.prevTransitionProps = transitionProps
 }
 
 export function transitionConfig (
@@ -56,7 +55,9 @@ export function transitionConfig (
 
       // transitionConfig拿不到上一次的过渡属性, 得靠onTransitionStart来hack一下
       const prev = hack.prevTransitionProps.scenes && hack.prevTransitionProps.scenes[index + 1]
-      if (scene && scene.isStable && prev && prev.route) {
+
+      if (scene && scene.isActive && prev && prev.route) {
+        // 退出时, 如果这个界面是Active且之前的界面有shouldSeeBackground属性, 那么定死1以避免白色闪屏
         if (prev.route.params.shouldSeeBackground === true) {
           return {
             opacity: 1
@@ -68,7 +69,9 @@ export function transitionConfig (
 
       if (params.shouldSeeBackground === true) {
         if (scene.index === navigation.state.index) {
-
+          return {
+            opacity: 1
+          }
         } else if (scene.index + 1 == navigation.state.index) {
           return {
             opacity: 1
@@ -76,18 +79,8 @@ export function transitionConfig (
         }
       }
 
-      // if (scene && scene.route) {
-      //   const { params = {} } = scene.route
-      //   if (params.shouldSeeBackground) {
-      //     // return {
-      //     //   backgroundColor: 'transparent',
-      //     //   opacity: 99
-      //     // }
-      //   }
-      // }
-
       const inputRange = [index - 1, index, index + 0.99, index + 1];
-      // console.log(inputRange)
+
       const opacity = position.interpolate({
         inputRange,
         outputRange: ([0, 1, 1, 0]),
