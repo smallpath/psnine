@@ -25,7 +25,6 @@ import {
   nightBackgroundColorBrighterLevelOne,
   standardTextColor, nightStandardTextColor,
   titleTextColor, nightTitleTextColor
-
 } from './constants/colorConfig';
 
 import configureStore from './store/store.js'
@@ -38,27 +37,28 @@ const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 let toolbarHeight = 56
 const tipHeight = toolbarHeight * 0.8
 
-import App from './containers/App.js'
+import App from './container/App.js'
 
-import Home from './components/Home'
-import Login from './containers/authPagers/Login'
-import Message from './containers/authPagers/Message'
-import MyGame from './components/MyGame'
-import Trophy from './components/Trophy'
-import GameTopic from './components/GameTopic'
-import Favorite from './components/Favorite'
+import Home from './container/user/Home'
+import Login from './container/user/Login'
+import Message from './container/user/Message'
+import MyGame from './container/user/MyGame'
+import Favorite from './container/user/Favorite'
 
-import CommentList from './components/CommentList'
-import CommunityTopic from './components/CommunityTopic'
-import BattleTopic from './components/BattleTopic'
-import GamePage from './components/Game'
-import Reply from './components/new/Reply'
+import Trophy from './container/game/Trophy'
+import GameTopic from './container/game/GameTopic'
+import GamePage from './container/game/Game'
 
-import Webview from './components/Webview'
-import About from './components/About'
-import ImageViewer from './components/imageViewer'
+import CommentList from './container/topic/CommentList'
+import CommunityTopic from './container/topic/CommunityTopic'
+import BattleTopic from './container/topic/BattleTopic'
 
-import NewTopic from './components/new/NewTopic'
+import Reply from './container/new/Reply'
+import NewTopic from './container/new/NewTopic'
+
+import WebView from './components/WebView'
+import About from './container/setting/About'
+import ImageViewer from './components/ImageViewer'
 
 import { transitionConfig, onTransitionStart } from './utils/transitionConfig'
 
@@ -121,8 +121,8 @@ const Navigator = StackNavigator({
     screen: About,
     navigationOptions: enableGesture
   },
-  Webview: {
-    screen: Webview
+  WebView: {
+    screen: WebView
   },
   ImageViewer: {
     screen: ImageViewer

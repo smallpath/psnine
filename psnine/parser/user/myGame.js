@@ -1,24 +1,24 @@
 const parser = require('cheerio-without-node-native')
 
-export default function parseThophy (html) {
+export default function parseThophy(html) {
   const $ = parser.load(html, {
     decodeEntities: false
   })
 
   const list = []
 
-  $('.box table tr').each(function(i, elem) {
+  $('.box table tr').each(function (i, elem) {
     const $this = $(this)
     const info = {}
 
-    $this.find('td').each(function(j, elem) {
+    $this.find('td').each(function (j, elem) {
       const that = $(this)
       if (j === 0) {
         info.avatar = that.find('img').attr('src')
         info.href = that.find('a').attr('href')
       } else if (j === 1) {
         info.title = that.find('p a').text()
-        info.platform = Array.from(that.find('span').map(function(k, elem) { return $(this).text()}))
+        info.platform = Array.from(that.find('span').map(function (k, elem) { return $(this).text() }))
         info.syncTime = that.find('small').text()
       } else if (j === 2) {
         info.allTime = (that.text() || '').replace('总耗时', '')
@@ -37,14 +37,14 @@ export default function parseThophy (html) {
 
   const page = []
 
-  $('ul.dropmenu').next().find('a').each(function(i, elem) {
+  $('ul.dropmenu').next().find('a').each(function (i, elem) {
     const $this = $(this)
     const url = 'http://psnine.com' + $this.attr('href')
     const text = $this.text()
     page.push({
       url,
       text,
-      type: $this.attr('href').includes('javascript:') ? 'disable' : 'enable' 
+      type: $this.attr('href').includes('javascript:') ? 'disable' : 'enable'
     })
   })
 

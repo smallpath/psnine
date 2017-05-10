@@ -7,7 +7,7 @@ export default function (html) {
 
   const all = $('.main .box')
 
-  const body = all.children().filter(function(i, el) {
+  const body = all.children().filter(function (i, el) {
     const $this = $(this)
     return $this.attr('class') === 'content pd10' || $this.attr('align') === 'center';
   })

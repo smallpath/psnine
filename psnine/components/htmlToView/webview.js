@@ -9,9 +9,10 @@ import {
   Dimensions,
   Button
 } from 'react-native'
-import MyDialog from '../dialog'
 
+import MyDialog from '../../components/Dialog'
 import Ionicons from 'react-native-vector-icons/Ionicons';
+
 const { width, height: SCEEN_HEIGHT } = Dimensions.get('window')
 
 let WEBVIEW_REF = `WEBVIEW_REF`;

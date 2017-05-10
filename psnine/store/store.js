@@ -11,8 +11,7 @@ const middlewares = [thunk];
 //   middlewares.push(logger);
 // }
 
-export default function configureStore(initialState){
-    const store = compose(applyMiddleware(...middlewares))(createStore)(rootReducer, initialState);
-
-    return store;
+export default function configureStore(initialState) {
+  const store = compose(applyMiddleware(...middlewares))(createStore)(rootReducer, initialState);
+  return store;
 }

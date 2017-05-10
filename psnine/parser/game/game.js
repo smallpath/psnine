@@ -46,10 +46,10 @@ export default function (html) {
   const toolbarInfo = []
 
   if (game) {
-    gameInfo.platform = Array.from(game.find('h1 span').map(function(i, elem) { return $(this).text()}))
+    gameInfo.platform = Array.from(game.find('h1 span').map(function (i, elem) { return $(this).text() }))
     gameInfo.title = (game.find('h1').text().match(new RegExp('《(.*?)》')) || ['', '解析错误'])[1]
     gameInfo.version = game.find('h1 em').text().split('\n').map(item => item.trim()).filter(item => item)
-    gameInfo.trophyArr = Array.from(game.find('em span').map(function(i, elem) { return $(this).text()}))
+    gameInfo.trophyArr = Array.from(game.find('em span').map(function (i, elem) { return $(this).text() }))
     gameInfo.avatar = game.find('img').attr('src')
     const alert = game.find('em span').parent().next()
     if (alert.text()) {
@@ -62,7 +62,7 @@ export default function (html) {
 
   if (player) {
     // console.log('player', player.text().length)
-    player.find('td').each(function(i, elem) {
+    player.find('td').each(function (i, elem) {
       const $this = $(this)
       switch (i) {
         case 0:
@@ -82,10 +82,10 @@ export default function (html) {
 
       }
     })
-  }  
+  }
 
   if (toolbar) {
-    toolbar.find('li').each(function(i, elem) {
+    toolbar.find('li').each(function (i, elem) {
       const $this = $(this)
       const img = 'http://psnine.com' + $this.find('img').attr('src')
       const text = $this.find('a').text()
@@ -100,7 +100,7 @@ export default function (html) {
       banner: {},
       list: []
     }
-    item.find('tr').each(function(i, elem) {
+    item.find('tr').each(function (i, elem) {
       $this = $(this)
       // console.log($this.)
       if (i === 0) {
@@ -125,7 +125,7 @@ export default function (html) {
         }
         const time = $this.find('td em.lh180')
         if (time.attr('tips')) {
-          info.time =  formatTime($this.find('td em.lh180').attr('tips') + ($this.find('td em.lh180').text().match(/(\d+\-\d+\:\d+)/igm) || [''])[0])
+          info.time = formatTime($this.find('td em.lh180').attr('tips') + ($this.find('td em.lh180').text().match(/(\d+\-\d+\:\d+)/igm) || [''])[0])
         }
         temp.list.push(info)
       }

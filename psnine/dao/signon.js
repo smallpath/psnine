@@ -7,54 +7,54 @@ let dayStr = '<b style="color:green;">';
 
 const signonURL = 'http://psnine.com/set/qidao/post';
 
-export const fetchSignOn = function(psnid) {
+export const fetchSignOn = function (psnid) {
 
-    return new Promise((resolve, reject) => {
-        fetch(signonURL)
-        .then((response)=>{
-            setTimeout(() => null, 0);
-            return response.text();
-        })
-        .then(html=>{
-            let num = parseSignOn(html, numStr);
-            let day = parseDays(html, dayStr);
-            resolve(num+'\r\n'+day);
-        })
-    });
+  return new Promise((resolve, reject) => {
+    fetch(signonURL)
+      .then((response) => {
+        setTimeout(() => null, 0);
+        return response.text();
+      })
+      .then(html => {
+        let num = parseSignOn(html, numStr);
+        let day = parseDays(html, dayStr);
+        resolve(num + '\r\n' + day);
+      })
+  });
 };
 
-const parseSignOn = (source, pattern)=>{
-    let index = source.indexOf(pattern);
-    let str = '';
-    if(index!=-1){
-        index+=pattern.length;
-        while (source[index] != '<'){
-            str += source[index];
-            index++;
-        }
+const parseSignOn = (source, pattern) => {
+  let index = source.indexOf(pattern);
+  let str = '';
+  if (index != -1) {
+    index += pattern.length;
+    while (source[index] != '<') {
+      str += source[index];
+      index++;
     }
-    return '本次祈祷得到 '+str+' 铜币';
+  }
+  return '本次祈祷得到 ' + str + ' 铜币';
 }
 
-const parseDays = (source, pattern)=>{
-    let index = source.indexOf(pattern);
-    let str = '';
-    if(index!=-1){
-        index+=pattern.length;
-        while (source[index] != '<'){
-            str += source[index];
-            index++;
-        }
+const parseDays = (source, pattern) => {
+  let index = source.indexOf(pattern);
+  let str = '';
+  if (index != -1) {
+    index += pattern.length;
+    while (source[index] != '<') {
+      str += source[index];
+      index++;
     }
-    return '恭喜你已签到 '+str+' 天了';
+  }
+  return '恭喜你已签到 ' + str + ' 天了';
 }
 
 
-export const safeSignOn = async function(psnid) {
-      if(psnid == null)
-        return;
+export const safeSignOn = async function (psnid) {
+  if (psnid == null)
+    return;
 
-      let data = await fetchSignOn(psnid);
-    
-      return data;
+  let data = await fetchSignOn(psnid);
+
+  return data;
 };

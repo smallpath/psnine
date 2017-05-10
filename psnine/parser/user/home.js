@@ -4,21 +4,21 @@ export default function (html, psnid) {
   const $ = parser.load(html)
 
   const avatar = $('.psnava img').attr('src')
-  const arr = $('.psninfo tr td').map(function(i, elem) {
-      return $(this).text()
+  const arr = $('.psninfo tr td').map(function (i, elem) {
+    return $(this).text()
   })
 
-  const trophyArr = $('.psntrophy span').map(function(i, elem) {
-      return $(this).text()
+  const trophyArr = $('.psntrophy span').map(function (i, elem) {
+    return $(this).text()
   })
 
   const backgroundImage = $('.header').next().attr('style').match(/\((.*?)\)/)
-  
+
   const reg = new RegExp(`${psnid}`, 'gmi')
   const isSigned = !html.includes('onclick="qidao(this)')
   const playerInfo = {
     backgroundImage: backgroundImage[1].replace(/\'/g, ''),
-    avatar: avatar ,
+    avatar: avatar,
     psnid: arr[0].match(reg) ? arr[0].match(reg)[0] : psnid,
     description: arr[0].replace(reg, ''),
     exp: arr[1],
@@ -37,7 +37,7 @@ export default function (html, psnid) {
   }
 
   const psnButtonInfo = []
-  $('.psnbtn a').each(function(i, elem) {
+  $('.psnbtn a').each(function (i, elem) {
     psnButtonInfo.push({
       psnid,
       text: $(this).text()
@@ -45,7 +45,7 @@ export default function (html, psnid) {
   })
 
   const toolbarInfo = []
-  $('.nav a').each(function(i, elem) {
+  $('.nav a').each(function (i, elem) {
     toolbarInfo.push({
       url: $(this).attr('href'),
       text: $(this).text()
@@ -53,17 +53,17 @@ export default function (html, psnid) {
   })
 
   const gameTable = []
-  $('.nav').next().find('tr').each(function(i, elem) {
+  $('.nav').next().find('tr').each(function (i, elem) {
     const $this = $(this)
     const info = {}
-    $this.find('td').each(function(j, elem) {
+    $this.find('td').each(function (j, elem) {
       const that = $(this)
       if (j === 0) {
         info.avatar = that.find('img').attr('src')
         info.href = that.find('a').attr('href')
       } else if (j === 1) {
         info.title = that.find('p a').text()
-        info.platform = Array.from(that.find('span').map(function(k, elem) { return $(this).text()}))
+        info.platform = Array.from(that.find('span').map(function (k, elem) { return $(this).text() }))
         info.syncTime = that.find('small').text()
       } else if (j === 2) {
         info.allTime = (that.text() || '').replace('总耗时', '')

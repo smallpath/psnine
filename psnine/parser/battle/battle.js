@@ -59,7 +59,7 @@ export default function (html) {
   }
 
   const commentList = []
-  all.find('.post').each(function(i, elem) {
+  all.find('.post').each(function (i, elem) {
     const $this = $(this)
     const id = $this.attr('id')
     if (!id) {
@@ -69,11 +69,11 @@ export default function (html) {
       return
     }
     const img = $this.find('img').attr('src')
-    const psnid = $this.find('.meta a').filter(function(i, elem) {
+    const psnid = $this.find('.meta a').filter(function (i, elem) {
       return $(this).attr('class') === 'psnnode'
     }).text()
-    let content = $this.find('.content').length ? 
-        $this.find('.content').html().replace(/\<br\>/igm, '\n').replace('\n', '').replace(/\t/igm, '') : 'not found'
+    let content = $this.find('.content').length ?
+      $this.find('.content').html().replace(/\<br\>/igm, '\n').replace('\n', '').replace(/\t/igm, '') : 'not found'
     const date = $this.find('.meta').text().split('\n').map(item => item.replace(/\t/g, '')).filter(item => item.trim()).pop()
     commentList.push({
       id,

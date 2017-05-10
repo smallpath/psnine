@@ -4,11 +4,11 @@ import {
 
 const logoutURL = 'http://psnine.com/sign/out';
 
-export const safeLogout = async function(psnid) {
-      if(psnid == null)
-        return;
+export const safeLogout = async function (psnid) {
+  if (psnid == null)
+    return;
 
-      let data = await fetch(logoutURL);
+  let data = await fetch(logoutURL);
 
-      await AsyncStorage.removeItem('@psnid');
+  await AsyncStorage.removeItem('@psnid');
 };

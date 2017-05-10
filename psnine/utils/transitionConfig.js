@@ -24,11 +24,11 @@ const hack = {
 
 const hackIndex = 0
 
-export function onTransitionStart (transitionProps,prevTransitionProps) {
+export function onTransitionStart(transitionProps, prevTransitionProps) {
   hack.prevTransitionProps = transitionProps
 }
 
-export function transitionConfig (
+export function transitionConfig(
   transitionProps,
   prevTransitionProps,
   isModal,
@@ -39,7 +39,7 @@ export function transitionConfig (
       easing: Easing.out(Easing.poly(5)), // decelerate
       timing: Animated.timing,
     },
-    screenInterpolator: function(props) {
+    screenInterpolator: function (props) {
       const {
         layout,
         position,

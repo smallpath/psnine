@@ -7,12 +7,12 @@ import qa from './Qa';
 import game from './Game';
 
 const rootReducer = combineReducers({
-    app,
-    battle,
-    community,
-    gene,
-    qa,
-    game
+  app,
+  battle,
+  community,
+  gene,
+  qa,
+  game
 });
 
 export default rootReducer;
