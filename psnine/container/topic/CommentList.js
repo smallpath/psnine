@@ -249,11 +249,11 @@ class CommentList extends Component {
                 elevation: 4,
                 opacity: 1
               }} borderRadius={2}>
-                <Text style={{ alignSelf: 'flex-start', fontSize: 18 }}>选择页数: {
+                <Text style={{ alignSelf: 'flex-start', fontSize: 18, color: modeInfo.titleTextColor }}>选择页数: {
                   this.isValueChanged ? this.state.sliderValue : this.state.currentPage
                 }</Text>
                 <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-                  <Text>{this.state.currentPage}</Text>
+                  <Text style={{color: modeInfo.standardTextColor}}>{this.state.currentPage}</Text>
                   <Slider
                     maximumValue={this.state.numPages}
                     minimumValue={1}
@@ -273,7 +273,7 @@ class CommentList extends Component {
                       })
                     }}
                   />
-                  <Text>{this.state.numPages}</Text>
+                  <Text style={{color: modeInfo.standardTextColor}}>{this.state.numPages}</Text>
                 </View>
                 <Text style={{ alignSelf: 'flex-end', color: '#009688' }}
                   onPress={() => {

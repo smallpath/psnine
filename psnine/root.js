@@ -24,7 +24,8 @@ import {
   backgroundColorBrighterLevelOne,
   nightBackgroundColorBrighterLevelOne,
   standardTextColor, nightStandardTextColor,
-  titleTextColor, nightTitleTextColor
+  titleTextColor, nightTitleTextColor,
+  okColor
 } from './constants/colorConfig';
 
 import configureStore from './store/store.js'
@@ -167,7 +168,8 @@ class Root extends React.Component {
       backgroundColor: backgroundColor,
       brighterLevelOne: backgroundColorBrighterLevelOne,
       standardTextColor: standardTextColor,
-      titleTextColor: titleTextColor
+      titleTextColor: titleTextColor,
+      okColor
     }
 
     this.nightModeInfo = {
@@ -180,6 +182,7 @@ class Root extends React.Component {
       brighterLevelOne: nightBackgroundColorBrighterLevelOne,
       standardTextColor: nightStandardTextColor,
       titleTextColor: nightTitleTextColor,
+      okColor
     }
   }
 

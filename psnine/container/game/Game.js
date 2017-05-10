@@ -209,7 +209,7 @@ export default class GamePage extends Component {
 
   renderToolbar = (list) => {
     const { modeInfo } = this.props.screenProps
-    console.log(list[0])
+
     return (
           <View style={{ 
             flex: 1, 
@@ -318,7 +318,7 @@ export default class GamePage extends Component {
               style={{ flex: -1, color: modeInfo.titleTextColor, }}>
               {rowData.title}
               { rowData.translate && <Text style={{ color: modeInfo.standardTextColor, marginLeft: 2  }}>{' '+ rowData.translate}</Text> }
-              { rowData.tip && <Text style={{ color: modeInfo.standardColor ,fontSize: 12, marginLeft: 2 }}>{rowData.tip}</Text> }
+              { rowData.tip && <Text style={{ color: modeInfo.standardColor ,fontSize: 12, marginLeft: 2 }}>{' ' + rowData.tip}</Text> }
             </Text>
             <Text
               ellipsizeMode={'tail'}
@@ -330,7 +330,7 @@ export default class GamePage extends Component {
               <View style={{ flex: 1, justifyContent: 'center', padding: 2 }}>
                 <Text selectable={false} style={{
                   flex: -1,
-                  color: modeInfo.standardTextColor,
+                  color: modeInfo.okColor,
                   textAlign: 'center',
                   textAlignVertical: 'center',
                   fontSize: 10

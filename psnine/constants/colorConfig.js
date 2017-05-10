@@ -18,4 +18,5 @@ module.exports = {
   nodeColor: '#E1F0F7',
   idColor: '#3498db',
   accentColor: '#ff4081',
+  okColor: '#009688'
 }

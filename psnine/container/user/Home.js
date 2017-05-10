@@ -78,9 +78,7 @@ export default class Home extends Component {
     switch (index) {
       case 0:
         ToastAndroid.show('同步中..', ToastAndroid.SHORT)
-        // sync(params.)
         const psnid = params.URL.split('/').filter(item => item.trim()).pop()
-        console.log(psnid)
         sync(psnid).then(res => res.text()).then(text => {
           if (text.includes('玩脱了')) {
             const arr = text.match(/\<title\>(.*?)\<\/title\>/)
@@ -226,7 +224,7 @@ export default class Home extends Component {
   renderToolbar = (list) => {
     const { modeInfo } = this.props.screenProps
     return (
-          <View pointerEvents='box-only'style={{ 
+          <View pointerEvents='box-none' style={{ 
             flex: 1, 
             flexDirection: 'row',
             alignItems: 'flex-start',
@@ -235,7 +233,14 @@ export default class Home extends Component {
             backgroundColor: modeInfo.backgroundColor
             }}>
           {list.map((item, index) => (
-            <TouchableNativeFeedback key={index} onPress={() => item.url}>
+            <TouchableNativeFeedback key={index} onPress={() => {
+                const url = item.url
+                if (item.text === '游戏') {
+                  this.props.navigation.navigate('MyGame', {
+                    URL: url + '?page=1'
+                  })
+                }
+              }}>
               <View pointerEvents={'box-only'} style={{ flex: 1, alignItems:'center', justifyContent: 'center' }}  key={index}>
                 <Text style={{ color: idColor, textAlign:'left', fontSize: 12 }}>{item.text}</Text>
               </View>

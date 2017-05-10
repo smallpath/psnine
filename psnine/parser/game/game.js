@@ -113,13 +113,20 @@ export default function (html) {
         temp.banner = banner
       } else {
         // 奖杯
+        const className = $this.find('p a').next().attr('class')
+        if (!className) {
+
+        }
+        const hasTranslate = !className
+        const hasTip = className && className.length !== 0
+        const tryTip = $this.find('p a').next().next().text()
         const info = {
           avatar: $this.find('img').attr('src'),
           title: $this.find('p a').text(),
           href: $this.find('p a').attr('href'),
           text: $this.find('td p').next().text(),
-          translate: $this.find('p a').next().text(),
-          tip: $this.find('p a').next().next().text(),
+          translate: hasTranslate ? $this.find('p a').next().text() : '',
+          tip: tryTip ? tryTip : hasTip ? $this.find('p a').next().text() : '',
           rare: $this.find('td').last().text().replace('珍贵度', ''),
           translateText: $this.find('td p').next().next().text()
         }
