@@ -115,7 +115,14 @@ HtmlView.propTypes = {
 }
 
 HtmlView.defaultProps = {
-  onLinkPress: url => Linking.openURL(url),
+  onLinkPress: url => {
+    const reg = /^(https|http)\:\/\//
+    if (reg.exec(url)) {
+      const target = url.replace(reg, 'p9://')
+      return Linking.openURL(target).catch(err => console.error('p9 linking occurred', err));
+    }
+    return Linking.openURL(url).catch(err => console.error('Web linking occurred', err));
+  },
   onImageLongPress: url => Linking.openURL(url),
   onError: console.error.bind(console),
   modeInfo: {},

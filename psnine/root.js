@@ -9,9 +9,11 @@ import {
   Button,
   Text,
   Easing,
+  Linking,
   InteractionManager
 } from 'react-native';
 import { Provider } from 'react-redux'
+import pathToRegexp from 'path-to-regexp';
 import {
   StackNavigator,
 } from 'react-navigation';
@@ -43,7 +45,7 @@ import App from './container/App.js'
 import Home from './container/user/Home'
 import Login from './container/user/Login'
 import Message from './container/user/Message'
-import MyGame from './container/user/MyGame'
+import UserGame from './container/user/UserGame'
 import Favorite from './container/user/Favorite'
 
 import Trophy from './container/game/Trophy'
@@ -71,52 +73,79 @@ const enableGesture = ({ navigation }) => {
 
 const Navigator = StackNavigator({
   Main: {
-    screen: App
+    screen: App,
+    path: '',
   },
   Login: {
     screen: Login,
-    navigationOptions: enableGesture
+    navigationOptions: enableGesture,
+    path: 'sign/in'
   },
   Message: {
     screen: Message,
-    navigationOptions: enableGesture
+    navigationOptions: enableGesture,
+    path: 'my/notice'
   },
   CommentList: {
     screen: CommentList,
-    navigationOptions: enableGesture
+    navigationOptions: enableGesture,
+    path: 'topic/:linkingID/comment'
+  },
+  GeneCommentList: {
+    screen: CommentList,
+    navigationOptions: enableGesture,
+    path: 'gene/:linkingID/comment'
   },
   CommunityTopic: {
     screen: CommunityTopic,
-    navigationOptions: enableGesture
+    navigationOptions: enableGesture,
+    path: 'topic/:linkingID'
+  },
+  GeneTopic: {
+    screen: CommunityTopic,
+    navigationOptions: enableGesture,
+    path: 'gene/:linkingID'
+  },
+  QaTopic: {
+    screen: CommunityTopic,
+    navigationOptions: enableGesture,
+    path: 'qa/:linkingID'
   },
   BattleTopic: {
     screen: BattleTopic,
-    navigationOptions: enableGesture
+    navigationOptions: enableGesture,
+    path: 'battle/:linkingID'
   },
   GamePage: {
     screen: GamePage,
-    navigationOptions: enableGesture
+    navigationOptions: enableGesture,
+    path: 'psngame/:linkingID'
   },
   GameTopic: {
-    screen: GameTopic
+    screen: GameTopic,
+    psngame: 'psngame/:linkingID/topic'
   },
   Favorite: {
-    screen: Favorite
+    screen: Favorite,
+    psngame: 'my/fav'
   },
   Home: {
-    screen: Home
+    screen: Home,
+    path: 'psnid/:linkingID',
   },
   Reply: {
     screen: Reply
   },
-  MyGame: {
-    screen: MyGame
+  UserGame: {
+    screen: UserGame,
+    path: 'psnid/:linkingID/psngame'
   },
   NewTopic: {
     screen: NewTopic
   },
   Trophy: {
-    screen: Trophy
+    screen: Trophy,
+    path: 'trophy/:linkingID'
   },
   About: {
     screen: About,
@@ -146,6 +175,45 @@ const Navigator = StackNavigator({
   });
 
 let backPressClickTimeStamp = 0
+
+const previousGetActionForPathAndParams = Navigator.router.getActionForPathAndParams;
+
+Object.assign(Navigator.router, {
+  getActionForPathAndParams(path, params) {
+    const action = previousGetActionForPathAndParams(path, params)
+    if (action && action.params && action.params.linkingID) {
+      const id = action.params.linkingID
+      switch (action.routeName) {
+        case 'Home':
+          action.params.title = `No.${id}`
+          action.params.URL = `http://psnine.com/${path}`
+          break;
+        case 'CommunityTopic':
+        case 'GeneTopic':
+        case 'QaTopic':
+        case 'BattleTopic':
+        case 'GamePage':
+          action.params.URL = `http://psnine.com/${path}`
+          action.params.rowData = {
+            id
+          }
+          break;
+        case 'CommentList':
+        case 'GeneCommentList':
+        case 'GameTopic':
+        case 'UserGame':
+          action.params.URL = `http://psnine.com/${path}?page=1`
+          break;
+        case 'Trophy':
+          action.params.URL = `http://psnine.com/${path}`
+          action.params.title = `No.${id}`
+          break;
+      }
+    }
+
+    return action
+  }
+})
 
 class Root extends React.Component {
   constructor(props) {
@@ -208,6 +276,21 @@ class Root extends React.Component {
     });
   }
 
+  componentDidMount() {
+    Linking.getInitialURL().then((url) => {
+      if (url) {
+        console.log('Initial url is: ' + url);
+      }
+    }).catch(err => console.error('An error occurred linking', err));
+    Linking.addEventListener('url', this._handleOpenURL);
+  }
+  componentWillUnmount() {
+    Linking.removeEventListener('url', this._handleOpenURL);
+  }
+  _handleOpenURL(event) {
+    // console.log(event.url);
+  }
+
   toast = (text) => {
     const value = this.state.tipBarMarginBottom._value
     if (value === 0) {
@@ -253,12 +336,14 @@ class Root extends React.Component {
       <Provider store={store}>
         <View style={{ flex: 1 }}>
           <StatusBar translucent={false} backgroundColor={this.state.isNightMode ? nightDeepColor : deepColor} barStyle="light-content" />
-          <Navigator onNavigationStateChange={null} screenProps={{
-            modeInfo: this.state.isNightMode ? this.nightModeInfo : this.dayModeInfo,
-            switchModeOnRoot: this.switchModeOnRoot,
-            tipBarMarginBottom: this.state.tipBarMarginBottom,
-            bottomText: this.state.text
-          }} />
+          <Navigator
+            uriPrefix={'p9://psnine.com/'}
+            onNavigationStateChange={null} screenProps={{
+              modeInfo: this.state.isNightMode ? this.nightModeInfo : this.dayModeInfo,
+              switchModeOnRoot: this.switchModeOnRoot,
+              tipBarMarginBottom: this.state.tipBarMarginBottom,
+              bottomText: this.state.text
+            }} />
           <Animated.View style={{
             height: tipHeight,
             position: 'absolute',

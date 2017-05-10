@@ -15,7 +15,8 @@ import {
   FlatList,
   PanResponder,
   Modal,
-  Keyboard
+  Keyboard,
+  Linking
 } from 'react-native';
 
 import HTMLView from '../../components/HtmlToView';

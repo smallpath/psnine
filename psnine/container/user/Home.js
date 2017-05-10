@@ -174,10 +174,11 @@ export default class Home extends Component {
           </View>
         </View>
 
-        <View style={{ flexDirection: 'row', justifyContent:'space-around', alignItems: 'center', flex: 3  }}>
+        <View style={{ flexDirection: 'row', justifyContent:'space-around', alignItems: 'center', flex: 3, elevation: 4  }}>
           <View style={{ justifyContent:'center', alignItems: 'center', alignSelf: 'center', flex: 5  }}>
-            <View>
+            <View borderRadius={50} style={{width: 100, height: 100, backgroundColor: '#fff'}} >
               <Image
+                borderRadius={50}
                 source={{ uri: rowData.avatar}}
                 style={[styles.avatar, { width: 100, height: 100 }]}
               />
