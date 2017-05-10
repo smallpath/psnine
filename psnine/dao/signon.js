@@ -5,21 +5,28 @@ import {
 let numStr = '<b style="color:red;">';
 let dayStr = '<b style="color:green;">';
 
-const signonURL = 'http://psnine.com/set/qidao/post';
+const signonURL = 'http://psnine.com/set/qidao/ajax';
 
 export const fetchSignOn = function (psnid) {
 
   return new Promise((resolve, reject) => {
-    fetch(signonURL)
-      .then((response) => {
-        setTimeout(() => null, 0);
-        return response.text();
-      })
-      .then(html => {
-        let num = parseSignOn(html, numStr);
-        let day = parseDays(html, dayStr);
-        resolve(num + '\r\n' + day);
-      })
+    fetch(signonURL, {
+      method: 'POST',
+      headers: {
+        'Accept': '*/*'
+      }
+    }).then((response) => {
+      setTimeout(() => null, 0);
+      return response.text();
+    })
+    .then(html => {
+      if (html === '今天已经签过了') {
+        return resolve('今天已经签过了')
+      }
+      let num = parseSignOn(html, numStr);
+      let day = parseDays(html, dayStr);
+      resolve(num + '\r\n' + day);
+    })
   });
 };
 

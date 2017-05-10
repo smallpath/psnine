@@ -30,20 +30,102 @@ import { safeLogout } from '../dao/logout';
 import { safeSignOn } from '../dao/signon';
 import { fetchUser } from '../dao';
 
-const items = [
-  "个人主页", "我的游戏", "我的收藏", "系统选项", "设置", "关于"
+const ListItems = [
+  { 
+    text: '个人主页',
+    iconName: 'md-home',
+    onPress: function() {
+      const { navigation, closeDrawer } = this.props;
+      closeDrawer();
+      
+      if (this.state.psnid == '') {
+        global.toast && global.toast('未登录', 2000);
+        return;
+      }
+
+      let URL = getHomeURL(this.state.psnid);
+      navigation.navigate('Home', {
+        URL,
+        title: this.state.psnid
+      });
+    }
+  },
+  { 
+    text: '我的游戏',
+    iconName: 'md-game-controller-b',
+    onPress: function() {
+      const { navigation, closeDrawer } = this.props;
+      closeDrawer();
+      
+      if (this.state.psnid == '') {
+        global.toast && global.toast('未登录', 2000);
+        return;
+      }
+
+      let URL = getMyGameURL(this.state.psnid);
+
+      navigation.navigate('MyGame', {
+        URL,
+        title: this.state.psnid
+      });
+    }
+  },
+  { 
+    text: '我的收藏',
+    iconName: 'md-home',
+    onPress: function() {
+      const { navigation, closeDrawer } = this.props;
+      closeDrawer();
+      
+      let URL = 'http://psnine.com/my/fav?page=1'
+
+      navigation.navigate('Favorite', {
+        URL,
+        title: '收藏'
+      });
+    }
+  },
+  { 
+    text: '短消息',
+    iconName: 'md-notifications',
+    onPress: function() {
+      const { navigation, closeDrawer } = this.props;
+      closeDrawer();
+      
+      if (this.state.psnid == '') {
+        global.toast && global.toast('未登录', 2000);
+        return;
+      }
+
+      let URL = getHomeURL(this.state.psnid);
+      navigation.navigate('Message', {
+        URL,
+        title: this.state.psnid
+      });
+    }
+  },
+  { 
+    text: '系统选项',
+    iconName: 'md-home'
+  },
+  { 
+    text: '设置',
+    iconName: 'md-options',
+    onPress: function() {
+
+    }
+  },
+  { 
+    text: '关于',
+    iconName: 'md-help-circle',
+    onPress: function() {
+      const { navigation, closeDrawer } = this.props;
+      closeDrawer()
+      navigation.navigate('About');
+    }
+  }
 ];
 
-const iconNameArr = [
-  'md-home',
-  'md-game-controller-b',
-  'md-analytics',
-  'md-appstore',
-  'md-basket',
-  'md-options',
-  'ios-add',
-  'md-help-circle'
-]
 
 class navigationDrawer extends Component {
   constructor(props) {
@@ -61,7 +143,7 @@ class navigationDrawer extends Component {
         bronze: '铜',
         isSigned: true,
       },
-      dataSource: dataSource.cloneWithRows(items),
+      dataSource: dataSource.cloneWithRows(ListItems),
     }
   }
 
@@ -72,7 +154,7 @@ class navigationDrawer extends Component {
   checkLoginState = async () => {
     const psnid = await AsyncStorage.getItem('@psnid');
 
-    if (!psnid == null)
+    if (!psnid)
       return;
 
     const userInfo = await fetchUser(psnid)
@@ -176,98 +258,6 @@ class navigationDrawer extends Component {
     let rows = [];
 
     if (this.state.psnid != '') {
-      rows.push(
-        <View key={'trophy'} style={styles.trophyRow}>
-          <TouchableNativeFeedback>
-            <View style={styles.menuContainer}>
-              {/*<Image
-                  source={require('../img/ic_favorites_white.png')}
-                  style={{width: 30, height: 30}} />*/}
-              <Text style={styles.platinum}>
-                {this.state.userInfo.platinum}
-              </Text>
-            </View>
-          </TouchableNativeFeedback>
-          <TouchableNativeFeedback>
-            <View style={styles.menuContainer}>
-              {/*<Image
-                source={require('../img/ic_download_white.png')}
-                style={{width: 30, height: 30}} /> */}
-              <Text style={styles.gold}>
-                {this.state.userInfo.gold}
-              </Text>
-            </View>
-          </TouchableNativeFeedback>
-          <TouchableNativeFeedback>
-            <View style={styles.menuContainer}>
-              {/*<Image
-                source={require('../img/ic_download_white.png')}
-                style={{width: 30, height: 30}} />*/}
-              <Text style={styles.silver}>
-                {this.state.userInfo.silver}
-              </Text>
-            </View>
-          </TouchableNativeFeedback>
-          <TouchableNativeFeedback>
-            <View style={styles.menuContainer}>
-              {/*<Image
-                source={require('../img/ic_download_white.png')}
-                style={{width: 30, height: 30}} />*/}
-              <Text style={styles.bronze}>
-                {this.state.userInfo.bronze}
-              </Text>
-            </View>
-          </TouchableNativeFeedback>
-        </View>);
-
-      rows.push(<View key={'rows'} style={styles.row}>
-        <Touchable>
-          <View style={styles.menuContainer}>
-            <Icon name="md-text" size={20} color='#fff' />
-            <Text style={styles.menuText}>
-              帖子
-                </Text>
-          </View>
-        </Touchable>
-        <Touchable
-          onPress={() => {
-            if (this.state.psnid == '') {
-              return;
-            }
-
-            closeDrawer();
-
-            navigation.navigate('Message', {
-              psnid: this.state.psnid
-            });
-          }}
-        >
-          <View style={styles.menuContainer}>
-            <Icon name="md-notifications" size={20} color='#fff' />
-            <Text style={styles.menuText}>
-              消息
-                </Text>
-          </View>
-        </Touchable>
-        <Touchable>
-          <View style={styles.menuContainer}>
-            <Icon name="ios-people" size={20} color='#fff' />
-            <Text style={styles.menuText}>
-              关注
-                </Text>
-          </View>
-        </Touchable>
-        <Touchable>
-          <View style={styles.menuContainer}>
-            <Icon name="md-star" size={20} color='#fff' />
-            <Text style={styles.menuText}>
-              收藏
-                </Text>
-          </View>
-        </Touchable>
-      </View>);
-
-
       if (this.state.userInfo.isSigned == false) {
         toolActions.push(
           <TouchableNativeFeedback
@@ -301,19 +291,19 @@ class navigationDrawer extends Component {
 
     return (
       <View style={[styles.header, {
-        height: this.state.psnid == '' ? 120 : 180,
+        height: this.state.psnid == '' ? 120 : 120,
         backgroundColor: this.props.modeInfo.standardColor,
       }]}>
 
-        <View style={styles.userInfo}>
+        <View style={[styles.userInfo, { justifyContent: 'center', alignItems: 'center' }]}>
           <View style={{ flexDirection: 'row', alignItems: 'center', }}>
             <View style={{ flexDirection: 'column', alignItems: 'center', }}>
               <Touchable onPress={this.pressLogin}>
                 <View style={{ flexDirection: 'column', alignItems: 'center', }}>
                   <Image
                     source={this.state.userInfo.avatar}
-                    style={{ width: 70, height: 70, marginRight: 8 }} />
-                  <Text style={[styles.menuText, { marginTop: 5 }]}>
+                    style={{ width: 70, height: 70 }} />
+                  <Text style={[styles.menuText, { marginTop: 5, textAlign: 'center' }]}>
                     {this.state.psnid == '' ? '请登录' : this.state.psnid}
                   </Text>
                 </View>
@@ -331,77 +321,23 @@ class navigationDrawer extends Component {
     );
   }
 
-  onSelectItem = (sectionID, rowID) => {
-    const { navigation, closeDrawer } = this.props;
-    closeDrawer();
-    let URL;
-    if (sectionID == 's1') {
-      let index = parseInt(rowID);
-      index = this.state.psnid == '' ? index + 2 : index;
-      switch (index) {
-        case 0:
-          if (this.state.psnid == '') {
-            global.toast && global.toast('未登录', 2000);
-            return;
-          }
-
-          URL = getHomeURL(this.state.psnid);
-          navigation.navigate('Home', {
-            URL,
-            title: this.state.psnid
-          });
-          break;
-        case 1:
-          if (this.state.psnid == '') {
-            global.toast && global.toast('未登录', 2000);
-            return;
-          }
-
-          URL = getMyGameURL(this.state.psnid);
-
-          navigation.navigate('MyGame', {
-            URL,
-            title: this.state.psnid
-          });
-          break;
-        case 2:
-          URL = 'http://psnine.com/my/fav?page=1'
-
-          navigation.navigate('Favorite', {
-            URL,
-            title: '收藏'
-          });
-          break;
-
-        case 4:
-
-          break;
-        case 5:
-          navigation.navigate('About');
-          break;
-
-      }
-
-    }
-  }
-
   renderRow = (rowData, sectionID, rowID, highlightRow) => {
-    let iconName = iconNameArr[rowID]
+    const item = ListItems[rowID]
+    let iconName = item.iconName
+
     const icon = <Icon name={iconName} size={25} style={{ marginLeft: 6 }} color='#03a9f4' />
-    if (this.state.psnid == '' && rowID == 4 || this.state.psnid != '' && rowID == 6) {
+    if (rowData.text === '系统选项') {
       return (
         <View style={{ marginTop: 6 }}>
           <View
-            style={{ backgroundColor: 'rgba(0,0,0,0.1)', height: 1, }}
+            style={{ backgroundColor: 'rgba(0,0,0,0.1)', height: rowID === '0' ? 0 : 1, }}
           />
-          <View>
-            <View style={[styles.themeItem, {
-              padding: 6, paddingLeft: 10, backgroundColor: this.props.modeInfo.backgroundColor
-            }]}>
-              <Text style={[styles.themeName, { fontSize: 13, color: this.props.modeInfo.standardTextColor }]}>
-                {rowData}
-              </Text>
-            </View>
+          <View style={[styles.themeItem, {
+            padding: 6, paddingLeft: 10, backgroundColor: this.props.modeInfo.backgroundColor
+          }]}>
+            <Text style={[styles.themeName, { fontSize: 13, color: this.props.modeInfo.standardTextColor }]}>
+              {rowData.text}
+            </Text>
           </View>
         </View>
       )
@@ -410,7 +346,7 @@ class navigationDrawer extends Component {
     return (
       <View>
         <TouchableNativeFeedback
-          onPress={() => this.onSelectItem(sectionID, rowID)}
+          onPress={() => item.onPress.bind(this)(rowData)}
           delayPressIn={0}
         >
           <View style={[styles.themeItem, {
@@ -418,7 +354,7 @@ class navigationDrawer extends Component {
           }]}>
             {icon}
             <Text style={[styles.themeName, { color: this.props.modeInfo.titleTextColor }]}>
-              {rowData}
+              {rowData.text}
             </Text>
           </View>
         </TouchableNativeFeedback>
@@ -433,7 +369,7 @@ class navigationDrawer extends Component {
       <View style={styles.container} {...this.props}>
         <ListView
           ref="themeslistview"
-          dataSource={this.state.psnid != '' ? this.state.dataSource : this.state.dataSource.cloneWithRows(items.slice(2))}
+          dataSource={this.state.psnid !== '' ? this.state.dataSource : this.state.dataSource.cloneWithRows(ListItems.slice(4))}
           renderRow={this.renderRow}
           keyboardDismissMode="on-drag"
           keyboardShouldPersistTaps="always"

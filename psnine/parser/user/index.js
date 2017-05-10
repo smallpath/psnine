@@ -32,7 +32,7 @@ export default function (html, psnid) {
     gold: trophyArr[1],
     silver: trophyArr[2],
     bronze: trophyArr[3],
-    isSigned
+    isSigned: false
   }
 
   return result
