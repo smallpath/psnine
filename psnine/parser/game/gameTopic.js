@@ -2,7 +2,7 @@ const parser = require('cheerio-without-node-native')
 
 export default function parseThophy (html) {
   const $ = parser.load(html, {
-    decodeEntities: false
+    decodeEntities: true
   })
 
   const list = []
@@ -22,6 +22,7 @@ export default function parseThophy (html) {
       date: arr[3],
       avatar: img,
       id,
+      url: $this.find('.title a').attr('href'),
       type: arr[4]
     }
     list.push(mock)

@@ -15,6 +15,7 @@ import gameParser from '../parser/game/game'
 import homeParser from '../parser/user/home'
 import trophyParser from '../parser/game/trophy'
 import myGameParser from '../parser/user/myGame'
+import gameTopicAPI from '../parser/game/gameTopic'
 
 const safeFetch = function(reqUrl) {
   return new Promise((resolve, reject) => {
@@ -52,6 +53,8 @@ export const getGameAPI = uri => safeFetch(uri).then(res => gameParser(res))
 export const getTrophyAPI = uri => safeFetch(uri).then(res => trophyParser(res))
 
 export const getMyGameAPI = uri => safeFetch(uri).then(res => myGameParser(res, uri.split('/').pop()))
+
+export const getGameTopicAPI = uri => safeFetch(uri).then(res => gameTopicAPI(res, uri.split('/').pop()))
 
 export const getHomeAPI = uri => safeFetch(uri).then(res => homeParser(res, uri.split('/').pop()))
 

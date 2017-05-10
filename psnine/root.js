@@ -45,6 +45,7 @@ import Login from './containers/authPagers/Login'
 import Message from './containers/authPagers/Message'
 import MyGame from './components/MyGame'
 import Trophy from './components/Trophy'
+import GameTopic from './components/GameTopic'
 
 import CommentList from './components/CommentList'
 import CommunityTopic from './components/CommunityTopic'
@@ -93,6 +94,9 @@ const Navigator = StackNavigator({
   GamePage: {
     screen: GamePage,
     navigationOptions: enableGesture
+  },
+  GameTopic: {
+    screen: GameTopic
   },
   Home: {
     screen: Home

@@ -210,8 +210,9 @@ export default class GamePage extends Component {
 
   renderToolbar = (list) => {
     const { modeInfo } = this.props.screenProps
+    console.log(list[0])
     return (
-          <View pointerEvents='box-only'style={{ 
+          <View style={{ 
             flex: 1, 
             flexDirection: 'row',
             alignItems: 'flex-start',
@@ -220,10 +221,18 @@ export default class GamePage extends Component {
             backgroundColor: modeInfo.backgroundColor
             }}>
           {list.map((item, index) => (
-            <View style={{ flex: 1, alignItems:'center', justifyContent: 'center' }}  key={index}>
-              <Image source={{uri:item.img}} style={{ width: 30, height: 30}}/>
-              <Text style={{ color: idColor, textAlign:'left', fontSize: 12 }}>{item.text}</Text>
-            </View>
+            <TouchableNativeFeedback key={index} onPress={() => {
+                if (item.text === '讨论') {
+                  this.props.navigation.navigate('GameTopic', {
+                    URL: `${item.url}?page=1`
+                  })
+                }
+              }}>
+              <View style={{ flex: 1, alignItems:'center', justifyContent: 'center' }}  key={index}>
+                <Image source={{uri:item.img}} style={{ width: 30, height: 30}}/>
+                <Text style={{ color: idColor, textAlign:'left', fontSize: 12 }}>{item.text}</Text>
+              </View>
+            </TouchableNativeFeedback>
         ))}
       </View>
     )
