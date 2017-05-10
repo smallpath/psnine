@@ -220,6 +220,39 @@ class CommunityTopic extends Component {
     )
   }
 
+  renderSonComment = (list) => {
+    const { modeInfo } = this.props.screenProps
+    const result = list.map((rowData, index) => {
+      return (
+        <View key={rowData.id || index} style={{
+            backgroundColor: modeInfo.brighterLevelOne,
+            borderBottomWidth: StyleSheet.hairlineWidth,
+            borderTopWidth: StyleSheet.hairlineWidth,
+            borderBottomColor: modeInfo.backgroundColor,
+            borderTopColor: modeInfo.backgroundColor,
+            padding: 5,
+        }}>
+          <TouchableNativeFeedback
+            useForeground={true}
+            delayPressIn={100}
+            background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
+          >
+            <HTMLView
+              value={rowData.text}
+              modeInfo={modeInfo}
+              stylesheet={styles}
+              onImageLongPress={this.handleImageOnclick}
+              imagePaddingOffset={30 + 75 + 10}
+              shouldForceInline={true}
+            />
+
+          </TouchableNativeFeedback>
+        </View>
+      )
+    })
+    return result
+  }
+
   hasComment = false
   renderComment = (commentList) => {
     const { modeInfo } = this.props.screenProps
@@ -261,6 +294,9 @@ class CommunityTopic extends Component {
                   <Text selectable={false} style={{ flex: -1, color: modeInfo.standardTextColor, textAlign: 'center', textAlignVertical: 'center' }}>{rowData.date}</Text>
                 </View>
 
+                { rowData.commentList.length !== 0 && (<View style={{ backgroundColor: modeInfo.brighterLevelOne}}>
+                  {this.renderSonComment(rowData.commentList)}
+                </View>)}
               </View>
 
             </View>
