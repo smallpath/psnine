@@ -43,6 +43,8 @@ import App from './containers/App.js'
 import Home from './components/Home'
 import Login from './containers/authPagers/Login'
 import Message from './containers/authPagers/Message'
+import MyGame from './components/MyGame'
+import Trophy from './components/Trophy'
 
 import CommentList from './components/CommentList'
 import CommunityTopic from './components/CommunityTopic'
@@ -98,8 +100,14 @@ const Navigator = StackNavigator({
   Reply: {
     screen: Reply
   },
+  MyGame: {
+    screen: MyGame
+  },
   NewTopic: {
     screen: NewTopic
+  },
+  Trophy: {
+    screen: Trophy
   },
   About: {
     screen: About,

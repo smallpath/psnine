@@ -359,7 +359,7 @@ class navigationDrawer extends Component {
 
           URL = getMyGameURL(this.state.psnid);
 
-          navigation.navigate('Webview', {
+          navigation.navigate('MyGame', {
             URL,
             title: this.state.psnid
           });

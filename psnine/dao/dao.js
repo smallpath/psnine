@@ -49,7 +49,7 @@ export const getBattleAPI = uri => safeFetch(uri).then(res => battleTopicParser(
 
 export const getGameAPI = uri => safeFetch(uri).then(res => gameParser(res))
 
-export const getTrophyAPI = uri => safeFetch(uri).then(res => trophyParser(res, uri.split('/').pop()))
+export const getTrophyAPI = uri => safeFetch(uri).then(res => trophyParser(res))
 
 export const getMyGameAPI = uri => safeFetch(uri).then(res => myGameParser(res, uri.split('/').pop()))
 

@@ -222,9 +222,9 @@ export default class Reply extends Component {
       } else {
         Keyboard.dismiss()
         Animated.spring(openVal, { toValue: 0, ...config }).start(() => {
-          
+          this.props.navigation.goBack()
         });
-        return false
+        return true
       }
     })
 

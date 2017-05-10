@@ -34,6 +34,7 @@ export default DrawerNavigator({
     screen: Gene,
   }
 }, {
+  initialRouteName: 'Game',
   drawerWidth: SCREEN_WIDTH / 2,
   drawerPosition: 'right',
   contentComponent: props => <ScrollView><DrawerItems {...props} /></ScrollView>,

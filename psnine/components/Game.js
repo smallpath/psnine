@@ -282,8 +282,14 @@ export default class GamePage extends Component {
   renderTrophy = (rowData, index) => {
     const { modeInfo } = this.props.screenProps
     return (
-      <TouchableNativeFeedback onPress={
-        () => {}
+      <TouchableNativeFeedback key={rowData.id || index} onPress={
+        () => {
+          this.props.navigation.navigate('Trophy', {
+            URL: rowData.href,
+            title: rowData.title,
+            rowData
+          })
+        }
       }>
         <View key={rowData.id || index}  style={{
           backgroundColor: modeInfo.backgroundColor,
