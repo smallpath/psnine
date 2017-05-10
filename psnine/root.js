@@ -46,6 +46,7 @@ import Message from './containers/authPagers/Message'
 import MyGame from './components/MyGame'
 import Trophy from './components/Trophy'
 import GameTopic from './components/GameTopic'
+import Favorite from './components/Favorite'
 
 import CommentList from './components/CommentList'
 import CommunityTopic from './components/CommunityTopic'
@@ -97,6 +98,9 @@ const Navigator = StackNavigator({
   },
   GameTopic: {
     screen: GameTopic
+  },
+  Favorite: {
+    screen: Favorite
   },
   Home: {
     screen: Home

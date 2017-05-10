@@ -31,7 +31,7 @@ import { safeSignOn } from '../dao/signon';
 import { fetchUser } from '../dao/dao';
 
 const items = [
-  "个人中心", "我的游戏", "排行", "Store", "闲游", "系统选项", "设置", "关于"
+  "个人主页", "我的游戏", "我的收藏", "系统选项", "设置", "关于"
 ];
 
 const iconNameArr = [
@@ -365,32 +365,18 @@ class navigationDrawer extends Component {
           });
           break;
         case 2:
-          URL = getRankURL();
+          URL = 'http://psnine.com/my/fav?page=1'
 
-          navigation.navigate('Webview', {
+          navigation.navigate('Favorite', {
             URL,
-            title: '排行'
+            title: '收藏'
           });
           break;
 
-        case 3:
-          URL = getStoreURL();
-          navigation.navigate('Webview', {
-            URL,
-            title: '商店'
-          });
-          break;
         case 4:
-          URL = getDealURL();
-          navigation.navigate('Webview', {
-            URL,
-            title: '闲游'
-          });
-          break;
-        case 6:
 
           break;
-        case 7:
+        case 5:
           navigation.navigate('About');
           break;
 

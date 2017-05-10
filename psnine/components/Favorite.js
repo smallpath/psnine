@@ -23,7 +23,7 @@ import { connect } from 'react-redux';
 import { standardColor, nodeColor, idColor } from '../constants/colorConfig';
 
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { getGameTopicAPI } from '../dao/dao';
+import { getFavoriteAPI } from '../dao/dao';
 import moment from '../utils/moment';
 import ImageViewer from './imageViewer'
 
@@ -67,7 +67,7 @@ class GameTopic extends Component {
     highlightRow: (sectionID: number, rowID: number) => void
   ) => {
     const { modeInfo } = this.props.screenProps
-
+    // console.log(rowData)
     return (
       <View rowID={rowID} style={{
         marginTop: 7,
@@ -128,7 +128,7 @@ class GameTopic extends Component {
       isLoading: true
     }, () => {
       InteractionManager.runAfterInteractions(() => {
-        getGameTopicAPI(url).then(data => {
+        getFavoriteAPI(url).then(data => {
           let thisList = []
           const thisPage = parseInt((url.match(/\?page=(\d+)/) || [0, 1])[1])
           let cb = () => { }
@@ -213,7 +213,7 @@ class GameTopic extends Component {
           navIconName="md-arrow-back"
           overflowIconName="md-more"
           iconColor={modeInfo.isNightMode ? '#000' : '#fff'}
-          title={'讨论'}
+          title={'收藏'}
           style={[styles.toolbar, { backgroundColor: modeInfo.standardColor }]}
           titleColor={modeInfo.isNightMode ? '#000' : '#fff'}
           actions={toolbarActions}

@@ -7,7 +7,7 @@ export default function parseThophy (html) {
 
   const list = []
 
-  $('ul li').each(function(i, elem) {
+  $('ul form li').each(function(i, elem) {
     const that = $(this)
     const info = {}
     info.avatar = that.find('img').attr('src')
@@ -17,7 +17,8 @@ export default function parseThophy (html) {
 
     info.psnid = that.find('.psnnode').text()
     info.userURL = that.find('.psnnode').attr('href')
-    info.time = that.find('.meta').contents().filter(function(){ return this.nodeType === 3})
+    info.time = that.find('.meta').contents()
+                  .filter(function(){ return this.nodeType === 3}).text().trim()
 
     list.push(info)
   })
@@ -25,7 +26,7 @@ export default function parseThophy (html) {
 
   const page = []
 
-  $('.page ul').find('a').each(function(i, elem) {
+  $('.page ul').last().find('a').each(function(i, elem) {
     const $this = $(this)
     const url = 'http://psnine.com' + $this.attr('href')
     const text = $this.text()

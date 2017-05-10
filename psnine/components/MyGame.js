@@ -212,7 +212,7 @@ class MyGame extends Component {
     const currentPage = this.state.currentPage
     const targetPage = currentPage + 1
     if (targetPage > this.state.numPages) return
-    if (this.state.isLoading === true) return alert('caonima onEndReached')
+    if (this.state.isLoading === true) return
     this.fetchMessages(URL.split('=').slice(0, -1).concat(targetPage).join('='), 'down');
 
   }
