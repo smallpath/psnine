@@ -149,7 +149,7 @@ export default class Home extends Component {
         }}>
           <Image
             source={{ uri: rowData.backgroundImage }}
-            resizeMode={'stretch'}
+            resizeMode={'cover'}
             resizeMethod={'resize'}
             style={{ 
               width: SCREEN_WIDTH, 
@@ -224,12 +224,12 @@ export default class Home extends Component {
   renderToolbar = (list) => {
     const { modeInfo } = this.props.screenProps
     return (
-          <View pointerEvents='box-none' style={{ 
+          <View style={{ 
             flex: 1, 
             flexDirection: 'row',
             alignItems: 'flex-start',
             flexWrap:'wrap',
-            padding: 12,
+            padding: 0,
             backgroundColor: modeInfo.backgroundColor
             }}>
           {list.map((item, index) => (
@@ -241,7 +241,7 @@ export default class Home extends Component {
                   })
                 }
               }}>
-              <View pointerEvents={'box-only'} style={{ flex: 1, alignItems:'center', justifyContent: 'center' }}  key={index}>
+              <View style={{ flex: 1, padding: 12, alignItems:'center', justifyContent: 'center' }}  key={index}>
                 <Text style={{ color: idColor, textAlign:'left', fontSize: 12 }}>{item.text}</Text>
               </View>
             </TouchableNativeFeedback>
