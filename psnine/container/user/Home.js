@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import {
   AppRegistry,
   StyleSheet,
+  ToastAndroid,
   Text,
   View,
   Image,
@@ -18,7 +19,7 @@ import {
   Keyboard
 } from 'react-native';
 
-
+import { sync } from '../../dao/sync'
 import MyDialog from '../../components/Dialog'
 import HTMLView from '../../components/HtmlToView';
 import { connect } from 'react-redux';
@@ -76,9 +77,27 @@ export default class Home extends Component {
     const { params } = this.props.navigation.state
     switch (index) {
       case 0:
+        ToastAndroid.show('同步中..', ToastAndroid.SHORT)
+        // sync(params.)
+        const psnid = params.URL.split('/').filter(item => item.trim()).pop()
+        console.log(psnid)
+        sync(psnid).then(res => res.text()).then(text => {
+          if (text.includes('玩脱了')) {
+            const arr = text.match(/\<title\>(.*?)\<\/title\>/)
+            if (arr && arr[1]) {
+              const msg = `同步失败: ${arr[1]}`
+              ToastAndroid.show(msg, ToastAndroid.SHORT);
+              return
+            }
+          }
+          ToastAndroid.show('同步成功', ToastAndroid.SHORT);
+          this.preFetch()
+        }).catch(err => {
+          const msg = `同步失败: ${err.toString()}`
+          ToastAndroid.show(msg, ToastAndroid.SHORT);
+        })
         return;
       case 1:
-        this.preFetch()
         return
       case 2:
         return;
