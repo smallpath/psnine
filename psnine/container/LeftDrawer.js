@@ -309,7 +309,7 @@ class navigationDrawer extends Component {
                 </View>
               </Touchable>
             </View>
-            <View style={{ flexDirection: 'row', marginLeft: 0, marginTop: 0 }}>
+            <View style={{ flexDirection: 'row', marginLeft: toolActions.length === 2 ? -20 : 0, marginTop: 0 }}>
               {toolActions}
             </View>
           </View>
