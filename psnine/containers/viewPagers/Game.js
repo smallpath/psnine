@@ -168,7 +168,7 @@ class Game extends Component {
           onValueChange={this.onValueChange.bind(this, 'sort')}>
           <Picker.Item label="最新排序" value="newest" />
           <Picker.Item label="玩的最多" value="owner" />
-          <Picker.Item label="玩的最多" value="difficulty" />
+          <Picker.Item label="难度最大" value="difficulty" />
         </Picker>
       </View>
     )

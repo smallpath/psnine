@@ -49,7 +49,7 @@ export default function parseThophy (html) {
           child.psnid = that.find('.psnnode').text()
           child.url = that.find('.psnnode').attr('href')
           child.text = '<div>' +(that.find('.content').html().replace(`<span class="meta">${that.find('.content').children().html()}</span>`, '').trim() || '').trim().replace('\n\t\t', '') + '</div>'
-          console.log(child.text)
+
           child.id = `son-comment-${j}`
           child.shouldDisplay = (that.attr('style') || '').includes('display:none') === false
           info.commentList.push(child)
