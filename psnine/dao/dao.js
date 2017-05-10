@@ -14,7 +14,7 @@ import topicCommentSnapshotApiParser from '../parser/topic/topicCommentSnapshot'
 import gameParser from '../parser/game/game'
 import homeParser from '../parser/user/home'
 import trophyParser from '../parser/game/trophy'
-import myGameParser from '../parser/user/game'
+import myGameParser from '../parser/user/myGame'
 
 const safeFetch = function(reqUrl) {
   return new Promise((resolve, reject) => {
@@ -89,7 +89,7 @@ export const getHomeURL = id => `${webHost}/psnid/${id}`;
 
 export const getRankURL = () => `${webHost}/psnid`;
 
-export const getMyGameURL = id => `${webHost}/psnid/${id}/psngame`;
+export const getMyGameURL = id => `${webHost}/psnid/${id}/psngame?page=1`;
 
 export const fetchUser = id => safeFetch(getHomeURL(id)).then(res => userParser(res, id))
 

@@ -282,63 +282,67 @@ export default class GamePage extends Component {
   renderTrophy = (rowData, index) => {
     const { modeInfo } = this.props.screenProps
     return (
-      <View key={rowData.id || index}  style={{
-        backgroundColor: modeInfo.backgroundColor,
-        flexDirection: 'row',
-        borderBottomWidth: StyleSheet.hairlineWidth,
-        borderBottomColor: modeInfo.brighterLevelOne,
-        padding: 2
-      }}>
-        <View pointerEvents='box-only' style={{ flex: -1, flexDirection: 'row', padding: 12 }}>
-          <Image
-            source={{ uri: rowData.avatar }}
-            style={[styles.avatar, { width: 54, height: 54 }]}
-          />
-        </View>
-        <View style={{ justifyContent: 'space-around', flex: 3 }}>
-          <Text
-            ellipsizeMode={'tail'}
-            style={{ flex: -1, color: modeInfo.titleTextColor, }}>
-            {rowData.title}
-            { rowData.translate && <Text style={{ color: modeInfo.standardTextColor, marginLeft: 2  }}>{' '+ rowData.translate}</Text> }
-            { rowData.tip && <Text style={{ color: modeInfo.standardColor ,fontSize: 12, marginLeft: 2 }}>{rowData.tip}</Text> }
-          </Text>
-          <Text
-            ellipsizeMode={'tail'}
-            style={{ flex: -1, color: modeInfo.titleTextColor, }}>
-            {rowData.translateText || rowData.text}
-          </Text>
-        </View>
-        { rowData.time &&(
-            <View style={{ flex: 1, justifyContent: 'center', padding: 2 }}>
-              <Text selectable={false} style={{
+      <TouchableNativeFeedback onPress={
+        () => {}
+      }>
+        <View key={rowData.id || index}  style={{
+          backgroundColor: modeInfo.backgroundColor,
+          flexDirection: 'row',
+          borderBottomWidth: StyleSheet.hairlineWidth,
+          borderBottomColor: modeInfo.brighterLevelOne,
+          padding: 2
+        }}>
+          <View pointerEvents='box-only' style={{ flex: -1, flexDirection: 'row', padding: 12 }}>
+            <Image
+              source={{ uri: rowData.avatar }}
+              style={[styles.avatar, { width: 54, height: 54 }]}
+            />
+          </View>
+          <View style={{ justifyContent: 'space-around', flex: 3 }}>
+            <Text
+              ellipsizeMode={'tail'}
+              style={{ flex: -1, color: modeInfo.titleTextColor, }}>
+              {rowData.title}
+              { rowData.translate && <Text style={{ color: modeInfo.standardTextColor, marginLeft: 2  }}>{' '+ rowData.translate}</Text> }
+              { rowData.tip && <Text style={{ color: modeInfo.standardColor ,fontSize: 12, marginLeft: 2 }}>{rowData.tip}</Text> }
+            </Text>
+            <Text
+              ellipsizeMode={'tail'}
+              style={{ flex: -1, color: modeInfo.titleTextColor, }}>
+              {rowData.translateText || rowData.text}
+            </Text>
+          </View>
+          { rowData.time &&(
+              <View style={{ flex: 1, justifyContent: 'center', padding: 2 }}>
+                <Text selectable={false} style={{
+                  flex: -1,
+                  color: modeInfo.standardTextColor,
+                  textAlign: 'center',
+                  textAlignVertical: 'center',
+                  fontSize: 10
+                }}>{rowData.time}</Text>
+              </View>
+            )
+          }
+          <View style={{ flex: 1, justifyContent: 'center', padding: 2 }}>
+            <Text selectable={false}             
+              style={{ 
+                flex: -1,             
+                textAlign: 'center',
+                textAlignVertical: 'center',
+                color: modeInfo.titleTextColor, }}>{rowData.rare}</Text>
+            <Text
+              ellipsizeMode={'tail'} 
+              style={{
                 flex: -1,
                 color: modeInfo.standardTextColor,
                 textAlign: 'center',
                 textAlignVertical: 'center',
                 fontSize: 10
-              }}>{rowData.time}</Text>
-            </View>
-          )
-        }
-        <View style={{ flex: 1, justifyContent: 'center', padding: 2 }}>
-          <Text selectable={false}             
-            style={{ 
-              flex: -1,             
-              textAlign: 'center',
-              textAlignVertical: 'center',
-              color: modeInfo.titleTextColor, }}>{rowData.rare}</Text>
-          <Text
-            ellipsizeMode={'tail'} 
-            style={{
-              flex: -1,
-              color: modeInfo.standardTextColor,
-              textAlign: 'center',
-              textAlignVertical: 'center',
-              fontSize: 10
-            }}>{rowData.rare ? '珍惜度' : ''}</Text>
+              }}>{rowData.rare ? '珍惜度' : ''}</Text>
+          </View>
         </View>
-      </View>
+      </TouchableNativeFeedback>
     )
   }
 
