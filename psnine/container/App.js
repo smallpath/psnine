@@ -16,7 +16,7 @@ import {
   RefreshControl,
 } from 'react-native';
 
-import NavigatorDrawer from './NavigatorDrawer';
+import LeftDrawer from './LeftDrawer';
 import Toolbar from './Toolbar';
 
 import { standardColor } from '../constants/colorConfig';
@@ -54,7 +54,7 @@ class Psnine extends Component {
         drawerWidth={Dimensions.get('window').width - DRAWER_WIDTH_LEFT}
         drawerPosition={DrawerLayoutAndroid.positions.Left}
         renderNavigationView={() => (
-          <NavigatorDrawer {...{
+          <LeftDrawer {...{
             closeDrawer: this.closeDrawer,
             navigation: this.props.navigation,
             modeInfo: screenProps.modeInfo,
