@@ -56,7 +56,7 @@ class Qa extends Component {
   _onRowPressed = (rowData) => {
     const { navigation } = this.props.screenProps;
     const URL = getQAUrl(rowData.id);
-    navigation.navigate('CommunityTopic', {
+    navigation.navigate('QaTopic', {
       URL,
       title: rowData.title,
       rowData,

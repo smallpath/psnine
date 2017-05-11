@@ -1,7 +1,9 @@
 
 const replyURL = 'http://psnine.com/set/comment/post'
+const ajaxURL = 'http://psnine.com/set/comson/ajax'
 
-export const postReply = form => {
+export const postReply = (form, type = 'post') => {
+  const url = type === 'post' ? replyURL : ajaxURL
   let formBody = []
   for (let property in form) {
     const encodedKey = encodeURIComponent(property);
@@ -9,8 +11,8 @@ export const postReply = form => {
     formBody.push(encodedKey + "=" + encodedValue);
   }
   formBody = formBody.join("&");
-
-  return fetch(replyURL, {
+  // console.log(url, formBody)
+  return fetch(url, {
     method: 'POST',
     headers: {
       'Accept': 'text/html,application/xhtml+xml,application/xml',

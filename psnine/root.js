@@ -54,6 +54,7 @@ import GamePage from './container/game/Game'
 
 import CommentList from './container/topic/CommentList'
 import CommunityTopic from './container/topic/CommunityTopic'
+import QaTopic from './container/topic/QaTopic'
 import BattleTopic from './container/topic/BattleTopic'
 
 import Reply from './container/new/Reply'
@@ -107,7 +108,7 @@ const Navigator = StackNavigator({
     path: 'gene/:linkingID'
   },
   QaTopic: {
-    screen: CommunityTopic,
+    screen: QaTopic,
     navigationOptions: enableGesture,
     path: 'qa/:linkingID'
   },

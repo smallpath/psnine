@@ -17,6 +17,7 @@ import trophyParser from '../parser/game/trophy'
 import myGameParser from '../parser/user/myGame'
 import gameTopicParser from '../parser/game/gameTopic'
 import favoriteParser from '../parser/user/favorite'
+import qaTopicParser from '../parser/qa/qa'
 
 const safeFetch = function(reqUrl) {
   return new Promise((resolve, reject) => {
@@ -54,6 +55,8 @@ export const getGameAPI = uri => safeFetch(uri).then(res => gameParser(res))
 export const getTrophyAPI = uri => safeFetch(uri).then(res => trophyParser(res))
 
 export const getFavoriteAPI = uri => safeFetch(uri).then(res => favoriteParser(res))
+
+export const getQaTopicAPI = uri => safeFetch(uri).then(res => qaTopicParser(res))
 
 export const getMyGameAPI = uri => safeFetch(uri).then(res => myGameParser(res, uri.split('/').pop()))
 

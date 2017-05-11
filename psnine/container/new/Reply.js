@@ -250,14 +250,24 @@ export default class Reply extends Component {
     const type = params.type === 'community' ? 'topic' : params.type
     const form = {
       type: type,
-      param: params.id,
       content: this.state.content,
-      com: ''
     }
-    if (params.type !== 'qa') {
-      form.old = 'yes'
+    if (type !== 'comson') {
+      form.param = params.id
+      form.com = ''
+      if (params.type !== 'qa') {
+        form.old = 'yes'
+      }
+    } else {
+      form.id = params.id
     }
-    postReply(form).then(res => res.text()).then(text => {
+    const replyType = type !== 'comson' ? 'post' : 'ajax'
+    // console.log(form, replyType)
+    postReply(form, replyType).then(res => {
+      // console.log(res)
+      return res
+    }).then(res => res.text()).then(text => {
+      // console.log(text, '====>')
       if (text.includes('玩脱了')) {
         const arr = text.match(/\<title\>(.*?)\<\/title\>/)
         if (arr && arr[1]) {
@@ -272,6 +282,7 @@ export default class Reply extends Component {
       })
     }).catch(err => {
       const msg = `评论失败: ${arr[1]}`
+      // console.log(text, '====>???')
       ToastAndroid.show(msg, ToastAndroid.SHORT);
     })
   }
