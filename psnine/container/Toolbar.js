@@ -35,7 +35,8 @@ import { changeSegmentIndex, changeCommunityType, changeGeneType, changeScrollTy
 
 import { standardColor, accentColor } from '../constants/colorConfig';
 
-import RightDrawer from './RightDrawer'
+// import RightDrawer from './RightDrawer'
+import TabContainer from './Tab'
 
 let screen = Dimensions.get('window');
 
@@ -123,9 +124,9 @@ class Toolbar extends Component {
     }
   }
 
-  _renderSegmentedView = () => {
+  /*_renderSegmentedView = () => {
     return (
-      <RightDrawer onNavigationStateChange={null} screenProps={{
+      <Tab onNavigationStateChange={null} screenProps={{
         communityType: this.props.app.communityType,
         geneType: this.props.app.geneType,
         navigation: this.props.navigation,
@@ -135,6 +136,29 @@ class Toolbar extends Component {
         setMarginTop: this.setMarginTop,
         modalVisible: this.state.modalVisible
       }}/>
+    )
+  }*/
+  _renderSegmentedView = () => {
+
+    return (
+      <TabContainer 
+        onNavigationStateChange={(prevRoute, nextRoute, action) => {
+          if (prevRoute.index !== nextRoute.index && action.type === 'Navigation/NAVIGATE') {
+            setTimeout(() => {
+              this.props.dispatch(changeSegmentIndex(nextRoute.index))
+            }, 100)
+          }
+        }}
+        screenProps={{
+          communityType: this.props.app.communityType,
+          geneType: this.props.app.geneType,
+          navigation: this.props.navigation,
+          toolbarDispatch: this.props.dispatch,
+          segmentedIndex: this.props.app.segmentedIndex,
+          modeInfo: this.props.modeInfo,
+          setMarginTop: this.setMarginTop,
+          modalVisible: this.state.modalVisible
+        }}/>
     )
   }
 
@@ -525,13 +549,14 @@ class Toolbar extends Component {
       <Animated.View
         style={[styles.container, {
           marginTop: this.state.marginTop,
+          backgroundColor: modeInfo.backgroundColor
         }]}
       >
         {this.renderModal()}
         <Icon.ToolbarAndroid
           navIconName="md-menu"
           title={title}
-          style={[styles.toolbar, { backgroundColor: modeInfo.standardColor }]}
+          style={[styles.toolbar, { backgroundColor: modeInfo.standardColor, elevation: 0 }]}
           titleColor={modeInfo.isNightMode ? '#000' : '#fff'}
           overflowIconName="md-more"
           iconColor={modeInfo.isNightMode ? '#000' : '#fff'}

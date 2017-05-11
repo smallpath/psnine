@@ -30,7 +30,7 @@ let dataSource = new ListView.DataSource({
 
 class Community extends Component {
   static navigationOptions = {
-    drawerLabel: '社区'
+    tabBarLabel: '社区'
   };
 
   constructor(props) {
