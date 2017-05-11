@@ -185,7 +185,7 @@ Object.assign(Navigator.router, {
       const id = action.params.linkingID
       switch (action.routeName) {
         case 'Home':
-          action.params.title = `No.${id}`
+          action.params.title = `${id}`
           action.params.URL = `http://psnine.com/${path}`
           break;
         case 'CommunityTopic':
@@ -252,6 +252,10 @@ class Root extends React.Component {
       titleTextColor: nightTitleTextColor,
       okColor
     }
+    this.dayModeInfo.dayModeInfo = this.dayModeInfo
+    this.dayModeInfo.nightModeInfo = this.nightModeInfo
+    this.nightModeInfo.dayModeInfo = this.dayModeInfo
+    this.nightModeInfo.nightModeInfo = this.nightModeInfo
   }
 
   switchModeOnRoot = () => {

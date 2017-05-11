@@ -87,7 +87,7 @@ class GameTopic extends Component {
           delayPressIn={100}
           background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
         >
-          <View pointerEvents='box-only' style={{ flex: 1, flexDirection: 'row', padding: 12 }}>
+          <View style={{ flex: 1, flexDirection: 'row', padding: 12 }}>
             <Image
               source={{ uri: rowData.avatar }}
               style={styles.avatar}
@@ -102,7 +102,15 @@ class GameTopic extends Component {
               </Text>
 
               <View style={{ flex: 1.1, flexDirection: 'row', justifyContent: 'space-between' }}>
-                <Text selectable={false} style={{ flex: -1, color: idColor, textAlign: 'center', textAlignVertical: 'center' }}>{rowData.psnid}</Text>
+                <Text selectable={false} style={{ flex: -1, color: idColor, textAlign: 'center', textAlignVertical: 'center' }}  onPress={
+                  () => {
+                    this.props.navigation.navigate('Home', {
+                      title: rowData.psnid,
+                      id: rowData.psnid,
+                      URL: `http://psnine.com/psnid/${rowData.psnid}`
+                    })
+                  }
+                }>{rowData.psnid}</Text>
                 <Text selectable={false} style={{ flex: -1, color: modeInfo.standardTextColor, textAlign: 'center', textAlignVertical: 'center' }}>{rowData.date}</Text>
                 <Text selectable={false} style={{ flex: -1, color: modeInfo.standardTextColor, textAlign: 'center', textAlignVertical: 'center' }}>{rowData.count}回复</Text>
                 <Text selectable={false} style={{ flex: -1, color: modeInfo.standardTextColor, textAlign: 'center', textAlignVertical: 'center' }}>{rowData.type}</Text>
@@ -266,7 +274,6 @@ class GameTopic extends Component {
                     maximumTrackTintColor={modeInfo.accentColor}
                     minimumTrackTintColor={modeInfo.standardTextColor}
                     thumbTintColor={modeInfo.accentColor}
-                    step={1}
                     style={{
                       paddingHorizontal: 90,
                       height: 50
@@ -275,7 +282,7 @@ class GameTopic extends Component {
                     onValueChange={(value) => {
                       this.isValueChanged = true
                       this.setState({
-                        sliderValue: value
+                        sliderValue: Math.round(value)
                       })
                     }}
                   />

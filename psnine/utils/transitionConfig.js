@@ -58,7 +58,7 @@ export function transitionConfig(
 
       if (scene && scene.isActive && prev && prev.route) {
         // 退出时, 如果这个界面是Active且之前的界面有shouldSeeBackground属性, 那么定死1以避免白色闪屏
-        if (prev.route.params.shouldSeeBackground === true) {
+        if (prev.route.params && prev.route.params.shouldSeeBackground === true) {
           return {
             opacity: 1
           }

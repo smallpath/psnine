@@ -138,7 +138,8 @@ export default class Home extends Component {
   renderHeader = (rowData) => {
     const { modeInfo } = this.props.screenProps
     const { psnButtonInfo } = this.state.data
-
+    const { nightModeInfo } = modeInfo
+    const color = nightModeInfo.titleTextColor
     return (
       <View key={rowData.id} style={{
         backgroundColor: modeInfo.titleTextColor,
@@ -161,16 +162,16 @@ export default class Home extends Component {
 
         <View style={{ flexDirection: 'row', justifyContent:'space-around', alignItems: 'center', flex: 1, padding: 5  }}>
           <View style={{ justifyContent:'center', alignItems: 'center', flex: 2  }}>
-            <Text style={{ flex: -1, color: modeInfo.titleTextColor, }}>{rowData.psnid}</Text>
-            <Text style={{ flex: -1, color: modeInfo.titleTextColor, fontSize: 12 }}>{rowData.description}</Text>
+            <Text style={{ flex: -1, color: color, }}>{rowData.psnid}</Text>
+            <Text style={{ flex: -1, color: color, fontSize: 12 }}>{rowData.description}</Text>
           </View>
           <View style={{ justifyContent:'center', alignItems: 'center', flex: 1  }}>
-            <Text style={{ flex: -1, color: modeInfo.titleTextColor, }}>{rowData.exp.split('经验')[0]}</Text>
-            <Text style={{ flex: -1, color: modeInfo.titleTextColor, fontSize: 12 }}>{rowData.exp.split('经验')[1]}</Text>
+            <Text style={{ flex: -1, color: color, }}>{rowData.exp.split('经验')[0]}</Text>
+            <Text style={{ flex: -1, color: color, fontSize: 12 }}>{rowData.exp.split('经验')[1]}</Text>
           </View>
           <View style={{ justifyContent:'center', alignItems: 'center', flex: 1  }}>
-            <Text style={{ flex: -1, color: modeInfo.titleTextColor, }}>{rowData.ranking}</Text>
-            <Text style={{ flex: -1, color: modeInfo.titleTextColor, fontSize: 12 }}>所在服排名</Text>
+            <Text style={{ flex: -1, color: color, }}>{rowData.ranking}</Text>
+            <Text style={{ flex: -1, color: color, fontSize: 12 }}>所在服排名</Text>
           </View>
         </View>
 
@@ -188,34 +189,34 @@ export default class Home extends Component {
 
         <View style={{ flexDirection: 'row', justifyContent:'center', alignItems: 'center', flex: 1, padding: 5  }}>
           <Text>
-            <Text style={{ flex: 1, color: modeInfo.titleTextColor, marginVertical: 2, textAlign:'center' }}>{rowData.platinum + ' '}</Text>
-            <Text style={{ flex: 1, color: modeInfo.titleTextColor, marginVertical: 2, textAlign:'center' }}>{rowData.gold + ' '}</Text>
-            <Text style={{ flex: 1, color: modeInfo.titleTextColor, marginVertical: 2, textAlign:'center' }}>{rowData.silver + ' '}</Text>
-            <Text style={{ flex: 1, color: modeInfo.titleTextColor, marginVertical: 2, textAlign:'center' }}>{rowData.gold + ' '}</Text>
-            <Text style={{ flex: 1, color: modeInfo.titleTextColor, marginVertical: 2, textAlign:'center' }}>{rowData.all + ' '}</Text>
+            <Text style={{ flex: 1, color: color, marginVertical: 2, textAlign:'center' }}>{rowData.platinum + ' '}</Text>
+            <Text style={{ flex: 1, color: color, marginVertical: 2, textAlign:'center' }}>{rowData.gold + ' '}</Text>
+            <Text style={{ flex: 1, color: color, marginVertical: 2, textAlign:'center' }}>{rowData.silver + ' '}</Text>
+            <Text style={{ flex: 1, color: color, marginVertical: 2, textAlign:'center' }}>{rowData.gold + ' '}</Text>
+            <Text style={{ flex: 1, color: color, marginVertical: 2, textAlign:'center' }}>{rowData.all + ' '}</Text>
           </Text>
         </View>
 
         <View style={{ flexDirection: 'row', justifyContent:'space-around', alignItems: 'center', flex: 1, padding: 5  }}>
           <View style={{ justifyContent:'center', alignItems: 'center', flex: 1  }}>
-            <Text style={{ flex: 1, color: modeInfo.titleTextColor, textAlign:'center' }}>{rowData. allGames}</Text>
-            <Text style={{ flex: 1, color: modeInfo.titleTextColor, textAlign:'center' }}>总游戏</Text>
+            <Text style={{ flex: 1, color: color, textAlign:'center' }}>{rowData. allGames}</Text>
+            <Text style={{ flex: 1, color: color, textAlign:'center' }}>总游戏</Text>
           </View>
           <View style={{ justifyContent:'center', alignItems: 'center', flex: 1  }}>
-            <Text style={{ flex: 1, color: modeInfo.titleTextColor, textAlign:'center' }}>{rowData.perfectGames}</Text>
-            <Text style={{ flex: 1, color: modeInfo.titleTextColor, textAlign:'center' }}>完美数</Text>
+            <Text style={{ flex: 1, color: color, textAlign:'center' }}>{rowData.perfectGames}</Text>
+            <Text style={{ flex: 1, color: color, textAlign:'center' }}>完美数</Text>
           </View>
           <View style={{ justifyContent:'center', alignItems: 'center', flex: 1  }}>
-            <Text style={{ flex: 1, color: modeInfo.titleTextColor, textAlign:'center' }}>{rowData.hole}</Text>
-            <Text style={{ flex: 1, color: modeInfo.titleTextColor, textAlign:'center' }}>坑数</Text>
+            <Text style={{ flex: 1, color: color, textAlign:'center' }}>{rowData.hole}</Text>
+            <Text style={{ flex: 1, color: color, textAlign:'center' }}>坑数</Text>
           </View>
           <View style={{ justifyContent:'center', alignItems: 'center', flex: 1  }}>
-            <Text style={{ flex: 1, color: modeInfo.titleTextColor, textAlign:'center' }}>{(rowData.ratio || '').replace('完成率', '')}</Text>
-            <Text style={{ flex: 1, color: modeInfo.titleTextColor, textAlign:'center' }}>完成率</Text>
+            <Text style={{ flex: 1, color: color, textAlign:'center' }}>{(rowData.ratio || '').replace('完成率', '')}</Text>
+            <Text style={{ flex: 1, color: color, textAlign:'center' }}>完成率</Text>
           </View>
           <View style={{ justifyContent:'center', alignItems: 'center', flex: 1  }}>
-            <Text style={{ flex: -1, color: modeInfo.titleTextColor, }}>{rowData.followed}</Text>
-            <Text style={{ flex: -1, color: modeInfo.titleTextColor, }}>被关注</Text>
+            <Text style={{ flex: -1, color: color, }}>{rowData.followed}</Text>
+            <Text style={{ flex: -1, color: color, }}>被关注</Text>
           </View>
         </View>
       </View>
@@ -237,7 +238,7 @@ export default class Home extends Component {
             <TouchableNativeFeedback key={index} onPress={() => {
                 const url = item.url
                 if (item.text === '游戏') {
-                  this.props.navigation.navigate('MyGame', {
+                  this.props.navigation.navigate('UserGame', {
                     URL: url + '?page=1'
                   })
                 }

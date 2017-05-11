@@ -64,7 +64,7 @@ const ListItems = [
 
       let URL = getMyGameURL(this.state.psnid);
 
-      navigation.navigate('MyGame', {
+      navigation.navigate('UserGame', {
         URL,
         title: this.state.psnid
       });

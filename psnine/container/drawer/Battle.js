@@ -87,7 +87,7 @@ class Battle extends Component {
           delayPressIn={100}
           background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
         >
-          <View pointerEvents='box-only' style={{ flex: -1, flexDirection: 'row', padding: 12 }}>
+          <View style={{ flex: -1, flexDirection: 'row', padding: 12 }}>
             <View style={{
               flex: 1,
               flexDirection: 'column',
@@ -121,7 +121,15 @@ class Battle extends Component {
               </Text>
               <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between' }}>
                 <Text style={{ flex: -1, color: modeInfo.standardTextColor, textAlign: 'center', textAlignVertical: 'center' }}>{rowData.platform.join(' ')}</Text>
-                <Text style={{ flex: -1, color: idColor, marginRight: -60, textAlignVertical: 'center' }}>{rowData.psnid}</Text>
+                <Text style={{ flex: -1, color: idColor, marginRight: -60, textAlignVertical: 'center' }} onPress={
+                () => {
+                  this.props.screenProps.navigation.navigate('Home', {
+                    title: rowData.psnid,
+                    id: rowData.psnid,
+                    URL: `http://psnine.com/psnid/${rowData.psnid}`
+                  })
+                }
+              }>{rowData.psnid}</Text>
               </View>
             </View>
             <Image

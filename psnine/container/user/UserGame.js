@@ -34,7 +34,7 @@ let toolbarActions = [
   { title: '跳页', iconName: 'md-map', show: 'always' },
 ];
 
-class MyGame extends Component {
+class UserGame extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -305,7 +305,6 @@ class MyGame extends Component {
                     maximumTrackTintColor={modeInfo.accentColor}
                     minimumTrackTintColor={modeInfo.standardTextColor}
                     thumbTintColor={modeInfo.accentColor}
-                    step={1}
                     style={{
                       paddingHorizontal: 90,
                       height: 50
@@ -314,7 +313,7 @@ class MyGame extends Component {
                     onValueChange={(value) => {
                       this.isValueChanged = true
                       this.setState({
-                        sliderValue: value
+                        sliderValue: Math.round(value)
                       })
                     }}
                   />
@@ -367,4 +366,4 @@ const styles = StyleSheet.create({
 });
 
 
-export default MyGame;
+export default UserGame;
