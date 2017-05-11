@@ -18,5 +18,14 @@ module.exports = {
   nodeColor: '#E1F0F7',
   idColor: '#3498db',
   accentColor: '#ff4081',
-  okColor: '#009688'
+  okColor: '#009688',
+  levelColor: '#e7c533',
+  rankColor: '#67c613',
+  ps4Color: '#8662DD',
+  ps3Color: '#F05561',
+  psvColor: '#0AAAE9',
+  errorColor: '#da314b',
+  perfectColor: '#00a8e6',
+  successColor: '#8cc14c'
+
 }

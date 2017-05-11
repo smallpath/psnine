@@ -24,7 +24,14 @@ import MyDialog from '../../components/Dialog'
 import HTMLView from '../../components/HtmlToView';
 import { connect } from 'react-redux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { standardColor, nodeColor, idColor, accentColor } from '../../constants/colorConfig';
+import {
+  standardColor, 
+  nodeColor, 
+  idColor,
+  accentColor,
+  levelColor,
+  rankColor,
+} from '../../constants/colorConfig';
 
 import { getHomeAPI } from '../../dao';
 
@@ -139,10 +146,12 @@ export default class Home extends Component {
     const { modeInfo } = this.props.screenProps
     const { psnButtonInfo } = this.state.data
     const { nightModeInfo } = modeInfo
-    const color = nightModeInfo.titleTextColor
+    const color = 'rgba(255,255,255,1)'
+    const infoColor = 'rgba(255,255,255,0.8)'
     return (
       <View key={rowData.id} style={{
         backgroundColor: modeInfo.titleTextColor,
+        height: SCREEN_WIDTH
       }}>
         <View style={{
           position: 'absolute',
@@ -154,69 +163,75 @@ export default class Home extends Component {
             resizeMethod={'resize'}
             style={{ 
               width: SCREEN_WIDTH, 
-              height: SCREEN_WIDTH / 16 * 13,
-              top: -1, // why??
+              height: SCREEN_WIDTH,
+              top: 0, // why??
             }}
           />
         </View>
 
         <View style={{ flexDirection: 'row', justifyContent:'space-around', alignItems: 'center', flex: 1, padding: 5  }}>
           <View style={{ justifyContent:'center', alignItems: 'center', flex: 2  }}>
-            <Text style={{ flex: -1, color: color, }}>{rowData.psnid}</Text>
-            <Text style={{ flex: -1, color: color, fontSize: 12 }}>{rowData.description}</Text>
+            <Text style={{ flex: -1, color: color, fontSize: 20 }}>{rowData.psnid}</Text>
+            <Text style={{ flex: -1, color: infoColor, fontSize: 12, textAlign: 'center' }}>{rowData.description}</Text>
           </View>
           <View style={{ justifyContent:'center', alignItems: 'center', flex: 1  }}>
-            <Text style={{ flex: -1, color: color, }}>{rowData.exp.split('经验')[0]}</Text>
-            <Text style={{ flex: -1, color: color, fontSize: 12 }}>{rowData.exp.split('经验')[1]}</Text>
+            <Text style={{ flex: -1, color: levelColor, fontSize: 20 }}>{rowData.exp.split('经验')[0]}</Text>
+            <Text style={{ flex: -1, color: infoColor, fontSize: 12 }}>{rowData.exp.split('经验')[1]}</Text>
           </View>
           <View style={{ justifyContent:'center', alignItems: 'center', flex: 1  }}>
-            <Text style={{ flex: -1, color: color, }}>{rowData.ranking}</Text>
-            <Text style={{ flex: -1, color: color, fontSize: 12 }}>所在服排名</Text>
+            <Text style={{ flex: -1, color: rankColor, fontSize: 20 }}>{rowData.ranking}</Text>
+            <Text style={{ flex: -1, color: infoColor, fontSize: 12 }}>所在服排名</Text>
           </View>
         </View>
 
-        <View style={{ flexDirection: 'row', justifyContent:'space-around', alignItems: 'center', flex: 3, elevation: 4  }}>
-          <View style={{ justifyContent:'center', alignItems: 'center', alignSelf: 'center', flex: 5  }}>
-            <View borderRadius={50} style={{width: 100, height: 100, backgroundColor: '#fff'}} >
+        <View style={{ position: 'absolute', top: 0, left: 0, width: SCREEN_WIDTH, height: SCREEN_WIDTH  }}>
+          <View style={{ justifyContent:'center', alignItems: 'center', alignSelf: 'center', flex: 5, marginTop: -51  }}>
+            <View borderRadius={75} style={{width: 150, height: 150, backgroundColor: '#fff'}} >
               <Image
-                borderRadius={50}
+                borderRadius={75}
                 source={{ uri: rowData.avatar}}
-                style={[styles.avatar, { width: 100, height: 100 }]}
+                style={[styles.avatar, { width: 150, height: 150 }]}
               />
             </View>
           </View>
         </View>
 
-        <View style={{ flexDirection: 'row', justifyContent:'center', alignItems: 'center', flex: 1, padding: 5  }}>
-          <Text>
-            <Text style={{ flex: 1, color: color, marginVertical: 2, textAlign:'center' }}>{rowData.platinum + ' '}</Text>
-            <Text style={{ flex: 1, color: color, marginVertical: 2, textAlign:'center' }}>{rowData.gold + ' '}</Text>
-            <Text style={{ flex: 1, color: color, marginVertical: 2, textAlign:'center' }}>{rowData.silver + ' '}</Text>
-            <Text style={{ flex: 1, color: color, marginVertical: 2, textAlign:'center' }}>{rowData.gold + ' '}</Text>
-            <Text style={{ flex: 1, color: color, marginVertical: 2, textAlign:'center' }}>{rowData.all + ' '}</Text>
-          </Text>
+        <View style={{ flexDirection: 'row', justifyContent:'space-around', alignItems: 'center', flex: 3, elevation: 4  }}>
+        </View>
+
+
+        <View style={{ flex: 1, padding: 5}}>
+          <View borderRadius={20} style={{ width: SCREEN_WIDTH / 4 * 3, alignSelf: 'center', alignContent: 'center',  flexDirection: 'row', justifyContent:'center', alignItems: 'center', backgroundColor: 'rgba(0,0,0,0.3)'  }}>
+            <Text style={{ height: 30, textAlignVertical: 'center',textAlign: 'center' }}>
+              <Text style={{ flex: 1, color: color, marginVertical: 2, textAlign:'center', fontSize: 15 }}>{rowData.platinum + ' '}</Text>
+              <Text style={{ flex: 1, color: color, marginVertical: 2, textAlign:'center', fontSize: 15 }}>{rowData.gold + ' '}</Text>
+              <Text style={{ flex: 1, color: color, marginVertical: 2, textAlign:'center', fontSize: 15 }}>{rowData.silver + ' '}</Text>
+              <Text style={{ flex: 1, color: color, marginVertical: 2, textAlign:'center', fontSize: 15 }}>{rowData.gold + ' '}</Text>
+              <Text style={{ flex: 1, color: color, marginVertical: 2, textAlign:'center', fontSize: 15 }}>{rowData.all + ' '}</Text>
+            </Text>
+          </View>
         </View>
 
         <View style={{ flexDirection: 'row', justifyContent:'space-around', alignItems: 'center', flex: 1, padding: 5  }}>
           <View style={{ justifyContent:'center', alignItems: 'center', flex: 1  }}>
-            <Text style={{ flex: 1, color: color, textAlign:'center' }}>{rowData. allGames}</Text>
-            <Text style={{ flex: 1, color: color, textAlign:'center' }}>总游戏</Text>
+            <Text style={{ flex: 1, color: color, textAlign:'center', fontSize: 20 }}>{rowData. allGames}</Text>
+            <Text style={{ flex: 1, color: infoColor, textAlign:'center', fontSize: 12 }}>总游戏</Text>
           </View>
           <View style={{ justifyContent:'center', alignItems: 'center', flex: 1  }}>
-            <Text style={{ flex: 1, color: color, textAlign:'center' }}>{rowData.perfectGames}</Text>
-            <Text style={{ flex: 1, color: color, textAlign:'center' }}>完美数</Text>
+            <Text style={{ flex: 1, color: color, textAlign:'center', fontSize: 20 }}>{rowData.perfectGames}</Text>
+            <Text style={{ flex: 1, color: infoColor, textAlign:'center', fontSize: 12 }}>完美数</Text>
           </View>
           <View style={{ justifyContent:'center', alignItems: 'center', flex: 1  }}>
-            <Text style={{ flex: 1, color: color, textAlign:'center' }}>{rowData.hole}</Text>
-            <Text style={{ flex: 1, color: color, textAlign:'center' }}>坑数</Text>
+            <Text style={{ flex: 1, color: color, textAlign:'center', fontSize: 20 }}>{rowData.hole}</Text>
+            <Text style={{ flex: 1, color: infoColor, textAlign:'center', fontSize: 12 }}>坑数</Text>
           </View>
           <View style={{ justifyContent:'center', alignItems: 'center', flex: 1  }}>
-            <Text style={{ flex: 1, color: color, textAlign:'center' }}>{(rowData.ratio || '').replace('完成率', '')}</Text>
-            <Text style={{ flex: 1, color: color, textAlign:'center' }}>完成率</Text>
+            <Text style={{ flex: 1, color: color, textAlign:'center', fontSize: 20 }}>{(rowData.ratio || '').replace('完成率', '')}</Text>
+            <Text style={{ flex: 1, color: infoColor, textAlign:'center', fontSize: 12 }}>完成率</Text>
           </View>
           <View style={{ justifyContent:'center', alignItems: 'center', flex: 1  }}>
-            <Text style={{ flex: -1, color: color, }}>{rowData.followed}</Text>
-            <Text style={{ flex: -1, color: color, }}>被关注</Text>
+            <Text style={{ flex: 1, color: color, textAlign:'center', fontSize: 20 }}>{rowData.followed}</Text>
+            <Text style={{ flex: 1, color: infoColor, textAlign:'center', fontSize: 12 }}>被关注</Text>
           </View>
         </View>
       </View>

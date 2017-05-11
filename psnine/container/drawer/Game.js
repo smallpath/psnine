@@ -62,8 +62,7 @@ class Game extends Component {
       URL,
       title: rowData.title,
       rowData,
-      type: 'game',
-      shouldBeSawBackground: true
+      type: 'game'
     })
   }
 

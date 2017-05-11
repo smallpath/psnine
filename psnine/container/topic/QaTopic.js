@@ -25,7 +25,8 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import { standardColor, nodeColor, idColor, accentColor } from '../../constants/colorConfig';
 
 import {
-  getQaTopicAPI
+  getQaTopicAPI,
+  getGameUrl
 } from '../../dao'
 import ImageViewer from '../../components/ImageViewer'
 
@@ -221,7 +222,14 @@ class QaTopic extends Component {
       }}>
         <TouchableNativeFeedback
           onPress={() => {
-
+            const { navigation } = this.props;
+            navigation.navigate('GamePage', {
+              // URL: 'http://psnine.com/psngame/5424?psnid=Smallpath',
+              URL: rowData.url,
+              title: rowData.title,
+              rowData,
+              type: 'game'
+            })
           }}
           useForeground={true}
           delayPressIn={100}
