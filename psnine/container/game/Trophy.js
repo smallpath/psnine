@@ -117,6 +117,13 @@ class CommunityTopic extends Component {
   }
 
   componentWillMount = () => {
+    this.preFetch()
+  }
+
+  preFetch = () => {
+    this.setState({
+      isLoading: true
+    })
     const { params } = this.props.navigation.state
     InteractionManager.runAfterInteractions(() => {
       const data = getTrophyAPI(params.URL).then(data => {
@@ -218,7 +225,7 @@ class CommunityTopic extends Component {
     )
   }
 
-  renderSonComment = (list) => {
+  renderSonComment = (list, parentRowData) => {
     const { modeInfo } = this.props.screenProps
     const result = list.map((rowData, index) => {
       return (
@@ -230,9 +237,12 @@ class CommunityTopic extends Component {
             borderTopColor: modeInfo.backgroundColor,
             padding: 5,
         }}>
-          <TouchableNativeFeedback
+          <Text
             useForeground={true}
             delayPressIn={100}
+            onPress={() => {
+              this.onCommentLongPress(parentRowData, rowData.psnid)
+            }}
             background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
           >
             <HTMLView
@@ -244,7 +254,7 @@ class CommunityTopic extends Component {
               shouldForceInline={true}
             />
 
-          </TouchableNativeFeedback>
+          </Text>
         </View>
       )
     })
@@ -301,7 +311,7 @@ class CommunityTopic extends Component {
                 </View>
 
                 { rowData.commentList.length !== 0 && (<View style={{ backgroundColor: modeInfo.brighterLevelOne}}>
-                  {this.renderSonComment(rowData.commentList)}
+                  {this.renderSonComment(rowData.commentList, rowData)}
                 </View>)}
               </View>
 
@@ -322,14 +332,19 @@ class CommunityTopic extends Component {
 
   isReplyShowing = false
 
-  onCommentLongPress = (rowData) => {
+  onCommentLongPress = (rowData, name = '') => {
     if (this.isReplyShowing === true) return
     const { params } = this.props.navigation.state
     const cb = () => {
       this.props.navigation.navigate('Reply', {
-        type: params.type,
-        id: params.rowData.id,
-        at: rowData.psnid,
+        type: 'comson',
+        id: rowData.id.replace('comment-', ''),
+        at: name ? name : rowData.psnid,
+        callback: () => {
+          fetch(`http://psnine.com/get/comson?id=${rowData.id.replace('comment-', '')}`).then(() => {
+            this.preFetch()
+          })
+        },
         shouldSeeBackground: true
       })
     }

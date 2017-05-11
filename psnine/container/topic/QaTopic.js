@@ -268,7 +268,7 @@ class QaTopic extends Component {
           <Text
             useForeground={true}
             delayPressIn={100}
-            onLongPress={() => {
+            onPress={() => {
               this.onCommentLongPress(parentRowData, rowData.psnid)
             }}
             background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
@@ -368,7 +368,6 @@ class QaTopic extends Component {
         at: name ? name : rowData.psnid,
         callback: () => {
           fetch(`http://psnine.com/get/comson?id=${rowData.id.replace('comment-', '')}`).then(() => {
-            console.log('getting', `http://psnine.com/get/comson?id=${rowData.id.replace('comment-', '')}`)
             this.preFetch()
           })
         },
