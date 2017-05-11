@@ -11,8 +11,6 @@ import {
 
 import { changeSegmentIndex } from '../actions/app';
 
-import RightDrawer from './RightDrawer'
-
 import Community from './drawer/Community';
 import Qa from './drawer/Qa';
 import Game from './drawer/Game';
@@ -26,7 +24,9 @@ import {
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
-export default DrawerNavigator({
+
+
+const RightDrawer = DrawerNavigator({
   Community: {
     screen: Community,
   },
@@ -105,6 +105,23 @@ export default DrawerNavigator({
   },
   backBehavior: 'none'
 });
+
+export default class RightDrawerContainer extends Component {
+  constructor(props) {
+    super(props)
+  }
+
+  shouldComponentUpdate(prop, state) {
+    if (prop.screenProps.modalVisible != this.props.screenProps.modalVisible) return false
+    return true
+  }
+
+  render() {
+    return (<RightDrawer
+      {...this.props}
+    />)
+  }
+}
 
 const ANDROID_VERSION_LOLLIPOP = 21;
 class TouchableItem extends Component {

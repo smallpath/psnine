@@ -132,10 +132,12 @@ class Toolbar extends Component {
         toolbarDispatch: this.props.dispatch,
         segmentedIndex: this.props.app.segmentedIndex,
         modeInfo: this.props.modeInfo,
-        setMarginTop: this.setMarginTop
+        setMarginTop: this.setMarginTop,
+        modalVisible: this.state.modalVisible
       }}/>
     )
   }
+
 
   componentWillReceiveProps(nextProps) {
     this.props.app = nextProps.app;
