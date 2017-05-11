@@ -11,7 +11,6 @@ export const postReply = (form, type = 'post') => {
     formBody.push(encodedKey + "=" + encodedValue);
   }
   formBody = formBody.join("&");
-  // console.log(url, formBody)
   return fetch(url, {
     method: 'POST',
     headers: {

@@ -53,10 +53,10 @@ export default class Reply extends Component {
 
   constructor(props) {
     super(props);
-
+    const at = this.props.navigation.state.params.at
     this.state = {
       icon: false,
-      content: this.props.navigation.state.params.at || '',
+      content: at ? `@${at} ` : '',
       openVal: new Animated.Value(0),
       marginTop: new Animated.Value(0),
       toolbarOpenVal: new Animated.Value(0)
@@ -106,11 +106,7 @@ export default class Reply extends Component {
     const { openVal, marginTop } = this.state
     const { callback } = this.props.navigation.state.params
     const { params } = this.props.navigation.state
-    if (params.at) {
-      this.setState({
-        content: `@${params.at} `
-      })
-    }
+
     this.PanResponder = PanResponder.create({
 
       onStartShouldSetPanResponderCapture: (e, gesture) => {
@@ -262,12 +258,10 @@ export default class Reply extends Component {
       form.id = params.id
     }
     const replyType = type !== 'comson' ? 'post' : 'ajax'
-    // console.log(form, replyType)
+
     postReply(form, replyType).then(res => {
-      // console.log(res)
       return res
     }).then(res => res.text()).then(text => {
-      // console.log(text, '====>')
       if (text.includes('玩脱了')) {
         const arr = text.match(/\<title\>(.*?)\<\/title\>/)
         if (arr && arr[1]) {
@@ -282,7 +276,6 @@ export default class Reply extends Component {
       })
     }).catch(err => {
       const msg = `评论失败: ${arr[1]}`
-      // console.log(text, '====>???')
       ToastAndroid.show(msg, ToastAndroid.SHORT);
     })
   }

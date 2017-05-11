@@ -253,101 +253,7 @@ class QaTopic extends Component {
     )
   }
 
-  renderComment = (commentList) => {
-    const { modeInfo } = this.props.screenProps
-    const list = []
-    let readMore = null
-    for (const rowData of commentList) {
-      if (rowData.isGettingMoreComment === false) {
-        list.push(
-          <View key={rowData.id} style={{
-            backgroundColor: modeInfo.backgroundColor,
-            borderBottomWidth: StyleSheet.hairlineWidth,
-            borderBottomColor: modeInfo.brighterLevelOne
-          }}>
-            <TouchableNativeFeedback
-              onLongPress={() => {
-                this.onCommentLongPress(rowData)
-              }}
-              useForeground={true}
-              delayPressIn={100}
-              background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
-            >
-              <View style={{ flex: 1, flexDirection: 'row', padding: 12 }}>
-                <Image
-                  source={{ uri: rowData.img }}
-                  style={styles.avatar}
-                />
-
-                <View style={{ marginLeft: 10, flex: 1, flexDirection: 'column' }}>
-                  <HTMLView
-                    value={rowData.content}
-                    modeInfo={modeInfo}
-                    stylesheet={styles}
-                    onImageLongPress={this.handleImageOnclick}
-                    imagePaddingOffset={30 + 75 + 10}
-                    shouldForceInline={true}
-                  />
-
-                  <View style={{ flex: 1.1, flexDirection: 'row', justifyContent: 'space-between' }}>
-                    <Text selectable={false} style={{ flex: -1, color: idColor, textAlign: 'center', textAlignVertical: 'center' }}  onPress={
-                      () => {
-                        this.props.navigation.navigate('Home', {
-                          title: rowData.psnid,
-                          id: rowData.psnid,
-                          URL: `http://psnine.com/psnid/${rowData.psnid}`
-                        })
-                      }
-                    }>{rowData.psnid}</Text>
-                    <Text selectable={false} style={{ flex: -1, color: modeInfo.standardTextColor, textAlign: 'center', textAlignVertical: 'center' }}>{rowData.date}</Text>
-                  </View>
-
-                </View>
-
-              </View>
-            </TouchableNativeFeedback>
-          </View>
-        )
-      } else {
-        readMore = (
-          <View key={'readmore'} style={{
-            backgroundColor: modeInfo.backgroundColor,
-            elevation: 1
-          }}>
-            <TouchableNativeFeedback
-              onPress={() => {
-                this._readMore(`${this.props.navigation.state.params.URL}/comment?page=1`)
-              }}
-              useForeground={true}
-              delayPressIn={100}
-              background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
-            >
-              <View pointerEvents='box-only' style={{ flex: 1, flexDirection: 'row', padding: 12 }}>
-
-                <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-                  <Text style={{ flex: 2.5, color: accentColor }}>{'阅读更多评论'}</Text>
-
-                </View>
-
-              </View>
-            </TouchableNativeFeedback>
-          </View>
-        )
-      }
-    }
-    const shouldMarginTop = !this.hasContent && !this.hasGameTable && !this.hasPage
-    return (
-      <View style={{ marginTop: shouldMarginTop ? 5 : 0 }}>
-        {readMore && <View style={{ elevation: 1, margin: 5, marginTop: 0, marginBottom: 5, backgroundColor: modeInfo.backgroundColor }}>{readMore}</View>}
-        <View style={{ elevation: 1, margin: 5, marginTop: 0, backgroundColor: modeInfo.backgroundColor }}>
-          {list}
-        </View>
-        {readMore && <View style={{ elevation: 1, margin: 5, marginTop: 0, marginBottom: 5, backgroundColor: modeInfo.backgroundColor }}>{readMore}</View>}
-      </View>
-    )
-  }
-
-  renderSonComment = (list) => {
+  renderSonComment = (list, parentRowData) => {
     const { modeInfo } = this.props.screenProps
     const result = list.map((rowData, index) => {
       return (
@@ -359,9 +265,12 @@ class QaTopic extends Component {
             borderTopColor: modeInfo.backgroundColor,
             padding: 5,
         }}>
-          <TouchableNativeFeedback
+          <Text
             useForeground={true}
             delayPressIn={100}
+            onLongPress={() => {
+              this.onCommentLongPress(parentRowData, rowData.psnid)
+            }}
             background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
           >
             <HTMLView
@@ -373,7 +282,7 @@ class QaTopic extends Component {
               shouldForceInline={true}
             />
 
-          </TouchableNativeFeedback>
+          </Text>
         </View>
       )
     })
@@ -429,7 +338,7 @@ class QaTopic extends Component {
                 </View>
 
                 { rowData.commentList.length !== 0 && (<View style={{ backgroundColor: modeInfo.brighterLevelOne}}>
-                  {this.renderSonComment(rowData.commentList)}
+                  {this.renderSonComment(rowData.commentList, rowData)}
                 </View>)}
               </View>
 
@@ -449,16 +358,19 @@ class QaTopic extends Component {
   }
   isReplyShowing = false
 
-  onCommentLongPress = (rowData) => {
+  onCommentLongPress = (rowData, name = '') => {
     if (this.isReplyShowing === true) return
     const { params } = this.props.navigation.state
     const cb = () => {
       this.props.navigation.navigate('Reply', {
         type: 'comson',
         id: rowData.id.replace('comment-', ''),
-        at: rowData.psnid,
+        at: name ? name : rowData.psnid,
         callback: () => {
-          this.preFetch()
+          fetch(`http://psnine.com/get/comson?id=${rowData.id.replace('comment-', '')}`).then(() => {
+            console.log('getting', `http://psnine.com/get/comson?id=${rowData.id.replace('comment-', '')}`)
+            this.preFetch()
+          })
         },
         shouldSeeBackground: true
       })

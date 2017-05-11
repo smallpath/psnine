@@ -3,7 +3,7 @@ module.exports = {
   standardColor: '#03a9f4',   //500
   tintColor: '#e1f5fe',
   backgroundColor: '#fff',
-  backgroundColorBrighterLevelOne: '#ddd',
+  backgroundColorBrighterLevelOne: '#f8f8f8',
   standardTextColor: '#757575',
   titleTextColor: '#202020',
 
