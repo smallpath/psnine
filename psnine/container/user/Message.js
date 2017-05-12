@@ -79,6 +79,7 @@ class Message extends Component {
         marginTop: 7,
         backgroundColor: modeInfo.backgroundColor,
         elevation: 1,
+        marginBottom: this.state.messages.length - 1 === parseInt(rowID) ? 7 : 0
       }}>
         <TouchableElement
           delayPressIn={0}

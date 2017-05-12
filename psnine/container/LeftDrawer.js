@@ -94,6 +94,7 @@ class navigationDrawer extends Component {
         bronze: '铜',
         isSigned: true,
       },
+      hasMessage: false,
       dataSource: dataSource.cloneWithRows(ListItems),
     }
   }
@@ -114,6 +115,7 @@ class navigationDrawer extends Component {
     this.setState({
       psnid,
       userInfo,
+      hasMessage: userInfo.hasMessage
     })
   }
 
@@ -156,6 +158,7 @@ class navigationDrawer extends Component {
         silver: '银',
         bronze: '铜',
       },
+      hasMessage: false
     });
     global.toast && global.toast('登出成功', 2000);
   }
@@ -202,7 +205,7 @@ class navigationDrawer extends Component {
   renderHeader = () => {
     const { navigation, closeDrawer, switchModeOnRoot } = this.props;
     const { modeInfo } = this.props
-    const { iconObj: icon, psnid, userInfo } = this.state
+    const { iconObj: icon, psnid, userInfo, hasMessage } = this.state
     let toolActions = [];
     const iconStyle = {
       borderColor: '#fff',
@@ -221,17 +224,37 @@ class navigationDrawer extends Component {
     const size = 24
     const borderRadius = 12
 
-    psnid && toolActions.push(
-      <TouchableNativeFeedback
-        background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
-        key={'sign'}
-        onPress={this.onMessageClick}
-      >
-        <View borderRadius={borderRadius} style={iconStyle}>
-          <Icon name="md-notifications" size={size} color={color} />
-        </View>
-      </TouchableNativeFeedback>
-    )
+    if (psnid) {
+      let dot = undefined
+      if (this.state.hasMessage) {
+        dot = (
+          <View borderRadius={4} style={{ position:'absolute', top: 3, right: 3, backgroundColor: modeInfo.accentColor, height: 8, width: 8}} />
+        )
+      }
+      toolActions.push(
+        <TouchableNativeFeedback
+          background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
+          key={'sign'}
+          onPress={() => {
+            if (dot) {
+              this.setState({
+                hasMessage: false
+              }, () => {
+                this.onMessageClick()
+              })
+              return
+            }
+            this.onMessageClick()
+          }}
+        >
+          <View borderRadius={borderRadius} style={iconStyle}>
+            <Icon name="md-notifications" size={size} color={color} />
+            {dot}
+          </View>
+        </TouchableNativeFeedback>
+      )
+    }
+
 
     toolActions.push(
       <TouchableNativeFeedback
@@ -252,11 +275,11 @@ class navigationDrawer extends Component {
         toolActions.push(
           <TouchableNativeFeedback
             background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
-            key={'sign'}
+            key={'log-in'}
             onPress={this.pressSign}
           >
             <View borderRadius={borderRadius} style={iconStyle}>
-              <Icon name="md-log-in" size={size} color={color} />
+              <Icon name="md-checkbox-outline" size={size} color={color} />
             </View>
           </TouchableNativeFeedback>
         )
@@ -309,7 +332,7 @@ class navigationDrawer extends Component {
                 </View>
               </View>) || undefined}
           </View>
-          <View style={{ flexDirection: 'row', alignSelf: 'flex-start', alignContent: 'flex-end' }}>
+          <View style={{ paddingRight: toolActions.length === 4 ? 20 : 0, flex:1, flexDirection: 'row', alignSelf: 'flex-start', alignContent: 'flex-end', justifyContent: 'center', alignItems: 'flex-end' }}>
             {toolActions}
           </View>
         </View>

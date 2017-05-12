@@ -33,7 +33,8 @@ export default function (html, psnid) {
     gold: trophyArr[1],
     silver: trophyArr[2],
     bronze: trophyArr[3],
-    isSigned
+    isSigned,
+    hasMessage: html.includes('<span class="badge dot"></span>')
   }
 
   return result
