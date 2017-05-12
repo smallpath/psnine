@@ -79,14 +79,14 @@ export default (maps) => {
         }
         break;
       case '留言板':
-        container.island = {
-          screen: MyHomeScreen
-        }
+        // container.island = {
+        //   screen: MyHomeScreen
+        // }
         break;
       case '圈子':
-        container.circle = {
-          screen: MyNotificationsScreen
-        }
+        // container.circle = {
+        //   screen: MyNotificationsScreen
+        // }
         break;
     }
   })

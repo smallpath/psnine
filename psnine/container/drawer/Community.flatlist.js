@@ -9,7 +9,8 @@ import {
   RefreshControl,
   InteractionManager,
   FlatList,
-  ProgressBarAndroid
+  ProgressBarAndroid,
+  Animated
 } from 'react-native';
 
 import { connect } from 'react-redux';
@@ -24,10 +25,12 @@ let toolbarHeight = 56;
 let releasedMarginTop = 0;
 let prevPosition = -1;
 
+const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
+
 class progress extends Component {
   render() {
     return (
-      <View style={{flexDirection:'row', flex: 1, height: 15, alignItems: 'center', justifyContent: 'center'}}>
+      <View style={{flexDirection:'row', flex: 1, height: 15, alignItems: 'flex-end'}}>
         <ProgressBarAndroid style={{flex:1,
           height: 15,
           transform: [
@@ -79,6 +82,7 @@ class Community extends Component {
         <TouchableNativeFeedback
           onPress={() => {
             this._onRowPressed(rowData)
+            this.flatlist.getNode().recordInteraction()
           }}
           useForeground={true}
           delayPressIn={100}
@@ -100,6 +104,7 @@ class Community extends Component {
 
               <View style={{ flex: 1.1, flexDirection: 'row', justifyContent: 'space-between' }}>
                 <Text selectable={false} style={{ flex: -1, color: idColor, textAlign: 'center', textAlignVertical: 'center' }} onPress={() => {
+                    this.flatlist.getNode().recordInteraction()
                     this.props.screenProps.navigation.navigate('Home', {
                       title: rowData.psnid,
                       id: rowData.psnid,
@@ -133,20 +138,35 @@ class Community extends Component {
       this.setState({
         isLoading: false
       })
+      this.isReceiving = true
     }
-
+    this.flatlist.getNode().recordInteraction()
   }
 
-  componentDidUpdate = () => {
-
-  }
-
+  isReceiving = false
   componentDidMount = () => {
     const { community: communityReducer } = this.props;
     if (communityReducer.topicPage == 0) {
       this._onRefresh();
     }
   }
+
+  // componentDidUpdate = () => {
+  //   if (this.isReceiving === false) return
+  //   this.isReceiving = false
+  //   const { community: communityReducer } = this.props;
+  //   const len = communityReducer.topics.length
+  //   if (len > 0) {
+  //     const perPage = len / communityReducer.topicPage
+  //     const targetIndex = perPage * (communityReducer.topicPage - 1)
+  //     // alert(targetIndex)
+  //     const index = targetIndex - 1
+  //     if (index < 0) return
+  //     setTimeout(() => {
+  //       this.flatlist.getNode().scrollToIndex({viewPosition: 0.9, index: index, animated: true});
+  //     })
+  //   }
+  // }
 
   _onRefresh = (type = '') => {
     const { community: reducer, dispatch } = this.props;
@@ -193,13 +213,14 @@ class Community extends Component {
 
   isLoading = true
   ITEM_HEIGHT = 78 + 7
+
   render() {
     const { community: reducer } = this.props;
     const { modeInfo } = this.props.screenProps
     // console.log('Community.js rendered');
 
     return (
-      <FlatList style={{
+      <AnimatedFlatList style={{
         flex: 1,
         backgroundColor: modeInfo.backgroundColor
       }}
@@ -213,63 +234,28 @@ class Community extends Component {
             ref={ref => this.refreshControl = ref}
           />
         }
-        ListHeaderComponent={progress}
         ListFooterComponent={progress}
         data={reducer.topics}
         keyExtractor={(item, index) => `${item.id}::${item.views}::${item.count}`}
         renderItem={this._renderItem}
         onEndReached={this._onEndReached}
-        onEndReachedThreshold={1}
+        onEndReachedThreshold={0.5}
         extraData={modeInfo}
-        windowSize={100}
-        maxToRenderPerBatch={32}
+        windowSize={999}
+        updateCellsBatchingPeriod={1}
+        initialNumToRender={42}
+        maxToRenderPerBatch={42}
         disableVirtualization={false}
+        contentContainerStyle={styles.list}
         getItemLayout={(data, index) => (
           {length: this.ITEM_HEIGHT, offset: this.ITEM_HEIGHT * index, index}
         )}
-        /*viewabilityConfig={{
-          minimumViewTime: 3000,
-          viewAreaCoveragePercentThreshold: 100,
-          waitForInteraction: true
-        }}*/
-      >
-      </FlatList>
-      /*<ListView
-        refreshControl={
-          <RefreshControl
-            refreshing={false}
-            onRefresh={this._onRefresh}
-            colors={[standardColor]}
-            progressBackgroundColor={modeInfo.backgroundColor}
-            ref={ref => this.refreshControl = ref}
-          />
-        }
-        ref={listView => this.listView = listView}
-        key={modeInfo.isNightMode}
-        style={{ backgroundColor: modeInfo.backgroundColor }}
-        pageSize={32}
-        initialListSize={32}
-        removeClippedSubviews={false}
-        enableEmptySections={true}
-        onEndReached={this._onEndReached}
-        onEndReachedThreshold={10}
-        dataSource={dataSource}
-        renderRow={this._renderRow}
-
-        onLayout={event => {
-          this.listViewHeight = event.nativeEvent.layout.height
+        viewabilityConfig={{
+          minimumViewTime: 1,
+          viewAreaCoveragePercentThreshold: 0,
+          waitForInteractions: true
         }}
-        onContentSizeChange={() => {
-          if (communityReducer.topicPage == 1)
-            return;
-          const y = this.currentHeight + 60 - this.listViewHeight
-          if (y === prevPosition) {
-            return
-          }
-          prevPosition = y;
-          this.listView.scrollTo({ y, animated: true })
-        }}
-      />*/
+      />
     )
   }
 
