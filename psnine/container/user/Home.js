@@ -16,7 +16,9 @@ import {
   FlatList,
   PanResponder,
   Modal,
-  Keyboard
+  Keyboard,
+  ScrollView,
+  BackHandler
 } from 'react-native';
 
 import { sync } from '../../dao/sync'
@@ -34,6 +36,8 @@ import {
 } from '../../constants/colorConfig';
 
 import { getHomeAPI } from '../../dao';
+
+import CreateUserTab from './UserTab'
 
 let screen = Dimensions.get('window');
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = screen;
@@ -76,7 +80,7 @@ export default class Home extends Component {
       openVal: new Animated.Value(0),
       modalVisible: false,
       modalOpenVal: new Animated.Value(0),
-      topicMarginTop: new Animated.Value(0)
+      marginTop: new Animated.Value(0)
     }
   }
 
@@ -111,8 +115,94 @@ export default class Home extends Component {
     }
   }
 
+
+  componentWillUnmount = () => {
+    this.removeListener && this.removeListener.remove()
+  }
+
+
   componentWillMount = () => {
     this.preFetch()
+    this._previousTop = 0
+    const { openVal, marginTop } = this.state
+    this._viewStyles= {
+      style: {
+        top: this._previousTop
+      }
+    }
+    this.removeListener = BackHandler.addEventListener('hardwareBackPress', () => {
+      if (marginTop._value !== -SCREEN_WIDTH) {
+        
+        return false;
+      }
+      this._viewStyles.style.top = 0
+      this._previousTop = 0
+      Animated.timing(marginTop, { toValue: 0, ...config, duration: 200 }).start();
+      return true
+    })
+    this.PanResponder = PanResponder.create({
+
+      onStartShouldSetPanResponderCapture: (e, gesture) => {
+        console.log('onStart')
+        const target = e.nativeEvent.pageY - this._previousTop - toolbarHeight * 2
+        console.log(target, SCREEN_WIDTH)
+        if (target <= SCREEN_WIDTH - toolbarHeight) {
+          console.log('grant:', target)
+          return true
+        } else if (target <= SCREEN_WIDTH) {
+          console.log('允许点击')
+          return false
+        } else {
+          console.log('jump:', SCREEN_WIDTH)
+          this._viewStyles.style.top = -SCREEN_WIDTH
+          this._previousTop = -SCREEN_WIDTH
+          // this.view.setNativeProps(this._viewStyles)
+          this._viewStyles.style.top
+          Animated.timing(marginTop, {
+            toValue: -SCREEN_WIDTH,
+            ...config
+          }).start()
+          return false
+        }
+        return target <= SCREEN_WIDTH ? true : false;
+      },
+      onPanResponderGrant: (e, gesture) => {
+        console.log('onGrant')
+        // const target = gesture.y0 <= 56 ? 0 : SCREEN_HEIGHT - 56
+        // marginTop.setOffset(target);
+      },
+      onPanResponderMove: (e, gesture) => {
+        this._viewStyles.style.top = this._previousTop + gesture.dy
+        if (this._viewStyles.style.top > 0) {
+          this._viewStyles.style.top = 0
+        }
+        marginTop.setValue(this._viewStyles.style.top)
+        // console.log(-this._previousTop)
+        // this.view.setNativeProps(this._viewStyles)
+      },
+
+      onPanResponderRelease: (e, gesture) => {
+
+      },
+      onPanResponderTerminationRequest: (evt, gesture) => {
+        return false;
+      },
+      onPanResponderTerminate: (evt, gesture) => {
+
+      },
+      // onShouldBlockNativeResponder: (evt, gesture) => {
+      //   return true;
+      // },
+      onPanResponderReject: (evt, gesture) => {
+        return false;
+      },
+      onPanResponderEnd: (evt, gesture) => {
+        // console.log('onEnd')
+        this._previousLeft += gesture.dx;
+        this._previousTop += gesture.dy;
+      },
+
+    });
   }
 
   preFetch = () => {
@@ -164,7 +254,7 @@ export default class Home extends Component {
             style={{ 
               width: SCREEN_WIDTH, 
               height: SCREEN_WIDTH,
-              top: 0, // why??
+              top: -1, // why??
             }}
           />
         </View>
@@ -242,7 +332,7 @@ export default class Home extends Component {
     const { modeInfo } = this.props.screenProps
     return (
           <View style={{ 
-            flex: 1, 
+            height: 40,
             flexDirection: 'row',
             alignItems: 'flex-start',
             flexWrap:'wrap',
@@ -267,106 +357,15 @@ export default class Home extends Component {
     )
   }
 
-  hasGameTable = false
-  renderGameItem = (rowData, index) => {
+  renderTabContainer = (list) => {
     const { modeInfo } = this.props.screenProps
+  
+    const UserTab = CreateUserTab(list)
     return (
-      <TouchableNativeFeedback key={rowData.id || index}   onPress={() => {
-          this.props.navigation.navigate('GamePage', {
-            URL: rowData.href,
-            title: rowData.title,
-            rowData,
-            type: 'game',
-            shouldBeSawBackground: true
-          })
-        }}>
-        <View pointerEvents={'box-only'} style={{
-          backgroundColor: modeInfo.backgroundColor,
-          flexDirection: 'row',
-          borderBottomWidth: StyleSheet.hairlineWidth,
-          borderBottomColor: modeInfo.brighterLevelOne,
-          padding: 2
-        }}>
-
-          <View style={{ flex: -1, flexDirection: 'row', padding: 12 }}>
-            <Image
-              source={{ uri: rowData.avatar }}
-              style={[styles.avatar, { width: 91, height: 54 }]}
-            />
-          </View>
-          <View style={{ justifyContent: 'center', flex: 3 }}>
-            <View>
-              <Text
-                ellipsizeMode={'tail'}
-                style={{ flex: -1, color: modeInfo.titleTextColor, }}>
-                {rowData.title}
-              </Text>
-            </View>
-            { rowData.platform && <View><Text style={{ color: modeInfo.standardTextColor, marginLeft: 2  }}>{rowData.platform.join(' ')}</Text></View> }
-            { rowData.syncTime && (<View style={{ flex: -1, flexDirection: 'row' }}>
-                <Text style={{ color: modeInfo.standardColor ,fontSize: 12, marginLeft: 2 }}>{rowData.syncTime + ' '}</Text>
-                <Text selectable={false} style={{
-                  flex: -1,
-                  color: modeInfo.standardTextColor,
-                  fontSize: 12
-                }}>{ rowData.allTime ? '总耗时 ' : ''}</Text>
-                <Text selectable={false} style={{
-                  flex: -1,
-                  fontSize: 12,
-                  color: modeInfo.standardTextColor,
-                }}>{rowData.allTime}</Text>
-              </View>)}
-          </View>
-          { rowData.alert && (
-            <View style={{ flex: 1, justifyContent: 'center', padding: 2 }}>
-              <Text selectable={false}             
-                style={{ 
-                  flex: -1,             
-                  textAlign: 'center',
-                  textAlignVertical: 'center',
-                  color: modeInfo.titleTextColor, }}>{rowData.alert}</Text>
-              <Text
-                ellipsizeMode={'tail'} 
-                style={{
-                  flex: -1,
-                  color: modeInfo.standardTextColor,
-                  textAlign: 'center',
-                  textAlignVertical: 'center',
-                  fontSize: 10
-                }}>{rowData.allPercent}</Text>
-            </View>
-            )
-          }
-          <View style={{ flex: 1, justifyContent: 'center', padding: 2 }}>
-            <Text selectable={false}             
-              style={{ 
-                flex: -1,             
-                textAlign: 'center',
-                textAlignVertical: 'center',
-                color: modeInfo.titleTextColor, }}>{rowData.percent}</Text>
-            <Text
-              ellipsizeMode={'tail'} 
-              style={{
-                flex: -1,
-                color: modeInfo.standardTextColor,
-                textAlign: 'center',
-                textAlignVertical: 'center',
-                fontSize: 10
-              }}>{rowData.trophyArr}</Text>
-          </View>
-        </View>
-      </TouchableNativeFeedback>
-    )
-  }
-
-  renderProfile = (rowData, index) => {
-    const { modeInfo } = this.props.screenProps
-    return (
-      <View key={index} style={{ backgroundColor: modeInfo.backgroundColor }}>
-        <View>
-          { rowData.map((item , index) => this.renderGameItem(item ,index)) }
-        </View>
-      </View>
+      <UserTab screenProps={{
+        modeInfo: modeInfo,
+        gameTable: this.state.data.gameTable
+      }} onNavigationStateChange={null}/> 
     )
   }
 
@@ -374,22 +373,10 @@ export default class Home extends Component {
     const { params } = this.props.navigation.state
     // console.log('GamePage.js rendered');
     const { modeInfo } = this.props.screenProps
-    const { data: source } = this.state
+    const { data: source, marginTop } = this.state
     const data = []
     const renderFuncArr = []
-    const shouldPushData = !this.state.isLoading
-    if (shouldPushData) {
-      data.push(source.playerInfo)
-      renderFuncArr.push(this.renderHeader)
-    }
-    if (shouldPushData) {
-      data.push(source.toolbarInfo)
-      renderFuncArr.push(this.renderToolbar)
-    }
-    if (shouldPushData && this.hasGameTable) {
-      data.push(source.gameTable)
-      renderFuncArr.push(this.renderProfile)
-    }
+    const shouldPushData = !this.state.isLoading 
 
     this.viewBottomIndex = Math.max(data.length - 1, 0)
 
@@ -408,10 +395,17 @@ export default class Home extends Component {
           style={[styles.toolbar, { backgroundColor: modeInfo.standardColor }]}
           actions={this.state.toolbar}
           onIconClicked={() => {
-            this.props.navigation.goBack()
+            if (marginTop._value !== -SCREEN_WIDTH) {
+              this.props.navigation.goBack()
+              return
+            }
+            this._viewStyles.style.top = 0
+            this._previousTop = 0
+            Animated.timing(marginTop, { toValue: 0, ...config, duration: 200 }).start();
           }}
           onActionSelected={this._onActionSelected}
         />
+
         {this.state.isLoading && (
           <ActivityIndicator
             animating={this.state.isLoading}
@@ -424,9 +418,42 @@ export default class Home extends Component {
             size={50}
           />
         )}
-        {!this.state.isLoading && <FlatList style={{
-          flex: -1,
-          backgroundColor: modeInfo.standardColor
+        {
+          !this.state.isLoading && (<Animated.View ref={(view) => {
+            this.view = view;
+          }} 
+          
+          style={{
+            overflow: 'visible',
+            flex:0, 
+            height: ACTUAL_SCREEN_HEIGHT + 360 - toolbarHeight + ACTUAL_SCREEN_HEIGHT    ,         
+            transform: [
+                {
+                  translateY: this.state.marginTop.interpolate({
+                    inputRange: [-360, 0, 360],
+                    outputRange: [-360, 0 , 360]
+                  })
+                }
+              ]
+            }}
+            {...this.PanResponder.panHandlers}
+            >
+            {
+              this.renderHeader(source.playerInfo)
+            }
+            <View style={{backgroundColor: '#f00', flex: 0, height: ACTUAL_SCREEN_HEIGHT}} contentContainerStyle={{
+              height: ACTUAL_SCREEN_HEIGHT
+            }}
+              >
+              {this.renderTabContainer(source.toolbarInfo)}
+            </View>
+            </Animated.View>
+          )
+        }
+        {/*{!this.state.isLoading && <FlatList style={{
+
+          height: 300,
+          backgroundColor: '#f00'//modeInfo.standardColor
         }}
           ref={flatlist => this.flatlist = flatlist}
           data={data}
@@ -444,7 +471,7 @@ export default class Home extends Component {
           }}
         >
         </FlatList>
-        }
+        }*/}
       </View>
     );
   }
