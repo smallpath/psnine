@@ -331,25 +331,13 @@ export default class Home extends Component {
         onStartShouldSetResponder={() => false}
         onMoveShouldSetResponder={() => false}
       >
-        {this.state.isLoading && (
-          <ActivityIndicator
-            animating={this.state.isLoading}
-            style={{
-              flex: 999,
-              justifyContent: 'center',
-              alignItems: 'center'
-            }}
-            color={accentColor}
-            size={50}
-          />
-        )}
         <Ionicons.ToolbarAndroid
           navIconName="md-arrow-back"
           overflowIconName="md-more"
           iconColor={modeInfo.isNightMode ? '#000' : '#fff'}
           title={`${params.title}`}
           titleColor={modeInfo.isNightMode ? '#000' : '#fff'}
-          style={[styles.toolbar, { backgroundColor: 'transparent' }]}
+          style={[styles.toolbar, { backgroundColor: this.state.isLoading ? modeInfo.standardColor : 'transparent' }]}
           actions={this.state.toolbar}
           onIconClicked={() => {
             if (marginTop._value !== -limit) {
@@ -362,6 +350,18 @@ export default class Home extends Component {
           }}
           onActionSelected={this._onActionSelected}
         />
+        {this.state.isLoading && (
+          <ActivityIndicator
+            animating={this.state.isLoading}
+            style={{
+              flex: 999,
+              justifyContent: 'center',
+              alignItems: 'center'
+            }}
+            color={accentColor}
+            size={50}
+          />
+        )}
         { (!this.state.isLoading && source.playerInfo && source.playerInfo.backgroundImage) && (
           <View style={{
             position: 'absolute',

@@ -11,9 +11,10 @@ import {
   InteractionManager,
 } from 'react-native';
 
+import HTMLView from '../../components/HtmlToView'
 import { connect } from 'react-redux';
 import { getTopicList } from '../../actions/community.js';
-import { standardColor, nodeColor, idColor } from '../../constants/colorConfig';
+import { standardColor, nodeColor, idColor, accentColor } from '../../constants/colorConfig';
 
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { getTopicURL, fetchMessages, } from '../../dao';
@@ -41,15 +42,29 @@ class Message extends Component {
 
   _pressRow = (rowData) => {
     const { navigation } = this.props;
-    let URL = rowData.id;
-    navigation.navigate('CommunityTopic', {
+    let URL = rowData.url;
+    let type = 'CommunityTopic'
+    if (URL.includes('/gene/')) {
+      type = 'GeneTopic'
+    } else if (URL.includes('/battle/')) {
+      type = 'BattleTopic'
+    } else if (URL.includes('/qa/')) {
+      type = 'QaTopic'
+    }
+
+    navigation.navigate(type, {
       URL,
-      title: rowData.content,
+      title: rowData.from ,
       rowData,
       shouldBeSawBackground: true
     });
   }
 
+  handleImageOnclick = (url) => this.props.navigation.navigate('ImageViewer', {
+    images: [
+      { url }
+    ]
+  })
 
   _renderRow = (rowData,
     sectionID: number | string,
@@ -77,12 +92,14 @@ class Message extends Component {
               />*/}
 
             <View style={{ marginLeft: 10, flex: 1, flexDirection: 'column' }}>
-              <Text
-                ellipsizeMode={'tail'}
-                numberOfLines={3}
-                style={{ flex: 2.5, color: modeInfo.titleTextColor, }}>
-                {rowData.content}
-              </Text>
+              <HTMLView
+                value={rowData.content}
+                modeInfo={modeInfo}
+                stylesheet={styles}
+                onImageLongPress={this.handleImageOnclick}
+                imagePaddingOffset={30 + 75 + 10}
+                shouldForceInline={true}
+              />
 
               <View style={{ flex: 1.1, flexDirection: 'row', justifyContent: 'space-between' }}>
                 <Text style={{ flex: -1, color: idColor, textAlign: 'center', textAlignVertical: 'center' }}>{rowData.from}</Text>
@@ -120,6 +137,7 @@ class Message extends Component {
         <Ionicons.ToolbarAndroid
           navIconName="md-arrow-back"
           overflowIconName="md-more"
+          titleColor={modeInfo.isNightMode ? '#000' : '#fff'}
           iconColor={modeInfo.isNightMode ? '#000' : '#fff'}
           title={'我的消息'}
           style={[styles.toolbar, { backgroundColor: modeInfo.standardColor }]}
@@ -157,6 +175,10 @@ const styles = StyleSheet.create({
     height: 56,
     elevation: 4,
   },
+  a: {
+    color: accentColor,
+    fontWeight: '300'
+  }
 });
 
 export default Message;

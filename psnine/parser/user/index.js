@@ -27,6 +27,7 @@ export default function (html, psnid) {
     perfectGames: arr[4].replace(/\D+/, ''),
     hole: arr[5].replace(/\D+/, ''),
     ratio: arr[6],
+    all: trophyArr[4],
     followed: arr[7].replace(/\D+/, ''),
     platinum: trophyArr[0],
     gold: trophyArr[1],

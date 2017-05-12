@@ -59,13 +59,14 @@ export default TabNavigator({
 }, {
   tabBarComponent: props => {
     const { modeInfo } = props.screenProps
+
     return (
       <DefaultTabBar
         {...props}
         activeTintColor={modeInfo.nightModeInfo.titleTextColor}
-        inactiveTintColor={modeInfo.nightModeInfo.standardTextColor}
+        inactiveTintColor={modeInfo.nightModeInfo.titleTextColor}
         indicatorStyle={{
-          backgroundColor: modeInfo.nightModeInfo.standardTextColor,
+          backgroundColor: modeInfo.nightModeInfo.titleTextColor,
         }}
         scrollEnabled={false}
         tabStyle={{

@@ -424,7 +424,7 @@ class CommunityTopic extends Component {
           navIconName="md-arrow-back"
           overflowIconName="md-more"
           iconColor={modeInfo.isNightMode ? '#000' : '#fff'}
-          title={`No.${params.rowData.id}`}
+          title={params.title ? params.title : `No.${params.rowData.id}`}
           titleColor={modeInfo.isNightMode ? '#000' : '#fff'}
           style={[styles.toolbar, { backgroundColor: modeInfo.standardColor }]}
           actions={toolbarActions}

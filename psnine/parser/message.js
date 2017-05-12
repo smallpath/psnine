@@ -11,13 +11,15 @@ export default function (html) {
       return $(this).text()
     }))[1]
     const text = $this.text()
-    let content = text.split('\n').map(item => item.replace(/\t/g, '')).filter(item => item)[1].replace(from, '')
-    const id = $this.find('a').attr('href')
+    let content = $this.find('.content').html()
+    const id = $this.find('a.psnnode').text()
+    const url = $this.find('a.psnnode').prev().attr('href')
 
     const mock = {
       content,
       from,
-      id
+      id,
+      url
     }
 
     result.push(mock)

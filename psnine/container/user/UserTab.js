@@ -35,8 +35,8 @@ class MyHomeScreen extends React.Component {
   render() {
     return (
       <Button style={{flex:1}}
-        onPress={() => this.props.navigation.navigate('Notifications')}
-        title="Go to notifications"
+        onPress={() => this.props.navigation.goBack()}
+        title="Not implemented yet"
       />
     );
   }
@@ -51,7 +51,7 @@ class MyNotificationsScreen extends React.Component {
     return (
       <Button style={{flex:1}}
         onPress={() => this.props.navigation.goBack()}
-        title="Go back home"
+        title="Not implemented yet"
       />
     );
   }

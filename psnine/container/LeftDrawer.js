@@ -22,7 +22,16 @@ import {
   getRankURL,
   getMyGameURL,
 } from '../dao';
-import { standardColor } from '../constants/colorConfig';
+
+import {
+  standardColor, 
+  nodeColor, 
+  idColor,
+  accentColor,
+  levelColor,
+  rankColor,
+} from '../constants/colorConfig';
+
 
 import Icon from 'react-native-vector-icons/Ionicons';
 
@@ -31,52 +40,13 @@ import { safeSignOn } from '../dao/signon';
 import { fetchUser } from '../dao';
 
 const ListItems = [
-  { 
-    text: '个人主页',
-    iconName: 'md-home',
-    onPress: function() {
-      const { navigation, closeDrawer } = this.props;
-      closeDrawer();
-      
-      if (this.state.psnid == '') {
-        global.toast && global.toast('未登录', 2000);
-        return;
-      }
-
-      let URL = getHomeURL(this.state.psnid);
-      navigation.navigate('Home', {
-        URL,
-        title: this.state.psnid
-      });
-    }
-  },
-  { 
-    text: '我的游戏',
-    iconName: 'md-game-controller-b',
-    onPress: function() {
-      const { navigation, closeDrawer } = this.props;
-      closeDrawer();
-      
-      if (this.state.psnid == '') {
-        global.toast && global.toast('未登录', 2000);
-        return;
-      }
-
-      let URL = getMyGameURL(this.state.psnid);
-
-      navigation.navigate('UserGame', {
-        URL,
-        title: this.state.psnid
-      });
-    }
-  },
-  { 
+  {
     text: '我的收藏',
     iconName: 'md-home',
-    onPress: function() {
+    onPress: function () {
       const { navigation, closeDrawer } = this.props;
       closeDrawer();
-      
+
       let URL = 'http://psnine.com/my/fav?page=1'
 
       navigation.navigate('Favorite', {
@@ -85,40 +55,21 @@ const ListItems = [
       });
     }
   },
-  { 
-    text: '短消息',
-    iconName: 'md-notifications',
-    onPress: function() {
-      const { navigation, closeDrawer } = this.props;
-      closeDrawer();
-      
-      if (this.state.psnid == '') {
-        global.toast && global.toast('未登录', 2000);
-        return;
-      }
-
-      let URL = getHomeURL(this.state.psnid);
-      navigation.navigate('Message', {
-        URL,
-        title: this.state.psnid
-      });
-    }
-  },
-  { 
+  {
     text: '系统选项',
     iconName: 'md-home'
   },
-  { 
+  {
     text: '设置',
     iconName: 'md-options',
-    onPress: function() {
+    onPress: function () {
 
     }
   },
-  { 
+  {
     text: '关于',
     iconName: 'md-help-circle',
-    onPress: function() {
+    onPress: function () {
       const { navigation, closeDrawer } = this.props;
       closeDrawer()
       navigation.navigate('About');
@@ -179,12 +130,16 @@ class navigationDrawer extends Component {
     const { navigation, closeDrawer } = this.props;
     const { psnid } = this.state;
     closeDrawer();
-    if (psnid == '') {
+    if (!psnid) {
       navigation.navigate('Login', {
         setLogin: this.setLogin
       })
     } else {
-      global.toast && global.toast('您已登录, 请先退出', 2000);
+      let URL = getHomeURL(this.state.psnid);
+      navigation.navigate('Home', {
+        URL,
+        title: this.state.psnid
+      });
     }
   }
 
@@ -223,6 +178,21 @@ class navigationDrawer extends Component {
     global.toast && global.toast(data, 2000);
   }
 
+  onMessageClick = () => {
+    const { navigation, closeDrawer } = this.props;
+    closeDrawer();
+    if (this.state.psnid == '') {
+      global.toast && global.toast('未登录', 2000);
+      return;
+    }
+
+    let URL = getHomeURL(this.state.psnid);
+    navigation.navigate('Message', {
+      URL,
+      title: this.state.psnid
+    });
+  }
+
   switch = () => {
     const { closeDrawer, switchModeOnRoot } = this.props;
     closeDrawer();
@@ -231,92 +201,118 @@ class navigationDrawer extends Component {
 
   renderHeader = () => {
     const { navigation, closeDrawer, switchModeOnRoot } = this.props;
-    const { iconObj: icon } = this.state
+    const { modeInfo } = this.props
+    const { iconObj: icon, psnid, userInfo } = this.state
     let toolActions = [];
-    let Touchable = TouchableWithoutFeedback;
+    const iconStyle = {
+      borderColor: '#fff',
+      borderWidth: 0,
+      flexDirection: 'column',
+      justifyContent: 'center',
+      alignItems: 'center',
+      backgroundColor: 'transparent',
+      height: 26,
+      width: 26,
+      flex: 0,
+      marginLeft: 14
+    }
+
+    const color = '#fff'
+    const size = 24
+    const borderRadius = 12
+
+    psnid && toolActions.push(
+      <TouchableNativeFeedback
+        background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
+        key={'sign'}
+        onPress={this.onMessageClick}
+      >
+        <View borderRadius={borderRadius} style={iconStyle}>
+          <Icon name="md-notifications" size={size} color={color} />
+        </View>
+      </TouchableNativeFeedback>
+    )
 
     toolActions.push(
       <TouchableNativeFeedback
+        background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
         key={'changeStyle'}
         onPress={this.switch}
       >
-        <View style={{
-          flexDirection: 'column',
-          justifyContent: 'center',
-          marginLeft: this.state.psnid == '' ? 90 : this.state.userInfo.isSigned ? 55 : 20,
-        }}>
+        <View borderRadius={borderRadius} style={iconStyle}>
           {this.props.modeInfo.isNightMode &&
-            <Icon name="md-sunny" size={20} style={{ marginLeft: 6 }} color='#fff' /> ||
-            <Icon name="md-moon" size={20} style={{ marginLeft: 6 }} color='#fff' />}
-          <Text style={[styles.menuText, { marginTop: 5 }]}>
-            {this.props.modeInfo.isNightMode ? '日间' : '夜间'}
-          </Text>
+            <Icon name="md-sunny" size={size} color={color} /> ||
+            <Icon name="md-moon" size={size} color={color} />}
         </View>
       </TouchableNativeFeedback>
     );
-
-    let rows = [];
 
     if (this.state.psnid != '') {
       if (this.state.userInfo.isSigned == false) {
         toolActions.push(
           <TouchableNativeFeedback
+            background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
             key={'sign'}
             onPress={this.pressSign}
           >
-            <View style={{ flexDirection: 'column', justifyContent: 'center', marginLeft: 20 }}>
-              <Icon name="md-log-in" size={20} style={{ marginLeft: 6 }} color='#fff' />
-              <Text style={[styles.menuText, { marginTop: 5 }]}>
-                签到
-                </Text>
+            <View borderRadius={borderRadius} style={iconStyle}>
+              <Icon name="md-log-in" size={size} color={color} />
             </View>
           </TouchableNativeFeedback>
         )
       }
-
       toolActions.push(
         <TouchableNativeFeedback
+          background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
           onPress={this.pressLogout}
           key={'exitApp'}
         >
-          <View style={{ flexDirection: 'column', justifyContent: 'center', marginLeft: 20 }}>
-            <Icon name="md-log-out" size={20} style={{ marginLeft: 6 }} color='#fff' />
-            <Text style={[styles.menuText, { marginTop: 5 }]}>
-              退出
-              </Text>
+          <View borderRadius={borderRadius} style={iconStyle}>
+            <Icon name="md-log-out" size={size} color={color} />
           </View>
         </TouchableNativeFeedback>
       )
     }
 
+    const infoColor = 'rgba(255,255,255,0.8)'
+    // console.log(userInfo, userInfo.exp, userInfo.split)
     return (
-      <View style={[styles.header, {
-        height: this.state.psnid == '' ? 120 : 120,
-        backgroundColor: this.props.modeInfo.standardColor,
+      <View style={[{
+        flex: 1,
+        padding: 20,
+        backgroundColor: this.props.modeInfo.standardColor
       }]}>
-
-        <View style={[styles.userInfo, { justifyContent: 'center', alignItems: 'center' }]}>
-          <View style={{ flexDirection: 'row', alignItems: 'center', }}>
-            <View style={{ flexDirection: 'column', alignItems: 'center', }}>
-              <Touchable onPress={this.pressLogin}>
-                <View style={{ flexDirection: 'column', alignItems: 'center', }}>
-                  <Image
-                    source={this.state.userInfo.avatar}
-                    style={{ width: 70, height: 70 }} />
-                  <Text style={[styles.menuText, { marginTop: 5, textAlign: 'center' }]}>
-                    {this.state.psnid == '' ? '请登录' : this.state.psnid}
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+          <View style={{ flexDirection: 'column', alignItems: 'flex-start', justifyContent: 'space-between', alignSelf: 'flex-start', alignContent: 'flex-start' }}>
+            <TouchableWithoutFeedback onPress={this.pressLogin}>
+              <View borderRadius={35} style={{ flexDirection: 'column', alignItems: 'center', backgroundColor: modeInfo.backgroundColor }}>
+                <Image
+                  borderRadius={35}
+                  source={userInfo.avatar}
+                  style={{ width: 70, height: 70, }} />
+              </View>
+            </TouchableWithoutFeedback>
+            <Text style={[styles.menuText, { paddingTop: 5, textAlign: 'center' }]}>{psnid == '' ? '请登录' : psnid}</Text>
+            {psnid && (
+              <View style={{flex: 1, width: 100}}>
+                <View style={{ flexDirection: 'row', justifyContent:'space-between', alignItems: 'center', flex: 1  }}>
+                    <Text style={{ color: levelColor, fontSize: 12 }}>{userInfo.exp.split('经验')[0] + ' '}<Text style={{ flex: -1, color: infoColor, fontSize: 12 }}>{userInfo.exp.split('经验')[1]}</Text></Text>
+                </View>
+                <View style={{ flex: 0, width: 200 }}>
+                  <Text style={{ }}>
+                    <Text style={{ flex: -1, color: color, textAlign:'center', fontSize: 12 }}>{userInfo.platinum + ' '}</Text>
+                    <Text style={{ flex: -1, color: color, textAlign:'center', fontSize: 12 }}>{userInfo.gold + ' '}</Text>
+                    <Text style={{ flex: -1, color: color, textAlign:'center', fontSize: 12 }}>{userInfo.silver + ' '}</Text>
+                    <Text style={{ flex: -1, color: color, textAlign:'center', fontSize: 12 }}>{userInfo.gold + ' '}</Text>
+                    <Text style={{ flex: -1, color: color, textAlign:'center', fontSize: 12 }}>{userInfo.all + ' '}</Text>
                   </Text>
                 </View>
-              </Touchable>
-            </View>
-            <View style={{ flexDirection: 'row', marginLeft: toolActions.length === 2 ? -20 : 0, marginTop: 0 }}>
-              {toolActions}
-            </View>
+              </View>) || undefined}
+          </View>
+          <View style={{ flexDirection: 'row', alignSelf: 'flex-start', alignContent: 'flex-end' }}>
+            {toolActions}
           </View>
         </View>
-
-        {rows}
-
       </View>
     );
   }
@@ -369,12 +365,13 @@ class navigationDrawer extends Component {
       <View style={styles.container} {...this.props}>
         <ListView
           ref="themeslistview"
-          dataSource={this.state.psnid !== '' ? this.state.dataSource : this.state.dataSource.cloneWithRows(ListItems.slice(4))}
+          dataSource={this.state.psnid !== '' ? this.state.dataSource : this.state.dataSource.cloneWithRows(ListItems.slice(1))}
           renderRow={this.renderRow}
           keyboardDismissMode="on-drag"
           keyboardShouldPersistTaps="always"
           renderHeader={this.renderHeader}
-          style={{ flex: 1, backgroundColor: this.props.modeInfo.backgroundColor }}
+          enableEmptySections={true}
+          style={{ flex: 2, backgroundColor: this.props.modeInfo.backgroundColor }}
         />
       </View>
     );
@@ -394,8 +391,7 @@ const styles = StyleSheet.create({
     height: 180,
   },
   userInfo: {
-    flex: 4,
-    margin: 20,
+    flex: 4
   },
   trophyRow: {
     flex: 1,

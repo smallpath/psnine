@@ -50,7 +50,7 @@ const RightDrawer = DrawerNavigator({
     const {
       navigation,
       activeTintColor = '#2196f3',
-      activeBackgroundColor = 'rgba(0, 0, 0, .04)',
+      activeBackgroundColor = 'rgba(0, 0, 0, .54)',
       inactiveTintColor = 'rgba(0, 0, 0, .87)',
       inactiveBackgroundColor = 'transparent',
       getLabel,
