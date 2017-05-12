@@ -41,8 +41,22 @@ import { fetchUser } from '../dao';
 
 const ListItems = [
   {
-    text: '我的收藏',
+    text: '个人中心',
     iconName: 'md-home',
+    onPress: function () {
+      const { navigation, closeDrawer } = this.props;
+      closeDrawer();
+
+      let URL = getHomeURL(this.state.psnid);
+      navigation.navigate('Home', {
+        URL,
+        title: this.state.psnid
+      });
+    }
+  },
+  {
+    text: '我的收藏',
+    iconName: 'md-star',
     onPress: function () {
       const { navigation, closeDrawer } = this.props;
       closeDrawer();
@@ -388,7 +402,7 @@ class navigationDrawer extends Component {
       <View style={styles.container} {...this.props}>
         <ListView
           ref="themeslistview"
-          dataSource={this.state.psnid !== '' ? this.state.dataSource : this.state.dataSource.cloneWithRows(ListItems.slice(1))}
+          dataSource={this.state.psnid !== '' ? this.state.dataSource : this.state.dataSource.cloneWithRows(ListItems.slice(2))}
           renderRow={this.renderRow}
           keyboardDismissMode="on-drag"
           keyboardShouldPersistTaps="always"
