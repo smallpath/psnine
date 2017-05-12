@@ -154,7 +154,7 @@ class Community extends Component {
       refreshing: true,
     });
 
-    dispatch(getTopicList(1, type));
+    // dispatch(getTopicList(1, type));
   }
 
   _scrollToTop = () => {
@@ -176,7 +176,7 @@ class Community extends Component {
       refreshing: true,
     });
 
-    this._loadMoreData(this.props.screenProps.type);
+    // this._loadMoreData(this.props.screenProps.type);
 
   }
 

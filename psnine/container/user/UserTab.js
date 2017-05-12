@@ -23,11 +23,12 @@ import {
 } from 'react-navigation';
 
 import HomeProfile from './HomeProfile'
+import UserGame from './UserGame'
 
 const DefaultTabBar = TabNavigator.Presets.Default.tabBarComponent;
 class MyHomeScreen extends React.Component {
   static navigationOptions = {
-    tabBarLabel: 'Home',
+    tabBarLabel: '留言板',
     // Note: By default the icon is only shown on iOS. Search the showIcon option below.
   };
 
@@ -43,7 +44,7 @@ class MyHomeScreen extends React.Component {
 
 class MyNotificationsScreen extends React.Component {
   static navigationOptions = {
-    tabBarLabel: 'Notifications'
+    tabBarLabel: '圈子'
   };
 
   render() {
@@ -73,13 +74,13 @@ export default (maps) => {
         }
         break;
       case '游戏':
-        container.game = {
-          screen: MyNotificationsScreen
+        container.UserGame = {
+          screen: UserGame
         }
         break;
       case '留言板':
         container.island = {
-          screen: MyNotificationsScreen
+          screen: MyHomeScreen
         }
         break;
       case '圈子':
@@ -96,19 +97,20 @@ export default (maps) => {
       return (
         <DefaultTabBar
           {...props}
-          activeTintColor={modeInfo.nightModeInfo.titleTextColor}
-          inactiveTintColor={modeInfo.nightModeInfo.standardTextColor}
+          activeTintColor={modeInfo.accentColor}
+          inactiveTintColor={modeInfo.titleTextColor}
           indicatorStyle={{
-            backgroundColor: modeInfo.nightModeInfo.standardTextColor,
+            backgroundColor: modeInfo.accentColor,
           }}
           scrollEnabled={false}
           tabStyle={{
             height: 40,
+            elevation: 0
           }}
           style={{
-            elevation: 4,
+            elevation: 0,
             height: 40,
-            backgroundColor: modeInfo.standardColor
+            backgroundColor: modeInfo.backgroundColor
           }}
         />
       )

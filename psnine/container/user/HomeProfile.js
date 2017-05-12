@@ -96,7 +96,7 @@ export default class Home extends Component {
     const { modeInfo } = this.props.screenProps
     return (
       <TouchableNativeFeedback key={rowData.id || index}   onPress={() => {
-          this.props.navigation.navigate('GamePage', {
+          this.props.screenProps.navigation.navigate('GamePage', {
             URL: rowData.href,
             title: rowData.title,
             rowData,
@@ -226,7 +226,7 @@ export default class Home extends Component {
         )}
         {!this.state.isLoading && <FlatList style={{
           flex: -1,
-          backgroundColor: modeInfo.standardColor
+          backgroundColor: modeInfo.backgroundColor
         }}
           ref={flatlist => this.flatlist = flatlist}
           data={data}

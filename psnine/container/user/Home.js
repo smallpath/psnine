@@ -65,6 +65,8 @@ const iconMapper = {
   '感谢': 'md-thumbs-up'
 }
 
+const limit = SCREEN_WIDTH - toolbarHeight
+
 export default class Home extends Component {
 
   constructor(props) {
@@ -131,7 +133,7 @@ export default class Home extends Component {
       }
     }
     this.removeListener = BackHandler.addEventListener('hardwareBackPress', () => {
-      if (marginTop._value !== -SCREEN_WIDTH) {
+      if (marginTop._value !== -limit) {
         
         return false;
       }
@@ -143,42 +145,33 @@ export default class Home extends Component {
     this.PanResponder = PanResponder.create({
 
       onStartShouldSetPanResponderCapture: (e, gesture) => {
-        console.log('onStart')
-        const target = e.nativeEvent.pageY - this._previousTop - toolbarHeight * 2
-        console.log(target, SCREEN_WIDTH)
-        if (target <= SCREEN_WIDTH - toolbarHeight) {
-          console.log('grant:', target)
+        const target = e.nativeEvent.pageY - this._previousTop - 40
+        if (target <= limit) {
           return true
         } else if (target <= SCREEN_WIDTH) {
-          console.log('允许点击')
           return false
         } else {
-          console.log('jump:', SCREEN_WIDTH)
-          this._viewStyles.style.top = -SCREEN_WIDTH
-          this._previousTop = -SCREEN_WIDTH
-          // this.view.setNativeProps(this._viewStyles)
+          this._viewStyles.style.top = -limit
+          this._previousTop = -limit
           this._viewStyles.style.top
           Animated.timing(marginTop, {
-            toValue: -SCREEN_WIDTH,
+            toValue: this._previousTop,
             ...config
           }).start()
           return false
         }
-        return target <= SCREEN_WIDTH ? true : false;
       },
       onPanResponderGrant: (e, gesture) => {
-        console.log('onGrant')
-        // const target = gesture.y0 <= 56 ? 0 : SCREEN_HEIGHT - 56
-        // marginTop.setOffset(target);
+
       },
       onPanResponderMove: (e, gesture) => {
         this._viewStyles.style.top = this._previousTop + gesture.dy
         if (this._viewStyles.style.top > 0) {
           this._viewStyles.style.top = 0
+        } else if (this._viewStyles.style.top < -limit) {
+          this._viewStyles.style.top = -limit
         }
         marginTop.setValue(this._viewStyles.style.top)
-        // console.log(-this._previousTop)
-        // this.view.setNativeProps(this._viewStyles)
       },
 
       onPanResponderRelease: (e, gesture) => {
@@ -190,14 +183,10 @@ export default class Home extends Component {
       onPanResponderTerminate: (evt, gesture) => {
 
       },
-      // onShouldBlockNativeResponder: (evt, gesture) => {
-      //   return true;
-      // },
       onPanResponderReject: (evt, gesture) => {
         return false;
       },
       onPanResponderEnd: (evt, gesture) => {
-        // console.log('onEnd')
         this._previousLeft += gesture.dx;
         this._previousTop += gesture.dy;
       },
@@ -240,29 +229,12 @@ export default class Home extends Component {
     const infoColor = 'rgba(255,255,255,0.8)'
     return (
       <View key={rowData.id} style={{
-        backgroundColor: modeInfo.titleTextColor,
-        height: SCREEN_WIDTH
+        backgroundColor: 'transparent',
+        height: SCREEN_WIDTH - toolbarHeight
       }}>
-        <View style={{
-          position: 'absolute',
-          top: 0
-        }}>
-          <Image
-            source={{ uri: rowData.backgroundImage }}
-            resizeMode={'cover'}
-            resizeMethod={'resize'}
-            style={{ 
-              width: SCREEN_WIDTH, 
-              height: SCREEN_WIDTH,
-              top: -1, // why??
-            }}
-          />
-        </View>
-
-        <View style={{ flexDirection: 'row', justifyContent:'space-around', alignItems: 'center', flex: 1, padding: 5  }}>
+        <View style={{ flexDirection: 'row', justifyContent:'space-around', alignItems: 'center', flex: 1, padding: 5, marginTop: -10  }}>
           <View style={{ justifyContent:'center', alignItems: 'center', flex: 2  }}>
-            <Text style={{ flex: -1, color: color, fontSize: 20 }}>{rowData.psnid}</Text>
-            <Text style={{ flex: -1, color: infoColor, fontSize: 12, textAlign: 'center' }}>{rowData.description}</Text>
+            <Text style={{ flex: -1, color: infoColor, fontSize: 15, textAlign: 'center' }}>{rowData.description}</Text>
           </View>
           <View style={{ justifyContent:'center', alignItems: 'center', flex: 1  }}>
             <Text style={{ flex: -1, color: levelColor, fontSize: 20 }}>{rowData.exp.split('经验')[0]}</Text>
@@ -274,8 +246,8 @@ export default class Home extends Component {
           </View>
         </View>
 
-        <View style={{ position: 'absolute', top: 0, left: 0, width: SCREEN_WIDTH, height: SCREEN_WIDTH  }}>
-          <View style={{ justifyContent:'center', alignItems: 'center', alignSelf: 'center', flex: 5, marginTop: -51  }}>
+        <View style={{ position: 'absolute', top: 0, left: 0, width: SCREEN_WIDTH, height: limit  }}>
+          <View style={{ justifyContent:'center', alignItems: 'center', alignSelf: 'center', flex: 3, marginTop: -70 }}>
             <View borderRadius={75} style={{width: 150, height: 150, backgroundColor: '#fff'}} >
               <Image
                 borderRadius={75}
@@ -291,7 +263,7 @@ export default class Home extends Component {
 
 
         <View style={{ flex: 1, padding: 5}}>
-          <View borderRadius={20} style={{ width: SCREEN_WIDTH / 4 * 3, alignSelf: 'center', alignContent: 'center',  flexDirection: 'row', justifyContent:'center', alignItems: 'center', backgroundColor: 'rgba(0,0,0,0.3)'  }}>
+          <View borderRadius={20} style={{ marginTop: 10, width: SCREEN_WIDTH / 4 * 3, alignSelf: 'center', alignContent: 'center',  flexDirection: 'row', justifyContent:'center', alignItems: 'center', backgroundColor: 'rgba(0,0,0,0.3)'  }}>
             <Text style={{ height: 30, textAlignVertical: 'center',textAlign: 'center' }}>
               <Text style={{ flex: 1, color: color, marginVertical: 2, textAlign:'center', fontSize: 15 }}>{rowData.platinum + ' '}</Text>
               <Text style={{ flex: 1, color: color, marginVertical: 2, textAlign:'center', fontSize: 15 }}>{rowData.gold + ' '}</Text>
@@ -328,35 +300,6 @@ export default class Home extends Component {
     )
   }
 
-  renderToolbar = (list) => {
-    const { modeInfo } = this.props.screenProps
-    return (
-          <View style={{ 
-            height: 40,
-            flexDirection: 'row',
-            alignItems: 'flex-start',
-            flexWrap:'wrap',
-            padding: 0,
-            backgroundColor: modeInfo.backgroundColor
-            }}>
-          {list.map((item, index) => (
-            <TouchableNativeFeedback key={index} onPress={() => {
-                const url = item.url
-                if (item.text === '游戏') {
-                  this.props.navigation.navigate('UserGame', {
-                    URL: url + '?page=1'
-                  })
-                }
-              }}>
-              <View style={{ flex: 1, padding: 12, alignItems:'center', justifyContent: 'center' }}  key={index}>
-                <Text style={{ color: idColor, textAlign:'left', fontSize: 12 }}>{item.text}</Text>
-              </View>
-            </TouchableNativeFeedback>
-        ))}
-      </View>
-    )
-  }
-
   renderTabContainer = (list) => {
     const { modeInfo } = this.props.screenProps
   
@@ -364,7 +307,9 @@ export default class Home extends Component {
     return (
       <UserTab screenProps={{
         modeInfo: modeInfo,
-        gameTable: this.state.data.gameTable
+        toolbar: list,
+        gameTable: this.state.data.gameTable,
+        navigation: this.props.navigation
       }} onNavigationStateChange={null}/> 
     )
   }
@@ -386,26 +331,6 @@ export default class Home extends Component {
         onStartShouldSetResponder={() => false}
         onMoveShouldSetResponder={() => false}
       >
-        <Ionicons.ToolbarAndroid
-          navIconName="md-arrow-back"
-          overflowIconName="md-more"
-          iconColor={modeInfo.isNightMode ? '#000' : '#fff'}
-          title={`${params.title}`}
-          titleColor={modeInfo.isNightMode ? '#000' : '#fff'}
-          style={[styles.toolbar, { backgroundColor: modeInfo.standardColor }]}
-          actions={this.state.toolbar}
-          onIconClicked={() => {
-            if (marginTop._value !== -SCREEN_WIDTH) {
-              this.props.navigation.goBack()
-              return
-            }
-            this._viewStyles.style.top = 0
-            this._previousTop = 0
-            Animated.timing(marginTop, { toValue: 0, ...config, duration: 200 }).start();
-          }}
-          onActionSelected={this._onActionSelected}
-        />
-
         {this.state.isLoading && (
           <ActivityIndicator
             animating={this.state.isLoading}
@@ -417,6 +342,42 @@ export default class Home extends Component {
             color={accentColor}
             size={50}
           />
+        )}
+        <Ionicons.ToolbarAndroid
+          navIconName="md-arrow-back"
+          overflowIconName="md-more"
+          iconColor={modeInfo.isNightMode ? '#000' : '#fff'}
+          title={`${params.title}`}
+          titleColor={modeInfo.isNightMode ? '#000' : '#fff'}
+          style={[styles.toolbar, { backgroundColor: 'transparent' }]}
+          actions={this.state.toolbar}
+          onIconClicked={() => {
+            if (marginTop._value !== -limit) {
+              this.props.navigation.goBack()
+              return
+            }
+            this._viewStyles.style.top = 0
+            this._previousTop = 0
+            Animated.timing(marginTop, { toValue: 0, ...config, duration: 200 }).start();
+          }}
+          onActionSelected={this._onActionSelected}
+        />
+        { (!this.state.isLoading && source.playerInfo && source.playerInfo.backgroundImage) && (
+          <View style={{
+            position: 'absolute',
+            top: -1
+          }}>
+            <Image
+              source={{ uri: source.playerInfo.backgroundImage }}
+              resizeMode={'cover'}
+              resizeMethod={'resize'}
+              style={{ 
+                width: SCREEN_WIDTH, 
+                height: SCREEN_WIDTH + 1,
+                top: 0, // why??
+              }}
+            />
+          </View>
         )}
         {
           !this.state.isLoading && (<Animated.View ref={(view) => {
@@ -441,8 +402,20 @@ export default class Home extends Component {
             {
               this.renderHeader(source.playerInfo)
             }
-            <View style={{backgroundColor: '#f00', flex: 0, height: ACTUAL_SCREEN_HEIGHT}} contentContainerStyle={{
-              height: ACTUAL_SCREEN_HEIGHT
+            <View style={{
+              position: 'absolute'
+            }}>
+              <Animated.View style={{
+                backgroundColor: this.state.marginTop.interpolate({
+                  inputRange: [-limit, -limit/2, 0, limit],
+                  outputRange: [modeInfo.standardColor, 'rgba(255, 255, 255, 0)', 'rgba(255, 255, 255, 0)', modeInfo.standardColor],
+                }),
+                width: SCREEN_WIDTH,
+                height: SCREEN_WIDTH
+              }}/>
+            </View>
+            <View style={{flex: 0, height: SCREEN_HEIGHT - toolbarHeight - StatusBar.currentHeight + 1, backgroundColor: modeInfo.backgroundColor}} contentContainerStyle={{
+              height: SCREEN_HEIGHT - toolbarHeight  - StatusBar.currentHeight + 1
             }}
               >
               {this.renderTabContainer(source.toolbarInfo)}

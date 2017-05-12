@@ -30,11 +30,13 @@ const ds = new ListView.DataSource({
 });
 
 let toolbarActions = [
-  { title: '回复', iconName: 'md-create', show: 'always' },
   { title: '跳页', iconName: 'md-map', show: 'always' },
 ];
 
 class UserGame extends Component {
+  static navigationOptions = {
+     tabBarLabel: '游戏'
+  }
   constructor(props) {
     super(props);
     this.state = {
@@ -49,11 +51,6 @@ class UserGame extends Component {
     }
   }
 
-  onNavClicked = (rowData) => {
-    const { navigation } = this.props;
-    navigation.goBack();
-  }
-
   _pressRow = (rowData) => {
 
   }
@@ -64,16 +61,15 @@ class UserGame extends Component {
     rowID: number | string,
     highlightRow: (sectionID: number, rowID: number) => void
   ) => {
-    const { modeInfo } = this.props.screenProps
+    const { modeInfo, navigation } = this.props.screenProps
     
     return (
       <TouchableNativeFeedback key={rowData.href || rowID}   onPress={() => {
-          this.props.navigation.navigate('GamePage', {
+          navigation.navigate('GamePage', {
             URL: rowData.href,
             title: rowData.title,
             rowData,
-            type: 'game',
-            shouldBeSawBackground: true
+            type: 'game'
           })
         }}>
         <View pointerEvents={'box-only'} style={{
@@ -156,7 +152,16 @@ class UserGame extends Component {
   }
 
   componentWillMount = async () => {
-    const { params } = this.props.navigation.state
+    const { screenProps } = this.props
+    const name = '游戏'
+    const params = {}
+    screenProps.toolbar.forEach(({ text, url}) => {
+      if (text === name) {
+        params.text = text
+        params.URL = url
+      }
+    })
+    this.URL = params.URL.includes('?page') ? params.URL : `${params.URL}?page=1`
     this.fetchMessages(params.URL, 'jump');
   }
 
@@ -197,7 +202,7 @@ class UserGame extends Component {
 
   pageArr = [1]
   _onRefresh = () => {
-    const { URL } = this.props.navigation.state.params;
+    const { URL } = this
     const currentPage = this.state.currentPage
     let type = currentPage === 1 ? 'jump' : 'up'
     let targetPage = currentPage - 1
@@ -209,7 +214,7 @@ class UserGame extends Component {
   }
 
   _onEndReached = () => {
-    const { URL } = this.props.navigation.state.params;
+    const { URL } = this
     const currentPage = this.state.currentPage
     const targetPage = currentPage + 1
     if (targetPage > this.state.numPages) return
@@ -221,22 +226,17 @@ class UserGame extends Component {
   onActionSelected = (index) => {
     switch (index) {
       case 0:
-        return;
-      case 1:
         this.setState({
           modalVisible: true
         })
-      case 2:
-        return;
-      case 3:
-        return;
+        return
     }
   }
 
   sliderValue = 1
   render() {
     const { modeInfo } = this.props.screenProps
-    const { params } = this.props.navigation.state
+    const { URL } = this
     // console.log('Message.js rendered');
     ds = ds.cloneWithRows(this.state.list)
 
@@ -246,17 +246,12 @@ class UserGame extends Component {
         onStartShouldSetResponder={() => false}
         onMoveShouldSetResponder={() => false}
       >
-        <Ionicons.ToolbarAndroid
-          navIconName="md-arrow-back"
-          overflowIconName="md-more"
-          iconColor={modeInfo.isNightMode ? '#000' : '#fff'}
-          title={'我的游戏'}
-          style={[styles.toolbar, { backgroundColor: modeInfo.standardColor }]}
-          titleColor={modeInfo.isNightMode ? '#000' : '#fff'}
+        {/*<Ionicons.ToolbarAndroid
+          iconColor={modeInfo.isNightMode ? '#fff' : '#000' }
+          style={[styles.toolbar, { backgroundColor: 'transparent' }]}
           actions={toolbarActions}
-          onIconClicked={this.onNavClicked}
           onActionSelected={this.onActionSelected}
-        />
+        />*/}
         <ListView
           refreshControl={
             <RefreshControl
@@ -326,7 +321,7 @@ class UserGame extends Component {
                       isLoading: true
                     }, () => {
                       const currentPage = this.state.currentPage
-                      const targetPage = params.URL.split('=').slice(0, -1).concat(this.state.sliderValue).join('=')
+                      const targetPage = URL.split('=').slice(0, -1).concat(this.state.sliderValue).join('=')
                       this.fetchMessages(targetPage, 'jump');
                     })
                   }}>确定</Text>
