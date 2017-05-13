@@ -44,19 +44,22 @@ class Message extends Component {
     const { navigation } = this.props;
     let URL = rowData.url;
     let type = 'CommunityTopic'
+    let replyType = 'community'
     if (URL.includes('/gene/')) {
       type = 'GeneTopic'
+      replyType = 'gene'
     } else if (URL.includes('/battle/')) {
       type = 'BattleTopic'
+      replyType = 'battle'
     } else if (URL.includes('/qa/')) {
       type = 'QaTopic'
+      replyType = 'qa'
     }
-
     navigation.navigate(type, {
       URL,
-      title: rowData.from ,
-      rowData,
-      shouldBeSawBackground: true
+      title: '@' + rowData.psnid ,
+      type: replyType,
+      rowData
     });
   }
 
@@ -103,7 +106,7 @@ class Message extends Component {
               />
 
               <View style={{ flex: 1.1, flexDirection: 'row', justifyContent: 'space-between' }}>
-                <Text style={{ flex: -1, color: idColor, textAlign: 'center', textAlignVertical: 'center' }}>{rowData.from}</Text>
+                <Text style={{ flex: -1, color: idColor, textAlign: 'center', textAlignVertical: 'center' }}>{rowData.psnid}</Text>
               </View>
 
             </View>

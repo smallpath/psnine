@@ -12,13 +12,14 @@ export default function (html) {
     }))[1]
     const text = $this.text()
     let content = $this.find('.content').html()
-    const id = $this.find('a.psnnode').text()
+    const psnid = $this.find('a.psnnode').text()
     const url = $this.find('a.psnnode').prev().attr('href')
 
     const mock = {
       content,
       from,
-      id,
+      psnid,
+      id: url.split('/').pop().match(/\d+/)[0],
       url
     }
 

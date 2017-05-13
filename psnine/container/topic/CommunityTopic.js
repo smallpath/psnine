@@ -403,6 +403,7 @@ class CommunityTopic extends Component {
         type: params.type,
         id: params.rowData.id,
         at: rowData.psnid,
+        callback: this._refreshComment,
         shouldSeeBackground: true
       })
     }
