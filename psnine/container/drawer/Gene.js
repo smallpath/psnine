@@ -27,7 +27,8 @@ let dataSource = new ListView.DataSource({
 
 class Gene extends Component {
   static navigationOptions = {
-    tabBarLabel: '基因'
+    tabBarLabel: '基因',
+    drawerLabel: '基因'
   };
 
   constructor(props) {

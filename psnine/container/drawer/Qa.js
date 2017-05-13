@@ -32,7 +32,8 @@ let dataSource = new ListView.DataSource({
 
 class Qa extends Component {
   static navigationOptions = {
-    tabBarLabel: '问答'
+    tabBarLabel: '问答',
+    drawerLabel: '问答'
   };
 
   constructor(props) {

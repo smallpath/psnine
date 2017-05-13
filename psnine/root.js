@@ -62,6 +62,9 @@ import NewTopic from './container/new/NewTopic'
 
 import WebView from './components/WebView'
 import About from './container/setting/About'
+import Setting from './container/setting/Setting'
+import Theme from './container/setting/Theme'
+import General from './container/setting/General'
 import ImageViewer from './components/ImageViewer'
 
 import { transitionConfig, onTransitionStart } from './utils/transitionConfig'
@@ -150,6 +153,18 @@ const Navigator = StackNavigator({
   },
   About: {
     screen: About,
+    navigationOptions: enableGesture
+  },
+  General: {
+    screen: General,
+    navigationOptions: enableGesture
+  },
+  Theme: {
+    screen: Theme,
+    navigationOptions: enableGesture
+  },
+  Setting: {
+    screen: Setting,
     navigationOptions: enableGesture
   },
   WebView: {

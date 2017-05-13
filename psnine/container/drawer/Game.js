@@ -32,7 +32,8 @@ let dataSource = new ListView.DataSource({
 
 class Game extends Component {
   static navigationOptions = {
-    tabBarLabel: '游戏'
+    tabBarLabel: '游戏',
+    drawerLabel: '游戏'
   }
 
   constructor(props) {

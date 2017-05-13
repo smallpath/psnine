@@ -77,16 +77,9 @@ const ListItems = [
     text: '设置',
     iconName: 'md-options',
     onPress: function () {
-
-    }
-  },
-  {
-    text: '关于',
-    iconName: 'md-help-circle',
-    onPress: function () {
       const { navigation, closeDrawer } = this.props;
       closeDrawer()
-      navigation.navigate('About');
+      navigation.navigate('Setting');
     }
   }
 ];

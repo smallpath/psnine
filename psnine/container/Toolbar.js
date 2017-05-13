@@ -21,7 +21,8 @@ import {
   TouchableWithoutFeedback,
   StatusBar,
   Modal,
-  Keyboard
+  Keyboard,
+  AsyncStorage
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import MyDialog from '../components/Dialog'
@@ -35,7 +36,7 @@ import { changeSegmentIndex, changeCommunityType, changeGeneType, changeScrollTy
 
 import { standardColor, accentColor } from '../constants/colorConfig';
 
-// import RightDrawer from './RightDrawer'
+import RightDrawer from './RightDrawer'
 import TabContainer from './Tab'
 
 let screen = Dimensions.get('window');
@@ -120,13 +121,22 @@ class Toolbar extends Component {
       innerMarginTop: new Animated.Value(0),
       modalVisible: false,
       modalOpenVal: new Animated.Value(0),
-      topicMarginTop: new Animated.Value(0)
+      topicMarginTop: new Animated.Value(0),
+      tabMode: 'tab'
     }
   }
 
-  /*_renderSegmentedView = () => {
+  componentWillMount = async () => {
+    const value = await AsyncStorage.getItem('@Theme:tabMode');
+    const tabMode = value === 'drawer' ? 'drawer' : 'tab'
+    this.setState({
+      tabMode
+    })
+  }
+
+  _renderDrawerView = () => {
     return (
-      <Tab onNavigationStateChange={null} screenProps={{
+      <RightDrawer onNavigationStateChange={null} screenProps={{
         communityType: this.props.app.communityType,
         geneType: this.props.app.geneType,
         navigation: this.props.navigation,
@@ -137,8 +147,8 @@ class Toolbar extends Component {
         modalVisible: this.state.modalVisible
       }}/>
     )
-  }*/
-  _renderSegmentedView = () => {
+  }
+  _renderTabView = () => {
 
     return (
       <TabContainer 
@@ -564,7 +574,7 @@ class Toolbar extends Component {
           onActionSelected={this.onActionSelected}
           onIconClicked={this.props._callDrawer()}
         />
-        {this._renderSegmentedView()}
+        {this.state.tabMode === 'tab' ? this._renderTabView() : this._renderDrawerView()}
         <TouchableWithoutFeedback onPress={this.closeMask}>
           <Animated.View
             ref={mask => this.mask = mask}

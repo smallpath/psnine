@@ -35,7 +35,8 @@ let dataSource = new ListView.DataSource({
 
 class Battle extends Component {
   static navigationOptions = {
-    tabBarLabel: '约战'
+    tabBarLabel: '约战',
+    drawerLabel: '约战'
   };
 
   constructor(props) {
