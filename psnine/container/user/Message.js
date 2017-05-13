@@ -54,6 +54,14 @@ class Message extends Component {
     } else if (URL.includes('/qa/')) {
       type = 'QaTopic'
       replyType = 'qa'
+    } else if (URL.includes('/psnid/') && URL.includes('/comment')) {
+      type = 'Home'
+      replyType = ''
+      navigation.navigate(type, {
+        URL: URL.replace('/comment', ''),
+        title: rowData.psnid
+      });
+      return
     }
     navigation.navigate(type, {
       URL,

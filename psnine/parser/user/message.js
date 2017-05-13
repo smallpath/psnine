@@ -14,12 +14,14 @@ export default function (html) {
     let content = $this.find('.content').html()
     const psnid = $this.find('a.psnnode').text()
     const url = $this.find('a.psnnode').prev().attr('href')
+    const matchedComment = url.match(/comment\-(\d+)$/)
+    const matchedID = url.match(/\/(\d+)$/)
 
     const mock = {
       content,
       from,
       psnid,
-      id: url.split('/').pop().match(/\d+/)[0],
+      id: matchedComment ? matchedComment[1] : matchedID ? matchedID[1] : url,
       url
     }
 
