@@ -46,6 +46,7 @@ import Home from './container/user/Home'
 import Login from './container/user/Login'
 import Message from './container/user/Message'
 import UserGame from './container/user/UserGame'
+import UserBoard from './container/user/UserBoard'
 import Favorite from './container/user/Favorite'
 
 import Trophy from './container/game/Trophy'
@@ -143,6 +144,10 @@ const Navigator = StackNavigator({
   UserGame: {
     screen: UserGame,
     path: 'psnid/:linkingID/psngame'
+  },
+  UserBoard: {
+    screen: UserGame,
+    path: 'psnid/:linkingID/comment'
   },
   NewTopic: {
     screen: NewTopic

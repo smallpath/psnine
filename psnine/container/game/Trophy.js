@@ -96,7 +96,7 @@ class CommunityTopic extends Component {
           this.props.navigation.navigate('Reply', {
             type: params.type,
             id: params.rowData.id,
-            callback: this._refreshComment,
+            callback: this.preFetch,
             shouldSeeBackground: true
           })
         }
@@ -107,7 +107,7 @@ class CommunityTopic extends Component {
         }
         return;
       case 1:
-        this._refreshComment()
+        this.preFetch()
         return
       case 2:
         return;

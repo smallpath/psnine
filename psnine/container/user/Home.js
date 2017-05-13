@@ -284,6 +284,7 @@ export default class Home extends Component {
   renderTabContainer = (list) => {
     const { modeInfo } = this.props.screenProps
     const { params } = this.props.navigation.state
+    const { marginTop } = this.state
   
     return (
       <CreateUserTab screenProps={{
@@ -306,17 +307,33 @@ export default class Home extends Component {
         profileToolbar: this.state.data.psnButtonInfo.reverse().map(item => {
           return { title: item.text, iconName: iconMapper[item.text], show: 'always' }
         }),
+        psnid: params.title,
         gameTable: this.state.data.gameTable,
         navigation: this.props.navigation
       }} onNavigationStateChange={(prevRoute, nextRoute, action) => {
         if (prevRoute.index !== nextRoute.index && action.type === 'Navigation/NAVIGATE') {
-          const callback = this.state.afterEachHooks[nextRoute.index]
-          if (callback) {
-            if (this.timeout) clearTimeout(this.timeout)
-            this.timeout = setTimeout(() => {
-              callback()
-              /*console.log('called hooks on', nextRoute.index)*/
-            }, 200)
+          const cb = () => {
+            const callback = this.state.afterEachHooks[nextRoute.index]
+            if (callback) {
+              if (this.timeout) clearTimeout(this.timeout)
+              this.timeout = setTimeout(() => {
+                callback()
+                /*console.log('called hooks on', nextRoute.index)*/
+              }, 200)
+            }
+          }
+          if (marginTop._value !== -limit) {
+            this._viewStyles.style.top = -limit
+            this._previousTop = -limit
+            this._viewStyles.style.top
+            Animated.timing(marginTop, {
+              toValue: this._previousTop,
+              ...config
+            }).start(() => {
+              cb()
+            })
+          } else {
+            cb()
           }
         }
       }}/> 

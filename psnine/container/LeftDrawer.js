@@ -52,6 +52,10 @@ const ListItems = [
         URL,
         title: this.state.psnid
       });
+      // navigation.navigate('Home', {
+      //   URL: 'http://psnine.com/psnid/Summer_1_Breeze',
+      //   title: 'Summer_1_Breeze'
+      // });
     }
   },
   {

@@ -24,6 +24,7 @@ import {
 
 import HomeProfile from './HomeProfile'
 import UserGame from './UserGame'
+import UserBoard from './UserBoard'
 
 const DefaultTabBar = TabNavigator.Presets.Default.tabBarComponent;
 class MyHomeScreen extends React.Component {
@@ -70,6 +71,9 @@ const container = {
   },
   UserGame: {
     screen: UserGame
+  },
+  UserBoard: {
+    screen: UserBoard
   }
 }
 
@@ -98,7 +102,7 @@ const Tab = TabNavigator(container, {
     )
   },
   lazy: true,
-  animationEnabled: true,
+  animationEnabled: false,
   backBehavior: 'none'
 })
 
