@@ -98,7 +98,7 @@ const Tab = TabNavigator(container, {
     )
   },
   lazy: true,
-  animationEnabled: false,
+  animationEnabled: true,
   backBehavior: 'none'
 })
 
@@ -107,7 +107,7 @@ export default class TabContainer extends React.PureComponent {
     super(props)
   }
   shouldComponentUpdate(nextProps, nextState) {
-    console.log('shouldComponent called')
+    // console.log('shouldComponent called')
     return false
   }
   render() {

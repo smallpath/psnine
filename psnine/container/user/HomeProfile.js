@@ -83,12 +83,19 @@ export default class Home extends Component {
     const { profileToolbar: toolbar } = this.props.screenProps
     if (!toolbar) return
     if (!toolbar.length) return
-    InteractionManager.runAfterInteractions(() => {
-      this.props.screenProps.setToolbar({
-        toolbar: toolbar,
-        toolbarActions: this._onActionSelected
+    const componentDidFocus = () => {
+      InteractionManager.runAfterInteractions(() => {
+        this.props.screenProps.setToolbar({
+          toolbar: toolbar,
+          toolbarActions: this._onActionSelected,
+          componentDidFocus: {
+            index: 0,
+            handler: componentDidFocus
+          }
+        })
       })
-    })
+    }
+    componentDidFocus()
   }
 
   _onActionSelected = (index) => {

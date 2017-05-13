@@ -196,20 +196,23 @@ class UserGame extends Component {
             isLoading: false
           }, () => {
             cb()
-            InteractionManager.runAfterInteractions(() => {
-              this.props.screenProps.setToolbar({
-                toolbar: toolbarActions,
-                toolbarActions: this.onActionSelected
+            const componentDidFocus = () => {
+              InteractionManager.runAfterInteractions(() => {
+                this.props.screenProps.setToolbar({
+                  toolbar: toolbarActions,
+                  toolbarActions: this.onActionSelected,
+                  componentDidFocus: {
+                    index: 1,
+                    handler: componentDidFocus
+                  }
+                })
               })
-            })
+            }
+            componentDidFocus()
           });
         })
       })
     })
-  }
-
-  componentDidUpdate = () => {
-    // alert('here')
   }
 
   pageArr = [1]

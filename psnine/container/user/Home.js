@@ -75,6 +75,7 @@ export default class Home extends Component {
       data: false,
       isLoading: true,
       toolbar: [],
+      afterEachHooks: [],
       mainContent: false,
       rotation: new Animated.Value(1),
       scale: new Animated.Value(1),
@@ -90,6 +91,7 @@ export default class Home extends Component {
 
   componentWillUnmount = () => {
     this.removeListener && this.removeListener.remove()
+    if (this.timeout) clearTimeout(this.timeout)
   }
 
 
@@ -117,10 +119,13 @@ export default class Home extends Component {
       onStartShouldSetPanResponderCapture: (e, gesture) => {
         const target = e.nativeEvent.pageY - this._previousTop - 40
         if (target <= limit) {
+          // console.log('===>1')
           return true
         } else if (target <= SCREEN_WIDTH) {
+          // console.log('===>2')
           return false
         } else {
+          // console.log('===>3')
           this._viewStyles.style.top = -limit
           this._previousTop = -limit
           this._viewStyles.style.top
@@ -134,8 +139,10 @@ export default class Home extends Component {
       onMoveShouldSetPanResponderCapture: (e, gesture) => {
         const target = e.nativeEvent.pageY - this._previousTop - 40
         if (target > limit && target <= SCREEN_WIDTH) {
+          // console.log('===>4')
           return Math.abs(gesture.dy) >= 2
         }
+        // console.log('===>5')
         return false
       },
       onPanResponderGrant: (e, gesture) => {
@@ -282,18 +289,37 @@ export default class Home extends Component {
       <CreateUserTab screenProps={{
         modeInfo: modeInfo,
         toolbar: list,
-        setToolbar: ({ toolbar, toolbarActions }) => {
-          this.setState({
+        setToolbar: ({ toolbar, toolbarActions, componentDidFocus }) => {
+          const obj = {
             toolbar,
             onActionSelected: toolbarActions
-          })
+          }
+          if (componentDidFocus) {
+            const { index, handler } = componentDidFocus
+            if (!this.state.afterEachHooks[index]) {
+              obj.afterEachHooks = [...this.state.afterEachHooks]
+              obj.afterEachHooks[index] = handler
+            }
+          }
+          this.setState(obj)
         },
         profileToolbar: this.state.data.psnButtonInfo.reverse().map(item => {
           return { title: item.text, iconName: iconMapper[item.text], show: 'always' }
         }),
         gameTable: this.state.data.gameTable,
         navigation: this.props.navigation
-      }} onNavigationStateChange={null}/> 
+      }} onNavigationStateChange={(prevRoute, nextRoute, action) => {
+        if (prevRoute.index !== nextRoute.index && action.type === 'Navigation/NAVIGATE') {
+          const callback = this.state.afterEachHooks[nextRoute.index]
+          if (callback) {
+            if (this.timeout) clearTimeout(this.timeout)
+            this.timeout = setTimeout(() => {
+              callback()
+              /*console.log('called hooks on', nextRoute.index)*/
+            }, 200)
+          }
+        }
+      }}/> 
     )
   }
 

@@ -153,9 +153,9 @@ class Toolbar extends Component {
       <TabContainer 
         onNavigationStateChange={(prevRoute, nextRoute, action) => {
           if (prevRoute.index !== nextRoute.index && action.type === 'Navigation/NAVIGATE') {
-            setTimeout(() => {
+            /*setTimeout(() => {*/
               this.props.dispatch(changeSegmentIndex(nextRoute.index))
-            }, 100)
+            /*}, 100)*/
           }
         }}
         screenProps={{
