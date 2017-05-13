@@ -133,7 +133,7 @@ export default class Home extends Component {
       }
     }
     this.removeListener = BackHandler.addEventListener('hardwareBackPress', () => {
-      if (marginTop._value !== -limit) {
+      if (marginTop._value === 0) {
         
         return false;
       }
@@ -160,6 +160,13 @@ export default class Home extends Component {
           }).start()
           return false
         }
+      },
+      onMoveShouldSetPanResponderCapture: (e, gesture) => {
+        const target = e.nativeEvent.pageY - this._previousTop - 40
+        if (target > limit && target <= SCREEN_WIDTH) {
+          return Math.abs(gesture.dy) >= 2
+        }
+        return false
       },
       onPanResponderGrant: (e, gesture) => {
 
@@ -246,7 +253,7 @@ export default class Home extends Component {
           </View>
         </View>
 
-        <View style={{ position: 'absolute', top: 0, left: 0, width: SCREEN_WIDTH, height: limit  }}>
+        <View style={{ position: 'absolute', top: 0, left: 0, right: 0, height: limit  }}>
           <View style={{ justifyContent:'center', alignItems: 'center', alignSelf: 'center', flex: 3, marginTop: -70 }}>
             <View borderRadius={75} style={{width: 150, height: 150, backgroundColor: '#fff'}} >
               <Image
@@ -340,7 +347,7 @@ export default class Home extends Component {
           style={[styles.toolbar, { backgroundColor: this.state.isLoading ? modeInfo.standardColor : 'transparent' }]}
           actions={this.state.toolbar}
           onIconClicked={() => {
-            if (marginTop._value !== -limit) {
+            if (marginTop._value === 0) {
               this.props.navigation.goBack()
               return
             }
@@ -365,14 +372,13 @@ export default class Home extends Component {
         { (!this.state.isLoading && source.playerInfo && source.playerInfo.backgroundImage) && (
           <View style={{
             position: 'absolute',
-            top: -1
+            top: -1, left: 0, right: 0, 
           }}>
             <Image
               source={{ uri: source.playerInfo.backgroundImage }}
               resizeMode={'cover'}
               resizeMethod={'resize'}
               style={{ 
-                width: SCREEN_WIDTH, 
                 height: SCREEN_WIDTH + 1,
                 top: 0, // why??
               }}
@@ -403,14 +409,16 @@ export default class Home extends Component {
               this.renderHeader(source.playerInfo)
             }
             <View style={{
-              position: 'absolute'
+              position: 'absolute',
+              right: 0,
+              left: 0
             }}>
               <Animated.View style={{
                 backgroundColor: this.state.marginTop.interpolate({
                   inputRange: [-limit, -limit/2, 0, limit],
                   outputRange: [modeInfo.standardColor, 'rgba(255, 255, 255, 0)', 'rgba(255, 255, 255, 0)', modeInfo.standardColor],
                 }),
-                width: SCREEN_WIDTH,
+                flex: 1,
                 height: SCREEN_WIDTH
               }}/>
             </View>
@@ -423,28 +431,6 @@ export default class Home extends Component {
             </Animated.View>
           )
         }
-        {/*{!this.state.isLoading && <FlatList style={{
-
-          height: 300,
-          backgroundColor: '#f00'//modeInfo.standardColor
-        }}
-          ref={flatlist => this.flatlist = flatlist}
-          data={data}
-          keyExtractor={(item, index) => item.id || index}
-          renderItem={({ item, index }) => {
-            return renderFuncArr[index](item)
-          }}
-          extraData={this.state}
-          windowSize={999}
-          disableVirtualization={true}
-          viewabilityConfig={{
-            minimumViewTime: 3000,
-            viewAreaCoveragePercentThreshold: 100,
-            waitForInteraction: true
-          }}
-        >
-        </FlatList>
-        }*/}
       </View>
     );
   }
