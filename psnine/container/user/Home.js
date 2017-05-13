@@ -229,11 +229,11 @@ export default class Home extends Component {
 
         <View style={{ position: 'absolute', top: 0, left: 0, right: 0, height: limit  }}>
           <View style={{ justifyContent:'center', alignItems: 'center', alignSelf: 'center', flex: 3, marginTop: -70 }}>
-            <View borderRadius={75} style={{width: 150, height: 150, backgroundColor: '#fff'}} >
+            <View borderRadius={75} style={{width: 150, height: 150, backgroundColor: 'transparent',}} >
               <Image
                 borderRadius={75}
                 source={{ uri: rowData.avatar}}
-                style={[styles.avatar, { width: 150, height: 150 }]}
+                style={[styles.avatar, { width: 150, height: 150,overlayColor: 'rgba(0,0,0,0.0)',backgroundColor: 'transparent', }]}
               />
             </View>
           </View>
@@ -309,6 +309,7 @@ export default class Home extends Component {
         }),
         psnid: params.title,
         gameTable: this.state.data.gameTable,
+        diaryTable: this.state.data.diaryTable,
         navigation: this.props.navigation
       }} onNavigationStateChange={(prevRoute, nextRoute, action) => {
         if (prevRoute.index !== nextRoute.index && action.type === 'Navigation/NAVIGATE') {

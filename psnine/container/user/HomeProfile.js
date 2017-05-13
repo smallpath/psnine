@@ -228,7 +228,67 @@ export default class Home extends Component {
     )
   }
 
-  renderProfile = (rowData, index) => {
+  renderDiary = (rowData, index) => {
+    const { modeInfo } = this.props.screenProps
+    const shouldShowImage = rowData.thumbs.length !== 0
+    const suffix = '<div>' + rowData.thumbs.map(text => `<img src="${text}">`) + '</div>'
+    const content = `<div>${rowData.content}${shouldShowImage ? suffix : ''}</div>`
+    return (
+      <TouchableNativeFeedback key={rowData.id || index}   onPress={() => {
+          this.props.screenProps.navigation.navigate('CommunityTopic', {
+            URL: rowData.href,
+            title: rowData.psnid,
+            rowData,
+            type: 'gene', // todo
+          })
+        }}>
+        <View pointerEvents={'box-only'} style={{
+          backgroundColor: modeInfo.backgroundColor,
+          flexDirection: 'column',
+          borderBottomWidth: StyleSheet.hairlineWidth,
+          borderBottomColor: modeInfo.standardTextColor,
+          padding: 10
+        }}>
+
+          <View style={{ flex: -1, flexDirection: 'row', padding: 5 }}>
+            <HTMLView
+              value={content}
+              modeInfo={Object.assign({}, modeInfo, {
+                standardTextColor: modeInfo.titleTextColor
+              })}
+              stylesheet={styles}
+              onImageLongPress={this.handleImageOnclick}
+              imagePaddingOffset={30 + 10}
+              shouldForceInline={false}
+            />
+          </View>
+          <View style={{ 
+            flex: 1, 
+            justifyContent: 'space-around', 
+            flexDirection: 'row',
+            alignItems: 'flex-start',
+            padding: 2,
+            paddingLeft: 12
+          }}>
+            <Text        
+              style={{ 
+                flex: 1,             
+                textAlign: 'left',
+                textAlignVertical: 'center',
+                color: modeInfo.standardTextColor, }}>{rowData.psnid}</Text>
+            <Text             
+              style={{ 
+                flex: 1,             
+                textAlign: 'left',
+                textAlignVertical: 'center',
+                color: modeInfo.standardTextColor, }}>{rowData.date + ' '}{rowData.count}</Text>
+          </View>
+        </View>
+      </TouchableNativeFeedback>
+    )
+  }
+
+  renderGameProfile = (rowData, index) => {
     const { modeInfo } = this.props.screenProps
     return (
       <View key={index} style={{ backgroundColor: modeInfo.backgroundColor }}>
@@ -239,15 +299,32 @@ export default class Home extends Component {
     )
   }
 
+  renderDiaryProfile = (rowData, index) => {
+    const { modeInfo } = this.props.screenProps
+    return (
+      <View key={index} style={{ backgroundColor: modeInfo.backgroundColor }}>
+        <View>
+          { rowData.map((item , index) => this.renderDiary(item ,index)) }
+        </View>
+      </View>
+    )
+  }
+
   render() {
     const { params = {} } = this.props.navigation.state
     // console.log('GamePage.js rendered');
-    const { modeInfo } = this.props.screenProps
+    const { modeInfo, gameTable, diaryTable } = this.props.screenProps
     const data = []
     const renderFuncArr = []
+    if (gameTable.length !== 0) {
+      data.push(gameTable)
+      renderFuncArr.push(this.renderGameProfile)
+    } 
+    if (diaryTable.length !== 0) {
+      data.push(diaryTable)
+      renderFuncArr.push(this.renderDiaryProfile)
+    }
 
-    data.push(this.props.screenProps.gameTable)
-    renderFuncArr.push(this.renderProfile)
 
     this.viewBottomIndex = Math.max(data.length - 1, 0)
 
