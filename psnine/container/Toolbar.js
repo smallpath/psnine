@@ -149,7 +149,6 @@ class Toolbar extends Component {
     )
   }
   _renderTabView = () => {
-
     return (
       <TabContainer 
         onNavigationStateChange={(prevRoute, nextRoute, action) => {

@@ -64,59 +64,55 @@ const styles = StyleSheet.create({
   },
 });
 
-export default (maps) => {
-  const container = {}
-  maps.forEach(({ text, url }) => {
-    switch (text) {
-      case '主页':
-        container.Home = {
-          screen: HomeProfile
-        }
-        break;
-      case '游戏':
-        container.UserGame = {
-          screen: UserGame
-        }
-        break;
-      case '留言板':
-        // container.island = {
-        //   screen: MyHomeScreen
-        // }
-        break;
-      case '圈子':
-        // container.circle = {
-        //   screen: MyNotificationsScreen
-        // }
-        break;
-    }
-  })
+const container = {
+  Home: {
+    screen: HomeProfile
+  },
+  UserGame: {
+    screen: UserGame
+  }
+}
 
-  return TabNavigator(container, {
-    tabBarComponent: props => {
-      const { modeInfo } = props.screenProps
-      return (
-        <DefaultTabBar
-          {...props}
-          activeTintColor={modeInfo.accentColor}
-          inactiveTintColor={modeInfo.titleTextColor}
-          indicatorStyle={{
-            backgroundColor: modeInfo.accentColor,
-          }}
-          scrollEnabled={false}
-          tabStyle={{
-            height: 40,
-            elevation: 0
-          }}
-          style={{
-            elevation: 0,
-            height: 40,
-            backgroundColor: modeInfo.backgroundColor
-          }}
-        />
-      )
-    },
-    lazy: true,
-    animationEnabled: false,
-    backBehavior: 'none'
-  })
+const Tab = TabNavigator(container, {
+  tabBarComponent: props => {
+    const { modeInfo } = props.screenProps
+    return (
+      <DefaultTabBar
+        {...props}
+        activeTintColor={modeInfo.accentColor}
+        inactiveTintColor={modeInfo.titleTextColor}
+        indicatorStyle={{
+          backgroundColor: modeInfo.accentColor,
+        }}
+        scrollEnabled={false}
+        tabStyle={{
+          height: 40,
+          elevation: 0
+        }}
+        style={{
+          elevation: 0,
+          height: 40,
+          backgroundColor: modeInfo.backgroundColor
+        }}
+      />
+    )
+  },
+  lazy: true,
+  animationEnabled: false,
+  backBehavior: 'none'
+})
+
+export default class TabContainer extends React.PureComponent {
+  constructor(props){
+    super(props)
+  }
+  shouldComponentUpdate(nextProps, nextState) {
+    console.log('shouldComponent called')
+    return false
+  }
+  render() {
+    return (
+      <Tab {...this.props} />
+    )
+  }
 }

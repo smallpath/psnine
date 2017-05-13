@@ -80,9 +80,47 @@ export default class Home extends Component {
   }
 
   componentWillMount = () => {
-
+    const { profileToolbar: toolbar } = this.props.screenProps
+    if (!toolbar) return
+    if (!toolbar.length) return
+    InteractionManager.runAfterInteractions(() => {
+      this.props.screenProps.setToolbar({
+        toolbar: toolbar,
+        toolbarActions: this._onActionSelected
+      })
+    })
   }
 
+  _onActionSelected = (index) => {
+    const { params } = this.props.screenProps.navigation.state
+    switch (index) {
+      case 0:
+        ToastAndroid.show('同步中..', ToastAndroid.SHORT)
+        const psnid = params.URL.split('/').filter(item => item.trim()).pop()
+        sync(psnid).then(res => res.text()).then(text => {
+          if (text.includes('玩脱了')) {
+            const arr = text.match(/\<title\>(.*?)\<\/title\>/)
+            if (arr && arr[1]) {
+              const msg = `同步失败: ${arr[1]}`
+              ToastAndroid.show(msg, ToastAndroid.SHORT);
+              return
+            }
+          }
+          ToastAndroid.show('同步成功', ToastAndroid.SHORT);
+          this.preFetch()
+        }).catch(err => {
+          const msg = `同步失败: ${err.toString()}`
+          ToastAndroid.show(msg, ToastAndroid.SHORT);
+        })
+        return;
+      case 1:
+        return
+      case 2:
+        return;
+      case 3:
+        return;
+    }
+  }
 
   handleImageOnclick = (url) => this.props.navigation.navigate('ImageViewer', {
     images: [

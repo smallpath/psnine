@@ -194,10 +194,22 @@ class UserGame extends Component {
             commentTotal: data.len,
             currentPage: thisPage,
             isLoading: false
-          }, cb);
+          }, () => {
+            cb()
+            InteractionManager.runAfterInteractions(() => {
+              this.props.screenProps.setToolbar({
+                toolbar: toolbarActions,
+                toolbarActions: this.onActionSelected
+              })
+            })
+          });
         })
       })
     })
+  }
+
+  componentDidUpdate = () => {
+    // alert('here')
   }
 
   pageArr = [1]

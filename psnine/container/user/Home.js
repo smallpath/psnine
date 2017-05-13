@@ -82,38 +82,8 @@ export default class Home extends Component {
       openVal: new Animated.Value(0),
       modalVisible: false,
       modalOpenVal: new Animated.Value(0),
-      marginTop: new Animated.Value(0)
-    }
-  }
-
-  _onActionSelected = (index) => {
-    const { params } = this.props.navigation.state
-    switch (index) {
-      case 0:
-        ToastAndroid.show('同步中..', ToastAndroid.SHORT)
-        const psnid = params.URL.split('/').filter(item => item.trim()).pop()
-        sync(psnid).then(res => res.text()).then(text => {
-          if (text.includes('玩脱了')) {
-            const arr = text.match(/\<title\>(.*?)\<\/title\>/)
-            if (arr && arr[1]) {
-              const msg = `同步失败: ${arr[1]}`
-              ToastAndroid.show(msg, ToastAndroid.SHORT);
-              return
-            }
-          }
-          ToastAndroid.show('同步成功', ToastAndroid.SHORT);
-          this.preFetch()
-        }).catch(err => {
-          const msg = `同步失败: ${err.toString()}`
-          ToastAndroid.show(msg, ToastAndroid.SHORT);
-        })
-        return;
-      case 1:
-        return
-      case 2:
-        return;
-      case 3:
-        return;
+      marginTop: new Animated.Value(0),
+      onActionSelected: this._onActionSelected
     }
   }
 
@@ -212,9 +182,6 @@ export default class Home extends Component {
         this.hasGameTable = data.gameTable.length !== 0
         this.setState({
           data,
-          toolbar: data.psnButtonInfo.reverse().map(item => {
-            return { title: item.text, iconName: iconMapper[item.text], show: 'always' }
-          }),
           isLoading: false
         })
       })
@@ -309,12 +276,21 @@ export default class Home extends Component {
 
   renderTabContainer = (list) => {
     const { modeInfo } = this.props.screenProps
+    const { params } = this.props.navigation.state
   
-    const UserTab = CreateUserTab(list)
     return (
-      <UserTab screenProps={{
+      <CreateUserTab screenProps={{
         modeInfo: modeInfo,
         toolbar: list,
+        setToolbar: ({ toolbar, toolbarActions }) => {
+          this.setState({
+            toolbar,
+            onActionSelected: toolbarActions
+          })
+        },
+        profileToolbar: this.state.data.psnButtonInfo.reverse().map(item => {
+          return { title: item.text, iconName: iconMapper[item.text], show: 'always' }
+        }),
         gameTable: this.state.data.gameTable,
         navigation: this.props.navigation
       }} onNavigationStateChange={null}/> 
@@ -346,6 +322,7 @@ export default class Home extends Component {
           titleColor={modeInfo.isNightMode ? '#000' : '#fff'}
           style={[styles.toolbar, { backgroundColor: this.state.isLoading ? modeInfo.standardColor : 'transparent' }]}
           actions={this.state.toolbar}
+          key={this.state.toolbar.map(item => item.text || '').join('::')}
           onIconClicked={() => {
             if (marginTop._value === 0) {
               this.props.navigation.goBack()
@@ -355,7 +332,7 @@ export default class Home extends Component {
             this._previousTop = 0
             Animated.timing(marginTop, { toValue: 0, ...config, duration: 200 }).start();
           }}
-          onActionSelected={this._onActionSelected}
+          onActionSelected={this.state.onActionSelected}
         />
         {this.state.isLoading && (
           <ActivityIndicator
@@ -425,6 +402,7 @@ export default class Home extends Component {
             <View style={{flex: 0, height: SCREEN_HEIGHT - toolbarHeight - StatusBar.currentHeight + 1, backgroundColor: modeInfo.backgroundColor}} contentContainerStyle={{
               height: SCREEN_HEIGHT - toolbarHeight  - StatusBar.currentHeight + 1
             }}
+              key={'caonima'}
               >
               {this.renderTabContainer(source.toolbarInfo)}
             </View>

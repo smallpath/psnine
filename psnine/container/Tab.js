@@ -40,7 +40,24 @@ const styles = StyleSheet.create({
   },
 });
 
-export default TabNavigator({
+
+export default class TabContainer extends Component {
+  constructor(props) {
+    super(props)
+  }
+
+  shouldComponentUpdate(prop, state) {
+    return false
+  }
+
+  render() {
+    return (<Tabs
+      {...this.props}
+    />)
+  }
+}
+
+const Tabs = TabNavigator({
   Community: {
     screen: Community,
   },
