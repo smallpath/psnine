@@ -116,6 +116,7 @@ class Toolbar extends Component {
     super(props);
 
     this.state = {
+      search: '',
       rotation: new Animated.Value(1),
       scale: new Animated.Value(1),
       opacity: new Animated.Value(1),
@@ -147,7 +148,8 @@ class Toolbar extends Component {
         segmentedIndex: this.props.app.segmentedIndex,
         modeInfo: this.props.modeInfo,
         setMarginTop: this.setMarginTop,
-        modalVisible: this.state.modalVisible
+        modalVisible: this.state.modalVisible,
+        searchTitle: this.state.search
       }}/>
     )
   }
@@ -169,7 +171,8 @@ class Toolbar extends Component {
           segmentedIndex: this.props.app.segmentedIndex,
           modeInfo: this.props.modeInfo,
           setMarginTop: this.setMarginTop,
-          modalVisible: this.state.modalVisible
+          modalVisible: this.state.modalVisible,
+          searchTitle: this.state.search
         }}/>
     )
   }
@@ -180,12 +183,15 @@ class Toolbar extends Component {
   }
 
   _onSearch = (text) => {
-    console.log(`Searching ${text}`)
+    this.setState({
+      search: text
+    })
   }
 
   _onSearchClicked = () => {
     this.props.navigation.navigate('Search', {
       shouldSeeBackground: true,
+      content: this.state.search,
       callback: this._onSearch
     })
   }

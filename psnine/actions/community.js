@@ -3,9 +3,12 @@ import * as ActionTypes from '../constants/actionTypes';
 
 import { fetchTopics } from '../dao';
 
-export function getTopicList(page = 1, type = '') {
+export function getTopicList(page = 1, {
+  type = '',
+  title = ''
+}) {
   return dispatch => {
-    return fetchTopics(page, type)
+    return fetchTopics(page, type, title)
       .then(response => {
         dispatch(gotTopicList(response, page, type));
       }).catch(err => {

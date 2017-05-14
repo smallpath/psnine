@@ -42,11 +42,11 @@ const host = `http://120.55.124.66`;
 
 const webHost = `http://psnine.com`;
 
-const getTopicsAPI = (page, type) => !type ? `${webHost}/topic?page=${page}&node=${type}` : `${webHost}/node/${type}?page=${page}`;
+const getTopicsAPI = (page, type, title) => !type ? `${webHost}/topic?page=${page}&node=${type}${title ? `&title=${title}` : '' }` : `${webHost}/node/${type}?page=${page}${title ? `&title=${title}` : '' }`;
 
-const getGenesAPI = (page, type) => `${webHost}/gene?page=${page}&type=${type}`;
+const getGenesAPI = (page, type, title) => `${webHost}/gene?page=${page}&type=${type}${title ? `&title=${title}` : '' }`;
 
-export const fetchTopics = (page = 1,type = '') => safeFetch(getTopicsAPI(page,type)).then(res => topicParser(res));
+export const fetchTopics = (page = 1,type = '', title) => safeFetch(getTopicsAPI(page,type, title)).then(res => topicParser(res));
 
 export const fetchGenes = (page = 1, type = 'all') => safeFetch(getGenesAPI(page,type)).then(res => geneParser(res));
 

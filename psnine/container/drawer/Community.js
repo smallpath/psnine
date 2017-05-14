@@ -123,6 +123,11 @@ class Community extends Component {
       this._onRefresh(nextProps.screenProps.communityType);
     } else if (this.props.screenProps.modeInfo.isNightMode != nextProps.screenProps.modeInfo.isNightMode) {
       this.props.screenProps.modeInfo = nextProps.screenProps.modeInfo;
+    } else if (this.props.screenProps.searchTitle !== nextProps.screenProps.searchTitle) {
+      this._onRefresh(
+        this.props.screenProps.communityType, 
+        nextProps.screenProps.searchTitle
+      )
     }
 
   }
@@ -143,19 +148,28 @@ class Community extends Component {
 
   componentDidMount = () => {
     const { community: communityReducer } = this.props;
+    const { communityType, searchTitle } = this.props.screenProps
     if (communityReducer.topicPage == 0) {
-      this._onRefresh();
+      this._onRefresh(
+        communityType, 
+        searchTitle
+      )
     }
   }
 
-  _onRefresh = (type = '') => {
+  _onRefresh = (type = '', searchTitle = '') => {
     const { community: communityReducer, dispatch } = this.props;
+    const { communityType } = this.props.screenProps
 
     this.refreshControl._nativeRef.setNativeProps({
       refreshing: true,
     });
 
-    dispatch(getTopicList(1, type));
+    dispatch(getTopicList(1, {
+        type,
+        title: searchTitle
+      })
+    );
   }
 
   _scrollToTop = () => {
@@ -164,10 +178,14 @@ class Community extends Component {
 
   _loadMoreData = () => {
     const { community: communityReducer, dispatch } = this.props;
-    const { communityType } = this.props.screenProps
+    const { communityType, searchTitle } = this.props.screenProps
 
     let page = communityReducer.topicPage + 1;
-    dispatch(getTopicList(page, communityType));
+    dispatch(getTopicList(page, {
+        type: communityType,
+        title: searchTitle
+      })
+    );
   }
 
   _onEndReached = () => {

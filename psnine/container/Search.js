@@ -54,10 +54,11 @@ export default class Search extends Component {
 
   constructor(props) {
     super(props);
+    const { params } = this.props.navigation.state
 
     this.state = {
       icon: false,
-      content: '',
+      content: params.content || '',
       openVal: new Animated.Value(0),
       marginTop: new Animated.Value(0),
       toolbarOpenVal: new Animated.Value(0)
@@ -65,18 +66,18 @@ export default class Search extends Component {
   }
 
   componentDidMount = () => {
-    let config = { tension: 30, friction: 7 };
+    // let config = { tension: 30, friction: 7 };
     Animated.spring(this.state.openVal, { toValue: 1, ...config }).start();
   }
 
   _pressBack = (callback) => {
     const { marginTop, openVal, content } = this.state
-    if (typeof callback === 'function') {
-      if (content === '') {
-        ToastAndroid.show('输入为空', 1000)
-        return
-      }
-    }
+    // if (typeof callback === 'function') {
+    //   if (content === '') {
+    //     ToastAndroid.show('输入为空', 1000)
+    //     return
+    //   }
+    // }
     let value = marginTop._value;
     if (Math.abs(value) >= 50) {
       Animated.spring(marginTop, { toValue: 0, ...config }).start();
@@ -85,7 +86,8 @@ export default class Search extends Component {
     this.content.clear();
     Keyboard.dismiss()
     Animated.spring(openVal, { toValue: 0, ...config }).start(() => {
-      typeof callback === 'function' && callback(content)
+      const _lastNativeText = this.content._lastNativeText
+      typeof callback === 'function' && callback(_lastNativeText)
       this.props.navigation.goBack()
     });
   }
@@ -98,7 +100,7 @@ export default class Search extends Component {
   }
 
   componentWillMount = async () => {
-    let config = { tension: 30, friction: 7 };
+    // let config = { tension: 30, friction: 7 };
     const { openVal, marginTop } = this.state
     const { callback } = this.props.navigation.state.params
     const { params } = this.props.navigation.state
@@ -139,16 +141,12 @@ export default class Search extends Component {
 
     const icon = await Promise.all([
       Ionicons.getImageSource('md-arrow-back', 20, modeInfo.standardColor),
-      Ionicons.getImageSource('md-happy', 50, '#fff'),
-      Ionicons.getImageSource('md-photos', 50, '#fff'),
       Ionicons.getImageSource('md-search', 20,  modeInfo.standardColor)
     ])
     this.setState({
       icon: {
         backIcon: icon[0],
-        emotionIcon: icon[1],
-        photoIcon: icon[2],
-        sendIcon: icon[3]
+        sendIcon: icon[1]
       }
     })
 
@@ -156,6 +154,7 @@ export default class Search extends Component {
 
   _onSubmitEditing = (event) => {
     const { callback } = this.props.navigation.state.params
+    // console.log(event.nativeEvent, event.nativeEvent.text)
     this._pressBack(callback)
   }
 
@@ -207,8 +206,8 @@ export default class Search extends Component {
             backgroundColor: 'rgba(0,0,0,0.2)',
             padding: 6,
             borderBottomLeftRadius: openVal.interpolate({
-              inputRange: [0, 0.66,1],
-              outputRange: [SCREEN_HEIGHT,SCREEN_HEIGHT, 0]
+              inputRange: [0, 9/16,1],
+              outputRange: [SCREEN_HEIGHT/2,SCREEN_HEIGHT/2, 0]
             }),
           }
         ]}

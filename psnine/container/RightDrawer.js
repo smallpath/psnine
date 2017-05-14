@@ -116,7 +116,8 @@ export default class RightDrawerContainer extends Component {
   }
 
   shouldComponentUpdate(prop, state) {
-    const { communityType, geneType, modeInfo } = prop.screenProps
+    const { communityType, geneType, modeInfo, searchTitle } = prop.screenProps
+    if (searchTitle !== this.props.screenProps.searchTitle) return true
     if (modeInfo.isNightMode !== this.props.screenProps.modeInfo.isNightMode) return true
     if (geneType !== this.props.screenProps.geneType) return true
     if (communityType !== this.props.screenProps.communityType) return true
