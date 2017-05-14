@@ -68,6 +68,7 @@ import Setting from './container/setting/Setting'
 import Theme from './container/setting/Theme'
 import General from './container/setting/General'
 import ImageViewer from './components/ImageViewer'
+import Search from './container/Search'
 
 import { transitionConfig, onTransitionStart } from './utils/transitionConfig'
 
@@ -80,6 +81,10 @@ const enableGesture = ({ navigation }) => {
 const Navigator = StackNavigator({
   Main: {
     screen: App,
+    path: '',
+  },
+  Search: {
+    screen: Search,
     path: '',
   },
   Login: {

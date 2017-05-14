@@ -179,15 +179,36 @@ class Toolbar extends Component {
     this.props.app = nextProps.app;
   }
 
+  _onSearch = (text) => {
+    console.log(`Searching ${text}`)
+  }
+
+  _onSearchClicked = () => {
+    this.props.navigation.navigate('Search', {
+      shouldSeeBackground: true,
+      callback: this._onSearch
+    })
+  }
+
   onActionSelected = (index) => {
     const { segmentedIndex } = this.props.app;
     const { dispatch } = this.props;
-    if (segmentedIndex == 0) {
-      let type = toolbarActions[segmentedIndex][index].value;
-      dispatch(changeCommunityType(type));
+    if (segmentedIndex === 0) {
+      if (index !== 0) {
+        let type = toolbarActions[segmentedIndex][index].value;
+        dispatch(changeCommunityType(type));
+      } else {
+        this._onSearchClicked()
+      }
     } else if (segmentedIndex == 5) {
-      let type = toolbarActions[segmentedIndex][index].value;
-      dispatch(changeGeneType(type));
+      if (index !== 0) {
+        let type = toolbarActions[segmentedIndex][index].value;
+        dispatch(changeGeneType(type));
+      } else {
+        this._onSearchClicked()
+      }
+    } else {
+      this.onActionSelected()
     }
   }
 
