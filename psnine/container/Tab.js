@@ -48,7 +48,10 @@ export default class TabContainer extends Component {
   }
 
   shouldComponentUpdate(prop, state) {
-    if (prop.screenProps.modeInfo.isNightMode !== this.props.screenProps.modeInfo.isNightMode) return true
+    const { communityType, geneType, modeInfo } = prop.screenProps
+    if (modeInfo.isNightMode !== this.props.screenProps.modeInfo.isNightMode) return true
+    if (geneType !== this.props.screenProps.geneType) return true
+    if (communityType !== this.props.screenProps.communityType) return true
     return false
   }
 

@@ -185,7 +185,7 @@ class Toolbar extends Component {
     if (segmentedIndex == 0) {
       let type = toolbarActions[segmentedIndex][index].value;
       dispatch(changeCommunityType(type));
-    } else if (segmentedIndex == 4) {
+    } else if (segmentedIndex == 5) {
       let type = toolbarActions[segmentedIndex][index].value;
       dispatch(changeGeneType(type));
     }
