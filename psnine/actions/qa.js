@@ -3,9 +3,13 @@ import * as ActionTypes from '../constants/actionTypes';
 
 import { fetchQuestion } from '../dao';
 
-export function getQAList(page, type, sort) {
+export function getQAList(page, {
+  type,
+  sort,
+  title
+}) {
   return dispatch => {
-    return fetchQuestion(page, type, sort)
+    return fetchQuestion(page, type, sort, title)
       .then(response => {
         dispatch(gotQAList(response, page, type));
       }).catch(err => {

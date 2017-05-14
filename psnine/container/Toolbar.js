@@ -214,7 +214,7 @@ class Toolbar extends Component {
         this._onSearchClicked()
       }
     } else {
-      this.onActionSelected()
+      this._onSearchClicked()
     }
   }
 
@@ -583,7 +583,7 @@ class Toolbar extends Component {
         }, i, iconNameArr.length)
       )
     }
-
+    // console.log(appReducer.segmentedIndex, toolbarActions[appReducer.segmentedIndex].length)
     return (
       <Animated.View
         style={[styles.container, {

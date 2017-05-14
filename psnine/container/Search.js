@@ -87,8 +87,10 @@ export default class Search extends Component {
     Keyboard.dismiss()
     Animated.spring(openVal, { toValue: 0, ...config }).start(() => {
       const _lastNativeText = this.content._lastNativeText
-      typeof callback === 'function' && callback(_lastNativeText)
       this.props.navigation.goBack()
+      InteractionManager.runAfterInteractions(() => {
+        typeof callback === 'function' && callback(_lastNativeText)
+      })
     });
   }
   isKeyboardShowing = false

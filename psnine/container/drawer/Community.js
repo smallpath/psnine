@@ -167,7 +167,7 @@ class Community extends Component {
 
     dispatch(getTopicList(1, {
         type,
-        title: searchTitle
+        title: searchTitle || this.props.screenProps.searchTitle
       })
     );
   }

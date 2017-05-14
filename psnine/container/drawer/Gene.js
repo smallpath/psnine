@@ -126,6 +126,11 @@ class Gene extends Component {
       this._onRefresh(nextProps.screenProps.geneType);
     } else if (this.props.screenProps.modeInfo.isNightMode != nextProps.screenProps.modeInfo.isNightMode) {
       this.props.screenProps.modeInfo = nextProps.screenProps.modeInfo;
+    } else if (this.props.screenProps.searchTitle !== nextProps.screenProps.searchTitle) {
+      this._onRefresh(
+        this.props.screenProps.geneType,
+        nextProps.screenProps.searchTitle
+      )
     }
   }
 
@@ -150,14 +155,17 @@ class Gene extends Component {
   }
 
 
-  _onRefresh = (type = '') => {
+  _onRefresh = (type = '', title) => {
     const { gene: geneReducer, dispatch } = this.props;
 
     this.refreshControl._nativeRef.setNativeProps({
       refreshing: true,
     });
 
-    dispatch(getGeneList(1, type));
+    dispatch(getGeneList(1, {
+      type,
+      title: title || this.props.screenProps.searchTitle
+    }));
 
   }
 
@@ -169,7 +177,10 @@ class Gene extends Component {
     const { gene: geneReducer, dispatch } = this.props;
     const { geneType } = this.props.screenProps
     let page = geneReducer.genePage + 1;
-    dispatch(getGeneList(page, geneType));
+    dispatch(getGeneList(page, {
+      type: geneType,
+      title: this.props.screenProps.searchTitle
+    }));
   }
 
   _onEndReached = () => {

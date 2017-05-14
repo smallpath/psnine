@@ -3,9 +3,12 @@ import * as ActionTypes from '../constants/actionTypes';
 
 import { fetchRanks } from '../dao';
 
-export function getRankList(page, sort, server, cheat) {
+export function getRankList(page, {
+  sort, server, cheat,
+  title = ''
+}) {
   return dispatch => {
-    return fetchRanks(page, sort, server, cheat)
+    return fetchRanks(page, sort, server, cheat, title)
       .then(response => {
         dispatch(gotRankList(response.list, page, response.totalPage));
       }).catch(err => {

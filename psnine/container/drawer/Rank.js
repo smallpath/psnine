@@ -254,6 +254,10 @@ class Rank extends Component {
     const { modeInfo } = this.props.screenProps
     if (modeInfo.isNightMode != nextProps.screenProps.modeInfo.isNightMode) {
       this.props.screenProps.modeInfo = nextProps.screenProps.modeInfo;
+    } else if (this.props.screenProps.searchTitle !== nextProps.screenProps.searchTitle) {
+      this._onRefresh(
+        nextProps.screenProps.searchTitle
+      )
     }
   }
 
@@ -278,7 +282,7 @@ class Rank extends Component {
     }
   }
 
-  _onRefresh = () => {
+  _onRefresh = (title = '') => {
     const { rank: reducer, dispatch } = this.props;
 
     this.refreshControl._nativeRef.setNativeProps({
@@ -286,7 +290,10 @@ class Rank extends Component {
     });
 
     const { server, sort, cheat } = this.state
-    dispatch(getRankList(1, sort, server, cheat));
+    dispatch(getRankList(1, {
+      sort, server, cheat,
+      title: title || this.props.screenProps.searchTitle
+    }));
   }
 
   _scrollToTop = () => {
@@ -297,7 +304,10 @@ class Rank extends Component {
     const { rank: reducer, dispatch } = this.props;
     const { server, sort, cheat } = this.state
     let page = reducer.page + 1;
-    dispatch(getRankList(page, sort, server, cheat));
+    dispatch(getRankList(page, {
+      sort, server, cheat,
+      title: this.props.screenProps.searchTitle
+    }));
   }
 
   _onEndReached = () => {

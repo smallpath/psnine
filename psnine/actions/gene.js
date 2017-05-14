@@ -3,9 +3,12 @@ import * as ActionTypes from '../constants/actionTypes';
 
 import { fetchGenes } from '../dao';
 
-export function getGeneList(page = 1, type = '') {
+export function getGeneList(page = 1, {
+  type = '',
+  title = '' 
+}) {
   return dispatch => {
-    return fetchGenes(page, type)
+    return fetchGenes(page, type, title)
       .then(response => {
         dispatch(gotGeneList(response, page, type));
       }).catch(err => {

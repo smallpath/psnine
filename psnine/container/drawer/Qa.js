@@ -176,6 +176,10 @@ class Qa extends Component {
   componentWillReceiveProps = (nextProps) => {
     if (this.props.screenProps.modeInfo.isNightMode != nextProps.screenProps.modeInfo.isNightMode) {
       this.props.screenProps.modeInfo = nextProps.screenProps.modeInfo;
+    } else if (this.props.screenProps.searchTitle !== nextProps.screenProps.searchTitle) {
+      this._onRefresh(
+        nextProps.screenProps.searchTitle
+      )
     }
   }
 
@@ -200,7 +204,7 @@ class Qa extends Component {
     }
   }
 
-  _onRefresh = () => {
+  _onRefresh = (title = '') => {
     const { qa: qaReducer, dispatch } = this.props;
 
     this.refreshControl._nativeRef.setNativeProps({
@@ -208,7 +212,12 @@ class Qa extends Component {
     });
 
     const { type, sort } = this.state
-    dispatch(getQAList(1, type, sort));
+    dispatch(getQAList(1, {
+        type,
+        sort,
+        title: title || this.props.screenProps.searchTitle
+      })
+    );
   }
 
   _scrollToTop = () => {
@@ -219,7 +228,12 @@ class Qa extends Component {
     const { qa: qaReducer, dispatch } = this.props;
     const { type, sort } = this.state
     let page = qaReducer.page + 1;
-    dispatch(getQAList(page, type, sort));
+    dispatch(getQAList(page, {
+        type, 
+        sort,
+        title: this.props.screenProps.searchTitle
+      })
+    );
   }
 
   _onEndReached = () => {

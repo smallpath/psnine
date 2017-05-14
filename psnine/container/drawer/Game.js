@@ -184,6 +184,10 @@ class Game extends Component {
     const { modeInfo } = this.props.screenProps
     if (modeInfo.isNightMode != nextProps.screenProps.modeInfo.isNightMode) {
       this.props.screenProps.modeInfo = nextProps.screenProps.modeInfo;
+    } else if (this.props.screenProps.searchTitle !== nextProps.screenProps.searchTitle) {
+      this._onRefresh(
+        nextProps.screenProps.searchTitle
+      )
     }
   }
 
@@ -208,7 +212,7 @@ class Game extends Component {
     }
   }
 
-  _onRefresh = () => {
+  _onRefresh = (title = '') => {
     const { game: gameReducer, dispatch } = this.props;
 
     this.refreshControl._nativeRef.setNativeProps({
@@ -216,7 +220,14 @@ class Game extends Component {
     });
 
     const { pf, sort, dlc } = this.state
-    dispatch(getGameList(1, sort, pf, dlc));
+    dispatch(
+      getGameList(1, {
+        sort, 
+        pf, 
+        dlc,
+        title: title || this.props.screenProps.searchTitle
+      })
+    );
   }
 
   _scrollToTop = () => {
@@ -227,7 +238,10 @@ class Game extends Component {
     const { game: gameReducer, dispatch } = this.props;
     const { pf, sort, dlc } = this.state
     let page = gameReducer.page + 1;
-    dispatch(getGameList(page, sort, pf, dlc));
+    dispatch(getGameList(page, {
+      sort, pf, dlc,
+      title: this.props.screenProps.searchTitle
+    }));
   }
 
   _onEndReached = () => {

@@ -3,9 +3,12 @@ import * as ActionTypes from '../constants/actionTypes';
 
 import { fetchGames } from '../dao';
 
-export function getGameList(page, sort, pf, dlc) {
+export function getGameList(page, {
+  sort, pf, dlc,
+  title = ''
+}) {
   return dispatch => {
-    return fetchGames(page, sort, pf, dlc)
+    return fetchGames(page, sort, pf, dlc, title)
       .then(response => {
         dispatch(gotGameList(response, page));
       }).catch(err => {

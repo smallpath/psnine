@@ -26,6 +26,7 @@ import gamePointParser from '../parser/game/gamePoint'
 const safeFetch = function(reqUrl) {
   return new Promise((resolve, reject) => {
     let timeout = setTimeout(() => reject('request time out'), 20000);
+    // console.log(reqUrl)
     fetch(reqUrl).then((response) => {
       clearTimeout(timeout);
       const text = response.text()
@@ -46,9 +47,9 @@ const getTopicsAPI = (page, type, title) => !type ? `${webHost}/topic?page=${pag
 
 const getGenesAPI = (page, type, title) => `${webHost}/gene?page=${page}&type=${type}${title ? `&title=${title}` : '' }`;
 
-export const fetchTopics = (page = 1,type = '', title) => safeFetch(getTopicsAPI(page,type, title)).then(res => topicParser(res));
+export const fetchTopics = (page = 1,type = '', title) => safeFetch(getTopicsAPI(page, type, title)).then(res => topicParser(res));
 
-export const fetchGenes = (page = 1, type = 'all') => safeFetch(getGenesAPI(page,type)).then(res => geneParser(res));
+export const fetchGenes = (page = 1, type = 'all', title) => safeFetch(getGenesAPI(page, type, title)).then(res => geneParser(res));
 
 export const getTopicAPI = uri => safeFetch(uri).then(res => topicApiParser(res))
 
@@ -108,21 +109,21 @@ export const getMyGameURL = id => `${webHost}/psnid/${id}/psngame?page=1`;
 
 export const fetchUser = id => safeFetch(getHomeURL(id)).then(res => userParser(res, id))
 
-export const getQasAPI = (page, type, sort) => webHost + `/qa?page=${page}&type=${type}&ob=${sort}`
+export const getQasAPI = (page, type, sort, title) => webHost + `/qa?page=${page}&type=${type}&ob=${sort}${title ? `&title=${title}` : '' }`
 
-export const fetchQuestion = (page = 1, type = 'all', sort = 'obdate') => safeFetch(getQasAPI(page, type, sort)).then(res => qaParser(res));
+export const fetchQuestion = (page = 1, type = 'all', sort = 'obdate', title) => safeFetch(getQasAPI(page, type, sort, title)).then(res => qaParser(res));
 
 export const getQAUrl = id => `${webHost}/qa/${id}`
 
-export const fetchGames = (page = 1, sort = 'newest', pf = 'all', dlc = 'all') => safeFetch(getGamesAPI(page, sort, pf, dlc)).then(res => gamesParser(res));
+export const fetchGames = (page = 1, sort = 'newest', pf = 'all', dlc = 'all', title) => safeFetch(getGamesAPI(page, sort, pf, dlc, title)).then(res => gamesParser(res));
 
-export const fetchRanks = (page = 1, sort = 'point', server = 'hk', cheat = '0') => safeFetch(getRanksAPI(page, sort, server, cheat)).then(res => ranksParser(res));
+export const fetchRanks = (page = 1, sort = 'point', server = 'hk', cheat = '0', title) => safeFetch(getRanksAPI(page, sort, server, cheat, title)).then(res => ranksParser(res));
 
 export const getUserUrl = id => `${webHost}/psnid/${id}`
 
-export const getRanksAPI = (page, sort, server, cheat) => `${webHost}/psnid?page=${page}&ob=${sort}&server=${server}&cheat=${cheat}`
+export const getRanksAPI = (page, sort, server, cheat, title = '') => `${webHost}/psnid?page=${page}&ob=${sort}&server=${server}&cheat=${cheat}${title ? `&title=${title}` : '' }`
 
-export const getGamesAPI = (page, sort, pf, dlc) => `${webHost}/psngame?page=${page}&ob=${sort}&pf=${pf}&dlc=${dlc}`
+export const getGamesAPI = (page, sort, pf, dlc, title) => `${webHost}/psngame?page=${page}&ob=${sort}&pf=${pf}&dlc=${dlc}${title ? `&title=${title}` : '' }`
 
 export const getGamePointURL = id => `${webHost}/psngame/${id}/comment`
 
