@@ -24,6 +24,7 @@ import Qa from './drawer/Qa';
 import Game from './drawer/Game';
 import Battle from './drawer/Battle';
 import Gene from './drawer/Gene';
+import Rank from './drawer/Rank';
 
 import {
   DrawerNavigator,
@@ -47,6 +48,7 @@ export default class TabContainer extends Component {
   }
 
   shouldComponentUpdate(prop, state) {
+    if (prop.screenProps.modeInfo.isNightMode !== this.props.screenProps.modeInfo.isNightMode) return true
     return false
   }
 
@@ -66,6 +68,9 @@ const Tabs = TabNavigator({
   },
   Game: {
     screen: Game,
+  },
+  Rank: {
+    screen: Rank
   },
   Battle: {
     screen: Battle,

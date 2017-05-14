@@ -16,6 +16,7 @@ import Qa from './drawer/Qa';
 import Game from './drawer/Game';
 import Battle from './drawer/Battle';
 import Gene from './drawer/Gene';
+import Rank from './drawer/Rank';
 
 import {
   DrawerNavigator,
@@ -35,6 +36,9 @@ const RightDrawer = DrawerNavigator({
   },
   Game: {
     screen: Game,
+  },
+  Rank: {
+    screen: Rank
   },
   Battle: {
     screen: Battle,

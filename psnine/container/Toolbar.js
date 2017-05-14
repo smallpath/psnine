@@ -62,8 +62,11 @@ let communityActions = [
   { title: 'Plus', value: 'plus', show: 'never' },
   { title: '开箱', value: 'openbox', show: 'never' },
   { title: '游列', value: 'gamelist', show: 'never' },
-  { title: '活动', value: 'event', show: 'never' },
-  { title: '火星', value: 'mars', show: 'never' },
+  { title: '活动', value: 'event', show: 'never' }
+];
+
+let qaActions = [
+  searchAction,
 ];
 
 let gameActions = [
@@ -87,7 +90,7 @@ let geneActions = [
   { title: '视频类', value: 'video', show: 'never' },
 ];
 
-let toolbarActions = [communityActions, gameActions, rankActions, battleActions, geneActions]
+let toolbarActions = [communityActions, qaActions, gameActions, rankActions, battleActions, geneActions]
 
 let titlesArr = ["社区", "问答", "游戏", "约战", "机因"];
 

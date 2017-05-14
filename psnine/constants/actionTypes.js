@@ -24,3 +24,6 @@ export const GET_QAS_ERROR = `GET_QAS_ERROR`;
 
 export const GET_GAMES_SUCCESS = `GET_GAMES_SUCCESS`;
 export const GET_GAMES_ERROR = `GET_GAMES_ERROR`;
+
+export const GET_RANK_SUCCESS = `GET_RANK_SUCCESS`;
+export const GET_RANK_ERROR = `GET_RANK_ERROR`;

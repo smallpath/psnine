@@ -5,6 +5,7 @@ import community from './Community';
 import gene from './Gene';
 import qa from './Qa';
 import game from './Game';
+import rank from './Rank';
 
 const rootReducer = combineReducers({
   app,
@@ -12,7 +13,8 @@ const rootReducer = combineReducers({
   community,
   gene,
   qa,
-  game
+  game,
+  rank
 });
 
 export default rootReducer;

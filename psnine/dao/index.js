@@ -6,6 +6,7 @@ import userParser from '../parser/user'
 import messageParser from '../parser/user/message'
 import qaParser from '../parser/qa'
 import gamesParser from '../parser/game'
+import ranksParser from '../parser/rank'
 import topicApiParser from '../parser/topic/topic'
 import battleTopicParser from '../parser/battle/battle'
 import topicContentApiParser from '../parser/topic/topicContent'
@@ -113,6 +114,12 @@ export const fetchQuestion = (page = 1, type = 'all', sort = 'obdate') => safeFe
 export const getQAUrl = id => `${webHost}/qa/${id}`
 
 export const fetchGames = (page = 1, sort = 'newest', pf = 'all', dlc = 'all') => safeFetch(getGamesAPI(page, sort, pf, dlc)).then(res => gamesParser(res));
+
+export const fetchRanks = (page = 1, sort = 'point', server = 'hk', cheat = '0') => safeFetch(getRanksAPI(page, sort, server, cheat)).then(res => ranksParser(res));
+
+export const getUserUrl = id => `${webHost}/psnid/${id}`
+
+export const getRanksAPI = (page, sort, server, cheat) => `${webHost}/psnid?page=${page}&ob=${sort}&server=${server}&cheat=${cheat}`
 
 export const getGamesAPI = (page, sort, pf, dlc) => `${webHost}/psngame?page=${page}&ob=${sort}&pf=${pf}&dlc=${dlc}`
 
