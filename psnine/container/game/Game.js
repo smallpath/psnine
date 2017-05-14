@@ -225,6 +225,13 @@ export default class GamePage extends Component {
                   this.props.navigation.navigate('GameTopic', {
                     URL: `${item.url}?page=1`
                   })
+                } else if (item.text === '评论') {
+                  this.props.navigation.navigate('GamePoint', {
+                    URL: `${item.url}`,
+                    rowData: {
+                      id: (item.url.match(/\/psngame\/(\d+)\/comment/) || [0,-1])[1]
+                    }
+                  })
                 }
               }}>
               <View style={{ flex: 1, alignItems:'center', justifyContent: 'center' }}  key={index}>

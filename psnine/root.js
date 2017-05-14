@@ -52,6 +52,7 @@ import Favorite from './container/user/Favorite'
 import Trophy from './container/game/Trophy'
 import GameTopic from './container/game/GameTopic'
 import GamePage from './container/game/Game'
+import GamePoint from './container/game/GamePoint'
 
 import CommentList from './container/topic/CommentList'
 import CommunityTopic from './container/topic/CommunityTopic'
@@ -129,6 +130,10 @@ const Navigator = StackNavigator({
   GameTopic: {
     screen: GameTopic,
     psngame: 'psngame/:linkingID/topic'
+  },
+  GamePoint: {
+    screen: GamePoint,
+    psngame: 'psngame/:linkingID/comment'
   },
   Favorite: {
     screen: Favorite,

@@ -15,7 +15,8 @@ import {
   Animated,
   Easing,
   PanResponder,
-  StatusBar
+  StatusBar,
+  Picker
 } from 'react-native';
 
 import { connect } from 'react-redux';
@@ -53,10 +54,15 @@ export default class Reply extends Component {
 
   constructor(props) {
     super(props);
-    const at = this.props.navigation.state.params.at
+    const { params } = this.props.navigation.state
+    const { at = '', shouldShowPoint = false, isOldPage = false } = params
+
     this.state = {
       icon: false,
       content: at ? `@${at} ` : '',
+      shouldShowPoint,
+      point: '0',
+      isOldPage: isOldPage,
       openVal: new Animated.Value(0),
       marginTop: new Animated.Value(0),
       toolbarOpenVal: new Animated.Value(0)
@@ -251,14 +257,22 @@ export default class Reply extends Component {
     if (type !== 'comson') {
       form.param = params.id
       form.com = ''
-      if (params.type !== 'qa') {
+      if (params.type !== 'qa' && params.type !== 'psngame') {
         form.old = 'yes'
       }
     } else {
       form.id = params.id
     }
-    const replyType = type !== 'comson' ? 'post' : 'ajax'
 
+    if (this.state.isOldPage === true) {
+      form.old = 'yes'
+    }
+    if (this.state.shouldShowPoint) {
+      form.point = this.state.point
+    }
+    const replyType = type !== 'comson' ? 'post' : 'ajax'
+    // console.log(replyType, form)
+    // return 
     postReply(form, replyType).then(res => {
       return res
     }).then(res => res.text()).then(text => {
@@ -279,6 +293,14 @@ export default class Reply extends Component {
       ToastAndroid.show(msg, ToastAndroid.SHORT);
     })
   }
+
+  onValueChange = (key: string, value: string) => {
+    const newState = {};
+    newState[key] = value;
+    this.setState(newState, () => {
+      // this._onRefresh()
+    });
+  };
 
   render() {
     let { openVal, marginTop } = this.state;
@@ -351,6 +373,31 @@ export default class Reply extends Component {
         <Animated.View style={[styles.KeyboardAvoidingView, {
           flex: openVal.interpolate({ inputRange: [0, 1], outputRange: [0, 10] }),
         }]} >
+          {
+            this.state.shouldShowPoint && (
+            <Picker style={{
+              flex: 1,
+              borderWidth: 1,
+              color: modeInfo.standardTextColor,
+              borderBottomColor: modeInfo.standardTextColor
+            }}
+              prompt='选择评分'
+              selectedValue={this.state.point}
+              onValueChange={this.onValueChange.bind(this, 'point')}>
+              <Picker.Item label="评分0" value="0" />
+              <Picker.Item label="评分1" value="1" />
+              <Picker.Item label="评分2" value="2" />
+              <Picker.Item label="评分3" value="3" />
+              <Picker.Item label="评分4" value="4" />
+              <Picker.Item label="评分5" value="5" />
+              <Picker.Item label="评分6" value="6" />
+              <Picker.Item label="评分7" value="7" />
+              <Picker.Item label="评分8" value="8" />
+              <Picker.Item label="评分9" value="9" />
+              <Picker.Item label="评分10" value="10" />
+            </Picker>
+            )
+          }
           <AnimatedKeyboardAvoidingView behavior={'padding'} style={[styles.contentView, {
             flex: openVal.interpolate({ inputRange: [0, 1], outputRange: [0, 12] }),
           }]}>
