@@ -524,7 +524,7 @@ class CommunityTopic extends Component {
             size={50}
           />
         )}
-        {params.type === 'community' && !this.state.isLoading && this.renderToolbar()}
+        {/*{params.type === 'community' && !this.state.isLoading && this.renderToolbar()}*/}
         {!this.state.isLoading && <FlatList style={{
           flex: -1,
           backgroundColor: modeInfo.standardColor
