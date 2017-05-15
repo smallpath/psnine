@@ -148,8 +148,9 @@ class CommunityTopic extends Component {
     const { modeInfo } = this.props.screenProps
     return (
       <View key={'header'} style={{
-        backgroundColor: modeInfo.backgroundColor,
-        margin: 5
+        height: 74,
+        elevation: 4,
+        backgroundColor:  modeInfo.backgroundColor,
       }}>
         <TouchableNativeFeedback
           onPress={() => {
@@ -159,7 +160,7 @@ class CommunityTopic extends Component {
           delayPressIn={100}
           background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
         >
-          <View pointerEvents='box-only' style={{ flex: 1, flexDirection: 'row', padding: 12 }}>
+          <View pointerEvents='box-only' style={{ flex: 1, flexDirection: 'row', padding: 12, backgroundColor:  modeInfo.backgroundColor, }}>
             <Image
               source={{ uri: rowData.avatar }}
               style={[styles.avatar, { width: 91 }]}
@@ -251,70 +252,58 @@ class CommunityTopic extends Component {
   }
 
   hasComment = false
-  renderComment = (commentList) => {
+  renderComment = (rowData, index) => {
     const { modeInfo } = this.props.screenProps
-    const list = []
-    let readMore = null
-    for (const rowData of commentList) {
-      list.push(
-        <View key={rowData.id} style={{
-          backgroundColor: modeInfo.backgroundColor,
-          borderBottomWidth: StyleSheet.hairlineWidth,
-          borderBottomColor: modeInfo.brighterLevelOne
-        }}>
-          <TouchableNativeFeedback
-            onLongPress={() => {
-              this.onCommentLongPress(rowData)
-            }}
-            useForeground={true}
-            delayPressIn={100}
-            background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
-          >
-            <View style={{ flex: 1, flexDirection: 'row', padding: 12 }}>
-              <Image
-                source={{ uri: rowData.avatar }}
-                style={styles.avatar}
+    return (
+      <View key={rowData.id || index} style={{
+        backgroundColor: modeInfo.backgroundColor,
+        borderBottomWidth: StyleSheet.hairlineWidth,
+        borderBottomColor: modeInfo.brighterLevelOne
+      }}>
+        <TouchableNativeFeedback
+          onLongPress={() => {
+            this.onCommentLongPress(rowData)
+          }}
+          useForeground={true}
+          delayPressIn={100}
+          background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
+        >
+          <View style={{ flex: 1, flexDirection: 'row', padding: 12 }}>
+            <Image
+              source={{ uri: rowData.avatar }}
+              style={styles.avatar}
+            />
+
+            <View style={{ marginLeft: 10, flex: 1, flexDirection: 'column' }}>
+              <HTMLView
+                value={rowData.text}
+                modeInfo={modeInfo}
+                stylesheet={styles}
+                onImageLongPress={this.handleImageOnclick}
+                imagePaddingOffset={30 + 75 + 10}
+                shouldForceInline={true}
               />
 
-              <View style={{ marginLeft: 10, flex: 1, flexDirection: 'column' }}>
-                <HTMLView
-                  value={rowData.text}
-                  modeInfo={modeInfo}
-                  stylesheet={styles}
-                  onImageLongPress={this.handleImageOnclick}
-                  imagePaddingOffset={30 + 75 + 10}
-                  shouldForceInline={true}
-                />
-
-                <View style={{ flex: 1.1, flexDirection: 'row', justifyContent: 'space-between' }}>
-                  <Text selectable={false} style={{ flex: -1, color: idColor, textAlign: 'center', textAlignVertical: 'center' }} onPress={
-                    () => {
-                      this.props.navigation.navigate('Home', {
-                        title: rowData.psnid,
-                        id: rowData.psnid,
-                        URL: `http://psnine.com/psnid/${rowData.psnid}`
-                      })
-                    }
-                  }>{rowData.psnid}</Text>
-                  <Text selectable={false} style={{ flex: -1, color: modeInfo.standardTextColor, textAlign: 'center', textAlignVertical: 'center' }}>{rowData.date}</Text>
-                </View>
-
-                { rowData.commentList.length !== 0 && (<View style={{ backgroundColor: modeInfo.brighterLevelOne}}>
-                  {this.renderSonComment(rowData.commentList, rowData)}
-                </View>)}
+              <View style={{ flex: 1.1, flexDirection: 'row', justifyContent: 'space-between' }}>
+                <Text selectable={false} style={{ flex: -1, color: idColor, textAlign: 'center', textAlignVertical: 'center' }} onPress={
+                  () => {
+                    this.props.navigation.navigate('Home', {
+                      title: rowData.psnid,
+                      id: rowData.psnid,
+                      URL: `http://psnine.com/psnid/${rowData.psnid}`
+                    })
+                  }
+                }>{rowData.psnid}</Text>
+                <Text selectable={false} style={{ flex: -1, color: modeInfo.standardTextColor, textAlign: 'center', textAlignVertical: 'center' }}>{rowData.date}</Text>
               </View>
 
+              { rowData.commentList.length !== 0 && (<View style={{ backgroundColor: modeInfo.brighterLevelOne}}>
+                {this.renderSonComment(rowData.commentList, rowData)}
+              </View>)}
             </View>
-          </TouchableNativeFeedback>
-        </View>
-      )
-    }
-    const shouldMarginTop = !this.hasComment
-    return (
-      <View style={{ marginTop: shouldMarginTop ? 5 : 0 }}>
-        <View style={{ elevation: 1, margin: 5, marginTop: 0, backgroundColor: modeInfo.backgroundColor }}>
-          {list}
-        </View>
+
+          </View>
+        </TouchableNativeFeedback>
       </View>
     )
   }
@@ -360,15 +349,15 @@ class CommunityTopic extends Component {
     const data = []
     const renderFuncArr = []
     const shouldPushData = !this.state.isLoading
-    if (shouldPushData) {
-      data.push(source.gameInfo)
-      renderFuncArr.push(this.renderHeader)
-    }
+    // if (shouldPushData) {
+    //   data.push(source.gameInfo)
+    //   renderFuncArr.push(this.renderHeader(source.gameInfo))
+    // }
 
-    if (shouldPushData && this.hasComment) {
-      data.push(this.state.commentList)
-      renderFuncArr.push(this.renderComment)
-    }
+    // if (shouldPushData && this.hasComment) {
+    //   data.push(this.state.commentList)
+    //   renderFuncArr.push(this.renderComment)
+    // }
 
     this.viewBottomIndex = Math.max(data.length - 1, 0)
 
@@ -384,7 +373,7 @@ class CommunityTopic extends Component {
           iconColor={modeInfo.isNightMode ? '#000' : '#fff'}
           title={`${params.title || '评论'}`}
           titleColor={modeInfo.isNightMode ? '#000' : '#fff'}
-          style={[styles.toolbar, { backgroundColor: modeInfo.standardColor }]}
+          style={[styles.toolbar, { backgroundColor: modeInfo.standardColor}]}
           actions={toolbarActions}
           onIconClicked={() => {
             this.props.navigation.goBack()
@@ -403,23 +392,24 @@ class CommunityTopic extends Component {
             size={50}
           />
         )}
+        {!this.state.isLoading && this.renderHeader(source.gameInfo)}
         {!this.state.isLoading && <FlatList style={{
           flex: -1,
-          backgroundColor: modeInfo.standardColor
+          backgroundColor: modeInfo.backgroundColor,
+          margin: 5 
         }}
           ref={flatlist => this.flatlist = flatlist}
-          data={data}
+          data={this.state.commentList}
           keyExtractor={(item, index) => item.id || index}
           renderItem={({ item, index }) => {
-            return renderFuncArr[index](item)
+            return this.renderComment(item, index)
           }}
           extraData={this.state}
           windowSize={999}
-          disableVirtualization={true}
+          disableVirtualization={false}
           viewabilityConfig={{
-            minimumViewTime: 3000,
-            viewAreaCoveragePercentThreshold: 100,
-            waitForInteraction: true
+            /*minimumViewTime: 3000,*/
+            viewAreaCoveragePercentThreshold: 0,
           }}
         >
         </FlatList>
