@@ -41,6 +41,9 @@ class Battle extends Component {
 
   constructor(props) {
     super(props);
+    this.state = {
+      isLoading: true
+    }
   }
 
   _renderSeparator(sectionID: number, rowID: number, adjacentRowHighlighted: bool) {
@@ -168,6 +171,10 @@ class Battle extends Component {
   componentWillReceiveProps(nextProps) {
     if (this.props.screenProps.modeInfo.isNightMode != nextProps.screenProps.modeInfo.isNightMode) {
       this.props.screenProps.modeInfo = nextProps.screenProps.modeInfo;
+    } else if (Object.keys(this.props.battle.battles).length < Object.keys(nextProps.battle.battles).length){
+      this.setState({
+        isLoading: false
+      })
     }
   }
 
@@ -217,7 +224,7 @@ class Battle extends Component {
       <ListView
         refreshControl={
           <RefreshControl
-            refreshing={false}
+            refreshing={this.state.isLoading}
             onRefresh={this._onRefresh}
             colors={[standardColor]}
             ref={ref => this.refreshControl = ref}

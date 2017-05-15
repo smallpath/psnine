@@ -215,7 +215,7 @@ class Qa extends Component {
     dispatch(getQAList(1, {
         type,
         sort,
-        title: title || this.props.screenProps.searchTitle
+        title: typeof title !== 'undefined' ? title : this.props.screenProps.searchTitle
       })
     );
   }

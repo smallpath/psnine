@@ -225,7 +225,7 @@ class Game extends Component {
         sort, 
         pf, 
         dlc,
-        title: title || this.props.screenProps.searchTitle
+        title: typeof title !== 'undefined' ? title : this.props.screenProps.searchTitle
       })
     );
   }

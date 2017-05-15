@@ -50,6 +50,8 @@ const emotionToolbarHeight = 190
 
 let config = { tension: 30, friction: 7, ease: Easing.in(Easing.ease(1, 0, 1, 1)), duration: 200 };
 
+let backConfig = { tension: 30, friction: 7, duration: 200 }
+
 export default class Search extends Component {
 
   constructor(props) {
@@ -66,26 +68,13 @@ export default class Search extends Component {
   }
 
   componentDidMount = () => {
-    // let config = { tension: 30, friction: 7 };
     Animated.spring(this.state.openVal, { toValue: 1, ...config }).start();
   }
 
   _pressBack = (callback) => {
     const { marginTop, openVal, content } = this.state
-    // if (typeof callback === 'function') {
-    //   if (content === '') {
-    //     ToastAndroid.show('输入为空', 1000)
-    //     return
-    //   }
-    // }
-    let value = marginTop._value;
-    if (Math.abs(value) >= 50) {
-      Animated.spring(marginTop, { toValue: 0, ...config }).start();
-      return true;
-    } 
-    this.content.clear();
     Keyboard.dismiss()
-    Animated.spring(openVal, { toValue: 0, ...config }).start(() => {
+    Animated.spring(openVal, { toValue: 0, ...backConfig }).start(() => {
       const _lastNativeText = this.content._lastNativeText
       this.props.navigation.goBack()
       InteractionManager.runAfterInteractions(() => {
@@ -102,7 +91,6 @@ export default class Search extends Component {
   }
 
   componentWillMount = async () => {
-    // let config = { tension: 30, friction: 7 };
     const { openVal, marginTop } = this.state
     const { callback } = this.props.navigation.state.params
     const { params } = this.props.navigation.state
@@ -110,35 +98,18 @@ export default class Search extends Component {
 
     this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () => {
       this.isKeyboardShowing = true
-      this.state.toolbarOpenVal.setValue(0)
     })
     this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', () => {
       this.isKeyboardShowing = false
-      this.shouldShowEmotion === true && Animated.spring(this.state.toolbarOpenVal, {
-        toValue: 1,
-        friction: 10
-      }).start(() => {
-        this.shouldShowEmotion = false
-      });
     })
     this.isToolbarShowing = false
     this.removeListener = BackHandler.addEventListener('hardwareBackPress', () => {
       let config = { tension: 30, friction: 7 };
-      if (this.state.toolbarOpenVal._value !== 0) {
-        Animated.spring(this.state.toolbarOpenVal, { toValue: 0, ...config }).start();
-        return true;
-      }
-      let value = this.state.marginTop._value
-      if (Math.abs(value) >= 50) {
-        Animated.spring(marginTop, { toValue: 0, ...config }).start();
-        return true;
-      } else {
-        Keyboard.dismiss()
-        Animated.spring(openVal, { toValue: 0, ...config }).start(() => {
-          this.props.navigation.goBack()
-        });
-        return true
-      }
+      Keyboard.dismiss()
+      Animated.spring(openVal, { toValue: 0, ...backConfig }).start(() => {
+        this.props.navigation.goBack()
+      });
+      return true
     })
 
     const icon = await Promise.all([
@@ -268,7 +239,7 @@ export default class Search extends Component {
             justifyContent: 'center',
             alignContent: 'center'
           }]}>
-            <TextInput placeholder="输入回复"
+            <TextInput placeholder="搜索标题"
               autoCorrect={false}
               multiline={false}
               keyboardType="default"

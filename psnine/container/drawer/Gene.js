@@ -164,7 +164,7 @@ class Gene extends Component {
 
     dispatch(getGeneList(1, {
       type,
-      title: title || this.props.screenProps.searchTitle
+      title: typeof title !== 'undefined' ? title : this.props.screenProps.searchTitle
     }));
 
   }

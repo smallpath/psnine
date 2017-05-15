@@ -292,7 +292,7 @@ class Rank extends Component {
     const { server, sort, cheat } = this.state
     dispatch(getRankList(1, {
       sort, server, cheat,
-      title: title || this.props.screenProps.searchTitle
+      title: typeof title !== 'undefined' ? title : this.props.screenProps.searchTitle
     }));
   }
 
