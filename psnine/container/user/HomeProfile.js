@@ -171,9 +171,9 @@ export default class Home extends Component {
                 {rowData.title}
               </Text>
             </View>
-            { rowData.platform && <View><Text style={{ color: modeInfo.standardTextColor, marginLeft: 2  }}>{rowData.platform.join(' ')}</Text></View> }
+            { rowData.platform && <View><Text style={{ color: modeInfo.standardTextColor, marginLeft: 2  }}>{rowData.platform.join(' ')}</Text></View> || undefined }
             { rowData.syncTime && (<View style={{ flex: -1, flexDirection: 'row' }}>
-                <Text style={{ color: modeInfo.standardColor ,fontSize: 12, marginLeft: 2 }}>{rowData.syncTime + ' '}</Text>
+                <Text style={{ color: modeInfo.standardTextColor ,fontSize: 12, marginLeft: 2 }}>{rowData.syncTime + ' '}</Text>
                 <Text selectable={false} style={{
                   flex: -1,
                   color: modeInfo.standardTextColor,
@@ -182,9 +182,9 @@ export default class Home extends Component {
                 <Text selectable={false} style={{
                   flex: -1,
                   fontSize: 12,
-                  color: modeInfo.standardTextColor,
+                  color: modeInfo.standardColor,
                 }}>{rowData.allTime}</Text>
-              </View>)}
+              </View>) || undefined}
           </View>
           { rowData.alert && (
             <View style={{ flex: 1, justifyContent: 'center', padding: 2 }}>
@@ -204,7 +204,7 @@ export default class Home extends Component {
                   fontSize: 10
                 }}>{rowData.allPercent}</Text>
             </View>
-            )
+            ) || undefined
           }
           <View style={{ flex: 1, justifyContent: 'center', padding: 2 }}>
             <Text selectable={false}             
@@ -233,6 +233,7 @@ export default class Home extends Component {
     const shouldShowImage = rowData.thumbs.length !== 0
     const suffix = '<div>' + rowData.thumbs.map(text => `<img src="${text}">`) + '</div>'
     const content = `<div>${rowData.content}${shouldShowImage ? suffix : ''}</div>`
+    alert('fuck')
     return (
       <TouchableNativeFeedback key={rowData.id || index}   onPress={() => {
           this.props.screenProps.navigation.navigate('CommunityTopic', {
@@ -293,7 +294,11 @@ export default class Home extends Component {
     return (
       <View key={index} style={{ backgroundColor: modeInfo.backgroundColor }}>
         <View>
-          { rowData.map((item , index) => this.renderGameItem(item ,index)) }
+          { rowData.map((item , index) => {
+              const component = this.renderGameItem(item ,index)
+              return component 
+            })
+          }
         </View>
       </View>
     )

@@ -244,7 +244,7 @@ export default class Home extends Component {
 
 
         <View style={{ flex: 1, padding: 5}}>
-          <View borderRadius={20} style={{ marginTop: 10, width: SCREEN_WIDTH / 4 * 3, alignSelf: 'center', alignContent: 'center',  flexDirection: 'row', justifyContent:'center', alignItems: 'center', backgroundColor: 'rgba(0,0,0,0.3)'  }}>
+          <View borderRadius={20} style={{ marginTop: 10, paddingHorizontal: 10, alignSelf: 'center', alignContent: 'center',  flexDirection: 'row', justifyContent:'center', alignItems: 'center', backgroundColor: 'rgba(0,0,0,0.3)'  }}>
             <Text style={{ height: 30, textAlignVertical: 'center',textAlign: 'center' }}>
               <Text style={{ flex: 1, color: color, marginVertical: 2, textAlign:'center', fontSize: 15 }}>{rowData.platinum + ' '}</Text>
               <Text style={{ flex: 1, color: color, marginVertical: 2, textAlign:'center', fontSize: 15 }}>{rowData.gold + ' '}</Text>
@@ -281,11 +281,16 @@ export default class Home extends Component {
     )
   }
 
+  // shouldComponentUpdate (nextProps, nextState) {
+  //   console.log(Object.keys(nextProps), Object.keys(nextState))
+  //   return true
+  // }
+
   renderTabContainer = (list) => {
     const { modeInfo } = this.props.screenProps
     const { params } = this.props.navigation.state
     const { marginTop } = this.state
-  
+    // console.log('re-rendered tab')
     return (
       <CreateUserTab screenProps={{
         modeInfo: modeInfo,
@@ -446,7 +451,6 @@ export default class Home extends Component {
             <View style={{flex: 0, height: SCREEN_HEIGHT - toolbarHeight - StatusBar.currentHeight + 1, backgroundColor: modeInfo.backgroundColor}} contentContainerStyle={{
               height: SCREEN_HEIGHT - toolbarHeight  - StatusBar.currentHeight + 1
             }}
-              key={'caonima'}
               >
               {this.renderTabContainer(source.toolbarInfo)}
             </View>
