@@ -21,6 +21,8 @@ import { getTopicURL } from '../../dao';
 
 import { changeScrollType } from '../../actions/app';
 
+import CommunityTopicItem from '../shared/CommunityTopicItem'
+
 let toolbarHeight = 56;
 let releasedMarginTop = 0;
 let prevPosition = -1;
@@ -28,6 +30,7 @@ let prevPosition = -1;
 const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
 
 class progress extends Component {
+  shouldComponentUpdate = () => false
   render() {
     return (
       <View style={{flexDirection:'row', flex: 1, height: 15, alignItems: 'flex-end'}}>
@@ -57,79 +60,17 @@ class Community extends Component {
     }
   }
 
-  _onRowPressed = (rowData) => {
-    const { navigation } = this.props.screenProps;
-    const URL = getTopicURL(rowData.id);
-    navigation.navigate('CommunityTopic', {
-      URL,
-      title: rowData.title,
-      rowData,
-      type: 'community',
-      shouldBeSawBackground: true
-    })
-  }
-
-  _renderItem = ({ item: rowData, index }) => {
-    const { modeInfo } = this.props.screenProps
-
-    return (
-      <View style={{
-        marginTop: 7,
-        backgroundColor: modeInfo.backgroundColor,
-        elevation: 1,
-        height: this.ITEM_HEIGHT - 7
-      }}>
-        <TouchableNativeFeedback
-          onPress={() => {
-            this._onRowPressed(rowData)
-            this.flatlist.getNode().recordInteraction()
-          }}
-          useForeground={true}
-          delayPressIn={100}
-          background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
-        >
-          <View style={{ flex: 1, flexDirection: 'row', padding: 12 }}>
-            <Image
-              source={{ uri: rowData.avatar }}
-              style={styles.avatar}
-            />
-
-            <View style={{ marginLeft: 10, flex: 1, flexDirection: 'column' }}>
-              <Text
-                ellipsizeMode={'tail'}
-                numberOfLines={2}
-                style={{ flex: 2.5, color: modeInfo.titleTextColor, }}>
-                {rowData.title}
-              </Text>
-
-              <View style={{ flex: 1.1, flexDirection: 'row', justifyContent: 'space-between' }}>
-                <Text selectable={false} style={{ flex: -1, color: idColor, textAlign: 'center', textAlignVertical: 'center' }} onPress={() => {
-                    this.flatlist.getNode().recordInteraction()
-                    this.props.screenProps.navigation.navigate('Home', {
-                      title: rowData.psnid,
-                      id: rowData.psnid,
-                      URL: `http://psnine.com/psnid/${rowData.psnid}`
-                    })
-                  }}>{rowData.psnid}</Text>
-                <Text selectable={false} style={{ flex: -1, color: modeInfo.standardTextColor, textAlign: 'center', textAlignVertical: 'center' }}>{rowData.date}</Text>
-                <Text selectable={false} style={{ flex: -1, color: modeInfo.standardTextColor, textAlign: 'center', textAlignVertical: 'center' }}>{rowData.count}回复</Text>
-                <Text selectable={false} style={{ flex: -1, color: modeInfo.standardTextColor, textAlign: 'center', textAlignVertical: 'center' }}>{rowData.type}</Text>
-              </View>
-
-            </View>
-
-          </View>
-        </TouchableNativeFeedback>
-      </View>
-    )
-  }
-
   componentWillReceiveProps = (nextProps) => {
     if (this.props.screenProps.communityType != nextProps.screenProps.communityType) {
       this.props.screenProps.communityType = nextProps.screenProps.communityType;
       this._onRefresh(nextProps.screenProps.communityType);
     } else if (this.props.screenProps.modeInfo.isNightMode != nextProps.screenProps.modeInfo.isNightMode) {
       this.props.screenProps.modeInfo = nextProps.screenProps.modeInfo;
+    } else if (this.props.screenProps.searchTitle !== nextProps.screenProps.searchTitle) {
+      this._onRefresh(
+        this.props.screenProps.communityType, 
+        nextProps.screenProps.searchTitle
+      )
     } else {
       // this.refreshControl && this.refreshControl._nativeRef.setNativeProps({
       //   refreshing: false,
@@ -146,41 +87,28 @@ class Community extends Component {
   isReceiving = false
   componentDidMount = () => {
     const { community: communityReducer } = this.props;
+    const { communityType, searchTitle } = this.props.screenProps
     if (communityReducer.topicPage == 0) {
-      this._onRefresh();
+      this._onRefresh(
+        communityType, 
+        searchTitle
+      )
     }
   }
 
-  // componentDidUpdate = () => {
-  //   if (this.isReceiving === false) return
-  //   this.isReceiving = false
-  //   const { community: communityReducer } = this.props;
-  //   const len = communityReducer.topics.length
-  //   if (len > 0) {
-  //     const perPage = len / communityReducer.topicPage
-  //     const targetIndex = perPage * (communityReducer.topicPage - 1)
-  //     // alert(targetIndex)
-  //     const index = targetIndex - 1
-  //     if (index < 0) return
-  //     setTimeout(() => {
-  //       this.flatlist.getNode().scrollToIndex({viewPosition: 0.9, index: index, animated: true});
-  //     })
-  //   }
-  // }
+  _onRefresh = (type = '', searchTitle = '') => {
+    const { community: communityReducer, dispatch } = this.props;
+    const { communityType } = this.props.screenProps
 
-  _onRefresh = (type = '') => {
-    const { community: reducer, dispatch } = this.props;
+    this.refreshControl._nativeRef.setNativeProps({
+      refreshing: true,
+    });
 
-    this.setState({
-      isLoading: true
-    }, () => {
-      dispatch(getTopicList(1, type));
-    })
-    // this.refreshControl && this.refreshControl._nativeRef.setNativeProps({
-    //   refreshing: true,
-    // });
-    // this.isLoading = true
-    // dispatch(getTopicList(1, type));
+    dispatch(getTopicList(1, {
+        type,
+        title: typeof searchTitle !== 'undefined' ? searchTitle : this.props.screenProps.searchTitle
+      })
+    );
   }
 
   _scrollToTop = () => {
@@ -188,31 +116,40 @@ class Community extends Component {
   }
 
   _loadMoreData = () => {
-    const { community: reducer, dispatch } = this.props;
-    const { communityType } = this.props.screenProps
+    const { community: communityReducer, dispatch } = this.props;
+    const { communityType, searchTitle } = this.props.screenProps
 
-    let page = reducer.topicPage + 1;
-    dispatch(getTopicList(page, communityType));
+    let page = communityReducer.topicPage + 1;
+    dispatch(getTopicList(page, {
+        type: communityType,
+        title: searchTitle
+      })
+    );
   }
 
   _onEndReached = () => {
     if (this.state.isLoading === true) return
 
-    // this.refreshControl && this.refreshControl._nativeRef.setNativeProps({
-    //   refreshing: true,
-    // });
-    // this.isLoading = true
-
-    // this._loadMoreData();
-    this.setState({
-      isLoading: true
-    }, () => {
+    // this.setState({
+    //   isLoading: true
+    // }, () => {
       this._loadMoreData();
-    })
+    // })
   }
 
   isLoading = true
   ITEM_HEIGHT = 78 + 7
+
+  _renderItem = ({ item: rowData, index }) => {
+    const { modeInfo, navigation } = this.props.screenProps
+    const { ITEM_HEIGHT } = this
+    return <CommunityTopicItem {...{
+      navigation,
+      rowData,
+      modeInfo,
+      ITEM_HEIGHT
+    }} />
+  }
 
   render() {
     const { community: reducer } = this.props;
@@ -227,7 +164,7 @@ class Community extends Component {
         ref={flatlist => this.flatlist = flatlist}
         refreshControl={
           <RefreshControl
-            refreshing={false}
+            refreshing={this.state.isLoading}
             onRefresh={this._onRefresh}
             colors={[modeInfo.standardColor]}
             progressBackgroundColor={modeInfo.backgroundColor}
@@ -241,10 +178,10 @@ class Community extends Component {
         onEndReached={this._onEndReached}
         onEndReachedThreshold={0.5}
         extraData={modeInfo}
-        windowSize={999}
+        windowSize={21}
         updateCellsBatchingPeriod={1}
         initialNumToRender={42}
-        maxToRenderPerBatch={42}
+        maxToRenderPerBatch={8}
         disableVirtualization={false}
         contentContainerStyle={styles.list}
         getItemLayout={(data, index) => (

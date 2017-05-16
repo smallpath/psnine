@@ -11,7 +11,7 @@ import {
 
 import { changeSegmentIndex } from '../actions/app';
 
-import Community from './drawer/Community';
+import Community from './drawer/Community.flatlist';
 import Qa from './drawer/Qa';
 import Game from './drawer/Game';
 import Battle from './drawer/Battle';
