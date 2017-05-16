@@ -7,7 +7,9 @@ import {
   Image,
   TouchableNativeFeedback,
   RefreshControl,
-  InteractionManager
+  InteractionManager,
+  SectionList,
+  Animated
 } from 'react-native';
 
 import { connect } from 'react-redux';
@@ -16,47 +18,16 @@ import { standardColor, nodeColor, idColor, accentColor } from '../../constants/
 
 import { getBattleURL, getGamePngURL } from '../../dao';
 
+const AnimatedSectionList = Animated.createAnimatedComponent(SectionList);
+
 let toolbarHeight = 56;
 let releasedMarginTop = 0;
 
-let getSectionData = (dataBlob, sectionID) => {
-  return dataBlob[sectionID];
-};
-let getRowData = (dataBlob, sectionID, rowID) => {
-  return dataBlob[rowID];
-};
-
-let dataSource = new ListView.DataSource({
-  getRowData: getRowData,
-  getSectionHeaderData: getSectionData,
-  rowHasChanged: (row1, row2) => row1.id !== row2.id,
-  sectionHeaderHasChanged: (s1, s2) => s1 !== s2,
-});
-
-class Battle extends Component {
-  static navigationOptions = {
-    tabBarLabel: '约战',
-    drawerLabel: '约战'
-  };
-
-  constructor(props) {
-    super(props);
-    this.state = {
-      isLoading: true
-    }
-  }
-
-  _renderSeparator(sectionID: number, rowID: number, adjacentRowHighlighted: bool) {
-    return (
-      <View
-        key={`${sectionID}-${rowID}`}
-        style={{ height: 1, backgroundColor: 'rgba(0, 0, 0, 0.1)', marginLeft: 10, marginRight: 10 }}
-      />
-    );
-  }
-
+class BattleItem extends React.PureComponent {
+  shouldComponentUpdate = () => false
+  
   _onRowPressed = (rowData) => {
-    const { navigation } = this.props.screenProps;
+    const { navigation } = this.props;
     const URL = getBattleURL(rowData.id);
     navigation.navigate('BattleTopic', {
       URL,
@@ -68,25 +39,18 @@ class Battle extends Component {
   }
 
 
-  _renderRow = (rowData,
-    sectionID: number | string,
-    rowID: number | string,
-    highlightRow: (sectionID: number, rowID: number) => void
-  ) => {
+  render = () => {
     // console.log(rowData)
-    const { modeInfo } = this.props.screenProps
-
-    let TouchableElement = TouchableNativeFeedback;
+    const { modeInfo, rowData } = this.props
 
     return (
-      <View rowID={rowID} style={{
-        marginTop: rowID.indexOf('R0') == -1 ? 0 : 0,
+      <View style={{
         marginLeft: 7,
         marginRight: 7,
         backgroundColor: modeInfo.backgroundColor,
         elevation: 2,
       }}>
-        <TouchableElement
+        <TouchableNativeFeedback
           onPress={() => { this._onRowPressed(rowData) }}
           delayPressIn={100}
           background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
@@ -141,32 +105,42 @@ class Battle extends Component {
               style={[styles.avatar, { marginLeft: 10 }]}
             />
           </View>
-        </TouchableElement>
+        </TouchableNativeFeedback>
       </View>
     )
   }
+}
 
-  _renderSectionHeader = (sectionData: string, sectionID: string) => {
-    return (
-      <View style={{
-        //backgroundColor: nodeColor,
-        flex: -1, left: 0,
-        height: 25,
-        width: 300,
-        elevation: 0,
-        marginTop: sectionID == 'day1' ? 7 : 14,
-        marginLeft: 7,
-        marginBottom: 7,
-      }}>
-        <Text numberOfLines={1}
-          style={{ fontSize: 20, color: idColor, textAlign: 'left', lineHeight: 25, marginLeft: 2, marginTop: 2 }}
-        >
-          {sectionData}
-        </Text>
-      </View>
-    );
+const renderSectionHeader = ({ section }) => {
+  // console.log(section)
+  return (
+    <View style={{
+      backgroundColor: section.modeInfo.backgroundColor,
+      flex: -1,
+      padding: 7,
+      marginLeft: 7,
+      marginRight: 7,
+      elevation: 2,
+    }}>
+      <Text numberOfLines={1}
+        style={{ fontSize: 20, color: idColor, textAlign: 'left', lineHeight: 25, marginLeft: 2, marginTop: 2 }}
+      >{section.key}</Text>
+    </View>
+  );
+}
+
+class Battle extends Component {
+  static navigationOptions = {
+    tabBarLabel: '约战',
+    drawerLabel: '约战'
   };
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      isLoading: true
+    }
+  }
 
   componentWillReceiveProps(nextProps) {
     if (this.props.screenProps.modeInfo.isNightMode != nextProps.screenProps.modeInfo.isNightMode) {
@@ -190,6 +164,15 @@ class Battle extends Component {
     dispatch(getBattleList());
   }
 
+  _renderItemComponent = ({ item: rowData, index }) => {
+    const { modeInfo, navigation } = this.props.screenProps
+    return (<BattleItem {...{
+      modeInfo,
+      navigation,
+      rowData
+    }}/>)
+  }
+
   render() {
     const { battle: battleReducer } = this.props;
     const { modeInfo } = this.props.screenProps
@@ -198,48 +181,34 @@ class Battle extends Component {
     let keys = Object.keys(data);
     let NUM_SECTIONS = keys.length;
 
-    let dataBlob = {};
-    let sectionIDs = [];
-    let rowIDs = [];
-
-    for (let i = 0; i < NUM_SECTIONS; i++) {
-      let sectionName = keys[i];
-      let localName = sectionName;
-      sectionIDs.push(sectionName);
-      dataBlob[sectionName] = localName;
-      rowIDs[i] = [];
-      let rows = data[sectionName];
-      let NUM_ROWS = rows.length;
-
-      for (let j = 0; j < NUM_ROWS; j++) {
-        let rowName = 'S' + i + ', R' + j;
-        rowIDs[i].push(rowName);
-        dataBlob[rowName] = rows[j];
+    const sections = Object.keys(data).map(sectionName => {
+      return {
+        key: sectionName,
+        modeInfo,
+        data: data[sectionName]
       }
-    }
+    });
 
-    dataSource = dataSource.cloneWithRowsAndSections(dataBlob, sectionIDs, rowIDs);
-    // console.log('Community.js rendered');
     return (
-      <ListView
+      <AnimatedSectionList
+        enableVirtualization={false}
+        ref={flatlist => this.flatlist = flatlist}
         refreshControl={
           <RefreshControl
             refreshing={this.state.isLoading}
             onRefresh={this._onRefresh}
-            colors={[standardColor]}
-            ref={ref => this.refreshControl = ref}
+            colors={[modeInfo.standardColor]}
             progressBackgroundColor={modeInfo.backgroundColor}
+            ref={ref => this.refreshControl = ref}
           />
         }
-        key={modeInfo.isNightMode}
-        ref={listView => this.listView = listView}
-        style={{ backgroundColor: modeInfo.backgroundColor }}
-        pageSize={32}
-        removeClippedSubviews={false}
-        enableEmptySections={true}
-        dataSource={dataSource}
-        renderSectionHeader={this._renderSectionHeader}
-        renderRow={this._renderRow}
+        disableVirtualization={true}
+        keyExtractor={(item, index) => `${item.id}`}
+        renderItem={this._renderItemComponent}
+        renderSectionHeader={renderSectionHeader}
+        stickySectionHeadersEnabled
+        sections={sections}
+        style={styles.list}
       />
     )
   }

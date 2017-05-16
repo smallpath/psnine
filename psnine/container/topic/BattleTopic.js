@@ -202,7 +202,7 @@ class CommunityTopic extends Component {
     const list = []
     for (const rowData of trophyTable) {
       list.push(
-        <View key={rowData.id} style={{
+        <View key={rowData.id || (list.length - 1)} style={{
           backgroundColor: modeInfo.backgroundColor
         }}>
           <TouchableNativeFeedback
