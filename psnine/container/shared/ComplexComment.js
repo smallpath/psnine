@@ -31,10 +31,7 @@ let screen = Dimensions.get('window');
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = screen;
 export default class ComplexComment extends React.PureComponent {
 
-  shouldComponentUpdate(nextProps, nextState) {
-    // console.log('item called')
-    return false
-  }
+  shouldComponentUpdate = (props) => props.modeInfo.isNightMode !== this.props.modeInfo.isNightMode
 
   renderSonComment = (list, parentRowData) => {
     const { modeInfo } = this.props
@@ -61,7 +58,7 @@ export default class ComplexComment extends React.PureComponent {
               modeInfo={modeInfo}
               stylesheet={styles}
               onImageLongPress={this.handleImageOnclick}
-              imagePaddingOffset={30 + 75 + 10}
+              imagePaddingOffset={30 + 50 + 10}
               shouldForceInline={true}
             />
 
@@ -122,7 +119,7 @@ export default class ComplexComment extends React.PureComponent {
                 modeInfo={modeInfo}
                 stylesheet={styles}
                 onImageLongPress={this.handleImageOnclick}
-                imagePaddingOffset={30 + 75 + 10}
+                imagePaddingOffset={30 + 50 + 10}
                 shouldForceInline={true}
               />
 

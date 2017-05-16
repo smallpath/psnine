@@ -96,15 +96,13 @@ class Rank extends Component {
           background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
         >
           <View style={{ flex: 1, flexDirection: 'row', padding: 12, justifyContent: 'space-around', alignItems: 'center' }}>
-
             <Image
               source={{ uri: rowData.avatar }}
               style={[styles.avatar, { width: 50 }]}
             />
-
             <View style={{ flex: 2, padding: 5}}>
               <Text style={{color: modeInfo.accentColor}}>{rowData.psnid}</Text>
-              <Text style={{color: modeInfo.titleTextColor}}>第{rowData.rank}</Text>
+              <Text style={{color: modeInfo.titleTextColor}}>No.{rowData.rank}</Text>
               <HTMLView
                 value={rowData.content}
                 modeInfo={modeInfo}
@@ -114,9 +112,7 @@ class Rank extends Component {
                 shouldForceInline={true}
               />
             </View>
-
             { rowData.type === 'general' ? this.renderGeneral(rowData) : this.renderOther(rowData) }
-
           </View>
         </TouchableElement>
       </View>

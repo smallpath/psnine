@@ -24,7 +24,7 @@ let toolbarHeight = 56;
 let releasedMarginTop = 0;
 
 class BattleItem extends React.PureComponent {
-  shouldComponentUpdate = () => false
+  shouldComponentUpdate = (props) => props.modeInfo.isNightMode !== this.props.modeInfo.isNightMode
   
   _onRowPressed = (rowData) => {
     const { navigation } = this.props;

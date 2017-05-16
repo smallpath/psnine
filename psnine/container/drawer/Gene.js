@@ -120,17 +120,22 @@ class Gene extends Component {
     )
   }
 
+  isReceiving = false
   componentWillReceiveProps(nextProps) {
     if (this.props.screenProps.geneType != nextProps.screenProps.geneType) {
       this.props.screenProps.geneType = nextProps.screenProps.geneType;
+      // this.isReceiving = true
       this._onRefresh(nextProps.screenProps.geneType);
     } else if (this.props.screenProps.modeInfo.isNightMode != nextProps.screenProps.modeInfo.isNightMode) {
       this.props.screenProps.modeInfo = nextProps.screenProps.modeInfo;
     } else if (this.props.screenProps.searchTitle !== nextProps.screenProps.searchTitle) {
+      // this.isReceiving = true
       this._onRefresh(
         this.props.screenProps.geneType,
         nextProps.screenProps.searchTitle
       )
+    } else {
+      this.isReceiving = true
     }
   }
 
@@ -142,10 +147,13 @@ class Gene extends Component {
     } else {
       this.currentHeight = this.listView.getMetrics().contentLength;
     }
-
-    this.refreshControl._nativeRef.setNativeProps({
-      refreshing: false,
-    });
+    // console.log(this.isReceiving)
+    if (this.isReceiving === true) {
+      this.refreshControl._nativeRef.setNativeProps({
+        refreshing: false,
+      });
+      this.isReceiving = false
+    }
   }
 
   componentDidMount = () => {
@@ -185,7 +193,7 @@ class Gene extends Component {
 
   _onEndReached = () => {
     const { gene: geneReducer, dispatch } = this.props;
-
+    // this.isReceiving = true
     this.refreshControl._nativeRef.setNativeProps({
       refreshing: true,
     });

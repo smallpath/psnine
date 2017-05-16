@@ -16,10 +16,12 @@ export default function (html) {
     node: titleArr.slice(5)
   }
 
-  const body = all.children().filter(function (i, el) {
+  const body = Array.from(all.children().filter(function (i, el) {
     const $this = $(this)
     return $this.attr('class') === 'content pd10' || $this.attr('align') === 'center';
-  })
+  }).map(function (i, elem) {
+    return $(this).html()
+  }))
   const page = []
 
   all.find('.page a').each(function (i, elem) {
@@ -66,7 +68,7 @@ export default function (html) {
   })
 
   const contentInfo = {
-    html: `<div>${(body.html() || '').trim()}</div>`,
+    html: `<div>${(body.join('') || '').trim()}</div>`,
     page: page,
     gameTable
   }

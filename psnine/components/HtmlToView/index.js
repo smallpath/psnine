@@ -78,8 +78,12 @@ class HtmlView extends Component {
       onImageLongPress: this.props.onImageLongPress,
       shouldForceInline: this.props.shouldForceInline
     }
-
-    htmlToElement(value, opts, (err, element) => {
+    // 加一个空文字来将最开头的表情内联
+    let target = value
+    if (target.indexOf('<img src="http://photo.psnine.com/face/') === 0) {
+      target = '<span/>' + target
+    }
+    htmlToElement(target, opts, (err, element) => {
       if (err) {
         this.props.onError(err)
       }

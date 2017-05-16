@@ -286,7 +286,7 @@ class QaTopic extends Component {
               modeInfo={modeInfo}
               stylesheet={styles}
               onImageLongPress={this.handleImageOnclick}
-              imagePaddingOffset={30 + 75 + 10}
+              imagePaddingOffset={30 + 50 + 10}
               shouldForceInline={true}
             />
 
@@ -328,7 +328,7 @@ class QaTopic extends Component {
                   modeInfo={modeInfo}
                   stylesheet={styles}
                   onImageLongPress={this.handleImageOnclick}
-                  imagePaddingOffset={30 + 75 + 10}
+                  imagePaddingOffset={30 + 50 + 10}
                   shouldForceInline={true}
                 />
 

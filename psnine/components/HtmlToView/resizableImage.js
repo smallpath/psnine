@@ -28,7 +28,8 @@ export default class ResizableImage extends Component {
       width: this.props.style.width || maxWidth,
       height: this.props.style.height || (maxWidth / 16 * 9),
       isLoading: this.props.isLoading || true,
-      alignCenter: this.props.alignCenter || false
+      alignCenter: this.props.alignCenter || false,
+      hasError: false
     }
   }
 
@@ -52,7 +53,11 @@ export default class ResizableImage extends Component {
           isLoading: false
         })
       }
-    }, () => { })
+    }, () => {
+      this.setState({
+        hasError: true
+      })
+    })
   }
 
   render() {
@@ -74,7 +79,7 @@ export default class ResizableImage extends Component {
     }
 
     const alignSelf = this.state.alignCenter ? { alignContent: 'center' } : {}
-
+    // console.log(maxWidth, this.state.width, source.width)
     return (
       <TouchableNativeFeedback onLongPress={this.props.linkPressHandler} style={[{ justifyContent: 'center', alignItems: 'center' }, alignSelf]}>
         <View style={{ width: source.width, height: source.height }}>
@@ -89,7 +94,7 @@ export default class ResizableImage extends Component {
                 height: source.height,
                 width: source.width
               }}
-              color={accentColor} />
+              color={this.state.hasError ? '#000' : accentColor} />
           }
           {!this.state.isLoading &&
             <Image

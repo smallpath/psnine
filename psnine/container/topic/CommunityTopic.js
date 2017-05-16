@@ -331,8 +331,8 @@ class CommunityTopic extends Component {
                     modeInfo={modeInfo}
                     stylesheet={styles}
                     onImageLongPress={this.handleImageOnclick}
-                    imagePaddingOffset={30 + 75 + 10}
-                    shouldForceInline={true}
+                    imagePaddingOffset={30 + 50 + 10}
+                    shouldForceInline={false}
                   />
 
                   <View style={{ flex: 1.1, flexDirection: 'row', justifyContent: 'space-between' }}>

@@ -32,10 +32,7 @@ let screen = Dimensions.get('window');
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = screen;
 export default class ComplexComment extends React.PureComponent {
 
-  shouldComponentUpdate(nextProps, nextState) {
-    // console.log('item called')
-    return false
-  }
+  shouldComponentUpdate = (props) => props.modeInfo.isNightMode !== this.props.modeInfo.isNightMode
 
   _onRowPressed = (rowData) => {
     const { navigation } = this.props;

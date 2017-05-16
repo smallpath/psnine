@@ -102,7 +102,12 @@ const Web = props => {
 };
 
 export default function htmlToElement(rawHtml, opts, done) {
-  function domToElement(dom, parent, inInsideView = true) {
+  function domToElement(dom, parent, inInsideView = true, depth = 0) {
+    
+    // debug开关函数
+    // const log = () =>{}
+    const log = (text, ...args) => console.log(`第${depth}层 ${Array(depth).fill('      ').join('')}${text} ${args.join(' ')}`)
+    log('是否在View内',inInsideView)
     // inInsideView为是否为第一层, 是第一层则图片外联并且支持返回View组件, 否则只支持返回Text和内联图片组件
     if (!dom) return null;
 
@@ -114,7 +119,7 @@ export default function htmlToElement(rawHtml, opts, done) {
     // 获得嵌套标签的子内容, 仅支持其中第一个子组件
     let getNodeData = function (node) {
       let nodeData = null;
-      if (node.children.length) {
+      if (node.children && node.children.length) {
         let nodeChild = node.children[0];
         if (nodeChild && nodeChild.data) {
           nodeData = nodeChild.data;
@@ -156,20 +161,29 @@ export default function htmlToElement(rawHtml, opts, done) {
     }
 
     // 渲染可以被内联的组件
-    let renderInlineNode = function (index, result = [], debug = false) {
+    let renderInlineNode = function (index, result = [], inInsideView = false) {
       let thisIndex = index + 1;
       if (thisIndex < domLen) {
         let nextNode = dom[thisIndex];
         if (domTemp[thisIndex] === true) {
           return result
         }
+
         if (inlineElements.includes(nextNode.name) || nextNode.type === 'text') {
           // 设置缓存标识
           domTemp[thisIndex] = true;
-
+          const isNestedImage = nextNode.name === 'a' && nextNode.children && nextNode.children.length === 1 && nextNode.children[0].name === 'img'
+          // console.log(isNestedImage, nextNode.name, (nextNode.children || []).length,
+          //   nextNode.children && nextNode.children.length === 1 && nextNode.children[0].name
+          //  ,'isNestedImage')
+          if (isNestedImage) {
+            log('渲染内联组件', inInsideView)
+            domTemp[thisIndex] = false
+            return result
+          }
           result.push(
             <Text key={index}>
-            { domToElement([nextNode], nextNode.parent, false) }
+            { domToElement([nextNode], nextNode.parent, false, depth+1) }
             </Text>
           )
         } else if (nextNode.name === 'br') {
@@ -200,10 +214,7 @@ export default function htmlToElement(rawHtml, opts, done) {
         const classStyle = {}
         renderInlineStyle(parent, classStyle)
 
-        let inlineArr = undefined
-        if (shouldRenderInline) {
-          inlineArr = renderInlineNode(index)
-        }
+        let inlineArr = renderInlineNode(index)
 
         return (
           <Text key={index} onPress={linkPressHandler} style={[
@@ -237,23 +248,32 @@ export default function htmlToElement(rawHtml, opts, done) {
         const rendered = opts.customRenderer(node, index, list, parent, domToElement);
         if (rendered || rendered === null) return rendered;
       }
-
-      const textComponent = renderText(node, index, parent, true)
+      log('尝试渲染renderText',node.type, node.name, inInsideView)
+      const textComponent = renderText(node, index, parent, !inInsideView)
       if (textComponent) return textComponent
 
       if (node.type === 'tag') {
         if (node.name === 'img') {
           let linkPressHandler = null;
+          let shouldForceInlineEmotion = false
           if (parent && parent.name === 'a' && parent.attribs.href) {
             const parentHref = parent.attribs.href
             const imgSrc = node.attribs.src
             const type = imgSrc === parentHref ? 'onImageLongPress' : 'linkHandler'
             linkPressHandler = () => opts[type](entities.decodeHTML(parentHref));
           } else if (node.attribs && node.attribs.src) {
+            // 内联p9的默认表情图片
+            if (node.attribs.src.includes('//photo.psnine.com/face/')) {
+              shouldForceInlineEmotion = true
+            }
             linkPressHandler = () => opts.onImageLongPress(entities.decodeHTML(node.attribs.src));
           }
 
-          const ImageComponent = inInsideView ? ResizableImgComponent : InlineImgComponent
+          let ImageComponent = inInsideView ? ResizableImgComponent : InlineImgComponent
+          if (shouldForceInlineEmotion) {
+            ImageComponent = InlineImgComponent
+          }
+          log('渲染Img标签', '此时是否在View中?', inInsideView, ImageComponent === ResizableImgComponent)
           return (
             <ImageComponent key={index} attribs={node.attribs}
                 isLoading={opts.shouldShowLoadingIndicator}
@@ -283,6 +303,7 @@ export default function htmlToElement(rawHtml, opts, done) {
         if (node.name === 'a' && node.attribs && node.attribs.href) {
           linkPressHandler = () => opts.linkHandler(entities.decodeHTML(node.attribs.href));
         }
+
 
         let linebreakBefore = null;
         let linebreakAfter = null;
@@ -382,7 +403,13 @@ export default function htmlToElement(rawHtml, opts, done) {
           classStyle
         ])
 
-        if (inInsideView && inlineElements.includes(node.name) === false) {
+        const isNestedImage = inInsideView && node.name === 'a' && node.children && node.children.length !==0 && node.children.some(item => item.name === 'img')
+        log('判断是渲染View还是渲染Text',inInsideView, node.name === 'a' && node.children && node.children.length === 1 && node.children[0].name === 'img',
+          node.name === 'a' && node.children && node.children.length !==0 && node.children.some(item => item.name === 'img')
+        , 'wow', depth)
+
+        if (inInsideView && (inlineElements.includes(node.name) === false || isNestedImage)) {
+
           if (node.name === 'br') {
             // P9内容的换行规则
             if (node.prev && ['br'].includes(node.prev.name)) {
@@ -399,17 +426,19 @@ export default function htmlToElement(rawHtml, opts, done) {
             }
             return <Text key={index}>{'\n'}</Text>
           }
+          log('渲染View组件', node.name, isNestedImage, depth)
           return (
             <View key={index} style={flattenStyles}>
-              {domToElement(node.children, node, inInsideView)}
+              {domToElement(node.children, node, inInsideView, depth+1)}
               {shouldSetLineAfter && linebreakAfter && <Text key={index} onPress={linkPressHandler} style={parent ? opts.styles[parent.name] : null}>{linebreakAfter}</Text>}
             </View>
           )
         } else {
-          let inlineNode = renderInlineNode(index, [], true)
+          log('渲染Text组件', inInsideView, node.name, depth)
+          let inlineNode = renderInlineNode(index, [], inInsideView)
 
           return (
-            <Text key={index} style={flattenStyles}>{domToElement(node.children, node, false)}
+            <Text key={index} style={flattenStyles}>{domToElement(node.children, node, false, depth+1)}
               {inlineNode.length !== 0 && inlineNode}
             </Text>
           )

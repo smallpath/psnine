@@ -111,6 +111,15 @@ class Community extends Component {
     );
   }
 
+  componentDidUpdate = () => {
+    if (this.isReceiving) {
+      this.refreshControl._nativeRef.setNativeProps({
+        refreshing: false,
+      });
+      this.isReceiving = false
+    }
+  }
+
   _scrollToTop = () => {
     this.listView.scrollTo({ y: 0, animated: true });
   }
