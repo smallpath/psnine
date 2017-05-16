@@ -73,12 +73,13 @@ export default class Search extends Component {
 
   _pressBack = (callback) => {
     const { marginTop, openVal, content } = this.state
-    Keyboard.dismiss()
+    // Keyboard.dismiss()
     Animated.spring(openVal, { toValue: 0, ...backConfig }).start(() => {
       const _lastNativeText = this.content._lastNativeText
       this.props.navigation.goBack()
       InteractionManager.runAfterInteractions(() => {
         typeof callback === 'function' && callback(_lastNativeText)
+        Keyboard.dismiss()
       })
     });
   }
@@ -105,9 +106,10 @@ export default class Search extends Component {
     this.isToolbarShowing = false
     this.removeListener = BackHandler.addEventListener('hardwareBackPress', () => {
       let config = { tension: 30, friction: 7 };
-      Keyboard.dismiss()
+      // Keyboard.dismiss()
       Animated.spring(openVal, { toValue: 0, ...backConfig }).start(() => {
         this.props.navigation.goBack()
+        Keyboard.dismiss()
       });
       return true
     })
