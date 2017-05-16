@@ -22,6 +22,7 @@ import HTMLView from '../../components/HtmlToView';
 import { connect } from 'react-redux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { standardColor, nodeColor, idColor, accentColor } from '../../constants/colorConfig';
+import ComplexComment from '../shared/ComplexComment'
 
 import {
   getGamePointAPI
@@ -149,7 +150,7 @@ class CommunityTopic extends Component {
     return (
       <View key={'header'} style={{
         height: 74,
-        elevation: 4,
+        elevation: 2,
         backgroundColor:  modeInfo.backgroundColor,
       }}>
         <TouchableNativeFeedback
@@ -215,128 +216,19 @@ class CommunityTopic extends Component {
     )
   }
 
-  renderSonComment = (list, parentRowData) => {
-    const { modeInfo } = this.props.screenProps
-    const result = list.map((rowData, index) => {
-      return (
-        <View key={rowData.id || index} style={{
-            backgroundColor: modeInfo.brighterLevelOne,
-            borderBottomWidth: StyleSheet.hairlineWidth,
-            borderTopWidth: StyleSheet.hairlineWidth,
-            borderBottomColor: modeInfo.backgroundColor,
-            borderTopColor: modeInfo.backgroundColor,
-            padding: 5,
-        }}>
-          <Text
-            useForeground={true}
-            delayPressIn={100}
-            onPress={() => {
-              this.onCommentLongPress(parentRowData, rowData.psnid)
-            }}
-            background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
-          >
-            <HTMLView
-              value={rowData.text}
-              modeInfo={modeInfo}
-              stylesheet={styles}
-              onImageLongPress={this.handleImageOnclick}
-              imagePaddingOffset={30 + 75 + 10}
-              shouldForceInline={true}
-            />
-
-          </Text>
-        </View>
-      )
-    })
-    return result
-  }
-
   hasComment = false
+
+  
   renderComment = (rowData, index) => {
     const { modeInfo } = this.props.screenProps
-    return (
-      <View key={rowData.id || index} style={{
-        backgroundColor: modeInfo.backgroundColor,
-        borderBottomWidth: StyleSheet.hairlineWidth,
-        borderBottomColor: modeInfo.brighterLevelOne
-      }}>
-        <TouchableNativeFeedback
-          onLongPress={() => {
-            this.onCommentLongPress(rowData)
-          }}
-          useForeground={true}
-          delayPressIn={100}
-          background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
-        >
-          <View style={{ flex: 1, flexDirection: 'row', padding: 12 }}>
-            <Image
-              source={{ uri: rowData.avatar }}
-              style={styles.avatar}
-            />
-
-            <View style={{ marginLeft: 10, flex: 1, flexDirection: 'column' }}>
-              <HTMLView
-                value={rowData.text}
-                modeInfo={modeInfo}
-                stylesheet={styles}
-                onImageLongPress={this.handleImageOnclick}
-                imagePaddingOffset={30 + 75 + 10}
-                shouldForceInline={true}
-              />
-
-              <View style={{ flex: 1.1, flexDirection: 'row', justifyContent: 'space-between' }}>
-                <Text selectable={false} style={{ flex: -1, color: idColor, textAlign: 'center', textAlignVertical: 'center' }} onPress={
-                  () => {
-                    this.props.navigation.navigate('Home', {
-                      title: rowData.psnid,
-                      id: rowData.psnid,
-                      URL: `http://psnine.com/psnid/${rowData.psnid}`
-                    })
-                  }
-                }>{rowData.psnid}</Text>
-                <Text selectable={false} style={{ flex: -1, color: modeInfo.standardTextColor, textAlign: 'center', textAlignVertical: 'center' }}>{rowData.date}</Text>
-              </View>
-
-              { rowData.commentList.length !== 0 && (<View style={{ backgroundColor: modeInfo.brighterLevelOne}}>
-                {this.renderSonComment(rowData.commentList, rowData)}
-              </View>)}
-            </View>
-
-          </View>
-        </TouchableNativeFeedback>
-      </View>
-    )
-  }
-
-  isReplyShowing = false
-
-  onCommentLongPress = (rowData, name = '') => {
-    if (this.isReplyShowing === true) return
-    const { params } = this.props.navigation.state
-    const cb = () => {
-      this.props.navigation.navigate('Reply', {
-        type: 'comson',
-        id: rowData.id.replace('comment-', ''),
-        at: name ? name : rowData.psnid,
-        callback: () => {
-          fetch(`http://psnine.com/get/comson?id=${rowData.id.replace('comment-', '')}`).then(() => {
-            this.preFetch()
-          })
-        },
-        shouldSeeBackground: true
-      })
-    }
-    if (this.state.openVal._value === 1) {
-      this._animateToolbar(0, cb)
-    } else if (this.state.openVal._value === 0) {
-      cb()
-    }
-  }
-
-  _readMore = (URL) => {
-    this.props.navigation.navigate('CommentList', {
-      URL
-    })
+    const { navigation } = this.props
+    const { preFetch } = this
+    return (<ComplexComment {...{
+      navigation,
+      modeInfo,
+      preFetch,
+      rowData
+    }}/>)
   }
 
   viewTopIndex = 0
@@ -396,7 +288,7 @@ class CommunityTopic extends Component {
         {!this.state.isLoading && <FlatList style={{
           flex: -1,
           backgroundColor: modeInfo.backgroundColor,
-          margin: 5 
+          padding: 5 
         }}
           ref={flatlist => this.flatlist = flatlist}
           data={this.state.commentList}
