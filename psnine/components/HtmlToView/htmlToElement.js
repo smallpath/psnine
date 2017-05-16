@@ -105,8 +105,8 @@ export default function htmlToElement(rawHtml, opts, done) {
   function domToElement(dom, parent, inInsideView = true, depth = 0) {
     
     // debug开关函数
-    // const log = () =>{}
-    const log = (text, ...args) => console.log(`第${depth}层 ${Array(depth).fill('      ').join('')}${text} ${args.join(' ')}`)
+    const log = () =>{}
+    // const log = (text, ...args) => console.log(`第${depth}层 ${Array(depth).fill('      ').join('')}${text} ${args.join(' ')}`)
     log('是否在View内',inInsideView)
     // inInsideView为是否为第一层, 是第一层则图片外联并且支持返回View组件, 否则只支持返回Text和内联图片组件
     if (!dom) return null;
