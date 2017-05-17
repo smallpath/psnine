@@ -94,7 +94,7 @@ class UserGame extends Component {
                 {rowData.title}
               </Text>
             </View>
-            {rowData.platform && (<View><Text style={{ color: modeInfo.standardTextColor, marginLeft: 2  }}>{rowData.platform.join(' ')}</Text></View>)}
+            {rowData.platform && (<View><Text style={{ color: modeInfo.standardTextColor, marginLeft: 2  }}>{rowData.platform.join(' ')}</Text></View>) || undefined}
             {rowData.syncTime && (<View style={{ flex: -1, flexDirection: 'row' }}>
                 <Text style={{ color: modeInfo.standardColor ,fontSize: 12, marginLeft: 2 }}>{rowData.syncTime + ' '}</Text>
                 <Text selectable={false} style={{
@@ -107,7 +107,7 @@ class UserGame extends Component {
                   fontSize: 12,
                   color: modeInfo.standardTextColor,
                 }}>{rowData.allTime}</Text>
-              </View>)}
+              </View>) || undefined}
           </View>
           { rowData.alert && (
             <View style={{ flex: 1, justifyContent: 'center', padding: 2 }}>
@@ -127,7 +127,7 @@ class UserGame extends Component {
                   fontSize: 10
                 }}>{rowData.allPercent}</Text>
             </View>
-            )
+            ) || undefined
           }
           <View style={{ flex: 1, justifyContent: 'center', padding: 2 }}>
             <Text selectable={false}             

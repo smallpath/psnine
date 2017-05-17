@@ -41,7 +41,7 @@ export default function parseThophy(html) {
     list,
     page,
     numberPerPage: 30, // ??
-    numPages: page.length - 1,
-    len: $('.page li').find('.disabled a').last().html()
+    numPages: parseInt(page[page.length - 2].text),
+    len: parseInt($('.page li').find('.disabled a').last().html())
   }
 }
