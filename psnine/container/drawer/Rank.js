@@ -8,7 +8,8 @@ import {
   TouchableNativeFeedback,
   RefreshControl,
   InteractionManager,
-  Picker
+  Picker,
+  FlatList
 } from 'react-native';
 
 import HTMLView from '../../components/HtmlToView';
@@ -21,15 +22,12 @@ import { getHomeURL } from '../../dao';
 
 import { changeScrollType } from '../../actions/app';
 
+import TopicItem from '../shared/RankItem'
+import FooterProgress from '../shared/FooterProgress'
+
 let toolbarHeight = 56;
 let releasedMarginTop = 0;
 let prevPosition = -1;
-
-let dataSource = new ListView.DataSource({
-  rowHasChanged: (row1, row2) => {
-    return row1.psnid !== row2.psnid || row1.rank !== row2.rank
-  },
-});
 
 class Rank extends Component {
   static navigationOptions = {
@@ -43,136 +41,11 @@ class Rank extends Component {
     this.state = {
       server: 'hk',
       sort: 'point',
-      cheat: '0'
+      cheat: '0',
+      isRefreshing: true,
+      isLoadingMore: false
     }
   }
-
-  _renderSeparator(sectionID: number, rowID: number, adjacentRowHighlighted: bool) {
-    return (
-      <View
-        key={`${sectionID}-${rowID}`}
-        style={{ height: 1, backgroundColor: 'rgba(0, 0, 0, 0.1)', marginLeft: 10, marginRight: 10 }}
-      />
-    );
-  }
-
-  _onRowPressed = (rowData) => {
-    const { navigation } = this.props.screenProps;
-    const URL = getHomeURL(rowData.psnid);
-    navigation.navigate('Home', {
-      // URL: 'http://psnine.com/psngame/5424?psnid=Smallpath',
-      URL,
-      title: rowData.psnid,
-      rowData
-    })
-  }
-
-
-  handleImageOnclick = (url) => this.props.screenProps.navigation.navigate('ImageViewer', {
-    images: [
-      { url }
-    ]
-  })
-
-  _renderRow = (rowData,
-    sectionID: number | string,
-    rowID: number | string,
-    highlightRow: (sectionID: number, rowID: number) => void
-  ) => {
-    const { modeInfo } = this.props.screenProps
-    let TouchableElement = TouchableNativeFeedback;
-    return (
-      <View rowID={rowID} style={{
-        marginTop: 7,
-        backgroundColor: modeInfo.backgroundColor,
-        elevation: 1,
-      }}>
-        <TouchableElement
-          onPress={() => {
-            this._onRowPressed(rowData)
-          }}
-          useForeground={true}
-          delayPressIn={100}
-          background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
-        >
-          <View style={{ flex: 1, flexDirection: 'row', padding: 12, justifyContent: 'space-around', alignItems: 'center' }}>
-            <Image
-              source={{ uri: rowData.avatar }}
-              style={[styles.avatar, { width: 50 }]}
-            />
-            <View style={{ flex: 2, padding: 5}}>
-              <Text style={{color: modeInfo.accentColor}}>{rowData.psnid}</Text>
-              <Text style={{color: modeInfo.titleTextColor}}>No.{rowData.rank}</Text>
-              <HTMLView
-                value={rowData.content}
-                modeInfo={modeInfo}
-                stylesheet={styles}
-                onImageLongPress={this.handleImageOnclick}
-                imagePaddingOffset={30 + 10}
-                shouldForceInline={true}
-              />
-            </View>
-            { rowData.type === 'general' ? this.renderGeneral(rowData) : this.renderOther(rowData) }
-          </View>
-        </TouchableElement>
-      </View>
-    )
-  }
-
-  renderGeneral = (rowData) => {
-    const { modeInfo } = this.props.screenProps
-    return (
-      <View style={{flex: 4, flexDirection: 'row'}}>
-        <View style={{flex: 2, flexDirection: 'column'}}>
-          <View style={{ flex: 1, flexDirection: 'column' }}>
-            <Text style={{color: modeInfo.standardTextColor}}>{rowData.level}</Text>
-          </View>
-          <View style={{ flex: 1, flexDirection: 'column' }}>
-            <Text style={{color: modeInfo.standardTextColor}}>{rowData.games}</Text>
-          </View>
-          <View style={{ flex: 1, flexDirection: 'column' }}>
-            <Text style={{color: modeInfo.standardTextColor}}>{rowData.perfectRate}</Text>
-          </View>
-        </View>
-        <View style={{flex: 2, flexDirection: 'column'}}>
-          <View style={{ flex: 1, flexDirection: 'column' }}>
-            <Text style={{color: modeInfo.standardTextColor}}>{rowData.platinum}</Text>
-          </View>
-          <View style={{ flex: 1, flexDirection: 'column' }}>
-            <Text style={{color: modeInfo.standardTextColor}}>{rowData.gold}</Text>
-          </View>
-          <View style={{ flex: 1, flexDirection: 'column' }}>
-            <Text style={{color: modeInfo.standardTextColor}}>{rowData.silver}</Text>
-          </View>
-          <View style={{ flex: 1, flexDirection: 'column' }}>
-            <Text style={{color: modeInfo.standardTextColor}}>{rowData.bronze}</Text>
-          </View>
-        </View>
-      </View>
-    )
-  }
-
-  renderOther = (rowData) => {
-    const { modeInfo } = this.props.screenProps
-    return (
-      <View style={{flex: 4, flexDirection: 'row'}}>
-        <View style={{ flex: 1, flexDirection: 'column' }}>
-          <HTMLView
-            value={rowData.level}
-            modeInfo={modeInfo}
-            stylesheet={styles}
-            onImageLongPress={this.handleImageOnclick}
-            imagePaddingOffset={30 + 0 + 10}
-            shouldForceInline={true}
-          />
-          <Text style={{color: modeInfo.standardTextColor}}>{rowData.exp}</Text>
-        </View>
-        { rowData.games && <View style={{ flex: 1, flexDirection: 'column' }}>
-          <Text style={{color: modeInfo.standardTextColor}}>{rowData.games}</Text>
-        </View> || undefined}
-      </View>
-    )
-  } 
 
   _renderHeader = () => {
     const { modeInfo } = this.props.screenProps
@@ -254,21 +127,16 @@ class Rank extends Component {
       this._onRefresh(
         nextProps.screenProps.searchTitle
       )
+    } else {
+      this.setState({
+        isRefreshing: false,
+        isLoadingMore: false
+      })
     }
   }
 
   componentDidUpdate = () => {
-    const { rank: reducer } = this.props;
 
-    if (reducer.page == 1) {
-      // this._scrollToTop()
-    } else {
-      this.currentHeight = this.listView.getMetrics().contentLength;
-    }
-
-    this.refreshControl._nativeRef.setNativeProps({
-      refreshing: false,
-    });
   }
 
   componentDidMount = () => {
@@ -281,19 +149,15 @@ class Rank extends Component {
   _onRefresh = (title = '') => {
     const { rank: reducer, dispatch } = this.props;
 
-    this.refreshControl._nativeRef.setNativeProps({
-      refreshing: true,
-    });
+    this.setState({
+      isRefreshing: true
+    })
 
     const { server, sort, cheat } = this.state
     dispatch(getRankList(1, {
       sort, server, cheat,
       title: typeof title !== 'undefined' ? title : this.props.screenProps.searchTitle
     }));
-  }
-
-  _scrollToTop = () => {
-    this.listView.scrollTo({ y: 0, animated: true });
   }
 
   _loadMoreData = () => {
@@ -310,56 +174,68 @@ class Rank extends Component {
     const { rank: reducer } = this.props;
 
     if (reducer.page === reducer.totalPage) return
+    if (this.state.isRefreshing || this.state.isLoadingMore) return
 
-    this.refreshControl._nativeRef.setNativeProps({
-      refreshing: true,
-    });
-
+    this.setState({
+      isLoadingMore: true
+    })
     this._loadMoreData();
+  }
+
+  ITEM_HEIGHT = 93 + 7
+
+  _renderItem = ({ item: rowData, index }) => {
+    const { modeInfo, navigation } = this.props.screenProps
+    const { ITEM_HEIGHT } = this
+    return <TopicItem {...{
+      navigation,
+      rowData,
+      modeInfo,
+      ITEM_HEIGHT
+    }} />
   }
 
   render() {
     const { rank: reducer } = this.props;
     const { modeInfo } = this.props.screenProps
-    // console.log('Community.js rendered');
-    dataSource = dataSource.cloneWithRows(reducer.ranks);
 
     return (
       <View style={{ backgroundColor: modeInfo.backgroundColor, flex: 1 }}>
         {this._renderHeader()}
-        <ListView
+        <FlatList style={{
+          flex: 1,
+          backgroundColor: modeInfo.backgroundColor
+        }}
+          ref={flatlist => this.flatlist = flatlist}
           refreshControl={
             <RefreshControl
-              refreshing={false}
+              refreshing={this.state.isRefreshing}
               onRefresh={this._onRefresh}
-              colors={[standardColor]}
+              colors={[modeInfo.standardColor]}
               progressBackgroundColor={modeInfo.backgroundColor}
               ref={ref => this.refreshControl = ref}
             />
           }
-          key={modeInfo.isNightMode}
-          ref={listView => this.listView = listView}
-          style={{ backgroundColor: modeInfo.backgroundColor, flex: 10 }}
-          pageSize={32}
-          initialListSize={32}
-          removeClippedSubviews={false}
-          enableEmptySections={true}
+          ListFooterComponent={() => <FooterProgress isLoadingMore={this.state.isLoadingMore} />}
+          data={reducer.ranks}
+          keyExtractor={(item, index) => `${item.psnid}::${item.rank}`}
+          renderItem={this._renderItem}
           onEndReached={this._onEndReached}
-          onEndReachedThreshold={10}
-          dataSource={dataSource}
-          renderRow={this._renderRow}
-          onLayout={event => {
-            this.listViewHeight = event.nativeEvent.layout.height
-          }}
-          onContentSizeChange={() => {
-            if (reducer.page == 1)
-              return;
-            const y = this.currentHeight + 60 - this.listViewHeight
-            if (y === prevPosition) {
-              return
-            }
-            prevPosition = y;
-            /*this.listView.scrollTo({ y, animated: true })*/
+          onEndReachedThreshold={0.5}
+          extraData={modeInfo}
+          windowSize={21}
+          updateCellsBatchingPeriod={1}
+          initialNumToRender={42}
+          maxToRenderPerBatch={8}
+          disableVirtualization={false}
+          contentContainerStyle={styles.list}
+          getItemLayout={(data, index) => (
+            {length: this.ITEM_HEIGHT, offset: this.ITEM_HEIGHT * index, index}
+          )}
+          viewabilityConfig={{
+            minimumViewTime: 1,
+            viewAreaCoveragePercentThreshold: 0,
+            waitForInteractions: true
           }}
         />
       </View>

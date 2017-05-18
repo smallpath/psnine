@@ -11,7 +11,8 @@ import {
   RefreshControl,
   InteractionManager,
   Modal,
-  Slider
+  Slider,
+  FlatList
 } from 'react-native';
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
@@ -24,9 +25,8 @@ import { standardColor, nodeColor, idColor } from '../../constants/colorConfig';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { getGameTopicAPI } from '../../dao';
 
-const ds = new ListView.DataSource({
-  rowHasChanged: (row1, row2) => row1.id !== row2.id,
-});
+import TopicItem from '../shared/CommunityItem'
+import FooterProgress from '../shared/FooterProgress'
 
 let toolbarActions = [
   { title: '回复', iconName: 'md-create', show: 'always' },
@@ -42,7 +42,8 @@ class GameTopic extends Component {
       numPages: 1,
       commentTotal: 1,
       currentPage: 1,
-      isLoading: true,
+      isRefreshing: true,
+      isLoadingMore: false,
       modalVisible: false,
       sliderValue: 1
     }
@@ -53,85 +54,19 @@ class GameTopic extends Component {
     navigation.goBack();
   }
 
-  _pressRow = (rowData) => {
-
-  }
-
-
-  _renderRow = (rowData,
-    sectionID: number | string,
-    rowID: number | string,
-    highlightRow: (sectionID: number, rowID: number) => void
-  ) => {
-    const { modeInfo } = this.props.screenProps
-
-    return (
-      <View rowID={rowID} style={{
-        marginTop: 7,
-        backgroundColor: modeInfo.backgroundColor,
-        elevation: 1,
-      }}>
-        <TouchableNativeFeedback
-          onPress={() => {
-            /*const URL = getTopicURL(rowData.id);*/
-            this.props.navigation.navigate('CommunityTopic', {
-              URL: rowData.url,
-              title: rowData.title,
-              rowData,
-              type: 'community',
-              shouldBeSawBackground: true
-            })
-          }}
-          useForeground={true}
-          delayPressIn={100}
-          background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
-        >
-          <View style={{ flex: 1, flexDirection: 'row', padding: 12 }}>
-            <Image
-              source={{ uri: rowData.avatar }}
-              style={styles.avatar}
-            />
-
-            <View style={{ marginLeft: 10, flex: 1, flexDirection: 'column' }}>
-              <Text
-                ellipsizeMode={'tail'}
-                numberOfLines={3}
-                style={{ flex: 2.5, color: modeInfo.titleTextColor, }}>
-                {rowData.title}
-              </Text>
-
-              <View style={{ flex: 1.1, flexDirection: 'row', justifyContent: 'space-between' }}>
-                <Text selectable={false} style={{ flex: -1, color: idColor, textAlign: 'center', textAlignVertical: 'center' }} onPress={
-                  () => {
-                    this.props.navigation.navigate('Home', {
-                      title: rowData.psnid,
-                      id: rowData.psnid,
-                      URL: `http://psnine.com/psnid/${rowData.psnid}`
-                    })
-                  }
-                }>{rowData.psnid}</Text>
-                <Text selectable={false} style={{ flex: -1, color: modeInfo.standardTextColor, textAlign: 'center', textAlignVertical: 'center' }}>{rowData.date}</Text>
-                <Text selectable={false} style={{ flex: -1, color: modeInfo.standardTextColor, textAlign: 'center', textAlignVertical: 'center' }}>{rowData.count}回复</Text>
-                <Text selectable={false} style={{ flex: -1, color: modeInfo.standardTextColor, textAlign: 'center', textAlignVertical: 'center' }}>{rowData.type}</Text>
-              </View>
-
-            </View>
-
-          </View>
-        </TouchableNativeFeedback>
-      </View>
-    )
-  }
-
   componentWillMount = async () => {
     const { params } = this.props.navigation.state
     this.fetchMessages(params.URL, 'jump');
   }
 
   fetchMessages = (url, type = 'down') => {
-    this.setState({
-      isLoading: true
-    }, () => {
+    const state = {}
+    if (type === 'down') {
+      state.isLoadingMore = true
+    } else {
+      state.isRefreshing = true
+    }
+    this.setState(state, () => {
       InteractionManager.runAfterInteractions(() => {
         getGameTopicAPI(url).then(data => {
           let thisList = []
@@ -145,18 +80,19 @@ class GameTopic extends Component {
             thisList.unshift(...data.list)
             this.pageArr.unshift(thisPage)
           } else if (type === 'jump') {
-            cb = () => this.listView.scrollTo({ y: 0, animated: true });
+            // cb = () => this.listView.scrollTo({ y: 0, animated: true });
             thisList = data.list
-            this.pageArr = [this.pageArr]
+            this.pageArr = [thisPage]
           }
-
+          // alert(`${this.state.currentPage} ${thisPage} ${data.numPages}`)
           this.setState({
             list: thisList,
             numberPerPage: data.numberPerPage,
             numPages: data.numPages,
             commentTotal: data.len,
             currentPage: thisPage,
-            isLoading: false
+            isLoadingMore: false,
+            isRefreshing: false
           }, cb);
         })
       })
@@ -166,7 +102,7 @@ class GameTopic extends Component {
   pageArr = [1]
   _onRefresh = () => {
     const { URL } = this.props.navigation.state.params;
-    const currentPage = this.state.currentPage
+    const currentPage = this.pageArr.reduce((prev, curr) => curr < prev ? curr : prev, this.state.currentPage)
     let type = currentPage === 1 ? 'jump' : 'up'
     let targetPage = currentPage - 1
     if (type === 'jump') {
@@ -181,7 +117,7 @@ class GameTopic extends Component {
     const currentPage = this.state.currentPage
     const targetPage = currentPage + 1
     if (targetPage > this.state.numPages) return
-    if (this.state.isLoading === true) return
+    if (this.state.isLoadingMore || this.state.isRefreshing) return
     this.fetchMessages(URL.split('=').slice(0, -1).concat(targetPage).join('='), 'down');
 
   }
@@ -201,13 +137,26 @@ class GameTopic extends Component {
     }
   }
 
+
+  ITEM_HEIGHT = 78 + 7
+
+  _renderItem = ({ item: rowData, index }) => {
+    const { modeInfo } = this.props.screenProps
+    const { ITEM_HEIGHT } = this
+    const { navigation } = this.props
+    return <TopicItem {...{
+      navigation,
+      rowData,
+      modeInfo,
+      ITEM_HEIGHT
+    }} />
+  }
+
   sliderValue = 1
   render() {
     const { modeInfo } = this.props.screenProps
     const { params } = this.props.navigation.state
     // console.log('Message.js rendered');
-    ds = ds.cloneWithRows(this.state.list)
-
     return (
       <View
         style={{ flex: 1, backgroundColor: modeInfo.backgroundColor }}
@@ -225,26 +174,40 @@ class GameTopic extends Component {
           onIconClicked={this.onNavClicked}
           onActionSelected={this.onActionSelected}
         />
-        <ListView
+        <FlatList style={{
+          flex: 1,
+          backgroundColor: modeInfo.backgroundColor
+        }}
+          ref={flatlist => this.flatlist = flatlist}
           refreshControl={
             <RefreshControl
-              refreshing={this.state.isLoading}
+              refreshing={this.state.isRefreshing}
               onRefresh={this._onRefresh}
-              colors={[standardColor]}
-              ref={ref => this.refreshControl = ref}
+              colors={[modeInfo.standardColor]}
               progressBackgroundColor={modeInfo.backgroundColor}
+              ref={ref => this.refreshControl = ref}
             />
           }
-          ref={listView => this.listView = listView}
-          pageSize={60}
-          removeClippedSubviews={false}
-          enableEmptySections={true}
-          dataSource={ds}
-          renderRow={this._renderRow}
+          ListFooterComponent={() => <FooterProgress isLoadingMore={this.state.isLoadingMore} />}
+          data={this.state.list}
+          keyExtractor={(item, index) => item.id}
+          renderItem={this._renderItem}
           onEndReached={this._onEndReached}
-          onEndReachedThreshold={10}
-          onLayout={event => {
-            this.listViewHeight = event.nativeEvent.layout.height
+          onEndReachedThreshold={0.5}
+          extraData={modeInfo}
+          windowSize={21}
+          updateCellsBatchingPeriod={1}
+          initialNumToRender={42}
+          maxToRenderPerBatch={8}
+          disableVirtualization={false}
+          contentContainerStyle={styles.list}
+          getItemLayout={(data, index) => (
+            {length: this.ITEM_HEIGHT, offset: this.ITEM_HEIGHT * index, index}
+          )}
+          viewabilityConfig={{
+            minimumViewTime: 1,
+            viewAreaCoveragePercentThreshold: 0,
+            waitForInteractions: true
           }}
         />
         {this.state.modalVisible && (
@@ -290,8 +253,7 @@ class GameTopic extends Component {
                 <Text style={{ alignSelf: 'flex-end', color: '#009688' }}
                   onPress={() => {
                     this.setState({
-                      modalVisible: false,
-                      isLoading: true
+                      modalVisible: false
                     }, () => {
                       const currentPage = this.state.currentPage
                       const targetPage = params.URL.split('=').slice(0, -1).concat(this.state.sliderValue).join('=')

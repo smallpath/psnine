@@ -19,12 +19,12 @@ import {
 
 import { changeSegmentIndex } from '../actions/app';
 
-import Community from './drawer/Community.flatlist';
-import Qa from './drawer/Qa.flatlist';
-import Game from './drawer/Game.flatlist';
+import Community from './drawer/Community';
+import Qa from './drawer/Qa';
+import Game from './drawer/Game';
 import Battle from './drawer/Battle';
-import Gene from './drawer/Gene.flatlist';
-import Rank from './drawer/Rank.flatlist';
+import Gene from './drawer/Gene';
+import Rank from './drawer/Rank';
 
 import {
   DrawerNavigator,
@@ -83,7 +83,6 @@ const Tabs = TabNavigator({
     screen: Gene,
   }
 }, {
-  initialRouteName: 'Gene',
   tabBarComponent: props => {
     const { modeInfo } = props.screenProps
     const titleTextColor = modeInfo.isNightMode ? '#000' : '#fff'

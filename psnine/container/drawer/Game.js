@@ -8,7 +8,8 @@ import {
   TouchableNativeFeedback,
   RefreshControl,
   InteractionManager,
-  Picker
+  Picker,
+  FlatList
 } from 'react-native';
 
 import { connect } from 'react-redux';
@@ -20,15 +21,12 @@ import { getGameUrl } from '../../dao';
 
 import { changeScrollType } from '../../actions/app';
 
+import TopicItem from '../shared/GameItem'
+import FooterProgress from '../shared/FooterProgress'
+
 let toolbarHeight = 56;
 let releasedMarginTop = 0;
 let prevPosition = -1;
-
-let dataSource = new ListView.DataSource({
-  rowHasChanged: (row1, row2) => {
-    return row1.id !== row2.id || row1.views !== row2.views || row1.count !== row2.count;
-  },
-});
 
 class Game extends Component {
   static navigationOptions = {
@@ -42,81 +40,10 @@ class Game extends Component {
     this.state = {
       pf: 'all',
       sort: 'newest',
-      dlc: 'all'
+      dlc: 'all',
+      isRefreshing: true,
+      isLoadingMore: false
     }
-  }
-
-  _renderSeparator(sectionID: number, rowID: number, adjacentRowHighlighted: bool) {
-    return (
-      <View
-        key={`${sectionID}-${rowID}`}
-        style={{ height: 1, backgroundColor: 'rgba(0, 0, 0, 0.1)', marginLeft: 10, marginRight: 10 }}
-      />
-    );
-  }
-
-  _onRowPressed = (rowData) => {
-    const { navigation } = this.props.screenProps;
-    const URL = getGameUrl(rowData.id);
-    navigation.navigate('GamePage', {
-      // URL: 'http://psnine.com/psngame/5424?psnid=Smallpath',
-      URL,
-      title: rowData.title,
-      rowData,
-      type: 'game'
-    })
-  }
-
-
-  _renderRow = (rowData,
-    sectionID: number | string,
-    rowID: number | string,
-    highlightRow: (sectionID: number, rowID: number) => void
-  ) => {
-    const { modeInfo } = this.props.screenProps
-    let TouchableElement = TouchableNativeFeedback;
-    return (
-      <View rowID={rowID} style={{
-        marginTop: 7,
-        backgroundColor: modeInfo.backgroundColor,
-        elevation: 1,
-      }}>
-        <TouchableElement
-          onPress={() => {
-            this._onRowPressed(rowData)
-          }}
-          useForeground={true}
-          delayPressIn={100}
-          background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
-        >
-          <View style={{ flex: 1, flexDirection: 'row', padding: 12 }}>
-            <Image
-              source={{ uri: rowData.avatar }}
-              style={[styles.avatar, { width: 91 }]}
-            />
-
-            <View style={{ marginLeft: 10, flex: 1, flexDirection: 'column' }}>
-              <Text
-                ellipsizeMode={'tail'}
-                numberOfLines={3}
-                style={{ flex: 2.5, color: modeInfo.titleTextColor, }}>
-                {rowData.title}
-              </Text>
-
-              <View style={{ flex: 1.1, flexDirection: 'row', justifyContent: 'space-between' }}>
-                <Text selectable={false} style={{ flex: -1, color: idColor, textAlign: 'center', textAlignVertical: 'center' }}>{rowData.platform}</Text>
-                <Text selectable={false} style={{ flex: -1, color: modeInfo.standardTextColor, textAlign: 'center', textAlignVertical: 'center' }}>{rowData.region}</Text>
-                <Text selectable={false} style={{ flex: -1, color: modeInfo.standardTextColor, textAlign: 'center', textAlignVertical: 'center' }}>{
-                  rowData.platium + rowData.gold + rowData.selver + rowData.bronze
-                }</Text>
-              </View>
-
-            </View>
-
-          </View>
-        </TouchableElement>
-      </View>
-    )
   }
 
   _renderHeader = () => {
@@ -188,21 +115,16 @@ class Game extends Component {
       this._onRefresh(
         nextProps.screenProps.searchTitle
       )
+    } else {
+      this.setState({
+        isRefreshing: false,
+        isLoadingMore: false
+      })
     }
   }
 
   componentDidUpdate = () => {
-    const { game: gameReducer } = this.props;
 
-    if (gameReducer.page == 1) {
-      this._scrollToTop()
-    } else {
-      this.currentHeight = this.listView.getMetrics().contentLength;
-    }
-
-    this.refreshControl._nativeRef.setNativeProps({
-      refreshing: false,
-    });
   }
 
   componentDidMount = () => {
@@ -215,9 +137,9 @@ class Game extends Component {
   _onRefresh = (title = '') => {
     const { game: gameReducer, dispatch } = this.props;
 
-    this.refreshControl._nativeRef.setNativeProps({
-      refreshing: true,
-    });
+    this.setState({
+      isRefreshing: true
+    })
 
     const { pf, sort, dlc } = this.state
     dispatch(
@@ -228,10 +150,6 @@ class Game extends Component {
         title: typeof title !== 'undefined' ? title : this.props.screenProps.searchTitle
       })
     );
-  }
-
-  _scrollToTop = () => {
-    this.listView.scrollTo({ y: 0, animated: true });
   }
 
   _loadMoreData = () => {
@@ -247,54 +165,70 @@ class Game extends Component {
   _onEndReached = () => {
     const { game: gameReducer } = this.props;
 
-    this.refreshControl._nativeRef.setNativeProps({
-      refreshing: true,
-    });
+    if (this.state.isRefreshing || this.state.isLoadingMore) return
+
+    this.setState({
+      isLoadingMore: true
+    })
 
     this._loadMoreData();
+  }
+
+
+  ITEM_HEIGHT = 74 + 7
+
+  _renderItem = ({ item: rowData, index }) => {
+    const { modeInfo, navigation } = this.props.screenProps
+    const { ITEM_HEIGHT } = this
+    return <TopicItem {...{
+      navigation,
+      rowData,
+      modeInfo,
+      ITEM_HEIGHT
+    }} />
   }
 
   render() {
     const { game: gameReducer } = this.props;
     const { modeInfo } = this.props.screenProps
     // console.log('Community.js rendered');
-    dataSource = dataSource.cloneWithRows(gameReducer.games);
     return (
       <View style={{ backgroundColor: modeInfo.backgroundColor, flex: 1 }}>
         {this._renderHeader()}
-        <ListView
+        <FlatList style={{
+          flex: 1,
+          backgroundColor: modeInfo.backgroundColor
+        }}
+          ref={flatlist => this.flatlist = flatlist}
           refreshControl={
             <RefreshControl
-              refreshing={false}
+              refreshing={this.state.isRefreshing}
               onRefresh={this._onRefresh}
-              colors={[standardColor]}
+              colors={[modeInfo.standardColor]}
               progressBackgroundColor={modeInfo.backgroundColor}
               ref={ref => this.refreshControl = ref}
             />
           }
-          key={modeInfo.isNightMode}
-          ref={listView => this.listView = listView}
-          style={{ backgroundColor: modeInfo.backgroundColor, flex: 10 }}
-          pageSize={32}
-          initialListSize={32}
-          removeClippedSubviews={false}
-          enableEmptySections={true}
+          ListFooterComponent={() => <FooterProgress isLoadingMore={this.state.isLoadingMore} />}
+          data={gameReducer.games}
+          keyExtractor={(item, index) => `${item.id}::${item.views}::${item.count}`}
+          renderItem={this._renderItem}
           onEndReached={this._onEndReached}
-          onEndReachedThreshold={10}
-          dataSource={dataSource}
-          renderRow={this._renderRow}
-          onLayout={event => {
-            this.listViewHeight = event.nativeEvent.layout.height
-          }}
-          onContentSizeChange={() => {
-            if (gameReducer.page == 1)
-              return;
-            const y = this.currentHeight + 60 - this.listViewHeight
-            if (y === prevPosition) {
-              return
-            }
-            prevPosition = y;
-            this.listView.scrollTo({ y, animated: true })
+          onEndReachedThreshold={0.5}
+          extraData={modeInfo}
+          windowSize={21}
+          updateCellsBatchingPeriod={1}
+          initialNumToRender={42}
+          maxToRenderPerBatch={8}
+          disableVirtualization={false}
+          contentContainerStyle={styles.list}
+          getItemLayout={(data, index) => (
+            {length: this.ITEM_HEIGHT, offset: this.ITEM_HEIGHT * index, index}
+          )}
+          viewabilityConfig={{
+            minimumViewTime: 1,
+            viewAreaCoveragePercentThreshold: 0,
+            waitForInteractions: true
           }}
         />
       </View>

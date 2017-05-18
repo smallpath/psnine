@@ -29,6 +29,7 @@ import {
   getGamePointAPI,
   getTopicURL
 } from '../../dao'
+import { getGeneURL } from '../../dao';
 
 let screen = Dimensions.get('window');
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = screen;
