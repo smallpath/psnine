@@ -11,7 +11,8 @@ import {
   RefreshControl,
   InteractionManager,
   Modal,
-  Slider
+  Slider,
+  FlatList
 } from 'react-native';
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
@@ -24,14 +25,13 @@ import { standardColor, nodeColor, idColor } from '../../constants/colorConfig';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { getTopicCommentAPI } from '../../dao';
 
-const ds = new ListView.DataSource({
-  rowHasChanged: (row1, row2) => row1.id !== row2.id,
-});
-
 let toolbarActions = [
   { title: '回复', iconName: 'md-create', show: 'always' },
   { title: '跳页', iconName: 'md-map', show: 'always' },
 ];
+
+import SimpleComment from '../shared/SimpleComment'
+import FooterProgress from '../shared/FooterProgress'
 
 class CommentList extends Component {
   constructor(props) {
@@ -42,7 +42,8 @@ class CommentList extends Component {
       numPages: 1,
       commentTotal: 1,
       currentPage: 1,
-      isLoading: true,
+      isRefreshing: true,
+      isLoadingMore: false,
       modalVisible: false,
       sliderValue: 1
     }
@@ -53,81 +54,16 @@ class CommentList extends Component {
     navigation.goBack();
   }
 
-  _pressRow = (rowData) => {
-
-  }
-
-
-  _renderRow = (rowData,
-    sectionID: number | string,
-    rowID: number | string,
-    highlightRow: (sectionID: number, rowID: number) => void
-  ) => {
-    const { modeInfo } = this.props.screenProps
-    let TouchableElement = TouchableNativeFeedback;
-
-    return (
-      <View key={rowData.id} style={{
-        borderBottomWidth: StyleSheet.hairlineWidth,
-        borderBottomColor: modeInfo.brighterLevelOne
-      }}>
-        <TouchableNativeFeedback
-          onPress={() => {
-
-          }}
-          useForeground={true}
-          delayPressIn={100}
-          background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
-        >
-          <View style={{ flex: 1, flexDirection: 'row', padding: 12 }}>
-            <Image
-              source={{ uri: rowData.img }}
-              style={styles.avatar}
-            />
-
-            <View style={{ marginLeft: 10, flex: 1, flexDirection: 'column' }}>
-              <HTMLView
-                value={rowData.content}
-                modeInfo={modeInfo}
-                stylesheet={styles}
-                onImageLongPress={(url) => this.props.navigation.navigate('ImageViewer', {
-                  images: [
-                    { url }
-                  ]
-                })}
-                imagePaddingOffset={30}
-              />
-
-              <View style={{ flex: 1.1, flexDirection: 'row', justifyContent: 'space-between' }}>
-                <Text selectable={false} style={{ flex: -1, color: idColor, textAlign: 'center', textAlignVertical: 'center' }} onPress={
-                  () => {
-                    this.props.navigation.navigate('Home', {
-                      title: rowData.psnid,
-                      id: rowData.psnid,
-                      URL: `http://psnine.com/psnid/${rowData.psnid}`
-                    })
-                  }
-                }>{rowData.psnid}</Text>
-                <Text selectable={false} style={{ flex: -1, color: modeInfo.standardTextColor, textAlign: 'center', textAlignVertical: 'center' }}>{rowData.date}</Text>
-              </View>
-
-            </View>
-
-          </View>
-        </TouchableNativeFeedback>
-      </View>
-    )
-  }
-
   componentWillMount = async () => {
     const { params } = this.props.navigation.state
     this.fetchMessages(params.URL, 'jump');
   }
 
   fetchMessages = (url, type = 'down') => {
-    this.setState({
-      isLoading: true
-    }, () => {
+    const state = {
+      [type === 'down' ? 'isLoadingMore' : 'isRefreshing'] : true
+    }
+    this.setState(state, () => {
       InteractionManager.runAfterInteractions(() => {
         getTopicCommentAPI(url).then(data => {
           let thisList = []
@@ -141,17 +77,19 @@ class CommentList extends Component {
             thisList.unshift(...data.commentList)
             this.pageArr.unshift(thisPage)
           } else if (type === 'jump') {
-            cb = () => this.listView.scrollTo({ y: 0, animated: true });
+            // cb = () => this.listView.scrollTo({ y: 0, animated: true });
             thisList = data.commentList
-            this.pageArr = [this.pageArr]
+            this.pageArr = [thisPage]
           }
+          this.pageArr = this.pageArr.sort((a, b) => a - b)
           this.setState({
             list: thisList,
             numberPerPage: data.numberPerPage,
             numPages: data.numPages,
             commentTotal: data.len,
             currentPage: thisPage,
-            isLoading: false
+            isLoadingMore: false,
+            isRefreshing: false
           }, cb);
         })
       })
@@ -161,22 +99,23 @@ class CommentList extends Component {
   pageArr = [1]
   _onRefresh = () => {
     const { URL } = this.props.navigation.state.params;
-    const currentPage = this.state.currentPage
+    const currentPage = this.pageArr[0] || 1
     let type = currentPage === 1 ? 'jump' : 'up'
     let targetPage = currentPage - 1
     if (type === 'jump') {
       targetPage = 1
     }
     if (this.pageArr.includes(targetPage)) type = 'jump'
+    if (this.state.isLoadingMore || this.state.isRefreshing) return
     this.fetchMessages(URL.split('=').slice(0, -1).concat(targetPage).join('='), type);
   }
 
   _onEndReached = () => {
     const { URL } = this.props.navigation.state.params;
-    const currentPage = this.state.currentPage
+    const currentPage = this.pageArr[this.pageArr.length - 1]
     const targetPage = currentPage + 1
     if (targetPage > this.state.numPages) return
-    if (this.state.isLoading === true) return
+    if (this.state.isLoadingMore || this.state.isRefreshing) return
     this.fetchMessages(URL.split('=').slice(0, -1).concat(targetPage).join('='), 'down');
 
   }
@@ -196,13 +135,22 @@ class CommentList extends Component {
     }
   }
 
+  _renderItem = ({ item: rowData, index }) => {
+    const { modeInfo } = this.props.screenProps
+    const { ITEM_HEIGHT } = this
+    const { navigation } = this.props
+    return <SimpleComment {...{
+      navigation,
+      rowData,
+      modeInfo
+    }} />
+  }
+
   sliderValue = 1
   render() {
     const { modeInfo } = this.props.screenProps
     const { params } = this.props.navigation.state
     // console.log('Message.js rendered');
-    ds = ds.cloneWithRows(this.state.list)
-
     return (
       <View
         style={{ flex: 1, backgroundColor: modeInfo.backgroundColor }}
@@ -220,26 +168,40 @@ class CommentList extends Component {
           onIconClicked={this.onNavClicked}
           onActionSelected={this.onActionSelected}
         />
-        <ListView
+        <FlatList style={{
+          flex: 1,
+          backgroundColor: modeInfo.backgroundColor
+        }}
+          ref={flatlist => this.flatlist = flatlist}
           refreshControl={
             <RefreshControl
-              refreshing={this.state.isLoading}
+              refreshing={this.state.isRefreshing}
               onRefresh={this._onRefresh}
-              colors={[standardColor]}
-              ref={ref => this.refreshControl = ref}
+              colors={[modeInfo.standardColor]}
               progressBackgroundColor={modeInfo.backgroundColor}
+              ref={ref => this.refreshControl = ref}
             />
           }
-          ref={listView => this.listView = listView}
-          pageSize={60}
-          removeClippedSubviews={false}
-          enableEmptySections={true}
-          dataSource={ds}
-          renderRow={this._renderRow}
+          ListFooterComponent={() => <FooterProgress isLoadingMore={this.state.isLoadingMore} />}
+          data={this.state.list}
+          keyExtractor={(item, index) => item.id}
+          renderItem={this._renderItem}
           onEndReached={this._onEndReached}
-          onEndReachedThreshold={10}
-          onLayout={event => {
-            this.listViewHeight = event.nativeEvent.layout.height
+          onEndReachedThreshold={0.5}
+          extraData={modeInfo}
+          windowSize={21}
+          updateCellsBatchingPeriod={1}
+          initialNumToRender={42}
+          maxToRenderPerBatch={8}
+          disableVirtualization={false}
+          contentContainerStyle={styles.list}
+          getItemLayout={(data, index) => (
+            {length: this.ITEM_HEIGHT, offset: this.ITEM_HEIGHT * index, index}
+          )}
+          viewabilityConfig={{
+            minimumViewTime: 1,
+            viewAreaCoveragePercentThreshold: 0,
+            waitForInteractions: true
           }}
         />
         {this.state.modalVisible && (

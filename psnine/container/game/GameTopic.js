@@ -60,13 +60,9 @@ class GameTopic extends Component {
   }
 
   fetchMessages = (url, type = 'down') => {
-    const state = {}
-    if (type === 'down') {
-      state.isLoadingMore = true
-    } else {
-      state.isRefreshing = true
-    }
-    this.setState(state, () => {
+    this.setState({
+      [type === 'down' ? 'isLoadingMore' : 'isRefreshing'] : true
+    }, () => {
       InteractionManager.runAfterInteractions(() => {
         getGameTopicAPI(url).then(data => {
           let thisList = []
@@ -84,6 +80,7 @@ class GameTopic extends Component {
             thisList = data.list
             this.pageArr = [thisPage]
           }
+          this.pageArr = this.pageArr.sort((a, b) => a - b)
           // alert(`${this.state.currentPage} ${thisPage} ${data.numPages}`)
           this.setState({
             list: thisList,
@@ -102,19 +99,20 @@ class GameTopic extends Component {
   pageArr = [1]
   _onRefresh = () => {
     const { URL } = this.props.navigation.state.params;
-    const currentPage = this.pageArr.reduce((prev, curr) => curr < prev ? curr : prev, this.state.currentPage)
+    const currentPage = this.pageArr[0] || 1
     let type = currentPage === 1 ? 'jump' : 'up'
     let targetPage = currentPage - 1
     if (type === 'jump') {
       targetPage = 1
     }
     if (this.pageArr.includes(targetPage)) type = 'jump'
+    if (this.state.isLoadingMore || this.state.isRefreshing) return
     this.fetchMessages(URL.split('=').slice(0, -1).concat(targetPage).join('='), type);
   }
 
   _onEndReached = () => {
     const { URL } = this.props.navigation.state.params;
-    const currentPage = this.state.currentPage
+    const currentPage = this.pageArr[this.pageArr.length - 1]
     const targetPage = currentPage + 1
     if (targetPage > this.state.numPages) return
     if (this.state.isLoadingMore || this.state.isRefreshing) return

@@ -79,7 +79,7 @@ class HtmlView extends Component {
       shouldForceInline: this.props.shouldForceInline
     }
     // 加一个空文字来将最开头的表情内联
-    let target = value
+    let target = value || ''
     if (target.indexOf('<img src="http://photo.psnine.com/face/') === 0) {
       target = '<span/>' + target
     }

@@ -233,7 +233,7 @@ export default class Home extends Component {
     const shouldShowImage = rowData.thumbs.length !== 0
     const suffix = '<div>' + rowData.thumbs.map(text => `<img src="${text}">`) + '</div>'
     const content = `<div>${rowData.content}${shouldShowImage ? suffix : ''}</div>`
-    alert('fuck')
+
     return (
       <TouchableNativeFeedback key={rowData.id || index}   onPress={() => {
           this.props.screenProps.navigation.navigate('CommunityTopic', {
@@ -289,45 +289,19 @@ export default class Home extends Component {
     )
   }
 
-  renderGameProfile = (rowData, index) => {
-    const { modeInfo } = this.props.screenProps
-    return (
-      <View key={index} style={{ backgroundColor: modeInfo.backgroundColor }}>
-        <View>
-          { rowData.map((item , index) => {
-              const component = this.renderGameItem(item ,index)
-              return component 
-            })
-          }
-        </View>
-      </View>
-    )
-  }
-
-  renderDiaryProfile = (rowData, index) => {
-    const { modeInfo } = this.props.screenProps
-    return (
-      <View key={index} style={{ backgroundColor: modeInfo.backgroundColor }}>
-        <View>
-          { rowData.map((item , index) => this.renderDiary(item ,index)) }
-        </View>
-      </View>
-    )
-  }
-
   render() {
     const { params = {} } = this.props.navigation.state
     // console.log('GamePage.js rendered');
     const { modeInfo, gameTable, diaryTable } = this.props.screenProps
-    const data = []
-    const renderFuncArr = []
+    let data = []
+    let renderFunc = () => null
     if (gameTable.length !== 0) {
-      data.push(gameTable)
-      renderFuncArr.push(this.renderGameProfile)
+      data = gameTable
+      renderFunc = this.renderGameItem
     } 
     if (diaryTable.length !== 0) {
-      data.push(diaryTable)
-      renderFuncArr.push(this.renderDiaryProfile)
+      data = diaryTable 
+      renderFunc = this.renderDiary
     }
 
 
@@ -357,9 +331,9 @@ export default class Home extends Component {
         }}
           ref={flatlist => this.flatlist = flatlist}
           data={data}
-          keyExtractor={(item, index) => item.id || index}
+          keyExtractor={(item, index) => item.href || index}
           renderItem={({ item, index }) => {
-            return renderFuncArr[index](item)
+            return renderFunc(item, index)
           }}
           extraData={this.state}
           windowSize={999}

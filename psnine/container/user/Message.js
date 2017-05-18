@@ -9,6 +9,7 @@ import {
   TouchableNativeFeedback,
   RefreshControl,
   InteractionManager,
+  FlatList
 } from 'react-native';
 
 import HTMLView from '../../components/HtmlToView'
@@ -19,9 +20,8 @@ import { standardColor, nodeColor, idColor, accentColor } from '../../constants/
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { getTopicURL, fetchMessages, } from '../../dao';
 
-const ds = new ListView.DataSource({
-  rowHasChanged: (row1, row2) => row1 !== row2,
-});
+import MessageItem from '../shared/MessageItem'
+import FooterProgress from '../shared/FooterProgress'
 
 let toolbarActions = [];
 
@@ -30,7 +30,7 @@ class Message extends Component {
     super(props);
     this.state = {
       messages: [],
-      isLoading: true,
+      isRefreshing: true,
       icon: false
     }
   }
@@ -77,54 +77,6 @@ class Message extends Component {
     ]
   })
 
-  _renderRow = (rowData,
-    sectionID: number | string,
-    rowID: number | string,
-    highlightRow: (sectionID: number, rowID: number) => void
-  ) => {
-    const { modeInfo } = this.props.screenProps
-    let TouchableElement = TouchableNativeFeedback;
-
-    return (
-      <View rowID={rowID} style={{
-        marginTop: 7,
-        backgroundColor: modeInfo.backgroundColor,
-        elevation: 1,
-        marginBottom: this.state.messages.length - 1 === parseInt(rowID) ? 7 : 0
-      }}>
-        <TouchableElement
-          delayPressIn={0}
-          background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
-          onPress={() => this._pressRow(rowData)}
-        >
-          <View pointerEvents='box-only' style={{ flex: 1, flexDirection: 'row', padding: 12 }}>
-            {/*<Image
-              source={{ uri: uri }}
-              style={styles.avatar}
-              />*/}
-
-            <View style={{ marginLeft: 10, flex: 1, flexDirection: 'column' }}>
-              <HTMLView
-                value={rowData.content}
-                modeInfo={modeInfo}
-                stylesheet={styles}
-                onImageLongPress={this.handleImageOnclick}
-                imagePaddingOffset={30 + 50 + 10}
-                shouldForceInline={true}
-              />
-
-              <View style={{ flex: 1.1, flexDirection: 'row', justifyContent: 'space-between' }}>
-                <Text style={{ flex: -1, color: idColor, textAlign: 'center', textAlignVertical: 'center' }}>{rowData.psnid}</Text>
-              </View>
-
-            </View>
-
-          </View>
-        </TouchableElement>
-      </View>
-    )
-  }
-
   componentWillMount = async () => {
     this.fetchMessages();
   }
@@ -133,8 +85,20 @@ class Message extends Component {
     const data = await fetchMessages(this.props.navigation.state.params.psnid);
     this.setState({
       messages: data,
-      isLoading: false
+      isRefreshing: false
     });
+  }
+
+  _renderItem = ({ item: rowData, index }) => {
+    const { modeInfo } = this.props.screenProps
+    const { ITEM_HEIGHT, _pressRow: onPress } = this
+    const { navigation } = this.props
+    return <MessageItem {...{
+      navigation,
+      rowData,
+      modeInfo,
+      onPress
+    }} />
   }
 
   render() {
@@ -156,20 +120,37 @@ class Message extends Component {
           actions={toolbarActions}
           onIconClicked={this.onNavClicked}
         />
-        <ListView
+        <FlatList style={{
+          flex: 1,
+          backgroundColor: modeInfo.backgroundColor
+        }}
+          ref={flatlist => this.flatlist = flatlist}
           refreshControl={
             <RefreshControl
-              refreshing={this.state.isLoading}
+              refreshing={this.state.isRefreshing}
               onRefresh={this.fetchMessages}
-              colors={[standardColor]}
+              colors={[modeInfo.standardColor]}
               progressBackgroundColor={modeInfo.backgroundColor}
+              ref={ref => this.refreshControl = ref}
             />
           }
-          pageSize={32}
-          removeClippedSubviews={false}
-          enableEmptySections={true}
-          dataSource={ds.cloneWithRows(this.state.messages)}
-          renderRow={this._renderRow}
+          data={this.state.messages}
+          keyExtractor={(item, index) => `${item.url}::${index}`}
+          renderItem={this._renderItem}
+          onEndReached={this._onEndReached}
+          onEndReachedThreshold={0.5}
+          extraData={modeInfo}
+          windowSize={21}
+          updateCellsBatchingPeriod={1}
+          initialNumToRender={42}
+          maxToRenderPerBatch={8}
+          disableVirtualization={false}
+          contentContainerStyle={styles.list}
+          viewabilityConfig={{
+            minimumViewTime: 1,
+            viewAreaCoveragePercentThreshold: 0,
+            waitForInteractions: true
+          }}
         />
       </View>
     )

@@ -11,7 +11,8 @@ import {
   RefreshControl,
   InteractionManager,
   Modal,
-  Slider
+  Slider,
+  FlatList
 } from 'react-native';
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
@@ -25,9 +26,8 @@ import { standardColor, nodeColor, idColor } from '../../constants/colorConfig';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { getMyGameAPI } from '../../dao';
 
-const ds = new ListView.DataSource({
-  rowHasChanged: (row1, row2) => row1.href !== row2.href,
-});
+import UserGameItem from '../shared/UserGameItem'
+import FooterProgress from '../shared/FooterProgress'
 
 let toolbarActions = [
   { title: '跳页', iconName: 'md-map', show: 'always' },
@@ -45,110 +45,11 @@ class UserGame extends Component {
       numPages: 1,
       commentTotal: 1,
       currentPage: 1,
-      isLoading: true,
+      isRefreshing: true,
+      isLoadingMore: false,
       modalVisible: false,
       sliderValue: 1
     }
-  }
-
-  _pressRow = (rowData) => {
-
-  }
-
-
-  _renderRow = (rowData,
-    sectionID: number | string,
-    rowID: number | string,
-    highlightRow: (sectionID: number, rowID: number) => void
-  ) => {
-    const { modeInfo, navigation } = this.props.screenProps
-    
-    return (
-      <TouchableNativeFeedback key={rowData.href || rowID}   onPress={() => {
-          navigation.navigate('GamePage', {
-            URL: rowData.href,
-            title: rowData.title,
-            rowData,
-            type: 'game'
-          })
-        }}>
-        <View pointerEvents={'box-only'} style={{
-          backgroundColor: modeInfo.backgroundColor,
-          flexDirection: 'row',
-          borderBottomWidth: StyleSheet.hairlineWidth,
-          borderBottomColor: modeInfo.brighterLevelOne,
-          padding: 2
-        }}>
-
-          <View style={{ flex: -1, flexDirection: 'row', padding: 12 }}>
-            <Image
-              source={{ uri: rowData.avatar }}
-              style={[styles.avatar, { width: 91, height: 54 }]}
-            />
-          </View>
-          <View style={{ justifyContent: 'center', flex: 3 }}>
-            <View>
-              <Text
-                ellipsizeMode={'tail'}
-                style={{ flex: -1, color: modeInfo.titleTextColor, }}>
-                {rowData.title}
-              </Text>
-            </View>
-            {rowData.platform && (<View><Text style={{ color: modeInfo.standardTextColor, marginLeft: 2  }}>{rowData.platform.join(' ')}</Text></View>) || undefined}
-            {rowData.syncTime && (<View style={{ flex: -1, flexDirection: 'row' }}>
-                <Text style={{ color: modeInfo.standardColor ,fontSize: 12, marginLeft: 2 }}>{rowData.syncTime + ' '}</Text>
-                <Text selectable={false} style={{
-                  flex: -1,
-                  color: modeInfo.standardTextColor,
-                  fontSize: 12
-                }}>{ rowData.allTime ? '总耗时 ' : ''}</Text>
-                <Text selectable={false} style={{
-                  flex: -1,
-                  fontSize: 12,
-                  color: modeInfo.standardTextColor,
-                }}>{rowData.allTime}</Text>
-              </View>) || undefined}
-          </View>
-          { rowData.alert && (
-            <View style={{ flex: 1, justifyContent: 'center', padding: 2 }}>
-              <Text selectable={false}             
-                style={{ 
-                  flex: -1,             
-                  textAlign: 'center',
-                  textAlignVertical: 'center',
-                  color: modeInfo.titleTextColor, }}>{rowData.alert}</Text>
-              <Text
-                ellipsizeMode={'tail'} 
-                style={{
-                  flex: -1,
-                  color: modeInfo.standardTextColor,
-                  textAlign: 'center',
-                  textAlignVertical: 'center',
-                  fontSize: 10
-                }}>{rowData.allPercent}</Text>
-            </View>
-            ) || undefined
-          }
-          <View style={{ flex: 1, justifyContent: 'center', padding: 2 }}>
-            <Text selectable={false}             
-              style={{ 
-                flex: -1,             
-                textAlign: 'center',
-                textAlignVertical: 'center',
-                color: modeInfo.titleTextColor, }}>{rowData.percent}</Text>
-            <Text
-              ellipsizeMode={'tail'} 
-              style={{
-                flex: -1,
-                color: modeInfo.standardTextColor,
-                textAlign: 'center',
-                textAlignVertical: 'center',
-                fontSize: 10
-              }}>{rowData.trophyArr}</Text>
-          </View>
-        </View>
-      </TouchableNativeFeedback>
-    )
   }
 
   componentWillMount = async () => {
@@ -167,7 +68,7 @@ class UserGame extends Component {
 
   fetchMessages = (url, type = 'down') => {
     this.setState({
-      isLoading: true
+      [type === 'down' ? 'isLoadingMore' : 'isRefreshing'] : true
     }, () => {
       InteractionManager.runAfterInteractions(() => {
         getMyGameAPI(url).then(data => {
@@ -182,18 +83,19 @@ class UserGame extends Component {
             thisList.unshift(...data.list)
             this.pageArr.unshift(thisPage)
           } else if (type === 'jump') {
-            cb = () => this.listView.scrollTo({ y: 0, animated: true });
+            // cb = () => this.listView.scrollTo({ y: 0, animated: true });
             thisList = data.list
-            this.pageArr = [this.pageArr]
+            this.pageArr = [thisPage]
           }
-
+          this.pageArr = this.pageArr.sort((a, b) => a - b)
           this.setState({
             list: thisList,
             numberPerPage: data.numberPerPage,
             numPages: data.numPages,
             commentTotal: data.len,
             currentPage: thisPage,
-            isLoading: false
+            isLoadingMore: false,
+            isRefreshing: false
           }, () => {
             cb()
             const componentDidFocus = () => {
@@ -218,22 +120,23 @@ class UserGame extends Component {
   pageArr = [1]
   _onRefresh = () => {
     const { URL } = this
-    const currentPage = this.state.currentPage
+    const currentPage = this.pageArr[0] || 1
     let type = currentPage === 1 ? 'jump' : 'up'
     let targetPage = currentPage - 1
     if (type === 'jump') {
       targetPage = 1
     }
     if (this.pageArr.includes(targetPage)) type = 'jump'
+    if (this.state.isLoadingMore || this.state.isRefreshing) return
     this.fetchMessages(URL.split('=').slice(0, -1).concat(targetPage).join('='), type);
   }
 
   _onEndReached = () => {
     const { URL } = this
-    const currentPage = this.state.currentPage
+    const currentPage = this.pageArr[this.pageArr.length - 1]
     const targetPage = currentPage + 1
     if (targetPage > this.state.numPages) return
-    if (this.state.isLoading === true) return
+    if (this.state.isLoadingMore || this.state.isRefreshing) return
     this.fetchMessages(URL.split('=').slice(0, -1).concat(targetPage).join('='), 'down');
 
   }
@@ -248,12 +151,26 @@ class UserGame extends Component {
     }
   }
 
+
+  ITEM_HEIGHT = 83
+
+  _renderItem = ({ item: rowData, index }) => {
+    const { modeInfo } = this.props.screenProps
+    const { ITEM_HEIGHT } = this
+    const { navigation } = this.props
+    return <UserGameItem {...{
+      navigation,
+      rowData,
+      modeInfo,
+      ITEM_HEIGHT
+    }} />
+  }
+
   sliderValue = 1
   render() {
     const { modeInfo } = this.props.screenProps
     const { URL } = this
     // console.log('Message.js rendered');
-    ds = ds.cloneWithRows(this.state.list)
 
     return (
       <View
@@ -261,32 +178,40 @@ class UserGame extends Component {
         onStartShouldSetResponder={() => false}
         onMoveShouldSetResponder={() => false}
       >
-        {/*<Ionicons.ToolbarAndroid
-          iconColor={modeInfo.isNightMode ? '#fff' : '#000' }
-          style={[styles.toolbar, { backgroundColor: 'transparent' }]}
-          actions={toolbarActions}
-          onActionSelected={this.onActionSelected}
-        />*/}
-        <ListView
+        <FlatList style={{
+          flex: 1,
+          backgroundColor: modeInfo.backgroundColor
+        }}
+          ref={flatlist => this.flatlist = flatlist}
           refreshControl={
             <RefreshControl
-              refreshing={this.state.isLoading}
+              refreshing={this.state.isRefreshing}
               onRefresh={this._onRefresh}
-              colors={[standardColor]}
-              ref={ref => this.refreshControl = ref}
+              colors={[modeInfo.standardColor]}
               progressBackgroundColor={modeInfo.backgroundColor}
+              ref={ref => this.refreshControl = ref}
             />
           }
-          ref={listView => this.listView = listView}
-          pageSize={60}
-          removeClippedSubviews={false}
-          enableEmptySections={true}
-          dataSource={ds}
-          renderRow={this._renderRow}
+          ListFooterComponent={() => <FooterProgress isLoadingMore={this.state.isLoadingMore} />}
+          data={this.state.list}
+          keyExtractor={(item, index) => item.href}
+          renderItem={this._renderItem}
           onEndReached={this._onEndReached}
-          onEndReachedThreshold={10}
-          onLayout={event => {
-            this.listViewHeight = event.nativeEvent.layout.height
+          onEndReachedThreshold={0.5}
+          extraData={modeInfo}
+          windowSize={21}
+          updateCellsBatchingPeriod={1}
+          initialNumToRender={42}
+          maxToRenderPerBatch={8}
+          disableVirtualization={false}
+          contentContainerStyle={styles.list}
+          getItemLayout={(data, index) => (
+            {length: this.ITEM_HEIGHT, offset: this.ITEM_HEIGHT * index, index}
+          )}
+          viewabilityConfig={{
+            minimumViewTime: 1,
+            viewAreaCoveragePercentThreshold: 0,
+            waitForInteractions: true
           }}
         />
         {this.state.modalVisible && (
