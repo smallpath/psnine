@@ -30,7 +30,6 @@ import TopicItem from '../shared/CommunityItem'
 import FooterProgress from '../shared/FooterProgress'
 
 let toolbarActions = [
-  { title: '回复', iconName: 'md-create', show: 'always' },
   { title: '跳页', iconName: 'md-map', show: 'always' },
 ];
 
@@ -123,15 +122,10 @@ class GameTopic extends Component {
   onActionSelected = (index) => {
     switch (index) {
       case 0:
-        return;
-      case 1:
         this.setState({
           modalVisible: true
         })
-      case 2:
-        return;
-      case 3:
-        return;
+      return
     }
   }
 

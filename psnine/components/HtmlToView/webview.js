@@ -17,10 +17,7 @@ const { width, height: SCEEN_HEIGHT } = Dimensions.get('window')
 
 let WEBVIEW_REF = `WEBVIEW_REF`;
 let toolbarActions = [
-  { title: '收藏', iconName: 'md-star', show: 'always' },
   { title: '刷新', iconName: 'md-refresh', show: 'always' },
-  { title: '感谢', iconName: 'md-thumbs-up', show: 'never' },
-  { title: '分享', show: 'never' },
 ];
 let title = "TOPIC";
 
@@ -43,13 +40,7 @@ export default class HtmlView extends Component {
   _onActionSelected = (index) => {
     switch (index) {
       case 0:
-        return;
-      case 1:
         return this.webview.reload();
-      case 2:
-        return;
-      case 3:
-        return;
     }
   }
 

@@ -31,7 +31,7 @@ import {
 } from './constants/colorConfig';
 
 import configureStore from './store/store.js'
-import moment from './utils/moment';
+// import moment from './utils/moment';
 
 const store = configureStore();
 
@@ -250,7 +250,7 @@ class Root extends React.Component {
   constructor(props) {
     super(props);
 
-    let hour = ~~moment().format('HH');
+    // let hour = ~~moment().format('HH');
 
     this.state = {
       text: '',

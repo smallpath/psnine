@@ -31,12 +31,7 @@ import {
 let screen = Dimensions.get('window');
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = screen;
 
-let toolbarActions = [
-  { title: '回复', iconName: 'md-create', show: 'always' },
-  { title: '收藏', iconName: 'md-star', show: 'always' },
-  { title: '感谢', iconName: 'md-thumbs-up', show: 'never' },
-  { title: '分享', show: 'never' },
-];
+let toolbarActions = [];
 let title = "TOPIC";
 let WEBVIEW_REF = `WEBVIEW_REF`;
 

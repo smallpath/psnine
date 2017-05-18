@@ -128,10 +128,6 @@ class CommentList extends Component {
         this.setState({
           modalVisible: true
         })
-      case 2:
-        return;
-      case 3:
-        return;
     }
   }
 

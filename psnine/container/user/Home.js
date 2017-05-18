@@ -42,12 +42,7 @@ import CreateUserTab from './UserTab'
 let screen = Dimensions.get('window');
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = screen;
 
-let toolbarActions = [
-  { title: '回复', iconName: 'md-create', show: 'always' },
-  { title: '收藏', iconName: 'md-star', show: 'always' },
-  { title: '感谢', iconName: 'md-thumbs-up', show: 'never' },
-  { title: '分享', show: 'never' },
-];
+let toolbarActions = [];
 let title = "TOPIC";
 let WEBVIEW_REF = `WEBVIEW_REF`;
 
@@ -60,9 +55,9 @@ let CIRCLE_SIZE = 56;
 let config = { tension: 30, friction: 7, ease: Easing.in(Easing.ease(1, 0, 1, 1)), duration: 200 };
 
 const iconMapper = {
-  '同步': 'md-sync',
-  '关注': 'md-star-half',
-  '感谢': 'md-thumbs-up'
+  '同步': 'md-sync'
+  // '关注': 'md-star-half',
+  // '感谢': 'md-thumbs-up'
 }
 
 const limit = SCREEN_WIDTH - toolbarHeight
@@ -295,6 +290,7 @@ export default class Home extends Component {
       <CreateUserTab screenProps={{
         modeInfo: modeInfo,
         toolbar: list,
+        preFetch: this.preFetch,
         setToolbar: ({ toolbar, toolbarActions, componentDidFocus }) => {
           const obj = {
             toolbar,
@@ -310,8 +306,8 @@ export default class Home extends Component {
           this.setState(obj)
         },
         profileToolbar: this.state.data.psnButtonInfo.reverse().map(item => {
-          return { title: item.text, iconName: iconMapper[item.text], show: 'always' }
-        }),
+          return iconMapper[item.text] ? { title: item.text, iconName: iconMapper[item.text], show: 'always' } : undefined
+        }).filter(item => item),
         psnid: params.title,
         gameTable: this.state.data.gameTable,
         diaryTable: this.state.data.diaryTable,

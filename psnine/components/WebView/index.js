@@ -11,10 +11,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import { standardColor } from '../../constants/colorConfig';
 
 let toolbarActions = [
-  { title: '收藏', iconName: 'md-star', show: 'always' },
-  { title: '刷新', iconName: 'md-refresh', show: 'always' },
-  { title: '感谢', iconName: 'md-thumbs-up', show: 'never' },
-  { title: '分享', show: 'never' },
+  { title: '刷新', iconName: 'md-refresh', show: 'always' }
 ];
 let title = "TOPIC";
 let WEBVIEW_REF = `WEBVIEW_REF`;
@@ -33,13 +30,7 @@ class Deal extends Component {
   _onActionSelected = (index) => {
     switch (index) {
       case 0:
-        return;
-      case 1:
         return this.refs[WEBVIEW_REF].reload();
-      case 2:
-        return;
-      case 3:
-        return;
     }
   }
 

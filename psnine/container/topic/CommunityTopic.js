@@ -37,9 +37,7 @@ const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = screen;
 
 let toolbarActions = [
   { title: '回复', iconName: 'md-create', show: 'always' },
-  { title: '收藏', iconName: 'md-star', show: 'always' },
-  { title: '感谢', iconName: 'md-thumbs-up', show: 'never' },
-  { title: '分享', show: 'never' },
+  { title: '刷新', iconName: 'md-refresh', show: 'always' },
 ];
 let title = "TOPIC";
 let WEBVIEW_REF = `WEBVIEW_REF`;
@@ -120,10 +118,6 @@ class CommunityTopic extends Component {
       case 1:
         this._refreshComment()
         return
-      case 2:
-        return;
-      case 3:
-        return;
     }
   }
 

@@ -38,12 +38,7 @@ import { getHomeAPI } from '../../dao';
 let screen = Dimensions.get('window');
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = screen;
 
-let toolbarActions = [
-  { title: '回复', iconName: 'md-create', show: 'always' },
-  { title: '收藏', iconName: 'md-star', show: 'always' },
-  { title: '感谢', iconName: 'md-thumbs-up', show: 'never' },
-  { title: '分享', show: 'never' },
-];
+let toolbarActions = [];
 let title = "TOPIC";
 let WEBVIEW_REF = `WEBVIEW_REF`;
 
@@ -100,6 +95,7 @@ export default class Home extends Component {
 
   _onActionSelected = (index) => {
     const { params } = this.props.screenProps.navigation.state
+    const { preFetch } = this.props.screenProps
     switch (index) {
       case 0:
         ToastAndroid.show('同步中..', ToastAndroid.SHORT)
@@ -114,7 +110,7 @@ export default class Home extends Component {
             }
           }
           ToastAndroid.show('同步成功', ToastAndroid.SHORT);
-          this.preFetch()
+          preFetch && preFetch()
         }).catch(err => {
           const msg = `同步失败: ${err.toString()}`
           ToastAndroid.show(msg, ToastAndroid.SHORT);
