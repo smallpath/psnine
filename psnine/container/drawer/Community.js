@@ -59,9 +59,29 @@ class Community extends Component {
       this.setState({
         isRefreshing: false,
         isLoadingMore: false
+      }, () => {
+        // const len = this.props.community.topics.length
+        // const per = this.props.community.topicPage
+        // const target = len / per * (per - 1)
+        // if (per === 1) {
+        //   setTimeout(() => {
+        //     this.flatlist.getNode().scrollToIndex({
+        //       animated: true,
+        //       viewPosition: 0,
+        //       index: 0
+        //     })
+        //   })
+        // } else if(per > 1) {
+        //   setTimeout(() => {
+        //     this.flatlist.getNode().scrollToIndex({
+        //       animated: true,
+        //       viewPosition: 0.9,
+        //       index: target - 1
+        //     })
+        //   })
+        // }
       })
     }
-    this.flatlist.getNode().recordInteraction()
   }
 
   componentDidMount = () => {
@@ -88,14 +108,6 @@ class Community extends Component {
         title: typeof searchTitle !== 'undefined' ? searchTitle : this.props.screenProps.searchTitle
       })
     );
-  }
-
-  componentDidUpdate = () => {
-
-  }
-
-  _scrollToTop = () => {
-    this.listView.scrollTo({ y: 0, animated: true });
   }
 
   _loadMoreData = () => {

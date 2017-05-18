@@ -155,9 +155,8 @@ class UserGame extends Component {
   ITEM_HEIGHT = 83
 
   _renderItem = ({ item: rowData, index }) => {
-    const { modeInfo } = this.props.screenProps
+    const { modeInfo, navigation } = this.props.screenProps
     const { ITEM_HEIGHT } = this
-    const { navigation } = this.props
     return <UserGameItem {...{
       navigation,
       rowData,

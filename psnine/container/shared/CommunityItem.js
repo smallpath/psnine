@@ -36,7 +36,8 @@ export default class ComplexComment extends React.PureComponent {
 
   _onRowPressed = (rowData) => {
     const { navigation } = this.props;
-    const URL = getTopicURL(rowData.id);
+    const id = rowData.id || parseInt(rowData.url.split('/').pop())
+    const URL = getTopicURL(id)
     navigation.navigate('CommunityTopic', {
       URL,
       title: rowData.title,
