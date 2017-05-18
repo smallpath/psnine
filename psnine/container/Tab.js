@@ -23,7 +23,7 @@ import Community from './drawer/Community.flatlist';
 import Qa from './drawer/Qa.flatlist';
 import Game from './drawer/Game.flatlist';
 import Battle from './drawer/Battle';
-import Gene from './drawer/Gene';
+import Gene from './drawer/Gene.flatlist';
 import Rank from './drawer/Rank.flatlist';
 
 import {
@@ -83,7 +83,7 @@ const Tabs = TabNavigator({
     screen: Gene,
   }
 }, {
-  initialRouteName: 'Qa',
+  initialRouteName: 'Gene',
   tabBarComponent: props => {
     const { modeInfo } = props.screenProps
     const titleTextColor = modeInfo.isNightMode ? '#000' : '#fff'
