@@ -26,7 +26,7 @@ export default function (html) {
       return $(this).attr('class') === 'psnnode'
     }).text()
     let content = $this.find('.content').length ?
-      $this.find('.content').html().replace(/\<br\>/igm, '\n').replace('\n', '').replace(/\t/igm, '') : 'not found'
+      $this.find('.content').html().trim() : 'not found'
     const date = $this.find('.meta').text().split('\n').map(item => item.replace(/\t/g, '')).filter(item => item.trim()).pop()
     commentList.push({
       id,
