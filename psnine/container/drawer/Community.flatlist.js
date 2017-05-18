@@ -21,7 +21,8 @@ import { getTopicURL } from '../../dao';
 
 import { changeScrollType } from '../../actions/app';
 
-import CommunityTopicItem from '../shared/CommunityTopicItem'
+import TopicItem from '../shared/CommunityTopicItem'
+import FooterProgress from '../shared/FooterProgress'
 
 let toolbarHeight = 56;
 let releasedMarginTop = 0;
@@ -29,34 +30,17 @@ let prevPosition = -1;
 
 const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
 
-class progress extends Component {
-  shouldComponentUpdate = () => false
-  render() {
-    return (
-      <View style={{flexDirection:'row', flex: 1, height: 15, alignItems: 'flex-end'}}>
-        <ProgressBarAndroid style={{flex:1,
-          height: 15,
-          transform: [
-            {
-              rotateZ: '180deg'
-            }
-          ]
-        }}  styleAttr="Horizontal"/>
-        <ProgressBarAndroid style={{flex:1,height: 15,}} styleAttr="Horizontal" />
-      </View>
-    )
-  }
-}
-
 class Community extends Component {
   static navigationOptions = {
-    tabBarLabel: '社区'
+    tabBarLabel: '社区',
+    drawerLabel: '社区'
   };
 
   constructor(props) {
     super(props);
     this.state = {
-      isLoading: true
+      isRefreshing: true,
+      isLoadingMore: false,
     }
   }
 
@@ -72,19 +56,14 @@ class Community extends Component {
         nextProps.screenProps.searchTitle
       )
     } else {
-      // this.refreshControl && this.refreshControl._nativeRef.setNativeProps({
-      //   refreshing: false,
-      // });
-      // this.isLoading = false
       this.setState({
-        isLoading: false
+        isRefreshing: false,
+        isLoadingMore: false
       })
-      this.isReceiving = true
     }
     this.flatlist.getNode().recordInteraction()
   }
 
-  isReceiving = false
   componentDidMount = () => {
     const { community: communityReducer } = this.props;
     const { communityType, searchTitle } = this.props.screenProps
@@ -100,9 +79,9 @@ class Community extends Component {
     const { community: communityReducer, dispatch } = this.props;
     const { communityType } = this.props.screenProps
 
-    this.refreshControl._nativeRef.setNativeProps({
-      refreshing: true,
-    });
+    this.setState({
+      isRefreshing: true
+    })
 
     dispatch(getTopicList(1, {
         type,
@@ -112,12 +91,7 @@ class Community extends Component {
   }
 
   componentDidUpdate = () => {
-    if (this.isReceiving) {
-      this.refreshControl._nativeRef.setNativeProps({
-        refreshing: false,
-      });
-      this.isReceiving = false
-    }
+
   }
 
   _scrollToTop = () => {
@@ -137,22 +111,20 @@ class Community extends Component {
   }
 
   _onEndReached = () => {
-    if (this.state.isLoading === true) return
+    if (this.state.isRefreshing || this.state.isLoadingMore) return
 
-    // this.setState({
-    //   isLoading: true
-    // }, () => {
-      this._loadMoreData();
-    // })
+    this.setState({
+      isLoadingMore: true
+    })
+    this._loadMoreData();
   }
 
-  isLoading = true
   ITEM_HEIGHT = 78 + 7
 
   _renderItem = ({ item: rowData, index }) => {
     const { modeInfo, navigation } = this.props.screenProps
     const { ITEM_HEIGHT } = this
-    return <CommunityTopicItem {...{
+    return <TopicItem {...{
       navigation,
       rowData,
       modeInfo,
@@ -173,14 +145,14 @@ class Community extends Component {
         ref={flatlist => this.flatlist = flatlist}
         refreshControl={
           <RefreshControl
-            refreshing={this.state.isLoading}
+            refreshing={this.state.isRefreshing}
             onRefresh={this._onRefresh}
             colors={[modeInfo.standardColor]}
             progressBackgroundColor={modeInfo.backgroundColor}
             ref={ref => this.refreshControl = ref}
           />
         }
-        ListFooterComponent={progress}
+        ListFooterComponent={() => <FooterProgress isLoadingMore={this.state.isLoadingMore} />}
         data={reducer.topics}
         keyExtractor={(item, index) => `${item.id}::${item.views}::${item.count}`}
         renderItem={this._renderItem}

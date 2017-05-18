@@ -24,7 +24,7 @@ import Qa from './drawer/Qa';
 import Game from './drawer/Game';
 import Battle from './drawer/Battle';
 import Gene from './drawer/Gene';
-import Rank from './drawer/Rank';
+import Rank from './drawer/Rank.flatlist';
 
 import {
   DrawerNavigator,
@@ -83,6 +83,7 @@ const Tabs = TabNavigator({
     screen: Gene,
   }
 }, {
+  initialRouteName: 'Rank',
   tabBarComponent: props => {
     const { modeInfo } = props.screenProps
     const titleTextColor = modeInfo.isNightMode ? '#000' : '#fff'
