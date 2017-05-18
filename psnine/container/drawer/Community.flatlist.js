@@ -21,7 +21,7 @@ import { getTopicURL } from '../../dao';
 
 import { changeScrollType } from '../../actions/app';
 
-import TopicItem from '../shared/CommunityTopicItem'
+import TopicItem from '../shared/CommunityItem'
 import FooterProgress from '../shared/FooterProgress'
 
 let toolbarHeight = 56;

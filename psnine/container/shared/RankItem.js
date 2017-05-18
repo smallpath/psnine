@@ -23,6 +23,8 @@ import { connect } from 'react-redux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { standardColor, nodeColor, idColor, accentColor } from '../../constants/colorConfig';
 
+import { getHomeURL } from '../../dao';
+
 import {
   getGamePointAPI,
   getTopicURL
@@ -31,12 +33,12 @@ import {
 let screen = Dimensions.get('window');
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = screen;
 
-export default class ComplexComment extends React.PureComponent {
+export default class extends React.PureComponent {
 
   shouldComponentUpdate = (props) => props.modeInfo.isNightMode !== this.props.modeInfo.isNightMode
 
   _onRowPressed = (rowData) => {
-    const { navigation } = this.props.screenProps;
+    const { navigation } = this.props;
     const URL = getHomeURL(rowData.psnid);
     navigation.navigate('Home', {
       // URL: 'http://psnine.com/psngame/5424?psnid=Smallpath',
@@ -47,7 +49,7 @@ export default class ComplexComment extends React.PureComponent {
   }
 
 
-  handleImageOnclick = (url) => this.props.screenProps.navigation.navigate('ImageViewer', {
+  handleImageOnclick = (url) => this.props.navigation.navigate('ImageViewer', {
     images: [
       { url }
     ]

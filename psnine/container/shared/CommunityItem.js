@@ -59,7 +59,6 @@ export default class ComplexComment extends React.PureComponent {
         <TouchableNativeFeedback
           onPress={() => {
             this._onRowPressed(rowData)
-            /*this.flatlist.getNode().recordInteraction()*/
           }}
           useForeground={true}
           delayPressIn={100}
@@ -71,15 +70,15 @@ export default class ComplexComment extends React.PureComponent {
               style={styles.avatar}
             />
 
-            <View style={{ marginLeft: 10, flex: 1, flexDirection: 'column' }}>
+            <View style={{ marginLeft: 10, flex: 1, flexDirection: 'column', justifyContent: 'space-between'  }}>
               <Text
                 ellipsizeMode={'tail'}
                 numberOfLines={2}
-                style={{ flex: 2.5, color: modeInfo.titleTextColor, }}>
+                style={{ flex: -1, color: modeInfo.titleTextColor, }}>
                 {rowData.title}
               </Text>
 
-              <View style={{ flex: 1.1, flexDirection: 'row', justifyContent: 'space-between' }}>
+              <View style={{ flex: -1, flexDirection: 'row', justifyContent: 'space-between' }}>
                 <Text selectable={false} style={{ flex: -1, color: idColor, textAlign: 'center', textAlignVertical: 'center' }} onPress={() => {
                     // this.flatlist.getNode().recordInteraction()
                     navigation.navigate('Home', {

@@ -12,36 +12,34 @@ import {
   FlatList
 } from 'react-native';
 
-import HTMLView from '../../components/HtmlToView';
 import { connect } from 'react-redux';
-import { getRankList } from '../../actions/rank.js';
+import { getQAList } from '../../actions/qa.js';
 import { standardColor, nodeColor, idColor } from '../../constants/colorConfig';
 import Icon from 'react-native-vector-icons/Ionicons';
 
-import { getHomeURL } from '../../dao';
+import { getQAUrl } from '../../dao';
 
 import { changeScrollType } from '../../actions/app';
 
-import TopicItem from '../shared/RankItem'
+import TopicItem from '../shared/QaItem'
 import FooterProgress from '../shared/FooterProgress'
 
 let toolbarHeight = 56;
 let releasedMarginTop = 0;
 let prevPosition = -1;
 
-class Rank extends Component {
+class Qa extends Component {
   static navigationOptions = {
-    tabBarLabel: '排行',
-    drawerLabel: '排行'
-  }
+    tabBarLabel: '问答',
+    drawerLabel: '问答'
+  };
 
   constructor(props) {
     super(props);
 
     this.state = {
-      server: 'hk',
-      sort: 'point',
-      cheat: '0',
+      type: 'all',
+      sort: 'obdate',
       isRefreshing: true,
       isLoadingMore: false
     }
@@ -60,52 +58,27 @@ class Rank extends Component {
         paddingTop: 3,
         backgroundColor: modeInfo.backgroundColor
       }}>
-            {/*server: 'hk',
-      sort: 'point',
-      cheat: '0'*/}
         <Picker style={{
-          flex: 3,
+          flex: 1,
           borderWidth: 1,
           color: modeInfo.standardTextColor
         }}
-          prompt='选择排序'
-          selectedValue={this.state.sort}
-          onValueChange={this.onValueChange.bind(this, 'sort')}>
-          <Picker.Item label="最后更新" value="datadate" />
-          <Picker.Item label="等级排行" value="point" />
-          <Picker.Item label="游戏最多" value="totalgame" />
-          <Picker.Item label="完美率" value="rarity" />
-          <Picker.Item label="签到最多" value="qidao" />
-          <Picker.Item label="N币最多" value="nb" />
-          <Picker.Item label="Z币最多" value="zb" />
+          prompt='选择类型'
+          selectedValue={this.state.type}
+          onValueChange={this.onValueChange.bind(this, 'type')}>
+          <Picker.Item label="全部" value="all" />
+          <Picker.Item label="PSN游戏" value="psngame" />
+          <Picker.Item label="节点" value="node" />
         </Picker>
         <Picker style={{
-          flex: 2.5,
-          borderWidth: 1,
-          color: modeInfo.standardTextColor
-        }}
-          prompt='选服'
-          selectedValue={this.state.server}
-          onValueChange={this.onValueChange.bind(this, 'server')}>
-          <Picker.Item label="所有" value="all" />
-          <Picker.Item label="国服" value="cn" />
-          <Picker.Item label="港服" value="hk" />
-          <Picker.Item label="日服" value="jp" />
-          <Picker.Item label="台服" value="tw" />
-          <Picker.Item label="美服" value="us" />
-          <Picker.Item label="英服" value="gb" />
-          <Picker.Item label="加服" value="ca" />
-        </Picker>
-        <Picker style={{
-          flex: 3,
+          flex: 1,
           color: modeInfo.standardTextColor
         }}
           prompt='排序'
-          selectedValue={this.state.cheat}
-          onValueChange={this.onValueChange.bind(this, 'cheat')}>
-          <Picker.Item label="身家清白" value="0" />
-          <Picker.Item label="浪子回头" value="1" />
-          <Picker.Item label="无可救药" value="2" />
+          selectedValue={this.state.sort}
+          onValueChange={this.onValueChange.bind(this, 'sort')}>
+          <Picker.Item label="综合排序" value="obdate" />
+          <Picker.Item label="最新" value="date" />
         </Picker>
       </View>
     )
@@ -120,8 +93,7 @@ class Rank extends Component {
   };
 
   componentWillReceiveProps = (nextProps) => {
-    const { modeInfo } = this.props.screenProps
-    if (modeInfo.isNightMode != nextProps.screenProps.modeInfo.isNightMode) {
+    if (this.props.screenProps.modeInfo.isNightMode != nextProps.screenProps.modeInfo.isNightMode) {
       this.props.screenProps.modeInfo = nextProps.screenProps.modeInfo;
     } else if (this.props.screenProps.searchTitle !== nextProps.screenProps.searchTitle) {
       this._onRefresh(
@@ -140,40 +112,41 @@ class Rank extends Component {
   }
 
   componentDidMount = () => {
-    const { rank: reducer } = this.props;
-    if (reducer.page === 0) {
+    const { qa: qaReducer } = this.props;
+    if (qaReducer.page === 0) {
       this._onRefresh();
     }
   }
 
   _onRefresh = (title = '') => {
-    const { rank: reducer, dispatch } = this.props;
+    const { qa: qaReducer, dispatch } = this.props;
 
     this.setState({
       isRefreshing: true
     })
 
-    const { server, sort, cheat } = this.state
-    dispatch(getRankList(1, {
-      sort, server, cheat,
-      title: typeof title !== 'undefined' ? title : this.props.screenProps.searchTitle
-    }));
+    const { type, sort } = this.state
+    dispatch(getQAList(1, {
+        type,
+        sort,
+        title: typeof title !== 'undefined' ? title : this.props.screenProps.searchTitle
+      })
+    );
   }
 
   _loadMoreData = () => {
-    const { rank: reducer, dispatch } = this.props;
-    const { server, sort, cheat } = this.state
-    let page = reducer.page + 1;
-    dispatch(getRankList(page, {
-      sort, server, cheat,
-      title: this.props.screenProps.searchTitle
-    }));
+    const { qa: qaReducer, dispatch } = this.props;
+    const { type, sort } = this.state
+    let page = qaReducer.page + 1;
+    dispatch(getQAList(page, {
+        type, 
+        sort,
+        title: this.props.screenProps.searchTitle
+      })
+    );
   }
 
   _onEndReached = () => {
-    const { rank: reducer } = this.props;
-
-    if (reducer.page === reducer.totalPage) return
     if (this.state.isRefreshing || this.state.isLoadingMore) return
 
     this.setState({
@@ -182,7 +155,8 @@ class Rank extends Component {
     this._loadMoreData();
   }
 
-  ITEM_HEIGHT = 93 + 7
+
+  ITEM_HEIGHT = 74 + 7
 
   _renderItem = ({ item: rowData, index }) => {
     const { modeInfo, navigation } = this.props.screenProps
@@ -196,8 +170,9 @@ class Rank extends Component {
   }
 
   render() {
-    const { rank: reducer } = this.props;
+    const { qa: qaReducer } = this.props;
     const { modeInfo } = this.props.screenProps
+    // console.log('Community.js rendered');
 
     return (
       <View style={{ backgroundColor: modeInfo.backgroundColor, flex: 1 }}>
@@ -217,8 +192,8 @@ class Rank extends Component {
             />
           }
           ListFooterComponent={() => <FooterProgress isLoadingMore={this.state.isLoadingMore} />}
-          data={reducer.ranks}
-          keyExtractor={(item, index) => `${item.psnid}::${item.rank}`}
+          data={qaReducer.qas}
+          keyExtractor={(item, index) => `${item.id}::${item.views}::${item.count}`}
           renderItem={this._renderItem}
           onEndReached={this._onEndReached}
           onEndReachedThreshold={0.5}
@@ -254,10 +229,10 @@ const styles = StyleSheet.create({
 
 function mapStateToProps(state) {
   return {
-    rank: state.rank
+    qa: state.qa
   };
 }
 
 export default connect(
   mapStateToProps
-)(Rank);
+)(Qa);
