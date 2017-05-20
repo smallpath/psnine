@@ -273,6 +273,7 @@ export default class Reply extends Component {
     const replyType = type !== 'comson' ? 'post' : 'ajax'
     // console.log(replyType, form)
     // return 
+
     postReply(form, replyType).then(res => {
       return res
     }).then(res => res.text()).then(text => {
@@ -280,17 +281,21 @@ export default class Reply extends Component {
         const arr = text.match(/\<title\>(.*?)\<\/title\>/)
         if (arr && arr[1]) {
           const msg = `评论失败: ${arr[1]}`
-          ToastAndroid.show(msg, ToastAndroid.SHORT);
+          // ToastAndroid.show(msg, ToastAndroid.SHORT);
+          global.toast(msg)
           return
         }
       }
       InteractionManager.runAfterInteractions(() => {
-        ToastAndroid.show('评论成功', ToastAndroid.SHORT);
+        // ToastAndroid.show('评论成功', ToastAndroid.SHORT);
+        // global.toast('评论成功')
         this._pressButton(() => params.callback && params.callback())
+        global.toast('评论成功')
       })
     }).catch(err => {
       const msg = `评论失败: ${arr[1]}`
-      ToastAndroid.show(msg, ToastAndroid.SHORT);
+      global.toast(msg)
+      // ToastAndroid.show(msg, ToastAndroid.SHORT);
     })
   }
 

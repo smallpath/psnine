@@ -105,7 +105,8 @@ export default class Home extends Component {
             const arr = text.match(/\<title\>(.*?)\<\/title\>/)
             if (arr && arr[1]) {
               const msg = `同步失败: ${arr[1]}`
-              ToastAndroid.show(msg, ToastAndroid.SHORT);
+              // ToastAndroid.show(msg, ToastAndroid.SHORT);
+              global.toast(msg)
               return
             }
           }
@@ -113,7 +114,8 @@ export default class Home extends Component {
           preFetch && preFetch()
         }).catch(err => {
           const msg = `同步失败: ${err.toString()}`
-          ToastAndroid.show(msg, ToastAndroid.SHORT);
+          global.toast(msg)
+          // ToastAndroid.show(msg, ToastAndroid.SHORT);
         })
         return;
       case 1:
