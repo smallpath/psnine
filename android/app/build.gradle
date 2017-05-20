@@ -1,6 +1,18 @@
 apply plugin: "com.android.application"
 
 import com.android.build.OutputFile
+import groovy.json.JsonSlurper
+
+def getNpmVersion() {
+    def inputFile = new File("../package.json")
+    def packageJson = new JsonSlurper().parseText(inputFile.text)
+    return packageJson["version"]
+}
+/* calculated from git commits to give sequential integers */
+def getGitVersion() {
+    def process = "git rev-list master --first-parent --count".execute()
+    return process.text.toInteger()
+}
 
 /**
  * The react.gradle file registers a task for each build variant (e.g. bundleDebugJsAndAssets
@@ -81,6 +93,8 @@ def enableSeparateBuildPerCPUArchitecture = false
  * Run Proguard to shrink the Java bytecode in release builds.
  */
 def enableProguardInReleaseBuilds = false
+def userVer = getNpmVersion()
+def googleVer = getGitVersion()
 
 android {
     compileSdkVersion 23
@@ -90,8 +104,8 @@ android {
         applicationId "com.psnine"
         minSdkVersion 16
         targetSdkVersion 22
-        versionCode 1
-        versionName "1.0"
+        versionCode googleVer
+        versionName userVer
         ndk {
             abiFilters "armeabi-v7a", "x86"
         }

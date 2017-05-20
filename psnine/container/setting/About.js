@@ -16,6 +16,8 @@ import { pngPrefix, getDealURL, getHappyPlusOneURL, getStoreURL } from '../../da
 
 import { safeLogin, registURL } from '../../dao/login';
 
+import packages from '../../../package.json'
+
 class About extends Component {
 
   constructor(props) {
@@ -26,7 +28,7 @@ class About extends Component {
       sourceCodeURL: 'https://github.com/smallpath/psnine',
       checkVersionURL: 'https://api.github.com/repos/smallpath/psnine/git/refs/tags',
       tagURL: 'https://github.com/smallpath/psnine/releases/tag',
-      version: '0.1.0',
+      version: packages['version'],
       icon: false
     }
   }
