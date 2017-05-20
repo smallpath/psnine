@@ -39,13 +39,13 @@ let CIRCLE_SIZE = 56;
 let config = { tension: 30, friction: 7, ease: Easing.in(Easing.ease(1, 0, 1, 1)), duration: 200 };
 
 const items = [
-  {
-    iconName: 'md-build',
-    text: '一般',
-    onPress: function() {
-      this.props.navigation.navigate('General')
-    }
-  },
+  // {
+  //   iconName: 'md-build',
+  //   text: '一般',
+  //   onPress: function() {
+  //     this.props.navigation.navigate('General')
+  //   }
+  // },
   {
     iconName: 'md-color-palette',
     text: '主题',
@@ -94,7 +94,7 @@ class Setting extends Component {
         <View style={[styles.themeItem, {
           flex: -1,
           height: 80,
-          flexDirection: 'row'
+          flexDirection: 'row',
         }]}>
           <View style={{ width: 30, height: 30, flex: 1, justifyContent: 'center', alignItems: 'center'}}>
             <Ionicons name={item.iconName} size={30} color={modeInfo.accentColor} />
@@ -103,7 +103,9 @@ class Setting extends Component {
             borderBottomWidth: StyleSheet.hairlineWidth,
             borderBottomColor: modeInfo.standradTextColor,
             alignItems: 'flex-start',
-            flex: 4
+            justifyContent: 'center',
+            flex: 4,
+            height: 80
           }}>
             <Text style={[styles.themeName, { alignContent:'stretch', textAlignVertical: 'center',flex: 1, color: modeInfo.titleTextColor }]}>
               {item.text}

@@ -130,15 +130,6 @@ class navigationDrawer extends Component {
     })
   }
 
-  renderSeparator(sectionID: number, rowID: number, adjacentRowHighlighted: bool) {
-    return (
-      <View
-        key={`${sectionID}-${rowID}`}
-        style={{ height: adjacentRowHighlighted ? 4 : 1, backgroundColor: adjacentRowHighlighted ? '#3B5998' : '#CCCCCC', }}
-      />
-    );
-  }
-
   pressLogin = () => {
     const { navigation, closeDrawer } = this.props;
     const { psnid } = this.state;
@@ -352,7 +343,9 @@ class navigationDrawer extends Component {
   }
 
   renderRow = (rowData, sectionID, rowID, highlightRow) => {
-    const item = ListItems[rowID]
+    const shouldSlice = this.state.psnid === ''
+    const targetListItems = shouldSlice ? ListItems.slice(2) : ListItems
+    const item = targetListItems[rowID]
     let iconName = item.iconName
 
     const icon = <Icon name={iconName} size={25} style={{ marginLeft: 6 }} color='#03a9f4' />
