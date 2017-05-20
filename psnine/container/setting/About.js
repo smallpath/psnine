@@ -4,7 +4,8 @@ import {
   Text,
   View,
   TouchableNativeFeedback,
-  Linking
+  Linking,
+  Alert
 } from 'react-native';
 
 import { connect } from 'react-redux';
@@ -23,6 +24,9 @@ class About extends Component {
     this.state = {
       checkUpdateTip: '点击检查更新',
       sourceCodeURL: 'https://github.com/smallpath/psnine',
+      checkVersionURL: 'https://api.github.com/repos/smallpath/psnine/git/refs/tags',
+      tagURL: 'https://github.com/smallpath/psnine/releases/tag',
+      version: '0.1.0',
       icon: false
     }
   }
@@ -44,11 +48,41 @@ class About extends Component {
     this.setState({
       checkUpdateTip: '正在检查更新',
     })
-    setTimeout(() => {
+    fetch(this.state.checkVersionURL).then(res => res.json()).then(data => {
+      let latestTag = 0
+
+      data.forEach(function(item, index) {
+        let tagArr = item.ref.match(/v(.*?)$/i)
+        if (tagArr.length >= 1) {
+          let tag = tagArr[1]
+          if (latestTag <= tag) latestTag = tag
+        }
+      })
+
+      if (this.state.version < latestTag) {
+        Alert.alert(
+          `发现新版本`,
+          `最新版本为v${this.state.version}, 是否打开网页下载?`,
+          [
+            {text: '取消', style: 'cancel'},
+            {text: '确定', onPress: () => Linking.openURL(`${this.state.tagURL}/v${latestTag}`).catch(err => global.toast(err.toString()))},
+          ],
+          { cancelable: false }
+        )
+        this.setState({
+          checkUpdateTip: `最新版本为v${latestTag}`,
+        })
+        return
+      }
       this.setState({
         checkUpdateTip: '当前已是最新版本',
       })
-    }, 1000);
+      // alert(JSON.stringify(data))
+    }).catch((err) => {
+      this.setState({
+        checkUpdateTip: err.toString(),
+      })
+    }) 
   }
 
   goSourceCode = async () => {
@@ -81,7 +115,7 @@ class About extends Component {
             <Text style={{
               textAlign: 'center',
               color: modeInfo.backgroundColor,
-            }}>{'version: 0.1'}</Text>
+            }}>{'version: ' + this.state.version}</Text>
           </View>
         </View>
 
@@ -118,7 +152,22 @@ class About extends Component {
               </Text>
             </View>
           </TouchableNativeFeedback>
-          <View style={{ flex: 2 }} />
+          <TouchableNativeFeedback
+          >
+            <View style={[styles.themeItem, {
+              padding: 6,
+              flexDirection: 'column',
+              alignItems: 'flex-start',
+            }]}>
+              <Text style={[styles.themeName, { marginTop: 12, flex: 1, color: modeInfo.titleTextColor }]}>
+                {'作者'}
+              </Text>
+              <Text style={[styles.themeName, { marginTop: -12, fontSize: 13, flex: 1, color: modeInfo.standardTextColor }]}>
+                {'smallpath2013@gmail.com'}
+              </Text>
+            </View>
+          </TouchableNativeFeedback>
+          <View style={{flex:1}}/>
         </View>
 
       </View>
