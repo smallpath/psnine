@@ -96,13 +96,15 @@ class Login extends Component {
     this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () => {
       Animated.spring(this.state.avoidKeyboardMarginTop, {
         toValue: 1,
-        friction: 10
+        friction: 10,
+        useNativeDriver: true
       }).start();
     })
     this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', () => {
       Animated.spring(this.state.avoidKeyboardMarginTop, {
         toValue: 0,
-        friction: 10
+        friction: 10,
+        useNativeDriver: true
       }).start();
     })
     const source = await Ionicons.getImageSource('ios-add', 24, '#fff')
@@ -124,7 +126,8 @@ class Login extends Component {
 
     Animated.spring(this.state.accountMarginTop, {
       toValue: 1,
-      friction: 10
+      friction: 10,
+      // useNativeDriver: true
     }).start();
   }
 
@@ -134,7 +137,8 @@ class Login extends Component {
       return;
     Animated.spring(this.state.accountMarginTop, {
       toValue: 0,
-      friction: 10
+      friction: 10,
+      // useNativeDriver: true
     }).start();
   }
 
@@ -146,7 +150,8 @@ class Login extends Component {
 
     Animated.spring(this.state.passwordMarginTop, {
       toValue: 1,
-      friction: 10
+      friction: 10,
+      // useNativeDriver: true
     }).start();
   }
 
@@ -156,7 +161,8 @@ class Login extends Component {
       return;
     Animated.spring(this.state.passwordMarginTop, {
       toValue: 0,
-      friction: 10
+      friction: 10,
+      // useNativeDriver: true
     }).start();
   }
 
@@ -171,17 +177,27 @@ class Login extends Component {
     const { modeInfo } = this.props.screenProps
 
     let avoidKeyboardStyle = {
-      top: this.state.avoidKeyboardMarginTop.interpolate({
-        inputRange: [0, 1],
-        outputRange: [SCREEN_HEIGHT / 10 * 4 - marginLeft * 1.5, marginLeft]
-      }),
+      bottom: marginLeft * 1.5,
+      top: SCREEN_HEIGHT / 10 * 4 - marginLeft * 1.5,
+      transform: [{
+        translateY: this.state.avoidKeyboardMarginTop.interpolate({
+          inputRange: [0, 1],
+          outputRange: [0, marginLeft - (SCREEN_HEIGHT / 10 * 4 - marginLeft * 1.5)]
+        })
+      }]
     }
 
     let accountTextStyle = {
-      top: this.state.accountMarginTop.interpolate({
-        inputRange: [0, 1],
-        outputRange: [40, 15]
-      }),
+      transform: [{
+        translateY: this.state.accountMarginTop.interpolate({
+          inputRange: [0, 1],
+          outputRange: [40, 10]
+        })
+      }],
+      // top: this.state.accountMarginTop.interpolate({
+      //   inputRange: [0, 1],
+      //   outputRange: [40, 15]
+      // }),
       color: this.state.accountMarginTop.interpolate({
         inputRange: [0, 1],
         outputRange: [modeInfo.standardTextColor, modeInfo.standardColor]
@@ -193,10 +209,16 @@ class Login extends Component {
     }
 
     let passwordTextStyle = {
-      top: this.state.passwordMarginTop.interpolate({
-        inputRange: [0, 1],
-        outputRange: [40, 15]
-      }),
+      transform: [{
+        translateY: this.state.passwordMarginTop.interpolate({
+          inputRange: [0, 1],
+          outputRange: [40, 10]
+        })
+      }],
+      // top: this.state.passwordMarginTop.interpolate({
+      //   inputRange: [0, 1],
+      //   outputRange: [40, 15]
+      // }),
       color: this.state.passwordMarginTop.interpolate({
         inputRange: [0, 1],
         outputRange: [modeInfo.standardTextColor, modeInfo.standardColor]
@@ -218,10 +240,16 @@ class Login extends Component {
             borderRadius: 30,
             backgroundColor: accentColor,
             position: 'absolute',
-            top: this.state.avoidKeyboardMarginTop.interpolate({
+            /*top: this.state.avoidKeyboardMarginTop.interpolate({
               inputRange: [0, 1],
               outputRange: [SCREEN_HEIGHT / 10 * 4 - marginLeft + 28, marginLeft + 28]
-            }),
+            }),*/
+            transform: [{
+              translateY: this.state.avoidKeyboardMarginTop.interpolate({
+                inputRange: [0, 1],
+                outputRange: [(SCREEN_HEIGHT / 10 * 4 - marginLeft + 28), 28 + marginLeft * 1.5]
+              })
+            }],
             right: 12,
             elevation: 6,
             zIndex: 1,
