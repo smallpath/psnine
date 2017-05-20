@@ -604,7 +604,7 @@ class Toolbar extends Component {
           onIconClicked={this.props._callDrawer()}
         />
         {this.state.tabMode === 'tab' ? this._renderTabView() : this._renderDrawerView()}
-        <TouchableWithoutFeedback onPress={this.closeMask}>
+        {/*<TouchableWithoutFeedback onPress={this.closeMask}>
           <Animated.View
             ref={mask => this.mask = mask}
             collapsable={false}
@@ -618,9 +618,9 @@ class Toolbar extends Component {
               position: 'absolute',
               zIndex: 1
             }} />
-        </TouchableWithoutFeedback>
-        {toolbarList}
-        <Animated.View
+        </TouchableWithoutFeedback>*/}
+        {/*{toolbarList}*/}
+        {/*<Animated.View
           ref={float => this.float = float}
           collapsable={false}
           style={{
@@ -675,7 +675,7 @@ class Toolbar extends Component {
               <Icon name="ios-add" size={40} color='#fff' />
             </View>
           </TouchableNativeFeedback>
-        </Animated.View>
+        </Animated.View>*/}
       </Animated.View>
     )
   }

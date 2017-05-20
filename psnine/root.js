@@ -343,9 +343,10 @@ class Root extends React.Component {
     })
     InteractionManager.runAfterInteractions(() => {
       Animated.timing(this.state.tipBarMarginBottom, {
-        toValue: this.state.tipBarMarginBottom._value === 1 ? 0 : 1,
+        toValue: 1,
         duration: 200,
-        easing: Easing.ease
+        easing: Easing.ease,
+        useNativeDriver: true
       }).start();
     });
 
@@ -353,9 +354,10 @@ class Root extends React.Component {
     setTimeout(() => {
       InteractionManager.runAfterInteractions(() => {
         Animated.timing(this.state.tipBarMarginBottom, {
-          toValue: this.state.tipBarMarginBottom._value === 1 ? 0 : 1,
+          toValue: 0,
           duration: 200,
-          easing: Easing.ease
+          easing: Easing.ease,
+          useNativeDriver: true
         }).start(() => {
           this.setState({
             text: ''
@@ -382,13 +384,18 @@ class Root extends React.Component {
           <Animated.View style={{
             height: tipHeight,
             position: 'absolute',
-            bottom: this.state.tipBarMarginBottom.interpolate({
-              inputRange: [0, 1],
-              outputRange: [-tipHeight, 0]
-            }),
+            bottom: 0,
             elevation: 6,
             width: SCREEN_WIDTH,
-            backgroundColor: modeInfo.backgroundColor
+            backgroundColor: modeInfo.backgroundColor,
+            transform: [
+              {
+                translateY: this.state.tipBarMarginBottom.interpolate({
+                  inputRange: [0, 1],
+                  outputRange: [tipHeight, 0]
+                })
+              }
+            ]
           }}>
             <View style={{
               flex: 1,
