@@ -10,7 +10,8 @@ import {
   InteractionManager,
   FlatList,
   ProgressBarAndroid,
-  Animated
+  Animated,
+  Alert
 } from 'react-native';
 
 import { connect } from 'react-redux';
@@ -39,7 +40,7 @@ class Community extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isRefreshing: true,
+      isRefreshing: false,
       isLoadingMore: false,
     }
   }

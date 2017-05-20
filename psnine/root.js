@@ -306,7 +306,7 @@ class Root extends React.Component {
         global.toast && global.toast('再按一次退出程序');
         return true;
       } else {
-        return BackHandler.exitApp();
+        return false;
       }
     });
   }

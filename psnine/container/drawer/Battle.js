@@ -138,7 +138,7 @@ class Battle extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isLoading: true
+      isLoading: false
     }
   }
 
@@ -152,15 +152,23 @@ class Battle extends Component {
     }
   }
 
+  shouldComponentUpdate(nextProps, nextState) {
+    if (this.props.screenProps.searchTitle !== nextProps.screenProps.searchTitle) {
+      return false
+    }
+    return true
+  }
+
   componentDidMount = () => {
     const { battle: battleReducer } = this.props;
-    // if (battleReducer.battles.length == 0)
-    this._onRefresh();
+    if (Object.keys(battleReducer.battles).length === 0) this._onRefresh();
   }
 
   _onRefresh = (type = '') => {
     const { battle: battleReducer, dispatch } = this.props;
-
+    this.setState({
+      isLoading: true
+    })
     dispatch(getBattleList());
   }
 

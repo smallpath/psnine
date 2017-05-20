@@ -41,7 +41,7 @@ class Game extends Component {
       pf: 'all',
       sort: 'newest',
       dlc: 'all',
-      isRefreshing: true,
+      isRefreshing: false,
       isLoadingMore: false
     }
   }

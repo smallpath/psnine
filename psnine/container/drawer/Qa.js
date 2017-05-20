@@ -40,7 +40,7 @@ class Qa extends Component {
     this.state = {
       type: 'all',
       sort: 'obdate',
-      isRefreshing: true,
+      isRefreshing: false,
       isLoadingMore: false
     }
   }

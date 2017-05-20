@@ -42,7 +42,7 @@ class Rank extends Component {
       server: 'hk',
       sort: 'point',
       cheat: '0',
-      isRefreshing: true,
+      isRefreshing: false,
       isLoadingMore: false
     }
   }

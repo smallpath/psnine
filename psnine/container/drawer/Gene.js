@@ -32,7 +32,7 @@ class Gene extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isRefreshing: true,
+      isRefreshing: false,
       isLoadingMore: false
     }
   }
