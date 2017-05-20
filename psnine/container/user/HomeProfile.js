@@ -110,7 +110,8 @@ export default class Home extends Component {
               return
             }
           }
-          ToastAndroid.show('同步成功', ToastAndroid.SHORT);
+          // ToastAndroid.show('同步成功', ToastAndroid.SHORT);
+          global.toast('同步成功')
           preFetch && preFetch()
         }).catch(err => {
           const msg = `同步失败: ${err.toString()}`
@@ -245,7 +246,7 @@ export default class Home extends Component {
           backgroundColor: modeInfo.backgroundColor,
           flexDirection: 'column',
           borderBottomWidth: StyleSheet.hairlineWidth,
-          borderBottomColor: modeInfo.standardTextColor,
+          borderBottomColor: modeInfo.brighterLevelOne,
           padding: 10
         }}>
 
