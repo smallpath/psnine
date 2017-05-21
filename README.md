@@ -1,7 +1,7 @@
 <img src="./android/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png">
 
 # Psnine
- [Psnine](http://psnine.com/)第三方安卓客户端, 支持安卓5.0及以上系统, 基于React Native
+[Psnine](http://psnine.com/)第三方安卓客户端, 支持安卓5.0及以上系统, 基于React Native
 
 # Features
 - 支持社区、问答、游戏、排行、约战和基因六大类别的显示、帖子查看、回复
@@ -17,10 +17,10 @@
 请查看[Release页面](https://github.com/smallpath/psnine/releases)
 
 # Statement
-该项目仅供交流，如果该项目侵犯Psnine了版权，本人会及时删除此页面与整个项目。
+该项目仅供交流, 如果该项目侵犯了Psnine版权, 本人会及时删除此页面与整个项目。
 
 # Contribution
-如果你发现了漏洞或者需要新功能，请在本仓库新建issue或联系`smallpath2013@gmail.com`
+如果发现了漏洞或者需要新功能, 请在本仓库新建issue, 也可联系邮箱`smallpath2013@gmail.com`
 
 # License
 ```
