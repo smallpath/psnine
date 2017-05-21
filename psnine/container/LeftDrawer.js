@@ -356,7 +356,7 @@ class navigationDrawer extends Component {
             style={{ backgroundColor: 'rgba(0,0,0,0.1)', height: rowID === '0' ? 0 : 1, }}
           />
           <View style={[styles.themeItem, {
-            padding: 6, paddingLeft: 10, backgroundColor: this.props.modeInfo.backgroundColor
+            padding: 6, paddingLeft: 10
           }]}>
             <Text style={[styles.themeName, { fontSize: 13, color: this.props.modeInfo.standardTextColor }]}>
               {rowData.text}
@@ -372,9 +372,7 @@ class navigationDrawer extends Component {
           onPress={() => item.onPress.bind(this)(rowData)}
           delayPressIn={0}
         >
-          <View style={[styles.themeItem, {
-            backgroundColor: this.props.modeInfo.backgroundColor
-          }]}>
+          <View style={[styles.themeItem]}>
             {icon}
             <Text style={[styles.themeName, { color: this.props.modeInfo.titleTextColor }]}>
               {rowData.text}
