@@ -6,7 +6,7 @@ export default function (html) {
   })
 
   const all = $('.main .box')
-  const side = $('.side p a')
+  const side = $('.side p a.title2')
   const titleText = all.find('.pd10 h1').text()
   const titleInfo = {
     title: titleText,

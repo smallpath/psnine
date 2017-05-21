@@ -1,7 +1,11 @@
 import {
   Easing,
-  Animated
+  Animated,
+  Dimensions
 } from 'react-native'
+
+const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
+
 function forInitial(props) {
   const {
     navigation,
@@ -89,12 +93,12 @@ export function transitionConfig(
       const translateX = 0;
       const translateY = position.interpolate({
         inputRange,
-        outputRange: ([50, 0, 0, 0]),
+        outputRange: ([SCREEN_WIDTH, 0, 0, 0]),
       });
 
       return {
         opacity,
-        transform: [{ translateX }, { translateY }],
+        transform: [{ translateX:translateY }, { translateY: 0 }],
       };
     }
   }
