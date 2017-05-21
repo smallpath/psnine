@@ -10,13 +10,11 @@ import {
   Text,
   Easing,
   Linking,
-  InteractionManager
+  InteractionManager,
+  AsyncStorage
 } from 'react-native';
 import { Provider } from 'react-redux'
-import pathToRegexp from 'path-to-regexp';
-import {
-  StackNavigator,
-} from 'react-navigation';
+import StackNavigator from './Navigator'
 import {
   accentColor,
   deepColor, standardColor, tintColor,
@@ -31,7 +29,7 @@ import {
 } from './constants/colorConfig';
 
 import configureStore from './store/store.js'
-// import moment from './utils/moment';
+import Animation from 'lottie-react-native';
 
 const store = configureStore();
 
@@ -39,212 +37,7 @@ const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
 let toolbarHeight = 56
 const tipHeight = toolbarHeight * 0.8
-
-import App from './container/App.js'
-
-import Home from './container/user/Home'
-import Login from './container/user/Login'
-import Message from './container/user/Message'
-import UserGame from './container/user/UserGame'
-import UserBoard from './container/user/UserBoard'
-import Favorite from './container/user/Favorite'
-
-import Trophy from './container/game/Trophy'
-import GameTopic from './container/game/GameTopic'
-import GamePage from './container/game/Game'
-import GamePoint from './container/game/GamePoint'
-
-import CommentList from './container/topic/CommentList'
-import CommunityTopic from './container/topic/CommunityTopic'
-import QaTopic from './container/topic/QaTopic'
-import BattleTopic from './container/topic/BattleTopic'
-
-import Reply from './container/new/Reply'
-import NewTopic from './container/new/NewTopic'
-
-import WebView from './components/WebView'
-import About from './container/setting/About'
-import Setting from './container/setting/Setting'
-import Theme from './container/setting/Theme'
-import General from './container/setting/General'
-import ImageViewer from './components/ImageViewer'
-import Search from './container/Search'
-
-import { transitionConfig, onTransitionStart } from './utils/transitionConfig'
-
-const enableGesture = ({ navigation }) => {
-  return {
-    gesturesEnabled: true
-  }
-}
-
-const Navigator = StackNavigator({
-  Main: {
-    screen: App,
-    path: '',
-  },
-  Search: {
-    screen: Search,
-    path: '',
-  },
-  Login: {
-    screen: Login,
-    navigationOptions: enableGesture,
-    path: 'sign/in'
-  },
-  Message: {
-    screen: Message,
-    navigationOptions: enableGesture,
-    path: 'my/notice'
-  },
-  CommentList: {
-    screen: CommentList,
-    navigationOptions: enableGesture,
-    path: 'topic/:linkingID/comment'
-  },
-  GeneCommentList: {
-    screen: CommentList,
-    navigationOptions: enableGesture,
-    path: 'gene/:linkingID/comment'
-  },
-  CommunityTopic: {
-    screen: CommunityTopic,
-    navigationOptions: enableGesture,
-    path: 'topic/:linkingID'
-  },
-  GeneTopic: {
-    screen: CommunityTopic,
-    navigationOptions: enableGesture,
-    path: 'gene/:linkingID'
-  },
-  QaTopic: {
-    screen: QaTopic,
-    navigationOptions: enableGesture,
-    path: 'qa/:linkingID'
-  },
-  BattleTopic: {
-    screen: BattleTopic,
-    navigationOptions: enableGesture,
-    path: 'battle/:linkingID'
-  },
-  GamePage: {
-    screen: GamePage,
-    navigationOptions: enableGesture,
-    path: 'psngame/:linkingID'
-  },
-  GameTopic: {
-    screen: GameTopic,
-    psngame: 'psngame/:linkingID/topic'
-  },
-  GamePoint: {
-    screen: GamePoint,
-    psngame: 'psngame/:linkingID/comment'
-  },
-  Favorite: {
-    screen: Favorite,
-    psngame: 'my/fav'
-  },
-  Home: {
-    screen: Home,
-    path: 'psnid/:linkingID',
-  },
-  Reply: {
-    screen: Reply
-  },
-  UserGame: {
-    screen: UserGame,
-    path: 'psnid/:linkingID/psngame'
-  },
-  UserBoard: {
-    screen: UserGame,
-    path: 'psnid/:linkingID/comment'
-  },
-  NewTopic: {
-    screen: NewTopic
-  },
-  Trophy: {
-    screen: Trophy,
-    path: 'trophy/:linkingID'
-  },
-  About: {
-    screen: About,
-    navigationOptions: enableGesture
-  },
-  General: {
-    screen: General,
-    navigationOptions: enableGesture
-  },
-  Theme: {
-    screen: Theme,
-    navigationOptions: enableGesture
-  },
-  Setting: {
-    screen: Setting,
-    navigationOptions: enableGesture
-  },
-  WebView: {
-    screen: WebView
-  },
-  ImageViewer: {
-    screen: ImageViewer
-  }
-}, {
-    initialRouteName: 'Main',
-    headerMode: 'none',
-    mode: 'card',
-    navigationOptions: {
-      cardStack: {
-        gesturesEnabled: true,
-      }
-    },
-    cardStyle: {
-      backgroundColor: 'transparent',
-      // opacity: 0.99
-    },
-    transitionConfig,
-    onTransitionStart
-  });
-
 let backPressClickTimeStamp = 0
-
-const previousGetActionForPathAndParams = Navigator.router.getActionForPathAndParams;
-
-Object.assign(Navigator.router, {
-  getActionForPathAndParams(path, params) {
-    const action = previousGetActionForPathAndParams(path, params)
-    if (action && action.params && action.params.linkingID) {
-      const id = action.params.linkingID
-      switch (action.routeName) {
-        case 'Home':
-          action.params.title = `${id}`
-          action.params.URL = `http://psnine.com/${path}`
-          break;
-        case 'CommunityTopic':
-        case 'GeneTopic':
-        case 'QaTopic':
-        case 'BattleTopic':
-        case 'GamePage':
-          action.params.URL = `http://psnine.com/${path}`
-          action.params.rowData = {
-            id
-          }
-          break;
-        case 'CommentList':
-        case 'GeneCommentList':
-        case 'GameTopic':
-        case 'UserGame':
-          action.params.URL = `http://psnine.com/${path}?page=1`
-          break;
-        case 'Trophy':
-          action.params.URL = `http://psnine.com/${path}`
-          action.params.title = `No.${id}`
-          break;
-      }
-    }
-
-    return action
-  }
-})
 
 class Root extends React.Component {
   constructor(props) {
@@ -255,7 +48,23 @@ class Root extends React.Component {
     this.state = {
       text: '',
       isNightMode: false,//hour >= 22 || hour < 7,
-      tipBarMarginBottom: new Animated.Value(0)
+      tipBarMarginBottom: new Animated.Value(0),
+      progress: new Animated.Value(0),
+      isLoadingAsyncStorage: true,
+      settingInfo: {
+        tabMode: 'tab',
+        psnid: '',
+        userInfo: {
+          avatar: require('./img/comment_avatar.png'),
+          platinum: '白',
+          gold: '金',
+          silver: '银',
+          bronze: '铜',
+          isSigned: true,
+        },
+        isNightMode: false
+      },
+      loadingText: '\n正在加载配置'
     };
 
     this.dayModeInfo = {
@@ -268,7 +77,7 @@ class Root extends React.Component {
       brighterLevelOne: backgroundColorBrighterLevelOne,
       standardTextColor: standardTextColor,
       titleTextColor: titleTextColor,
-      okColor
+      okColor,
     }
 
     this.nightModeInfo = {
@@ -294,6 +103,7 @@ class Root extends React.Component {
     this.setState({
       isNightMode: targetState,
     });
+    AsyncStorage.setItem('@Theme:isNightMode', targetState.toString())
     return targetState;
   }
 
@@ -311,7 +121,42 @@ class Root extends React.Component {
     });
   }
 
+  loadSetting = () => {
+    this.state.progress.setValue(0)
+    this.setState({
+      isLoadingAsyncStorage: true
+    })
+    const settingInfo = {}
+    Promise.all([
+      AsyncStorage.getItem('@Theme:tabMode'),
+      AsyncStorage.getItem('@psnid'),
+      AsyncStorage.getItem('@userInfo'),
+      AsyncStorage.getItem('@Theme:isNightMode')
+    ]).then(result => {
+      Object.assign(settingInfo, {
+        tabMode: result[0] || this.state.settingInfo.tabMode,
+        psnid: result[1] || this.state.settingInfo.psnid,
+        userInfo: JSON.parse(result[2]) || this.state.settingInfo.userInfo,
+        isNightMode: JSON.parse(result[3]) || this.state.settingInfo.isNightMode
+      })
+    })
+    Animated.timing(this.state.progress, {
+      toValue: 0.65,
+      // ease: Easing.in(Easing.ease(1, 0, 1, 1)), 
+      duration: 1500
+    }).start()
+    setTimeout(() => {
+      this.setState({
+        isLoadingAsyncStorage: false,
+        settingInfo,
+        isNightMode: settingInfo.isNightMode
+      })
+    }, 1300)
+  }
+
   componentDidMount() {
+    
+    this.loadSetting()
     Linking.getInitialURL().then((url) => {
       if (url) {
         console.log('Initial url is: ' + url);
@@ -368,47 +213,78 @@ class Root extends React.Component {
   }
 
   render() {
-    const modeInfo = this.state.isNightMode ? this.dayModeInfo : this.nightModeInfo
+    const targetModeInfo = this.state.isNightMode ? this.nightModeInfo : this.dayModeInfo
+    const { isLoadingAsyncStorage, progress } = this.state
+    const modeInfo = Object.assign({}, targetModeInfo, {
+      loadSetting: this.loadSetting,
+      settingInfo: this.state.settingInfo,
+      reverseModeInfo: this.state.isNightMode ? this.dayModeInfo : this.nightModeInfo
+    })
+
+    const child = isLoadingAsyncStorage ? (
+      <View style={{ flex: 1, backgroundColor: 'rgb(0,208,192)'}}>
+        <Animation
+          ref={animation => { this.animation = animation; }}
+          style={{
+            width: SCREEN_WIDTH,
+            height: SCREEN_HEIGHT - StatusBar.currentHeight,
+          }}
+          progress={progress}
+          source={require('./animations/LottieLogo1.json')}
+        />
+        <Text numberOfLines={2} style={{
+          position: 'absolute',
+          left: 0,
+          top: SCREEN_HEIGHT/2,
+          textAlign: 'center',
+          textAlignVertical: 'center',
+          right: 0,
+          bottom: 0
+        }}>{this.state.loadingText}</Text>
+      </View>
+    ) : (
+      <View style={{ flex: 1 }}>
+        <StatusBar translucent={false} backgroundColor={this.state.isNightMode ? nightDeepColor : deepColor} barStyle="light-content" />
+        <StackNavigator
+          uriPrefix={'p9://psnine.com/'}
+          onNavigationStateChange={null} screenProps={{
+            modeInfo,
+            switchModeOnRoot: this.switchModeOnRoot,
+            tipBarMarginBottom: this.state.tipBarMarginBottom,
+            bottomText: this.state.text
+          }} />
+        <Animated.View style={{
+          height: tipHeight,
+          position: 'absolute',
+          bottom: 0,
+          elevation: 6,
+          width: SCREEN_WIDTH,
+          backgroundColor: modeInfo.reverseModeInfo.backgroundColor,
+          transform: [
+            {
+              translateY: this.state.tipBarMarginBottom.interpolate({
+                inputRange: [0, 1],
+                outputRange: [tipHeight, 0]
+              })
+            }
+          ]
+        }}>
+          <View style={{
+            flex: 1,
+            justifyContent: 'center',
+            padding: 20
+          }}>
+            <Text style={{
+              fontSize: 15,
+              color: modeInfo.reverseModeInfo.titleTextColor
+            }}>{this.state.text}</Text>
+          </View>
+        </Animated.View>
+      </View>
+    )
     return (
       <Provider store={store}>
-        <View style={{ flex: 1 }}>
-          <StatusBar translucent={false} backgroundColor={this.state.isNightMode ? nightDeepColor : deepColor} barStyle="light-content" />
-          <Navigator
-            uriPrefix={'p9://psnine.com/'}
-            onNavigationStateChange={null} screenProps={{
-              modeInfo: this.state.isNightMode ? this.nightModeInfo : this.dayModeInfo,
-              switchModeOnRoot: this.switchModeOnRoot,
-              tipBarMarginBottom: this.state.tipBarMarginBottom,
-              bottomText: this.state.text
-            }} />
-          <Animated.View style={{
-            height: tipHeight,
-            position: 'absolute',
-            bottom: 0,
-            elevation: 6,
-            width: SCREEN_WIDTH,
-            backgroundColor: modeInfo.backgroundColor,
-            transform: [
-              {
-                translateY: this.state.tipBarMarginBottom.interpolate({
-                  inputRange: [0, 1],
-                  outputRange: [tipHeight, 0]
-                })
-              }
-            ]
-          }}>
-            <View style={{
-              flex: 1,
-              justifyContent: 'center',
-              padding: 20
-            }}>
-              <Text style={{
-                fontSize: 15,
-                color: modeInfo.titleTextColor
-              }}>{this.state.text}</Text>
-            </View>
-          </Animated.View>
-        </View>
+        {child}
       </Provider>
     );
   }

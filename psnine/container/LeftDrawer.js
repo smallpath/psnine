@@ -95,16 +95,11 @@ class navigationDrawer extends Component {
     let dataSource = new ListView.DataSource({
       rowHasChanged: (row1, row2) => row1 !== row2,
     });
+    const { modeInfo } = this.props
+
     this.state = {
-      psnid: '',
-      userInfo: {
-        avatar: require('../img/comment_avatar.png'),
-        platinum: '白',
-        gold: '金',
-        silver: '银',
-        bronze: '铜',
-        isSigned: true,
-      },
+      psnid: modeInfo.settingInfo.psnid,
+      userInfo: modeInfo.settingInfo.userInfo,
       hasMessage: false,
       dataSource: dataSource.cloneWithRows(ListItems),
     }
@@ -115,7 +110,7 @@ class navigationDrawer extends Component {
   }
 
   checkLoginState = async () => {
-    const psnid = await AsyncStorage.getItem('@psnid');
+    const psnid = this.state.psnid
 
     if (!psnid)
       return;
@@ -151,7 +146,7 @@ class navigationDrawer extends Component {
     const { closeDrawer } = this.props;
     closeDrawer();
     await safeLogout(this.state.psnid);
-    this.setState({
+    const backupInfo = {
       psnid: '',
       userInfo: {
         avatar: require('../img/comment_avatar.png'),
@@ -161,7 +156,12 @@ class navigationDrawer extends Component {
         bronze: '铜',
       },
       hasMessage: false
-    });
+    }
+    this.setState(backupInfo);
+    Promise.all([
+      AsyncStorage.setItem('@userInfo', JSON.stringify(backupInfo.userInfo)),
+      AsyncStorage.setItem('@psnid', backupInfo.psnid),
+    ])
     global.toast && global.toast('登出成功', 2000);
   }
 

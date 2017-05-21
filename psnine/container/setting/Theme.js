@@ -46,20 +46,8 @@ class Theme extends Component {
     super(props);
 
     this.state = {
-      tabMode: 'tab'
+      tabMode: this.props.screenProps.modeInfo.settingInfo.tabMode
     }
-  }
-
-  componentDidMount = () => {
-
-  }
-
-  componentWillMount = async () => {
-    const value = await AsyncStorage.getItem('@Theme:tabMode');
-    const tabMode = value === 'drawer' ? 'drawer' : 'tab'
-    this.setState({
-      tabMode
-    })
   }
 
   renderSwitchType = (item, index) => {
@@ -96,6 +84,7 @@ class Theme extends Component {
   }
 
   onValueChange = (key, value) => {
+    const { modeInfo } = this.props.screenProps
     const newState = {};
     newState[key] = value;
     this.setState(newState, () => {
@@ -104,7 +93,7 @@ class Theme extends Component {
           '提示',
           '重启后生效'
         )
-        AsyncStorage.setItem('@Theme:tabMode', value)
+        AsyncStorage.setItem('@Theme:tabMode', value).catch(err => console.log(err))
       }
     });
   };

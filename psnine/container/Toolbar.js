@@ -126,16 +126,8 @@ class Toolbar extends Component {
       modalVisible: false,
       modalOpenVal: new Animated.Value(0),
       topicMarginTop: new Animated.Value(0),
-      tabMode: 'tab'
+      tabMode: this.props.modeInfo.settingInfo.tabMode
     }
-  }
-
-  componentWillMount = async () => {
-    const value = await AsyncStorage.getItem('@Theme:tabMode');
-    const tabMode = value === 'drawer' ? 'drawer' : 'tab'
-    this.setState({
-      tabMode
-    })
   }
 
   _renderDrawerView = () => {

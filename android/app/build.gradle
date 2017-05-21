@@ -97,7 +97,7 @@ def userVer = getNpmVersion()
 def googleVer = getGitVersion()
 
 android {
-    compileSdkVersion 23
+    compileSdkVersion 25
     buildToolsVersion "23.0.1"
 
     defaultConfig {
@@ -157,6 +157,7 @@ dependencies {
     compile project(':ReactAndroid')
     // 矢量图片
     compile project(':react-native-vector-icons')
+    compile project(':lottie-react-native')
 
     // For animated GIF support
     compile 'com.facebook.fresco:animated-base-support:0.14.1'
