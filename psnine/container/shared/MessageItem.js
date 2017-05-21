@@ -38,9 +38,9 @@ export default class ComplexComment extends React.PureComponent {
 
     return (
       <View key={rowData.id} style={{
-        /*borderBottomWidth: StyleSheet.hairlineWidth,
-        borderBottomColor: modeInfo.brighterLevelOne,*/
-        marginVertical: 3.5
+        marginVertical: 3.5,
+        elevation: 1,
+        backgroundColor: modeInfo.backgroundColor
       }}>
         <TouchableNativeFeedback
           onPress={() => onPress(rowData)}
@@ -111,6 +111,6 @@ const styles = StyleSheet.create({
   },
   a: {
     fontWeight: '300',
-    color: idColor, // make links coloured pink
+    color: accentColor, // make links coloured pink
   },
 });

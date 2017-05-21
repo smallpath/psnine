@@ -30,7 +30,7 @@ import {
 
 let screen = Dimensions.get('window');
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = screen;
-export default class ComplexComment extends React.PureComponent {
+export default class extends React.PureComponent {
 
   constructor(props) {
     super(props)
@@ -116,7 +116,7 @@ export default class ComplexComment extends React.PureComponent {
                     { url }
                   ]
                 })}
-                imagePaddingOffset={30 + 50}
+                imagePaddingOffset={30 + 50 + 10}
               />
 
               <View style={{ flex: 1.1, flexDirection: 'row', justifyContent: 'space-between' }}>

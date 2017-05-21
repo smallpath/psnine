@@ -57,12 +57,11 @@ export function transitionConfig(
 
       let index = scene.index;
 
-      // transitionConfig拿不到上一次的过渡属性, 得靠onTransitionStart来hack一下
-      const prev = hack.prevTransitionProps.scenes && hack.prevTransitionProps.scenes[index + 1]
+      let prev = hack.prevTransitionProps.scenes && hack.prevTransitionProps.scenes[index + 1]
 
-      if (scene && scene.isActive && prev && prev.route) {
-        // 退出时, 如果这个界面是Active且之前的界面有shouldSeeBackground属性, 那么定死1以避免白色闪屏
-        if (prev.route.params && prev.route.params.shouldSeeBackground === true) {
+      if (scene && prev && prev.route) {
+        const shouldSet = prev.route.params && prev.route.params.shouldSeeBackground === true
+        if (scene.isActive && shouldSet) {
           return {
             opacity: 1
           }
@@ -72,11 +71,7 @@ export function transitionConfig(
       const params = (navigation.state.routes[navigation.state.index] || {}).params || {}
 
       if (params.shouldSeeBackground === true) {
-        if (scene.index === navigation.state.index) {
-          return {
-            opacity: 1
-          }
-        } else if (scene.index + 1 == navigation.state.index) {
+        if (scene.index + 1 >= navigation.state.index) {
           return {
             opacity: 1
           }
@@ -93,7 +88,7 @@ export function transitionConfig(
       const translateX = 0;
       const translateY = position.interpolate({
         inputRange,
-        outputRange: ([SCREEN_WIDTH, 0, 0, 0]),
+        outputRange: ([SCREEN_WIDTH/2, 0, 0, 0]),
       });
 
       return {

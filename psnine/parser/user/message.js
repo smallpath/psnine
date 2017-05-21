@@ -11,7 +11,7 @@ export default function (html) {
       return $(this).text()
     }))[1]
     const text = $this.text()
-    let content = $this.find('.content').html()
+    let content = $this.find('.content').html().replace(/<a.*?class="font12 r">.*?<\/a>/, '')
     const psnid = $this.find('a.psnnode').text()
     const url = $this.find('a.psnnode').prev().attr('href')
     const matchedComment = url.match(/comment\-(\d+)$/)

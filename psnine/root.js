@@ -43,11 +43,9 @@ class Root extends React.Component {
   constructor(props) {
     super(props);
 
-    // let hour = ~~moment().format('HH');
-
     this.state = {
       text: '',
-      isNightMode: false,//hour >= 22 || hour < 7,
+      isNightMode: false,
       tipBarMarginBottom: new Animated.Value(0),
       progress: new Animated.Value(0),
       isLoadingAsyncStorage: true,
@@ -64,7 +62,7 @@ class Root extends React.Component {
         },
         isNightMode: false
       },
-      loadingText: '\n正在加载配置'
+      loadingText: 'PSNINE\nP9 · 酷玩趣友'
     };
 
     this.dayModeInfo = {
@@ -227,7 +225,7 @@ class Root extends React.Component {
           ref={animation => { this.animation = animation; }}
           style={{
             width: SCREEN_WIDTH,
-            height: SCREEN_HEIGHT - StatusBar.currentHeight * 3,
+            height: SCREEN_HEIGHT - StatusBar.currentHeight * 6,
           }}
           progress={progress}
           source={require('./animations/LottieLogo1.json')}
@@ -235,7 +233,7 @@ class Root extends React.Component {
         <Text numberOfLines={2} style={{
           position: 'absolute',
           left: 0,
-          top: SCREEN_HEIGHT/2,
+          top: SCREEN_HEIGHT / 10 * 1,
           textAlign: 'center',
           textAlignVertical: 'center',
           right: 0,
