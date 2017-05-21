@@ -24,9 +24,9 @@ import majiang from './majiang'
 import shoubing from './shoubing'
 
 const Emotions = [
+  alu,
   majiang,
-  shoubing,
-  alu
+  shoubing
 ]
 
 const viewPagerHeight = 190

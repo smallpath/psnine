@@ -31,6 +31,7 @@ import {
   getBattleAPI
 } from '../../dao'
 import ImageViewer from '../../components/ImageViewer'
+import SimpleComment from '../shared/SimpleComment'
 
 let screen = Dimensions.get('window');
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = screen;
@@ -295,58 +296,21 @@ class CommunityTopic extends Component {
   hasReadMore = false
   renderComment = (commentList) => {
     const { modeInfo } = this.props.screenProps
+    const { navigation } = this.props
     const list = []
     let readMore = null
     for (const rowData of commentList) {
       if (rowData.isGettingMoreComment === false) {
         list.push(
-          <View key={rowData.id} style={{
-            backgroundColor: modeInfo.backgroundColor,
-            borderBottomWidth: StyleSheet.hairlineWidth,
-            borderBottomColor: modeInfo.brighterLevelOne
-          }}>
-            <TouchableNativeFeedback
-              onLongPress={() => {
-                this.onCommentLongPress(rowData)
-              }}
-              useForeground={true}
-              delayPressIn={100}
-              background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
-            >
-              <View style={{ flex: 1, flexDirection: 'row', padding: 12 }}>
-                <Image
-                  source={{ uri: rowData.img }}
-                  style={styles.avatar}
-                />
-
-                <View style={{ marginLeft: 10, flex: 1, flexDirection: 'column' }}>
-                  <HTMLView
-                    value={rowData.content}
-                    modeInfo={modeInfo}
-                    stylesheet={styles}
-                    onImageLongPress={this.handleImageOnclick}
-                    imagePaddingOffset={30 + 50 + 10}
-                    shouldForceInline={false}
-                  />
-
-                  <View style={{ flex: 1.1, flexDirection: 'row', justifyContent: 'space-between' }}>
-                    <Text selectable={false} style={{ flex: -1, color: idColor, textAlign: 'center', textAlignVertical: 'center' }}  onPress={
-                      () => {
-                        this.props.navigation.navigate('Home', {
-                          title: rowData.psnid,
-                          id: rowData.psnid,
-                          URL: `http://psnine.com/psnid/${rowData.psnid}`
-                        })
-                      }
-                    }>{rowData.psnid}</Text>
-                    <Text selectable={false} style={{ flex: -1, color: modeInfo.standardTextColor, textAlign: 'center', textAlignVertical: 'center' }}>{rowData.date}</Text>
-                  </View>
-
-                </View>
-
-              </View>
-            </TouchableNativeFeedback>
-          </View>
+          <SimpleComment key={rowData.id || list.length}  {...{
+            navigation,
+            rowData,
+            modeInfo,
+            onLongPress: () => {
+              this.onCommentLongPress(rowData)
+            },
+            index: list.length
+          }} />
         )
       } else {
         readMore = (

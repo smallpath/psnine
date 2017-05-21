@@ -96,6 +96,7 @@ class CommunityTopic extends Component {
             type: params.type,
             id: params.rowData.id,
             callback: this.preFetch,
+            isOldPage: this.state.data.isOldPage,
             shouldSeeBackground: true
           })
         }
@@ -230,9 +231,10 @@ class CommunityTopic extends Component {
     const { modeInfo } = this.props.screenProps
     const { navigation } = this.props
     const { preFetch } = this
-    return (<ComplexComment {...{
+    return (<ComplexComment key={rowData.id || index} {...{
       navigation,
       modeInfo,
+      onLongPress: () => {},
       preFetch,
       rowData
     }}/>)

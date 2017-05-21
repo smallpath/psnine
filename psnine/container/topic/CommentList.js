@@ -135,7 +135,7 @@ class CommentList extends Component {
     const { modeInfo } = this.props.screenProps
     const { ITEM_HEIGHT } = this
     const { navigation } = this.props
-    return <SimpleComment {...{
+    return <SimpleComment key={rowData.id || index} {...{
       navigation,
       rowData,
       modeInfo

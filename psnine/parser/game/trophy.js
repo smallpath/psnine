@@ -72,10 +72,10 @@ export default function parseThophy(html) {
       commentList.push(info)
     })
   }
-
   return {
     trophyInfo,
     gameInfo,
-    commentList
+    commentList,
+    isOldPage: html.includes('<input type="hidden" name="old" value="yes"')
   }
 }

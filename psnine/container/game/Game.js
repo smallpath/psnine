@@ -297,7 +297,8 @@ export default class GamePage extends Component {
           this.props.navigation.navigate('Trophy', {
             URL: rowData.href,
             title: rowData.title,
-            rowData
+            rowData,
+            type: 'trophy'
           })
         }
       }>

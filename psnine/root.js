@@ -227,7 +227,7 @@ class Root extends React.Component {
           ref={animation => { this.animation = animation; }}
           style={{
             width: SCREEN_WIDTH,
-            height: SCREEN_HEIGHT - StatusBar.currentHeight,
+            height: SCREEN_HEIGHT - StatusBar.currentHeight * 3,
           }}
           progress={progress}
           source={require('./animations/LottieLogo1.json')}

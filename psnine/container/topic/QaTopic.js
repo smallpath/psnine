@@ -29,6 +29,7 @@ import {
   getGameUrl
 } from '../../dao'
 import ImageViewer from '../../components/ImageViewer'
+import ComplexComment from '../shared/ComplexComment'
 
 let screen = Dimensions.get('window');
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = screen;
@@ -252,98 +253,21 @@ class QaTopic extends Component {
     )
   }
 
-  renderSonComment = (list, parentRowData) => {
-    const { modeInfo } = this.props.screenProps
-    const result = list.map((rowData, index) => {
-      return (
-        <View key={rowData.id || index} style={{
-            backgroundColor: modeInfo.brighterLevelOne,
-            borderBottomWidth: StyleSheet.hairlineWidth,
-            borderTopWidth: StyleSheet.hairlineWidth,
-            borderBottomColor: modeInfo.backgroundColor,
-            borderTopColor: modeInfo.backgroundColor,
-            padding: 5,
-        }}>
-          <Text
-            useForeground={true}
-            delayPressIn={100}
-            onPress={() => {
-              this.onCommentLongPress(parentRowData, rowData.psnid)
-            }}
-            background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
-          >
-            <HTMLView
-              value={rowData.text}
-              modeInfo={modeInfo}
-              stylesheet={styles}
-              onImageLongPress={this.handleImageOnclick}
-              imagePaddingOffset={30 + 50 + 10}
-              shouldForceInline={true}
-            />
-
-          </Text>
-        </View>
-      )
-    })
-    return result
-  }
-
   renderComment = (commentList) => {
     const { modeInfo } = this.props.screenProps
+    const { navigation } = this.props
     const list = []
     let readMore = null
     for (const rowData of commentList) {
       list.push(
-        <View key={rowData.id} style={{
-          backgroundColor: modeInfo.backgroundColor,
-          borderBottomWidth: StyleSheet.hairlineWidth,
-          borderBottomColor: modeInfo.brighterLevelOne
-        }}>
-          <TouchableNativeFeedback
-            onLongPress={() => {
-              this.onCommentLongPress(rowData)
-            }}
-            useForeground={true}
-            delayPressIn={100}
-            background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
-          >
-            <View style={{ flex: 1, flexDirection: 'row', padding: 12 }}>
-              <Image
-                source={{ uri: rowData.avatar }}
-                style={styles.avatar}
-              />
-
-              <View style={{ marginLeft: 10, flex: 1, flexDirection: 'column' }}>
-                <HTMLView
-                  value={rowData.text}
-                  modeInfo={modeInfo}
-                  stylesheet={styles}
-                  onImageLongPress={this.handleImageOnclick}
-                  imagePaddingOffset={30 + 50 + 10}
-                  shouldForceInline={true}
-                />
-
-                <View style={{ flex: 1.1, flexDirection: 'row', justifyContent: 'space-between' }}>
-                  <Text selectable={false} style={{ flex: -1, color: idColor, textAlign: 'center', textAlignVertical: 'center' }} onPress={
-                    () => {
-                      this.props.navigation.navigate('Home', {
-                        title: rowData.psnid,
-                        id: rowData.psnid,
-                        URL: `http://psnine.com/psnid/${rowData.psnid}`
-                      })
-                    }
-                  }>{rowData.psnid}</Text>
-                  <Text selectable={false} style={{ flex: -1, color: modeInfo.standardTextColor, textAlign: 'center', textAlignVertical: 'center' }}>{rowData.date}</Text>
-                </View>
-
-                { rowData.commentList.length !== 0 && (<View style={{ backgroundColor: modeInfo.brighterLevelOne}}>
-                  {this.renderSonComment(rowData.commentList, rowData)}
-                </View>)}
-              </View>
-
-            </View>
-          </TouchableNativeFeedback>
-        </View>
+        <ComplexComment key={rowData.id || list.length} {...{
+          navigation,
+          rowData,
+          modeInfo,
+          onLongPress: () => {},
+          preFetch: this.preFetch,
+          index: list.length
+        }} />
       )
     }
     const shouldMarginTop = !this.hasComment
@@ -356,29 +280,6 @@ class QaTopic extends Component {
     )
   }
   isReplyShowing = false
-
-  onCommentLongPress = (rowData, name = '') => {
-    if (this.isReplyShowing === true) return
-    const { params } = this.props.navigation.state
-    const cb = () => {
-      this.props.navigation.navigate('Reply', {
-        type: 'comson',
-        id: rowData.id.replace('comment-', ''),
-        at: name ? name : rowData.psnid,
-        callback: () => {
-          fetch(`http://psnine.com/get/comson?id=${rowData.id.replace('comment-', '')}`).then(() => {
-            this.preFetch()
-          })
-        },
-        shouldSeeBackground: true
-      })
-    }
-    if (this.state.openVal._value === 1) {
-      this._animateToolbar(0, cb)
-    } else if (this.state.openVal._value === 0) {
-      cb()
-    }
-  }
 
   _readMore = (URL) => {
     this.props.navigation.navigate('CommentList', {

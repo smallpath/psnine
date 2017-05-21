@@ -56,7 +56,7 @@ export default class Reply extends Component {
     super(props);
     const { params } = this.props.navigation.state
     const { at = '', shouldShowPoint = false, isOldPage = false } = params
-
+    // console.log(params)
     this.state = {
       icon: false,
       content: at ? `@${at} ` : '',
@@ -257,7 +257,7 @@ export default class Reply extends Component {
     if (type !== 'comson') {
       form.param = params.id
       form.com = ''
-      if (params.type !== 'qa' && params.type !== 'psngame') {
+      if (['qa', 'psngame', 'trophy'].indexOf(params.type) === -1){
         form.old = 'yes'
       }
     } else {

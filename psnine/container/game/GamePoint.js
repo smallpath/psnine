@@ -217,10 +217,11 @@ class CommunityTopic extends Component {
     const { modeInfo } = this.props.screenProps
     const { navigation } = this.props
     const { preFetch } = this
-    return (<ComplexComment {...{
+    return (<ComplexComment key={rowData.id || index} {...{
       navigation,
       modeInfo,
       preFetch,
+      onLongPress: () => {},
       rowData
     }}/>)
   }
@@ -291,11 +292,12 @@ class CommunityTopic extends Component {
             return this.renderComment(item, index)
           }}
           extraData={this.state}
-          windowSize={999}
-          disableVirtualization={false}
+          windowSize={21}
+          disableVirtualization={true}
           viewabilityConfig={{
-            /*minimumViewTime: 3000,*/
+            minimumViewTime: 1,
             viewAreaCoveragePercentThreshold: 0,
+            waitForInteractions: true
           }}
         >
         </FlatList>

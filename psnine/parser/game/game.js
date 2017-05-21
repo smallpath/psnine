@@ -121,6 +121,7 @@ export default function (html) {
         const hasTip = className && className.length !== 0
         const tryTip = $this.find('p a').next().next().text()
         const info = {
+          id: (($this.find('p a').attr('href') || '-1').match(/trophy\/(\d+)/) || [0, -1])[1],
           avatar: $this.find('img').attr('src'),
           title: $this.find('p a').text(),
           href: $this.find('p a').attr('href'),

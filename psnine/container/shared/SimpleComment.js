@@ -19,6 +19,7 @@ import {
 } from 'react-native';
 
 import HTMLView from '../../components/HtmlToView';
+import MyDialog from '../../components/Dialog';
 import { connect } from 'react-redux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { standardColor, nodeColor, idColor, accentColor } from '../../constants/colorConfig';
@@ -31,25 +32,75 @@ let screen = Dimensions.get('window');
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = screen;
 export default class ComplexComment extends React.PureComponent {
 
-  shouldComponentUpdate = (props) => props.modeInfo.isNightMode !== this.props.modeInfo.isNightMode
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      modalVisible: false
+    }
+  }
+
+  shouldComponentUpdate = (props, state) => {
+    if (props.modeInfo.isNightMode !== this.props.modeInfo.isNightMode) return true
+    if (this.state.modalVisible !== state.modalVisible) return true
+    return false
+  }
 
   render() {
-    const { modeInfo, rowData } = this.props
+    const { modeInfo, rowData, index, onLongPress } = this.props
 
     return (
-      <View key={rowData.id} style={{
+      <View key={rowData.id || index} style={{
         borderBottomWidth: StyleSheet.hairlineWidth,
+        backgroundColor: modeInfo.backgroundColor,
         borderBottomColor: modeInfo.brighterLevelOne
       }}>
         <TouchableNativeFeedback
-          onPress={() => {
-
+          onLongPress={() => {
+            onLongPress && this.setState({
+              modalVisible: true
+            })
           }}
           useForeground={true}
           delayPressIn={100}
           background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
         >
           <View style={{ flex: 1, flexDirection: 'row', padding: 12 }}>
+            {
+              this.state.modalVisible && onLongPress && (
+                <MyDialog modeInfo={modeInfo}
+                  modalVisible={this.state.modalVisible}
+                  onDismiss={() => { this.setState({ modalVisible: false }); }}
+                  onRequestClose={() => { this.setState({ modalVisible: false }); }}
+                  renderContent={() => (
+                    <View style={{
+                      justifyContent: 'center',
+                      alignItems: 'flex-start',
+                      backgroundColor: modeInfo.backgroundColor,
+                      position: 'absolute',
+                      left: 30,
+                      right: 30,
+                      paddingVertical: 15,
+                      elevation: 4,
+                      opacity: 1
+                    }} borderRadius={2}>
+                      <TouchableNativeFeedback onPress={() => {
+                          this.setState({
+                            modalVisible: false
+                          }, () => {
+                            requestAnimationFrame(() => {
+                              onLongPress && onLongPress()
+                            })
+                          })
+                        }}>
+                        <View style={{height: 50, paddingVertical: 10, paddingLeft: 20 ,alignSelf: 'stretch', alignContent: 'stretch', justifyContent: 'center'}}>
+                          <Text style={{textAlignVertical: 'center', fontSize: 18}}>回复</Text>
+                        </View>
+                      </TouchableNativeFeedback>
+                    </View>
+                  )} />
+              )
+            }
             <Image
               source={{ uri: rowData.img }}
               style={styles.avatar}

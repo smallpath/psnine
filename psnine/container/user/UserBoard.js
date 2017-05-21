@@ -26,6 +26,7 @@ import { standardColor, nodeColor, idColor } from '../../constants/colorConfig';
 
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { getUserBoardCommentAPI } from '../../dao';
+import ComplexComment from '../shared/ComplexComment'
 
 const ds = new ListView.DataSource({
   rowHasChanged: (row1, row2) => row1.href !== row2.href,
@@ -128,122 +129,23 @@ class UserBoard extends Component {
     })
   }
 
-  renderSonComment = (list, parentRowData) => {
-    const { modeInfo } = this.props.screenProps
-    const result = list.map((rowData, index) => {
-      return (
-        <View key={rowData.id || index} style={{
-            backgroundColor: modeInfo.brighterLevelOne,
-            borderBottomWidth: StyleSheet.hairlineWidth,
-            borderTopWidth: StyleSheet.hairlineWidth,
-            borderBottomColor: modeInfo.backgroundColor,
-            borderTopColor: modeInfo.backgroundColor,
-            padding: 5,
-        }}>
-          <Text
-            useForeground={true}
-            delayPressIn={100}
-            onPress={() => {
-              this.onCommentLongPress(parentRowData, rowData.psnid)
-            }}
-            background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
-          >
-            <HTMLView
-              value={rowData.text}
-              modeInfo={modeInfo}
-              stylesheet={styles}
-              onImageLongPress={this.handleImageOnclick}
-              imagePaddingOffset={30 + 50 + 10}
-              shouldForceInline={true}
-            />
-
-          </Text>
-        </View>
-      )
-    })
-    return result
-  }
-
   hasComment = false
   renderComment = (rowData, index) => {
-    const { modeInfo } = this.props.screenProps
+    const { modeInfo, navigation } = this.props.screenProps
     return (
-      <View key={rowData.id} style={{
-        backgroundColor: modeInfo.backgroundColor,
-        borderBottomWidth: StyleSheet.hairlineWidth,
-        borderBottomColor: modeInfo.brighterLevelOne
-      }}>
-        <TouchableNativeFeedback
-          onLongPress={() => {
-            this.onCommentLongPress(rowData)
-          }}
-          useForeground={true}
-          delayPressIn={100}
-          background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
-        >
-          <View style={{ flex: 1, flexDirection: 'row', padding: 12 }}>
-            <Image
-              source={{ uri: rowData.avatar }}
-              style={styles.avatar}
-            />
-
-            <View style={{ marginLeft: 10, flex: 1, flexDirection: 'column' }}>
-              <HTMLView
-                value={rowData.text}
-                modeInfo={modeInfo}
-                stylesheet={styles}
-                onImageLongPress={this.handleImageOnclick}
-                imagePaddingOffset={30 + 50 + 10}
-                shouldForceInline={true}
-              />
-
-              <View style={{ flex: 1.1, flexDirection: 'row', justifyContent: 'space-between' }}>
-                <Text selectable={false} style={{ flex: -1, color: idColor, textAlign: 'center', textAlignVertical: 'center' }} onPress={
-                  () => {
-                    this.props.navigation.navigate('Home', {
-                      title: rowData.psnid,
-                      id: rowData.psnid,
-                      URL: `http://psnine.com/psnid/${rowData.psnid}`
-                    })
-                  }
-                }>{rowData.psnid}</Text>
-                <Text selectable={false} style={{ flex: -1, color: modeInfo.standardTextColor, textAlign: 'center', textAlignVertical: 'center' }}>{rowData.date}</Text>
-              </View>
-
-              { rowData.commentList.length !== 0 && (<View style={{ backgroundColor: modeInfo.brighterLevelOne}}>
-                {this.renderSonComment(rowData.commentList, rowData)}
-              </View>)}
-            </View>
-
-          </View>
-        </TouchableNativeFeedback>
-      </View>
+      <ComplexComment key={rowData.id || index} {...{
+        navigation,
+        rowData,
+        modeInfo,
+        onLongPress: () => {},
+        preFetch: this.preFetch,
+        index
+      }} />
     )
   }
 
 
   isReplyShowing = false
-
-  onCommentLongPress = (rowData, name = '') => {
-    if (this.isReplyShowing === true) return
-    const { params } = this.props.navigation.state
-    const cb = () => {
-      this.isReplyShowing = true
-      this.props.screenProps.navigation.navigate('Reply', {
-        type: 'comson',
-        id: rowData.id.replace('comment-', ''),
-        at: name ? name : rowData.psnid,
-        callback: () => {
-          fetch(`http://psnine.com/get/comson?id=${rowData.id.replace('comment-', '')}`).then(() => {
-            this.isReplyShowing = false
-            this.preFetch()
-          })
-        },
-        shouldSeeBackground: true
-      })
-    }
-    cb()
-  }
 
   render() {
     const { modeInfo } = this.props.screenProps

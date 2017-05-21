@@ -20,6 +20,7 @@ import {
 
 import HTMLView from '../../components/HtmlToView';
 import { connect } from 'react-redux';
+import MyDialog from '../../components/Dialog';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { standardColor, nodeColor, idColor, accentColor } from '../../constants/colorConfig';
 
@@ -31,10 +32,22 @@ let screen = Dimensions.get('window');
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = screen;
 export default class ComplexComment extends React.PureComponent {
 
-  shouldComponentUpdate = (props) => props.modeInfo.isNightMode !== this.props.modeInfo.isNightMode
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      modalVisible: false
+    }
+  }
+
+  shouldComponentUpdate = (props, state) => {
+    if (props.modeInfo.isNightMode !== this.props.modeInfo.isNightMode) return true
+    if (this.state.modalVisible !== state.modalVisible) return true
+    return false
+  }
 
   renderSonComment = (list, parentRowData) => {
-    const { modeInfo } = this.props
+    const { modeInfo, onLongPress } = this.props
     const result = list.map((rowData, index) => {
       return (
         <View key={rowData.id || index} style={{
@@ -45,11 +58,48 @@ export default class ComplexComment extends React.PureComponent {
             borderTopColor: modeInfo.backgroundColor,
             padding: 5,
         }}>
+          {
+            this.state.modalVisible && onLongPress && (
+              <MyDialog modeInfo={modeInfo}
+                modalVisible={this.state.modalVisible}
+                onDismiss={() => { this.setState({ modalVisible: false }); }}
+                onRequestClose={() => { this.setState({ modalVisible: false }); }}
+                renderContent={() => (
+                  <View style={{
+                    justifyContent: 'center',
+                    alignItems: 'flex-start',
+                    backgroundColor: modeInfo.backgroundColor,
+                    position: 'absolute',
+                    left: 30,
+                    right: 30,
+                    paddingVertical: 15,
+                    elevation: 4,
+                    opacity: 1
+                  }} borderRadius={2}>
+                    <TouchableNativeFeedback onPress={() => {
+                        this.setState({
+                          modalVisible: false
+                        }, () => {
+                          requestAnimationFrame(() => {
+                            this.onCommentLongPress(parentRowData, rowData.psnid)
+                          })
+                        })
+                      }}>
+                      <View style={{height: 50, paddingVertical: 10, paddingLeft: 20 ,alignSelf: 'stretch', alignContent: 'stretch', justifyContent: 'center'}}>
+                        <Text style={{textAlignVertical: 'center', fontSize: 18}}>回复</Text>
+                      </View>
+                    </TouchableNativeFeedback>
+                  </View>
+                )} />
+            )
+          }
           <Text
             useForeground={true}
             delayPressIn={100}
-            onPress={() => {
-              this.onCommentLongPress(parentRowData, rowData.psnid)
+            onLongPress={() => {
+              this.setState({
+                modalVisible: true
+              })
             }}
             background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
           >
@@ -74,6 +124,7 @@ export default class ComplexComment extends React.PureComponent {
     // if (this.isReplyShowing === true) return
     const { params } = this.props.navigation.state
     const { preFetch } = this.props
+
     const cb = () => {
       this.props.navigation.navigate('Reply', {
         type: 'comson',
@@ -81,7 +132,7 @@ export default class ComplexComment extends React.PureComponent {
         at: name ? name : rowData.psnid,
         callback: () => {
           fetch(`http://psnine.com/get/comson?id=${rowData.id.replace('comment-', '')}`).then(() => {
-            preFetch()
+            preFetch && preFetch()
           })
         },
         shouldSeeBackground: true
@@ -91,7 +142,7 @@ export default class ComplexComment extends React.PureComponent {
   }
 
   render() {
-    const { modeInfo, rowData } = this.props
+    const { modeInfo, rowData, onLongPress, index } = this.props
 
     return (
       <View key={rowData.id || index} style={{
@@ -101,13 +152,51 @@ export default class ComplexComment extends React.PureComponent {
       }}>
         <TouchableNativeFeedback
           onLongPress={() => {
-            this.onCommentLongPress(rowData)
+            // this.onCommentLongPress(rowData)
+            this.setState({
+              modalVisible: true
+            })
           }}
           useForeground={true}
           delayPressIn={100}
           background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
         >
           <View style={{ flex: 1, flexDirection: 'row', padding: 12 }}>
+            {
+              this.state.modalVisible && onLongPress && (
+                <MyDialog modeInfo={modeInfo}
+                  modalVisible={this.state.modalVisible}
+                  onDismiss={() => { this.setState({ modalVisible: false }); }}
+                  onRequestClose={() => { this.setState({ modalVisible: false }); }}
+                  renderContent={() => (
+                    <View style={{
+                      justifyContent: 'center',
+                      alignItems: 'flex-start',
+                      backgroundColor: modeInfo.backgroundColor,
+                      position: 'absolute',
+                      left: 30,
+                      right: 30,
+                      paddingVertical: 15,
+                      elevation: 4,
+                      opacity: 1
+                    }} borderRadius={2}>
+                      <TouchableNativeFeedback onPress={() => {
+                          this.setState({
+                            modalVisible: false
+                          }, () => {
+                            requestAnimationFrame(() => {
+                              this.onCommentLongPress(rowData)
+                            })
+                          })
+                        }}>
+                        <View style={{height: 50, paddingVertical: 10, paddingLeft: 20 ,alignSelf: 'stretch', alignContent: 'stretch', justifyContent: 'center'}}>
+                          <Text style={{textAlignVertical: 'center', fontSize: 18}}>回复</Text>
+                        </View>
+                      </TouchableNativeFeedback>
+                    </View>
+                  )} />
+              )
+            }
             <Image
               source={{ uri: rowData.avatar }}
               style={styles.avatar}
