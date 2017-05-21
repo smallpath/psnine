@@ -1,5 +1,7 @@
+<img src="./android/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png">
+
 # Psnine
- [Psnine.com](http://psnine.com/)第三方安卓客户端，支持安卓5.0及以上系统, 基于React Native
+ [Psnine](http://psnine.com/)第三方安卓客户端, 支持安卓5.0及以上系统, 基于React Native
 
 # Features
 - 支持社区、问答、游戏、排行、约战和基因六大类别的显示、帖子查看、回复
