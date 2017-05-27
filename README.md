@@ -1,7 +1,7 @@
 <img src="./android/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png">
 
 # Psnine
-[Psnine](http://psnine.com/)第三方安卓客户端, 支持安卓5.0及以上系统, 基于React Native
+Psnine第三方安卓客户端, 基于React Native, 支持安卓5.0及以上系统 
 
 # Features
 - 支持社区、问答、游戏、排行、约战和基因六大类别的显示、帖子查看、回复
@@ -12,6 +12,11 @@
 
 # Download
 > [https://fir.im/mf24](https://fir.im/mf24)
+
+# Todo
+- [ ] 圈子
+- [ ] Store
+- [ ] 闲游
 
 # Changelog
 请查看[Release页面](https://github.com/smallpath/psnine/releases)
