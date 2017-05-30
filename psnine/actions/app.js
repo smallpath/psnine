@@ -22,6 +22,13 @@ export function changeGeneType(argument) {
   }
 }
 
+export function changeCircleType(argument) {
+  return {
+    type: ActionTypes.CHANGE_CIRCLE_TYPE,
+    value: argument
+  }
+}
+
 export function changeScrollType(argument) {
   return {
     type: ActionTypes.CHANGE_SCROLL_TYPE,

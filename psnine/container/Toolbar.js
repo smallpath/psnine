@@ -32,7 +32,7 @@ import { connect } from 'react-redux';
 
 import NewTopic from './new/NewTopic';
 
-import { changeSegmentIndex, changeCommunityType, changeGeneType, changeScrollType } from '../actions/app';
+import { changeSegmentIndex, changeCommunityType, changeGeneType, changeCircleType } from '../actions/app';
 
 import { standardColor, accentColor } from '../constants/colorConfig';
 
@@ -91,7 +91,12 @@ let geneActions = [
 ];
 
 let circleActions = [
-  searchAction
+  searchAction,
+  { title: '全部', value: 'all', show: 'never' },
+  { title: '图文类', value: 'photo', show: 'never' },
+  { title: '音乐类', value: 'music', show: 'never' },
+  { title: '影视类', value: 'movie', show: 'never' },
+  { title: '视频类', value: 'video', show: 'never' },
 ]
 
 let storeActions = [
@@ -147,6 +152,7 @@ class Toolbar extends Component {
       <RightDrawer onNavigationStateChange={null} screenProps={{
         communityType: this.props.app.communityType,
         geneType: this.props.app.geneType,
+        circleType: this.props.app.circleType,
         navigation: this.props.navigation,
         toolbarDispatch: this.props.dispatch,
         segmentedIndex: this.props.app.segmentedIndex,
@@ -170,6 +176,7 @@ class Toolbar extends Component {
         screenProps={{
           communityType: this.props.app.communityType,
           geneType: this.props.app.geneType,
+          circleType: this.props.app.circleType,
           navigation: this.props.navigation,
           toolbarDispatch: this.props.dispatch,
           segmentedIndex: this.props.app.segmentedIndex,
@@ -210,10 +217,17 @@ class Toolbar extends Component {
       } else {
         this._onSearchClicked()
       }
-    } else if (segmentedIndex == 5) {
+    } else if (segmentedIndex === 5) {
       if (index !== 0) {
         let type = toolbarActions[segmentedIndex][index].value;
         dispatch(changeGeneType(type));
+      } else {
+        this._onSearchClicked()
+      }
+    } else if (segmentedIndex === 6) {  
+      if (index !== 0) {
+        let type = toolbarActions[segmentedIndex][index].value;
+        dispatch(changeCircleType(type));
       } else {
         this._onSearchClicked()
       }

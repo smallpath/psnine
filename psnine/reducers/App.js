@@ -4,6 +4,7 @@ const initialState = {
   segmentedIndex: 0,
   communityType: '',
   geneType: '',
+  circleType: 'all',
   isScrolling: false
 }
 
@@ -25,9 +26,9 @@ function reducer(state = initialState, action) {
         geneType: action.value,
       });
       return newState;
-    case ActionTypes.CHANGE_SCROLL_TYPE:
+    case ActionTypes.CHANGE_CIRCLE_TYPE:
       newState = Object.assign({}, state, {
-        isScrolling: action.value,
+        circleType: action.value,
       });
       return newState;
     default:
