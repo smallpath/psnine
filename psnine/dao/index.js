@@ -23,11 +23,12 @@ import userBoardParser from '../parser/user/comment'
 import gamePointParser from '../parser/game/gamePoint'
 import storeParser from '../parser/store'
 import tradeParser from '../parser/trade'
+import tradeTopicParser from '../parser/trade/trade'
 
 
 const safeFetch = function(reqUrl) {
   return new Promise((resolve, reject) => {
-    let timeout = setTimeout(() => reject('request time out'), 20000);
+    let timeout = setTimeout(() => reject('请求超时::dao.js::line#31'), 20000);
     // console.log(reqUrl)
     fetch(reqUrl).then((response) => {
       clearTimeout(timeout);
@@ -68,6 +69,8 @@ export const getFavoriteAPI = uri => safeFetch(uri).then(res => favoriteParser(r
 export const getQaTopicAPI = uri => safeFetch(uri).then(res => qaTopicParser(res))
 
 export const getMyGameAPI = uri => safeFetch(uri).then(res => myGameParser(res, uri.split('/').pop()))
+
+export const getTradeTopicAPI = uri => safeFetch(uri).then(res => tradeTopicParser(res, uri.split('/').pop()))
 
 export const getGameTopicAPI = uri => safeFetch(uri).then(res => gameTopicParser(res, uri.split('/').pop()))
 
