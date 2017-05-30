@@ -133,6 +133,7 @@ export default class RightDrawerContainer extends Component {
     if (modeInfo.isNightMode !== this.props.screenProps.modeInfo.isNightMode) return true
     if (geneType !== this.props.screenProps.geneType) return true
     if (communityType !== this.props.screenProps.communityType) return true
+    if (circleType !== this.props.screenProps.circleType) return true
     return false
   }
 

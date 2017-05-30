@@ -100,7 +100,7 @@ const Tabs = TabNavigator({
     screen: Trade,
   }
 }, {
-  initialRouteName: 'Circle',
+  initialRouteName: 'Store',
   tabBarComponent: props => {
     const { modeInfo } = props.screenProps
     const titleTextColor = modeInfo.isNightMode ? '#000' : '#fff'

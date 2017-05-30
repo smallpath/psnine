@@ -7,6 +7,7 @@ import qa from './Qa';
 import game from './Game';
 import rank from './Rank';
 import circle from './Circle';
+import store from './Store';
 
 const rootReducer = combineReducers({
   app,
@@ -16,7 +17,8 @@ const rootReducer = combineReducers({
   qa,
   game,
   rank,
-  circle
+  circle,
+  store
 });
 
 export default rootReducer;

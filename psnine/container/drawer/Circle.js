@@ -44,7 +44,6 @@ class Circle extends Component {
   }
 
   componentWillReceiveProps = (nextProps) => {
-    console.log(this.props.screenProps.circleType, nextProps.screenProps.circleType)
     if (this.props.screenProps.circleType != nextProps.screenProps.circleType) {
       this.props.screenProps.circleType = nextProps.screenProps.circleType;
       this._onRefresh(nextProps.screenProps.circleType);
