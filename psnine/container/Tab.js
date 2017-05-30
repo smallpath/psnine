@@ -10,6 +10,10 @@ import {
   Button
 } from 'react-native';
 
+let screen = Dimensions.get('window');
+
+const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = screen;
+
 import {
   accentColor,
   titleTextColor,
@@ -25,6 +29,9 @@ import Game from './drawer/Game';
 import Battle from './drawer/Battle';
 import Gene from './drawer/Gene';
 import Rank from './drawer/Rank';
+import Circle from './drawer/Circle';
+import Store from './drawer/Store';
+import Trade from './drawer/Trade';
 
 import {
   DrawerNavigator,
@@ -81,32 +88,54 @@ const Tabs = TabNavigator({
   },
   Gene: {
     screen: Gene,
+  },
+  Circle: {
+    screen: Circle
+  },
+  Store: {
+    screen: Store,
+  },
+  Trade: {
+    screen: Trade,
   }
 }, {
   tabBarComponent: props => {
     const { modeInfo } = props.screenProps
     const titleTextColor = modeInfo.isNightMode ? '#000' : '#fff'
     return (
-      <DefaultTabBar
-        {...props}
-        activeTintColor={titleTextColor}
-        inactiveTintColor={titleTextColor}
-        indicatorStyle={{
-          backgroundColor: titleTextColor,
-        }}
-        scrollEnabled={false}
-        tabStyle={{
-          height: 40,
-        }}
-        style={{
-          elevation: 4,
-          height: 40,
-          backgroundColor: modeInfo.standardColor
-        }}
-      />
+        <DefaultTabBar
+          {...props}
+          activeTintColor={titleTextColor}
+          inactiveTintColor={titleTextColor}
+          indicatorStyle={{
+            backgroundColor: titleTextColor,
+          }}
+          style={{
+            ...props.style,
+            backgroundColor: modeInfo.standardColor
+          }}
+        />
     )
   },
   lazy: true,
   animationEnabled: false,
-  backBehavior: 'none'
+  scrollEnabled: true,
+  backBehavior: 'none',
+  tabBarOptions: {
+    activeTintColor: '#fff',
+    inactiveTintColor: '#fff',
+    indicatorStyle: {
+      backgroundColor: '#fff',
+    },
+    scrollEnabled: true,
+    animationEnabled: false,
+    tabStyle: {
+      height: 40,
+      width: SCREEN_WIDTH / 5.5
+    },
+    style: {
+      elevation: 4,
+      height: 40
+    }
+  }
 });

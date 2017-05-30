@@ -392,6 +392,7 @@ class navigationDrawer extends Component {
           ref="themeslistview"
           dataSource={this.state.psnid !== '' ? this.state.dataSource : this.state.dataSource.cloneWithRows(ListItems.slice(2))}
           renderRow={this.renderRow}
+          key={this.props.modeInfo.isNightMode ? 'night' : 'day'}
           keyboardDismissMode="on-drag"
           keyboardShouldPersistTaps="always"
           renderHeader={this.renderHeader}

@@ -17,6 +17,9 @@ import Game from './drawer/Game';
 import Battle from './drawer/Battle';
 import Gene from './drawer/Gene';
 import Rank from './drawer/Rank';
+import Circle from './drawer/Circle';
+import Store from './drawer/Store';
+import Trade from './drawer/Trade';
 
 import {
   DrawerNavigator,
@@ -45,6 +48,15 @@ const RightDrawer = DrawerNavigator({
   },
   Gene: {
     screen: Gene,
+  },
+  Circle: {
+    screen: Circle
+  },
+  Store: {
+    screen: Store,
+  },
+  Trade: {
+    screen: Trade,
   }
 }, {
   initialRouteName: 'Community',

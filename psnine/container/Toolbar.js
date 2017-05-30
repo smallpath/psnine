@@ -90,7 +90,19 @@ let geneActions = [
   { title: '视频类', value: 'video', show: 'never' },
 ];
 
-let toolbarActions = [communityActions, qaActions, gameActions, rankActions, battleActions, geneActions]
+let circleActions = [
+  searchAction
+]
+
+let storeActions = [
+  searchAction
+]
+
+let tradeActions = [
+  searchAction
+]
+
+let toolbarActions = [communityActions, qaActions, gameActions, rankActions, battleActions, geneActions, circleActions, storeActions, tradeActions]
 
 let titlesArr = ["社区", "问答", "游戏", "约战", "机因"];
 
@@ -587,7 +599,7 @@ class Toolbar extends Component {
         <Icon.ToolbarAndroid
           navIconName="md-menu"
           title={title}
-          style={[styles.toolbar, { backgroundColor: modeInfo.standardColor, elevation: 0 }]}
+          style={[styles.toolbar, { backgroundColor: modeInfo.standardColor, elevation: this.state.tabMode === 'tab' ? 0 : 4 }]}
           titleColor={modeInfo.isNightMode ? '#000' : '#fff'}
           overflowIconName="md-more"
           iconColor={modeInfo.isNightMode ? '#000' : '#fff'}
