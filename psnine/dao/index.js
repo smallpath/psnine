@@ -21,6 +21,7 @@ import favoriteParser from '../parser/user/favorite'
 import qaTopicParser from '../parser/qa/qa'
 import userBoardParser from '../parser/user/comment'
 import gamePointParser from '../parser/game/gamePoint'
+import storeParser from '../parser/store'
 
 
 const safeFetch = function(reqUrl) {
@@ -124,6 +125,8 @@ export const getUserUrl = id => `${webHost}/psnid/${id}`
 export const getRanksAPI = (page, sort, server, cheat, title = '') => `${webHost}/psnid?page=${page}&ob=${sort}&server=${server}&cheat=${cheat}${title ? `&title=${title}` : '' }`
 
 export const getGamesAPI = (page, sort, pf, dlc, title) => `${webHost}/psngame?page=${page}&ob=${sort}&pf=${pf}&dlc=${dlc}${title ? `&title=${title}` : '' }`
+
+export const getstoreAPI = (page, server, ob, pf, plus, title) => `${webHost}/store?page=${page}&ob=${ob}&pf=${pf}&plus=${plus}${title ? `&title=${title}` : '' }`
 
 export const getGamePointURL = id => `${webHost}/psngame/${id}/comment`
 
