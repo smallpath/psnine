@@ -8,7 +8,7 @@ export function getRankList(page, {
   title = ''
 }) {
   return dispatch => {
-    return fetchRanks(page, sort, server, cheat, title)
+    return fetchRanks({ page, sort, server, cheat, title })
       .then(response => {
         dispatch(gotRankList(response.list, page, response.totalPage));
       }).catch(err => {

@@ -22,6 +22,7 @@ import qaTopicParser from '../parser/qa/qa'
 import userBoardParser from '../parser/user/comment'
 import gamePointParser from '../parser/game/gamePoint'
 import storeParser from '../parser/store'
+import tradeParser from '../parser/trade'
 
 
 const safeFetch = function(reqUrl) {
@@ -44,13 +45,13 @@ const host = `http://120.55.124.66`;
 
 const webHost = `http://psnine.com`;
 
-const getTopicsAPI = (page, type, title) => !type ? `${webHost}/topic?page=${page}&node=${type}${title ? `&title=${title}` : '' }` : `${webHost}/node/${type}?page=${page}${title ? `&title=${title}` : '' }`;
+const getTopicsAPI = ({ page, type, title }) => !type ? `${webHost}/topic?page=${page}&node=${type}${title ? `&title=${title}` : '' }` : `${webHost}/node/${type}?page=${page}${title ? `&title=${title}` : '' }`;
 
-const getGenesAPI = (page, type, title) => `${webHost}/gene?page=${page}&type=${type}${title ? `&title=${title}` : '' }`;
+const getGenesAPI = ({ page, type, title }) => `${webHost}/gene?page=${page}&type=${type}${title ? `&title=${title}` : '' }`;
 
-export const fetchTopics = (page = 1,type = '', title) => safeFetch(getTopicsAPI(page, type, title)).then(res => topicParser(res));
+export const fetchTopics = (...args) => safeFetch(getTopicsAPI(...args)).then(res => topicParser(res));
 
-export const fetchGenes = (page = 1, type = 'all', title) => safeFetch(getGenesAPI(page, type, title)).then(res => geneParser(res));
+export const fetchGenes = (...args) => safeFetch(getGenesAPI(...args)).then(res => geneParser(res));
 
 export const getTopicAPI = uri => safeFetch(uri).then(res => topicApiParser(res))
 
@@ -116,17 +117,23 @@ export const fetchQuestion = (page = 1, type = 'all', sort = 'obdate', title) =>
 
 export const getQAUrl = id => `${webHost}/qa/${id}`
 
-export const fetchGames = (page = 1, sort = 'newest', pf = 'all', dlc = 'all', title) => safeFetch(getGamesAPI(page, sort, pf, dlc, title)).then(res => gamesParser(res));
+export const fetchGames = (...args) => safeFetch(getGamesAPI(...args)).then(res => gamesParser(res));
 
-export const fetchRanks = (page = 1, sort = 'point', server = 'hk', cheat = '0', title) => safeFetch(getRanksAPI(page, sort, server, cheat, title)).then(res => ranksParser(res));
+export const fetchRanks = (...args) => safeFetch(getRanksAPI(...args)).then(res => ranksParser(res));
 
 export const getUserUrl = id => `${webHost}/psnid/${id}`
 
-export const getRanksAPI = (page, sort, server, cheat, title = '') => `${webHost}/psnid?page=${page}&ob=${sort}&server=${server}&cheat=${cheat}${title ? `&title=${title}` : '' }`
+export const getRanksAPI = ({ page = 1, sort = 'point', server = 'hk', cheat = '0', title }) => `${webHost}/psnid?page=${page}&ob=${sort}&server=${server}&cheat=${cheat}${title ? `&title=${title}` : '' }`
 
-export const getGamesAPI = (page, sort, pf, dlc, title) => `${webHost}/psngame?page=${page}&ob=${sort}&pf=${pf}&dlc=${dlc}${title ? `&title=${title}` : '' }`
+export const getGamesAPI = ({ page = 1, sort = 'newest', pf = 'all', dlc = 'all', title }) => `${webHost}/psngame?page=${page}&ob=${sort}&pf=${pf}&dlc=${dlc}${title ? `&title=${title}` : '' }`
 
-export const getstoreAPI = (page, server, ob, pf, plus, title) => `${webHost}/store?page=${page}&ob=${ob}&pf=${pf}&plus=${plus}${title ? `&title=${title}` : '' }`
+export const getStoreAPI = ({ page, server, ob, pf, plus, title }) => `${webHost}/store?page=${page}&ob=${ob}&pf=${pf}&plus=${plus}${title ? `&title=${title}` : '' }`
+
+export const fetchStores = (...args) => safeFetch(getStoreAPI(...args)).then(res => storeParser(res));
+
+export const getTradeAPI = (page, category, type, pf, lang, province, ob, title) => `${webHost}/store?page=${page}&category=${category}&type=${type}&pf=${pf}&lang=${lang}&province=${province}&ob=${ob}${title ? `&title=${title}` : '' }`
+
+export const fetchTrades = (...args) => safeFetch(getTradeAPI(...args)).then(res => tradeParser(res));
 
 export const getGamePointURL = id => `${webHost}/psngame/${id}/comment`
 

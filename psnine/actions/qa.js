@@ -9,7 +9,7 @@ export function getQAList(page, {
   title
 }) {
   return dispatch => {
-    return fetchQuestion(page, type, sort, title)
+    return fetchQuestion({ page, type, sort, title })
       .then(response => {
         dispatch(gotQAList(response, page, type));
       }).catch(err => {

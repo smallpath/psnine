@@ -8,7 +8,7 @@ export function getTopicList(page = 1, {
   title = ''
 }) {
   return dispatch => {
-    return fetchTopics(page, type, title)
+    return fetchTopics({ page, type, title })
       .then(response => {
         dispatch(gotTopicList(response, page, type));
       }).catch(err => {

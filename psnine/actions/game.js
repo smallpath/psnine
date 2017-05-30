@@ -8,7 +8,7 @@ export function getGameList(page, {
   title = ''
 }) {
   return dispatch => {
-    return fetchGames(page, sort, pf, dlc, title)
+    return fetchGames({ page, sort, pf, dlc, title })
       .then(response => {
         dispatch(gotGameList(response, page));
       }).catch(err => {

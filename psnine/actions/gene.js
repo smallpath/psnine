@@ -9,7 +9,7 @@ export function getGeneList(page = 1, {
 }) {
   return dispatch => {
     // console.log(page, type, title)
-    return fetchGenes(page, type, title)
+    return fetchGenes({ page, type, title })
       .then(response => {
         dispatch(gotGeneList(response, page, type));
       }).catch(err => {
