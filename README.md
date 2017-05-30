@@ -15,14 +15,26 @@ Psnine第三方安卓客户端, 基于React Native, 支持安卓5.0及以上系�
 
 # Todo
 - [ ] 圈子
+  - [x] 圈子列表
+  - [ ] 圈子详情
+  - [ ] 圈子排行榜
+  - [ ] 新建基因
 - [ ] Store
+  - [x] Store列表
+  - [ ] Store详情
 - [ ] 闲游
+  - [x] 闲游列表
+  - [ ] 闲游主题
+  - [ ] 闲游回复
+- [ ] 个人
+  - [ ] 我的圈子
+
 
 # Changelog
 请查看[Release页面](https://github.com/smallpath/psnine/releases)
 
 # Statement
-该项目仅供交流, 如果该项目侵犯了Psnine版权, 本人会及时删除此页面与整个项目。
+该项目仅供交流, 并已取得Psnine官方第三方应用版权授权。
 
 # Contribution
 如果发现了漏洞或者需要新功能, 请在本仓库新建issue, 也可联系邮箱`smallpath2013@gmail.com`
