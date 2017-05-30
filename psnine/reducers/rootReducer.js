@@ -8,6 +8,7 @@ import game from './Game';
 import rank from './Rank';
 import circle from './Circle';
 import store from './Store';
+import trade from './Trade';
 
 const rootReducer = combineReducers({
   app,
@@ -18,7 +19,8 @@ const rootReducer = combineReducers({
   game,
   rank,
   circle,
-  store
+  store,
+  trade
 });
 
 export default rootReducer;

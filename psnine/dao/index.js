@@ -138,7 +138,7 @@ export const getStoreAPI = ({ page, server, ob, pf, plus, title }) => `${webHost
 
 export const fetchStores = (...args) => safeFetch(getStoreAPI(...args)).then(res => storeParser(res));
 
-export const getTradeAPI = (page, category, type, pf, lang, province, ob, title) => `${webHost}/store?page=${page}&category=${category}&type=${type}&pf=${pf}&lang=${lang}&province=${province}&ob=${ob}${title ? `&title=${title}` : '' }`
+export const getTradeAPI = ({ page, category, type, pf, lang, province, ob, title }) => `${webHost}/trade?page=${page}&category=${category}&type=${type}&pf=${pf}&lang=${lang}&province=${province}&ob=${ob}${title ? `&title=${title}` : '' }`
 
 export const fetchTrades = (...args) => safeFetch(getTradeAPI(...args)).then(res => tradeParser(res));
 

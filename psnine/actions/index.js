@@ -8,6 +8,7 @@ import rank from './rank';
 import gene from './gene';
 import circle from './circle';
 import store from './store';
+import trade from './trade';
 
 let actions = {};
 
@@ -20,5 +21,6 @@ Object.assign(actions, game)
 Object.assign(actions, gene)
 Object.assign(actions, circle)
 Object.assign(actions, store)
+Object.assign(actions, trade)
 
 module.exports = actions;

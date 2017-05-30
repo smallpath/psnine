@@ -50,7 +50,7 @@ class StoreItem extends React.PureComponent {
       <View style={{
         marginVertical: 3.5,
         backgroundColor: modeInfo.backgroundColor,
-        elevation: 2,
+        elevation: 1,
         height: ITEM_HEIGHT - 7,
         justifyContent: 'center', alignItems: 'center'
       }}>

@@ -122,7 +122,7 @@ class Root extends React.Component {
   loadSetting = () => {
     this.state.progress.setValue(0)
     this.setState({
-      isLoadingAsyncStorage: false
+      isLoadingAsyncStorage: true
     })
     const settingInfo = {}
     Promise.all([
@@ -137,24 +137,24 @@ class Root extends React.Component {
         userInfo: JSON.parse(result[2]) || this.state.settingInfo.userInfo,
         isNightMode: JSON.parse(result[3]) || this.state.settingInfo.isNightMode
       })
-      this.setState({
-        isLoadingAsyncStorage: false,
-        settingInfo,
-        isNightMode: settingInfo.isNightMode
-      })
-    })
-    // Animated.timing(this.state.progress, {
-    //   toValue: 0.65,
-    //   // ease: Easing.in(Easing.ease(1, 0, 1, 1)), 
-    //   duration: 1500
-    // }).start()
-    // setTimeout(() => {
       // this.setState({
       //   isLoadingAsyncStorage: false,
       //   settingInfo,
       //   isNightMode: settingInfo.isNightMode
       // })
-    // }, 1300)
+    })
+    Animated.timing(this.state.progress, {
+      toValue: 0.65,
+      // ease: Easing.in(Easing.ease(1, 0, 1, 1)), 
+      duration: 1500
+    }).start()
+    setTimeout(() => {
+      this.setState({
+        isLoadingAsyncStorage: false,
+        settingInfo,
+        isNightMode: settingInfo.isNightMode
+      })
+    }, 1300)
   }
 
   componentDidMount() {
