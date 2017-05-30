@@ -24,6 +24,7 @@ import gamePointParser from '../parser/game/gamePoint'
 import storeParser from '../parser/store'
 import tradeParser from '../parser/trade'
 import tradeTopicParser from '../parser/trade/trade'
+import circleParser from '../parser/circle'
 
 
 const safeFetch = function(reqUrl) {
@@ -137,6 +138,10 @@ export const fetchStores = (...args) => safeFetch(getStoreAPI(...args)).then(res
 export const getTradeAPI = (page, category, type, pf, lang, province, ob, title) => `${webHost}/store?page=${page}&category=${category}&type=${type}&pf=${pf}&lang=${lang}&province=${province}&ob=${ob}${title ? `&title=${title}` : '' }`
 
 export const fetchTrades = (...args) => safeFetch(getTradeAPI(...args)).then(res => tradeParser(res));
+
+export const fetchCircles = (...args) => safeFetch(getCirlclesAPI(...args)).then(res => circleParser(res));
+
+export const getCirlclesAPI = ({ page, title, type }) => `${webHost}/group?page=${page}&type=${type}${title ? `&title=${title}` : '' }`
 
 export const getGamePointURL = id => `${webHost}/psngame/${id}/comment`
 
