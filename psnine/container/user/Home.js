@@ -306,7 +306,10 @@ export default class Home extends Component {
           this.setState(obj)
         },
         profileToolbar: this.state.data.psnButtonInfo.reverse().map(item => {
-          return iconMapper[item.text] ? { title: item.text, iconName: iconMapper[item.text], show: 'always' } : undefined
+          const result = { title: item.text, iconName: iconMapper[item.text], show: 'always' }
+          if (!iconMapper[item.text]) delete result.iconName
+          if (item.text.includes('冷却') || iconMapper[item.text]) return result
+          return undefined
         }).filter(item => item),
         psnid: params.title,
         gameTable: this.state.data.gameTable,
