@@ -141,8 +141,8 @@ export default function htmlToElement(rawHtml, opts, done) {
               styleObj.fontSize = 12;
               break;
             case 'mark':
-              styleObj.backgroundColor = '#333'
-              styleObj.color = '#333'
+              styleObj.backgroundColor = opts.modeInfo.reverseModeInfo.backgroundColor
+              styleObj.color = opts.modeInfo.backgroundColor
           }
         }
         const styles = (parent.attribs.style || '').split(';')
