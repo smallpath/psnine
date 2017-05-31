@@ -13,9 +13,10 @@ export default function (html) {
     psnid: titleArr.slice(-3).shift(),
     date: titleArr.slice(-2).shift().replace('编辑', ''),
     reply: titleArr.slice(-1).shift(),
-    content: titleArr.slice(5, -3).pop(),
-    tableText: titleArr.slice(5, -4).map(item => `${item.slice(0, 2)}：${item.slice(2)}`),
-    table: titleArr.slice(5, -4).map(item => item.slice(2))
+    content: all.find('.content').html(),
+    tableText: titleArr.slice(2, -4).map(item => `${item.slice(0, 2)}：${item.slice(2)}`),
+    table: titleArr.slice(2, -4).map(item => item.slice(2)),
+    warning: all.find('h1').next().text()
   }
 
   const body = Array.from(all.children().filter(function (i, el) {
@@ -24,55 +25,9 @@ export default function (html) {
   }).map(function (i, elem) {
     return $(this).html()
   }))
-  const page = []
-
-  all.find('.page a').each(function (i, elem) {
-    const $this = $(this)
-    const url = 'http://psnine.com' + $this.attr('href')
-    const text = $this.text()
-    page.push({
-      url,
-      text
-    })
-  })
-
-  const gameTable = []
-
-  all.find('.list').find('table tr').each(function (i, elem) {
-
-    const $this = $(this)
-    const img = $this.find('img').attr('src')
-    if (!img) return
-    const text = $this.text()
-    const arr = text.split('\n').map(item => item.replace(/\t/g, '').trim()).filter(item => item.trim())
-
-    const title = $this.find('td p a').text()
-    const matched = img.match(/\/(\d+)\./)
-
-    const id = matched ? matched[1] : arr[1] + arr[2]
-
-    const startIndex = arr.some(item => item.includes('%')) ? -6 : -5
-    const regionArr = arr.slice(1, startIndex)
-    const trophyArr = arr.slice(startIndex)
-    const mock = {
-      title: title,
-      avatar: img,
-      id,
-      region: regionArr.map(item => item.replace('&nbsp;', ' ')).join(''),
-      platium: trophyArr[0],
-      gold: trophyArr[1],
-      selver: trophyArr[2],
-      bronze: trophyArr[3],
-      platform: arr[0].replace(title, '')
-    }
-
-    gameTable.push(mock)
-  })
 
   const contentInfo = {
-    html: `<div>${(body.join('') || '').trim()}</div>`,
-    page: page,
-    gameTable
+    html: `<div>${(body.join('') || '').trim()}</div>`
   }
   // console.log(body.html())
   const commentList = []

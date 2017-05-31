@@ -30,15 +30,15 @@ class TradeItem extends React.PureComponent {
   shouldComponentUpdate = (props) => props.modeInfo.isNightMode !== this.props.modeInfo.isNightMode
   
   _onRowPressed = (rowData) => {
-    // const { navigation } = this.props;
-    // const URL = getBattleURL(rowData.id);
-    // navigation.navigate('BattleTopic', {
-    //   URL,
-    //   title: rowData.title,
-    //   rowData,
-    //   type: 'battle',
-    //   shouldBeSawBackground: true
-    // })
+    const { navigation } = this.props;
+    const URL = getBattleURL(rowData.id);
+    navigation.navigate('TradeTopic', {
+      URL: rowData.href,
+      title: rowData.title,
+      rowData,
+      type: 'trade',
+      shouldBeSawBackground: true
+    })
   }
 
 

@@ -22,6 +22,7 @@ import CommentList from './container/topic/CommentList'
 import CommunityTopic from './container/topic/CommunityTopic'
 import QaTopic from './container/topic/QaTopic'
 import BattleTopic from './container/topic/BattleTopic'
+import TradeTopic from './container/topic/TradeTopic'
 
 import Circle from './container/circle/Circle'
 import CircleTopic from './container/circle/CircleTopic'
@@ -94,6 +95,11 @@ const Navigator = StackNavigator({
     screen: BattleTopic,
     navigationOptions: enableGesture,
     path: 'battle/:linkingID'
+  },
+  TradeTopic: {
+    screen: TradeTopic,
+    navigationOptions: enableGesture,
+    path: 'trade/:linkingID'
   },
   GamePage: {
     screen: GamePage,
