@@ -99,16 +99,16 @@ export default class Home extends Component {
         top: this._previousTop
       }
     }
-    this.removeListener = BackHandler.addEventListener('hardwareBackPress', () => {
-      if (marginTop._value === 0) {
+    // this.removeListener = BackHandler.addEventListener('hardwareBackPress', () => {
+    //   if (marginTop._value === 0) {
         
-        return false;
-      }
-      this._viewStyles.style.top = 0
-      this._previousTop = 0
-      Animated.timing(marginTop, { toValue: 0, ...config, duration: 200 }).start();
-      return true
-    })
+    //     return false;
+    //   }
+    //   this._viewStyles.style.top = 0
+    //   this._previousTop = 0
+    //   Animated.timing(marginTop, { toValue: 0, ...config, duration: 200 }).start();
+    //   return true
+    // })
     this.PanResponder = PanResponder.create({
 
       onStartShouldSetPanResponderCapture: (e, gesture) => {

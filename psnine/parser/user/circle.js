@@ -27,7 +27,23 @@ export default function (html) {
     list.push(info)
   })
 
+  const page = []
+  
+  $('.page li a').each(function (i, elem) {
+    const $this = $(this)
+    const url = 'http://psnine.com' + $this.attr('href')
+    const text = $this.text()
+    page.push({
+      url,
+      text,
+      type: $this.attr('href').includes('javascript:') ? 'disable' : 'enable'
+    })
+  })
   return {
-    list
+    list,
+    page,
+    numberPerPage: 30,
+    numPages: parseInt((page[page.length - 2] || {}).text),
+    len: parseInt($('.page li').find('.disabled a').last().html())
   }
 }

@@ -63,7 +63,7 @@ class TradeItem extends React.PureComponent {
           delayPressIn={100}
           background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
         >
-          <View style={{ flex: 1, flexDirection: 'row', padding: 5 }}>
+          <View style={{ flex: 1, flexDirection: 'row', padding: 12 }}>
             <Image
               source={{ uri: rowData.avatar }}
               style={styles.avatar}

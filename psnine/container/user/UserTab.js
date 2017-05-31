@@ -25,38 +25,9 @@ import {
 import HomeProfile from './HomeProfile'
 import UserGame from './UserGame'
 import UserBoard from './UserBoard'
+import UserCircle from './UserCircle'
 
 const DefaultTabBar = TabNavigator.Presets.Default.tabBarComponent;
-class MyHomeScreen extends React.Component {
-  static navigationOptions = {
-    tabBarLabel: '留言板',
-    // Note: By default the icon is only shown on iOS. Search the showIcon option below.
-  };
-
-  render() {
-    return (
-      <Button style={{flex:1}}
-        onPress={() => this.props.navigation.goBack()}
-        title="Not implemented yet"
-      />
-    );
-  }
-}
-
-class MyNotificationsScreen extends React.Component {
-  static navigationOptions = {
-    tabBarLabel: '圈子'
-  };
-
-  render() {
-    return (
-      <Button style={{flex:1}}
-        onPress={() => this.props.navigation.goBack()}
-        title="Not implemented yet"
-      />
-    );
-  }
-}
 
 const styles = StyleSheet.create({
   icon: {
@@ -74,6 +45,9 @@ const container = {
   },
   UserBoard: {
     screen: UserBoard
+  },
+  UserCircle: {
+    screen: UserCircle
   }
 }
 

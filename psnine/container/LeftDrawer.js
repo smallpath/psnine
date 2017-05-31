@@ -106,18 +106,29 @@ class navigationDrawer extends Component {
   }
 
   componentWillMount() {
+    console.log('waht')
     this.checkLoginState();
+    console.log('??')
+  }
+
+  componentWillReceiveProps = (nextProps) => {
+    if (this.state.psnid !== nextProps.modeInfo.settingInfo.psnid) {
+      this.setState({
+        psnid: nextProps.modeInfo.settingInfo.psnid,
+        userInfo: nextProps.modeInfo.settingInfo.userInfo
+      })
+    }
   }
 
   checkLoginState = async () => {
     const psnid = this.state.psnid
-
+    console.log(psnid, '===>')
     if (!psnid)
       return;
 
     const userInfo = await fetchUser(psnid)
     await AsyncStorage.setItem('@userInfo', JSON.stringify(userInfo));
-
+    console.log(userInfo)
     this.setState({
       psnid,
       userInfo,

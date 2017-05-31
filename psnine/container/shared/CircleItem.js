@@ -49,14 +49,16 @@ export default class CircleItem extends React.PureComponent {
 
   render = () => {
     // console.log(rowData)
-    const { modeInfo, rowData, ITEM_HEIGHT } = this.props
+    const { modeInfo, rowData, ITEM_HEIGHT, shouldMargin = true } = this.props
     // console.log(rowData)
     return (
       <View style={{
-        marginVertical: 3.5,
+        marginVertical: shouldMargin ? 3.5 : 0,
         backgroundColor: modeInfo.backgroundColor,
-        elevation: 1,
-        height: ITEM_HEIGHT - 7,
+        borderBottomWidth: shouldMargin ? 0 : StyleSheet.hairlineWidth,
+        borderBottomColor: modeInfo.brighterLevelOne,
+        elevation: shouldMargin ? 1 : 0,
+        height: ITEM_HEIGHT - (shouldMargin ? 7 : 0),
         alignItems: 'center',
         justifyContent: 'center'
       }}>
