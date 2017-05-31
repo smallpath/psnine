@@ -33,7 +33,7 @@ import userCircleParser from '../parser/user/circle'
 const safeFetch = function(reqUrl) {
   return new Promise((resolve, reject) => {
     let timeout = setTimeout(() => reject('请求超时::dao.js::line#31'), 20000);
-    console.log(reqUrl)
+    // console.log(reqUrl)
     fetch(reqUrl).then((response) => {
       clearTimeout(timeout);
       const text = response.text()

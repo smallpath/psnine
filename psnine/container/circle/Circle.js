@@ -79,8 +79,32 @@ export default class extends Component {
   }
 
 
-  componentWillUnmount = () => {
+  handlePress = (index) => {
+    const { modeInfo } = this.props.screenProps
+    const { nightModeInfo } = modeInfo
+    const { navigation } = this.props
+    const { params } = navigation.state
+    let URL
+    switch(index) {
+      case 0:
 
+        break;
+      case 1:
+        URL = params.URL.includes('?page') ? params.URL : params.URL + '?page=1'
+        navigation.navigate('CircleTopic', {
+          URL
+        })
+        break;
+      case 2:
+        URL = params.URL + '/leaderboard?page=1'
+        navigation.navigate('CircleRank', {
+          URL
+        })
+        break;
+      case 3:
+
+        break;
+    }
   }
 
   componentWillMount = () => {
@@ -196,23 +220,6 @@ export default class extends Component {
         </View>
       </View>
     )
-  }
-
-  handlePress = (index) => {
-    switch(index) {
-      case 0:
-
-        break;
-      case 1:
-
-        break;
-      case 2:
-
-        break;
-      case 3:
-
-        break;
-    }
   }
 
   render() {

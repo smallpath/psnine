@@ -12,7 +12,7 @@ export function getCircleList(page = 1, {
       .then(response => {
         dispatch(gotList(response, page, type));
       }).catch(err => {
-        console.error('communityError', err)
+        console.error('circleActionError', err)
         dispatch(gotListError());
         global.toast && global.toast('网络错误', 2000);
       });
