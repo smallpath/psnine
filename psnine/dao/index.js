@@ -33,7 +33,7 @@ import userCircleParser from '../parser/user/circle'
 const safeFetch = function(reqUrl) {
   return new Promise((resolve, reject) => {
     let timeout = setTimeout(() => reject('请求超时::dao.js::line#31'), 20000);
-    // console.log(reqUrl)
+    console.log(reqUrl)
     fetch(reqUrl).then((response) => {
       clearTimeout(timeout);
       const text = response.text()
@@ -144,7 +144,7 @@ export const fetchTrades = (...args) => safeFetch(getTradeAPI(...args)).then(res
 
 export const fetchCircles = (...args) => safeFetch(getCirlclesAPI(...args)).then(res => circlesParser(res));
 
-export const fetchCircle = (...args) => safeFetch(getCirlcleAPI(...args)).then(res => circleParser(res));
+export const fetchCircle = url => safeFetch(url).then(res => circleParser(res));
 
 export const fetchCircleLeader = (...args) => safeFetch(getCirlcleLeaderAPI(...args)).then(res => circleLeaderParser(res));
 

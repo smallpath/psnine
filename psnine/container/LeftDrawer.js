@@ -106,9 +106,7 @@ class navigationDrawer extends Component {
   }
 
   componentWillMount() {
-    console.log('waht')
     this.checkLoginState();
-    console.log('??')
   }
 
   componentWillReceiveProps = (nextProps) => {
@@ -122,13 +120,11 @@ class navigationDrawer extends Component {
 
   checkLoginState = async () => {
     const psnid = this.state.psnid
-    console.log(psnid, '===>')
     if (!psnid)
       return;
 
     const userInfo = await fetchUser(psnid)
     await AsyncStorage.setItem('@userInfo', JSON.stringify(userInfo));
-    console.log(userInfo)
     this.setState({
       psnid,
       userInfo,

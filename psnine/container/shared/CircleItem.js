@@ -35,15 +35,13 @@ export default class CircleItem extends React.PureComponent {
   shouldComponentUpdate = (props) => props.modeInfo.isNightMode !== this.props.modeInfo.isNightMode
   
   _onRowPressed = (rowData) => {
-    // const { navigation } = this.props;
+    const { navigation } = this.props;
     // const URL = getBattleURL(rowData.id);
-    // navigation.navigate('BattleTopic', {
-    //   URL,
-    //   title: rowData.title,
-    //   rowData,
-    //   type: 'battle',
-    //   shouldBeSawBackground: true
-    // })
+    navigation.navigate('Circle', {
+      URL: rowData.href,
+      title: rowData.title,
+      rowData
+    })
   }
 
 
@@ -92,7 +90,7 @@ export default class CircleItem extends React.PureComponent {
               </Text>
               <Text style={{ flex: -1, color: idColor, textAlignVertical: 'center', fontSize: 12 }} onPress={
                 () => {
-                  this.props.screenProps.navigation.navigate('Home', {
+                  this.props.navigation.navigate('Home', {
                     title: rowData.owner,
                     id: rowData.owner,
                     URL: `http://psnine.com/psnid/${rowData.owner}`

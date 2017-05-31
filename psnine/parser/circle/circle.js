@@ -12,8 +12,9 @@ export default function (html) {
   titleInfo.avatar = title.first().find('img').attr('src')
   titleInfo.name = title.first().find('h1').text()
   titleInfo.access = title.first().find('p').first().text()
+  titleInfo.limit = title.first().find('p').html()
   titleInfo.content = `<div>${title.first().find('.content').html()}</div>`
-  titleInfo.owener = title.find('a.psnnode').text()
+  titleInfo.owner = title.find('a.psnnode').text()
 
   const list = []
 
@@ -61,6 +62,7 @@ export default function (html) {
   return {
     list,
     page,
+    titleInfo,
     numberPerPage: 30,
     numPages: parseInt((page[page.length - 2] || {}).text),
     len: parseInt($('.page li').find('.disabled a').last().html())

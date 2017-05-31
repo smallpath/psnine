@@ -23,6 +23,10 @@ import CommunityTopic from './container/topic/CommunityTopic'
 import QaTopic from './container/topic/QaTopic'
 import BattleTopic from './container/topic/BattleTopic'
 
+import Circle from './container/circle/Circle'
+import CircleTopic from './container/circle/CircleTopic'
+import CircleRank from './container/circle/CircleRank'
+
 import Reply from './container/new/Reply'
 import NewTopic from './container/new/NewTopic'
 
@@ -129,6 +133,15 @@ const Navigator = StackNavigator({
   Trophy: {
     screen: Trophy,
     path: 'trophy/:linkingID'
+  },
+  Circle: {
+    screen: Circle,
+  },
+  CircleTopic: {
+    screen: CircleTopic
+  },
+  CircleRank: {
+    screen: CircleRank
   },
   About: {
     screen: About,
