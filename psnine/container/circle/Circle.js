@@ -182,11 +182,11 @@ export default class extends Component {
             </View>
             <View style={{ justifyContent: 'space-between', alignItems: 'flex-start', padding: 12}}>
               <View>
-                <Text style={{}}>{rowData.name}</Text>
+                <Text style={{ color: modeInfo.titleTextColor }}>{rowData.name}</Text>
               </View>
 
               <View style={{ justifyContent: 'space-between', alignItems: 'center' }}>
-                <Text><Text style={{fontSize: 12, color: modeInfo.standardTextColor}}>机长：</Text>{rowData.owner}</Text>
+                <Text style={{color: modeInfo.standardTextColor}}><Text style={{fontSize: 12, color: modeInfo.standardTextColor}}>机长：</Text>{rowData.owner}</Text>
               </View>
             </View> 
           </View>

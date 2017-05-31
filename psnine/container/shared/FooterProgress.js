@@ -13,6 +13,8 @@ import {
   Animated
 } from 'react-native';
 
+import { accentColor } from '../../constants/colorConfig'
+
 export default class FooterProgress extends React.PureComponent {
   shouldComponentUpdate = (nextProps) => {
     if (nextProps.isLoadingMore !== this.props.isLoadingMore) return true
@@ -21,7 +23,7 @@ export default class FooterProgress extends React.PureComponent {
   render() {
     return this.props.isLoadingMore ? (
       <View style={{flexDirection:'row', flex: 1, height: 15, alignItems: 'flex-end'}}>
-        <ProgressBarAndroid style={{flex:1,
+        <ProgressBarAndroid color={accentColor} style={{flex:1,
           height: 15,
           transform: [
             {
@@ -29,7 +31,7 @@ export default class FooterProgress extends React.PureComponent {
             }
           ]
         }}  styleAttr="Horizontal"/>
-        <ProgressBarAndroid style={{flex:1,height: 15,}} styleAttr="Horizontal" />
+        <ProgressBarAndroid style={{flex:1,height: 15,}} color={accentColor} styleAttr="Horizontal" />
       </View>
     ) : (<View style={{flexDirection:'row', flex: 1, height: 15, alignItems: 'flex-end'}}/>)
   }

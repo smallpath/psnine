@@ -102,10 +102,10 @@ class UserGame extends Component {
             const componentDidFocus = () => {
               InteractionManager.runAfterInteractions(() => {
                 this.props.screenProps.setToolbar({
-                  toolbar: toolbarActions,
+                  toolbar: [],
                   toolbarActions: this.onActionSelected,
                   componentDidFocus: {
-                    index: 1,
+                    index: 3,
                     handler: componentDidFocus
                   }
                 })

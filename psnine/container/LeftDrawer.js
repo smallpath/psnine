@@ -106,14 +106,22 @@ class navigationDrawer extends Component {
   }
 
   componentWillMount() {
-    this.checkLoginState();
+    const { modeInfo } = this.props
+    this.setState({
+      psnid: modeInfo.settingInfo.psnid,
+      userInfo: modeInfo.settingInfo.userInfo
+    }, () => {
+      this.checkLoginState();
+    })
   }
 
   componentWillReceiveProps = (nextProps) => {
-    if (this.state.psnid !== nextProps.modeInfo.settingInfo.psnid) {
+    if (this.state.psnid !== nextProps.modeInfo.settingInfo.psnid && nextProps.modeInfo.settingInfo.psnid !== '') {
       this.setState({
         psnid: nextProps.modeInfo.settingInfo.psnid,
         userInfo: nextProps.modeInfo.settingInfo.userInfo
+      }, () => {
+        this.checkLoginState();
       })
     }
   }

@@ -142,7 +142,7 @@ class Root extends React.Component {
       //   isLoadingAsyncStorage: false,
       //   settingInfo,
       //   isNightMode: settingInfo.isNightMode
-      // }, () => checkVersion())
+      // }, () => checkVersion().catch(err => {}))
     })
     Animated.timing(this.state.progress, {
       toValue: 0.65,
@@ -154,7 +154,7 @@ class Root extends React.Component {
         isLoadingAsyncStorage: false,
         settingInfo,
         isNightMode: settingInfo.isNightMode
-      }, () => checkVersion())
+      }, () => checkVersion().catch(err => {}))
     }, 1300)
   }
 
@@ -227,6 +227,7 @@ class Root extends React.Component {
 
     const child = isLoadingAsyncStorage ? (
       <View style={{ flex: 1, backgroundColor: 'rgb(0,208,192)'}}>
+        <StatusBar translucent={false} backgroundColor={this.state.isNightMode ? nightDeepColor : deepColor} barStyle="light-content" />
         <Animation
           ref={animation => { this.animation = animation; }}
           style={{

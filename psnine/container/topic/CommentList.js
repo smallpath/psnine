@@ -26,7 +26,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import { getTopicCommentAPI } from '../../dao';
 
 let toolbarActions = [
-  { title: '回复', iconName: 'md-create', show: 'always' },
+  // { title: '回复', iconName: 'md-create', show: 'always' },
   { title: '跳页', iconName: 'md-map', show: 'always' },
 ];
 
@@ -117,17 +117,15 @@ class CommentList extends Component {
     if (targetPage > this.state.numPages) return
     if (this.state.isLoadingMore || this.state.isRefreshing) return
     this.fetchMessages(URL.split('=').slice(0, -1).concat(targetPage).join('='), 'down');
-
   }
 
   onActionSelected = (index) => {
     switch (index) {
       case 0:
-        return;
-      case 1:
         this.setState({
           modalVisible: true
         })
+      return
     }
   }
 
