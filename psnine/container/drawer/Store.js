@@ -122,43 +122,75 @@ class Store extends Component {
     }
   }
 
+  shouldOnRefreshForSearch = false
   componentWillReceiveProps = (nextProps) => {
+    let shouldCall = nextProps.segmentedIndex === 7
+    let empty = () => {}
+    let cb = empty
     if (this.props.screenProps.modeInfo.isNightMode != nextProps.screenProps.modeInfo.isNightMode) {
-      this.props.screenProps.modeInfo = nextProps.screenProps.modeInfo;
+      cb = () => {}
     } else if (this.props.screenProps.searchTitle !== nextProps.screenProps.searchTitle) {
-      this._onRefresh(
-        nextProps.screenProps.searchTitle
-      )
+      if (shouldCall) {
+        cb = () => this._onRefresh(
+          nextProps.screenProps.searchTitle
+        )
+      } else {
+        cb = () => this.shouldOnRefreshForSearch = true
+        shouldCall = true
+      }
     } else {
-      this.setState({
-        isRefreshing: false,
-        isLoadingMore: false
-      }, () => {
-        // const len = this.props.community.topics.length
-        // const per = this.props.community.topicPage
-        // const target = len / per * (per - 1)
-        // if (per === 1) {
-        //   setTimeout(() => {
-        //     this.flatlist.getNode().scrollToIndex({
-        //       animated: true,
-        //       viewPosition: 0,
-        //       index: 0
-        //     })
-        //   })
-        // } else if(per > 1) {
-        //   setTimeout(() => {
-        //     this.flatlist.getNode().scrollToIndex({
-        //       animated: true,
-        //       viewPosition: 0.9,
-        //       index: target - 1
-        //     })
-        //   })
-        // }
-      })
+      if (this.shouldOnRefreshForSearch === true && shouldCall) {
+        this.shouldOnRefreshForSearch = false
+        cb = () => this._onRefresh(
+          nextProps.screenProps.searchTitle
+        )
+      } else {
+        cb = () => this.setState({
+          isRefreshing: false,
+          isLoadingMore: false
+        }, () => {
+          // const len = this.props.community.topics.length
+          // const per = this.props.community.topicPage
+          // const target = len / per * (per - 1)
+          // if (per === 1) {
+          //   setTimeout(() => {
+          //     this.flatlist.getNode().scrollToIndex({
+          //       animated: true,
+          //       viewPosition: 0,
+          //       index: 0
+          //     })
+          //   })
+          // } else if(per > 1) {
+          //   setTimeout(() => {
+          //     this.flatlist.getNode().scrollToIndex({
+          //       animated: true,
+          //       viewPosition: 0.9,
+          //       index: target - 1
+          //     })
+          //   })
+          // }
+        })
+      }
+    }
+    if (shouldCall) {
+      cb && cb()
     }
   }
 
-  componentDidMount = () => {
+
+  shouldComponentUpdate = (nextProps, nextState) => {
+    if (nextProps.segmentedIndex !== 7) return false
+    if (this.props.segmentedIndex !== 7) {
+      if (this.shouldOnRefreshForSearch === true) {
+        this.shouldOnRefreshForSearch = false
+        return true
+      }
+      if (nextProps.screenProps.searchTitle === this.props.screenProps.searchTitle) return false
+    }
+    return true
+  }
+
+  componentWillMount = () => {
     const { reducer } = this.props;
     const { searchTitle } = this.props.screenProps
 
@@ -169,7 +201,7 @@ class Store extends Component {
     }
   }
 
-  _onRefresh = (searchTitle = '') => {
+  _onRefresh = (searchTitle) => {
     const { reducer, dispatch } = this.props;
     // const { circleType } = this.props.screenProps
 
@@ -220,7 +252,7 @@ class Store extends Component {
   render() {
     const { reducer } = this.props;
     const { modeInfo } = this.props.screenProps
-    // console.log('Community.js rendered');
+    // console.log('Store.js rendered');
     // console.log(reducer.page, reducer.list)
     return (
       <AnimatedFlatList style={{
@@ -275,6 +307,7 @@ const styles = StyleSheet.create({
 function mapStateToProps(state) {
   return {
     reducer: state.store,
+    segmentedIndex: state.app.segmentedIndex
   };
 }
 

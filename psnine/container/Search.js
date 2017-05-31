@@ -145,11 +145,12 @@ export default class Search extends Component {
       left: openVal.interpolate({ inputRange: [0, 1], outputRange: [SCREEN_WIDTH, 0] }),
       bottom: openVal.interpolate({ inputRange: [0, 1], outputRange: [SCREEN_HEIGHT, 0] }),
       borderWidth: 0,
+      backgroundColor: modeInfo.backgroundColor,
       borderRadius: openVal.interpolate({ inputRange: [-0.15, 0, 1], outputRange: [CIRCLE_SIZE * 1.3, CIRCLE_SIZE * 1.3,  0] }),
-      backgroundColor: openVal.interpolate({
-        inputRange: [0, 1],
-        outputRange: [accentColor, modeInfo.backgroundColor]
-      }),
+      // backgroundColor: openVal.interpolate({
+      //   inputRange: [0, 1],
+      //   outputRange: [accentColor, modeInfo.backgroundColor]
+      // }),
       marginTop: marginTop.interpolate({
         inputRange: [0, SCREEN_HEIGHT],
         outputRange: [0, SCREEN_HEIGHT]
@@ -163,12 +164,13 @@ export default class Search extends Component {
     let animatedToolbarStyle = {
       height: openVal.interpolate({ inputRange: [0, 0.9, 1], outputRange: [searchHeight, searchHeight, searchHeight] }),
       borderWidth: 0,
-      borderRadius: openVal.interpolate({ inputRange: [-0.15, 0, 1], outputRange: [CIRCLE_SIZE * 1.3, CIRCLE_SIZE * 1.3, 0] }),
-      zIndex: openVal.interpolate({ inputRange: [0, 1], outputRange: [0, 3] }),
-      backgroundColor: openVal.interpolate({
-        inputRange: [0, 1],
-        outputRange: [accentColor, modeInfo.backgroundColor]
-      }),
+      backgroundColor: modeInfo.backgroundColor,
+      // borderRadius: openVal.interpolate({ inputRange: [-0.15, 0, 1], outputRange: [CIRCLE_SIZE * 1.3, CIRCLE_SIZE * 1.3, 0] }),
+      // zIndex: openVal.interpolate({ inputRange: [0, 1], outputRange: [0, 3] }),
+      // backgroundColor: openVal.interpolate({
+      //   inputRange: [0, 1],
+      //   outputRange: [accentColor, modeInfo.backgroundColor]
+      // }),
     }
 
     return (

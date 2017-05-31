@@ -107,34 +107,61 @@ class Game extends Component {
     });
   };
 
+  shouldOnRefreshForSearch = false
   componentWillReceiveProps = (nextProps) => {
-    const { modeInfo } = this.props.screenProps
-    if (modeInfo.isNightMode != nextProps.screenProps.modeInfo.isNightMode) {
-      this.props.screenProps.modeInfo = nextProps.screenProps.modeInfo;
+    let shouldCall = nextProps.segmentedIndex === 2
+    let empty = () => {}
+    let cb = empty
+    if (this.props.screenProps.modeInfo.isNightMode != nextProps.screenProps.modeInfo.isNightMode) {
+      cb = () => {}
     } else if (this.props.screenProps.searchTitle !== nextProps.screenProps.searchTitle) {
-      this._onRefresh(
-        nextProps.screenProps.searchTitle
-      )
+      if (shouldCall) {
+        cb = () => this._onRefresh(
+          nextProps.screenProps.searchTitle
+        )
+      } else {
+        cb = () => this.shouldOnRefreshForSearch = true
+        shouldCall = true
+      }
     } else {
-      this.setState({
-        isRefreshing: false,
-        isLoadingMore: false
-      })
+      if (this.shouldOnRefreshForSearch === true && shouldCall) {
+        this.shouldOnRefreshForSearch = false
+        cb = () => this._onRefresh(
+          nextProps.screenProps.searchTitle
+        )
+      } else {
+        cb = () => this.setState({
+          isRefreshing: false,
+          isLoadingMore: false
+        })
+      }
+    }
+    if (shouldCall) {
+      cb && cb()
     }
   }
 
-  componentDidUpdate = () => {
 
+  shouldComponentUpdate = (nextProps, nextState) => {
+    if (nextProps.segmentedIndex !== 2) return false
+    if (this.props.segmentedIndex !== 2) {
+      if (this.shouldOnRefreshForSearch === true) {
+        this.shouldOnRefreshForSearch = false
+        return true
+      }
+      if (nextProps.screenProps.searchTitle === this.props.screenProps.searchTitle) return false
+    }
+    return true
   }
 
-  componentDidMount = () => {
+  componentWillMount = () => {
     const { game: gameReducer } = this.props;
     if (gameReducer.page === 0) {
       this._onRefresh();
     }
   }
 
-  _onRefresh = (title = '') => {
+  _onRefresh = (title) => {
     const { game: gameReducer, dispatch } = this.props;
 
     this.setState({
@@ -191,7 +218,7 @@ class Game extends Component {
   render() {
     const { game: gameReducer } = this.props;
     const { modeInfo } = this.props.screenProps
-    // console.log('Community.js rendered');
+    // console.log('Game.js rendered');
     return (
       <View style={{ backgroundColor: modeInfo.backgroundColor, flex: 1 }}>
         {this._renderHeader()}
@@ -247,7 +274,8 @@ const styles = StyleSheet.create({
 
 function mapStateToProps(state) {
   return {
-    game: state.game
+    game: state.game,
+    segmentedIndex: state.app.segmentedIndex
   };
 }
 

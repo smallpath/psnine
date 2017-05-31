@@ -39,7 +39,7 @@ export default function (html) {
   $('.page a').each(function (i, elem) {
     const $this = $(this)
     const url = 'http://psnine.com' + $this.attr('href')
-    const text = $this.text()
+    const text = $this.text() || '1'
     page.push({
       url,
       text,
@@ -51,7 +51,7 @@ export default function (html) {
     list,
     page,
     numberPerPage: 30,
-    numPages: parseInt(page[page.length - 2].text),
+    numPages: page.length >= 2 ? parseInt(page[page.length - 2].text) : 1,
     len: parseInt($('.page li').find('.disabled a').last().html())
   }
 }

@@ -43,47 +43,46 @@ class Circle extends Component {
     }
   }
 
+  shouldOnRefreshForSearch = false
+
   componentWillReceiveProps = (nextProps) => {
+    let shouldCall = nextProps.segmentedIndex === 6
+    let empty = () => {}
+    let cb = empty
     if (this.props.screenProps.circleType != nextProps.screenProps.circleType) {
-      this.props.screenProps.circleType = nextProps.screenProps.circleType;
-      this._onRefresh(nextProps.screenProps.circleType);
+      cb = () => this._onRefresh(nextProps.screenProps.circleType);
     } else if (this.props.screenProps.modeInfo.isNightMode != nextProps.screenProps.modeInfo.isNightMode) {
-      this.props.screenProps.modeInfo = nextProps.screenProps.modeInfo;
+      cb = () => {}
     } else if (this.props.screenProps.searchTitle !== nextProps.screenProps.searchTitle) {
-      this._onRefresh(
-        this.props.screenProps.circleType, 
-        nextProps.screenProps.searchTitle
-      )
+      if (shouldCall) {
+        cb = () => this._onRefresh(
+          this.props.screenProps.circleType, 
+          nextProps.screenProps.searchTitle
+        )
+      } else {
+        cb = () => this.shouldOnRefreshForSearch = true
+        shouldCall = true
+      }
     } else {
-      this.setState({
-        isRefreshing: false,
-        isLoadingMore: false
-      }, () => {
-        // const len = this.props.community.topics.length
-        // const per = this.props.community.topicPage
-        // const target = len / per * (per - 1)
-        // if (per === 1) {
-        //   setTimeout(() => {
-        //     this.flatlist.getNode().scrollToIndex({
-        //       animated: true,
-        //       viewPosition: 0,
-        //       index: 0
-        //     })
-        //   })
-        // } else if(per > 1) {
-        //   setTimeout(() => {
-        //     this.flatlist.getNode().scrollToIndex({
-        //       animated: true,
-        //       viewPosition: 0.9,
-        //       index: target - 1
-        //     })
-        //   })
-        // }
-      })
+      if (this.shouldOnRefreshForSearch === true && shouldCall) {
+        this.shouldOnRefreshForSearch = false
+        cb = () => this._onRefresh(
+          this.props.screenProps.circleType, 
+          nextProps.screenProps.searchTitle
+        )
+      } else {
+        cb = () => this.setState({
+          isRefreshing: false,
+          isLoadingMore: false
+        })
+      }
+    }
+    if (shouldCall) {
+      cb && cb()
     }
   }
 
-  componentDidMount = () => {
+  componentWillMount = () => {
     const { reducer } = this.props;
     const { circleType, searchTitle } = this.props.screenProps
 
@@ -95,7 +94,20 @@ class Circle extends Component {
     }
   }
 
-  _onRefresh = (type = '', searchTitle = '') => {
+
+  shouldComponentUpdate = (nextProps, nextState) => {
+    if (nextProps.segmentedIndex !== 6) return false
+    if (this.props.segmentedIndex !== 6) {
+      if (this.shouldOnRefreshForSearch === true) {
+        this.shouldOnRefreshForSearch = false
+        return true
+      }
+      if (nextProps.screenProps.searchTitle === this.props.screenProps.searchTitle) return false
+    }
+    return true
+  }
+
+  _onRefresh = (type = '', searchTitle) => {
     const { reducer, dispatch } = this.props;
     const { circleType } = this.props.screenProps
 
@@ -148,7 +160,7 @@ class Circle extends Component {
   render() {
     const { reducer } = this.props;
     const { modeInfo } = this.props.screenProps
-    // console.log('Community.js rendered');
+    // console.log('Circle.js rendered');
     // console.log(reducer.page, reducer.list)
     return (
       <AnimatedFlatList style={{
@@ -203,6 +215,7 @@ const styles = StyleSheet.create({
 function mapStateToProps(state) {
   return {
     reducer: state.circle,
+    segmentedIndex: state.app.segmentedIndex
   };
 }
 

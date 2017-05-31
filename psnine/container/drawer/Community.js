@@ -45,47 +45,60 @@ class Community extends Component {
     }
   }
 
+  shouldOnRefreshForSearch = false
+
   componentWillReceiveProps = (nextProps) => {
+    let shouldCall = nextProps.segmentedIndex === 0
+    let empty = () => {}
+    let cb = empty
     if (this.props.screenProps.communityType != nextProps.screenProps.communityType) {
-      this.props.screenProps.communityType = nextProps.screenProps.communityType;
-      this._onRefresh(nextProps.screenProps.communityType);
+      cb = () => this._onRefresh(nextProps.screenProps.communityType);
     } else if (this.props.screenProps.modeInfo.isNightMode != nextProps.screenProps.modeInfo.isNightMode) {
-      this.props.screenProps.modeInfo = nextProps.screenProps.modeInfo;
+      cb = () => {}
     } else if (this.props.screenProps.searchTitle !== nextProps.screenProps.searchTitle) {
-      this._onRefresh(
-        this.props.screenProps.communityType, 
-        nextProps.screenProps.searchTitle
-      )
+      if (shouldCall) {
+        cb = () => this._onRefresh(
+          this.props.screenProps.communityType, 
+          nextProps.screenProps.searchTitle
+        )
+      } else {
+        cb = () => this.shouldOnRefreshForSearch = true
+        shouldCall = true
+      }
     } else {
-      this.setState({
-        isRefreshing: false,
-        isLoadingMore: false
-      }, () => {
-        // const len = this.props.community.topics.length
-        // const per = this.props.community.topicPage
-        // const target = len / per * (per - 1)
-        // if (per === 1) {
-        //   setTimeout(() => {
-        //     this.flatlist.getNode().scrollToIndex({
-        //       animated: true,
-        //       viewPosition: 0,
-        //       index: 0
-        //     })
-        //   })
-        // } else if(per > 1) {
-        //   setTimeout(() => {
-        //     this.flatlist.getNode().scrollToIndex({
-        //       animated: true,
-        //       viewPosition: 0.9,
-        //       index: target - 1
-        //     })
-        //   })
-        // }
-      })
+      if (this.shouldOnRefreshForSearch === true && shouldCall) {
+        // this.shouldOnRefreshForSearch = false
+        cb = () => this._onRefresh(
+          this.props.screenProps.communityType, 
+          nextProps.screenProps.searchTitle
+        )
+      } else {
+        cb = () => {
+          this.setState({
+            isRefreshing: false,
+            isLoadingMore: false
+          })
+        }
+      }
+    }
+    if (shouldCall) {
+      cb && cb()
     }
   }
 
-  componentDidMount = () => {
+  shouldComponentUpdate = (nextProps, nextState) => {
+    if (nextProps.segmentedIndex !== 0) return false
+    if (this.props.segmentedIndex !== 0) {
+      if (this.shouldOnRefreshForSearch === true) {
+        this.shouldOnRefreshForSearch = false
+        return true
+      }
+      if (nextProps.screenProps.searchTitle === this.props.screenProps.searchTitle) return false
+    }
+    return true
+  }
+
+  componentWillMount = () => {
     const { community: communityReducer } = this.props;
     const { communityType, searchTitle } = this.props.screenProps
     if (communityReducer.topicPage == 0) {
@@ -96,7 +109,7 @@ class Community extends Component {
     }
   }
 
-  _onRefresh = (type = '', searchTitle = '') => {
+  _onRefresh = (type = '', searchTitle) => {
     const { community: communityReducer, dispatch } = this.props;
     const { communityType } = this.props.screenProps
 
@@ -199,9 +212,10 @@ const styles = StyleSheet.create({
   }
 });
 
-function mapStateToProps(state) {
+function mapStateToProps(state, ownProps) {
   return {
-    community: state.community
+    community: state.community,
+    segmentedIndex: state.app.segmentedIndex
   };
 }
 

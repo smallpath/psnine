@@ -77,9 +77,7 @@ let rankActions = [
   searchAction,
 ];
 
-let battleActions = [
-  searchAction,
-];
+let battleActions = [];
 
 let geneActions = [
   searchAction,
@@ -149,7 +147,15 @@ class Toolbar extends Component {
 
   _renderDrawerView = () => {
     return (
-      <RightDrawer onNavigationStateChange={null} screenProps={{
+      <RightDrawer         
+        onNavigationStateChange={(prevRoute, nextRoute, action) => {
+          if (prevRoute.index !== nextRoute.index && action.type === 'Navigation/NAVIGATE') {
+            /*setTimeout(() => {*/
+              /*console.log('navigate', nextRoute.index)*/
+              this.props.dispatch(changeSegmentIndex(nextRoute.index))
+            /*}, 100)*/
+          }
+        }} screenProps={{
         communityType: this.props.app.communityType,
         geneType: this.props.app.geneType,
         circleType: this.props.app.circleType,
@@ -165,10 +171,11 @@ class Toolbar extends Component {
   }
   _renderTabView = () => {
     return (
-      <TabContainer 
+      <TabContainer
         onNavigationStateChange={(prevRoute, nextRoute, action) => {
           if (prevRoute.index !== nextRoute.index && action.type === 'Navigation/NAVIGATE') {
             /*setTimeout(() => {*/
+              /*console.log('navigate', nextRoute.index)*/
               this.props.dispatch(changeSegmentIndex(nextRoute.index))
             /*}, 100)*/
           }

@@ -119,9 +119,9 @@ export const getMyGameURL = id => `${webHost}/psnid/${id}/psngame?page=1`;
 
 export const fetchUser = id => safeFetch(getHomeURL(id)).then(res => userParser(res, id))
 
-export const getQasAPI = (page, type, sort, title) => webHost + `/qa?page=${page}&type=${type}&ob=${sort}${title ? `&title=${title}` : '' }`
+export const getQasAPI = ({ page = 1, type = 'all', sort = 'obdate', title }) => webHost + `/qa?page=${page}&type=${type}&ob=${sort}${title ? `&title=${title}` : '' }`
 
-export const fetchQuestion = (page = 1, type = 'all', sort = 'obdate', title) => safeFetch(getQasAPI(page, type, sort, title)).then(res => qaParser(res));
+export const fetchQuestion = (...args) => safeFetch(getQasAPI(...args)).then(res => qaParser(res));
 
 export const getQAUrl = id => `${webHost}/qa/${id}`
 

@@ -92,33 +92,62 @@ class Qa extends Component {
     });
   };
 
+  shouldOnRefreshForSearch = false
   componentWillReceiveProps = (nextProps) => {
+    let shouldCall = nextProps.segmentedIndex === 1
+    let empty = () => {}
+    let cb = empty
     if (this.props.screenProps.modeInfo.isNightMode != nextProps.screenProps.modeInfo.isNightMode) {
-      this.props.screenProps.modeInfo = nextProps.screenProps.modeInfo;
+      cb = () => {}
     } else if (this.props.screenProps.searchTitle !== nextProps.screenProps.searchTitle) {
-      this._onRefresh(
-        nextProps.screenProps.searchTitle
-      )
+      if (shouldCall) {
+        cb = () => this._onRefresh(
+          nextProps.screenProps.searchTitle
+        )
+      } else {
+        cb = () => this.shouldOnRefreshForSearch = true
+        shouldCall = true
+      }
     } else {
-      this.setState({
-        isRefreshing: false,
-        isLoadingMore: false
-      })
+      if (this.shouldOnRefreshForSearch === true && shouldCall) {
+        // this.shouldOnRefreshForSearch = false
+        cb = () => this._onRefresh(
+          nextProps.screenProps.searchTitle
+        )
+      } else {
+        cb = () => {
+          this.setState({
+            isRefreshing: false,
+            isLoadingMore: false
+          })
+        }
+      }
+    }
+    if (shouldCall) {
+      cb && cb()
     }
   }
 
-  componentDidUpdate = () => {
-
-  }
-
-  componentDidMount = () => {
+  componentWillMount = () => {
     const { qa: qaReducer } = this.props;
     if (qaReducer.page === 0) {
       this._onRefresh();
     }
   }
 
-  _onRefresh = (title = '') => {
+  shouldComponentUpdate = (nextProps, nextState) => {
+    if (nextProps.segmentedIndex !== 1) return false
+    if (this.props.segmentedIndex !== 1) {
+      if (this.shouldOnRefreshForSearch === true) {
+        this.shouldOnRefreshForSearch = false
+        return true
+      }
+      if (nextProps.screenProps.searchTitle === this.props.screenProps.searchTitle) return false
+    }
+    return true
+  }
+
+  _onRefresh = (title) => {
     const { qa: qaReducer, dispatch } = this.props;
 
     this.setState({
@@ -172,8 +201,7 @@ class Qa extends Component {
   render() {
     const { qa: qaReducer } = this.props;
     const { modeInfo } = this.props.screenProps
-    // console.log('Community.js rendered');
-
+    // console.log('Qa.js rendered');
     return (
       <View style={{ backgroundColor: modeInfo.backgroundColor, flex: 1 }}>
         {this._renderHeader()}
@@ -229,7 +257,8 @@ const styles = StyleSheet.create({
 
 function mapStateToProps(state) {
   return {
-    qa: state.qa
+    qa: state.qa,
+    segmentedIndex: state.app.segmentedIndex
   };
 }
 

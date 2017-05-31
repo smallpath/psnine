@@ -159,7 +159,7 @@ class Battle extends Component {
     return true
   }
 
-  componentDidMount = () => {
+  componentWillMount = () => {
     const { battle: battleReducer } = this.props;
     if (Object.keys(battleReducer.battles).length === 0) this._onRefresh();
   }

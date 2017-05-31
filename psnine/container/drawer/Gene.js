@@ -37,30 +37,58 @@ class Gene extends Component {
     }
   }
 
-  componentWillReceiveProps(nextProps) {
+  shouldOnRefreshForSearch = false
+  componentWillReceiveProps = (nextProps) => {
+    let shouldCall = nextProps.segmentedIndex === 5
+    let empty = () => {}
+    let cb = empty
     if (this.props.screenProps.geneType != nextProps.screenProps.geneType) {
-      this.props.screenProps.geneType = nextProps.screenProps.geneType;
-      this._onRefresh(nextProps.screenProps.geneType);
+      cb = () => this._onRefresh(nextProps.screenProps.geneType);
     } else if (this.props.screenProps.modeInfo.isNightMode != nextProps.screenProps.modeInfo.isNightMode) {
-      this.props.screenProps.modeInfo = nextProps.screenProps.modeInfo;
+      cb = () => {}
     } else if (this.props.screenProps.searchTitle !== nextProps.screenProps.searchTitle) {
-      this._onRefresh(
-        this.props.screenProps.geneType,
-        nextProps.screenProps.searchTitle
-      )
+      if (shouldCall) {
+        cb = () => this._onRefresh(
+          this.props.screenProps.geneType, 
+          nextProps.screenProps.searchTitle
+        )
+      } else {
+        cb = () => this.shouldOnRefreshForSearch = true
+        shouldCall = true
+      }
     } else {
-      this.setState({
-        isRefreshing: false,
-        isLoadingMore: false
-      })
+      if (this.shouldOnRefreshForSearch === true && shouldCall) {
+        this.shouldOnRefreshForSearch = false
+        cb = () => this._onRefresh(
+          this.props.screenProps.geneType, 
+          nextProps.screenProps.searchTitle
+        )
+      } else {
+        cb = () => this.setState({
+          isRefreshing: false,
+          isLoadingMore: false
+        })
+      }
+    }
+    if (shouldCall) {
+      cb && cb()
     }
   }
 
-  componentDidUpdate = () => {
 
+  shouldComponentUpdate = (nextProps, nextState) => {
+    if (nextProps.segmentedIndex !== 5) return false
+    if (this.props.segmentedIndex !== 5) {
+      if (this.shouldOnRefreshForSearch === true) {
+        this.shouldOnRefreshForSearch = false
+        return true
+      }
+      if (nextProps.screenProps.searchTitle === this.props.screenProps.searchTitle) return false
+    }
+    return true
   }
 
-  componentDidMount = () => {
+  componentWillMount = () => {
     const { gene: geneReducer } = this.props;
     if (geneReducer.genePage == 0)
       this._onRefresh();
@@ -170,6 +198,7 @@ const styles = StyleSheet.create({
 function mapStateToProps(state) {
   return {
     gene: state.gene,
+    segmentedIndex: state.app.segmentedIndex
   };
 }
 
