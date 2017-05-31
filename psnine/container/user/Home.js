@@ -200,6 +200,7 @@ export default class Home extends Component {
   renderHeader = (rowData) => {
     const { modeInfo } = this.props.screenProps
     const { psnButtonInfo } = this.state.data
+    const { marginTop } = this.state
     const { nightModeInfo } = modeInfo
     const color = 'rgba(255,255,255,1)'
     const infoColor = 'rgba(255,255,255,0.8)'
@@ -222,7 +223,7 @@ export default class Home extends Component {
           </View>
         </View>
 
-        <View style={{ position: 'absolute', top: 0, left: 0, right: 0, height: limit  }}>
+        <View style={{ position: 'absolute', top: 0, left: 0, right: 0, height: limit }}>
           <View style={{ justifyContent:'center', alignItems: 'center', alignSelf: 'center', flex: 3, marginTop: -70 }}>
             <View borderRadius={75} style={{width: 150, height: 150, backgroundColor: 'transparent',}} >
               <Image
@@ -395,9 +396,17 @@ export default class Home extends Component {
           />
         )}
         { (!this.state.isLoading && source.playerInfo && source.playerInfo.backgroundImage) && (
-          <View style={{
+          <Animated.View style={{
             position: 'absolute',
-            top: -1, left: 0, right: 0, 
+            top: -1, left: 0, right: 0,
+            transform: [
+              {
+                translateY: this.state.marginTop.interpolate({
+                  inputRange: [-1000, 0, 1000],
+                  outputRange: [-500, 0 , 500]
+                })
+              }
+            ]
           }}>
             <Image
               source={{ uri: source.playerInfo.backgroundImage }}
@@ -408,7 +417,7 @@ export default class Home extends Component {
                 top: 0, // why??
               }}
             />
-          </View>
+          </Animated.View>
         )}
         {
           !this.state.isLoading && (<Animated.View ref={(view) => {
@@ -418,12 +427,12 @@ export default class Home extends Component {
           style={{
             overflow: 'visible',
             flex:0, 
-            height: ACTUAL_SCREEN_HEIGHT + 360 - toolbarHeight + ACTUAL_SCREEN_HEIGHT    ,         
+            height: ACTUAL_SCREEN_HEIGHT + SCREEN_WIDTH - toolbarHeight + ACTUAL_SCREEN_HEIGHT    ,         
             transform: [
                 {
                   translateY: this.state.marginTop.interpolate({
-                    inputRange: [-360, 0, 360],
-                    outputRange: [-360, 0 , 360]
+                    inputRange: [-1000, 0, 1000],
+                    outputRange: [-1000, 0 , 1000]
                   })
                 }
               ]
