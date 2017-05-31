@@ -30,6 +30,7 @@ import {
 
 import configureStore from './store/store.js'
 import Animation from 'lottie-react-native';
+import checkVersion from './bootstrap/checkVersion'
 
 const store = configureStore();
 
@@ -141,7 +142,7 @@ class Root extends React.Component {
       //   isLoadingAsyncStorage: false,
       //   settingInfo,
       //   isNightMode: settingInfo.isNightMode
-      // })
+      // }, () => checkVersion())
     })
     Animated.timing(this.state.progress, {
       toValue: 0.65,
@@ -153,7 +154,7 @@ class Root extends React.Component {
         isLoadingAsyncStorage: false,
         settingInfo,
         isNightMode: settingInfo.isNightMode
-      })
+      }, () => checkVersion())
     }, 1300)
   }
 

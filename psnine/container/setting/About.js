@@ -18,6 +18,8 @@ import { safeLogin, registURL } from '../../dao/login';
 
 import packages from '../../../package.json'
 
+import checkVersion from '../../bootstrap/checkVersion'
+
 class About extends Component {
 
   constructor(props) {
@@ -50,41 +52,15 @@ class About extends Component {
     this.setState({
       checkUpdateTip: '正在检查更新',
     })
-    fetch(this.state.checkVersionURL).then(res => res.json()).then(data => {
-      let latestTag = 0
-
-      data.forEach(function(item, index) {
-        let tagArr = item.ref.match(/v(.*?)$/i)
-        if (tagArr.length >= 1) {
-          let tag = tagArr[1]
-          if (latestTag <= tag) latestTag = tag
-        }
-      })
-
-      if (this.state.version < latestTag) {
-        Alert.alert(
-          `发现新版本`,
-          `最新版本为v${this.state.version}, 是否打开网页下载?`,
-          [
-            {text: '取消', style: 'cancel'},
-            {text: '确定', onPress: () => Linking.openURL(`${this.state.tagURL}/v${latestTag}`).catch(err => global.toast(err.toString()))},
-          ],
-          { cancelable: false }
-        )
-        this.setState({
-          checkUpdateTip: `最新版本为v${latestTag}`,
-        })
-        return
-      }
+    checkVersion().then((version) => {
       this.setState({
-        checkUpdateTip: '当前已是最新版本',
+        checkUpdateTip: version ? `最新版本为v${version}` : '当前已是最新版本',
       })
-      // alert(JSON.stringify(data))
-    }).catch((err) => {
+    }).catch(err => {
       this.setState({
         checkUpdateTip: err.toString(),
       })
-    }) 
+    })
   }
 
   goSourceCode = async () => {
