@@ -104,6 +104,9 @@ export default class extends Component {
       case 3:
 
         break;
+      case 4:
+
+        break;
     }
   }
 
@@ -189,13 +192,18 @@ export default class extends Component {
           </View>
         </View>
 
-
-        <View style={{ justifyContent: 'space-between', alignItems: 'center', flexDirection: 'row', padding: 7}}>
-          <Button style={{flex:1}} title={'发基因'} color={modeInfo.standardColor} onPress={() => this.handlePress(0)}></Button>
-          <Button style={{flex:1}} title={'基因列表'} color={modeInfo.standardColor} onPress={() => this.handlePress(1)}></Button>
-          <Button style={{flex:1}} title={'玩家排行榜'} color={modeInfo.standardColor} onPress={() => this.handlePress(2)}></Button>
-          <Button style={{flex:1}} title={'退圈'} color={modeInfo.accentColor} onPress={() => this.handlePress(3)}></Button>
-        </View>
+        { rowData.isJoined && (
+          <View style={{ justifyContent: 'space-between', alignItems: 'center', flexDirection: 'row', padding: 7}}>
+            <Button style={{flex:1}} title={'发基因'} color={modeInfo.standardColor} onPress={() => this.handlePress(0)}></Button>
+            <Button style={{flex:1}} title={'基因列表'} color={modeInfo.standardColor} onPress={() => this.handlePress(1)}></Button>
+            <Button style={{flex:1}} title={'玩家排行榜'} color={modeInfo.standardColor} onPress={() => this.handlePress(2)}></Button>
+            <Button style={{flex:1}} title={'退圈'} color={modeInfo.accentColor} onPress={() => this.handlePress(3)}></Button>
+          </View>
+        ) || (
+          <View style={{ justifyContent: 'center', alignItems: 'center', flexDirection: 'row', padding: 7}}>
+            <Button style={{flex:1}} title={'申请加入'} color={modeInfo.standardColor} onPress={() => this.handlePress(4)}></Button>
+          </View>
+        )}
 
         <View style={{padding: 7, marginTop: 0}}>
           <HTMLView

@@ -146,7 +146,7 @@ export const fetchCircles = (...args) => safeFetch(getCirlclesAPI(...args)).then
 
 export const fetchCircle = url => safeFetch(url).then(res => circleParser(res));
 
-export const fetchCircleLeader = (...args) => safeFetch(getCirlcleLeaderAPI(...args)).then(res => circleLeaderParser(res));
+export const fetchCircleLeader = url => safeFetch(url).then(res => circleLeaderParser(res));
 
 export const getCirlclesAPI = ({ page, title, type }) => `${webHost}/group?page=${page}&type=${type}${title ? `&title=${title}` : '' }`
 

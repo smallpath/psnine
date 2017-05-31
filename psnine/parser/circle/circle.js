@@ -15,6 +15,7 @@ export default function (html) {
   titleInfo.limit = title.first().find('p').html()
   titleInfo.content = `<div>${title.first().find('.content').html()}</div>`
   titleInfo.owner = title.find('a.psnnode').text()
+  titleInfo.isJoined = !html.includes('class="btn-success">申请加入</button>')
 
   const list = []
 
