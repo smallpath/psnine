@@ -11,10 +11,12 @@ export default function (html) {
   $('ul.storelist li').each(function (i, elem) {
     const $this = $(this)
     const arr = $this.find('div.storeinfo').text().split('\n').map(item => item.trim()).filter(item => item)
-
+    const matched = $this.find('img').parent().attr('onclick').match(/\'(.*?)\'/igm)
     const info = {
       avatar: $this.find('img').attr('src'),
       onclick: $this.find('img').parent().attr('onclick'),
+      id: matched ? matched[0].replace(/\'/igm, '') : '-1',
+      server: matched ? matched[1].replace(/\'/igm, '') : 'hk',
       title: arr[0],
       type: arr[1].replace('类别：', ''),
       comment: arr.slice(-1).pop().replace('备注：', ''),

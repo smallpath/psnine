@@ -22,6 +22,7 @@ import qaTopicParser from '../parser/qa/qa'
 import userBoardParser from '../parser/user/comment'
 import gamePointParser from '../parser/game/gamePoint'
 import storeParser from '../parser/store'
+import storeTopicParser from '../parser/store/store'
 import tradeParser from '../parser/trade'
 import tradeTopicParser from '../parser/trade/trade'
 import circlesParser from '../parser/circle'
@@ -30,13 +31,13 @@ import circleLeaderParser from '../parser/circle/rank'
 import userCircleParser from '../parser/user/circle'
 
 
-const safeFetch = function(reqUrl) {
+const safeFetch = function(reqUrl, type = 'text') {
   return new Promise((resolve, reject) => {
     let timeout = setTimeout(() => reject('请求超时::dao.js::line#31'), 20000);
     // console.log(reqUrl)
     fetch(reqUrl).then((response) => {
       clearTimeout(timeout);
-      const text = response.text()
+      const text = response[type]()
       return resolve(text);
     }).catch((error) => {
       console.warn(error)
@@ -134,9 +135,30 @@ export const getRanksAPI = ({ page = 1, sort = 'point', server = 'hk', cheat = '
 
 export const getGamesAPI = ({ page = 1, sort = 'newest', pf = 'all', dlc = 'all', title }) => `${webHost}/psngame?page=${page}&ob=${sort}&pf=${pf}&dlc=${dlc}${title ? `&title=${title}` : '' }`
 
-export const getStoreAPI = ({ page, server, ob, pf, plus, title }) => `${webHost}/store?page=${page}&ob=${ob}&pf=${pf}&plus=${plus}${title ? `&title=${title}` : '' }`
+export const getStoresAPI = ({ page, server, ob, pf, plus, title }) => `${webHost}/store?page=${page}&ob=${ob}&pf=${pf}&plus=${plus}${title ? `&title=${title}` : '' }`
 
-export const fetchStores = (...args) => safeFetch(getStoreAPI(...args)).then(res => storeParser(res));
+export const fetchStores = (...args) => safeFetch(getStoresAPI(...args)).then(res => storeParser(res));
+
+export const getStoreAPI = ({ id, server}) => {
+  let url
+  let param
+  if (server=='cn') {
+    param = 'CN/zh';
+    // uparam = 'zh-hans-cn';
+  } else if (server=='hk') {
+    param = 'HK/zh';
+    // uparam = 'zh-hans-hk';
+  } else if(server=='jp') {
+    param = 'JP/ja';
+    // uparam = 'ja-jp';
+  } else if(server=='us') {
+    param = 'US/en';
+    // uparam = 'en-us';
+  }
+  return 'https://store.playstation.com/store/api/chihiro/00_09_000/container/'+ param +'/999/' + id;
+}
+
+export const fetchStore = ({ id, server}) => safeFetch(getStoreAPI({ id, server}), 'json').then(res => storeTopicParser(res, server));
 
 export const getTradeAPI = ({ page, category, type, pf, lang, province, ob, title }) => `${webHost}/trade?page=${page}&category=${category}&type=${type}&pf=${pf}&lang=${lang}&province=${province}&ob=${ob}${title ? `&title=${title}` : '' }`
 

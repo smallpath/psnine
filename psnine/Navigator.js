@@ -23,6 +23,7 @@ import CommunityTopic from './container/topic/CommunityTopic'
 import QaTopic from './container/topic/QaTopic'
 import BattleTopic from './container/topic/BattleTopic'
 import TradeTopic from './container/topic/TradeTopic'
+import StoreTopic from './container/topic/StoreTopic'
 
 import Circle from './container/circle/Circle'
 import CircleTopic from './container/circle/CircleTopic'
@@ -108,15 +109,18 @@ const Navigator = StackNavigator({
   },
   GameTopic: {
     screen: GameTopic,
-    psngame: 'psngame/:linkingID/topic'
+    path: 'psngame/:linkingID/topic'
   },
   GamePoint: {
     screen: GamePoint,
-    psngame: 'psngame/:linkingID/comment'
+    path: 'psngame/:linkingID/comment'
   },
   Favorite: {
     screen: Favorite,
-    psngame: 'my/fav'
+    path: 'my/fav'
+  },
+  StoreTopic: {
+    screen: StoreTopic
   },
   Home: {
     screen: Home,

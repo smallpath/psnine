@@ -30,15 +30,13 @@ class StoreItem extends React.PureComponent {
   shouldComponentUpdate = (props) => props.modeInfo.isNightMode !== this.props.modeInfo.isNightMode
   
   _onRowPressed = (rowData) => {
-    // const { navigation } = this.props;
-    // const URL = getBattleURL(rowData.id);
-    // navigation.navigate('BattleTopic', {
-    //   URL,
-    //   title: rowData.title,
-    //   rowData,
-    //   type: 'battle',
-    //   shouldBeSawBackground: true
-    // })
+    const { navigation } = this.props;
+    navigation.navigate('StoreTopic', {
+      id: rowData.id,
+      server: rowData.server,
+      title: rowData.title || 'PSN商店',
+      rowData
+    })
   }
 
 
