@@ -87,6 +87,10 @@ class Community extends Component {
   }
 
   shouldComponentUpdate = (nextProps, nextState) => {
+    if (nextState.isRefreshing !== this.state.isRefreshing) {
+      if (this.shouldOnRefreshForSearch === true) this.shouldOnRefreshForSearch = false
+      return true
+    }
     if (nextProps.segmentedIndex !== 0) return false
     if (this.props.segmentedIndex !== 0) {
       if (this.shouldOnRefreshForSearch === true) {
@@ -161,7 +165,7 @@ class Community extends Component {
   render() {
     const { community: reducer } = this.props;
     const { modeInfo } = this.props.screenProps
-    // console.log('Community.js rendered');
+    log('Community.js rendered');
 
     return (
       <AnimatedFlatList style={{

@@ -77,6 +77,10 @@ class Gene extends Component {
 
 
   shouldComponentUpdate = (nextProps, nextState) => {
+    if (nextState.isRefreshing !== this.state.isRefreshing) {
+      if (this.shouldOnRefreshForSearch === true) this.shouldOnRefreshForSearch = false
+      return true
+    }
     if (nextProps.segmentedIndex !== 5) return false
     if (this.props.segmentedIndex !== 5) {
       if (this.shouldOnRefreshForSearch === true) {
@@ -140,7 +144,7 @@ class Gene extends Component {
   }
 
   render() {
-    // console.log('Gene.js rendered');
+    log('Gene.js rendered');
     const { gene: geneReducer } = this.props;
     const { modeInfo } = this.props.screenProps
 

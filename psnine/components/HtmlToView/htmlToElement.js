@@ -153,6 +153,8 @@ export default function htmlToElement(rawHtml, opts, done) {
           splited[0] = splited[0].replace(/\-([a-z])/, (matched) => matched[1].toUpperCase())
           if (splited[1].includes('px')) {
             splited[1] = parseInt(splited[1])
+          } else {
+            splited[1] = splited[1].toLowerCase()
           }
           styleObj[splited[0]] = splited[1]
         }

@@ -143,6 +143,10 @@ class Game extends Component {
 
 
   shouldComponentUpdate = (nextProps, nextState) => {
+    if (nextState.isRefreshing !== this.state.isRefreshing) {
+      if (this.shouldOnRefreshForSearch === true) this.shouldOnRefreshForSearch = false
+      return true
+    }
     if (nextProps.segmentedIndex !== 2) return false
     if (this.props.segmentedIndex !== 2) {
       if (this.shouldOnRefreshForSearch === true) {
@@ -218,7 +222,7 @@ class Game extends Component {
   render() {
     const { game: gameReducer } = this.props;
     const { modeInfo } = this.props.screenProps
-    // console.log('Game.js rendered');
+    log('Game.js rendered');
     return (
       <View style={{ backgroundColor: modeInfo.backgroundColor, flex: 1 }}>
         {this._renderHeader()}

@@ -179,6 +179,10 @@ class Store extends Component {
 
 
   shouldComponentUpdate = (nextProps, nextState) => {
+    if (nextState.isRefreshing !== this.state.isRefreshing) {
+      if (this.shouldOnRefreshForSearch === true) this.shouldOnRefreshForSearch = false
+      return true
+    }
     if (nextProps.segmentedIndex !== 7) return false
     if (this.props.segmentedIndex !== 7) {
       if (this.shouldOnRefreshForSearch === true) {
@@ -252,7 +256,7 @@ class Store extends Component {
   render() {
     const { reducer } = this.props;
     const { modeInfo } = this.props.screenProps
-    // console.log('Store.js rendered');
+    log('Store.js rendered');
     // console.log(reducer.page, reducer.list)
     return (
       <AnimatedFlatList style={{

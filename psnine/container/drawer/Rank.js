@@ -155,6 +155,10 @@ class Rank extends Component {
 
 
   shouldComponentUpdate = (nextProps, nextState) => {
+    if (nextState.isRefreshing !== this.state.isRefreshing) {
+      if (this.shouldOnRefreshForSearch === true) this.shouldOnRefreshForSearch = false
+      return true
+    }
     if (nextProps.segmentedIndex !== 3) return false
     if (this.props.segmentedIndex !== 3) {
       if (this.shouldOnRefreshForSearch === true) {
@@ -229,7 +233,7 @@ class Rank extends Component {
   render() {
     const { rank: reducer } = this.props;
     const { modeInfo } = this.props.screenProps
-    // console.log('Rank.js rerendered')
+    log('Rank.js rerendered')
     return (
       <View style={{ backgroundColor: modeInfo.backgroundColor, flex: 1 }}>
         {this._renderHeader()}

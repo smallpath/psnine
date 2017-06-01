@@ -128,6 +128,10 @@ class Trade extends Component {
 
 
   shouldComponentUpdate = (nextProps, nextState) => {
+    if (nextState.isRefreshing !== this.state.isRefreshing) {
+      if (this.shouldOnRefreshForSearch === true) this.shouldOnRefreshForSearch = false
+      return true
+    }
     if (nextProps.segmentedIndex !== 8) return false
     if (this.props.segmentedIndex !== 8) {
       if (this.shouldOnRefreshForSearch === true) {
@@ -230,7 +234,7 @@ class Trade extends Component {
   render() {
     const { reducer } = this.props;
     const { modeInfo } = this.props.screenProps
-    // console.log('Trade.js rendered');
+    log('Trade.js rendered');
     // console.log(reducer.page, reducer.list)
     return (
       <AnimatedFlatList style={{

@@ -136,6 +136,10 @@ class Qa extends Component {
   }
 
   shouldComponentUpdate = (nextProps, nextState) => {
+    if (nextState.isRefreshing !== this.state.isRefreshing) {
+      if (this.shouldOnRefreshForSearch === true) this.shouldOnRefreshForSearch = false
+      return true
+    }
     if (nextProps.segmentedIndex !== 1) return false
     if (this.props.segmentedIndex !== 1) {
       if (this.shouldOnRefreshForSearch === true) {
@@ -201,7 +205,7 @@ class Qa extends Component {
   render() {
     const { qa: qaReducer } = this.props;
     const { modeInfo } = this.props.screenProps
-    // console.log('Qa.js rendered');
+    log('Qa.js rendered');
     return (
       <View style={{ backgroundColor: modeInfo.backgroundColor, flex: 1 }}>
         {this._renderHeader()}

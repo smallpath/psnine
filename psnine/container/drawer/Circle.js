@@ -96,6 +96,10 @@ class Circle extends Component {
 
 
   shouldComponentUpdate = (nextProps, nextState) => {
+    if (nextState.isRefreshing !== this.state.isRefreshing) {
+      if (this.shouldOnRefreshForSearch === true) this.shouldOnRefreshForSearch = false
+      return true
+    }
     if (nextProps.segmentedIndex !== 6) return false
     if (this.props.segmentedIndex !== 6) {
       if (this.shouldOnRefreshForSearch === true) {
@@ -160,7 +164,7 @@ class Circle extends Component {
   render() {
     const { reducer } = this.props;
     const { modeInfo } = this.props.screenProps
-    // console.log('Circle.js rendered');
+    log('Circle.js rendered');
     // console.log(reducer.page, reducer.list)
     return (
       <AnimatedFlatList style={{
