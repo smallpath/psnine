@@ -57,7 +57,7 @@ class StoreItem extends React.PureComponent {
           delayPressIn={100}
           background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
         >
-          <View style={{ flex: -1, flexDirection: 'row', padding: 5, justifyContent: 'center', alignItems: 'center' }}>
+          <View pointerEvents={'box-only'} style={{ flex: -1, flexDirection: 'row', padding: 5, justifyContent: 'center', alignItems: 'center' }}>
             <View style={{
               flex: 1,
               flexDirection: 'column',

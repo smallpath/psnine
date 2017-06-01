@@ -20,3 +20,23 @@ export const postReply = (form, type = 'post') => {
     body: formBody
   })
 }
+
+
+const circleURL = 'http://psnine.com/set/group/ajax'
+export const postCircle = form => {
+  let formBody = []
+  for (let property in form) {
+    const encodedKey = encodeURIComponent(property);
+    const encodedValue = encodeURIComponent(form[property]);
+    formBody.push(encodedKey + "=" + encodedValue);
+  }
+  formBody = formBody.join("&");
+  return fetch(circleURL, {
+    method: 'POST',
+    headers: {
+      'Accept': 'text/html,application/xhtml+xml,application/xml',
+      'Content-Type': 'application/x-www-form-urlencoded'
+    },
+    body: formBody
+  })
+}

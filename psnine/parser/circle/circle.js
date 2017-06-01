@@ -16,6 +16,7 @@ export default function (html) {
   titleInfo.content = `<div>${title.first().find('.content').html()}</div>`
   titleInfo.owner = title.find('a.psnnode').text()
   titleInfo.isJoined = !html.includes('class="btn-success">申请加入</button>')
+  titleInfo.isLogined = !html.includes('<a href="http://psnine.com/sign/in">登录</a>')
 
   const list = []
 

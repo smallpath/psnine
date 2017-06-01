@@ -18,6 +18,7 @@ const { width, height: SCEEN_HEIGHT } = Dimensions.get('window')
 let WEBVIEW_REF = `WEBVIEW_REF`;
 let toolbarActions = [
   { title: '刷新', iconName: 'md-refresh', show: 'always' },
+  { title: '在浏览器中打开', show: 'never' },
 ];
 let title = "TOPIC";
 
@@ -41,6 +42,8 @@ export default class HtmlView extends Component {
     switch (index) {
       case 0:
         return this.webview.reload();
+      case 1:
+        return Linking.openURL(this.props.url).catch(err => global.toast && global.toast())
     }
   }
 

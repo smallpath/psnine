@@ -49,11 +49,7 @@ export default class extends React.PureComponent {
   }
 
 
-  handleImageOnclick = (url) => this.props.navigation.navigate('ImageViewer', {
-    images: [
-      { url }
-    ]
-  })
+  handleImageOnclick = () => {}
 
   render = () => {
     const { modeInfo, rowData } = this.props
@@ -72,7 +68,7 @@ export default class extends React.PureComponent {
           delayPressIn={100}
           background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
         >
-          <View style={{ flex: 1, flexDirection: 'row', padding: 12, justifyContent: 'space-around', alignItems: 'center' }}>
+          <View pointerEvents={'box-only'} style={{ flex: 1, flexDirection: 'row', padding: 12, justifyContent: 'space-around', alignItems: 'center' }}>
             <Image
               source={{ uri: rowData.avatar }}
               style={[styles.avatar, { width: 50 }]}

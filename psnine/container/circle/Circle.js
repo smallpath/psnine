@@ -57,6 +57,8 @@ let config = { tension: 30, friction: 7, ease: Easing.in(Easing.ease(1, 0, 1, 1)
 
 const limit = SCREEN_WIDTH - toolbarHeight
 
+import { postCircle } from '../../dao/post'
+
 export default class extends Component {
 
   constructor(props) {
@@ -85,6 +87,7 @@ export default class extends Component {
     const { navigation } = this.props
     const { params } = navigation.state
     let URL
+    const id = (params.URL.match(/\/group\/(\d+)/) || [0, -1])[1]
     switch(index) {
       case 0:
 
@@ -102,10 +105,17 @@ export default class extends Component {
         })
         break;
       case 3:
-
-        break;
+        // 退圈
       case 4:
-
+        // 申请加入
+        postCircle({
+          type: index === 3 ? 'unjoin' : 'join',
+          groupid: id
+        }).then(() => {
+          global.toast && global.toast(index === 3 ? '退圈成功' : '申请成功')
+        }).catch((err) => {
+          global.toast && global.toast(err.toString())
+        }).then(() => this.preFetch())
         break;
     }
   }
@@ -192,18 +202,18 @@ export default class extends Component {
           </View>
         </View>
 
-        { rowData.isJoined && (
+        { rowData.isLogined && rowData.isJoined && (
           <View style={{ justifyContent: 'space-between', alignItems: 'center', flexDirection: 'row', padding: 7}}>
             <Button style={{flex:1}} title={'发基因'} color={modeInfo.standardColor} onPress={() => this.handlePress(0)}></Button>
             <Button style={{flex:1}} title={'基因列表'} color={modeInfo.standardColor} onPress={() => this.handlePress(1)}></Button>
             <Button style={{flex:1}} title={'玩家排行榜'} color={modeInfo.standardColor} onPress={() => this.handlePress(2)}></Button>
-            <Button style={{flex:1}} title={'退圈'} color={modeInfo.accentColor} onPress={() => this.handlePress(3)}></Button>
+            <Button style={{flex:1}} title={'贵圈真乱'} color={modeInfo.accentColor} onPress={() => this.handlePress(3)}></Button>
           </View>
-        ) || (
+        ) || (rowData.isLogined && (
           <View style={{ justifyContent: 'center', alignItems: 'center', flexDirection: 'row', padding: 7}}>
             <Button style={{flex:1}} title={'申请加入'} color={modeInfo.standardColor} onPress={() => this.handlePress(4)}></Button>
           </View>
-        )}
+        ) || undefined )}
 
         <View style={{padding: 7, marginTop: 0}}>
           <HTMLView

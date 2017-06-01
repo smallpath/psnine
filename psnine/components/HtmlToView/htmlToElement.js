@@ -368,7 +368,7 @@ export default function htmlToElement(rawHtml, opts, done) {
                   classStyle.maxWidth = SCEEN_WIDTH - opts.imagePaddingOffset
                   classStyle.flexDirection = 'row'
                   classStyle.justifyContent = 'center'
-                  classStyle.alignItems = 'center'
+                  classStyle.alignItems = 'flex-start'
                   classStyle.elevation = 1
                   classStyle.marginTop = 2
                   classStyle.marginBottom = 2
@@ -406,9 +406,9 @@ export default function htmlToElement(rawHtml, opts, done) {
         ])
 
         const isNestedImage = inInsideView && node.name === 'a' && node.children && node.children.length !==0 && node.children.some(item => item.name === 'img')
-        log('判断是渲染View还是渲染Text',inInsideView, node.name === 'a' && node.children && node.children.length === 1 && node.children[0].name === 'img',
-          node.name === 'a' && node.children && node.children.length !==0 && node.children.some(item => item.name === 'img')
-        , 'wow', depth)
+        // log('判断是渲染View还是渲染Text',inInsideView, node.name === 'a' && node.children && node.children.length === 1 && node.children[0].name === 'img',
+        //   node.name === 'a' && node.children && node.children.length !==0 && node.children.some(item => item.name === 'img')
+        // , 'wow', depth)
 
         if (inInsideView && (inlineElements.includes(node.name) === false || isNestedImage)) {
 
