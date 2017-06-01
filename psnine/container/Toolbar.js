@@ -149,9 +149,8 @@ class Toolbar extends Component {
     return (
       <RightDrawer         
         onNavigationStateChange={(prevRoute, nextRoute, action) => {
-          if (prevRoute.index !== nextRoute.index && action.type === 'Navigation/NAVIGATE') {
+          if (prevRoute.index !== nextRoute.index && action.type === 'Navigation/NAVIGATE' && !['DrawerOpen', 'DrawerClose'].includes(nextRoute.routes[nextRoute.index].routeName)) {
             /*setTimeout(() => {*/
-              /*console.log('navigate', nextRoute.index)*/
               this.props.dispatch(changeSegmentIndex(nextRoute.index))
             /*}, 100)*/
           }
