@@ -54,6 +54,9 @@ class Message extends Component {
     } else if (URL.includes('/qa/')) {
       type = 'QaTopic'
       replyType = 'qa'
+    } else if (URL.includes('/trade/')) {
+      type = 'TradeTopic'
+      replyType = 'trade'
     } else if (URL.includes('/psnid/') && URL.includes('#comment')) {
       type = 'Home'
       replyType = ''
