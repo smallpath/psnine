@@ -214,7 +214,7 @@ export default class GamePage extends Component {
             padding: 12,
             backgroundColor: modeInfo.backgroundColor
             }}>
-          {list.map((item, index) => (
+          {list.map((item, index) => ['讨论', '评论'].includes(item.text) && (
             <TouchableNativeFeedback key={index} onPress={() => {
                 if (item.text === '讨论') {
                   this.props.navigation.navigate('GameTopic', {
@@ -234,7 +234,7 @@ export default class GamePage extends Component {
                 <Text style={{ color: idColor, textAlign:'left', fontSize: 12 }}>{item.text}</Text>
               </View>
             </TouchableNativeFeedback>
-        ))}
+        ) || undefined )}
       </View>
     )
   }
