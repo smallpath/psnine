@@ -18,6 +18,7 @@ import trophyParser from '../parser/game/trophy'
 import myGameParser from '../parser/user/myGame'
 import gameTopicParser from '../parser/game/gameTopic'
 import favoriteParser from '../parser/user/favorite'
+import issueParser from '../parser/user/issue'
 import qaTopicParser from '../parser/qa/qa'
 import userBoardParser from '../parser/user/comment'
 import gamePointParser from '../parser/game/gamePoint'
@@ -70,6 +71,8 @@ export const getTrophyAPI = uri => safeFetch(uri).then(res => trophyParser(res))
 export const getUserBoardCommentAPI = uri => safeFetch(uri).then(res => userBoardParser(res))
 
 export const getFavoriteAPI = (uri, type = 'topic') => safeFetch(`${uri}&channel=${type}`).then(res => favoriteParser(res, type))
+
+export const getIssueAPI = (uri, type = 'topic') => safeFetch(`${uri}&channel=${type}`).then(res => issueParser(res, type))
 
 export const getQaTopicAPI = uri => safeFetch(uri).then(res => qaTopicParser(res))
 

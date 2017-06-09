@@ -12,6 +12,7 @@ import Message from './container/user/Message'
 import UserGame from './container/user/UserGame'
 import UserBoard from './container/user/UserBoard'
 import Favorite from './container/user/Favorite'
+import Issue from './container/user/Issue'
 
 import Trophy from './container/game/Trophy'
 import GameTopic from './container/game/GameTopic'
@@ -64,6 +65,9 @@ const Navigator = StackNavigator({
   Login: {
     screen: Login,
     path: 'sign/in'
+  },
+  Issue: {
+    screen: Issue
   },
   Message: {
     screen: Message,
