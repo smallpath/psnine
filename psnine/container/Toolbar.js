@@ -105,7 +105,7 @@ let tradeActions = [
   searchAction
 ]
 
-let toolbarActions = [communityActions, qaActions, gameActions, rankActions, battleActions, geneActions, circleActions, storeActions, tradeActions]
+let toolbarActions = [communityActions, qaActions, geneActions, gameActions, battleActions, rankActions, circleActions, storeActions, tradeActions]
 
 let titlesArr = ["社区", "问答", "游戏", "约战", "机因"];
 
@@ -223,7 +223,7 @@ class Toolbar extends Component {
       } else {
         this._onSearchClicked()
       }
-    } else if (segmentedIndex === 5) {
+    } else if (segmentedIndex === 2) {
       if (index !== 0) {
         let type = toolbarActions[segmentedIndex][index].value;
         dispatch(changeGeneType(type));

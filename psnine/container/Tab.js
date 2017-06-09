@@ -78,17 +78,17 @@ const Tabs = TabNavigator({
   Qa: {
     screen: Qa,
   },
+  Gene: {
+    screen: Gene,
+  },
   Game: {
     screen: Game,
-  },
-  Rank: {
-    screen: Rank
   },
   Battle: {
     screen: Battle,
   },
-  Gene: {
-    screen: Gene,
+  Rank: {
+    screen: Rank
   },
   Circle: {
     screen: Circle

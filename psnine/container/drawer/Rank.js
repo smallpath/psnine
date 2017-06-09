@@ -121,7 +121,7 @@ class Rank extends Component {
 
   shouldOnRefreshForSearch = false
   componentWillReceiveProps = (nextProps) => {
-    let shouldCall = nextProps.segmentedIndex === 3
+    let shouldCall = nextProps.segmentedIndex === 5
     let empty = () => {}
     let cb = empty
     if (this.props.screenProps.modeInfo.isNightMode != nextProps.screenProps.modeInfo.isNightMode) {
@@ -162,8 +162,8 @@ class Rank extends Component {
       if (this.shouldOnRefreshForSearch === true) this.shouldOnRefreshForSearch = false
       return true
     }
-    if (nextProps.segmentedIndex !== 3) return false
-    if (this.props.segmentedIndex !== 3) {
+    if (nextProps.segmentedIndex !== 5) return false
+    if (this.props.segmentedIndex !== 5) {
       if (this.shouldOnRefreshForSearch === true) {
         this.shouldOnRefreshForSearch = false
         return true

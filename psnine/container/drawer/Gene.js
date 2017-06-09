@@ -39,7 +39,7 @@ class Gene extends Component {
 
   shouldOnRefreshForSearch = false
   componentWillReceiveProps = (nextProps) => {
-    let shouldCall = nextProps.segmentedIndex === 5
+    let shouldCall = nextProps.segmentedIndex === 2
     let empty = () => {}
     let cb = empty
     if (this.props.screenProps.geneType != nextProps.screenProps.geneType) {
@@ -84,8 +84,8 @@ class Gene extends Component {
       if (this.shouldOnRefreshForSearch === true) this.shouldOnRefreshForSearch = false
       return true
     }
-    if (nextProps.segmentedIndex !== 5) return false
-    if (this.props.segmentedIndex !== 5) {
+    if (nextProps.segmentedIndex !== 2) return false
+    if (this.props.segmentedIndex !== 2) {
       if (this.shouldOnRefreshForSearch === true) {
         this.shouldOnRefreshForSearch = false
         return true
