@@ -39,12 +39,13 @@ import Theme from './container/setting/Theme'
 import General from './container/setting/General'
 import ImageViewer from './components/ImageViewer'
 import Search from './container/Search'
+import Pass from './container/user/Pass'
 
 import { transitionConfig, onTransitionStart } from './utils/transitionConfig'
 
 const enableGesture = ({ navigation }) => {
   return {
-    gesturesEnabled: true
+    gesturesEnabled: false
   }
 }
 
@@ -57,34 +58,31 @@ const Navigator = StackNavigator({
     screen: Search,
     path: '',
   },
+  Pass: {
+    screen: Pass
+  },
   Login: {
     screen: Login,
-    navigationOptions: enableGesture,
     path: 'sign/in'
   },
   Message: {
     screen: Message,
-    navigationOptions: enableGesture,
     path: 'my/notice'
   },
   CommentList: {
     screen: CommentList,
-    navigationOptions: enableGesture,
     path: 'topic/:linkingID/comment'
   },
   GeneCommentList: {
     screen: CommentList,
-    navigationOptions: enableGesture,
     path: 'gene/:linkingID/comment'
   },
   CommunityTopic: {
     screen: CommunityTopic,
-    navigationOptions: enableGesture,
     path: 'topic/:linkingID'
   },
   GeneTopic: {
     screen: CommunityTopic,
-    navigationOptions: enableGesture,
     path: 'gene/:linkingID'
   },
   QaTopic: {
