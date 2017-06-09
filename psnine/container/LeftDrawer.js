@@ -59,7 +59,7 @@ const ListItems = [
     }
   },
   {
-    text: '我的收藏',
+    text: '收藏',
     iconName: 'md-star',
     onPress: function () {
       const { navigation, closeDrawer } = this.props;
@@ -74,6 +74,96 @@ const ListItems = [
     }
   },
   {
+    text: '发布',
+    iconName: 'md-bookmarks',
+    onPress: function () {
+      const { navigation, closeDrawer } = this.props;
+      closeDrawer();
+
+      let URL = 'http://psnine.com/my/issue?page=1'
+
+      navigation.navigate('Issue', {
+        URL,
+        title: '发布'
+      });
+    }
+  },
+  {
+    text: '圈子',
+    iconName: 'md-globe',
+    onPress: function () {
+      const { navigation, closeDrawer } = this.props;
+      closeDrawer();
+
+      let URL = 'http://psnine.com/my/group'
+
+      navigation.navigate('Group', {
+        URL,
+        title: '圈子'
+      });
+    }
+  },
+  {
+    text: '图床',
+    iconName: 'md-image',
+    onPress: function () {
+      const { navigation, closeDrawer } = this.props;
+      closeDrawer();
+
+      let URL = 'http://psnine.com/my/photo'
+
+      navigation.navigate('Photo', {
+        URL,
+        title: '图床'
+      });
+    }
+  },
+  {
+    text: '明细',
+    iconName: 'md-star',
+    onPress: function () {
+      const { navigation, closeDrawer } = this.props;
+      closeDrawer();
+
+      let URL = 'http://psnine.com/my/account'
+
+      navigation.navigate('Account', {
+        URL,
+        title: '明细'
+      });
+    }
+  },
+  {
+    text: '个性化',
+    iconName: 'md-brush',
+    onPress: function () {
+      const { navigation, closeDrawer } = this.props;
+      closeDrawer();
+
+      let URL = 'http://psnine.com/my/setting'
+
+      navigation.navigate('Custom', {
+        URL,
+        title: '个性化'
+      });
+    }
+  },
+  {
+    text: '改密码',
+    iconName: 'md-key',
+    onPress: function () {
+      const { navigation, closeDrawer } = this.props;
+      closeDrawer();
+
+      let URL = 'http://psnine.com/my/pass'
+
+      navigation.navigate('Pass', {
+        URL,
+        title: '改密码'
+      });
+    }
+  },
+  {
     text: '系统选项',
     iconName: 'md-home'
   },
@@ -84,6 +174,15 @@ const ListItems = [
       const { navigation, closeDrawer } = this.props;
       closeDrawer()
       navigation.navigate('Setting');
+    }
+  },
+  {
+    text: '关于',
+    iconName: 'md-help-circle',
+    onPress: function () {
+      const { navigation, closeDrawer } = this.props;
+      closeDrawer()
+      navigation.navigate('About');
     }
   }
 ];

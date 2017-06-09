@@ -24,6 +24,7 @@ import MyDialog from '../../components/Dialog'
 import HTMLView from '../../components/HtmlToView';
 import { connect } from 'react-redux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import UserGameItem from '../shared/UserGameItem';
 import {
   standardColor, 
   nodeColor, 
@@ -135,97 +136,21 @@ export default class Home extends Component {
   })
 
 
-  hasGameTable = false
-  renderGameItem = (rowData, index) => {
-    const { modeInfo } = this.props.screenProps
-    return (
-      <TouchableNativeFeedback key={rowData.id || index}   onPress={() => {
-          this.props.screenProps.navigation.navigate('GamePage', {
-            URL: rowData.href,
-            title: rowData.title,
-            rowData,
-            type: 'game',
-            shouldBeSawBackground: true
-          })
-        }}>
-        <View pointerEvents={'box-only'} style={{
-          backgroundColor: modeInfo.backgroundColor,
-          flexDirection: 'row',
-          borderBottomWidth: StyleSheet.hairlineWidth,
-          borderBottomColor: modeInfo.brighterLevelOne,
-          padding: 2
-        }}>
+  ITEM_HEIGHT = 83
 
-          <View style={{ flex: -1, flexDirection: 'row', padding: 12 }}>
-            <Image
-              source={{ uri: rowData.avatar }}
-              style={[styles.avatar, { width: 91, height: 54 }]}
-            />
-          </View>
-          <View style={{ justifyContent: 'center', flex: 3 }}>
-            <View>
-              <Text
-                ellipsizeMode={'tail'}
-                style={{ flex: -1, color: modeInfo.titleTextColor, }}>
-                {rowData.title}
-              </Text>
-            </View>
-            { rowData.platform && <View><Text style={{ color: modeInfo.standardTextColor, marginLeft: 2  }}>{rowData.platform.join(' ')}</Text></View> || undefined }
-            { rowData.syncTime && (<View style={{ flex: -1, flexDirection: 'row' }}>
-                <Text style={{ color: modeInfo.standardTextColor ,fontSize: 12, marginLeft: 2 }}>{rowData.syncTime + ' '}</Text>
-                <Text selectable={false} style={{
-                  flex: -1,
-                  color: modeInfo.standardTextColor,
-                  fontSize: 12
-                }}>{ rowData.allTime ? '总耗时 ' : ''}</Text>
-                <Text selectable={false} style={{
-                  flex: -1,
-                  fontSize: 12,
-                  color: modeInfo.standardColor,
-                }}>{rowData.allTime}</Text>
-              </View>) || undefined}
-          </View>
-          { rowData.alert && (
-            <View style={{ flex: 1, justifyContent: 'center', padding: 2 }}>
-              <Text selectable={false}             
-                style={{ 
-                  flex: -1,             
-                  textAlign: 'center',
-                  textAlignVertical: 'center',
-                  color: modeInfo.titleTextColor, }}>{rowData.alert}</Text>
-              <Text
-                ellipsizeMode={'tail'} 
-                style={{
-                  flex: -1,
-                  color: modeInfo.standardTextColor,
-                  textAlign: 'center',
-                  textAlignVertical: 'center',
-                  fontSize: 10
-                }}>{rowData.allPercent}</Text>
-            </View>
-            ) || undefined
-          }
-          <View style={{ flex: 1, justifyContent: 'center', padding: 2 }}>
-            <Text selectable={false}             
-              style={{ 
-                flex: -1,             
-                textAlign: 'center',
-                textAlignVertical: 'center',
-                color: modeInfo.titleTextColor, }}>{rowData.percent}</Text>
-            <Text
-              ellipsizeMode={'tail'} 
-              style={{
-                flex: -1,
-                color: modeInfo.standardTextColor,
-                textAlign: 'center',
-                textAlignVertical: 'center',
-                fontSize: 10
-              }}>{rowData.trophyArr}</Text>
-          </View>
-        </View>
-      </TouchableNativeFeedback>
-    )
+  renderGameItem = (rowData, index) => {
+    const { modeInfo, navigation } = this.props.screenProps
+    const { ITEM_HEIGHT } = this
+    return <UserGameItem {...{
+      navigation,
+      rowData,
+      modeInfo,
+      ITEM_HEIGHT
+    }} />
   }
+
+
+  hasGameTable = false
 
   renderDiary = (rowData, index) => {
     const { modeInfo } = this.props.screenProps

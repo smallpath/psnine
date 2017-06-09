@@ -33,6 +33,11 @@ import {
   accentColor,
   levelColor,
   rankColor,
+  trophyColor1,
+  trophyColor2,
+  trophyColor3,
+  trophyColor4,
+  trophyColor5
 } from '../../constants/colorConfig';
 
 import { getHomeAPI } from '../../dao';
@@ -242,11 +247,11 @@ export default class Home extends Component {
         <View style={{ flex: 1, padding: 5}}>
           <View borderRadius={20} style={{ marginTop: 10, paddingHorizontal: 10, alignSelf: 'center', alignContent: 'center',  flexDirection: 'row', justifyContent:'center', alignItems: 'center', backgroundColor: 'rgba(0,0,0,0.3)'  }}>
             <Text style={{ height: 30, textAlignVertical: 'center',textAlign: 'center' }}>
-              <Text style={{ flex: 1, color: color, marginVertical: 2, textAlign:'center', fontSize: 15 }}>{rowData.platinum + ' '}</Text>
-              <Text style={{ flex: 1, color: color, marginVertical: 2, textAlign:'center', fontSize: 15 }}>{rowData.gold + ' '}</Text>
-              <Text style={{ flex: 1, color: color, marginVertical: 2, textAlign:'center', fontSize: 15 }}>{rowData.silver + ' '}</Text>
-              <Text style={{ flex: 1, color: color, marginVertical: 2, textAlign:'center', fontSize: 15 }}>{rowData.bronze + ' '}</Text>
-              <Text style={{ flex: 1, color: color, marginVertical: 2, textAlign:'center', fontSize: 15 }}>{rowData.all + ' '}</Text>
+              <Text style={{ flex: 1, color: trophyColor1, marginVertical: 2, textAlign:'center', fontSize: 15 }}>{rowData.platinum + ' '}</Text>
+              <Text style={{ flex: 1, color: trophyColor2, marginVertical: 2, textAlign:'center', fontSize: 15 }}>{rowData.gold + ' '}</Text>
+              <Text style={{ flex: 1, color: trophyColor3, marginVertical: 2, textAlign:'center', fontSize: 15 }}>{rowData.silver + ' '}</Text>
+              <Text style={{ flex: 1, color: trophyColor4, marginVertical: 2, textAlign:'center', fontSize: 15 }}>{rowData.bronze + ' '}</Text>
+              <Text style={{ flex: 1, color: infoColor, marginVertical: 2, textAlign:'center', fontSize: 15 }}>{rowData.all + ' '}</Text>
             </Text>
           </View>
         </View>

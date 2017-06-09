@@ -52,14 +52,6 @@ const items = [
     onPress: function() {
       this.props.navigation.navigate('Theme')
     }
-  },
-  {
-    text: '关于',
-    iconName: 'md-help-circle',
-    onPress: function () {
-      const { navigation } = this.props;
-      navigation.navigate('About');
-    }
   }
 ]
 

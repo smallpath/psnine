@@ -153,6 +153,9 @@ class Battle extends Component {
   }
 
   shouldComponentUpdate(nextProps, nextState) {
+    if (this.props.screenProps.modeInfo.isNightMode != nextProps.screenProps.modeInfo.isNightMode) {
+      return true
+    }
     if (this.props.screenProps.searchTitle !== nextProps.screenProps.searchTitle) {
       return false
     }

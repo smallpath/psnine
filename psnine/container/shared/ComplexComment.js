@@ -86,7 +86,7 @@ export default class ComplexComment extends React.PureComponent {
                         })
                       }}>
                       <View style={{height: 50, paddingVertical: 10, paddingLeft: 20 ,alignSelf: 'stretch', alignContent: 'stretch', justifyContent: 'center'}}>
-                        <Text style={{textAlignVertical: 'center', fontSize: 18}}>回复</Text>
+                        <Text style={{textAlignVertical: 'center', fontSize: 18, color: modeInfo.standardTextColor}}>回复</Text>
                       </View>
                     </TouchableNativeFeedback>
                   </View>

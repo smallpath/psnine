@@ -61,7 +61,7 @@ export default class extends React.PureComponent {
             </View>
             {rowData.platform && (<View><Text style={{ color: modeInfo.standardTextColor, marginLeft: 2  }}>{rowData.platform.join(' ')}</Text></View>) || undefined}
             {rowData.syncTime && (<View style={{ flex: -1, flexDirection: 'row' }}>
-                <Text style={{ color: modeInfo.standardColor ,fontSize: 12, marginLeft: 2 }}>{rowData.syncTime + ' '}</Text>
+                <Text style={{ color: modeInfo.standardTextColor ,fontSize: 12, marginLeft: 2 }}>{rowData.syncTime + ' '}</Text>
                 <Text selectable={false} style={{
                   flex: -1,
                   color: modeInfo.standardTextColor,
@@ -70,7 +70,7 @@ export default class extends React.PureComponent {
                 <Text selectable={false} style={{
                   flex: -1,
                   fontSize: 12,
-                  color: modeInfo.standardTextColor,
+                  color: modeInfo.standardColor,
                 }}>{rowData.allTime}</Text>
               </View>) || undefined}
           </View>
