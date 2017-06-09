@@ -245,7 +245,7 @@ export default class Home extends Component {
               <Text style={{ flex: 1, color: color, marginVertical: 2, textAlign:'center', fontSize: 15 }}>{rowData.platinum + ' '}</Text>
               <Text style={{ flex: 1, color: color, marginVertical: 2, textAlign:'center', fontSize: 15 }}>{rowData.gold + ' '}</Text>
               <Text style={{ flex: 1, color: color, marginVertical: 2, textAlign:'center', fontSize: 15 }}>{rowData.silver + ' '}</Text>
-              <Text style={{ flex: 1, color: color, marginVertical: 2, textAlign:'center', fontSize: 15 }}>{rowData.gold + ' '}</Text>
+              <Text style={{ flex: 1, color: color, marginVertical: 2, textAlign:'center', fontSize: 15 }}>{rowData.bronze + ' '}</Text>
               <Text style={{ flex: 1, color: color, marginVertical: 2, textAlign:'center', fontSize: 15 }}>{rowData.all + ' '}</Text>
             </Text>
           </View>
