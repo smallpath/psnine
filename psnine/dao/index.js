@@ -69,7 +69,7 @@ export const getTrophyAPI = uri => safeFetch(uri).then(res => trophyParser(res))
 
 export const getUserBoardCommentAPI = uri => safeFetch(uri).then(res => userBoardParser(res))
 
-export const getFavoriteAPI = uri => safeFetch(uri).then(res => favoriteParser(res))
+export const getFavoriteAPI = (uri, type = 'topic') => safeFetch(`${uri}&channel=${type}`).then(res => favoriteParser(res, type))
 
 export const getQaTopicAPI = uri => safeFetch(uri).then(res => qaTopicParser(res))
 

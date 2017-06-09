@@ -27,13 +27,23 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import { getFavoriteAPI } from '../../dao';
 
 import TopicItem from '../shared/CommunityItem'
+import GeneItem from '../shared/GeneItem'
+import RankItem from '../shared/RankItem'
+import QaItem from '../shared/QaItem'
+const Mapper = {
+  'topic': TopicItem,
+  'gene' : GeneItem,
+  'psnid': RankItem,
+  'qa': QaItem
+}
 import FooterProgress from '../shared/FooterProgress'
 
 let toolbarActions = [
+  { title: '类型', iconName: 'md-funnel', show: 'always' },
   { title: '跳页', iconName: 'md-map', show: 'always' },
 ];
 
-class GameTopic extends Component {
+class Fav extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -45,7 +55,10 @@ class GameTopic extends Component {
       isRefreshing: true,
       isLoadingMore: false,
       modalVisible: false,
-      sliderValue: 1
+      sliderValue: 1,
+      typeModalVisible: false,
+      type: 'topic', // gene psnid qa
+      finalType: 'topic'
     }
   }
 
@@ -64,7 +77,7 @@ class GameTopic extends Component {
       [type === 'down' ? 'isLoadingMore' : 'isRefreshing'] : true
     }, () => {
       InteractionManager.runAfterInteractions(() => {
-        getFavoriteAPI(url).then(data => {
+        getFavoriteAPI(url, this.state.type).then(data => {
           let thisList = []
           const thisPage = parseInt((url.match(/\?page=(\d+)/) || [0, 1])[1])
           let cb = () => { }
@@ -88,7 +101,8 @@ class GameTopic extends Component {
             commentTotal: data.len,
             currentPage: thisPage,
             isLoadingMore: false,
-            isRefreshing: false
+            isRefreshing: false,
+            finalType: this.state.type
           }, cb);
         })
       })
@@ -123,6 +137,11 @@ class GameTopic extends Component {
     switch (index) {
       case 0:
         this.setState({
+          typeModalVisible: true
+        })
+      return
+      case 1:
+        this.setState({
           modalVisible: true
         })
       return
@@ -136,13 +155,22 @@ class GameTopic extends Component {
     const { modeInfo } = this.props.screenProps
     const { ITEM_HEIGHT } = this
     const { navigation } = this.props
-    return <TopicItem {...{
+    const Item = Mapper[this.state.finalType]
+    // console.log(rowData)
+    return <Item {...{
       navigation,
       rowData,
       modeInfo,
       ITEM_HEIGHT
     }} />
   }
+
+
+  onValueChange = (key: string, value: string) => {
+    const newState = {};
+    newState[key] = value;
+    this.setState(newState);
+  };
 
   sliderValue = 1
   render() {
@@ -203,6 +231,52 @@ class GameTopic extends Component {
             waitForInteractions: true
           }}
         />
+        {this.state.typeModalVisible && (
+          <MyDialog modeInfo={modeInfo}
+            modalVisible={this.state.typeModalVisible}
+            onDismiss={() => { this.setState({ typeModalVisible: false }); this.isValueChanged = false }}
+            onRequestClose={() => { this.setState({ typeModalVisible: false }); this.isValueChanged = false }}
+            renderContent={() => (
+              <View style={{
+                justifyContent: 'center',
+                alignItems: 'flex-start',
+                backgroundColor: modeInfo.backgroundColor,
+                position: 'absolute',
+                paddingVertical: 30,
+                left: 30,
+                right: 30,
+                paddingHorizontal: 20,
+                elevation: 4,
+                opacity: 1
+              }} borderRadius={2}>
+                <Text style={{ alignSelf: 'flex-start', fontSize: 18, color: modeInfo.titleTextColor }}>选择类型: </Text>
+                <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+                  <Picker style={{
+                    flex: 1,
+                    borderWidth: 1,
+                    color: modeInfo.standardTextColor
+                  }}
+                    prompt='选择类型'
+                    selectedValue={this.state.type}
+                    onValueChange={this.onValueChange.bind(this, 'type')}>
+                    <Picker.Item label="主题" value="topic" />
+                    <Picker.Item label="基因" value="gene" />
+                    <Picker.Item label="用户" value="psnid" />
+                    <Picker.Item label="问答" value="qa" />
+                  </Picker>
+                </View>
+                <Text style={{ alignSelf: 'flex-end', color: '#009688' }}
+                  onPress={() => {
+                    this.setState({
+                      typeModalVisible: false,
+                      isLoading: true
+                    }, () => {
+                      this.fetchMessages(params.URL, 'jump');
+                    })
+                  }}>确定</Text>
+              </View>
+            )} />
+        )}
         {this.state.modalVisible && (
           <MyDialog modeInfo={modeInfo}
             modalVisible={this.state.modalVisible}
@@ -290,4 +364,4 @@ const styles = StyleSheet.create({
 });
 
 
-export default GameTopic;
+export default Fav;

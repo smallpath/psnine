@@ -75,7 +75,7 @@ export default class extends React.PureComponent {
             />
             <View style={{ flex: 2, padding: 5}}>
               <Text style={{color: modeInfo.accentColor}}>{rowData.psnid}</Text>
-              <Text style={{color: modeInfo.titleTextColor}}>No.{rowData.rank}</Text>
+              <Text style={{color: modeInfo.titleTextColor}}>{rowData.rank ? 'No.' + rowData.rank : ''}</Text>
               <HTMLView
                 value={rowData.content}
                 modeInfo={modeInfo}
