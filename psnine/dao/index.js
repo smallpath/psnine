@@ -30,6 +30,7 @@ import circlesParser from '../parser/circle'
 import circleParser from '../parser/circle/circle'
 import circleLeaderParser from '../parser/circle/rank'
 import userCircleParser from '../parser/user/circle'
+import userGroupParser from '../parser/user/group'
 
 
 const safeFetch = function(reqUrl, type = 'text') {
@@ -170,6 +171,8 @@ export const fetchTrades = (...args) => safeFetch(getTradeAPI(...args)).then(res
 export const fetchCircles = (...args) => safeFetch(getCirlclesAPI(...args)).then(res => circlesParser(res));
 
 export const fetchCircle = url => safeFetch(url).then(res => circleParser(res));
+
+export const getGroupAPI = url => safeFetch(url).then(res => userGroupParser(res));
 
 export const fetchCircleLeader = url => safeFetch(url).then(res => circleLeaderParser(res));
 

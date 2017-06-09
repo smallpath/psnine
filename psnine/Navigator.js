@@ -41,6 +41,7 @@ import General from './container/setting/General'
 import ImageViewer from './components/ImageViewer'
 import Search from './container/Search'
 import Pass from './container/user/Pass'
+import UserGroup from './container/user/Group'
 
 import { transitionConfig, onTransitionStart } from './utils/transitionConfig'
 
@@ -68,6 +69,9 @@ const Navigator = StackNavigator({
   },
   Issue: {
     screen: Issue
+  },
+  UserGroup: {
+    screen: UserGroup
   },
   Message: {
     screen: Message,

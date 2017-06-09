@@ -99,12 +99,12 @@ export default class CircleItem extends React.PureComponent {
               }><Text style={{ flex: -1, color: modeInfo.standardTextColor, fontSize: 12 }} numberOfLines={1}>机长：</Text>{rowData.owner}</Text>
             </View>
             <View style={{ marginLeft: 10, flex: 1, flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-              <Text style={{ flex: -1, color: modeInfo.standardTextColor }} numberOfLines={1}>类型</Text>
-              <Text style={{ flex: -1, color: modeInfo.standardTextColor }} numberOfLines={1}>{rowData.type}</Text>
+              <Text style={{ flex: -1, color: modeInfo.standardTextColor }} numberOfLines={1}>{rowData.type ? '类型' : '状态'}</Text>
+              <Text style={{ flex: -1, color: modeInfo.standardTextColor }} numberOfLines={1}>{rowData.type || rowData.type}</Text>
             </View>
-            <View style={{ marginLeft: 10, flex: 1, flexDirection: 'column', justifyContent: 'center', alignItems: 'center'  }}>
-              <Text style={{ flex: -1, color: modeInfo.standardTextColor }} numberOfLines={1}>热度</Text>
-              <Text style={{ flex: -1, color: modeInfo.standardTextColor }} numberOfLines={1}>{rowData.hot}</Text>
+            <View style={{ marginLeft: 10, flex: rowData.hot ? 1 : 1.5, flexDirection: 'column', justifyContent: 'center', alignItems: 'center'  }}>
+              <Text style={{ flex: -1, color: modeInfo.standardTextColor }} numberOfLines={1}>{rowData.hot ? '热度' : '加入时间'}</Text>
+              <Text style={{ flex: -1, color: modeInfo.standardTextColor }} numberOfLines={1}>{rowData.hot || rowData.access}</Text>
             </View>
           </View>
         </TouchableNativeFeedback>

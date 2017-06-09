@@ -97,7 +97,7 @@ const ListItems = [
 
       let URL = 'http://psnine.com/my/group'
 
-      navigation.navigate('Group', {
+      navigation.navigate('UserGroup', {
         URL,
         title: '圈子'
       });
