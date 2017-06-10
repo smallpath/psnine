@@ -32,6 +32,7 @@ import circleLeaderParser from '../parser/circle/rank'
 import userCircleParser from '../parser/user/circle'
 import userGroupParser from '../parser/user/group'
 import photoParser from '../parser/user/photo'
+import detailParser from '../parser/user/detail'
 
 
 const safeFetch = function(reqUrl, type = 'text') {
@@ -176,6 +177,8 @@ export const fetchCircle = url => safeFetch(url).then(res => circleParser(res));
 export const getGroupAPI = url => safeFetch(url).then(res => userGroupParser(res));
 
 export const fetchCircleLeader = url => safeFetch(url).then(res => circleLeaderParser(res));
+
+export const getDetailAPI = url => safeFetch(url).then(res => detailParser(res));
 
 export const getCirlclesAPI = ({ page, title, type }) => `${webHost}/group?page=${page}&type=${type}${title ? `&title=${title}` : '' }`
 

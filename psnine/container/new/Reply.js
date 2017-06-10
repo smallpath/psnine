@@ -27,7 +27,8 @@ import { pngPrefix, getDealURL, getHappyPlusOneURL, getStoreURL } from '../../da
 
 import { safeLogin, registURL } from '../../dao/login';
 import { postReply } from '../../dao/post';
-
+import HTMLView from '../../components/HtmlToView'
+import MyDialog from '../../components/Dialog'
 import Emotion from '../../components/Emotion'
 
 let title = '回复';
@@ -65,7 +66,8 @@ export default class Reply extends Component {
       isOldPage: isOldPage,
       openVal: new Animated.Value(0),
       marginTop: new Animated.Value(0),
-      toolbarOpenVal: new Animated.Value(0)
+      toolbarOpenVal: new Animated.Value(0),
+      modalVisible: false
     }
   }
 
@@ -235,14 +237,16 @@ export default class Reply extends Component {
       Ionicons.getImageSource('md-arrow-back', 20, '#fff'),
       Ionicons.getImageSource('md-happy', 50, '#fff'),
       Ionicons.getImageSource('md-photos', 50, '#fff'),
-      Ionicons.getImageSource('md-send', 50, '#fff')
+      Ionicons.getImageSource('md-send', 50, '#fff'),
+      Ionicons.getImageSource('md-eye', 50, '#fff'),
     ])
     this.setState({
       icon: {
         backIcon: icon[0],
         emotionIcon: icon[1],
         photoIcon: icon[2],
-        sendIcon: icon[3]
+        sendIcon: icon[3],
+        previewIcon: icon[4]
       }
     })
 
@@ -467,6 +471,23 @@ export default class Reply extends Component {
                   </TouchableNativeFeedback>
                 </View>
                 <TouchableNativeFeedback
+                  onPress={() => {
+                    this.setState({
+                      modalVisible: true
+                    })
+                  }}
+                  delayPressIn={0}
+                  background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
+                  style={{ borderRadius: 25 }}
+                >
+                  <View style={{ width: 50, height: 50, marginLeft: 0, borderRadius: 25, }}>
+                    {icon && <Image
+                      source={icon.previewIcon}
+                      style={{ width: 25, height: 25, marginTop: 12.5, marginLeft: 12.5 }}
+                    />}
+                  </View>
+                </TouchableNativeFeedback>
+                <TouchableNativeFeedback
                   onPress={this.sendReply}
                   delayPressIn={0}
                   background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
@@ -481,6 +502,41 @@ export default class Reply extends Component {
                 </TouchableNativeFeedback>
               </View>
             </Animated.View>
+            {
+              this.state.modalVisible && (
+                <MyDialog modeInfo={modeInfo}
+                  modalVisible={this.state.modalVisible}
+                  onDismiss={() => { this.setState({ modalVisible: false }); this.isValueChanged = false }}
+                  onRequestClose={() => { this.setState({ modalVisible: false }); this.isValueChanged = false }}
+                  renderContent={() => (
+                    <View style={{
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      backgroundColor: modeInfo.backgroundColor,
+                      paddingVertical: 10,
+                      paddingHorizontal: 10,
+                      elevation: 4,
+                      position: 'absolute',
+                      left: 20,
+                      right: 20,
+                      opacity: 1
+                    }} borderRadius={2}>
+                      <HTMLView
+                        value={this.state.content || '暂无内容'}
+                        modeInfo={modeInfo}
+                        stylesheet={styles}
+                        onImageLongPress={(url) => this.props.navigation.navigate('ImageViewer', {
+                          images: [
+                            { url }
+                          ]
+                        })}
+                        imagePaddingOffset={60}
+                        shouldForceInline={true}
+                      />
+                    </View>
+                  )} />
+              )
+            }
             {/* 表情 */}
             <Animated.View style={{
               elevation: 4,

@@ -127,7 +127,7 @@ const ListItems = [
 
       let URL = 'http://psnine.com/my/account'
 
-      navigation.navigate('Account', {
+      navigation.navigate('UserDetail', {
         URL,
         title: '明细'
       });
