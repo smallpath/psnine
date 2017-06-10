@@ -31,6 +31,7 @@ import circleParser from '../parser/circle/circle'
 import circleLeaderParser from '../parser/circle/rank'
 import userCircleParser from '../parser/user/circle'
 import userGroupParser from '../parser/user/group'
+import photoParser from '../parser/user/photo'
 
 
 const safeFetch = function(reqUrl, type = 'text') {
@@ -185,6 +186,8 @@ export const getCirlcleLeaderAPI = ({ id, page }) => `${webHost}/group/${id}/lea
 export const getGamePointURL = id => `${webHost}/psngame/${id}/comment`
 
 export const getGamePointAPI= url => safeFetch(url).then(res => gamePointParser(res));
+
+export const getPhotoAPI= url => safeFetch(url).then(res => photoParser(res));
 
 export const getUserCircleAPI= url => safeFetch(url).then(res => userCircleParser(res));
 

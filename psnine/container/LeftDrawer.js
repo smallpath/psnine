@@ -110,9 +110,9 @@ const ListItems = [
       const { navigation, closeDrawer } = this.props;
       closeDrawer();
 
-      let URL = 'http://psnine.com/my/photo'
+      let URL = 'http://psnine.com/my/photo?page=1'
 
-      navigation.navigate('Photo', {
+      navigation.navigate('UserPhoto', {
         URL,
         title: '图床'
       });

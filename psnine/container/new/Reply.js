@@ -89,6 +89,7 @@ export default class Reply extends Component {
     });
 
   }
+
   isKeyboardShowing = false
   _pressEmotion = () => {
     let config = { tension: 30, friction: 7 };
@@ -452,7 +453,7 @@ export default class Reply extends Component {
                     </View>
                   </TouchableNativeFeedback>
                   <TouchableNativeFeedback
-                    onPress={this._pressButton}
+                    onPress={this._pressImageButton}
                     delayPressIn={0}
                     background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
                     style={{ borderRadius: 25 }}
@@ -509,8 +510,19 @@ export default class Reply extends Component {
   }
 
   onPressEmotion = ({ text, url }) => {
-    this.setState({
-      content: this.state.content + text
+
+  }
+
+
+  _pressImageButton = (callback) => {
+    const { params } = this.props.navigation.state
+    this.props.navigation.navigate('UserPhoto', {
+      URL: 'http://psnine.com/my/photo?page=1',
+      callback: ({ url }) => {
+        this.setState({
+          content: this.state.content + `[img]${url}[/img]`
+        })
+      }
     })
   }
 }

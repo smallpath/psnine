@@ -42,6 +42,7 @@ import ImageViewer from './components/ImageViewer'
 import Search from './container/Search'
 import Pass from './container/user/Pass'
 import UserGroup from './container/user/Group'
+import UserPhoto from './container/user/Photo'
 
 import { transitionConfig, onTransitionStart } from './utils/transitionConfig'
 
@@ -72,6 +73,9 @@ const Navigator = StackNavigator({
   },
   UserGroup: {
     screen: UserGroup
+  },
+  UserPhoto: {
+    screen: UserPhoto
   },
   Message: {
     screen: Message,
