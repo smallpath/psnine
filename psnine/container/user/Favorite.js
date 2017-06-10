@@ -189,8 +189,15 @@ class Fav extends Component {
           overflowIconName="md-more"
           iconColor={modeInfo.isNightMode ? '#000' : '#fff'}
           title={'收藏'}
+          subtitle={({ 
+            'topic' : '社区',
+            'gene' : '基因',
+            'psnid' : '用户',
+            'qa' : '问答',
+          })[this.state.finalType]}
           style={[styles.toolbar, { backgroundColor: modeInfo.standardColor }]}
           titleColor={modeInfo.isNightMode ? '#000' : '#fff'}
+          subtitleColor={modeInfo.isNightMode ? '#000' : '#fff'}
           actions={toolbarActions}
           onIconClicked={this.onNavClicked}
           onActionSelected={this.onActionSelected}

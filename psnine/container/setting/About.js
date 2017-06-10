@@ -73,6 +73,18 @@ class About extends Component {
     } catch (err) { }
   }
 
+  linkAuthor = async () => {
+    Alert.alert(
+      `联系作者`,
+      `反馈问题或需要新功能请通过Github或邮箱联系`,
+      [
+        {text: '站内', onPress: () => Linking.openURL(`p9://psnine.com/psnid/secondlife_xhm`).catch(err => global.toast && global.toast(err.toString()))},
+        {text: '邮箱', style: 'cancel', onPress: () => Linking.openURL(`mailto:smallpath2013@gmail.com`).catch(err => global.toast && global.toast(err.toString()))},
+        {text: 'Github', onPress: () => Linking.openURL(`https://github.com/smallpath/psnine`).catch(err => global.toast && global.toast(err.toString()))},
+      ]
+    )
+  }
+
   render() {
     const { modeInfo } = this.props.screenProps
     return (
@@ -131,6 +143,7 @@ class About extends Component {
             </View>
           </TouchableNativeFeedback>
           <TouchableNativeFeedback
+            onPress={this.linkAuthor}
           >
             <View style={[styles.themeItem, {
               padding: 6,
@@ -138,10 +151,10 @@ class About extends Component {
               alignItems: 'flex-start',
             }]}>
               <Text style={[styles.themeName, { marginTop: 12, flex: 1, color: modeInfo.titleTextColor }]}>
-                {'作者'}
+                {'联系作者'}
               </Text>
               <Text style={[styles.themeName, { marginTop: -12, fontSize: 13, flex: 1, color: modeInfo.standardTextColor }]}>
-                {'smallpath2013@gmail.com'}
+                {'@smallpath'}
               </Text>
             </View>
           </TouchableNativeFeedback>

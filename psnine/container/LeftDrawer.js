@@ -120,7 +120,7 @@ const ListItems = [
   },
   {
     text: '明细',
-    iconName: 'md-star',
+    iconName: 'md-podium',
     onPress: function () {
       const { navigation, closeDrawer } = this.props;
       closeDrawer();
@@ -487,7 +487,9 @@ class navigationDrawer extends Component {
           delayPressIn={0}
         >
           <View style={[styles.themeItem]}>
-            {icon}
+            <View style={{width: 30, alignItems: 'center', justifyContent: 'center'}}>
+              {icon}
+            </View>
             <Text style={[styles.themeName, { color: this.props.modeInfo.titleTextColor }]}>
               {rowData.text}
             </Text>
