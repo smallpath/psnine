@@ -72,7 +72,7 @@ export default class PhotoItem extends React.PureComponent {
             }
           }
           onLongPress={() => {
-            onLongPress && this.setState({
+            this.setState({
               modalVisible: true
             })
           }}
@@ -83,7 +83,7 @@ export default class PhotoItem extends React.PureComponent {
           <View style={{ flex: 1, flexDirection: 'row', padding: 5, 
           backgroundColor: isChecked ? modeInfo.standardColor : modeInfo.backgroundColor }}>
             {
-              this.state.modalVisible && onLongPress && (
+              this.state.modalVisible && (
                 <MyDialog modeInfo={modeInfo}
                   modalVisible={this.state.modalVisible}
                   onDismiss={() => { this.setState({ modalVisible: false }); }}
@@ -117,6 +117,17 @@ export default class PhotoItem extends React.PureComponent {
                           <Text style={{textAlignVertical: 'center', fontSize: 18, color: modeInfo.standardTextColor}}>查看图片</Text>
                         </View>
                       </TouchableNativeFeedback>
+                      { onLongPress && <TouchableNativeFeedback onPress={() => {
+                          this.setState({
+                            modalVisible: false
+                          }, () => {
+                            onLongPress && onLongPress()
+                          })
+                        }}>
+                        <View style={{height: 50, paddingVertical: 10, paddingLeft: 20 ,alignSelf: 'stretch', alignContent: 'stretch', justifyContent: 'center'}}>
+                          <Text style={{textAlignVertical: 'center', fontSize: 18, color: modeInfo.standardTextColor}}>删除图片</Text>
+                        </View>
+                      </TouchableNativeFeedback>}
                     </View>
                   )} />
               )

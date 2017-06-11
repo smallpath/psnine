@@ -174,11 +174,6 @@ export default class Custom extends Component {
             })}
           ]
         )
-      },
-      onLongPress: () => {
-        /*if (params.callback) {
-          params.callback({ url: rowData.href || rowData.img })
-        }*/
       }
     }}/>)
     return (

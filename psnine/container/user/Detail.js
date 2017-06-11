@@ -100,15 +100,16 @@ export default class Detail extends Component {
     return (
       <View style={{flex: 1}}>
         <View style={{ flex:1, flexDirection: 'row' }}>
-          <View style={{flex:1, backgroundColor: '#F5FAEC',  alignItems:'center'}}><Text style={{color: '#659f13', padding: 20}}>{rowData.zb}</Text></View>
-          <View style={{flex:1, backgroundColor: '#FDF7F7',  alignItems:'center'}}><Text style={{color: '#b94a48', padding: 20}}>{rowData.level}</Text></View>
+          <View style={{flex:1, alignItems:'center'}}><Text style={{color: '#659f13', padding: 20}}>{rowData.zb}</Text></View>
+          <View style={{flex:1, alignItems:'center'}}><Text style={{color: '#b94a48', padding: 20}}>{rowData.level}</Text></View>
         </View>
         <View style={{ flex:1, padding: 20 }}>
-          <Text>{rowData.ssInfo}</Text>
+          <Text style={{ color: modeInfo.standardTextColor }}>{rowData.ssInfo}</Text>
         </View>
         { rowData.serverInfo.length && <View style={{ flex:1, padding: 10 }}>
           {rowData.serverInfo.map((item, index) => <View key={index} style={{flexDirection:'row', paddingHorizontal: 10, paddingVertical: 2}}>
-            <Text style={{flex:1, alignItems: 'center'}}>{item.ip}</Text><Text style={{flex:1, alignItems: 'center'}}>{item.name}</Text>
+            <Text style={{flex:1, alignItems: 'center', color: modeInfo.standardTextColor }}>{item.ip}</Text><Text 
+              style={{flex:1, alignItems: 'center', color: modeInfo.standardTextColor }}>{item.name}</Text>
           </View>)}
         </View>}
         <View style={{ flex:1, padding: 10 }}>

@@ -25,6 +25,7 @@ import { standardColor, nodeColor, idColor } from '../../constants/colorConfig';
 
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { getPhotoAPI } from '../../dao';
+import { postDeleteImage } from '../../dao/post';
 
 import TopicItem from '../shared/CommunityItem'
 import GeneItem from '../shared/GeneItem'
@@ -169,10 +170,10 @@ export default class Photo extends Component {
         }
       },
       onLongPress: () => {
-        if (params.callback) {
-          navigation.goBack()
-          params.callback({ url: rowData.href || rowData.img })
-        }
+        postDeleteImage({ delimg: rowData.delimg }).then(res => res.text()).then(html => {
+          toast('删除成功')
+          this.fetchMessages(params.URL, 'jump');
+        })
       }
     }} />
   }
