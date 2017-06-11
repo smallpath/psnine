@@ -45,6 +45,7 @@ import UserGroup from './container/user/Group'
 import UserPhoto from './container/user/Photo'
 import UserDetail from './container/user/Detail'
 import UserCustom from './container/user/Custom'
+import ImageUpload from './container/user/ImageUpload'
 
 import { transitionConfig, onTransitionStart } from './utils/transitionConfig'
 
@@ -84,6 +85,9 @@ const Navigator = StackNavigator({
   },
   UserPhoto: {
     screen: UserPhoto
+  },
+  ImageUpload: {
+    screen: ImageUpload
   },
   Message: {
     screen: Message,

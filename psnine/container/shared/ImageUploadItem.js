@@ -62,8 +62,8 @@ export default class PhotoItem extends React.PureComponent {
         alignContent: 'flex-end',
         backgroundColor: modeInfo.backgroundColor,
         borderBottomColor: modeInfo.brighterLevelOne,
-        width: ITEM_HEIGHT,
-        height: ITEM_HEIGHT,
+        width: SCREEN_WIDTH / 2,
+        height: SCREEN_WIDTH / 2,
       }}>
         <TouchableNativeFeedback
           onPress={
@@ -104,10 +104,16 @@ export default class PhotoItem extends React.PureComponent {
                           this.setState({
                             modalVisible: false
                           }, () => {
+                            /*console.log(rowData.node.image.uri)*/
                             requestAnimationFrame(() => {
                               this.props.navigation.navigate('ImageViewer', {
                                 images: [
-                                  { url: rowData.img }
+                                  { 
+                                    url: rowData.node.image.uri,
+                                    uri: rowData.node.image.uri,
+                                    width: rowData.node.image.width,
+                                    height: rowData.node.image.height,
+                                  }
                                 ]
                               })
                             })
@@ -122,8 +128,8 @@ export default class PhotoItem extends React.PureComponent {
               )
             }
             <Image
-              source={{ uri: rowData.img || rowData.href }}
-              style={[styles.avatar, { width: width, height: width }]}
+              source={{ uri: rowData.node.image.uri || rowData.href }}
+              style={[styles.avatar, { width: SCREEN_WIDTH / 2 - 10, height: SCREEN_WIDTH / 2 - 10 }]}
             />
           </View>
         </TouchableNativeFeedback>

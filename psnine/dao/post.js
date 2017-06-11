@@ -78,3 +78,18 @@ export const postSetting = form => {
     body: formBody
   })
 }
+
+const imageURL = 'http://psnine.com/my/photo'
+export const postImage = image => {
+  const upimg = {
+    uri: image.image.uri,
+    type: image.type,
+    name: image.image.uri.split('/').pop() + '.' + image.type.split('/').pop()
+  }
+  const body = new FormData()
+  body.append('upimg', upimg)
+  return fetch(imageURL, {
+    method: 'POST',
+    body
+  })
+}
