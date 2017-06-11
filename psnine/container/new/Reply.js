@@ -572,6 +572,7 @@ export default class Reply extends Component {
 
   _pressImageButton = (callback) => {
     const { params } = this.props.navigation.state
+    Keyboard.dismiss()
     this.props.navigation.navigate('UserPhoto', {
       URL: 'http://psnine.com/my/photo?page=1',
       callback: ({ url }) => {

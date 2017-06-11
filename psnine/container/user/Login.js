@@ -170,6 +170,10 @@ class Login extends Component {
     this.login()
   }
 
+  focusNextField = (nextField) => {
+    this[nextField].focus();
+  };
+
   render() {
     // console.log('Loggin.js rendered');
     let marginLeft = 40;
@@ -310,7 +314,9 @@ class Login extends Component {
                 ref={ref => this.accountTextInput = ref}
                 onFocus={this.onAccountTextFocus}
                 onBlur={this.onAccountTextBlur}
-                onSubmitEditing={this.onSubmit}
+                blurOnSubmit={false}
+                returnKeyType="next"
+                onSubmitEditing={() => this.focusNextField('passwordTextInput')}
                 style={[styles.textInput, { color: modeInfo.standardTextColor }]}
                 placeholderTextColor={modeInfo.standardTextColor}
               />

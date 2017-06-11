@@ -212,6 +212,10 @@ class Login extends Component {
     })
   }
 
+  focusNextField = (nextField) => {
+    this[nextField].focus();
+  };
+
   render() {
     // console.log('Loggin.js rendered');
     let marginLeft = 40;
@@ -354,7 +358,7 @@ class Login extends Component {
         }, avoidKeyboardStyle]}>
 
           <View style={[styles.loginTextView, { marginLeft: marginLeft / 2 * 1.5, marginTop: 27 }]}>
-            <Text style={[styles.mainFont, { fontSize: 30, marginLeft: 0, marginBottom: 0 }]}>登录</Text>
+            <Text style={[styles.mainFont, { fontSize: 30, marginLeft: 0, marginBottom: 0 }]}>修改密码</Text>
           </View>
 
           <View style={[styles.KeyboardAvoidingView, {
@@ -372,7 +376,9 @@ class Login extends Component {
                 ref={ref => this.accountTextInput = ref}
                 onFocus={this.onAccountTextFocus}
                 onBlur={this.onAccountTextBlur}
-                onSubmitEditing={this.onSubmit}
+                blurOnSubmit={false}
+                returnKeyType="next"
+                onSubmitEditing={() => this.focusNextField('passwordTextInput')}
                 style={[styles.textInput, { color: modeInfo.standardTextColor }]}
                 placeholderTextColor={modeInfo.standardTextColor}
               />
@@ -390,7 +396,9 @@ class Login extends Component {
                 ref={ref => this.passwordTextInput = ref}
                 onFocus={this.onPasswordTextFocus}
                 onBlur={this.onPasswordTextBlur}
-                onSubmitEditing={this.onSubmit}
+                blurOnSubmit={false}
+                returnKeyType="next"
+                onSubmitEditing={() => this.focusNextField('password2TextInput')}
                 style={[styles.textInput, { color: modeInfo.standardTextColor }]}
                 placeholderTextColor={modeInfo.standardTextColor}
               />
