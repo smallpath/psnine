@@ -142,7 +142,7 @@ const ListItems = [
 
       let URL = 'http://psnine.com/my/setting'
 
-      navigation.navigate('Custom', {
+      navigation.navigate('UserCustom', {
         URL,
         title: '个性化'
       });

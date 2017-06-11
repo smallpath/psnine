@@ -33,6 +33,7 @@ import userCircleParser from '../parser/user/circle'
 import userGroupParser from '../parser/user/group'
 import photoParser from '../parser/user/photo'
 import detailParser from '../parser/user/detail'
+import customParser from '../parser/user/custom'
 
 
 const safeFetch = function(reqUrl, type = 'text') {
@@ -144,6 +145,8 @@ export const getGamesAPI = ({ page = 1, sort = 'newest', pf = 'all', dlc = 'all'
 export const getStoresAPI = ({ page, server, ob, pf, plus, title }) => `${webHost}/store?page=${page}&ob=${ob}&pf=${pf}&plus=${plus}${title ? `&title=${title}` : '' }`
 
 export const fetchStores = (...args) => safeFetch(getStoresAPI(...args)).then(res => storeParser(res));
+
+export const getCustomAPI = url => safeFetch(url).then(res => customParser(res));
 
 export const getStoreAPI = ({ id, server}) => {
   let url
