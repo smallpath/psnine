@@ -120,7 +120,7 @@ export default class PsnineAbout extends Component {
         onPress: () => Linking.openURL('mailto:psnine@qq.com').catch(err => toast(err.toString()))
       },
       {
-        title: '关于Psnine',
+        title: '关于PSNINE',
         desc: '关于我们 & 意见建议 & 站务问题',
         onPress: () => navigation.navigate('CommunityTopic', {
           URL: 'http://psnine.com/topic/1',
@@ -129,13 +129,22 @@ export default class PsnineAbout extends Component {
       },
       {
         title: '发帖教学',
-        desc: '',
+        desc: '如何花式发贴',
         onPress: () => navigation.navigate('CommunityTopic', {
           URL: 'http://psnine.com/topic/10422',
           title: '发帖教学'
         })
       },
+      {
+        title: '捐赠',
+        desc: '你的捐助能让我们更好地前行',
+        onPress: () => navigation.navigate('CommunityTopic', {
+          URL: 'http://psnine.com/topic/29077',
+          title: '「PSNINE募捐帖」'
+        })
+      },
     ]
+    if (modeInfo.settingInfo.psnid === '') items.pop()
     return (
       <View style={{ flex: 1, backgroundColor: modeInfo.backgroundColor }}>
         <Ionicons.ToolbarAndroid

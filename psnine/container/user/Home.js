@@ -118,6 +118,7 @@ export default class Home extends Component {
 
       onStartShouldSetPanResponderCapture: (e, gesture) => {
         const target = e.nativeEvent.pageY - this._previousTop - 40
+        console.log(this._previousTop)
         if (target <= limit) {
           // console.log('===>1')
           return true
@@ -152,8 +153,10 @@ export default class Home extends Component {
         this._viewStyles.style.top = this._previousTop + gesture.dy
         if (this._viewStyles.style.top > 0) {
           this._viewStyles.style.top = 0
+          this._previousTop = 0
         } else if (this._viewStyles.style.top < -limit) {
           this._viewStyles.style.top = -limit
+          this._previousTop = -limit
         }
         marginTop.setValue(this._viewStyles.style.top)
       },
@@ -172,7 +175,10 @@ export default class Home extends Component {
       },
       onPanResponderEnd: (evt, gesture) => {
         this._previousLeft += gesture.dx;
+        // console.log(gesture.dy, this._previousTop, '==>', gesture.dy + this._previousTop)
         this._previousTop += gesture.dy;
+        if (this._previousTop > 0) this._previousTop = 0
+        if (this._previousTop < -limit) this._previousTop = -limit
       },
 
     });

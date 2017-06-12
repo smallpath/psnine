@@ -110,19 +110,23 @@ class About extends Component {
 
     const items = [
       {
-        title: '检查更新',
-        desc: this.state.checkUpdateTip,
-        onPress: this.checkUpdate
+        title: '作者',
+        desc: 'smallpath <smallpath2013@gmail.com>',
+        onPress: this.linkAuthor
       },
       {
-        title: '源代码',
+        title: '源码',
         desc: this.state.sourceCodeURL,
         onPress: this.goSourceCode
       },
       {
-        title: '联系作者',
-        desc: '@smallpath',
-        onPress: this.linkAuthor
+        title: '版本号',
+        desc: this.state.version
+      },
+      {
+        title: '检查更新',
+        desc: this.state.checkUpdateTip,
+        onPress: this.checkUpdate
       },
     ]
     return (

@@ -433,7 +433,7 @@ class navigationDrawer extends Component {
                   style={{ width: 70, height: 70, }} />
               </View>
             </TouchableWithoutFeedback>
-            <Text style={[styles.menuText, { paddingTop: 5, textAlign: 'center', alignSelf: 'center' }]}>{psnid == '' ? '请登录' : psnid}</Text>
+            <Text style={[styles.menuText, { paddingTop: 5, textAlign: 'center', alignSelf: psnid == '' ? 'center' : 'flex-start' }]}>{psnid == '' ? '请登录' : psnid}</Text>
             {psnid && (
               <View style={{flex: 1, width: 100}}>
                 <View style={{ flexDirection: 'row', justifyContent:'space-between', alignItems: 'center', flex: 1  }}>
