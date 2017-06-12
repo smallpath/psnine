@@ -34,7 +34,8 @@ export const fav = (form) => {
     formBody.push(encodedKey + "=" + encodedValue);
   }
   formBody = formBody.join("&");
-  return fetch('http://psnine.com/set/fav/ajax', {
+  const target = typeof form.unfav !== 'undefined' ? 'http://psnine.com/my/fav' : 'http://psnine.com/set/fav/ajax'
+  return fetch(target, {
     method: 'POST',
     headers: {
       'Accept': 'text/html,application/xhtml+xml,application/xml',

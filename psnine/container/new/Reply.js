@@ -574,7 +574,9 @@ export default class Reply extends Component {
   }
 
   onPressEmotion = ({ text, url }) => {
-
+    this.setState({
+      content: this.state.content + `[img]${url}[/img]`
+    })
   }
 
 

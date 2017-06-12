@@ -19,6 +19,7 @@ import {
   Linking
 } from 'react-native';
 
+import { sync, updown, fav } from '../../dao/sync'
 import HTMLView from '../../components/HtmlToView';
 import { connect } from 'react-redux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -34,9 +35,6 @@ import ComplexComment from '../shared/ComplexComment'
 let screen = Dimensions.get('window');
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = screen;
 
-let toolbarActions = [
-  { title: '回复', iconName: 'md-create', show: 'always' }
-];
 let title = "TOPIC";
 let WEBVIEW_REF = `WEBVIEW_REF`;
 
@@ -47,6 +45,69 @@ const ACTUAL_SCREEN_HEIGHT = SCREEN_HEIGHT - StatusBar.currentHeight + 1;
 
 let CIRCLE_SIZE = 56;
 let config = { tension: 30, friction: 7, ease: Easing.in(Easing.ease(1, 0, 1, 1)), duration: 200 };
+
+let toolbarActions = [
+  { title: '回复', iconName: 'md-create', show: 'always', onPress: function() {
+    const { params } = this.props.navigation.state
+    if (this.isReplyShowing === true) return
+    const cb = () => {
+      this.props.navigation.navigate('Reply', {
+        type: params.type,
+        id: params.rowData ? params.rowData.id : this.state.data && this.state.data.titleInfo && this.state.data.titleInfo.psnid,
+        callback: this.preFetch,
+        shouldSeeBackground: true
+      })
+    }
+    if (this.state.openVal._value === 1) {
+      this._animateToolbar(0, cb)
+    } else if (this.state.openVal._value === 0) {
+      cb()
+    }
+  }},
+  { title: '刷新', iconName: 'md-refresh', show: 'never', onPress: function() {
+    this.preFetch()
+  }},
+  { title: '收藏', iconName: 'md-star-half', show: 'never', onPress: function() {
+    const { params } = this.props.navigation.state
+    // console.log(params)
+    fav({ 
+      type: 'qa',
+      param: params.rowData && params.rowData.id,
+    }).then(res => res.text()).then(text => {
+      if (text) return toast(text)
+      toast('操作成功')
+    }).catch(err => {
+      const msg = `操作失败: ${err.toString()}`
+      toast(msg)
+    })
+  }},
+  { title: '顶', iconName: 'md-star-half', show: 'never', onPress: function() {
+    const { params } = this.props.navigation.state
+    updown({ 
+      type: 'qa',
+      param: params.rowData && params.rowData.id,
+      updown: 'up'
+    }).then(res => res.text()).then(text => {
+      if (text) return toast(text)
+      toast('操作成功')
+    }).catch(err => {
+      const msg = `操作失败: ${err.toString()}`
+      toast(msg)
+    })
+  }},
+  { title: '微博', iconName: 'md-share-alt', show: 'never', onPress: function() {
+    try {
+      const url = this.state.data.titleInfo.shareInfo.weibo
+      url && Linking.openURL(url).catch(err => toast(err.toString())) || toast('暂无出处')
+    } catch (err) {}
+  }},
+  { title: '出处', iconName: 'md-share-alt', show: 'never', onPress: function() {
+    try {
+      const url = this.state.data.titleInfo.shareInfo.source
+      url && Linking.openURL(url).catch(err => toast(err.toString())) || toast('暂无出处')
+    } catch (err) {}
+  }},
+];
 
 class QaTopic extends Component {
 
@@ -319,6 +380,16 @@ class QaTopic extends Component {
 
     this.viewBottomIndex = Math.max(data.length - 1, 0)
 
+    const targetActions = toolbarActions.slice()
+    try {
+      if (this.state.data && this.state.data.titleInfo && 
+          this.state.data.titleInfo.shareInfo && this.state.data.titleInfo.shareInfo.source) {
+        //
+      } else {
+        targetActions.pop()
+      }
+    } catch(err) {}
+
     return (
       <View
         style={{ flex: 1, backgroundColor: modeInfo.backgroundColor }}
@@ -332,11 +403,13 @@ class QaTopic extends Component {
           title={params.title ? params.title : `No.${params.rowData.id}`}
           titleColor={modeInfo.isNightMode ? '#000' : '#fff'}
           style={[styles.toolbar, { backgroundColor: modeInfo.standardColor }]}
-          actions={toolbarActions}
+          actions={targetActions}
           onIconClicked={() => {
             this.props.navigation.goBack()
           }}
-          onActionSelected={this._onActionSelected}
+          onActionSelected={(index) => {
+            toolbarActions[index].onPress.bind(this)()
+          }}
         />
         {this.state.isLoading && (
           <ActivityIndicator

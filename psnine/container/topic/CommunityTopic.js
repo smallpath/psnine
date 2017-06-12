@@ -501,6 +501,15 @@ class CommunityTopic extends Component {
     }
 
     this.viewBottomIndex = Math.max(data.length - 1, 0)
+    const targetActions = toolbarActions.slice()
+    try {
+      if (this.state.data && this.state.data.titleInfo && 
+          this.state.data.titleInfo.shareInfo && this.state.data.titleInfo.shareInfo.source) {
+        //
+      } else {
+        targetActions.pop()
+      }
+    } catch(err) {}
 
     return (
       <View
@@ -515,7 +524,7 @@ class CommunityTopic extends Component {
           title={params.title ? params.title : `No.${params.rowData.id}`  }
           titleColor={modeInfo.isNightMode ? '#000' : '#fff'}
           style={[styles.toolbar, { backgroundColor: modeInfo.standardColor }]}
-          actions={toolbarActions}
+          actions={targetActions}
           onIconClicked={() => {
             this.props.navigation.goBack()
           }}

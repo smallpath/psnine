@@ -37,6 +37,7 @@ const Mapper = {
   'qa': QaItem
 }
 import FooterProgress from '../shared/FooterProgress'
+import { fav } from '../../dao/sync'
 
 let toolbarActions = [
   { title: '类型', iconName: 'md-funnel', show: 'always' },
@@ -161,7 +162,23 @@ class Fav extends Component {
       navigation,
       rowData,
       modeInfo,
-      ITEM_HEIGHT
+      ITEM_HEIGHT,
+      modalList: [{
+        text: '取消收藏',
+        onPress: () => {
+          fav({ 
+            type: this.state.finalType,
+            param: rowData && rowData.id,
+            unfav: ''
+          }).then(res => res.text()).then(text => {
+            toast('已取消收藏')
+            this._onRefresh()
+          }).catch(err => {
+            const msg = `取消失败: ${err.toString()}`
+            toast(msg)
+          })
+        }
+      }]
     }} />
   }
 
