@@ -60,9 +60,9 @@ let CIRCLE_SIZE = 56;
 let config = { tension: 30, friction: 7, ease: Easing.in(Easing.ease(1, 0, 1, 1)), duration: 200 };
 
 const iconMapper = {
-  '同步': 'md-sync'
-  // '关注': 'md-star-half',
-  // '感谢': 'md-thumbs-up'
+  '同步': 'md-sync',
+  '关注': 'md-star-half',
+  '感谢': 'md-thumbs-up'
 }
 
 const limit = SCREEN_WIDTH - toolbarHeight
@@ -317,7 +317,7 @@ export default class Home extends Component {
           }
           this.setState(obj)
         },
-        profileToolbar: this.state.data.psnButtonInfo.reverse().map(item => {
+        profileToolbar: this.state.data.psnButtonInfo.map(item => {
           const result = { title: item.text, iconName: iconMapper[item.text], show: 'always' }
           if (!iconMapper[item.text]) delete result.iconName
           if (item.text.includes('冷却') || iconMapper[item.text]) return result

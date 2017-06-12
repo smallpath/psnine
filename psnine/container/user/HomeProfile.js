@@ -19,7 +19,7 @@ import {
   Keyboard
 } from 'react-native';
 
-import { sync } from '../../dao/sync'
+import { sync, updown, fav } from '../../dao/sync'
 import MyDialog from '../../components/Dialog'
 import HTMLView from '../../components/HtmlToView';
 import { connect } from 'react-redux';
@@ -97,10 +97,42 @@ export default class Home extends Component {
   _onActionSelected = (index) => {
     const { params } = this.props.screenProps.navigation.state
     const { preFetch } = this.props.screenProps
+    const psnid = params.URL.split('/').filter(item => item.trim()).pop()
     switch (index) {
       case 0:
+        fav({ 
+          type: 'psnid',
+          param: psnid
+        }).then(res => res.text()).then(text => {
+          // console.log(text)
+          // ToastAndroid.show('同步成功', ToastAndroid.SHORT);
+          if (text) return toast(text)
+          toast('收藏成功')
+          preFetch && preFetch()
+        }).catch(err => {
+          const msg = `操作失败: ${err.toString()}`
+          global.toast(msg)
+          // ToastAndroid.show(msg, ToastAndroid.SHORT);
+        })
+        return;
+      case 1:
+        updown({ 
+          type: 'psnid',
+          param: psnid,
+          updown: 'up'
+        }).then(res => res.text()).then(text => {
+          // ToastAndroid.show('同步成功', ToastAndroid.SHORT);
+          if (text) return toast(text)
+          toast('操作成功')
+          preFetch && preFetch()
+        }).catch(err => {
+          const msg = `操作失败: ${err.toString()}`
+          global.toast(msg)
+          // ToastAndroid.show(msg, ToastAndroid.SHORT);
+        })
+        return
+      case 2:
         ToastAndroid.show('同步中..', ToastAndroid.SHORT)
-        const psnid = params.URL.split('/').filter(item => item.trim()).pop()
         sync(psnid).then(res => res.text()).then(text => {
           if (text.includes('玩脱了')) {
             const arr = text.match(/\<title\>(.*?)\<\/title\>/)
@@ -119,12 +151,6 @@ export default class Home extends Component {
           global.toast(msg)
           // ToastAndroid.show(msg, ToastAndroid.SHORT);
         })
-        return;
-      case 1:
-        return
-      case 2:
-        return;
-      case 3:
         return;
     }
   }

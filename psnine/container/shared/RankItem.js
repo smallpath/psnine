@@ -52,12 +52,13 @@ export default class extends React.PureComponent {
   handleImageOnclick = () => {}
 
   render = () => {
-    const { modeInfo, rowData } = this.props
+    const { modeInfo, rowData, ITEM_HEIGHT } = this.props
 
     return (
       <View style={{
-        marginTop: 7,
+        marginVertical: 3.5,
         backgroundColor: modeInfo.backgroundColor,
+        height: ITEM_HEIGHT - 7,
         elevation: 1
       }}>
         <TouchableNativeFeedback
@@ -68,7 +69,7 @@ export default class extends React.PureComponent {
           delayPressIn={100}
           background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
         >
-          <View pointerEvents={'box-only'} style={{ flex: 1, flexDirection: 'row', padding: 12, justifyContent: 'space-around', alignItems: 'center' }}>
+          <View pointerEvents={'box-only'} style={{ flex: 1, flexDirection: 'row', flexWrap: 'nowrap',padding: 8, justifyContent: 'space-around', alignItems: 'center' }}>
             <Image
               source={{ uri: rowData.avatar }}
               style={[styles.avatar, { width: 50 }]}
@@ -94,9 +95,9 @@ export default class extends React.PureComponent {
 
   renderGeneral = (rowData) => {
 
-    const { modeInfo } = this.props
+    const { modeInfo, ITEM_HEIGHT } = this.props
     return (
-      <View style={{flex: 4, flexDirection: 'row'}}>
+      <View style={{flex: 4, flexDirection: 'row', height: ITEM_HEIGHT - 7- 7 }}>
         <View style={{flex: 2, flexDirection: 'column'}}>
           <View style={{ flex: 1, flexDirection: 'column' }}>
             <Text style={{color: modeInfo.standardTextColor}}>{rowData.level}</Text>
