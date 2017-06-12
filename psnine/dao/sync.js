@@ -26,6 +26,7 @@ export const updown = (form) => {
 }
 
 export const fav = (form) => {
+  // console.log(form)
   let formBody = []
   for (let property in form) {
     const encodedKey = encodeURIComponent(property);
