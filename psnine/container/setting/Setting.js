@@ -47,15 +47,15 @@ const items = [
     }
   },
   {
-    iconName: 'md-help-circle',
-    text: '关于PSNINE',
+    iconName: 'md-information-circle',
+    text: 'PSNINE',
     onPress: function() {
       this.props.navigation.navigate('PsnineAbout')
     }
   },
   {
-    iconName: 'md-information-circle',
-    text: '关于本应用',
+    iconName: 'md-help-circle',
+    text: '关于',
     onPress: function() {
       this.props.navigation.navigate('About')
     }

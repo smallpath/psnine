@@ -99,7 +99,7 @@ export default class Home extends Component {
     const { preFetch } = this.props.screenProps
     const psnid = params.URL.split('/').filter(item => item.trim()).pop()
     switch (index) {
-      case 0:
+      case 2:
         fav({ 
           type: 'psnid',
           param: psnid
@@ -131,7 +131,7 @@ export default class Home extends Component {
           // ToastAndroid.show(msg, ToastAndroid.SHORT);
         })
         return
-      case 2:
+      case 0:
         ToastAndroid.show('同步中..', ToastAndroid.SHORT)
         sync(psnid).then(res => res.text()).then(text => {
           if (text.includes('玩脱了')) {

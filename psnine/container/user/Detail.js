@@ -11,7 +11,8 @@ import {
   SectionList,
   Animated,
   FlatList,
-  ScrollView
+  ScrollView,
+  Button
 } from 'react-native';
 
 import { connect } from 'react-redux';
@@ -26,22 +27,6 @@ let toolbarHeight = 56;
 let releasedMarginTop = 0;
 
 let toolbarActions = []
-
-// const renderSectionHeader = ({ section }) => {
-//   // console.log(section)
-//   return (
-//     <View style={{
-//       backgroundColor: section.modeInfo.backgroundColor,
-//       flex: -1,
-//       padding: 7,
-//       elevation: 2,
-//     }}>
-//       <Text numberOfLines={1}
-//         style={{ fontSize: 20, color: idColor, textAlign: 'left', lineHeight: 25, marginLeft: 2, marginTop: 2 }}
-//       >{section.key}</Text>
-//     </View>
-//   );
-// }
 
 export default class Detail extends Component {
 
@@ -98,7 +83,7 @@ export default class Detail extends Component {
     const { modeInfo } = this.props.screenProps
     const { navigation } = this.props
     return (
-      <View style={{flex: 1}}>
+      <ScrollView style={{flex: 1, padding: 5}}>
         <View style={{ flex:1, flexDirection: 'row' }}>
           <View style={{flex:1, alignItems:'center'}}><Text style={{color: '#659f13', padding: 20}}>{rowData.zb}</Text></View>
           <View style={{flex:1, alignItems:'center'}}><Text style={{color: '#b94a48', padding: 20}}>{rowData.level}</Text></View>
@@ -126,7 +111,12 @@ export default class Detail extends Component {
             shouldForceInline={false}
           />
         </View>
-      </View>
+        <Button color={modeInfo.accentColor} title={'我要捐助'} onPress={() => {
+          navigation.navigate('WebView', {
+            URL: 'http://psnine.com/set/mujuan'
+          })  
+        }} style={{flex:1}}/>
+      </ScrollView>
     )
   }
 
@@ -136,14 +126,6 @@ export default class Detail extends Component {
 
     let keys = Object.keys(data);
     let NUM_SECTIONS = keys.length;
-
-    const sections = Object.keys(data).filter(sectionName => data[sectionName].length !== 0).map(sectionName => {
-      return {
-        key: sectionName === 'joinedList' ? '我加入的基因圈' : '我创建的基因圈',
-        modeInfo,
-        data: data[sectionName]
-      }
-    });
 
     return (
       <View

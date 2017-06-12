@@ -115,12 +115,7 @@ export default class PsnineAbout extends Component {
         onPress: () => Linking.openURL('http://psnine.com').catch(err => toast(err.toString()))
       },
       {
-        title: '合作洽谈',
-        desc: 'psnine@qq.com',
-        onPress: () => Linking.openURL('mailto:psnine@qq.com').catch(err => toast(err.toString()))
-      },
-      {
-        title: '关于PSNINE',
+        title: '关于',
         desc: '关于我们 & 意见建议 & 站务问题',
         onPress: () => navigation.navigate('CommunityTopic', {
           URL: 'http://psnine.com/topic/1',
@@ -136,12 +131,25 @@ export default class PsnineAbout extends Component {
         })
       },
       {
+        title: '作弊举报',
+        desc: 'PSN作弊玩家举报专用帖',
+        onPress: () => navigation.navigate('CommunityTopic', {
+          URL: 'http://psnine.com/topic/2',
+          title: 'PSN作弊玩家举报专用帖'
+        })
+      },
+      {
         title: '捐赠',
         desc: '你的捐助能让我们更好地前行',
         onPress: () => navigation.navigate('CommunityTopic', {
           URL: 'http://psnine.com/topic/29077',
           title: '「PSNINE募捐帖」'
         })
+      },
+      {
+        title: '合作洽谈',
+        desc: 'psnine@qq.com',
+        onPress: () => Linking.openURL('mailto:psnine@qq.com').catch(err => toast(err.toString()))
       },
     ]
     if (modeInfo.settingInfo.psnid === '') items.pop()
@@ -151,7 +159,7 @@ export default class PsnineAbout extends Component {
           navIconName="md-arrow-back"
           overflowIconName="md-more"
           iconColor={modeInfo.isNightMode ? '#000' : '#fff'}
-          title={`关于Psnine`}
+          title={`PSNINE`}
           titleColor={modeInfo.isNightMode ? '#000' : '#fff'}
           style={[styles.toolbar, { backgroundColor: modeInfo.standardColor }]}
           onIconClicked={() => {

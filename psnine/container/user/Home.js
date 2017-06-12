@@ -317,8 +317,8 @@ export default class Home extends Component {
           }
           this.setState(obj)
         },
-        profileToolbar: this.state.data.psnButtonInfo.map(item => {
-          const result = { title: item.text, iconName: iconMapper[item.text], show: 'always' }
+        profileToolbar: this.state.data.psnButtonInfo.reverse().map(item => {
+          const result = { title: item.text, iconName: iconMapper[item.text], show: item.text.includes('同步') ? 'always' : 'never' }
           if (!iconMapper[item.text]) delete result.iconName
           if (item.text.includes('冷却') || iconMapper[item.text]) return result
           return undefined

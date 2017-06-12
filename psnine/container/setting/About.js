@@ -111,7 +111,7 @@ class About extends Component {
     const items = [
       {
         title: '作者',
-        desc: 'smallpath <smallpath2013@gmail.com>',
+        desc: 'Smallpath <smallpath2013@gmail.com>',
         onPress: this.linkAuthor
       },
       {
@@ -135,7 +135,7 @@ class About extends Component {
           navIconName="md-arrow-back"
           overflowIconName="md-more"
           iconColor={modeInfo.isNightMode ? '#000' : '#fff'}
-          title={`关于应用`}
+          title={`关于`}
           titleColor={modeInfo.isNightMode ? '#000' : '#fff'}
           style={[styles.toolbar, { backgroundColor: modeInfo.standardColor }]}
           onIconClicked={() => {
