@@ -25,7 +25,7 @@ let dataSource = new ListView.DataSource({
   rowHasChanged: (row1, row2) => row1 !== row2,
 });
 
-class About extends Component {
+export default class PsnineAbout extends Component {
 
   constructor(props) {
     super(props);
@@ -107,22 +107,33 @@ class About extends Component {
 
   render() {
     const { modeInfo } = this.props.screenProps
-
+    const { navigation } = this.props
     const items = [
       {
-        title: '检查更新',
-        desc: this.state.checkUpdateTip,
-        onPress: this.checkUpdate
+        title: 'PSNINE',
+        desc: 'P9 · 酷玩趣友',
+        onPress: () => Linking.openURL('http://psnine.com').catch(err => toast(err.toString()))
       },
       {
-        title: '源代码',
-        desc: this.state.sourceCodeURL,
-        onPress: this.goSourceCode
+        title: '合作洽谈',
+        desc: 'psnine@qq.com',
+        onPress: () => Linking.openURL('mailto:psnine@qq.com').catch(err => toast(err.toString()))
       },
       {
-        title: '联系作者',
-        desc: '@smallpath',
-        onPress: this.linkAuthor
+        title: '关于Psnine',
+        desc: '关于我们 & 意见建议 & 站务问题',
+        onPress: () => navigation.navigate('CommunityTopic', {
+          URL: 'http://psnine.com/topic/1',
+          title: '关于我们 & 意见建议 & 站务问题'
+        })
+      },
+      {
+        title: '发帖教学',
+        desc: '',
+        onPress: () => navigation.navigate('CommunityTopic', {
+          URL: 'http://psnine.com/topic/10422',
+          title: '发帖教学'
+        })
       },
     ]
     return (
@@ -131,7 +142,7 @@ class About extends Component {
           navIconName="md-arrow-back"
           overflowIconName="md-more"
           iconColor={modeInfo.isNightMode ? '#000' : '#fff'}
-          title={`关于应用`}
+          title={`关于Psnine`}
           titleColor={modeInfo.isNightMode ? '#000' : '#fff'}
           style={[styles.toolbar, { backgroundColor: modeInfo.standardColor }]}
           onIconClicked={() => {
@@ -181,6 +192,3 @@ const styles = StyleSheet.create({
     textDecorationLine: 'underline',
   },
 });
-
-
-export default About

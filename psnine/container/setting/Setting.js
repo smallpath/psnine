@@ -39,20 +39,27 @@ let CIRCLE_SIZE = 56;
 let config = { tension: 30, friction: 7, ease: Easing.in(Easing.ease(1, 0, 1, 1)), duration: 200 };
 
 const items = [
-  // {
-  //   iconName: 'md-build',
-  //   text: '一般',
-  //   onPress: function() {
-  //     this.props.navigation.navigate('General')
-  //   }
-  // },
   {
     iconName: 'md-color-palette',
     text: '主题',
     onPress: function() {
       this.props.navigation.navigate('Theme')
     }
-  }
+  },
+  {
+    iconName: 'md-help-circle',
+    text: '关于PSNINE',
+    onPress: function() {
+      this.props.navigation.navigate('PsnineAbout')
+    }
+  },
+  {
+    iconName: 'md-information-circle',
+    text: '关于本应用',
+    onPress: function() {
+      this.props.navigation.navigate('About')
+    }
+  },
 ]
 
 class Setting extends Component {
@@ -83,7 +90,7 @@ class Setting extends Component {
         onPress={item.onPress.bind(this)}
         key={index}
       >
-        <View style={[styles.themeItem, {
+        <View pointerEvents={'box-only'} style={[styles.themeItem, {
           flex: -1,
           height: 80,
           flexDirection: 'row',
