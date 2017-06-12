@@ -11,6 +11,7 @@ import {
   TouchableWithoutFeedback,
   TouchableHighlight,
   ToastAndroid,
+  Alert
 } from 'react-native';
 
 import {
@@ -149,21 +150,6 @@ const ListItems = [
     }
   },
   {
-    text: '改密码',
-    iconName: 'md-key',
-    onPress: function () {
-      const { navigation, closeDrawer } = this.props;
-      closeDrawer();
-
-      let URL = 'http://psnine.com/my/pass'
-
-      navigation.navigate('Pass', {
-        URL,
-        title: '改密码'
-      });
-    }
-  },
-  {
     text: '系统选项',
     iconName: 'md-home'
   },
@@ -175,16 +161,16 @@ const ListItems = [
       closeDrawer()
       navigation.navigate('Setting');
     }
-  },
-  {
-    text: '关于',
-    iconName: 'md-help-circle',
-    onPress: function () {
-      const { navigation, closeDrawer } = this.props;
-      closeDrawer()
-      navigation.navigate('About');
-    }
   }
+  // {
+  //   text: '关于',
+  //   iconName: 'md-help-circle',
+  //   onPress: function () {
+  //     const { navigation, closeDrawer } = this.props;
+  //     closeDrawer()
+  //     navigation.navigate('About');
+  //   }
+  // }
 ];
 
 
@@ -318,6 +304,33 @@ class navigationDrawer extends Component {
     switchModeOnRoot();
   }
 
+  onUserLongPress = () => {
+    if (this.state.psnid === '') return
+    const { closeDrawer, switchModeOnRoot } = this.props;
+    Alert.alert(
+      '操作',
+      '请选择操作',
+      [
+        { text: '修改密码', onPress: () => {
+          const { navigation, closeDrawer } = this.props;
+          closeDrawer();
+
+          let URL = 'http://psnine.com/my/pass'
+
+          navigation.navigate('Pass', {
+            URL,
+            title: '改密码'
+          });
+        }},
+        {
+          text: '退出', onPress: () => {
+            this.pressLogout()
+          }
+        }
+      ]
+    )
+  }
+
   renderHeader = () => {
     const { navigation, closeDrawer, switchModeOnRoot } = this.props;
     const { modeInfo } = this.props
@@ -400,17 +413,6 @@ class navigationDrawer extends Component {
           </TouchableNativeFeedback>
         )
       }
-      toolActions.push(
-        <TouchableNativeFeedback
-          background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
-          onPress={this.pressLogout}
-          key={'exitApp'}
-        >
-          <View borderRadius={borderRadius} style={iconStyle}>
-            <Icon name="md-log-out" size={size} color={color} />
-          </View>
-        </TouchableNativeFeedback>
-      )
     }
 
     const infoColor = 'rgba(255,255,255,0.8)'
@@ -423,7 +425,7 @@ class navigationDrawer extends Component {
       }]}>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
           <View style={{ flexDirection: 'column', alignItems: 'flex-start', justifyContent: 'space-between', alignSelf: 'flex-start', alignContent: 'flex-start' }}>
-            <TouchableWithoutFeedback onPress={this.pressLogin}>
+            <TouchableWithoutFeedback onPress={this.pressLogin} onLongPress={this.onUserLongPress}>
               <View borderRadius={35} style={{ flexDirection: 'column', alignItems: 'center', backgroundColor: modeInfo.backgroundColor }}>
                 <Image
                   borderRadius={35}
@@ -431,7 +433,7 @@ class navigationDrawer extends Component {
                   style={{ width: 70, height: 70, }} />
               </View>
             </TouchableWithoutFeedback>
-            <Text style={[styles.menuText, { paddingTop: 5, textAlign: 'center' }]}>{psnid == '' ? '请登录' : psnid}</Text>
+            <Text style={[styles.menuText, { paddingTop: 5, textAlign: 'center', alignSelf: 'center' }]}>{psnid == '' ? '请登录' : psnid}</Text>
             {psnid && (
               <View style={{flex: 1, width: 100}}>
                 <View style={{ flexDirection: 'row', justifyContent:'space-between', alignItems: 'center', flex: 1  }}>

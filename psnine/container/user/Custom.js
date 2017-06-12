@@ -86,27 +86,60 @@ export default class Custom extends Component {
   }
 
   ITEM_HEIGHT = 78 + 7
-  _renderItemComponent = ({ item: rowData, index }) => {
-    const { modeInfo } = this.props.screenProps
-    const { ITEM_HEIGHT } = this
-    const { navigation } = this.props
-    return (<CircleItem {...{
-      modeInfo,
-      navigation,
-      rowData
-    }}/>)
-  }
+
 
   renderVIP = ({ item: rowData, index}) => {
     const { modeInfo } = this.props.screenProps
     const { ITEM_HEIGHT } = this
     const { navigation } = this.props
     // console.log(index, rowData)
-    return (<CircleItem {...{
-      modeInfo,
-      navigation,
-      rowData
-    }}/>)
+    const bgvip = this.state.data.form.bgvip 
+    const avavip = this.state.data.form.avavip 
+    return (
+      <View style={{ flex: 1, padding: 10 }}>
+        <Button title={'自定义背景图'} color={bgvip !== 0 ? modeInfo.standardColor : modeInfo.standardTextColor}
+          onPress={() => {
+            this.props.navigation.navigate('UserPhoto', {
+              URL: 'http://psnine.com/my/photo?page=1',
+              afterAlert: ({ url }) => {
+                this.setSetting({
+                  bgvip: url.split('/').pop().split('.')[0]
+                })
+              },
+              alertText: '是否将此图片设置为自定义背景图?'
+            })
+
+          }} style={{
+            flex: 1
+          }}/>
+        <Button title={'自定义头像'} color={avavip !== 0 ? modeInfo.standardColor : modeInfo.standardTextColor}
+          onPress={() => {
+            Alert.alert(
+              '个性化',
+              '请选择功能',
+              [
+                {text: '清除自定义头像', onPress: () => this.setSetting({
+                  avavip: ''
+                })},
+                {text: '取消', style: 'cancel'},
+                {text: '自定义头像', onPress: () => this.props.navigation.navigate('UserPhoto', {
+                  URL: 'http://psnine.com/my/photo?page=1',
+                  afterAlert: ({ url }) => {
+                    this.setSetting({
+                      avavip: url.split('/').pop().split('.')[0]
+                    })
+                  },
+                  alertText: '是否将此图片设置为自定义头像?'
+                })}
+              ]
+            )
+
+          }}
+          style={{
+            flex: 1
+          }}/>
+      </View>
+    )
   }
 
   renderShow = ({ item: rowData, index}) => {
@@ -170,7 +203,8 @@ export default class Custom extends Component {
           [
             {text: '取消', style: 'cancel'},
             {text: '确定', onPress: () => this.setSetting({
-              bg: rowData.value
+              bg: rowData.value,
+              bgvip: ''
             })}
           ]
         )
@@ -185,7 +219,7 @@ export default class Custom extends Component {
 
   setSetting = (form) => {
     const obj = Object.assign({}, this.state.data.form, form)
-    postSetting(obj).then(res => {
+    return postSetting(obj).then(res => {
       // console.log(res)
       return res.text()
     }).then(text => {
@@ -215,14 +249,14 @@ export default class Custom extends Component {
             value: 'diary'
           }]] : []
         } else if (index === 2) {
-          return [
+          return [[
             {
               text: '自定义背景图'
             },
             {
               text: '自定义头像'
             }
-          ]
+          ]]
         }
       })(),
       renderItem: [
@@ -231,8 +265,8 @@ export default class Custom extends Component {
         this.renderVIP
       ][index]
     })) : []
-    if (this.state.data.isVIP) {
-      sections.pop()
+    if (!this.state.data.isVIP) {
+      sections.length = 1
     }
 
     let NUM_SECTIONS = sections.length

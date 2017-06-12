@@ -35,6 +35,7 @@ import NewTopic from './container/new/NewTopic'
 
 import WebView from './components/WebView'
 import About from './container/setting/About'
+import PsnineAbout from './container/setting/PsnineAbout'
 import Setting from './container/setting/Setting'
 import Theme from './container/setting/Theme'
 import General from './container/setting/General'
@@ -92,6 +93,9 @@ const Navigator = StackNavigator({
   Message: {
     screen: Message,
     path: 'my/notice'
+  },
+  PsnineAbout: {
+    screen: PsnineAbout
   },
   CommentList: {
     screen: CommentList,

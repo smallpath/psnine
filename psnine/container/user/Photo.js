@@ -12,7 +12,8 @@ import {
   InteractionManager,
   Modal,
   Slider,
-  FlatList
+  FlatList,
+  Alert
 } from 'react-native';
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
@@ -164,16 +165,45 @@ export default class Photo extends Component {
       modeInfo,
       ITEM_HEIGHT,
       onPress: () => {
-        if (params.callback) {
+        if (params.alertText && params.afterAlert) {
+          Alert.alert(
+            '提示',
+            params.alertText,
+            [
+              {
+                text: '取消', style: 'cancel'
+              },
+              {
+                text: '确定', onPress: () => {
+                  navigation.goBack()
+                  params.afterAlert({ url: rowData.href || rowData.img })
+                }
+              }
+            ]
+          )
+        }else if (params.callback) {
           navigation.goBack()
           params.callback({ url: rowData.href || rowData.img })
         }
       },
       onLongPress: () => {
-        postDeleteImage({ delimg: rowData.delimg }).then(res => res.text()).then(html => {
-          toast('删除成功')
-          this.fetchMessages(params.URL, 'jump');
-        })
+        Alert.alert(
+          '提示',
+          '是否删除图片?',
+          [
+            {
+              text: '取消', style: 'cancel'
+            },
+            {
+              text: '确定', onPress: () => {
+                postDeleteImage({ delimg: rowData.delimg }).then(res => res.text()).then(html => {
+                  toast('删除成功')
+                  this.fetchMessages(params.URL, 'jump');
+                })
+              }
+            }
+          ]
+        )
       }
     }} />
   }
