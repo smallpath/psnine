@@ -22,17 +22,18 @@ export default class FooterProgress extends React.PureComponent {
   }
   render() {
     return this.props.isLoadingMore ? (
-      <View style={{flexDirection:'row', flex: 1, height: 15, alignItems: 'flex-end'}}>
+      <View style={{flexDirection:'row', flex: 1, height: 4, alignItems: 'flex-end'}}>
         <ProgressBarAndroid color={accentColor} style={{flex:1,
-          height: 15,
+          height: 40,
+          marginBottom: -18,
           transform: [
             {
               rotateZ: '180deg'
             }
           ]
         }}  styleAttr="Horizontal"/>
-        <ProgressBarAndroid style={{flex:1,height: 15,}} color={accentColor} styleAttr="Horizontal" />
+        <ProgressBarAndroid style={{flex:1,height: 40,marginBottom: -18}} color={accentColor} styleAttr="Horizontal" />
       </View>
-    ) : (<View style={{flexDirection:'row', flex: 1, height: 15, alignItems: 'flex-end'}}/>)
+    ) : (<View style={{flexDirection:'row', flex: 1, height: 4, alignItems: 'flex-end'}}/>)
   }
 }

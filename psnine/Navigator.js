@@ -27,7 +27,6 @@ import TradeTopic from './container/topic/TradeTopic'
 import StoreTopic from './container/topic/StoreTopic'
 
 import Circle from './container/circle/Circle'
-import CircleTopic from './container/circle/CircleTopic'
 import CircleRank from './container/circle/CircleRank'
 
 import Reply from './container/new/Reply'
@@ -172,9 +171,6 @@ const Navigator = StackNavigator({
   },
   Circle: {
     screen: Circle,
-  },
-  CircleTopic: {
-    screen: CircleTopic
   },
   CircleRank: {
     screen: CircleRank

@@ -106,7 +106,7 @@ export default class Detail extends Component {
         <View style={{ flex:1, padding: 20 }}>
           <Text style={{ color: modeInfo.standardTextColor }}>{rowData.ssInfo}</Text>
         </View>
-        { rowData.serverInfo.length && <View style={{ flex:1, padding: 10 }}>
+        { rowData.serverInfo && rowData.serverInfo.length && <View style={{ flex:1, padding: 10 }}>
           {rowData.serverInfo.map((item, index) => <View key={index} style={{flexDirection:'row', paddingHorizontal: 10, paddingVertical: 2}}>
             <Text style={{flex:1, alignItems: 'center', color: modeInfo.standardTextColor }}>{item.ip}</Text><Text 
               style={{flex:1, alignItems: 'center', color: modeInfo.standardTextColor }}>{item.name}</Text>

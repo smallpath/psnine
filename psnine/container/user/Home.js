@@ -418,7 +418,7 @@ export default class Home extends Component {
               resizeMode={'cover'}
               resizeMethod={'resize'}
               style={{ 
-                height: SCREEN_WIDTH + 1,
+                height: 360 + 1,
                 top: 0, // why??
               }}
             />
@@ -432,7 +432,7 @@ export default class Home extends Component {
           style={{
             overflow: 'visible',
             flex:0, 
-            height: ACTUAL_SCREEN_HEIGHT + SCREEN_WIDTH - toolbarHeight + ACTUAL_SCREEN_HEIGHT    ,         
+            height: ACTUAL_SCREEN_HEIGHT + 360 - toolbarHeight + ACTUAL_SCREEN_HEIGHT    ,         
             transform: [
                 {
                   translateY: this.state.marginTop.interpolate({

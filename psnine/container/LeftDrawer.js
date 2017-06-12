@@ -460,7 +460,7 @@ class navigationDrawer extends Component {
 
   renderRow = (rowData, sectionID, rowID, highlightRow) => {
     const shouldSlice = this.state.psnid === ''
-    const targetListItems = shouldSlice ? ListItems.slice(2) : ListItems
+    const targetListItems = shouldSlice ? ListItems.slice(-2) : ListItems
     const item = targetListItems[rowID]
     let iconName = item.iconName
 
@@ -508,7 +508,7 @@ class navigationDrawer extends Component {
       <View style={styles.container} {...this.props}>
         <ListView
           ref="themeslistview"
-          dataSource={this.state.psnid !== '' ? this.state.dataSource : this.state.dataSource.cloneWithRows(ListItems.slice(2))}
+          dataSource={this.state.psnid !== '' ? this.state.dataSource : this.state.dataSource.cloneWithRows(ListItems.slice(-2))}
           renderRow={this.renderRow}
           key={this.props.modeInfo.isNightMode ? 'night' : 'day'}
           keyboardDismissMode="on-drag"

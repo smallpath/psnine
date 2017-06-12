@@ -98,7 +98,15 @@ export default class extends React.PureComponent {
                 }>{rowData.psnid}</Text>
                 <Text style={{ fontSize: 12, flex: -1, color: modeInfo.standardTextColor, textAlign: 'center', textAlignVertical: 'center' }}>{rowData.date}</Text>
                 <Text style={{ fontSize: 12, flex: -1, color: modeInfo.standardTextColor, textAlign: 'center', textAlignVertical: 'center' }}>{rowData.count}</Text>
-                <Text style={{ fontSize: 12, flex: -1, color: modeInfo.standardTextColor, textAlign: 'center', textAlignVertical: 'center' }}>{rowData.circle}</Text>
+                <Text style={{ fontSize: 12, flex: -1, color: idColor, textAlign: 'center', textAlignVertical: 'center' }} onPress={
+                  () => {
+                    this.props.navigation.navigate('Circle', {
+                      URL: rowData.circleHref,
+                      title: rowData.circle,
+                      rowData
+                    })
+                  }
+                }>{rowData.circle}</Text>
               </View>
 
             </View>

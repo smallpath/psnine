@@ -42,7 +42,7 @@ export default class HtmlView extends Component {
     switch (index) {
       case 0:
         return this.webview.reload();
-      case 1:
+      case 1:Linking
         return Linking.openURL(this.props.url).catch(err => global.toast && global.toast())
     }
   }
@@ -69,7 +69,16 @@ export default class HtmlView extends Component {
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', padding: 5, alignSelf: 'center', alignContent: 'center'  }}>
         <Button color={this.props.modeInfo.accentColor} style={{
 
-        }} title={'打开网页'} onPress={() => { this.setState({ modalVisible: true }) }}></Button>
+        }} title={'打开网页'} onPress={() => { 
+          if (this.props.url.includes('player.youku.com') || this.props.url.includes('music.163.com')) {
+            return this.setState({
+              modalVisible: false
+            }, () => {
+              Linking.openURL(this.props.url).catch(err => global.toast && global.toast())
+            })
+          }
+          this.setState({ modalVisible: true })
+        }}></Button>
         {this.state.modalVisible && (
           <MyDialog modeInfo={this.props.modeInfo}
             modalVisible={this.state.modalVisible}

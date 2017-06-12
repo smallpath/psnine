@@ -72,8 +72,15 @@ export default class Reply extends Component {
   }
 
   componentDidMount = () => {
+    const { modeInfo } = this.props.screenProps
     let config = { tension: 30, friction: 7 };
-    Animated.spring(this.state.openVal, { toValue: 1, ...config }).start();
+    Animated.spring(this.state.openVal, { toValue: 1, ...config }).start(() => {
+      if (modeInfo.settingInfo.psnid === '') {
+        toast('请首先登录')
+        this.props.navigation.goBack()
+        return
+      }
+    });
   }
 
   _pressButton = (callback) => {
@@ -115,6 +122,7 @@ export default class Reply extends Component {
     const { openVal, marginTop } = this.state
     const { callback } = this.props.navigation.state.params
     const { params } = this.props.navigation.state
+    const { modeInfo } = this.props.screenProps
 
     this.PanResponder = PanResponder.create({
 

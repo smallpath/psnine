@@ -32,6 +32,7 @@ import {
 } from '../../dao'
 import ImageViewer from '../../components/ImageViewer'
 import SimpleComment from '../shared/SimpleComment'
+import { getGameUrl } from '../../dao';
 
 let screen = Dimensions.get('window');
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = screen;
@@ -250,7 +251,15 @@ class CommunityTopic extends Component {
         }}>
           <TouchableNativeFeedback
             onPress={() => {
-
+              const { navigation } = this.props;
+              const URL = getGameUrl(rowData.id);
+              navigation.navigate('GamePage', {
+                // URL: 'http://psnine.com/psngame/5424?psnid=Smallpath',
+                URL,
+                title: rowData.title,
+                rowData,
+                type: 'game'
+              })
             }}
             useForeground={true}
             delayPressIn={100}
