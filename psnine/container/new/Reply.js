@@ -67,7 +67,8 @@ export default class Reply extends Component {
       openVal: new Animated.Value(0),
       marginTop: new Animated.Value(0),
       toolbarOpenVal: new Animated.Value(0),
-      modalVisible: false
+      modalVisible: false,
+      selection: {}
     }
   }
 
@@ -425,6 +426,7 @@ export default class Reply extends Component {
               keyboardType="default"
               returnKeyType='go'
               returnKeyLabel='go'
+              onSelectionChange={this.onSelectionChange}
               blurOnSubmit={true}
               numberOfLines={100}
               ref={ref => this.content = ref}
@@ -574,8 +576,30 @@ export default class Reply extends Component {
   }
 
   onPressEmotion = ({ text, url }) => {
+    this.addText(
+      `[img]${url}[/img]`
+    )
+  }
+
+  addText = (text) => {
+    const origin = this.state.content
+    let { start = 0, end = 0 } = this.state.selection
+    if (start !== end) {
+      const exist = origin.slice(start, end)
+      text = text.slice(0, start) + exist + text.slice(end)
+      end = start + exist.length
+    }
+    let input = origin.slice(0, start) + text + origin.slice(end)
     this.setState({
-      content: this.state.content + `[img]${url}[/img]`
+      content: input,
+      selection: { start, end }
+    })
+  }
+
+  onSelectionChange = ({ nativeEvent }) => {
+    // console.log(nativeEvent.selection)
+    this.setState({
+      selection: nativeEvent.selection
     })
   }
 
@@ -586,9 +610,7 @@ export default class Reply extends Component {
     this.props.navigation.navigate('UserPhoto', {
       URL: 'http://psnine.com/my/photo?page=1',
       callback: ({ url }) => {
-        this.setState({
-          content: this.state.content + `[img]${url}[/img]`
-        })
+        this.addText(`[img]${url}[/img]`)
       }
     })
   }
