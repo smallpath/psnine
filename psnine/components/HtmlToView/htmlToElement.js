@@ -31,8 +31,12 @@ const ResizableImgComponent = props => {
     width,
     height,
   };
+  let src = props.attribs.src
+  if (/^(.*?):\/\//.exec(src)) {} else {
+    src = 'http://psnine.com' + src
+  }
   const source = {
-    uri: props.attribs.src,
+    uri: src,
     width,
     height,
     imagePaddingOffset: props.imagePaddingOffset
@@ -58,8 +62,12 @@ const InlineImgComponent = props => {
     width,
     height,
   };
+  let src = props.attribs.src
+  if (/^(.*?):\/\//.exec(src)) {} else {
+    src = 'http://psnine.com' + src
+  }
   const source = {
-    uri: props.attribs.src,
+    uri: src,
     width,
     height,
     imagePaddingOffset: props.imagePaddingOffset

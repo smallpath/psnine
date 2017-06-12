@@ -171,7 +171,7 @@ class CommunityTopic extends Component {
         this.hasComment = data.commentList.length !== 0
         this.hasReadMore = this.hasComment ? data.commentList[0].isGettingMoreComment === true ? true : false : false
         this.hasPage = data.contentInfo.page.length !== 0
-        this.hasShare = !!data.titleInfo.shareInfo && Object.keys(data.titleInfo.shareInfo).length
+        this.hasShare = data.contentInfo.external.length !== 0
         this.setState({
           data,
           mainContent: html,
@@ -193,7 +193,39 @@ class CommunityTopic extends Component {
     return true
   }
 
+
   hasShare = false
+  renderShare = (page) => {
+    const { modeInfo } = this.props.screenProps
+    const list = []
+    for (const item of page) {
+      const thisJSX = (
+        <TouchableNativeFeedback key={item.url} onPress={() => {
+          this.props.navigation.navigate('CommunityTopic', {
+            title: item.text,
+            URL: item.url
+          })
+        }}>
+          <View style={{ flex: -1, padding: 2 }}>
+            <Text style={{ color: idColor }}>{item.text}</Text>
+          </View>
+        </TouchableNativeFeedback>
+      )
+      list.push(thisJSX)
+    }
+    return (
+      <View style={{ elevation: 2, margin: 5, marginVertical: 0, backgroundColor: modeInfo.backgroundColor }}>
+        <View style={{
+          elevation: 2,
+          margin: 5,
+          backgroundColor: modeInfo.backgroundColor,
+          padding: 5
+        }}>
+          {list}
+        </View>
+      </View>
+    )
+  }
 
   renderHeader = (titleInfo) => {
     const { modeInfo } = this.props.screenProps
@@ -452,9 +484,9 @@ class CommunityTopic extends Component {
       list.push(thisJSX)
     }
     return (
-      <View style={{ elevation: 1, margin: 5, marginTop: 0, marginBottom: 0, backgroundColor: modeInfo.backgroundColor }}>
+      <View style={{ elevation: 0, margin: 5, marginVertical: 0, backgroundColor: modeInfo.backgroundColor }}>
         <View style={{
-          elevation: 2,
+          elevation: 0,
           margin: 5,
           backgroundColor: modeInfo.backgroundColor,
           padding: 5
@@ -478,15 +510,15 @@ class CommunityTopic extends Component {
       data.push(source.titleInfo)
       renderFuncArr.push(this.renderHeader)
     }
+    if (shouldPushData && this.hasShare) {
+      data.push(source.contentInfo.external)
+      renderFuncArr.push(this.renderShare)
+    }
     if (shouldPushData && this.hasPage) {
       data.push(source.contentInfo.page)
       renderFuncArr.push(this.renderPage)
     }
-    // let actionFunc = this._onActionSelected
-    const actions = toolbarActions
-    // if (shouldPushData && !this.hasShare) {
-    //   actions.length = 2
-    // }
+
     if (shouldPushData && this.hasContent) {
       data.push(this.state.mainContent)
       renderFuncArr.push(this.renderContent)
