@@ -52,20 +52,21 @@ class Deal extends Component {
     const { modeInfo } = this.props.screenProps
     const { params } = this.props.navigation.state
     return (
-      <View style={{ flex: 1 }}>
+      <View style={{ flex: 1, backgroundColor: modeInfo.backgroundColor }}>
         <Ionicons.ToolbarAndroid
           navIconName="md-arrow-back"
           overflowIconName="md-more" iconColor={modeInfo.isNightMode ? '#000' : '#fff'}
           title={params.title}
+          titleColor={modeInfo.backgroundColor}
           style={[styles.toolbar, { backgroundColor: modeInfo.standardColor, }]}
           actions={toolbarActions}
           onIconClicked={this._pressButton}
           onActionSelected={this._onActionSelected}
         />
-        <KeyboardAvoidingView
+        {/*<KeyboardAvoidingView
           behavior={'padding'}
           style={{ flex: 3 }}
-        >
+        >*/}
           <WebView
             ref={WEBVIEW_REF}
             source={{ uri: params.URL }}
@@ -76,7 +77,7 @@ class Deal extends Component {
             startInLoadingState={true}
             injectedJavaScript={`$('.header').hide()`}
           />
-        </KeyboardAvoidingView>
+        {/*</KeyboardAvoidingView>*/}
       </View>
     );
   }

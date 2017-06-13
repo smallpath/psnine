@@ -80,7 +80,9 @@ let rankActions = [
   searchAction,
 ];
 
-let battleActions = [];
+let battleActions = [
+  { title: '新建', iconName: 'md-create', value: '', show: 'always' },
+];
 
 let geneActions = [
   searchAction,
@@ -105,6 +107,7 @@ let storeActions = [
 ]
 
 let tradeActions = [
+  { title: '新建', iconName: 'md-create', value: '', show: 'always' },
   searchAction
 ]
 
@@ -226,9 +229,17 @@ class Toolbar extends Component {
       } else {
         index === 1 && this._onSearchClicked()
         index === 0 && this.props.navigation.navigate('NewTopic', {
-          shouldSeeBackground: true
+
         })
       }
+    } else if (segmentedIndex === 1) {
+      this.props.navigation.navigate('WebView', {
+        URL: 'http://psnine.com/set/qa',
+        title: '创建问题'
+      })
+      // index === 0 && this.props.navigation.navigate('NewQaWebView', {
+      //   shouldSeeBackground: true
+      // })
     } else if (segmentedIndex === 2) {
       if (index !== 0) {
         let type = toolbarActions[segmentedIndex][index].value;
@@ -244,9 +255,22 @@ class Toolbar extends Component {
         this._onSearchClicked()
       }
     } else if (segmentedIndex === 4) {
-      this.props.navigation.navigate('NewBattle', {
-        shouldSeeBackground: true
+      // this.props.navigation.navigate('NewBattleWebWiew', {
+      // })
+      this.props.navigation.navigate('WebView', {
+        URL: 'http://psnine.com/set/battle',
+        title: '创建约战'
       })
+    } else if (segmentedIndex === 8) {
+      // console.log(index, typeof index)
+      // index === 0 && this.props.navigation.navigate('WebView', {
+      //   URL: 'http://psnine.com/set/trade',
+      //   title: '发布交易'
+      // })
+      index === 0 && this.props.navigation.navigate('NewTrade', {
+        // shouldSeeBackground: true
+      })
+      index === 1 && this._onSearchClicked()
     } else {
       this._onSearchClicked()
     }

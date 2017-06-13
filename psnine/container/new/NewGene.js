@@ -66,7 +66,7 @@ export default class NewTopic extends Component {
       url: '',
       groupid: params.groupid || '-1',
       addgene: '',
-      openVal: new Animated.Value(0),
+      openVal: new Animated.Value(1),
       marginTop: new Animated.Value(0),
       toolbarOpenVal: new Animated.Value(0),
       modalVisible: false,
@@ -77,13 +77,13 @@ export default class NewTopic extends Component {
   componentDidMount = () => {
     const { modeInfo } = this.props.screenProps
     let config = { tension: 30, friction: 7 };
-    Animated.spring(this.state.openVal, { toValue: 1, ...config }).start(() => {
+    // Animated.spring(this.state.openVal, { toValue: 1, ...config }).start(() => {
       if (modeInfo.settingInfo.psnid === '') {
         toast('请首先登录')
         this.props.navigation.goBack()
         return
       }
-    });
+    // });
   }
 
   _pressButton = (callback) => {
@@ -95,10 +95,10 @@ export default class NewTopic extends Component {
     } 
     this.content.clear();
     Keyboard.dismiss()
-    Animated.spring(openVal, { toValue: 0, ...config }).start(() => {
+    // Animated.spring(openVal, { toValue: 0, ...config }).start(() => {
       typeof callback === 'function' && callback()
       this.props.navigation.goBack()
-    });
+    // });
 
   }
 
@@ -127,90 +127,6 @@ export default class NewTopic extends Component {
     const { params } = this.props.navigation.state
     const { modeInfo } = this.props.screenProps
 
-    this.PanResponder = PanResponder.create({
-
-      onStartShouldSetPanResponderCapture: (e, gesture) => {
-        return e.nativeEvent.pageX <= 56 ? false : true;
-      },
-      onPanResponderGrant: (e, gesture) => {
-        Keyboard.dismiss()
-        const target = gesture.y0 <= 56 ? 0 : SCREEN_HEIGHT - 56
-        marginTop.setOffset(target);
-      },
-      onPanResponderMove: Animated.event([
-        null,
-        {
-          dy: marginTop
-        }
-      ]),
-
-      onPanResponderRelease: (e, gesture) => {
-
-      },
-      onPanResponderTerminationRequest: (evt, gesture) => {
-        return false;
-      },
-      onPanResponderTerminate: (evt, gesture) => {
-
-      },
-      onShouldBlockNativeResponder: (evt, gesture) => {
-        return true;
-      },
-      onPanResponderReject: (evt, gesture) => {
-        return false;
-      },
-      onPanResponderEnd: (evt, gesture) => {
-        let dy = gesture.dy;
-        let vy = gesture.vy;
-
-        marginTop.flattenOffset();
-
-        let duration = 50;
-
-        if (vy < 0) {
-
-          if (Math.abs(dy) <= CIRCLE_SIZE) {
-
-            Animated.spring(marginTop, {
-              toValue: SCREEN_HEIGHT - CIRCLE_SIZE,
-              duration,
-              easing: Easing.linear,
-            }).start();
-
-          } else {
-
-            Animated.spring(marginTop, {
-              toValue: 0,
-              duration,
-              easing: Easing.linear,
-            }).start();
-
-          }
-
-        } else {
-
-          if (Math.abs(dy) <= CIRCLE_SIZE) {
-
-            Animated.spring(marginTop, {
-              toValue: 0,
-              duration,
-              easing: Easing.linear,
-            }).start();
-
-          } else {
-
-            Animated.spring(marginTop, {
-              toValue: SCREEN_HEIGHT - CIRCLE_SIZE,
-              duration,
-              easing: Easing.linear,
-            }).start();
-          }
-
-        }
-
-      },
-
-    });
     this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () => {
       this.isKeyboardShowing = true
       this.state.toolbarOpenVal.setValue(0)
@@ -225,24 +141,7 @@ export default class NewTopic extends Component {
       });
     })
     this.isToolbarShowing = false
-    // this.removeListener = BackHandler.addEventListener('hardwareBackPress', () => {
-    //   let config = { tension: 30, friction: 7 };
-    //   if (this.state.toolbarOpenVal._value !== 0) {
-    //     Animated.spring(this.state.toolbarOpenVal, { toValue: 0, ...config }).start();
-    //     return true;
-    //   }
-    //   let value = this.state.marginTop._value
-    //   if (Math.abs(value) >= 50) {
-    //     Animated.spring(marginTop, { toValue: 0, ...config }).start();
-    //     return true;
-    //   } else {
-    //     Keyboard.dismiss()
-    //     Animated.spring(openVal, { toValue: 0, ...config }).start(() => {
-    //       this.props.navigation.goBack()
-    //     });
-    //     return true
-    //   }
-    // })
+
 
     const icon = await Promise.all([
       Ionicons.getImageSource('md-arrow-back', 20, '#fff'),
@@ -264,14 +163,7 @@ export default class NewTopic extends Component {
   }
 
   sendReply = () => {
-    // console.log({
-    //   content: this.state.content,
-    //   photo: this.state.photo.join(','),
-    //   url: this.state.url,
-    //   groupid: this.state.groupid,
-    //   addgene: this.state.addgene
-    // })
-    // return
+
     postCreateTopic({
       content: this.state.content,
       photo: this.state.photo.join(','),
@@ -357,27 +249,19 @@ export default class NewTopic extends Component {
         ]}
 
       >
-        <Animated.View {...this.PanResponder.panHandlers} style={[styles.toolbar, animatedToolbarStyle]}>
-          <View style={{
-            flex: 1,
-            flexDirection: 'row',
-            alignItems: 'center',
-          }}>
-            <TouchableNativeFeedback
-              onPress={this._pressButton}
-              delayPressIn={0}
-              background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
-              style={{ borderRadius: 25 }}
-            >
-              <View style={{ width: 50, height: 50, marginLeft: 0, borderRadius: 25 }}>
-                {icon && <Image
-                  source={icon.backIcon}
-                  style={{ width: 20, height: 20, marginTop: 15, marginLeft: 15 }}
-                />}
-              </View>
-            </TouchableNativeFeedback>
-            <Text style={{ color: 'white', fontSize: 23, marginLeft: 10, }}>{title}</Text>
-          </View>
+        <Animated.View style={[styles.toolbar, animatedToolbarStyle]}>
+          <Ionicons.ToolbarAndroid
+            navIconName="md-arrow-back"
+            overflowIconName="md-more"
+            iconColor={modeInfo.isNightMode ? '#000' : '#fff'}
+            title={title}
+            style={[styles.toolbar, { backgroundColor: modeInfo.standardColor }]}
+            titleColor={modeInfo.isNightMode ? '#000' : '#fff'}
+            subtitleColor={modeInfo.isNightMode ? '#000' : '#fff'}
+            actions={toolbarActions}
+            onIconClicked={this._pressButton}
+            onActionSelected={this.onActionSelected}
+          />
 
         </Animated.View >
 

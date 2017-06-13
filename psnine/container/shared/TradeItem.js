@@ -21,7 +21,7 @@ export default class TradeItem extends React.PureComponent {
   
   _onRowPressed = (rowData) => {
     const { navigation } = this.props;
-    const URL = getBattleURL(rowData.id);
+    // const URL = getBattleURL(rowData.id);
     navigation.navigate('TradeTopic', {
       URL: rowData.href,
       title: rowData.title,

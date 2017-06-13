@@ -106,7 +106,7 @@ export default class extends Component {
     switch(index) {
       case 0:
         this.props.navigation.navigate('NewGene', {
-          shouldSeeBackground: true,
+          // shouldSeeBackground: true,
           groupid: id
         })
         break;

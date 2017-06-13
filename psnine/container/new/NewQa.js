@@ -349,27 +349,19 @@ export default class NewTopic extends Component {
         ]}
 
       >
-        <Animated.View {...this.PanResponder.panHandlers} style={[styles.toolbar, animatedToolbarStyle]}>
-          <View style={{
-            flex: 1,
-            flexDirection: 'row',
-            alignItems: 'center',
-          }}>
-            <TouchableNativeFeedback
-              onPress={this._pressButton}
-              delayPressIn={0}
-              background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
-              style={{ borderRadius: 25 }}
-            >
-              <View style={{ width: 50, height: 50, marginLeft: 0, borderRadius: 25 }}>
-                {icon && <Image
-                  source={icon.backIcon}
-                  style={{ width: 20, height: 20, marginTop: 15, marginLeft: 15 }}
-                />}
-              </View>
-            </TouchableNativeFeedback>
-            <Text style={{ color: 'white', fontSize: 23, marginLeft: 10, }}>{title}</Text>
-          </View>
+        <Animated.View style={[styles.toolbar, animatedToolbarStyle]}>
+          <Ionicons.ToolbarAndroid
+            navIconName="md-arrow-back"
+            overflowIconName="md-more"
+            iconColor={modeInfo.isNightMode ? '#000' : '#fff'}
+            title={title}
+            style={[styles.toolbar, { backgroundColor: modeInfo.standardColor }]}
+            titleColor={modeInfo.isNightMode ? '#000' : '#fff'}
+            subtitleColor={modeInfo.isNightMode ? '#000' : '#fff'}
+            actions={toolbarActions}
+            onIconClicked={this._pressButton}
+            onActionSelected={this.onActionSelected}
+          />
 
         </Animated.View >
 
