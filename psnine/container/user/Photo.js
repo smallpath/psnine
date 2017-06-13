@@ -43,6 +43,7 @@ import FooterProgress from '../shared/FooterProgress'
 let toolbarActions = [
   { title: '上传', iconName: 'md-cloud-upload', show: 'always' },
   { title: '跳页', iconName: 'md-map', show: 'always' },
+  { title: '确定', iconName: 'md-checkmark', show: 'always' },
 ];
 
 import Item from '../shared/PhotoItem'
@@ -50,6 +51,9 @@ import Item from '../shared/PhotoItem'
 export default class Photo extends Component {
   constructor(props) {
     super(props);
+    const { navigation } = this.props
+    const { params } = navigation.state
+    const { selections = [], type = 'general' } = params
     this.state = {
       list: [],
       numberPerPage: 60,
@@ -59,7 +63,9 @@ export default class Photo extends Component {
       isRefreshing: true,
       isLoadingMore: false,
       modalVisible: false,
-      sliderValue: 1
+      sliderValue: 1,
+      selections,
+      type
     }
   }
 
@@ -147,6 +153,12 @@ export default class Photo extends Component {
           modalVisible: true
         })
       return
+      case 2:
+        const { navigation } = this.props
+        const { params } = navigation.state
+        params.callbackAfterAll && params.callbackAfterAll(this.state.selections)
+        navigation.goBack()
+      return
     }
   }
 
@@ -158,12 +170,14 @@ export default class Photo extends Component {
     const { ITEM_HEIGHT } = this
     const { navigation } = this.props
     const { params } = navigation.state
+    const { selections } = this.state
     // console.log(rowData)
     return <Item {...{
       navigation,
       rowData,
       modeInfo,
       ITEM_HEIGHT,
+      isChecked: selections.includes(rowData.id),
       onPress: () => {
         if (params.alertText && params.afterAlert) {
           Alert.alert(
@@ -181,9 +195,16 @@ export default class Photo extends Component {
               }
             ]
           )
-        }else if (params.callback) {
+        } else if (params.callback) {
           navigation.goBack()
           params.callback({ url: rowData.href || rowData.img })
+        } else if (params.type === 'multi') {
+          const target = this.state.selections.includes(rowData.id) ? 
+              this.state.selections.filter(item => item !== rowData.id) : 
+              this.state.selections.slice().concat(rowData.id)
+          this.setState({
+            selections: target
+          })
         }
       },
       onLongPress: () => {
@@ -227,7 +248,7 @@ export default class Photo extends Component {
           title={'图床'}
           style={[styles.toolbar, { backgroundColor: modeInfo.standardColor }]}
           titleColor={modeInfo.isNightMode ? '#000' : '#fff'}
-          actions={toolbarActions}
+          actions={params.type === 'multi' ? toolbarActions : toolbarActions.slice().pop()}
           onIconClicked={this.onNavClicked}
           onActionSelected={this.onActionSelected}
         />

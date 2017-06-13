@@ -16,7 +16,8 @@ import {
   Easing,
   PanResponder,
   StatusBar,
-  Picker
+  Picker,
+  Button
 } from 'react-native';
 
 import { connect } from 'react-redux';
@@ -61,10 +62,10 @@ export default class NewTopic extends Component {
     this.state = {
       icon: false,
       content: '',
-      open: '1',
-      node: 'talk',
-      title: '',
-      addtopic: '',
+      photo: [],
+      url: '',
+      groupid: params.groupid || '-1',
+      addgene: '',
       openVal: new Animated.Value(0),
       marginTop: new Animated.Value(0),
       toolbarOpenVal: new Animated.Value(0),
@@ -224,24 +225,24 @@ export default class NewTopic extends Component {
       });
     })
     this.isToolbarShowing = false
-    this.removeListener = BackHandler.addEventListener('hardwareBackPress', () => {
-      let config = { tension: 30, friction: 7 };
-      if (this.state.toolbarOpenVal._value !== 0) {
-        Animated.spring(this.state.toolbarOpenVal, { toValue: 0, ...config }).start();
-        return true;
-      }
-      let value = this.state.marginTop._value
-      if (Math.abs(value) >= 50) {
-        Animated.spring(marginTop, { toValue: 0, ...config }).start();
-        return true;
-      } else {
-        Keyboard.dismiss()
-        Animated.spring(openVal, { toValue: 0, ...config }).start(() => {
-          this.props.navigation.goBack()
-        });
-        return true
-      }
-    })
+    // this.removeListener = BackHandler.addEventListener('hardwareBackPress', () => {
+    //   let config = { tension: 30, friction: 7 };
+    //   if (this.state.toolbarOpenVal._value !== 0) {
+    //     Animated.spring(this.state.toolbarOpenVal, { toValue: 0, ...config }).start();
+    //     return true;
+    //   }
+    //   let value = this.state.marginTop._value
+    //   if (Math.abs(value) >= 50) {
+    //     Animated.spring(marginTop, { toValue: 0, ...config }).start();
+    //     return true;
+    //   } else {
+    //     Keyboard.dismiss()
+    //     Animated.spring(openVal, { toValue: 0, ...config }).start(() => {
+    //       this.props.navigation.goBack()
+    //     });
+    //     return true
+    //   }
+    // })
 
     const icon = await Promise.all([
       Ionicons.getImageSource('md-arrow-back', 20, '#fff'),
@@ -263,13 +264,20 @@ export default class NewTopic extends Component {
   }
 
   sendReply = () => {
-
+    // console.log({
+    //   content: this.state.content,
+    //   photo: this.state.photo.join(','),
+    //   url: this.state.url,
+    //   groupid: this.state.groupid,
+    //   addgene: this.state.addgene
+    // })
+    // return
     postCreateTopic({
       content: this.state.content,
-      open: this.state.open,
-      node: this.state.node,
-      title: this.state.title,
-      addtopic: this.state.addtopic,
+      photo: this.state.photo.join(','),
+      url: this.state.url,
+      groupid: this.state.groupid,
+      addgene: this.state.addgene
     }, 'gene').then(res => {
       return res
     }).then(res => res.text()).then(text => {
@@ -376,45 +384,10 @@ export default class NewTopic extends Component {
         <Animated.View style={[styles.KeyboardAvoidingView, {
           flex: openVal.interpolate({ inputRange: [0, 1], outputRange: [0, 10] }),
         }]} >
-          <TextInput placeholder="标题"
-            autoCorrect={false}
-            multiline={false}
-            keyboardType="default"
-            returnKeyType="next"
-            returnKeyLabel='next'
-            onSelectionChange={this.onSelectionChange}
-            blurOnSubmit={false}
-            numberOfLines={100}
-            ref={ref => this.title = ref}
-            onChange={({ nativeEvent }) => { this.setState({ title: nativeEvent.text }) }}
-            value={this.state.title}
-            style={[styles.textInput, {
-              color: modeInfo.titleTextColor,
-              textAlign: 'left',
-              height: 56,
-              borderBottomColor: modeInfo.brighterLevelOne,
-              borderBottomWidth: StyleSheet.hairlineWidth
-            }]}
-            placeholderTextColor={modeInfo.standardTextColor}
-            // underlineColorAndroid={accentColor}
-            underlineColorAndroid='rgba(0,0,0,0)'
-          />
-          <Picker style={{
-            flex: 1,
-            borderWidth: 1,
-            color: modeInfo.standardTextColor,
-            borderBottomColor: modeInfo.standardTextColor
-          }}
-            prompt='选择'
-            selectedValue={this.state.open}
-            onValueChange={this.onValueChange.bind(this, 'open')}>
-            <Picker.Item label="发布文章（2分钟内会在首页展示）" value="0" />
-            <Picker.Item label="保存草稿（仅自己可见）" value="1" />
-          </Picker>
           <AnimatedKeyboardAvoidingView behavior={'padding'} style={[styles.contentView, {
             flex: openVal.interpolate({ inputRange: [0, 1], outputRange: [0, 12] }),
           }]}>
-            <TextInput placeholder="内容"
+            <TextInput placeholder="请说说你对这些图/音乐/视频/电影的感受和看法，不要超过600字哦"
               autoCorrect={false}
               multiline={true}
               keyboardType="default"
@@ -430,7 +403,44 @@ export default class NewTopic extends Component {
                 color: modeInfo.titleTextColor,
                 textAlign: 'left',
                 textAlignVertical: 'top',
-                flex: 1,
+                flex: 20,
+              }]}
+              placeholderTextColor={modeInfo.standardTextColor}
+              // underlineColorAndroid={accentColor}
+              underlineColorAndroid='rgba(0,0,0,0)'
+            />
+            <Button style={{flex:1, padding: 5, margin: 5}} title={'点我选择图片(已选择' + this.state.photo.length + '张)'} onPress={() => {
+              Keyboard.dismiss()
+              this.props.navigation.navigate('UserPhoto', {
+                URL: 'http://psnine.com/my/photo?page=1',
+                type: 'multi',
+                selections: this.state.photo,
+                callbackAfterAll: (imageArr) => {
+                  this.setState({
+                    photo: imageArr
+                  })
+                }
+              })
+            }} color={modeInfo.standardColor}/>
+            <TextInput placeholder="选填项，内容可以带一个链接地址，http://开头哦"
+              autoCorrect={false}
+              multiline={false}
+              keyboardType="default"
+              returnKeyType="next"
+              returnKeyLabel='next'
+              onSelectionChange={this.onSelectionChange}
+              blurOnSubmit={false}
+              numberOfLines={1}
+              ref={ref => this.url = ref}
+              onChange={({ nativeEvent }) => { this.setState({ url: nativeEvent.text }) }}
+              value={this.state.url}
+              style={[styles.textInput, {
+                color: modeInfo.titleTextColor,
+                textAlign: 'left',
+                height: 56,
+                /*flex: 0,*/
+                borderBottomColor: modeInfo.brighterLevelOne,
+                borderBottomWidth: StyleSheet.hairlineWidth
               }]}
               placeholderTextColor={modeInfo.standardTextColor}
               // underlineColorAndroid={accentColor}
