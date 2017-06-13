@@ -98,6 +98,7 @@ export default class Home extends Component {
     const { params } = this.props.screenProps.navigation.state
     const { preFetch } = this.props.screenProps
     const psnid = params.URL.split('/').filter(item => item.trim()).pop()
+    // alert(index)
     switch (index) {
       case 2:
         fav({ 
