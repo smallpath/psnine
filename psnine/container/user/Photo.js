@@ -248,7 +248,7 @@ export default class Photo extends Component {
           title={'图床'}
           style={[styles.toolbar, { backgroundColor: modeInfo.standardColor }]}
           titleColor={modeInfo.isNightMode ? '#000' : '#fff'}
-          actions={params.type === 'multi' ? toolbarActions : toolbarActions.slice().pop()}
+          actions={params.type === 'multi' ? toolbarActions : toolbarActions.slice(0, 2)}
           onIconClicked={this.onNavClicked}
           onActionSelected={this.onActionSelected}
         />

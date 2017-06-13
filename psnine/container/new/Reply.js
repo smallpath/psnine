@@ -58,6 +58,7 @@ export default class Reply extends Component {
     const { params } = this.props.navigation.state
     const { at = '', shouldShowPoint = false, isOldPage = false } = params
     // console.log(params)
+    const content = at ? `@${at} ` : ''
     this.state = {
       icon: false,
       content: at ? `@${at} ` : '',
@@ -68,7 +69,7 @@ export default class Reply extends Component {
       marginTop: new Animated.Value(0),
       toolbarOpenVal: new Animated.Value(0),
       modalVisible: false,
-      selection: {}
+      selection: { start: content.length, end: content.length }
     }
   }
 
