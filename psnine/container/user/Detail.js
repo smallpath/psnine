@@ -84,6 +84,11 @@ export default class Detail extends Component {
     const { navigation } = this.props
     return (
       <ScrollView style={{flex: 1, padding: 5}}>
+        <Button color={modeInfo.accentColor} title={'我要捐助'} onPress={() => {
+          navigation.navigate('WebView', {
+            URL: 'http://psnine.com/set/mujuan'
+          })  
+        }} style={{flex:1}}/>
         <View style={{ flex:1, flexDirection: 'row' }}>
           <View style={{flex:1, alignItems:'center'}}><Text style={{color: '#659f13', padding: 20}}>{rowData.zb}</Text></View>
           <View style={{flex:1, alignItems:'center'}}><Text style={{color: '#b94a48', padding: 20}}>{rowData.level}</Text></View>
@@ -111,11 +116,6 @@ export default class Detail extends Component {
             shouldForceInline={false}
           />
         </View>
-        <Button color={modeInfo.accentColor} title={'我要捐助'} onPress={() => {
-          navigation.navigate('WebView', {
-            URL: 'http://psnine.com/set/mujuan'
-          })  
-        }} style={{flex:1}}/>
       </ScrollView>
     )
   }
@@ -146,15 +146,6 @@ export default class Detail extends Component {
         />
         <ScrollView
           ref={flatlist => this.flatlist = flatlist}
-          refreshControl={
-            <RefreshControl
-              refreshing={this.state.isLoading}
-              onRefresh={this._onRefresh}
-              colors={[modeInfo.standardColor]}
-              progressBackgroundColor={modeInfo.backgroundColor}
-              ref={ref => this.refreshControl = ref}
-            />
-          }
           style={styles.list}
         >
         { this.state.data.vipInfo && this.renderVIP(this.state.data.vipInfo)}

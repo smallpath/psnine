@@ -221,7 +221,7 @@ export default class Issue extends Component {
           }
           ListFooterComponent={() => <FooterProgress isLoadingMore={this.state.isLoadingMore} />}
           data={this.state.list}
-          keyExtractor={(item, index) => item.url}
+          keyExtractor={(item, index) => item.url || item.id || item.title}
           renderItem={this._renderItem}
           onEndReached={this._onEndReached}
           onEndReachedThreshold={0.5}

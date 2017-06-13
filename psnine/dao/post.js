@@ -21,6 +21,24 @@ export const postReply = (form, type = 'post') => {
   })
 }
 
+export const postCreateTopic = (form, type = 'post') => {
+  let formBody = []
+  for (let property in form) {
+    const encodedKey = encodeURIComponent(property);
+    const encodedValue = encodeURIComponent(form[property]);
+    formBody.push(encodedKey + "=" + encodedValue);
+  }
+  formBody = formBody.join("&");
+  return fetch('http://psnine.com/set/topic/post', {
+    method: 'POST',
+    headers: {
+      'Accept': 'text/html,application/xhtml+xml,application/xml',
+      'Content-Type': 'application/x-www-form-urlencoded'
+    },
+    body: formBody
+  })
+}
+
 
 const circleURL = 'http://psnine.com/set/group/ajax'
 export const postCircle = form => {

@@ -53,6 +53,7 @@ let indexWithoutFloatButton = [2];
 const searchAction = { title: '搜索', iconName: 'md-search', value: '', show: 'always' }
 
 let communityActions = [
+  { title: '新建', iconName: 'md-create', value: '', show: 'always' },
   searchAction,
   { title: '全部', value: '', show: 'never' },
   { title: '新闻', value: 'news', show: 'never' },
@@ -66,6 +67,7 @@ let communityActions = [
 ];
 
 let qaActions = [
+  { title: '新建', iconName: 'md-create', value: '', show: 'always' },
   searchAction,
 ];
 
@@ -74,12 +76,14 @@ let gameActions = [
 ];
 
 let rankActions = [
+  { title: '新建', iconName: 'md-create', value: '', show: 'always' },
   searchAction,
 ];
 
 let battleActions = [];
 
 let geneActions = [
+  { title: '新建', iconName: 'md-create', value: '', show: 'always' },
   searchAction,
   { title: '全部', value: 'all', show: 'never' },
   { title: '图文类', value: 'photo', show: 'never' },
@@ -217,18 +221,24 @@ class Toolbar extends Component {
     const { segmentedIndex } = this.props.app;
     const { dispatch } = this.props;
     if (segmentedIndex === 0) {
-      if (index !== 0) {
+      if (index !== 0 && index !== 1) {
         let type = toolbarActions[segmentedIndex][index].value;
         dispatch(changeCommunityType(type));
       } else {
-        this._onSearchClicked()
+        index === 1 && this._onSearchClicked()
+        index === 0 && this.props.navigation.navigate('NewTopic', {
+          shouldSeeBackground: true
+        })
       }
     } else if (segmentedIndex === 2) {
-      if (index !== 0) {
+      if (index !== 0 && index !== 1) {
         let type = toolbarActions[segmentedIndex][index].value;
         dispatch(changeGeneType(type));
       } else {
-        this._onSearchClicked()
+        index === 1 && this._onSearchClicked()
+        index === 0 && this.props.navigation.navigate('NewGene', {
+          shouldSeeBackground: true
+        })
       }
     } else if (segmentedIndex === 6) {  
       if (index !== 0) {
@@ -237,6 +247,10 @@ class Toolbar extends Component {
       } else {
         this._onSearchClicked()
       }
+    } else if (segmentedIndex === 4) {
+      this.props.navigation.navigate('NewBattle', {
+        shouldSeeBackground: true
+      })
     } else {
       this._onSearchClicked()
     }
