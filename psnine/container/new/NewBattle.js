@@ -31,7 +31,7 @@ import HTMLView from '../../components/HtmlToView'
 import MyDialog from '../../components/Dialog'
 import Emotion from '../../components/Emotion'
 
-let title = '创建讨论';
+let title = '创建约战';
 
 let toolbarActions = [
 
@@ -270,7 +270,7 @@ export default class NewTopic extends Component {
       node: this.state.node,
       title: this.state.title,
       addtopic: this.state.addtopic,
-    }).then(res => {
+    }, 'battle').then(res => {
       return res
     }).then(res => res.text()).then(text => {
       // console.log(text)

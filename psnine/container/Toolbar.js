@@ -83,7 +83,6 @@ let rankActions = [
 let battleActions = [];
 
 let geneActions = [
-  { title: '新建', iconName: 'md-create', value: '', show: 'always' },
   searchAction,
   { title: '全部', value: 'all', show: 'never' },
   { title: '图文类', value: 'photo', show: 'never' },
@@ -231,14 +230,11 @@ class Toolbar extends Component {
         })
       }
     } else if (segmentedIndex === 2) {
-      if (index !== 0 && index !== 1) {
+      if (index !== 0) {
         let type = toolbarActions[segmentedIndex][index].value;
         dispatch(changeGeneType(type));
       } else {
-        index === 1 && this._onSearchClicked()
-        index === 0 && this.props.navigation.navigate('NewGene', {
-          shouldSeeBackground: true
-        })
+        this._onSearchClicked()
       }
     } else if (segmentedIndex === 6) {  
       if (index !== 0) {

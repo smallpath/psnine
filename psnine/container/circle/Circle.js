@@ -105,7 +105,10 @@ export default class extends Component {
     const id = (params.URL.match(/\/group\/(\d+)/) || [0, -1])[1]
     switch(index) {
       case 0:
-
+        this.props.navigation.navigate('NewGene', {
+          shouldSeeBackground: true,
+          groupid: id
+        })
         break;
       case 1:
         break;
@@ -255,8 +258,8 @@ export default class extends Component {
 
         { rowData.isLogined && rowData.isJoined && (
           <View style={{ justifyContent: 'space-around', alignItems: 'center', flexDirection: 'row', padding: 7}}>
-            {/*<Button style={{flex:1}} title={'发基因'} color={modeInfo.standardColor} onPress={() => this.handlePress(0)}></Button>*/}
-            <Button style={{flex:1}} title={'基因列表'} color={modeInfo.standardColor} onPress={() => this.handlePress(1)}></Button>
+            <Button style={{flex:1}} title={'发基因'} color={modeInfo.standardColor} onPress={() => this.handlePress(0)}></Button>
+            {/*<Button style={{flex:1}} title={'基因列表'} color={modeInfo.standardColor} onPress={() => this.handlePress(1)}></Button>*/}
             <Button style={{flex:1}} title={'玩家排行榜'} color={modeInfo.standardColor} onPress={() => this.handlePress(2)}></Button>
             <Button style={{flex:1}} title={'贵圈真乱'} color={modeInfo.accentColor} onPress={() => this.handlePress(3)}></Button>
           </View>

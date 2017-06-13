@@ -21,7 +21,15 @@ export const postReply = (form, type = 'post') => {
   })
 }
 
-export const postCreateTopic = (form, type = 'post') => {
+const createMapper = {
+  'topic' : 'http://psnine.com/set/topic/post',
+  'qa' : 'http://psnine.com/set/qa/post',
+  'gene' : 'http://psnine.com/set/gene/post',
+  'battle' : 'http://psnine.com/set/battle/post',
+  'trade' : 'http://psnine.com/set/trade/post',
+}
+
+export const postCreateTopic = (form, type = 'topic') => {
   let formBody = []
   for (let property in form) {
     const encodedKey = encodeURIComponent(property);
@@ -29,7 +37,9 @@ export const postCreateTopic = (form, type = 'post') => {
     formBody.push(encodedKey + "=" + encodedValue);
   }
   formBody = formBody.join("&");
-  return fetch('http://psnine.com/set/topic/post', {
+  const url = createMapper[type]
+  if (!url) throw new Error('create Mappler not found: ' + type)
+  return fetch(url, {
     method: 'POST',
     headers: {
       'Accept': 'text/html,application/xhtml+xml,application/xml',
@@ -38,7 +48,6 @@ export const postCreateTopic = (form, type = 'post') => {
     body: formBody
   })
 }
-
 
 const circleURL = 'http://psnine.com/set/group/ajax'
 export const postCircle = form => {

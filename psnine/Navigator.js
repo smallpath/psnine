@@ -31,6 +31,10 @@ import CircleRank from './container/circle/CircleRank'
 
 import Reply from './container/new/Reply'
 import NewTopic from './container/new/NewTopic'
+import NewBattle from './container/new/NewBattle'
+import NewGene from './container/new/NewGene'
+import NewTrade from './container/new/NewTrade'
+import NewQa from './container/new/NewQa'
 
 import WebView from './components/WebView'
 import About from './container/setting/About'
@@ -164,6 +168,18 @@ const Navigator = StackNavigator({
   },
   NewTopic: {
     screen: NewTopic
+  },
+  NewQa: {
+    screen: NewQa
+  },
+  NewTrade: {
+    screen: NewTrade
+  },
+  NewGene: {
+    screen: NewGene
+  },
+  NewBattle: {
+    screen: NewBattle
   },
   Trophy: {
     screen: Trophy,
