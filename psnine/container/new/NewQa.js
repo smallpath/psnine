@@ -23,7 +23,7 @@ import { connect } from 'react-redux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { standardColor, accentColor } from '../../constants/colorConfig';
 
-import { pngPrefix, getDealURL, getHappyPlusOneURL, getStoreURL, getNewQaAPI } from '../../dao';
+import { pngPrefix, getDealURL, getHappyPlusOneURL, getStoreURL, getNewQaAPI, getQaEditAPI } from '../../dao';
 
 import { safeLogin, registURL } from '../../dao/login';
 import { postCreateTopic } from '../../dao/post';
@@ -129,20 +129,28 @@ export default class NewTopic extends Component {
 
   componentWillMount = async () => {
     // console.log('??', typeof getNewQaAPI)
+    let config = { tension: 30, friction: 7 };
+    const { openVal, marginTop } = this.state
+    const { callback } = this.props.navigation.state.params
+    const { params } = this.props.navigation.state
+    const { modeInfo } = this.props.screenProps
     InteractionManager.runAfterInteractions(() => {
       getNewQaAPI().then(data => {
         // console.log(data)
         this.setState({
           data,
           isLoading: false
+        }, () => {
+          // console.log(params)
+          if (params.URL) {
+            getQaEditAPI(params.URL).then(data => {
+              // console.log(data)
+              this.setState(data)
+            })
+          }
         })
       })
     })
-    let config = { tension: 30, friction: 7 };
-    const { openVal, marginTop } = this.state
-    const { callback } = this.props.navigation.state.params
-    const { params } = this.props.navigation.state
-    const { modeInfo } = this.props.screenProps
 
     this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () => {
       this.isKeyboardShowing = true
@@ -179,10 +187,15 @@ export default class NewTopic extends Component {
   }
 
   sendReply = () => {
-    const { title, hb, psngameid, node, content, addqa } = this.state 
-    postCreateTopic({
-      title, hb, psngameid, node, content, addqa
-    }, 'qa').then(res => {
+    const { title, hb, psngameid, node, content } = this.state 
+    const result = {
+      title, hb, psngameid, node, content
+    }
+    result[this.state.key] = ''
+    if (this.state.id !== '') {
+      result.qaid = this.state.id
+    }
+    postCreateTopic(result, 'qa').then(res => {
       // console.log(res)
       return res
     }).then(res => res.text()).then(text => {
@@ -191,22 +204,17 @@ export default class NewTopic extends Component {
         const arr = text.match(/\<title\>(.*?)\<\/title\>/)
         if (arr && arr[1]) {
           const msg = `发布失败: ${arr[1]}`
-          // ToastAndroid.show(msg, ToastAndroid.SHORT);
           global.toast(msg)
           return
         }
       }
       InteractionManager.runAfterInteractions(() => {
-        // ToastAndroid.show('评论成功', ToastAndroid.SHORT);
-        // global.toast('评论成功')
         this._pressButton()
-        // this._pressButton(() => params.callback && params.callback())
         global.toast('发布成功')
       })
     }).catch(err => {
       const msg = `发布失败: ${arr[1]}`
       global.toast(msg)
-      // ToastAndroid.show(msg, ToastAndroid.SHORT);
     })
   }
 
@@ -254,6 +262,7 @@ export default class NewTopic extends Component {
       backgroundColor: modeInfo.standardColor,
     }
 
+    const { params } = this.props.navigation.state
     return (
       <Animated.View
         ref={ref => this.ref = ref}
@@ -267,7 +276,7 @@ export default class NewTopic extends Component {
             navIconName="md-arrow-back"
             overflowIconName="md-more"
             iconColor={modeInfo.isNightMode ? '#000' : '#fff'}
-            title={title}
+            title={params.URL ? '编辑问答' : '创建问答'}
             style={[styles.toolbar, { backgroundColor: modeInfo.standardColor }]}
             titleColor={modeInfo.isNightMode ? '#000' : '#fff'}
             subtitleColor={modeInfo.isNightMode ? '#000' : '#fff'}

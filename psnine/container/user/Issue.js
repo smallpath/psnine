@@ -168,7 +168,6 @@ export default class Issue extends Component {
         text: '编辑',
         onPress: (rowData) => {
           const URL = rowData.edit
-          console.log(URL)
           requestAnimationFrame(() => {
             const target = ({ 
               'topic' : 'NewTopic',
@@ -289,8 +288,8 @@ export default class Issue extends Component {
                     selectedValue={this.state.type}
                     onValueChange={this.onValueChange.bind(this, 'type')}>
                     <Picker.Item label="主题" value="topic" />
-                    <Picker.Item label="基因" value="gene" />
                     <Picker.Item label="问答" value="qa" />
+                    <Picker.Item label="基因" value="gene" />
                     <Picker.Item label="约战" value="battle" />
                     <Picker.Item label="交易" value="trade" />
                   </Picker>
