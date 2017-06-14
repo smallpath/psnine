@@ -60,6 +60,7 @@ class Root extends React.Component {
           silver: '银',
           bronze: '铜',
           isSigned: true,
+          exp: ''
         },
         isNightMode: false
       },
@@ -118,6 +119,39 @@ class Root extends React.Component {
         return false;
       }
     });
+  }
+
+  reloadSetting = () => {
+    const settingInfo = {}
+    Promise.all([
+      AsyncStorage.getItem('@Theme:tabMode'),
+      AsyncStorage.getItem('@psnid'),
+      AsyncStorage.getItem('@userInfo'),
+      AsyncStorage.getItem('@Theme:isNightMode')
+    ]).then(result => {
+      // console.log('getting psnid: ' + result[1])
+      Object.assign(settingInfo, {
+        tabMode: result[0] || 'tab',
+        psnid: result[1] || '',
+        userInfo: JSON.parse(result[2]) || {
+          avatar: require('./img/comment_avatar.png'),
+          platinum: '白',
+          gold: '金',
+          silver: '银',
+          bronze: '铜',
+          isSigned: true,
+          exp: '' 
+        },
+        isNightMode: JSON.parse(result[3]) || false
+      })
+      this.setState({
+        settingInfo,
+        isNightMode: settingInfo.isNightMode
+      })
+    }).catch(err => {
+      // console.log(err)
+      toast && toast(err.toString())
+    })
   }
 
   loadSetting = () => {
@@ -221,6 +255,7 @@ class Root extends React.Component {
     const { isLoadingAsyncStorage, progress } = this.state
     const modeInfo = Object.assign({}, targetModeInfo, {
       loadSetting: this.loadSetting,
+      reloadSetting: this.reloadSetting,
       settingInfo: this.state.settingInfo,
       reverseModeInfo: this.state.isNightMode ? this.dayModeInfo : this.nightModeInfo
     })

@@ -202,6 +202,7 @@ class navigationDrawer extends Component {
 
   componentWillReceiveProps = (nextProps) => {
     if (this.state.psnid !== nextProps.modeInfo.settingInfo.psnid && nextProps.modeInfo.settingInfo.psnid !== '') {
+      // console.log(this.state.psnid, nextProps.modeInfo.settingInfo.psnid)
       this.setState({
         psnid: nextProps.modeInfo.settingInfo.psnid,
         userInfo: nextProps.modeInfo.settingInfo.userInfo
@@ -254,22 +255,26 @@ class navigationDrawer extends Component {
         gold: '金',
         silver: '银',
         bronze: '铜',
+        exp: ''
       },
       hasMessage: false
     }
-    this.setState(backupInfo);
+    await this.setState(backupInfo);
     Promise.all([
       AsyncStorage.setItem('@userInfo', JSON.stringify(backupInfo.userInfo)),
       AsyncStorage.setItem('@psnid', backupInfo.psnid),
-    ])
-    global.toast && global.toast('登出成功', 2000);
+    ]).then(() => {
+      const { modeInfo } = this.props
+      modeInfo.reloadSetting && modeInfo.reloadSetting()
+    }).catch(err => toast(err.toString())).then(() => {
+      global.toast && global.toast('登出成功', 2000);
+    })
+    
   }
 
   setLogin = (psnid, userInfo) => {
-    this.setState({
-      psnid,
-      userInfo,
-    })
+    const { modeInfo } = this.props
+    modeInfo.reloadSetting && modeInfo.reloadSetting()
   }
 
   pressSign = async () => {
@@ -416,7 +421,7 @@ class navigationDrawer extends Component {
     }
 
     const infoColor = 'rgba(255,255,255,0.8)'
-    // console.log(userInfo, userInfo.exp, userInfo.split)
+    // console.log(userInfo, userInfo.exp)
     return (
       <View style={[{
         flex: 1,
