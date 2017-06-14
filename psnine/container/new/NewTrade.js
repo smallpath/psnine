@@ -25,7 +25,7 @@ import { connect } from 'react-redux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { standardColor, accentColor } from '../../constants/colorConfig';
 
-import { pngPrefix, getDealURL, getHappyPlusOneURL, getStoreURL } from '../../dao';
+import { pngPrefix, getDealURL, getHappyPlusOneURL, getStoreURL, getTradeEditAPI } from '../../dao';
 
 import { safeLogin, registURL } from '../../dao/login';
 import { postCreateTopic } from '../../dao/post';
@@ -79,6 +79,8 @@ export default class NewTopic extends Component {
       version: 'hk',
       lang: 'cn',
       province: 'beijing',
+      id: '',
+      key: 'addtrade',
       openVal: new Animated.Value(1),
       marginTop: new Animated.Value(0),
       toolbarOpenVal: new Animated.Value(0),
@@ -139,6 +141,14 @@ export default class NewTopic extends Component {
     const { callback } = this.props.navigation.state.params
     const { params } = this.props.navigation.state
     const { modeInfo } = this.props.screenProps
+
+    if (params.URL) {
+      InteractionManager.runAfterInteractions(() => {
+        getTradeEditAPI(params.URL).then(data => {
+          this.setState(data)
+        })
+      })
+    }
 
     this.PanResponder = PanResponder.create({
 
@@ -239,24 +249,6 @@ export default class NewTopic extends Component {
       });
     })
     this.isToolbarShowing = false
-    // this.removeListener = BackHandler.addEventListener('hardwareBackPress', () => {
-    //   let config = { tension: 30, friction: 7 };
-    //   if (this.state.toolbarOpenVal._value !== 0) {
-    //     Animated.spring(this.state.toolbarOpenVal, { toValue: 0, ...config }).start();
-    //     return true;
-    //   }
-    //   let value = this.state.marginTop._value
-    //   if (Math.abs(value) >= 50) {
-    //     Animated.spring(marginTop, { toValue: 0, ...config }).start();
-    //     return true;
-    //   } else {
-    //     Keyboard.dismiss()
-    //     Animated.spring(openVal, { toValue: 0, ...config }).start(() => {
-    //       this.props.navigation.goBack()
-    //     });
-    //     return true
-    //   }
-    // })
 
     const icon = await Promise.all([
       Ionicons.getImageSource('md-arrow-back', 20, '#fff'),
@@ -279,8 +271,9 @@ export default class NewTopic extends Component {
 
   sendReply = () => {
     // return
-    const { title, photo, price, qq, tb, content, category, type, pf, way, version, lang, province } = this.state
-    postCreateTopic({
+    const { title, photo, price, qq, tb, content, category, type, pf, 
+      id, key, way, version, lang, province } = this.state
+    const result = {
       title,
       photo: photo.join(',') || '',
       price,
@@ -293,9 +286,14 @@ export default class NewTopic extends Component {
       way,
       version,
       lang,
-      province,
-      addtrade: '',
-    }, 'trade').then(res => {
+      province
+    }
+    result[key] = ''
+    if (id !== '') {
+      result.tradeid = id
+    }
+    
+    postCreateTopic(result, 'trade').then(res => {
       // console.log(res)
       // res.url 
       return res
@@ -370,7 +368,7 @@ export default class NewTopic extends Component {
       height: openVal.interpolate({ inputRange: [0, 0.9, 1], outputRange: [0, 0, 56] }),
       backgroundColor: modeInfo.standardColor,
     }
-
+    const { params } = this.props.navigation.state
     return (
       <Animated.View
         ref={ref => this.ref = ref}
@@ -383,7 +381,7 @@ export default class NewTopic extends Component {
             navIconName="md-arrow-back"
             overflowIconName="md-more"
             iconColor={modeInfo.isNightMode ? '#000' : '#fff'}
-            title={title}
+            title={params.URL ? '编辑交易' : '发布交易'}
             style={[styles.toolbar, { backgroundColor: modeInfo.standardColor }]}
             titleColor={modeInfo.isNightMode ? '#000' : '#fff'}
             subtitleColor={modeInfo.isNightMode ? '#000' : '#fff'}
