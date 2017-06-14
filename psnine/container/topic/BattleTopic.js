@@ -151,7 +151,7 @@ class CommunityTopic extends Component {
 
             }}
             useForeground={true}
-            delayPressIn={100}
+            delayPressIn={0}
             background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
           >
             <View style={{ flex: 1, flexDirection: 'row', padding: 12 }}>
@@ -204,7 +204,7 @@ class CommunityTopic extends Component {
 
             }}
             useForeground={true}
-            delayPressIn={100}
+            delayPressIn={0}
             background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
           >
             <View pointerEvents='box-only' style={{ flex: 1, flexDirection: 'row', padding: 12 }}>
@@ -292,7 +292,7 @@ class CommunityTopic extends Component {
                 this._readMore(`${this.props.navigation.state.params.URL}/comment?page=1`)
               }}
               useForeground={true}
-              delayPressIn={100}
+              delayPressIn={0}
               background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
             >
               <View pointerEvents='box-only' style={{ flex: 1, flexDirection: 'row', padding: 12 }}>

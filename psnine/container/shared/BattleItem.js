@@ -14,11 +14,19 @@ import {
 import { getGameUrl, getBattleURL } from '../../dao';
 
 import { standardColor, nodeColor, idColor } from '../../constants/colorConfig';
-
+import MyDialog from '../../components/Dialog';
 
 export default class BattleItem extends React.PureComponent {
-  shouldComponentUpdate = (props) => props.modeInfo.isNightMode !== this.props.modeInfo.isNightMode
-  
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      modalVisible: false
+    }
+  }
+
+  shouldComponentUpdate = (props, state) => props.modeInfo.isNightMode !== this.props.modeInfo.isNightMode || this.state.modalVisible !== state.modalVisible
+
   _onRowPressed = (rowData) => {
     const { navigation } = this.props;
     const URL = getBattleURL(rowData.id);
@@ -34,7 +42,7 @@ export default class BattleItem extends React.PureComponent {
 
   render = () => {
     // console.log(rowData)
-    const { modeInfo, rowData } = this.props
+    const { modeInfo, rowData, modalList = [] } = this.props
 
     return (
       <View style={{
@@ -45,7 +53,11 @@ export default class BattleItem extends React.PureComponent {
       }}>
         <TouchableNativeFeedback
           onPress={() => { this._onRowPressed(rowData) }}
-          delayPressIn={100}
+          onLongPress={() => {
+             modalList.length && this.setState({
+              modalVisible: true
+            })
+          }}
           background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
         >
           <View style={{ flex: -1, flexDirection: 'row', padding: 12 }}>
@@ -65,6 +77,43 @@ export default class BattleItem extends React.PureComponent {
               />
               <Text style={{ flex: -1, color: idColor, textAlign: 'center', textAlignVertical: 'center' }}>{rowData.game}</Text>
             </View>
+            {
+              this.state.modalVisible && modalList.length && (
+              <MyDialog modeInfo={modeInfo}
+                modalVisible={this.state.modalVisible}
+                onDismiss={() => { this.setState({ modalVisible: false }); }}
+                onRequestClose={() => { this.setState({ modalVisible: false }); }}
+                renderContent={() => (
+                  <View style={{
+                    justifyContent: 'center',
+                    alignItems: 'flex-start',
+                    backgroundColor: modeInfo.backgroundColor,
+                    position: 'absolute',
+                    left: 30,
+                    right: 30,
+                    paddingVertical: 15,
+                    elevation: 4,
+                    opacity: 1
+                  }} borderRadius={2}>
+                  {
+                    modalList.map((item, index) => (
+                      <TouchableNativeFeedback key={index + item.text} onPress={() => {
+                          this.setState({
+                            modalVisible: false
+                          }, () => {
+                            item.onPress(rowData)
+                          })
+                        }}>
+                        <View style={{height: 50, paddingVertical: 10, paddingLeft: 20 ,alignSelf: 'stretch', alignContent: 'stretch', justifyContent: 'center'}}>
+                          <Text style={{textAlignVertical: 'center', fontSize: 18, color: modeInfo.standardTextColor}}>{item.text}</Text>
+                        </View>
+                      </TouchableNativeFeedback>
+                    ))
+                  }
+                  </View>
+                )} />
+              )
+            }
             <View style={{ marginLeft: 10, flex: 2, flexDirection: 'column' }}>
               <Text
                 ellipsizeMode={'tail'}

@@ -79,7 +79,7 @@ export default class extends React.PureComponent {
             })
           }}
           useForeground={true}
-          delayPressIn={100}
+          delayPressIn={0}
           background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
         >
           <View pointerEvents={'box-only'} style={{ flex: 1, flexDirection: 'row', flexWrap: 'nowrap',padding: 8, justifyContent: 'space-around', alignItems: 'center' }}>

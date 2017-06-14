@@ -78,7 +78,7 @@ export default class extends React.PureComponent {
       }}>
         <TouchableNativeFeedback
           onPress={() => { this._onRowPressed(rowData) }}
-          delayPressIn={100}
+          delayPressIn={0}
           onLongPress={() => {
              modalList.length && this.setState({
               modalVisible: true

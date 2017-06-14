@@ -167,10 +167,17 @@ export default class Issue extends Component {
       modalList: [{
         text: '编辑',
         onPress: (rowData) => {
-          const id = rowData.id || parseInt(rowData.url.split('/').pop())
-          const URL = getTopicURL(id) + '/edit'
+          const URL = rowData.edit
+          console.log(URL)
           requestAnimationFrame(() => {
-            navigation.navigate('NewTopic', {
+            const target = ({ 
+              'topic' : 'NewTopic',
+              'gene' : 'NewGene',
+              'battle' : 'NewBattle',
+              'qa' : 'NewQa',
+              'trade' : 'NewTrade',
+            })[this.state.finalType]
+            navigation.navigate(target, {
               URL
             })
           })
