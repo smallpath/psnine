@@ -65,13 +65,14 @@ export default class NewTopic extends Component {
       psngameid: '',
       node: '',
       content: '',
-      addqa: '',
       type: 'game',
       data: {
         hb: [],
         game: [],
         node: []
       },
+      id,
+      key: 'addqa',
       isLoading: true,
       openVal: new Animated.Value(1),
       marginTop: new Animated.Value(0),

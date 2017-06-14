@@ -24,7 +24,7 @@ import { connect } from 'react-redux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { standardColor, accentColor } from '../../constants/colorConfig';
 
-import { pngPrefix, getDealURL, getHappyPlusOneURL, getStoreURL } from '../../dao';
+import { pngPrefix, getDealURL, getHappyPlusOneURL, getStoreURL, getGeneEditAPI } from '../../dao';
 
 import { safeLogin, registURL } from '../../dao/login';
 import { postCreateTopic } from '../../dao/post';
@@ -65,7 +65,7 @@ export default class NewTopic extends Component {
       photo: [],
       url: '',
       groupid: params.groupid || '-1',
-      addgene: '',
+      key: 'addgene',
       openVal: new Animated.Value(1),
       marginTop: new Animated.Value(0),
       toolbarOpenVal: new Animated.Value(0),
@@ -127,6 +127,14 @@ export default class NewTopic extends Component {
     const { params } = this.props.navigation.state
     const { modeInfo } = this.props.screenProps
 
+    if (params.URL) {
+      InteractionManager.runAfterInteractions(() => {
+        getGeneEditAPI(params.URL).then(data => {
+          this.setState(data)
+        })
+      })
+    }
+
     this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () => {
       this.isKeyboardShowing = true
       this.state.toolbarOpenVal.setValue(0)
@@ -163,37 +171,32 @@ export default class NewTopic extends Component {
   }
 
   sendReply = () => {
-
-    postCreateTopic({
-      content: this.state.content,
-      photo: this.state.photo.join(','),
-      url: this.state.url,
-      groupid: this.state.groupid,
-      addgene: this.state.addgene
-    }, 'gene').then(res => {
+    const { content, photo, url, groupid, key, id }  = this.state
+    const result = {
+      content, photo: photo.join(',') || '', url, groupid
+    }
+    result[key] = ''
+    if (id !== '') {
+      result.geneid = id
+    }
+    postCreateTopic(result, 'gene').then(res => {
       return res
     }).then(res => res.text()).then(text => {
-      // console.log(text)
       if (text.includes('玩脱了')) {
         const arr = text.match(/\<title\>(.*?)\<\/title\>/)
         if (arr && arr[1]) {
           const msg = `发布失败: ${arr[1]}`
-          // ToastAndroid.show(msg, ToastAndroid.SHORT);
           global.toast(msg)
           return
         }
       }
       InteractionManager.runAfterInteractions(() => {
-        // ToastAndroid.show('评论成功', ToastAndroid.SHORT);
-        // global.toast('评论成功')
         this._pressButton()
-        // this._pressButton(() => params.callback && params.callback())
         global.toast('发布成功')
       })
     }).catch(err => {
       const msg = `发布失败: ${arr[1]}`
       global.toast(msg)
-      // ToastAndroid.show(msg, ToastAndroid.SHORT);
     })
   }
 
@@ -241,6 +244,7 @@ export default class NewTopic extends Component {
       backgroundColor: modeInfo.standardColor,
     }
 
+    const { params } = this.props.navigation.state
     return (
       <Animated.View
         ref={ref => this.ref = ref}
@@ -254,7 +258,7 @@ export default class NewTopic extends Component {
             navIconName="md-arrow-back"
             overflowIconName="md-more"
             iconColor={modeInfo.isNightMode ? '#000' : '#fff'}
-            title={title}
+            title={params.URL ? '编辑基因' : '创建基因'}
             style={[styles.toolbar, { backgroundColor: modeInfo.standardColor }]}
             titleColor={modeInfo.isNightMode ? '#000' : '#fff'}
             subtitleColor={modeInfo.isNightMode ? '#000' : '#fff'}
