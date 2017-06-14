@@ -390,6 +390,17 @@ class QaTopic extends Component {
       }
     } catch(err) {}
 
+    if (shouldPushData && this.state.data.titleInfo && this.state.data.titleInfo.shareInfo  && this.state.data.titleInfo.shareInfo.edit) {
+      targetActions.push(
+        { title: '编辑', iconName: 'md-create', show: 'never', onPress: function() {
+            const { navigation } = this.props
+            navigation.navigate('NewGene', {
+              URL: this.state.data.titleInfo.shareInfo.edit
+            })
+          }},
+      )
+    }
+
     return (
       <View
         style={{ flex: 1, backgroundColor: modeInfo.backgroundColor }}
@@ -408,7 +419,7 @@ class QaTopic extends Component {
             this.props.navigation.goBack()
           }}
           onActionSelected={(index) => {
-            toolbarActions[index].onPress.bind(this)()
+            targetActions[index].onPress.bind(this)()
           }}
         />
         {this.state.isLoading && (

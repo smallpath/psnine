@@ -31,8 +31,20 @@ let screen = Dimensions.get('window');
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = screen;
 
 let toolbarActions = [
-  { title: '回复', iconName: 'md-create', show: 'always' },
-  { title: '刷新', iconName: 'md-refresh', show: 'always' },
+  { title: '回复', iconName: 'md-create', show: 'always', onPress: function() {
+      const { params } = this.props.navigation.state
+      if (this.isReplyShowing === true) return
+      this.props.navigation.navigate('Reply', {
+        type: params.type,
+        id: params.rowData.id,
+        callback: this.preFetch(),
+        shouldSeeBackground: true
+      })
+      return;
+  }},
+  { title: '刷新', iconName: 'md-refresh', show: 'never', onPress: function() {
+    this.preFetch()
+  }},
 ];
 let title = "TOPIC";
 let WEBVIEW_REF = `WEBVIEW_REF`;
@@ -60,24 +72,6 @@ class CommunityTopic extends Component {
       modalVisible: false,
       modalOpenVal: new Animated.Value(0),
       topicMarginTop: new Animated.Value(0)
-    }
-  }
-
-  _onActionSelected = (index) => {
-    const { params } = this.props.navigation.state
-    switch (index) {
-      case 0:
-        if (this.isReplyShowing === true) return
-        this.props.navigation.navigate('Reply', {
-          type: params.type,
-          id: params.rowData.id,
-          callback: this.preFetch(),
-          shouldSeeBackground: true
-        })
-        return;
-      case 1:
-        this.preFetch()
-        return
     }
   }
 
@@ -369,6 +363,17 @@ class CommunityTopic extends Component {
       data.push(this.state.commentList)
       renderFuncArr.push(this.renderComment)
     }
+    const targetActions = toolbarActions.slice()
+    if (shouldPushData && source.contentInfo.game && source.contentInfo.game.edit) {
+      targetActions.push(
+        { title: '编辑', iconName: 'md-create', show: 'never', onPress: function() {
+            const { navigation } = this.props
+            navigation.navigate('NewBattle', {
+              URL: source.contentInfo.game.edit
+            })
+          }},
+      )
+    }
 
     this.viewBottomIndex = Math.max(data.length - 1, 0)
 
@@ -385,11 +390,11 @@ class CommunityTopic extends Component {
           title={params.title ? params.title : `No.${params.rowData.id}`}
           titleColor={modeInfo.isNightMode ? '#000' : '#fff'}
           style={[styles.toolbar, { backgroundColor: modeInfo.standardColor }]}
-          actions={toolbarActions}
+          actions={targetActions}
           onIconClicked={() => {
             this.props.navigation.goBack()
           }}
-          onActionSelected={this._onActionSelected}
+          onActionSelected={(index) => targetActions[index].onPress.bind(this)()}
         />
         {this.state.isLoading && (
           <ActivityIndicator

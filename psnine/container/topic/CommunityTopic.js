@@ -534,14 +534,30 @@ class CommunityTopic extends Component {
 
     this.viewBottomIndex = Math.max(data.length - 1, 0)
     const targetActions = toolbarActions.slice()
+
     try {
       if (this.state.data && this.state.data.titleInfo && 
-          this.state.data.titleInfo.shareInfo && this.state.data.titleInfo.shareInfo.source) {
+          this.state.data.titleInfo.shareInfo && 
+            this.state.data.titleInfo.shareInfo.source
+            ) {
         //
       } else {
         targetActions.pop()
       }
     } catch(err) {}
+
+    if (shouldPushData && this.state.data.titleInfo && this.state.data.titleInfo.shareInfo  && this.state.data.titleInfo.shareInfo.edit) {
+      targetActions.push(
+        { title: '编辑', iconName: 'md-create', show: 'never', onPress: function() {
+            const { navigation } = this.props
+            // console.log(params.type)
+            const target = params.type === 'gene' ? 'NewGene' : 'NewTopic'
+            navigation.navigate(target, {
+              URL: this.state.data.titleInfo.shareInfo.edit
+            })
+          }},
+      )
+    }
 
     return (
       <View
@@ -561,7 +577,7 @@ class CommunityTopic extends Component {
             this.props.navigation.goBack()
           }}
           onActionSelected={(index) => {
-            toolbarActions[index].onPress.bind(this)()
+            targetActions[index].onPress.bind(this)()
           }}
         />
         {this.state.isLoading && (

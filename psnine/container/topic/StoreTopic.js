@@ -119,7 +119,7 @@ export default class extends Component {
     const { titleInfo } = this.state
     const color = 'rgba(255,255,255,1)'
     const infoColor = 'rgba(255,255,255,0.8)'
-    console.log(rowData.content)
+    // console.log(rowData.content)
     return (
         <View style={{padding: 12, margin: 7, backgroundColor: modeInfo.backgroundColor, elevation: 1, flex: 1 }}>
           <HTMLView

@@ -27,13 +27,31 @@ import {
   getTradeTopicAPI as getAPI
 } from '../../dao'
 
+import {
+  postReply
+} from '../../dao/post'
+
 let screen = Dimensions.get('window');
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = screen;
 
 let toolbarActions = [
-  { title: '回复', iconName: 'md-create', show: 'always' },
-  { title: '刷新', iconName: 'md-refresh', show: 'always' },
+  { title: '回复', iconName: 'md-create', show: 'always', onPress: function() {
+      const { params } = this.props.navigation.state
+      if (this.isReplyShowing === true) return
+      this.props.navigation.navigate('Reply', {
+        type: params.type,
+        id: params.rowData.id,
+        callback: () => this.preFetch(),
+        isOldPage: true,
+        shouldSeeBackground: true
+      })
+      return;
+  }},
+  { title: '刷新', iconName: 'md-refresh', show: 'never', onPress: function() {
+    this.preFetch()
+  }},
 ];
+
 let title = "TOPIC";
 let WEBVIEW_REF = `WEBVIEW_REF`;
 
@@ -61,25 +79,6 @@ export default class extends Component {
       modalVisible: false,
       modalOpenVal: new Animated.Value(0),
       topicMarginTop: new Animated.Value(0)
-    }
-  }
-
-  _onActionSelected = (index) => {
-    const { params } = this.props.navigation.state
-    switch (index) {
-      case 0:
-        if (this.isReplyShowing === true) return
-        this.props.navigation.navigate('Reply', {
-          type: params.type,
-          id: params.rowData.id,
-          callback: () => this.preFetch(),
-          isOldPage: true,
-          shouldSeeBackground: true
-        })
-        return;
-      case 1:
-        this.preFetch()
-        return
     }
   }
 
@@ -352,6 +351,32 @@ export default class extends Component {
       renderFuncArr.push(this.renderComment)
     }
 
+    const targetActions = toolbarActions.slice()
+    if (shouldPushData && source.titleInfo) {
+      source.titleInfo.edit && targetActions.push(
+        { title: '编辑', iconName: 'md-create', show: 'never', onPress: function() {
+            const { navigation } = this.props
+            navigation.navigate('NewTrade', {
+              URL: source.titleInfo.edit
+            })
+          }},
+      )
+      source.titleInfo.dalao && targetActions.push(
+        { title: '打捞', iconName: 'md-create', show: 'never', onPress: function() {
+            const { navigation } = this.props
+            // dalao()
+            postReply({
+              type: 'trade',
+              id: source.titleInfo.dalao
+            }, 'dalao').then(res => { return res.text() }).then(html => {
+              if (html) return toast(html.replace(/<(.*?)>/igm, ''))
+              return toast('已成功打捞')
+            }).catch(err => toast(err.toString()))
+          }},
+      )
+    }
+
+
     this.viewBottomIndex = Math.max(data.length - 1, 0)
 
     return (
@@ -367,11 +392,11 @@ export default class extends Component {
           title={params.title ? params.title : `No.${params.rowData.id}`}
           titleColor={modeInfo.isNightMode ? '#000' : '#fff'}
           style={[styles.toolbar, { backgroundColor: modeInfo.standardColor }]}
-          actions={toolbarActions}
+          actions={targetActions}
           onIconClicked={() => {
             this.props.navigation.goBack()
           }}
-          onActionSelected={this._onActionSelected}
+          onActionSelected={(index) => targetActions[index].onPress.bind(this)()}
         />
         {this.state.isLoading && (
           <ActivityIndicator
