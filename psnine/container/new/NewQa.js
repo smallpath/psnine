@@ -23,7 +23,7 @@ import { connect } from 'react-redux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { standardColor, accentColor } from '../../constants/colorConfig';
 
-import { pngPrefix, getDealURL, getHappyPlusOneURL, getStoreURL } from '../../dao';
+import { pngPrefix, getDealURL, getHappyPlusOneURL, getStoreURL, getNewQaAPI } from '../../dao';
 
 import { safeLogin, registURL } from '../../dao/login';
 import { postCreateTopic } from '../../dao/post';
@@ -55,17 +55,25 @@ export default class NewTopic extends Component {
 
   constructor(props) {
     super(props);
-    const { params } = this.props.navigation.state
+    const { params = {} } = this.props.navigation.state
     const { at = '', shouldShowPoint = false, isOldPage = false } = params
     // console.log(params)
     this.state = {
       icon: false,
-      content: '',
-      open: '1',
-      node: 'talk',
       title: '',
-      addtopic: '',
-      openVal: new Animated.Value(0),
+      hb: '10',
+      psngameid: '',
+      node: '',
+      content: '',
+      addqa: '',
+      type: 'game',
+      data: {
+        hb: [],
+        game: [],
+        node: []
+      },
+      isLoading: true,
+      openVal: new Animated.Value(1),
       marginTop: new Animated.Value(0),
       toolbarOpenVal: new Animated.Value(0),
       modalVisible: false,
@@ -76,13 +84,13 @@ export default class NewTopic extends Component {
   componentDidMount = () => {
     const { modeInfo } = this.props.screenProps
     let config = { tension: 30, friction: 7 };
-    Animated.spring(this.state.openVal, { toValue: 1, ...config }).start(() => {
+    // Animated.spring(this.state.openVal, { toValue: 1, ...config }).start(() => {
       if (modeInfo.settingInfo.psnid === '') {
         toast('请首先登录')
         this.props.navigation.goBack()
         return
       }
-    });
+    // });
   }
 
   _pressButton = (callback) => {
@@ -94,10 +102,10 @@ export default class NewTopic extends Component {
     } 
     this.content.clear();
     Keyboard.dismiss()
-    Animated.spring(openVal, { toValue: 0, ...config }).start(() => {
+    // Animated.spring(openVal, { toValue: 0, ...config }).start(() => {
       typeof callback === 'function' && callback()
       this.props.navigation.goBack()
-    });
+    // });
 
   }
 
@@ -120,96 +128,22 @@ export default class NewTopic extends Component {
   }
 
   componentWillMount = async () => {
+    // console.log('??', typeof getNewQaAPI)
+    InteractionManager.runAfterInteractions(() => {
+      getNewQaAPI().then(data => {
+        // console.log(data)
+        this.setState({
+          data,
+          isLoading: false
+        })
+      })
+    })
     let config = { tension: 30, friction: 7 };
     const { openVal, marginTop } = this.state
     const { callback } = this.props.navigation.state.params
     const { params } = this.props.navigation.state
     const { modeInfo } = this.props.screenProps
 
-    this.PanResponder = PanResponder.create({
-
-      onStartShouldSetPanResponderCapture: (e, gesture) => {
-        return e.nativeEvent.pageX <= 56 ? false : true;
-      },
-      onPanResponderGrant: (e, gesture) => {
-        Keyboard.dismiss()
-        const target = gesture.y0 <= 56 ? 0 : SCREEN_HEIGHT - 56
-        marginTop.setOffset(target);
-      },
-      onPanResponderMove: Animated.event([
-        null,
-        {
-          dy: marginTop
-        }
-      ]),
-
-      onPanResponderRelease: (e, gesture) => {
-
-      },
-      onPanResponderTerminationRequest: (evt, gesture) => {
-        return false;
-      },
-      onPanResponderTerminate: (evt, gesture) => {
-
-      },
-      onShouldBlockNativeResponder: (evt, gesture) => {
-        return true;
-      },
-      onPanResponderReject: (evt, gesture) => {
-        return false;
-      },
-      onPanResponderEnd: (evt, gesture) => {
-        let dy = gesture.dy;
-        let vy = gesture.vy;
-
-        marginTop.flattenOffset();
-
-        let duration = 50;
-
-        if (vy < 0) {
-
-          if (Math.abs(dy) <= CIRCLE_SIZE) {
-
-            Animated.spring(marginTop, {
-              toValue: SCREEN_HEIGHT - CIRCLE_SIZE,
-              duration,
-              easing: Easing.linear,
-            }).start();
-
-          } else {
-
-            Animated.spring(marginTop, {
-              toValue: 0,
-              duration,
-              easing: Easing.linear,
-            }).start();
-
-          }
-
-        } else {
-
-          if (Math.abs(dy) <= CIRCLE_SIZE) {
-
-            Animated.spring(marginTop, {
-              toValue: 0,
-              duration,
-              easing: Easing.linear,
-            }).start();
-
-          } else {
-
-            Animated.spring(marginTop, {
-              toValue: SCREEN_HEIGHT - CIRCLE_SIZE,
-              duration,
-              easing: Easing.linear,
-            }).start();
-          }
-
-        }
-
-      },
-
-    });
     this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () => {
       this.isKeyboardShowing = true
       this.state.toolbarOpenVal.setValue(0)
@@ -224,24 +158,6 @@ export default class NewTopic extends Component {
       });
     })
     this.isToolbarShowing = false
-    this.removeListener = BackHandler.addEventListener('hardwareBackPress', () => {
-      let config = { tension: 30, friction: 7 };
-      if (this.state.toolbarOpenVal._value !== 0) {
-        Animated.spring(this.state.toolbarOpenVal, { toValue: 0, ...config }).start();
-        return true;
-      }
-      let value = this.state.marginTop._value
-      if (Math.abs(value) >= 50) {
-        Animated.spring(marginTop, { toValue: 0, ...config }).start();
-        return true;
-      } else {
-        Keyboard.dismiss()
-        Animated.spring(openVal, { toValue: 0, ...config }).start(() => {
-          this.props.navigation.goBack()
-        });
-        return true
-      }
-    })
 
     const icon = await Promise.all([
       Ionicons.getImageSource('md-arrow-back', 20, '#fff'),
@@ -263,17 +179,14 @@ export default class NewTopic extends Component {
   }
 
   sendReply = () => {
-
+    const { title, hb, psngameid, node, content, addqa } = this.state 
     postCreateTopic({
-      content: this.state.content,
-      open: this.state.open,
-      node: this.state.node,
-      title: this.state.title,
-      addtopic: this.state.addtopic,
+      title, hb, psngameid, node, content, addqa
     }, 'qa').then(res => {
+      // console.log(res)
       return res
     }).then(res => res.text()).then(text => {
-      // console.log(text)
+      // console.log(text, text.length)
       if (text.includes('玩脱了')) {
         const arr = text.match(/\<title\>(.*?)\<\/title\>/)
         if (arr && arr[1]) {
@@ -397,12 +310,57 @@ export default class NewTopic extends Component {
             color: modeInfo.standardTextColor,
             borderBottomColor: modeInfo.standardTextColor
           }}
-            prompt='选择'
+            prompt='悬赏'
             selectedValue={this.state.open}
             onValueChange={this.onValueChange.bind(this, 'open')}>
-            <Picker.Item label="发布文章（2分钟内会在首页展示）" value="0" />
-            <Picker.Item label="保存草稿（仅自己可见）" value="1" />
+            {
+              this.state.isLoading &&
+                <Picker.Item label={'加载中'} value={''}/>
+               || this.state.data.hb.map((item, index) => <Picker.Item key={index} label={'悬赏: ' + item.text} value={item.value}/>)
+            }
           </Picker>
+          <View style={{
+            flex: 1,
+            flexDirection: 'row'
+          }}>
+            <Picker style={{
+              flex: 1,
+              color: modeInfo.standardTextColor,
+            }}
+              prompt='类型'
+              selectedValue={this.state.type}
+              onValueChange={this.onValueChange.bind(this, 'type')}>
+              <Picker.Item label={'游戏'} value={'game'}/>
+              <Picker.Item label={'节点'} value={'node'}/>
+            </Picker>
+            {
+              this.state.type === 'game' && (
+                <Picker style={{
+                  flex: 2,
+                  color: modeInfo.standardTextColor,
+                }}
+                  prompt='选择游戏'
+                  selectedValue={this.state.psngameid}
+                  onValueChange={this.onValueChange.bind(this, 'psngameid')}>
+                  {
+                    this.state.data.game.map((item, index) => <Picker.Item key={index} label={item.text} value={item.value}/>)
+                  }
+                </Picker>
+              ) || (
+                <Picker style={{
+                  flex: 2,
+                  color: modeInfo.standardTextColor,
+                }}
+                  prompt='选择节点'
+                  selectedValue={this.state.node}
+                  onValueChange={this.onValueChange.bind(this, 'node')}>
+                  {
+                    this.state.data.node.map((item, index) => <Picker.Item key={index} label={item.text} value={item.value}/>)
+                  }
+                </Picker>
+              )
+            }
+          </View>
           <AnimatedKeyboardAvoidingView behavior={'padding'} style={[styles.contentView, {
             flex: openVal.interpolate({ inputRange: [0, 1], outputRange: [0, 12] }),
           }]}>
@@ -498,41 +456,6 @@ export default class NewTopic extends Component {
                 </TouchableNativeFeedback>
               </View>
             </Animated.View>
-            {
-              this.state.modalVisible && (
-                <MyDialog modeInfo={modeInfo}
-                  modalVisible={this.state.modalVisible}
-                  onDismiss={() => { this.setState({ modalVisible: false }); this.isValueChanged = false }}
-                  onRequestClose={() => { this.setState({ modalVisible: false }); this.isValueChanged = false }}
-                  renderContent={() => (
-                    <View style={{
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                      backgroundColor: modeInfo.backgroundColor,
-                      paddingVertical: 10,
-                      paddingHorizontal: 10,
-                      elevation: 4,
-                      position: 'absolute',
-                      left: 20,
-                      right: 20,
-                      opacity: 1
-                    }} borderRadius={2}>
-                      <HTMLView
-                        value={this.state.content || '暂无内容'}
-                        modeInfo={modeInfo}
-                        stylesheet={styles}
-                        onImageLongPress={(url) => this.props.navigation.navigate('ImageViewer', {
-                          images: [
-                            { url }
-                          ]
-                        })}
-                        imagePaddingOffset={60}
-                        shouldForceInline={true}
-                      />
-                    </View>
-                  )} />
-              )
-            }
             {/* 表情 */}
             <Animated.View style={{
               elevation: 4,

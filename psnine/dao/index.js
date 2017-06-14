@@ -34,6 +34,8 @@ import userGroupParser from '../parser/user/group'
 import photoParser from '../parser/user/photo'
 import detailParser from '../parser/user/detail'
 import customParser from '../parser/user/custom'
+import newQaParser from '../parser/new/qa'
+import newBattleParser from '../parser/new/battle'
 
 
 const safeFetch = function(reqUrl, type = 'text') {
@@ -147,6 +149,10 @@ export const getStoresAPI = ({ page, server, ob, pf, plus, title }) => `${webHos
 export const fetchStores = (...args) => safeFetch(getStoresAPI(...args)).then(res => storeParser(res));
 
 export const getCustomAPI = url => safeFetch(url).then(res => customParser(res));
+
+export const getNewBattleAPI = () => safeFetch('http://psnine.com/set/battle').then(res => newBattleParser(res));
+
+export const getNewQaAPI = () => safeFetch('http://psnine.com/set/qa').then(res => newQaParser(res));
 
 export const getStoreAPI = ({ id, server}) => {
   let url

@@ -228,18 +228,10 @@ class Toolbar extends Component {
         dispatch(changeCommunityType(type));
       } else {
         index === 1 && this._onSearchClicked()
-        index === 0 && this.props.navigation.navigate('NewTopic', {
-
-        })
+        index === 0 && this.props.navigation.navigate('NewTopic', {})
       }
     } else if (segmentedIndex === 1) {
-      this.props.navigation.navigate('WebView', {
-        URL: 'http://psnine.com/set/qa',
-        title: '创建问题'
-      })
-      // index === 0 && this.props.navigation.navigate('NewQaWebView', {
-      //   shouldSeeBackground: true
-      // })
+      index === 0 && this.props.navigation.navigate('NewQa', {})
     } else if (segmentedIndex === 2) {
       if (index !== 0) {
         let type = toolbarActions[segmentedIndex][index].value;
