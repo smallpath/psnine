@@ -1,9 +1,13 @@
 
 const replyURL = 'http://psnine.com/set/comment/post'
 const ajaxURL = 'http://psnine.com/set/comson/ajax'
+const editURL = 'http://psnine.com/set/edit/ajax'
+const cainaURL = 'http://psnine.com/set/caina/ajax'
 
 export const postReply = (form, type = 'post') => {
-  const url = type === 'post' ? replyURL : ajaxURL
+  let url = type === 'post' ? replyURL : ajaxURL
+  if (type === 'edit') url = editURL
+  if (type === 'caina') url = cainaURL
   let formBody = []
   for (let property in form) {
     const encodedKey = encodeURIComponent(property);

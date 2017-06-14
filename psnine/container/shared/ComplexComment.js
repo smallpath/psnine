@@ -15,7 +15,8 @@ import {
   FlatList,
   PanResponder,
   Modal,
-  Keyboard
+  Keyboard,
+  Alert
 } from 'react-native';
 
 import HTMLView from '../../components/HtmlToView';
@@ -27,6 +28,10 @@ import { standardColor, nodeColor, idColor, accentColor } from '../../constants/
 import {
   getGamePointAPI
 } from '../../dao'
+
+import {
+  postReply
+} from '../../dao/post'
 
 let screen = Dimensions.get('window');
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = screen;
@@ -42,6 +47,7 @@ export default class ComplexComment extends React.PureComponent {
 
   shouldComponentUpdate = (props, state) => {
     if (props.modeInfo.isNightMode !== this.props.modeInfo.isNightMode) return true
+    if (props.rowData.isAccepted !== this.props.rowData.isAccepted) return true
     if (this.state.modalVisible !== state.modalVisible) return true
     return false
   }
@@ -146,7 +152,7 @@ export default class ComplexComment extends React.PureComponent {
 
     return (
       <View key={rowData.id || index} style={{
-        backgroundColor: modeInfo.backgroundColor,
+        backgroundColor: rowData.isAccepted ? modeInfo.tintColor : modeInfo.backgroundColor,
         borderBottomWidth: StyleSheet.hairlineWidth,
         borderBottomColor: modeInfo.brighterLevelOne
       }}>
@@ -193,6 +199,54 @@ export default class ComplexComment extends React.PureComponent {
                           <Text style={{textAlignVertical: 'center', fontSize: 18}}>回复</Text>
                         </View>
                       </TouchableNativeFeedback>
+                      {
+                        rowData.caina && rowData.isAccepted === false && (
+                          <TouchableNativeFeedback onPress={() => {
+                            this.setState({
+                              modalVisible: false
+                            }, () => {
+                              requestAnimationFrame(() => {
+                                const { params } = this.props.navigation.state
+                               
+                                postReply({
+                                  qid: rowData.qid,
+                                  psnid: rowData.psnid
+                                }, 'caina').then(res => { return res.text() }).then(html => {
+                                  return global.toast('采纳成功')
+                                }).catch(err => toast(err.toString()))
+                              })
+                            })
+                          }}>
+                          <View style={{height: 50, paddingVertical: 10, paddingLeft: 20 ,alignSelf: 'stretch', alignContent: 'stretch', justifyContent: 'center'}}>
+                            <Text style={{textAlignVertical: 'center', fontSize: 18, color: modeInfo.standardTextColor}}>采纳</Text>
+                          </View>
+                        </TouchableNativeFeedback>
+                        )
+                      }
+                      {
+                        rowData.psnid === modeInfo.settingInfo.psnid && (
+                          <TouchableNativeFeedback onPress={() => {
+                            this.setState({
+                              modalVisible: false
+                            }, () => {
+                              requestAnimationFrame(() => {
+                                const { params } = this.props.navigation.state
+                                /*console.log((rowData.id.match(/\d+/) || [0])[0])*/
+                                  this.props.navigation.navigate('Reply', {
+                                    type: 'comment',
+                                    id: (rowData.id.match(/\d+/) || [0])[0],
+                                    content: rowData.editcomment,
+                                    shouldSeeBackground: true
+                                  })
+                              })
+                            })
+                          }}>
+                          <View style={{height: 50, paddingVertical: 10, paddingLeft: 20 ,alignSelf: 'stretch', alignContent: 'stretch', justifyContent: 'center'}}>
+                            <Text style={{textAlignVertical: 'center', fontSize: 18, color: modeInfo.standardTextColor}}>编辑</Text>
+                          </View>
+                        </TouchableNativeFeedback>
+                        )
+                      }
                     </View>
                   )} />
               )

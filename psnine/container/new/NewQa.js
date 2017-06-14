@@ -71,7 +71,7 @@ export default class NewTopic extends Component {
         game: [],
         node: []
       },
-      id,
+      id: '',
       key: 'addqa',
       isLoading: true,
       openVal: new Animated.Value(1),

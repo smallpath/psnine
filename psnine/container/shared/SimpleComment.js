@@ -97,6 +97,30 @@ export default class extends React.PureComponent {
                           <Text style={{textAlignVertical: 'center', fontSize: 18, color: modeInfo.standardTextColor}}>回复</Text>
                         </View>
                       </TouchableNativeFeedback>
+                      {
+                        rowData.psnid === modeInfo.settingInfo.psnid && (
+                          <TouchableNativeFeedback onPress={() => {
+                            this.setState({
+                              modalVisible: false
+                            }, () => {
+                              requestAnimationFrame(() => {
+                                const { params } = this.props.navigation.state
+                                /*console.log((rowData.id.match(/\d+/) || [0])[0])*/
+                                  this.props.navigation.navigate('Reply', {
+                                    type: 'comment',
+                                    id: (rowData.id.match(/\d+/) || [0])[0],
+                                    content: rowData.editcomment,
+                                    shouldSeeBackground: true
+                                  })
+                              })
+                            })
+                          }}>
+                          <View style={{height: 50, paddingVertical: 10, paddingLeft: 20 ,alignSelf: 'stretch', alignContent: 'stretch', justifyContent: 'center'}}>
+                            <Text style={{textAlignVertical: 'center', fontSize: 18, color: modeInfo.standardTextColor}}>编辑</Text>
+                          </View>
+                        </TouchableNativeFeedback>
+                        )
+                      }
                     </View>
                   )} />
               )
