@@ -115,13 +115,12 @@ export default class Custom extends Component {
         <Button title={'自定义头像'} color={avavip !== 0 ? modeInfo.standardColor : modeInfo.standardTextColor}
           onPress={() => {
             Alert.alert(
-              '个性化',
+              '个性设定',
               '请选择功能',
               [
                 {text: '清除自定义头像', onPress: () => this.setSetting({
                   avavip: ''
                 })},
-                {text: '取消', style: 'cancel'},
                 {text: '自定义头像', onPress: () => this.props.navigation.navigate('UserPhoto', {
                   URL: 'http://psnine.com/my/photo?page=1',
                   afterAlert: ({ url }) => {
@@ -153,7 +152,7 @@ export default class Custom extends Component {
         <Button title={'游戏'} color={home === 'psngame' ? modeInfo.standardColor : modeInfo.standardTextColor}
           onPress={() => {
             Alert.alert(
-              '个性化',
+              '个性设定',
               '是否将个人主页默认展示模块更改为游戏?',
               [
                 {text: '取消', style: 'cancel'},
@@ -168,7 +167,7 @@ export default class Custom extends Component {
         <Button title={'日志'} color={home === 'diary' ? modeInfo.standardColor : modeInfo.standardTextColor}
           onPress={() => {
             Alert.alert(
-              '个性化',
+              '个性设定',
               '是否将个人主页默认展示模块更改为日志?',
               [
                 {text: '取消', style: 'cancel'},
@@ -198,7 +197,7 @@ export default class Custom extends Component {
       isChecked: this.state.data.form.bg === rowData.value,
       onPress: () => {
         Alert.alert(
-          '个性化',
+          '个性设定',
           '是否将此图片设置为个人主页背景?',
           [
             {text: '取消', style: 'cancel'},
@@ -283,7 +282,7 @@ export default class Custom extends Component {
           navIconName="md-arrow-back"
           overflowIconName="md-more"
           iconColor={modeInfo.isNightMode ? '#000' : '#fff'}
-          title={'个性化'}
+          title={'个性设定'}
           style={{ backgroundColor: modeInfo.standardColor, height: 56, elevation: 4 }}
           titleColor={modeInfo.isNightMode ? '#000' : '#fff'}
           actions={toolbarActions}

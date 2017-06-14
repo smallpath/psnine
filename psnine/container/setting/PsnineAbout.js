@@ -139,6 +139,14 @@ export default class PsnineAbout extends Component {
         })
       },
       {
+        title: '关于约战',
+        desc: '使用说明+BUG汇总+建议提交',
+        onPress: () => navigation.navigate('CommunityTopic', {
+          URL: 'http://psnine.com/topic/7552',
+          title: 'P9「约战」公测'
+        })
+      },
+      {
         title: '捐赠',
         desc: '你的捐助能让我们更好地前行',
         onPress: () => navigation.navigate('CommunityTopic', {

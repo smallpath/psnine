@@ -24,6 +24,11 @@ module.exports = {
   ps4Color: '#8662DD',
   ps3Color: '#F05561',
   psvColor: '#0AAAE9',
+  warningColor: '#faa732',
+  textWarningColor: '#c09853',
+  textErrorColor: '#b94a48',
+  textPerfectColor: '#659f13',
+  textSuccessColor: '#3a87ad',
   errorColor: '#da314b',
   perfectColor: '#00a8e6',
   successColor: '#8cc14c',
@@ -32,4 +37,6 @@ module.exports = {
   trophyColor3: '#a6a6a6',
   trophyColor4: '#bf6a3a',
   trophyColor5: 'rgba(0,0,0,0.5)',
+
+
 }

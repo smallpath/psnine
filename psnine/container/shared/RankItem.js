@@ -22,7 +22,11 @@ import HTMLView from '../../components/HtmlToView';
 import MyDialog from '../../components/Dialog';
 import { connect } from 'react-redux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { standardColor, nodeColor, idColor, accentColor } from '../../constants/colorConfig';
+import colorConfig, { standardColor, nodeColor, idColor, 
+  accentColor,
+  levelColor,
+  rankColor
+} from '../../constants/colorConfig';
 
 import { getHomeURL } from '../../dao';
 
@@ -124,9 +128,8 @@ export default class extends React.PureComponent {
                 )} />
               )
             }
-            <View style={{ flex: 2, padding: 5}}>
+            <View style={{ flex: 3, padding: 5}}>
               <Text style={{color: modeInfo.accentColor}}>{rowData.psnid}</Text>
-              <Text style={{color: modeInfo.titleTextColor}}>{rowData.rank ? 'No.' + rowData.rank : ''}</Text>
               <HTMLView
                 value={rowData.content}
                 modeInfo={modeInfo}
@@ -150,7 +153,10 @@ export default class extends React.PureComponent {
       <View style={{flex: 4, flexDirection: 'row', height: ITEM_HEIGHT - 7- 7 }}>
         <View style={{flex: 2, flexDirection: 'column'}}>
           <View style={{ flex: 1, flexDirection: 'column' }}>
-            <Text style={{color: modeInfo.standardTextColor}}>{rowData.level}</Text>
+            <Text style={{color: modeInfo.titleTextColor}}>{rowData.rank ? 'No.' + rowData.rank : ''}</Text>
+          </View>
+          <View style={{ flex: 1, flexDirection: 'column' }}>
+            <Text style={{color: levelColor}}>{rowData.level + ' '}<Text style={{color: modeInfo.standardTextColor}}>{rowData.exp}</Text></Text>
           </View>
           <View style={{ flex: 1, flexDirection: 'column' }}>
             <Text style={{color: modeInfo.standardTextColor}}>{rowData.games}</Text>
@@ -159,18 +165,18 @@ export default class extends React.PureComponent {
             <Text style={{color: modeInfo.standardTextColor}}>{rowData.perfectRate}</Text>
           </View>
         </View>
-        <View style={{flex: 2, flexDirection: 'column'}}>
+        <View style={{flex: 2, flexDirection: 'column', paddingLeft: 4}}>
           <View style={{ flex: 1, flexDirection: 'column' }}>
-            <Text style={{color: modeInfo.standardTextColor}}>{rowData.platinum}</Text>
+            <Text style={{color: colorConfig.trophyColor1}}>{rowData.platinum}</Text>
           </View>
           <View style={{ flex: 1, flexDirection: 'column' }}>
-            <Text style={{color: modeInfo.standardTextColor}}>{rowData.gold}</Text>
+            <Text style={{color: colorConfig.trophyColor2}}>{rowData.gold}</Text>
           </View>
           <View style={{ flex: 1, flexDirection: 'column' }}>
-            <Text style={{color: modeInfo.standardTextColor}}>{rowData.silver}</Text>
+            <Text style={{color: colorConfig.trophyColor3}}>{rowData.silver}</Text>
           </View>
           <View style={{ flex: 1, flexDirection: 'column' }}>
-            <Text style={{color: modeInfo.standardTextColor}}>{rowData.bronze}</Text>
+            <Text style={{color: colorConfig.trophyColor4}}>{rowData.bronze}</Text>
           </View>
         </View>
       </View>

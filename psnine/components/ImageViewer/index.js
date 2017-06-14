@@ -7,7 +7,7 @@ export default class extends React.Component {
   }
   render() {
     return (
-      <ImageViewer imageUrls={this.props.navigation.state.params.images} />
+      <ImageViewer imageUrls={this.props.navigation.state.params.images} saveToLocalByLongPress={false} />
     )
   }
 }

@@ -24,7 +24,7 @@ import {
   getMyGameURL,
 } from '../dao';
 
-import {
+import colorConfig, {
   standardColor, 
   nodeColor, 
   idColor,
@@ -42,7 +42,7 @@ import { fetchUser } from '../dao';
 
 const ListItems = [
   {
-    text: '个人中心',
+    text: '个人主页',
     iconName: 'md-home',
     onPress: function () {
       const { navigation, closeDrawer } = this.props;
@@ -60,7 +60,7 @@ const ListItems = [
     }
   },
   {
-    text: '收藏',
+    text: '我收藏的',
     iconName: 'md-star',
     onPress: function () {
       const { navigation, closeDrawer } = this.props;
@@ -75,7 +75,7 @@ const ListItems = [
     }
   },
   {
-    text: '发布',
+    text: '我发布的',
     iconName: 'md-bookmarks',
     onPress: function () {
       const { navigation, closeDrawer } = this.props;
@@ -135,7 +135,7 @@ const ListItems = [
     }
   },
   {
-    text: '个性化',
+    text: '个性设定',
     iconName: 'md-brush',
     onPress: function () {
       const { navigation, closeDrawer } = this.props;
@@ -145,7 +145,7 @@ const ListItems = [
 
       navigation.navigate('UserCustom', {
         URL,
-        title: '个性化'
+        title: '个性设定'
       });
     }
   },
@@ -308,7 +308,7 @@ class navigationDrawer extends Component {
     if (this.state.psnid === '') return
     const { closeDrawer, switchModeOnRoot } = this.props;
     Alert.alert(
-      '操作',
+      '提示',
       '请选择操作',
       [
         { text: '修改密码', onPress: () => {

@@ -84,9 +84,10 @@ export default class Detail extends Component {
     const { navigation } = this.props
     return (
       <ScrollView style={{flex: 1, padding: 5}}>
-        <Button color={modeInfo.accentColor} title={'我要捐助'} onPress={() => {
+        <Button color={modeInfo.accentColor} title={'捐助PSNINE'} onPress={() => {
           navigation.navigate('WebView', {
-            URL: 'http://psnine.com/set/mujuan'
+            URL: 'http://psnine.com/set/mujuan',
+            title: '捐助PSNINE'
           })  
         }} style={{flex:1}}/>
         <View style={{ flex:1, flexDirection: 'row' }}>
