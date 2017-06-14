@@ -23,7 +23,7 @@ import { connect } from 'react-redux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { standardColor, accentColor } from '../../constants/colorConfig';
 
-import { pngPrefix, getDealURL, getHappyPlusOneURL, getStoreURL, getNewBattleAPI } from '../../dao';
+import { pngPrefix, getDealURL, getHappyPlusOneURL, getStoreURL, getNewBattleAPI, getBattleEditAPI } from '../../dao';
 
 import { safeLogin, registURL } from '../../dao/login';
 import { postCreateTopic } from '../../dao/post';
@@ -67,13 +67,14 @@ export default class NewTopic extends Component {
       starttime: '0:00:00',
       trophies: '',
       content: '',
-      addbattle: '',
       data: {
         num: [],
         game: [],
         startday: [],
         starttime: []
       },
+      id: '',
+      key: 'addbattle',
 
       isLoading: true,
       openVal: new Animated.Value(1),
@@ -132,6 +133,12 @@ export default class NewTopic extends Component {
 
   componentWillMount = async () => {
     // console.log('??', typeof getNewQaAPI)
+    let config = { tension: 30, friction: 7 };
+    const { openVal, marginTop } = this.state
+    const { callback } = this.props.navigation.state.params
+    const { params } = this.props.navigation.state
+    const { modeInfo } = this.props.screenProps
+
     InteractionManager.runAfterInteractions(() => {
       getNewBattleAPI().then(data => {
         // console.log(data)
@@ -141,14 +148,13 @@ export default class NewTopic extends Component {
           psngameid: data.game.length !== 0 ? data.game[0].value : '',
           starttime: data.starttime.length !== 0 ? data.starttime[0].value : '',
           startday: data.startday.length !== 0 ? data.startday[0].value : '',
+        }, () => {
+          if (params.URL) {
+            getBattleEditAPI(params.URL).then(data => this.setState(data))
+          }
         })
       })
     })
-    let config = { tension: 30, friction: 7 };
-    const { openVal, marginTop } = this.state
-    const { callback } = this.props.navigation.state.params
-    const { params } = this.props.navigation.state
-    const { modeInfo } = this.props.screenProps
 
     this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () => {
       this.isKeyboardShowing = true
@@ -185,14 +191,15 @@ export default class NewTopic extends Component {
   }
 
   sendReply = () => {
-    const { num, psngameid, startday, starttime, trophies, content, addbattle } = this.state 
-    // console.log({
-    //   num, psngameid, startday, starttime, trophies, content, addbattle 
-    // })
-    // return
-    postCreateTopic({
-      num, psngameid, startday, starttime, trophies, content, addbattle 
-    }, 'battle').then(res => {
+    const { num, psngameid, startday, starttime, trophies, content, id, key } = this.state 
+    const result = {
+      num, psngameid, startday, starttime, trophies, content 
+    }
+    result[key] = ''
+    if (id !== '') {
+      result.battleid = id
+    }
+    postCreateTopic(result, 'battle').then(res => {
       return res
     }).then(res => res.text()).then(text => {
       if (text.includes('玩脱了')) {
@@ -258,6 +265,7 @@ export default class NewTopic extends Component {
       backgroundColor: modeInfo.standardColor,
     }
 
+    const { params } = this.props.navigation.state
     return (
       <Animated.View
         ref={ref => this.ref = ref}
@@ -271,7 +279,7 @@ export default class NewTopic extends Component {
             navIconName="md-arrow-back"
             overflowIconName="md-more"
             iconColor={modeInfo.isNightMode ? '#000' : '#fff'}
-            title={title}
+            title={params.URL ? '编辑约战' : '创建约战'}
             style={[styles.toolbar, { backgroundColor: modeInfo.standardColor }]}
             titleColor={modeInfo.isNightMode ? '#000' : '#fff'}
             subtitleColor={modeInfo.isNightMode ? '#000' : '#fff'}
