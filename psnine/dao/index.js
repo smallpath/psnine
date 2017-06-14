@@ -36,6 +36,11 @@ import detailParser from '../parser/user/detail'
 import customParser from '../parser/user/custom'
 import newQaParser from '../parser/new/qa'
 import newBattleParser from '../parser/new/battle'
+import topicEditParser from '../parser/edit/topic'
+import qaEditParser from '../parser/edit/qa'
+import geneEditParser from '../parser/edit/gene'
+import battleEditParser from '../parser/edit/battle'
+import tradeEditParser from '../parser/edit/trade'
 
 
 const safeFetch = function(reqUrl, type = 'text') {
@@ -204,3 +209,13 @@ export const getPhotoAPI= url => safeFetch(url).then(res => photoParser(res));
 export const getUserCircleAPI= url => safeFetch(url).then(res => userCircleParser(res));
 
 export const getGameUrl = id => `${webHost}/psngame/${id}`
+
+export const getTopicEditAPI = url => safeFetch(url).then(res => topicEditParser(res));
+
+export const getQaEditAPI = url => safeFetch(url).then(res => qaEditParser(res));
+
+export const getGeneEditAPI = url => safeFetch(url).then(res => geneEditParser(res));
+
+export const getBattleEditAPI = url => safeFetch(url).then(res => battleEditParser(res));
+
+export const getTradeEditAPI = url => safeFetch(url).then(res => tradeEditParser(res));

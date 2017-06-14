@@ -16,14 +16,15 @@ import {
   Easing,
   PanResponder,
   StatusBar,
-  Picker
+  Picker,
+  Linking
 } from 'react-native';
 
 import { connect } from 'react-redux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { standardColor, accentColor } from '../../constants/colorConfig';
 
-import { pngPrefix, getDealURL, getHappyPlusOneURL, getStoreURL } from '../../dao';
+import { pngPrefix, getDealURL, getHappyPlusOneURL, getStoreURL, getTopicEditAPI } from '../../dao';
 
 import { safeLogin, registURL } from '../../dao/login';
 import { postCreateTopic } from '../../dao/post';
@@ -64,7 +65,8 @@ export default class NewTopic extends Component {
       open: '1',
       node: 'talk',
       title: '',
-      addtopic: '',
+      key: 'addtopic',
+      id: '',
       openVal: new Animated.Value(1),
       marginTop: new Animated.Value(0),
       toolbarOpenVal: new Animated.Value(0),
@@ -86,19 +88,9 @@ export default class NewTopic extends Component {
   }
 
   _pressButton = (callback) => {
-    const { marginTop, openVal } = this.state
-    let value = marginTop._value;
-    if (Math.abs(value) >= 50) {
-      Animated.spring(marginTop, { toValue: 0, ...config }).start();
-      return true;
-    } 
-    this.content.clear();
     Keyboard.dismiss()
-    // Animated.spring(openVal, { toValue: 0, ...config }).start(() => {
-      typeof callback === 'function' && callback()
-      this.props.navigation.goBack()
-    // });
-
+    typeof callback === 'function' && callback()
+    this.props.navigation.goBack()
   }
 
   isKeyboardShowing = false
@@ -125,6 +117,14 @@ export default class NewTopic extends Component {
     const { callback } = this.props.navigation.state.params
     const { params } = this.props.navigation.state
     const { modeInfo } = this.props.screenProps
+
+    if (params.URL) {
+      InteractionManager.runAfterInteractions(() => {
+        getTopicEditAPI(params.URL).then(data => {
+          this.setState(data)
+        })
+      })
+    }
 
     this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () => {
       this.isKeyboardShowing = true
@@ -160,15 +160,22 @@ export default class NewTopic extends Component {
 
   }
 
+  afterExist = ''
   sendReply = () => {
-
-    postCreateTopic({
+    const result = {
       content: this.state.content,
       open: this.state.open,
       node: this.state.node,
-      title: this.state.title,
-      addtopic: this.state.addtopic,
-    }).then(res => {
+      title: this.state.title
+    }
+    result[this.state.key] = ''
+    if (this.state.id !== '') {
+      result.topicid = this.state.id
+    }
+    postCreateTopic(result).then(res => {
+      // if (res.url) Linking
+      //     .openURL(res.url.replace('http:', 'p9:').replace('https:', 'p9:'))
+      //     .catch(err => {})
       return res
     }).then(res => res.text()).then(text => {
       // console.log(text)
@@ -176,22 +183,17 @@ export default class NewTopic extends Component {
         const arr = text.match(/\<title\>(.*?)\<\/title\>/)
         if (arr && arr[1]) {
           const msg = `发布失败: ${arr[1]}`
-          // ToastAndroid.show(msg, ToastAndroid.SHORT);
           global.toast(msg)
           return
         }
       }
       InteractionManager.runAfterInteractions(() => {
-        // ToastAndroid.show('评论成功', ToastAndroid.SHORT);
-        // global.toast('评论成功')
         this._pressButton()
-        // this._pressButton(() => params.callback && params.callback())
         global.toast('发布成功')
       })
     }).catch(err => {
       const msg = `发布失败: ${arr[1]}`
       global.toast(msg)
-      // ToastAndroid.show(msg, ToastAndroid.SHORT);
     })
   }
 
@@ -232,7 +234,7 @@ export default class NewTopic extends Component {
       height: 56,
       backgroundColor: modeInfo.standardColor,
     }
-
+    const { params } = this.props.navigation.state
     return (
       <View
         ref={ref => this.ref = ref}
@@ -246,7 +248,7 @@ export default class NewTopic extends Component {
             navIconName="md-arrow-back"
             overflowIconName="md-more"
             iconColor={modeInfo.isNightMode ? '#000' : '#fff'}
-            title={title}
+            title={params.URL ? '编辑讨论' : '创建讨论'}
             style={[styles.toolbar, { backgroundColor: modeInfo.standardColor }]}
             titleColor={modeInfo.isNightMode ? '#000' : '#fff'}
             subtitleColor={modeInfo.isNightMode ? '#000' : '#fff'}

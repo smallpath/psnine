@@ -24,7 +24,7 @@ import { connect } from 'react-redux';
 import { standardColor, nodeColor, idColor } from '../../constants/colorConfig';
 
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { getIssueAPI } from '../../dao';
+import { getIssueAPI, getTopicURL } from '../../dao';
 
 import TopicItem from '../shared/CommunityItem'
 import GeneItem from '../shared/GeneItem'
@@ -163,7 +163,19 @@ export default class Issue extends Component {
       navigation,
       rowData,
       modeInfo,
-      ITEM_HEIGHT
+      ITEM_HEIGHT,
+      modalList: [{
+        text: '编辑',
+        onPress: (rowData) => {
+          const id = rowData.id || parseInt(rowData.url.split('/').pop())
+          const URL = getTopicURL(id) + '/edit'
+          requestAnimationFrame(() => {
+            navigation.navigate('NewTopic', {
+              URL
+            })
+          })
+        }
+      }]
     }} />
   }
 
