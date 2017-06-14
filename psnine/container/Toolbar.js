@@ -247,21 +247,9 @@ class Toolbar extends Component {
         this._onSearchClicked()
       }
     } else if (segmentedIndex === 4) {
-      // this.props.navigation.navigate('NewBattleWebWiew', {
-      // })
-      this.props.navigation.navigate('WebView', {
-        URL: 'http://psnine.com/set/battle',
-        title: '创建约战'
-      })
+      this.props.navigation.navigate('NewBattle', {})
     } else if (segmentedIndex === 8) {
-      // console.log(index, typeof index)
-      // index === 0 && this.props.navigation.navigate('WebView', {
-      //   URL: 'http://psnine.com/set/trade',
-      //   title: '发布交易'
-      // })
-      index === 0 && this.props.navigation.navigate('NewTrade', {
-        // shouldSeeBackground: true
-      })
+      index === 0 && this.props.navigation.navigate('NewTrade', {})
       index === 1 && this._onSearchClicked()
     } else {
       this._onSearchClicked()

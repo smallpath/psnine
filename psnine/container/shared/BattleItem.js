@@ -11,7 +11,7 @@ import {
   Picker
 } from 'react-native';
 
-import { getGameUrl } from '../../dao';
+import { getGameUrl, getBattleURL } from '../../dao';
 
 import { standardColor, nodeColor, idColor } from '../../constants/colorConfig';
 

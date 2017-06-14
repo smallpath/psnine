@@ -23,7 +23,7 @@ import { connect } from 'react-redux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { standardColor, accentColor } from '../../constants/colorConfig';
 
-import { pngPrefix, getDealURL, getHappyPlusOneURL, getStoreURL } from '../../dao';
+import { pngPrefix, getDealURL, getHappyPlusOneURL, getStoreURL, getNewBattleAPI } from '../../dao';
 
 import { safeLogin, registURL } from '../../dao/login';
 import { postCreateTopic } from '../../dao/post';
@@ -31,7 +31,7 @@ import HTMLView from '../../components/HtmlToView'
 import MyDialog from '../../components/Dialog'
 import Emotion from '../../components/Emotion'
 
-let title = '创建约战';
+let title = '创建问题';
 
 let toolbarActions = [
 
@@ -55,16 +55,27 @@ export default class NewTopic extends Component {
 
   constructor(props) {
     super(props);
-    const { params } = this.props.navigation.state
+    const { params = {} } = this.props.navigation.state
     const { at = '', shouldShowPoint = false, isOldPage = false } = params
     // console.log(params)
     this.state = {
       icon: false,
+
+      num: '2',
+      psngameid: '',
+      startday: '',
+      starttime: '0:00:00',
+      trophies: '',
       content: '',
-      open: '1',
-      node: 'talk',
-      title: '',
-      addtopic: '',
+      addbattle: '',
+      data: {
+        num: [],
+        game: [],
+        startday: [],
+        starttime: []
+      },
+
+      isLoading: true,
       openVal: new Animated.Value(1),
       marginTop: new Animated.Value(0),
       toolbarOpenVal: new Animated.Value(0),
@@ -120,6 +131,19 @@ export default class NewTopic extends Component {
   }
 
   componentWillMount = async () => {
+    // console.log('??', typeof getNewQaAPI)
+    InteractionManager.runAfterInteractions(() => {
+      getNewBattleAPI().then(data => {
+        // console.log(data)
+        this.setState({
+          data,
+          isLoading: false,
+          psngameid: data.game.length !== 0 ? data.game[0].value : '',
+          starttime: data.starttime.length !== 0 ? data.starttime[0].value : '',
+          startday: data.startday.length !== 0 ? data.startday[0].value : '',
+        })
+      })
+    })
     let config = { tension: 30, friction: 7 };
     const { openVal, marginTop } = this.state
     const { callback } = this.props.navigation.state.params
@@ -140,24 +164,6 @@ export default class NewTopic extends Component {
       });
     })
     this.isToolbarShowing = false
-    this.removeListener = BackHandler.addEventListener('hardwareBackPress', () => {
-      let config = { tension: 30, friction: 7 };
-      if (this.state.toolbarOpenVal._value !== 0) {
-        Animated.spring(this.state.toolbarOpenVal, { toValue: 0, ...config }).start();
-        return true;
-      }
-      let value = this.state.marginTop._value
-      if (Math.abs(value) >= 50) {
-        Animated.spring(marginTop, { toValue: 0, ...config }).start();
-        return true;
-      } else {
-        Keyboard.dismiss()
-        Animated.spring(openVal, { toValue: 0, ...config }).start(() => {
-          this.props.navigation.goBack()
-        });
-        return true
-      }
-    })
 
     const icon = await Promise.all([
       Ionicons.getImageSource('md-arrow-back', 20, '#fff'),
@@ -179,31 +185,26 @@ export default class NewTopic extends Component {
   }
 
   sendReply = () => {
-
+    const { num, psngameid, startday, starttime, trophies, content, addbattle } = this.state 
+    // console.log({
+    //   num, psngameid, startday, starttime, trophies, content, addbattle 
+    // })
+    // return
     postCreateTopic({
-      content: this.state.content,
-      open: this.state.open,
-      node: this.state.node,
-      title: this.state.title,
-      addtopic: this.state.addtopic,
+      num, psngameid, startday, starttime, trophies, content, addbattle 
     }, 'battle').then(res => {
       return res
     }).then(res => res.text()).then(text => {
-      // console.log(text)
       if (text.includes('玩脱了')) {
         const arr = text.match(/\<title\>(.*?)\<\/title\>/)
         if (arr && arr[1]) {
           const msg = `发布失败: ${arr[1]}`
-          // ToastAndroid.show(msg, ToastAndroid.SHORT);
           global.toast(msg)
           return
         }
       }
       InteractionManager.runAfterInteractions(() => {
-        // ToastAndroid.show('评论成功', ToastAndroid.SHORT);
-        // global.toast('评论成功')
         this._pressButton()
-        // this._pressButton(() => params.callback && params.callback())
         global.toast('发布成功')
       })
     }).catch(err => {
@@ -280,49 +281,94 @@ export default class NewTopic extends Component {
           />
 
         </Animated.View >
-
-        <Animated.View style={[styles.KeyboardAvoidingView, {
-          flex: openVal.interpolate({ inputRange: [0, 1], outputRange: [0, 10] }),
-        }]} >
-          <TextInput placeholder="标题"
-            autoCorrect={false}
-            multiline={false}
-            keyboardType="default"
-            returnKeyType="next"
-            returnKeyLabel='next'
-            onSelectionChange={this.onSelectionChange}
-            blurOnSubmit={false}
-            numberOfLines={100}
-            ref={ref => this.title = ref}
-            onChange={({ nativeEvent }) => { this.setState({ title: nativeEvent.text }) }}
-            value={this.state.title}
-            style={[styles.textInput, {
-              color: modeInfo.titleTextColor,
-              textAlign: 'left',
-              height: 56,
-              borderBottomColor: modeInfo.brighterLevelOne,
-              borderBottomWidth: StyleSheet.hairlineWidth
-            }]}
-            placeholderTextColor={modeInfo.standardTextColor}
-            // underlineColorAndroid={accentColor}
-            underlineColorAndroid='rgba(0,0,0,0)'
-          />
-          <Picker style={{
+        <Picker style={{
             flex: 1,
             borderWidth: 1,
             color: modeInfo.standardTextColor,
             borderBottomColor: modeInfo.standardTextColor
           }}
-            prompt='选择'
-            selectedValue={this.state.open}
-            onValueChange={this.onValueChange.bind(this, 'open')}>
-            <Picker.Item label="发布文章（2分钟内会在首页展示）" value="0" />
-            <Picker.Item label="保存草稿（仅自己可见）" value="1" />
+            prompt='选择游戏'
+            selectedValue={this.state.psngameid}
+            onValueChange={this.onValueChange.bind(this, 'psngameid')}>
+            {
+              this.state.isLoading &&
+                <Picker.Item label={'加载中'} value={''}/>
+               || this.state.data.game.map((item, index) => <Picker.Item key={index} label={'游戏: ' + item.text} value={item.value}/>)
+            }
           </Picker>
+          <View style={{
+            flex: 1,
+            flexDirection: 'row'
+          }}>
+            <TextInput placeholder="选填项，联机奖杯的编号，多个请用逗号分割"
+              autoCorrect={false}
+              multiline={false}
+              keyboardType="default"
+              returnKeyType="next"
+              returnKeyLabel='next'
+              onSelectionChange={this.onSelectionChange}
+              blurOnSubmit={false}
+              numberOfLines={100}
+              ref={ref => this.trophies = ref}
+              onChange={({ nativeEvent }) => { this.setState({ trophies: nativeEvent.text }) }}
+              value={this.state.trophies}
+              style={[styles.textInput, {
+                color: modeInfo.titleTextColor,
+                textAlign: 'left',
+                flex: 2,
+                borderBottomColor: modeInfo.brighterLevelOne,
+                borderBottomWidth: StyleSheet.hairlineWidth
+              }]}
+              placeholderTextColor={modeInfo.standardTextColor}
+              // underlineColorAndroid={accentColor}
+              underlineColorAndroid='rgba(0,0,0,0)'
+            />
+            <Picker style={{
+              flex: 1.5,
+              color: modeInfo.standardTextColor,
+            }}
+              prompt='选择人数'
+              selectedValue={this.state.num}
+              onValueChange={this.onValueChange.bind(this, 'num')}>
+              {
+                this.state.data.num.map((item, index) => <Picker.Item key={index} label={'人数: ' + item.text} value={item.value}/>)
+              }
+            </Picker>
+          </View>
+        <Animated.View style={[styles.KeyboardAvoidingView, {
+          flex: openVal.interpolate({ inputRange: [0, 1], outputRange: [0, 10] }),
+        }]} >
+          <View style={{
+            flex: 1,
+            flexDirection: 'row'
+          }}>
+            <Picker style={{
+              flex: 2,
+              color: modeInfo.standardTextColor,
+            }}
+              prompt='选择日期'
+              selectedValue={this.state.startday}
+              onValueChange={this.onValueChange.bind(this, 'startday')}>
+              {
+                this.state.data.startday.map((item, index) => <Picker.Item key={index} label={item.text} value={item.value}/>)
+              }
+            </Picker>
+            <Picker style={{
+              flex: 1,
+              color: modeInfo.standardTextColor,
+            }}
+              prompt='选择时间'
+              selectedValue={this.state.starttime}
+              onValueChange={this.onValueChange.bind(this, 'starttime')}>
+              {
+                this.state.data.starttime.map((item, index) => <Picker.Item key={index} label={item.text} value={item.value}/>)
+              }
+            </Picker>
+          </View>
           <AnimatedKeyboardAvoidingView behavior={'padding'} style={[styles.contentView, {
             flex: openVal.interpolate({ inputRange: [0, 1], outputRange: [0, 12] }),
           }]}>
-            <TextInput placeholder="内容"
+            <TextInput placeholder="简单介绍一下你的房间吧，最多只能写500字哦"
               autoCorrect={false}
               multiline={true}
               keyboardType="default"
@@ -414,41 +460,6 @@ export default class NewTopic extends Component {
                 </TouchableNativeFeedback>
               </View>
             </Animated.View>
-            {
-              this.state.modalVisible && (
-                <MyDialog modeInfo={modeInfo}
-                  modalVisible={this.state.modalVisible}
-                  onDismiss={() => { this.setState({ modalVisible: false }); this.isValueChanged = false }}
-                  onRequestClose={() => { this.setState({ modalVisible: false }); this.isValueChanged = false }}
-                  renderContent={() => (
-                    <View style={{
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                      backgroundColor: modeInfo.backgroundColor,
-                      paddingVertical: 10,
-                      paddingHorizontal: 10,
-                      elevation: 4,
-                      position: 'absolute',
-                      left: 20,
-                      right: 20,
-                      opacity: 1
-                    }} borderRadius={2}>
-                      <HTMLView
-                        value={this.state.content || '暂无内容'}
-                        modeInfo={modeInfo}
-                        stylesheet={styles}
-                        onImageLongPress={(url) => this.props.navigation.navigate('ImageViewer', {
-                          images: [
-                            { url }
-                          ]
-                        })}
-                        imagePaddingOffset={60}
-                        shouldForceInline={true}
-                      />
-                    </View>
-                  )} />
-              )
-            }
             {/* 表情 */}
             <Animated.View style={{
               elevation: 4,
