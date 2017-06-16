@@ -70,6 +70,16 @@ class About extends Component {
     } catch (err) { }
   }
 
+  goToRelease = async () => {
+    let supported = await Linking.canOpenURL(this.state.sourceCodeURL + '/releases');
+    try {
+      if (supported)
+        Linking.openURL(this.state.sourceCodeURL + '/releases');
+      else
+        global.toast && global.toast(`未找到浏览器, 如果您使用了冰箱, 请先解冻浏览器`, 2000);
+    } catch (err) { }
+  }
+
   linkAuthor = async () => {
     Alert.alert(
       `联系作者`,
@@ -130,7 +140,8 @@ class About extends Component {
       },
       {
         title: '更新日志',
-        desc: this.state.sourceCodeURL + '/releases'
+        desc: this.state.sourceCodeURL + '/releases',
+        onPress: this.goToRelease
       },
     ]
     return (
