@@ -32,18 +32,16 @@ import configureStore from './store/store.js'
 import Animation from 'lottie-react-native';
 import checkVersion from './bootstrap/checkVersion'
 
-const store = configureStore();
-
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
 let toolbarHeight = 56
 const tipHeight = toolbarHeight * 0.8
 let backPressClickTimeStamp = 0
 
-class Root extends React.Component {
+export default class Root extends React.Component {
   constructor(props) {
     super(props);
-
+    this.store = configureStore();
     this.state = {
       text: '',
       isNightMode: false,
@@ -323,11 +321,9 @@ class Root extends React.Component {
       </View>
     )
     return (
-      <Provider store={store}>
+      <Provider store={this.store}>
         {child}
       </Provider>
     );
   }
 }
-
-export default Root
