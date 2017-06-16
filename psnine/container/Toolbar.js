@@ -635,6 +635,8 @@ class Toolbar extends Component {
           title={title}
           style={[styles.toolbar, { backgroundColor: modeInfo.standardColor, elevation: this.state.tabMode === 'tab' ? 0 : 4 }]}
           titleColor={modeInfo.isNightMode ? '#000' : '#fff'}
+          subtitle={this.state.search ? `当前搜索: ${this.state.search}` : ''}
+          subtitleColor={modeInfo.isNightMode ? '#000' : '#fff'}
           overflowIconName="md-more"
           iconColor={modeInfo.isNightMode ? '#000' : '#fff'}
           actions={toolbarActions[appReducer.segmentedIndex]}
