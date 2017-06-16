@@ -203,6 +203,11 @@ class Toolbar extends Component {
 
   componentWillReceiveProps(nextProps) {
     this.props.app = nextProps.app;
+    if (this.state.tabMode !== nextProps.modeInfo.settingInfo.tabMode) {
+      this.setState({
+        tabMode: nextProps.modeInfo.settingInfo.tabMode
+      })
+    }
   }
 
   _onSearch = (text) => {

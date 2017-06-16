@@ -121,7 +121,7 @@ export default class Root extends React.Component {
 
   reloadSetting = () => {
     const settingInfo = {}
-    Promise.all([
+    return Promise.all([
       AsyncStorage.getItem('@Theme:tabMode'),
       AsyncStorage.getItem('@psnid'),
       AsyncStorage.getItem('@userInfo'),

@@ -63,7 +63,7 @@ class Theme extends Component {
     }]}>
       <View style={{flex: 4, justifyContent: 'center', alignItems: 'flex-start'}}>
         <Text style={[styles.themeName, { marginTop: 12, flex: 1, color: modeInfo.titleTextColor }]}>
-          {'选择首页模式'}
+          {'首页模式'}
         </Text>
         <Text style={[styles.themeName, { marginTop: -12, fontSize: 13, flex: 1, color: modeInfo.standardTextColor }]}>
           {'可选标签模式或右侧抽屉模式'}
@@ -73,7 +73,7 @@ class Theme extends Component {
         flex: 3,
         color: modeInfo.standardTextColor
       }}
-        prompt='选择首页模式'
+        prompt='首页模式'
         selectedValue={this.state.tabMode}
         onValueChange={this.onValueChange.bind(this, 'tabMode')}>
         <Picker.Item label="右侧抽屉" value="drawer" />
@@ -89,11 +89,9 @@ class Theme extends Component {
     newState[key] = value;
     this.setState(newState, () => {
       if (key === 'tabMode') {
-        Alert.alert(
-          '提示',
-          '重启后生效'
-        )
-        AsyncStorage.setItem('@Theme:tabMode', value).catch(err => console.log(err))
+        AsyncStorage.setItem('@Theme:tabMode', value).catch(err => toast(err.toString())).then(() => {
+          return modeInfo.reloadSetting && modeInfo.reloadSetting()
+        })
       }
     });
   };

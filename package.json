@@ -9,6 +9,7 @@
     "test": "jest"
   },
   "dependencies": {
+    "babel-plugin-transform-remove-console": "^6.8.4",
     "cheerio-without-node-native": "^0.20.2",
     "lodash.debounce": "^4.0.8",
     "lottie-react-native": "^1.1.1",
