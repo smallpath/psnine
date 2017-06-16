@@ -232,6 +232,7 @@ class Toolbar extends Component {
       }
     } else if (segmentedIndex === 1) {
       index === 0 && this.props.navigation.navigate('NewQa', {})
+      index === 1 && this._onSearchClicked()
     } else if (segmentedIndex === 2) {
       if (index !== 0) {
         let type = toolbarActions[segmentedIndex][index].value;
