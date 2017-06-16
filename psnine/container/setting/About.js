@@ -128,6 +128,10 @@ class About extends Component {
         desc: this.state.checkUpdateTip,
         onPress: this.checkUpdate
       },
+      {
+        title: '更新日志',
+        desc: this.state.sourceCodeURL + '/releases'
+      },
     ]
     return (
       <View style={{ flex: 1, backgroundColor: modeInfo.backgroundColor }}>

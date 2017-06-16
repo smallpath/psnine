@@ -493,7 +493,7 @@ class navigationDrawer extends Component {
           onPress={() => item.onPress.bind(this)(rowData)}
           delayPressIn={0}
         >
-          <View style={[styles.themeItem]}>
+          <View pointerEvents={'box-only'} style={[styles.themeItem]}>
             <View style={{width: 30, alignItems: 'center', justifyContent: 'center'}}>
               {icon}
             </View>

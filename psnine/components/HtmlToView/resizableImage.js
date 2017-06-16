@@ -99,7 +99,7 @@ export default class ResizableImage extends Component {
           {!this.state.isLoading &&
             <Image
               resizeMode={'contain'}
-              resizeMethod={'scale'}
+              resizeMethod={'resize'}
               onError={(e) => { }}
               key={`${source.width}:${source.height}`}
               source={source} />
