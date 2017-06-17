@@ -23,6 +23,7 @@ const baseStyle = {
 export default class ResizableImage extends Component {
   constructor(props) {
     super(props)
+    const { width } = Dimensions.get('window')
     const maxWidth = width - this.props.source.imagePaddingOffset
     this.maxWidth = maxWidth
     this.state = {
@@ -70,6 +71,7 @@ export default class ResizableImage extends Component {
 
   render() {
     const finalSize = {}
+    const { width } = Dimensions.get('window')
     const maxWidth = width - this.props.source.imagePaddingOffset
     if (this.state.width > maxWidth) {
       finalSize.width = maxWidth
