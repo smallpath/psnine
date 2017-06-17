@@ -74,6 +74,8 @@ class Circle extends Component {
         cb = () => this.setState({
           isRefreshing: false,
           isLoadingMore: false
+        }, () => {
+          // this.props.reducer.page === 1 && this.flatlist.scrollToOffset({ offset: 0, animated: true })
         })
       }
     }
@@ -121,7 +123,7 @@ class Circle extends Component {
     this.setState({
       isRefreshing: true
     })
-
+    this.flatlist && this.flatlist.getNode().scrollToOffset({ offset: 0, animated: true })
     dispatch(getList(1, {
         type,
         title: typeof searchTitle !== 'undefined' ? searchTitle : this.props.screenProps.searchTitle

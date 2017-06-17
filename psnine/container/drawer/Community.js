@@ -77,6 +77,14 @@ class Community extends Component {
           this.setState({
             isRefreshing: false,
             isLoadingMore: false
+          }, () => {
+            // this.props.community.topicPage === 1 && this.flatlist.getNode().scrollToOffset({ offset: 0, animated: true })
+            // if (item.topicPage > 1) {
+            //   const max = item.topics.length / item.topicPage
+            //   const target = max * (item.topicPage - 1)
+            //   setTimeout(() => this.flatlist.getNode().scrollToIndex({ index: target, viewPosition: 1, viewOffset: 50, animated: true }))
+            //   // console.log(this.contentOffset + 50)
+            // }
           })
         }
       }
@@ -123,7 +131,8 @@ class Community extends Component {
     this.setState({
       isRefreshing: true
     })
-
+    // console.log(typeof this.flatlist)
+    this.flatlist && this.flatlist.getNode().scrollToOffset({ offset: 0, animated: true })
     dispatch(getTopicList(1, {
         type,
         title: typeof searchTitle !== 'undefined' ? searchTitle : this.props.screenProps.searchTitle

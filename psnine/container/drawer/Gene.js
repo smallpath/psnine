@@ -67,6 +67,8 @@ class Gene extends Component {
         cb = () => this.setState({
           isRefreshing: false,
           isLoadingMore: false
+        }, () => {
+          // this.props.gene.genePage === 1 && this.flatlist.scrollToOffset({ offset: 0, animated: true })
         })
       }
     }
@@ -108,7 +110,7 @@ class Gene extends Component {
     this.setState({
       isRefreshing: true
     })
-
+    this.flatlist && this.flatlist.scrollToOffset({ offset: 0, animated: true })
     dispatch(getGeneList(1, {
       type,
       title: typeof title !== 'undefined' ? title : this.props.screenProps.searchTitle
