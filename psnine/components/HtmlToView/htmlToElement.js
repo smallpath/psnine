@@ -35,6 +35,10 @@ const ResizableImgComponent = props => {
   if (/^(.*?):\/\//.exec(src)) {} else {
     src = 'http://psnine.com' + src
   }
+
+  // props.imageArr.push(src)
+  // console.log(props.imageArr)
+
   const source = {
     uri: src,
     width,
@@ -283,6 +287,19 @@ export default function htmlToElement(rawHtml, opts, done) {
           if (shouldForceInlineEmotion) {
             ImageComponent = InlineImgComponent
           }
+          if (ImageComponent === ResizableImgComponent) {
+              let src = node.attribs.src
+              if (/^(.*?):\/\//.exec(src)) {} else {
+                src = 'http://psnine.com' + src
+              }
+              // console.log('pushing', src)
+              opts.imageArr.push({ url: src })
+              const len = opts.imageArr.length
+              linkPressHandler = () => opts.onImageLongPress({
+                imageUrls: opts.imageArr,
+                index: len - 1
+              });
+          }
           log('渲染Img标签', '此时是否在View中?', inInsideView, ImageComponent === ResizableImgComponent)
           return (
             <ImageComponent key={index} attribs={node.attribs}
@@ -290,6 +307,7 @@ export default function htmlToElement(rawHtml, opts, done) {
                 linkPressHandler={linkPressHandler}
                 alignCenter={opts.alignCenter}
                 modeInfo={opts.modeInfo}
+                imageArr={opts.imageArr}
                 imagePaddingOffset={opts.imagePaddingOffset} />
             );
         } else if (node.name === 'embed' || node.name === 'iframe') {

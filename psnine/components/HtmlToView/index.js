@@ -76,7 +76,8 @@ class HtmlView extends Component {
       shouldShowLoadingIndicator: this.props.shouldShowLoadingIndicator,
       alignCenter: this.props.alignCenter,
       onImageLongPress: this.props.onImageLongPress,
-      shouldForceInline: this.props.shouldForceInline
+      shouldForceInline: this.props.shouldForceInline,
+      imageArr: []
     }
     // 加一个空文字来将最开头的表情内联
     let target = value || ''
@@ -84,6 +85,7 @@ class HtmlView extends Component {
       target = '<span/>' + target
     }
     htmlToElement(target, opts, (err, element) => {
+      // console.log(opts.imageArr)
       if (err) {
         this.props.onError(err)
       }

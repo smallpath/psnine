@@ -90,16 +90,23 @@ export default class ResizableImage extends Component {
     const alignSelf = this.state.alignCenter ? { alignContent: 'center' } : {}
     let loadImageWithoutWifi = global.loadImageWithoutWifi
     // console.log(global.netInfo, global.loadImageWithoutWifi)
-    const onPress = loadImageWithoutWifi ? () => {} : () => {
+    let onPress = loadImageWithoutWifi ? () => {} : () => {
       this.setState({
         shouldLoad: true
       }, () => {
         this.loadImage()
       })
     }
+
+    if (this.state.shouldLoad === true && this.state.isLoading === false && this.state.hasError === false) {
+      onPress = this.props.linkPressHandler
+    }
+
+    let onLongPress = this.props.linkPressHandler
+    if (this.state.hasError || this.state.isLoading || this.state.shouldLoad === false) onLongPress = () => {}
     
     return (
-      <TouchableNativeFeedback onLongPress={this.props.linkPressHandler} onPress={onPress} style={[{ justifyContent: 'center', alignItems: 'center' }, alignSelf]}>
+      <TouchableNativeFeedback onLongPress={onLongPress} onPress={onPress} style={[{ justifyContent: 'center', alignItems: 'center' }, alignSelf]}>
         {<View style={{ width: source.width, height: source.height }}>
           {this.state.shouldLoad === false && (<View style={{flex: 1, backgroundColor: modeInfo.brighterLevelOne, alignItems: 'center', justifyContent: 'center' }}>
             <Text style={{color: modeInfo.standardTextColor, textAlign: 'center', textAlignVertical: 'center'}}>点击加载图片</Text>
