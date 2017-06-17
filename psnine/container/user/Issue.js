@@ -294,15 +294,18 @@ export default class Issue extends Component {
                     <Picker.Item label="交易" value="trade" />
                   </Picker>
                 </View>
-                <Text style={{ alignSelf: 'flex-end', color: '#009688' }}
-                  onPress={() => {
+                <TouchableNativeFeedback onPress={() => {
                     this.setState({
                       typeModalVisible: false,
                       isLoading: true
                     }, () => {
                       this.fetchMessages(params.URL, 'jump');
                     })
-                  }}>确定</Text>
+                  }}>
+                  <View style={{ alignSelf: 'flex-end', paddingHorizontal: 8, paddingVertical: 5 }}>
+                    <Text style={{color: '#009688'}}>确定</Text>
+                  </View>
+                </TouchableNativeFeedback>
               </View>
             )} />
         )}
@@ -346,8 +349,7 @@ export default class Issue extends Component {
                   />
                   <Text style={{color: modeInfo.standardTextColor}}>{this.state.numPages}</Text>
                 </View>
-                <Text style={{ alignSelf: 'flex-end', color: '#009688' }}
-                  onPress={() => {
+                <TouchableNativeFeedback onPress={() => {
                     this.setState({
                       modalVisible: false,
                       isLoading: true
@@ -356,7 +358,11 @@ export default class Issue extends Component {
                       const targetPage = params.URL.split('=').slice(0, -1).concat(this.state.sliderValue).join('=')
                       this.fetchMessages(targetPage, 'jump');
                     })
-                  }}>确定</Text>
+                  }}>
+                  <View style={{ alignSelf: 'flex-end', paddingHorizontal: 8, paddingVertical: 5 }}>
+                    <Text style={{color: '#009688'}}>确定</Text>
+                  </View>
+                </TouchableNativeFeedback>
               </View>
             )} />
         )}

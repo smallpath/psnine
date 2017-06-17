@@ -113,7 +113,7 @@ export default class extends Component {
       case 1:
         break;
       case 2:
-        URL = params.URL + '/leaderboard?page=1'
+        URL = params.URL + '/rank?page=1'
         navigation.navigate('CircleRank', {
           URL
         })
@@ -450,8 +450,7 @@ export default class extends Component {
                     />
                     <Text style={{color: modeInfo.standardTextColor}}>{this.state.numPages}</Text>
                   </View>
-                  <Text style={{ alignSelf: 'flex-end', color: '#009688' }}
-                    onPress={() => {
+                  <TouchableNativeFeedback onPress={() => {
                       this.setState({
                         modalVisible: false,
                         /*isLoadingMore: true*/
@@ -460,7 +459,11 @@ export default class extends Component {
                         const targetPage = this.URL.split('=').slice(0, -1).concat(this.state.sliderValue).join('=')
                         this.fetchMessages(targetPage, 'jump');
                       })
-                    }}>确定</Text>
+                    }}>
+                    <View style={{ alignSelf: 'flex-end', paddingHorizontal: 8, paddingVertical: 5 }}>
+                      <Text style={{color: '#009688'}}>确定</Text>
+                    </View>
+                  </TouchableNativeFeedback>
                 </View>
               )} />
           )}

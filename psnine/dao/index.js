@@ -198,7 +198,7 @@ export const getCirlclesAPI = ({ page, title, type }) => `${webHost}/group?page=
 
 export const getCirlcleAPI = ({ id, page }) => `${webHost}/group/${id}?page=${page}`
 
-export const getCirlcleLeaderAPI = ({ id, page }) => `${webHost}/group/${id}/leaderboard?page=${page}`
+export const getCirlcleLeaderAPI = ({ id, page }) => `${webHost}/group/${id}/rank?page=${page}`
 
 export const getGamePointURL = id => `${webHost}/psngame/${id}/comment`
 

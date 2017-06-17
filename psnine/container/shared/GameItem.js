@@ -50,7 +50,7 @@ export default class extends React.PureComponent {
           delayPressIn={0}
           background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
         >
-          <View style={{ flex: 1, flexDirection: 'row', padding: 12 }}>
+          <View pointerEvents={'box-only'} style={{ flex: 1, flexDirection: 'row', padding: 12 }}>
             <Image
               source={{ uri: rowData.avatar }}
               style={[styles.avatar, { width: 91 }]}

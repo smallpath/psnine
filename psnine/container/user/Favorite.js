@@ -266,7 +266,7 @@ class Fav extends Component {
                 alignItems: 'flex-start',
                 backgroundColor: modeInfo.backgroundColor,
                 position: 'absolute',
-                paddingVertical: 30,
+                paddingVertical: 20,
                 left: 30,
                 right: 30,
                 paddingHorizontal: 20,
@@ -289,15 +289,18 @@ class Fav extends Component {
                     <Picker.Item label="问答" value="qa" />
                   </Picker>
                 </View>
-                <Text style={{ alignSelf: 'flex-end', color: '#009688' }}
-                  onPress={() => {
-                    this.setState({
-                      typeModalVisible: false,
-                      isLoading: true
-                    }, () => {
-                      this.fetchMessages(params.URL, 'jump');
-                    })
-                  }}>确定</Text>
+                <TouchableNativeFeedback onPress={() => {
+                  this.setState({
+                    typeModalVisible: false,
+                    isLoading: true
+                  }, () => {
+                    this.fetchMessages(params.URL, 'jump');
+                  })
+                }}>
+                  <View style={{ alignSelf: 'flex-end', paddingHorizontal: 8, paddingVertical: 5 }}>
+                    <Text style={{color: '#009688'}}>确定</Text>
+                  </View>
+                </TouchableNativeFeedback>
               </View>
             )} />
         )}
@@ -341,17 +344,20 @@ class Fav extends Component {
                   />
                   <Text style={{color: modeInfo.standardTextColor}}>{this.state.numPages}</Text>
                 </View>
-                <Text style={{ alignSelf: 'flex-end', color: '#009688' }}
-                  onPress={() => {
-                    this.setState({
-                      modalVisible: false,
-                      isLoading: true
-                    }, () => {
-                      const currentPage = this.state.currentPage
-                      const targetPage = params.URL.split('=').slice(0, -1).concat(this.state.sliderValue).join('=')
-                      this.fetchMessages(targetPage, 'jump');
-                    })
-                  }}>确定</Text>
+                <TouchableNativeFeedback onPress={() => {
+                  this.setState({
+                    modalVisible: false,
+                    isLoading: true
+                  }, () => {
+                    const currentPage = this.state.currentPage
+                    const targetPage = params.URL.split('=').slice(0, -1).concat(this.state.sliderValue).join('=')
+                    this.fetchMessages(targetPage, 'jump');
+                  })
+                }}>
+                  <View style={{ alignSelf: 'flex-end', paddingHorizontal: 8, paddingVertical: 5 }}>
+                    <Text style={{color: '#009688'}}>确定</Text>
+                  </View>
+                </TouchableNativeFeedback>
               </View>
             )} />
         )}
