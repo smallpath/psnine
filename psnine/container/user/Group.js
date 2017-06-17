@@ -129,7 +129,7 @@ export default class Group extends Component {
             <RefreshControl
               refreshing={this.state.isLoading}
               onRefresh={this._onRefresh}
-              colors={[modeInfo.standardColor]}
+              colors={[modeInfo.accentColor]}
               progressBackgroundColor={modeInfo.backgroundColor}
               ref={ref => this.refreshControl = ref}
             />

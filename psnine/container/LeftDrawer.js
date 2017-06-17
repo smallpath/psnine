@@ -443,7 +443,7 @@ class navigationDrawer extends Component {
             {psnid && (
               <View style={{flex: 1, width: 100}}>
                 <View style={{ flexDirection: 'row', justifyContent:'space-between', alignItems: 'center', flex: 1  }}>
-                    <Text style={{ color: levelColor, fontSize: 12 }}>{userInfo.exp.split('经验')[0] + ' '}<Text style={{ flex: -1, color: infoColor, fontSize: 12 }}>{userInfo.exp.split('经验')[1]}</Text></Text>
+                    <Text style={{ color: color, fontSize: 12 }}>{userInfo.exp.split('经验')[0] + ' '}<Text style={{ flex: -1, color: color, fontSize: 12 }}>{userInfo.exp.split('经验')[1]}</Text></Text>
                 </View>
                 <View style={{ flex: 0, width: 200 }}>
                   <Text style={{ }}>
@@ -470,7 +470,7 @@ class navigationDrawer extends Component {
     const item = targetListItems[rowID]
     let iconName = item.iconName
 
-    const icon = <Icon name={iconName} size={25} style={{ marginLeft: 6 }} color='#03a9f4' />
+    const icon = <Icon name={iconName} size={25} style={{ marginLeft: 6 }} color={this.props.modeInfo.standardColor} />
     if (rowData.text === '系统选项') {
       return (
         <View style={{ marginTop: 6 }}>

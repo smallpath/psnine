@@ -261,12 +261,12 @@ export default class Photo extends Component {
             <RefreshControl
               refreshing={this.state.isRefreshing}
               onRefresh={this._onRefresh}
-              colors={[modeInfo.standardColor]}
+              colors={[modeInfo.accentColor]}
               progressBackgroundColor={modeInfo.backgroundColor}
               ref={ref => this.refreshControl = ref}
             />
           }
-          ListFooterComponent={() => <FooterProgress isLoadingMore={this.state.isLoadingMore} />}
+          ListFooterComponent={() => <FooterProgress isLoadingMore={this.state.isLoadingMore} modeInfo={modeInfo} />}
           data={this.state.list}
           keyExtractor={(item, index) => item.url || item.href}
           renderItem={this._renderItem}

@@ -27,7 +27,7 @@ let releasedMarginTop = 0;
 const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
 
 class StoreItem extends React.PureComponent {
-  shouldComponentUpdate = (props) => props.modeInfo.isNightMode !== this.props.modeInfo.isNightMode
+  shouldComponentUpdate = (props) => props.modeInfo.themeName !== this.props.modeInfo.themeName
   
   _onRowPressed = (rowData) => {
     const { navigation } = this.props;
@@ -127,7 +127,7 @@ class Store extends Component {
     let shouldCall = nextProps.segmentedIndex === 7
     let empty = () => {}
     let cb = empty
-    if (this.props.screenProps.modeInfo.isNightMode != nextProps.screenProps.modeInfo.isNightMode) {
+    if (this.props.screenProps.modeInfo.themeName != nextProps.screenProps.modeInfo.themeName) {
       cb = () => {}
     } else if (this.props.screenProps.searchTitle !== nextProps.screenProps.searchTitle) {
       if (shouldCall) {
@@ -179,7 +179,7 @@ class Store extends Component {
 
 
   shouldComponentUpdate = (nextProps, nextState) => {
-    if (this.props.screenProps.modeInfo.isNightMode != nextProps.screenProps.modeInfo.isNightMode) {
+    if (this.props.screenProps.modeInfo.themeName != nextProps.screenProps.modeInfo.themeName) {
       return true
     }
     if (nextState.isRefreshing !== this.state.isRefreshing) {
@@ -271,12 +271,12 @@ class Store extends Component {
           <RefreshControl
             refreshing={this.state.isRefreshing}
             onRefresh={this._onRefresh}
-            colors={[modeInfo.standardColor]}
+            colors={[modeInfo.accentColor]}
             progressBackgroundColor={modeInfo.backgroundColor}
             ref={ref => this.refreshControl = ref}
           />
         }
-        ListFooterComponent={() => <FooterProgress isLoadingMore={this.state.isLoadingMore} />}
+        ListFooterComponent={() => <FooterProgress isLoadingMore={this.state.isLoadingMore} modeInfo={modeInfo}/>}
         data={reducer.list}
         keyExtractor={(item, index) => item.onclick}
         renderItem={this._renderItem}

@@ -1,42 +1,55 @@
-module.exports = {
-  deepColor: '#0288d1',       //700
-  standardColor: '#03a9f4',   //500
-  tintColor: '#e1f5fe',
+import palette from 'google-material-color'
+
+import * as common from './commonColor'
+
+const colorNameArr = Object.keys(palette.palette).filter(name => ['Black', 'White', 'Grey', 'Blue Grey', 'Brown'].includes(name) === false)
+
+const dayColor = {
   backgroundColor: '#fff',
-  backgroundColorBrighterLevelOne: '#f8f8f8',
+  brighterLevelOne: '#f8f8f8',
   standardTextColor: '#757575',
-  titleTextColor: '#202020',
-
-  nightDeepColor: '#01579b',       //700
-  nightStandardColor: '#0288d1',   //500
-  nightTintColor: '#111',
-  nightBackgroundColor: '#212121',
-  nightBackgroundColorBrighterLevelOne: '#424242',
-  nightStandardTextColor: '#e0e0e0',
-  nightTitleTextColor: '#fff',
-
-  nodeColor: '#E1F0F7',
-  idColor: '#3498db',
-  accentColor: '#ff4081',
-  okColor: '#009688',
-  levelColor: '#e7c533',
-  rankColor: '#67c613',
-  ps4Color: '#8662DD',
-  ps3Color: '#F05561',
-  psvColor: '#0AAAE9',
-  warningColor: '#faa732',
-  textWarningColor: '#c09853',
-  textErrorColor: '#b94a48',
-  textPerfectColor: '#659f13',
-  textSuccessColor: '#3a87ad',
-  errorColor: '#da314b',
-  perfectColor: '#00a8e6',
-  successColor: '#8cc14c',
-  trophyColor1: '#7a96d1',
-  trophyColor2: '#cd9a46',
-  trophyColor3: '#a6a6a6',
-  trophyColor4: '#bf6a3a',
-  trophyColor5: 'rgba(0,0,0,0.5)',
-
-
+  titleTextColor: '#202020'
 }
+
+const nightColor = {
+  backgroundColor: '#212121',
+  brighterLevelOne: '#424242',
+  standardTextColor: '#e0e0e0',
+  titleTextColor: '#fff',
+}
+
+const getColor = palette.get.bind(palette)
+const exports = {}
+
+const getAccentColorName = name => {
+  const index = colorNameArr.indexOf(name)
+  let targetIndex = index - 5
+  if (targetIndex < 0) targetIndex += colorNameArr.length
+  return colorNameArr[targetIndex]
+}
+
+for (const name of colorNameArr) {
+  const finalName = name[0].toLowerCase() + name.replace(' ', '').slice(1)
+  exports[finalName] = {
+    ...dayColor,
+    ...common,
+    deepColor: getColor(name, 700),
+    standardColor: getColor(name, 500),
+    tintColor: getColor(name, 100),
+    accentColor: getColor(getAccentColorName(name), 'A200')
+  }
+
+  exports[`${finalName}Night`] = {
+    ...nightColor,
+    ...common,
+    deepColor: getColor(name, 900),
+    standardColor: getColor(name, 700),
+    tintColor: getColor(name, 300),
+    accentColor: getColor(getAccentColorName(name), 'A400')
+  }
+  console.log(getColor(getAccentColorName(name), 'A200'), getColor(getAccentColorName(name), 'A400'))
+}
+
+Object.assign(exports, common)
+export default exports
+export * from './commonColor'

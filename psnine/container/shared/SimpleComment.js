@@ -41,7 +41,7 @@ export default class extends React.PureComponent {
   }
 
   shouldComponentUpdate = (props, state) => {
-    if (props.modeInfo.isNightMode !== this.props.modeInfo.isNightMode) return true
+    if (props.modeInfo.themeName !== this.props.modeInfo.themeName) return true
     if (this.state.modalVisible !== state.modalVisible) return true
     return false
   }
@@ -144,7 +144,7 @@ export default class extends React.PureComponent {
               />
 
               <View style={{ flex: 1.1, flexDirection: 'row', justifyContent: 'space-between' }}>
-                <Text selectable={false} style={{ flex: -1, color: idColor, textAlign: 'center', textAlignVertical: 'center' }} onPress={
+                <Text selectable={false} style={{ flex: -1, color: modeInfo.standardColor, textAlign: 'center', textAlignVertical: 'center' }} onPress={
                   () => {
                     this.props.navigation.navigate('Home', {
                       title: rowData.psnid,

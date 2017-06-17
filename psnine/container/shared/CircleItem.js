@@ -32,7 +32,7 @@ let screen = Dimensions.get('window');
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = screen;
 
 export default class CircleItem extends React.PureComponent {
-  shouldComponentUpdate = (props) => props.modeInfo.isNightMode !== this.props.modeInfo.isNightMode
+  shouldComponentUpdate = (props) => props.modeInfo.themeName !== this.props.modeInfo.themeName
   
   _onRowPressed = (rowData) => {
     const { navigation } = this.props;
@@ -87,7 +87,7 @@ export default class CircleItem extends React.PureComponent {
                 style={{ flex: -1, color: modeInfo.titleTextColor, fontSize: 15 }}>
                 {rowData.title}
               </Text>
-              <Text style={{ flex: -1, color: idColor, textAlignVertical: 'center', fontSize: 12 }} onPress={
+              <Text style={{ flex: -1, color: modeInfo.standardColor, textAlignVertical: 'center', fontSize: 12 }} onPress={
                 () => {
                   this.props.navigation.navigate('Home', {
                     title: rowData.owner,

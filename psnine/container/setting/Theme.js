@@ -23,7 +23,7 @@ import HTMLView from '../../components/HtmlToView';
 
 import { connect } from 'react-redux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { standardColor, nodeColor, idColor, accentColor } from '../../constants/colorConfig';
+import ColorConfig, { standardColor, nodeColor, idColor, accentColor } from '../../constants/colorConfig';
 
 let screen = Dimensions.get('window');
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = screen;
@@ -40,46 +40,101 @@ const ACTUAL_SCREEN_HEIGHT = SCREEN_HEIGHT - StatusBar.currentHeight + 1;
 let CIRCLE_SIZE = 56;
 let config = { tension: 30, friction: 7, ease: Easing.in(Easing.ease(1, 0, 1, 1)), duration: 200 };
 
+const mapper = {
+  'red': '红色',
+  'pink': '粉色',
+  'purple': '紫色',
+  'deepPurple': '深紫色',
+  'indigo': '靛蓝色',
+  'blue': '蓝色',
+  'lightBlue': '浅蓝色',
+  'cyan': '青色',
+  'teal': '深绿色',
+  'green': '绿色',
+  'lightGreen': '浅绿色',
+  'lime': '柠檬黄',
+  'yellow': '黄色',
+  'amber': '琥珀色',
+  'orange': '橘黄色',
+  'deepOrange': '深橘色'
+}
+
 class Theme extends Component {
 
   constructor(props) {
     super(props);
 
     this.state = {
-      tabMode: this.props.screenProps.modeInfo.settingInfo.tabMode
+      tabMode: this.props.screenProps.modeInfo.settingInfo.tabMode,
+      colorTheme: this.props.screenProps.modeInfo.colorTheme
     }
   }
 
   renderSwitchType = (item, index) => {
     const { modeInfo } = this.props.screenProps
     return (
-    <View key={index} style={[styles.themeItem, {
-        flex: -1,
-        height: 80,
-        flexDirection: 'row',
-        padding: 10,
-        borderBottomWidth: StyleSheet.hairlineWidth,
-        borderBottomColor: modeInfo.standradTextColor,
-    }]}>
-      <View style={{flex: 4, justifyContent: 'center', alignItems: 'flex-start'}}>
-        <Text style={[styles.themeName, { marginTop: 12, flex: 1, color: modeInfo.titleTextColor }]}>
-          {'首页模式'}
-        </Text>
-        <Text style={[styles.themeName, { marginTop: -12, fontSize: 13, flex: 1, color: modeInfo.standardTextColor }]}>
-          {'可选标签模式或右侧抽屉模式'}
-        </Text>
+      <View key={index} style={[styles.themeItem, {
+          flex: -1,
+          height: 80,
+          flexDirection: 'row',
+          padding: 10,
+          borderBottomWidth: StyleSheet.hairlineWidth,
+          borderBottomColor: modeInfo.brighterLevelOne,
+      }]}>
+        <View style={{flex: 4, justifyContent: 'center', alignItems: 'flex-start'}}>
+          <Text style={[styles.themeName, { marginTop: 12, flex: 1, color: modeInfo.titleTextColor }]}>
+            {'首页模式'}
+          </Text>
+          <Text style={[styles.themeName, { marginTop: -12, fontSize: 13, flex: 1, color: modeInfo.standardTextColor }]}>
+            {'可选标签模式或右侧抽屉模式'}
+          </Text>
+        </View>
+        <Picker style={{
+          flex: 3,
+          color: modeInfo.standardTextColor
+        }}
+          prompt='首页模式'
+          selectedValue={this.state.tabMode}
+          onValueChange={this.onValueChange.bind(this, 'tabMode')}>
+          <Picker.Item label="右侧抽屉" value="drawer" />
+          <Picker.Item label="标签" value="tab" />
+        </Picker>
       </View>
-      <Picker style={{
-        flex: 3,
-        color: modeInfo.standardTextColor
-      }}
-        prompt='首页模式'
-        selectedValue={this.state.tabMode}
-        onValueChange={this.onValueChange.bind(this, 'tabMode')}>
-        <Picker.Item label="右侧抽屉" value="drawer" />
-        <Picker.Item label="标签" value="tab" />
-      </Picker>
-    </View>
+    )
+  }
+
+  renderSwitchThemeColor = (item, index) => {
+    const { modeInfo } = this.props.screenProps
+    // const mapper = modeInfo.themeName
+    return (
+      <View key={index} style={[styles.themeItem, {
+          flex: -1,
+          height: 80,
+          flexDirection: 'row',
+          padding: 10,
+          borderBottomWidth: StyleSheet.hairlineWidth,
+          borderBottomColor: modeInfo.brighterLevelOne,
+      }]}>
+        <View style={{flex: 4, justifyContent: 'center', alignItems: 'flex-start'}}>
+          <Text style={[styles.themeName, { marginTop: 12, flex: 1, color: modeInfo.titleTextColor }]}>
+            {'切换主题颜色'}
+          </Text>
+          <Text style={[styles.themeName, { marginTop: -12, fontSize: 13, flex: 1, color: modeInfo.standardTextColor }]}>
+            {`当前颜色: ${mapper[this.state.colorTheme]}`}
+          </Text>
+        </View>
+        <Picker style={{
+          flex: 3,
+          color: modeInfo.standardTextColor
+        }}
+          prompt='首页模式'
+          selectedValue={this.state.colorTheme}
+          onValueChange={this.onValueChange.bind(this, 'colorTheme')}>
+          {Object.keys(mapper).map((name, index) => {
+            return <Picker.Item key={index} color={ColorConfig[name].standardColor} label={mapper[name]} value={name} />
+          })}
+        </Picker>
+      </View>
     )
   }
 
@@ -92,6 +147,11 @@ class Theme extends Component {
         AsyncStorage.setItem('@Theme:tabMode', value).catch(err => toast(err.toString())).then(() => {
           return modeInfo.reloadSetting && modeInfo.reloadSetting()
         })
+      } else {
+        if (key === 'colorTheme') {
+          // console.log(value)
+          return modeInfo.switchModeOnRoot && modeInfo.switchModeOnRoot(value)
+        }
       }
     });
   };
@@ -116,6 +176,7 @@ class Theme extends Component {
         />
         <View style={{flex:1}}>
           {this.renderSwitchType()}
+          {this.renderSwitchThemeColor()}
         </View>
       </View>
     );

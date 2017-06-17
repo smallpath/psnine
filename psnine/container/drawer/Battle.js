@@ -35,7 +35,7 @@ const renderSectionHeader = ({ section }) => {
       elevation: 2,
     }}>
       <Text numberOfLines={1}
-        style={{ fontSize: 20, color: idColor, textAlign: 'left', lineHeight: 25, marginLeft: 2, marginTop: 2 }}
+        style={{ fontSize: 20, color: section.modeInfo.standardColor, textAlign: 'left', lineHeight: 25, marginLeft: 2, marginTop: 2 }}
       >{section.key}</Text>
     </View>
   );
@@ -55,7 +55,7 @@ class Battle extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (this.props.screenProps.modeInfo.isNightMode != nextProps.screenProps.modeInfo.isNightMode) {
+    if (this.props.screenProps.modeInfo.themeName != nextProps.screenProps.modeInfo.themeName) {
       this.props.screenProps.modeInfo = nextProps.screenProps.modeInfo;
     } else if (Object.keys(this.props.battle.battles).length < Object.keys(nextProps.battle.battles).length){
       this.setState({
@@ -65,7 +65,7 @@ class Battle extends Component {
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    if (this.props.screenProps.modeInfo.isNightMode != nextProps.screenProps.modeInfo.isNightMode) {
+    if (this.props.screenProps.modeInfo.themeName != nextProps.screenProps.modeInfo.themeName) {
       return true
     }
     if (this.props.screenProps.searchTitle !== nextProps.screenProps.searchTitle) {
@@ -120,7 +120,7 @@ class Battle extends Component {
           <RefreshControl
             refreshing={this.state.isLoading}
             onRefresh={this._onRefresh}
-            colors={[modeInfo.standardColor]}
+            colors={[modeInfo.accentColor]}
             progressBackgroundColor={modeInfo.backgroundColor}
             ref={ref => this.refreshControl = ref}
           />

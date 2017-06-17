@@ -132,7 +132,7 @@ class Message extends Component {
             <RefreshControl
               refreshing={this.state.isRefreshing}
               onRefresh={this.fetchMessages}
-              colors={[modeInfo.standardColor]}
+              colors={[modeInfo.accentColor]}
               progressBackgroundColor={modeInfo.backgroundColor}
               ref={ref => this.refreshControl = ref}
             />

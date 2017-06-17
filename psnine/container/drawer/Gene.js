@@ -44,7 +44,7 @@ class Gene extends Component {
     let cb = empty
     if (this.props.screenProps.geneType != nextProps.screenProps.geneType) {
       cb = () => this._onRefresh(nextProps.screenProps.geneType);
-    } else if (this.props.screenProps.modeInfo.isNightMode != nextProps.screenProps.modeInfo.isNightMode) {
+    } else if (this.props.screenProps.modeInfo.themeName != nextProps.screenProps.modeInfo.themeName) {
       cb = () => {}
     } else if (this.props.screenProps.searchTitle !== nextProps.screenProps.searchTitle) {
       if (shouldCall) {
@@ -77,7 +77,7 @@ class Gene extends Component {
 
 
   shouldComponentUpdate = (nextProps, nextState) => {
-    if (this.props.screenProps.modeInfo.isNightMode != nextProps.screenProps.modeInfo.isNightMode) {
+    if (this.props.screenProps.modeInfo.themeName != nextProps.screenProps.modeInfo.themeName) {
       return true
     }
     if (nextState.isRefreshing !== this.state.isRefreshing) {
@@ -161,12 +161,12 @@ class Gene extends Component {
           <RefreshControl
             refreshing={this.state.isRefreshing}
             onRefresh={this._onRefresh}
-            colors={[modeInfo.standardColor]}
+            colors={[modeInfo.accentColor]}
             progressBackgroundColor={modeInfo.backgroundColor}
             ref={ref => this.refreshControl = ref}
           />
         }
-        ListFooterComponent={() => <FooterProgress isLoadingMore={this.state.isLoadingMore} />}
+        ListFooterComponent={() => <FooterProgress isLoadingMore={this.state.isLoadingMore} modeInfo={modeInfo} />}
         data={geneReducer.genes}
         keyExtractor={(item, index) => `${item.id}::${item.views}::${item.count}`}
         renderItem={this._renderItem}

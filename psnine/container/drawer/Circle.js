@@ -51,7 +51,7 @@ class Circle extends Component {
     let cb = empty
     if (this.props.screenProps.circleType != nextProps.screenProps.circleType) {
       cb = () => this._onRefresh(nextProps.screenProps.circleType);
-    } else if (this.props.screenProps.modeInfo.isNightMode != nextProps.screenProps.modeInfo.isNightMode) {
+    } else if (this.props.screenProps.modeInfo.themeName != nextProps.screenProps.modeInfo.themeName) {
       cb = () => {}
     } else if (this.props.screenProps.searchTitle !== nextProps.screenProps.searchTitle) {
       if (shouldCall) {
@@ -96,7 +96,7 @@ class Circle extends Component {
 
 
   shouldComponentUpdate = (nextProps, nextState) => {
-    if (this.props.screenProps.modeInfo.isNightMode != nextProps.screenProps.modeInfo.isNightMode) {
+    if (this.props.screenProps.modeInfo.themeName != nextProps.screenProps.modeInfo.themeName) {
       return true
     }
     if (nextState.isRefreshing !== this.state.isRefreshing) {
@@ -179,12 +179,12 @@ class Circle extends Component {
           <RefreshControl
             refreshing={this.state.isRefreshing}
             onRefresh={this._onRefresh}
-            colors={[modeInfo.standardColor]}
+            colors={[modeInfo.accentColor]}
             progressBackgroundColor={modeInfo.backgroundColor}
             ref={ref => this.refreshControl = ref}
           />
         }
-        ListFooterComponent={() => <FooterProgress isLoadingMore={this.state.isLoadingMore} />}
+        ListFooterComponent={() => <FooterProgress isLoadingMore={this.state.isLoadingMore} modeInfo={modeInfo} modeInfo={modeInfo} />}
         data={reducer.list}
         keyExtractor={(item, index) => item.href}
         renderItem={this._renderItem}

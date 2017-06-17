@@ -15,17 +15,10 @@ import {
 } from 'react-native';
 import { Provider } from 'react-redux'
 import StackNavigator from './Navigator'
-import {
+import ColorConfig, {
   accentColor,
-  deepColor, standardColor, tintColor,
-  nightDeepColor, nightStandardColor, nightTintColor,
-
-  backgroundColor, nightBackgroundColor,
-  backgroundColorBrighterLevelOne,
-  nightBackgroundColorBrighterLevelOne,
-  standardTextColor, nightStandardTextColor,
-  titleTextColor, nightTitleTextColor,
-  okColor
+  okColor,
+  deepColor
 } from './constants/colorConfig';
 
 import configureStore from './store/store.js'
@@ -51,6 +44,7 @@ export default class Root extends React.Component {
       settingInfo: {
         tabMode: 'tab',
         psnid: '',
+        loadImageWithoutWifi: true,
         userInfo: {
           avatar: require('./img/comment_avatar.png'),
           platinum: '白',
@@ -60,49 +54,27 @@ export default class Root extends React.Component {
           isSigned: true,
           exp: ''
         },
-        isNightMode: false
+        isNightMode: false,
+        colorTheme: 'lightBlue',
       },
+      colorTheme: 'lightBlue',
       loadingText: 'PSNINE\nP9 · 酷玩趣友'
     };
-
-    this.dayModeInfo = {
-      isNightMode: false,
-      accentColor: accentColor,
-      deepColor: deepColor,
-      standardColor: standardColor,
-      tintColor: tintColor,
-      backgroundColor: backgroundColor,
-      brighterLevelOne: backgroundColorBrighterLevelOne,
-      standardTextColor: standardTextColor,
-      titleTextColor: titleTextColor,
-      okColor,
-    }
-
-    this.nightModeInfo = {
-      isNightMode: true,
-      accentColor: accentColor,
-      deepColor: nightDeepColor,
-      standardColor: nightStandardColor,
-      tintColor: nightTintColor,
-      backgroundColor: nightBackgroundColor,
-      brighterLevelOne: nightBackgroundColorBrighterLevelOne,
-      standardTextColor: nightStandardTextColor,
-      titleTextColor: nightTitleTextColor,
-      okColor
-    }
-    this.dayModeInfo.dayModeInfo = this.dayModeInfo
-    this.dayModeInfo.nightModeInfo = this.nightModeInfo
-    this.nightModeInfo.dayModeInfo = this.dayModeInfo
-    this.nightModeInfo.nightModeInfo = this.nightModeInfo
   }
 
-  switchModeOnRoot = () => {
-    let targetState = !this.state.isNightMode;
-    this.setState({
-      isNightMode: targetState,
-    });
-    AsyncStorage.setItem('@Theme:isNightMode', targetState.toString())
-    return targetState;
+  switchModeOnRoot = (themeName) => {
+    if (!themeName) {
+      let targetState = !this.state.isNightMode;
+      this.setState({
+        isNightMode: targetState,
+      });
+      return AsyncStorage.setItem('@Theme:isNightMode', targetState.toString())
+    } else {
+      this.setState({
+        colorTheme: themeName.toString(),
+      });
+      return AsyncStorage.setItem('@Theme:colorTheme', themeName.toString())
+    }
   }
 
   componentWillMount = () => {
@@ -125,7 +97,9 @@ export default class Root extends React.Component {
       AsyncStorage.getItem('@Theme:tabMode'),
       AsyncStorage.getItem('@psnid'),
       AsyncStorage.getItem('@userInfo'),
-      AsyncStorage.getItem('@Theme:isNightMode')
+      AsyncStorage.getItem('@Theme:isNightMode'),
+      AsyncStorage.getItem('@Theme:loadImageWithoutWifi'),
+      AsyncStorage.getItem('@Theme:colorTheme'),
     ]).then(result => {
       // console.log('getting psnid: ' + result[1])
       Object.assign(settingInfo, {
@@ -140,10 +114,13 @@ export default class Root extends React.Component {
           isSigned: true,
           exp: '' 
         },
-        isNightMode: JSON.parse(result[3]) || false
+        isNightMode: JSON.parse(result[3]) || false,
+        loadImageWithoutWifi: result[4] || true,
+        colorTheme: result[5] || 'lightBlue'
       })
       this.setState({
         settingInfo,
+        colorTheme: settingInfo.colorTheme,
         isNightMode: settingInfo.isNightMode
       })
     }).catch(err => {
@@ -162,19 +139,18 @@ export default class Root extends React.Component {
       AsyncStorage.getItem('@Theme:tabMode'),
       AsyncStorage.getItem('@psnid'),
       AsyncStorage.getItem('@userInfo'),
-      AsyncStorage.getItem('@Theme:isNightMode')
+      AsyncStorage.getItem('@Theme:isNightMode'),
+      AsyncStorage.getItem('@Theme:loadImageWithoutWifi'),
+      AsyncStorage.getItem('@Theme:colorTheme'),
     ]).then(result => {
       Object.assign(settingInfo, {
         tabMode: result[0] || this.state.settingInfo.tabMode,
         psnid: result[1] || this.state.settingInfo.psnid,
         userInfo: JSON.parse(result[2]) || this.state.settingInfo.userInfo,
-        isNightMode: JSON.parse(result[3]) || this.state.settingInfo.isNightMode
+        isNightMode: JSON.parse(result[3]) || this.state.settingInfo.isNightMode,
+        loadImageWithoutWifi: result[4] || true,
+        colorTheme: result[5] || 'lightBlue'
       })
-      // this.setState({
-      //   isLoadingAsyncStorage: false,
-      //   settingInfo,
-      //   isNightMode: settingInfo.isNightMode
-      // }, () => checkVersion().catch(err => {}))
     })
     Animated.timing(this.state.progress, {
       toValue: 0.65,
@@ -185,6 +161,7 @@ export default class Root extends React.Component {
       this.setState({
         isLoadingAsyncStorage: false,
         settingInfo,
+        colorTheme: settingInfo.colorTheme,
         isNightMode: settingInfo.isNightMode
       }, () => checkVersion().catch(err => {}))
     }, 1300)
@@ -249,18 +226,26 @@ export default class Root extends React.Component {
   }
 
   render() {
-    const targetModeInfo = this.state.isNightMode ? this.nightModeInfo : this.dayModeInfo
+    const dayModeInfo = ColorConfig[this.state.colorTheme]
+    const nightModeInfo = ColorConfig[this.state.colorTheme + 'Night']
+    const targetModeInfo = this.state.isNightMode ? nightModeInfo : dayModeInfo
     const { isLoadingAsyncStorage, progress } = this.state
     const modeInfo = Object.assign({}, targetModeInfo, {
       loadSetting: this.loadSetting,
       reloadSetting: this.reloadSetting,
       settingInfo: this.state.settingInfo,
-      reverseModeInfo: this.state.isNightMode ? this.dayModeInfo : this.nightModeInfo
+      isNightMode: this.state.isNightMode,
+      reverseModeInfo: this.state.isNightMode ? dayModeInfo : nightModeInfo,
+      dayModeInfo: dayModeInfo,
+      nightModeInfo: nightModeInfo,
+      switchModeOnRoot: this.switchModeOnRoot,
+      themeName: this.state.isNightMode ? this.state.colorTheme + 'Night' : this.state.colorTheme,
+      colorTheme: this.state.colorTheme
     })
 
     const child = isLoadingAsyncStorage ? (
       <View style={{ flex: 1, backgroundColor: 'rgb(0,208,192)'}}>
-        <StatusBar translucent={false} backgroundColor={this.state.isNightMode ? nightDeepColor : deepColor} barStyle="light-content" />
+        <StatusBar translucent={false} backgroundColor={'rgb(0,208,192)'} barStyle={"light-content"} />
         <Animation
           ref={animation => { this.animation = animation; }}
           style={{
@@ -282,7 +267,7 @@ export default class Root extends React.Component {
       </View>
     ) : (
       <View style={{ flex: 1 }}>
-        <StatusBar translucent={false} backgroundColor={this.state.isNightMode ? nightDeepColor : deepColor} barStyle="light-content" />
+        <StatusBar translucent={false} backgroundColor={modeInfo.deepColor} barStyle={"light-content"} />
         <StackNavigator
           uriPrefix={'p9://psnine.com/'}
           onNavigationStateChange={null} screenProps={{

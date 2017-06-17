@@ -45,7 +45,7 @@ export default class PhotoItem extends React.PureComponent {
   }
 
   shouldComponentUpdate = (props, state) => {
-    if (props.modeInfo.isNightMode !== this.props.modeInfo.isNightMode) return true
+    if (props.modeInfo.themeName !== this.props.modeInfo.themeName) return true
     if (this.state.modalVisible !== state.modalVisible) return true
     if (props.isChecked !== this.props.isChecked) return true
     return false

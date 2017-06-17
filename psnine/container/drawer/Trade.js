@@ -44,7 +44,7 @@ class Trade extends Component {
 
 
   shouldComponentUpdate = (nextProps, nextState) => {
-    if (this.props.screenProps.modeInfo.isNightMode != nextProps.screenProps.modeInfo.isNightMode) {
+    if (this.props.screenProps.modeInfo.themeName != nextProps.screenProps.modeInfo.themeName) {
       return true
     }
     if (nextState.isRefreshing !== this.state.isRefreshing) {
@@ -67,7 +67,7 @@ class Trade extends Component {
     let shouldCall = nextProps.segmentedIndex === 8
     let empty = () => {}
     let cb = empty
-    if (this.props.screenProps.modeInfo.isNightMode != nextProps.screenProps.modeInfo.isNightMode) {
+    if (this.props.screenProps.modeInfo.themeName != nextProps.screenProps.modeInfo.themeName) {
       cb = () => {}
     } else if (this.props.screenProps.searchTitle !== nextProps.screenProps.searchTitle) {
       if (shouldCall) {
@@ -165,12 +165,12 @@ class Trade extends Component {
           <RefreshControl
             refreshing={this.state.isRefreshing}
             onRefresh={this._onRefresh}
-            colors={[modeInfo.standardColor]}
+            colors={[modeInfo.accentColor]}
             progressBackgroundColor={modeInfo.backgroundColor}
             ref={ref => this.refreshControl = ref}
           />
         }
-        ListFooterComponent={() => <FooterProgress isLoadingMore={this.state.isLoadingMore} />}
+        ListFooterComponent={() => <FooterProgress isLoadingMore={this.state.isLoadingMore} modeInfo={modeInfo} />}
         data={reducer.list}
         keyExtractor={(item, index) => item.href}
         renderItem={this._renderItem}

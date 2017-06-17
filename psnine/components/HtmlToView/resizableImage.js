@@ -94,7 +94,7 @@ export default class ResizableImage extends Component {
                 height: source.height,
                 width: source.width
               }}
-              color={this.state.hasError ? '#000' : accentColor} />
+              color={this.state.hasError ? '#000' : this.props.modeInfo.accentColor} />
           }
           {!this.state.isLoading &&
             <Image

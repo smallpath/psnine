@@ -31,7 +31,7 @@ let screen = Dimensions.get('window');
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = screen;
 export default class ComplexComment extends React.PureComponent {
 
-  shouldComponentUpdate = (props) => props.modeInfo.isNightMode !== this.props.modeInfo.isNightMode
+  shouldComponentUpdate = (props) => props.modeInfo.themeName !== this.props.modeInfo.themeName
 
   render() {
     const { modeInfo, rowData, onPress } = this.props
@@ -68,7 +68,7 @@ export default class ComplexComment extends React.PureComponent {
               />
 
               <View style={{ flex: 1.1, flexDirection: 'row', justifyContent: 'space-between' }}>
-                <Text selectable={false} style={{ flex: -1, color: idColor, textAlign: 'center', textAlignVertical: 'center' }} onPress={
+                <Text selectable={false} style={{ flex: -1, color: modeInfo.standardColor, textAlign: 'center', textAlignVertical: 'center' }} onPress={
                   () => {
                     this.props.navigation.navigate('Home', {
                       title: rowData.psnid,

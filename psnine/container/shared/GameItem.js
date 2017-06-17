@@ -18,7 +18,7 @@ import { standardColor, nodeColor, idColor } from '../../constants/colorConfig';
 
 export default class extends React.PureComponent {
 
-  shouldComponentUpdate = (props) => props.modeInfo.isNightMode !== this.props.modeInfo.isNightMode
+  shouldComponentUpdate = (props) => props.modeInfo.themeName !== this.props.modeInfo.themeName
 
   _onRowPressed = (rowData) => {
     const { navigation } = this.props;
@@ -65,7 +65,7 @@ export default class extends React.PureComponent {
               </Text>
 
               <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                <Text selectable={false} style={{ flex: -1, color: idColor, textAlign: 'center', textAlignVertical: 'center' }}>{rowData.platform}</Text>
+                <Text selectable={false} style={{ flex: -1, color: modeInfo.standardColor, textAlign: 'center', textAlignVertical: 'center' }}>{rowData.platform}</Text>
                 <Text selectable={false} style={{ flex: -1, color: modeInfo.standardTextColor, textAlign: 'center', textAlignVertical: 'center' }}>{rowData.region}</Text>
                 <Text selectable={false} style={{ flex: -1, color: modeInfo.standardTextColor, textAlign: 'center', textAlignVertical: 'center' }}>{
                   rowData.platium + rowData.gold + rowData.selver + rowData.bronze

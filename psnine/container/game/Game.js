@@ -439,7 +439,7 @@ export default class GamePage extends Component {
               justifyContent: 'center',
               alignItems: 'center'
             }}
-            color={accentColor}
+            color={modeInfo.accentColor}
             size={50}
           />
         )}

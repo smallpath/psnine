@@ -47,7 +47,7 @@ export default class extends React.PureComponent {
     }
   }
 
-  shouldComponentUpdate = (props, state) => props.modeInfo.isNightMode !== this.props.modeInfo.isNightMode || this.state.modalVisible !== state.modalVisible
+  shouldComponentUpdate = (props, state) => props.modeInfo.themeName !== this.props.modeInfo.themeName || this.state.modalVisible !== state.modalVisible
 
   _onRowPressed = (rowData) => {
     const { navigation } = this.props;

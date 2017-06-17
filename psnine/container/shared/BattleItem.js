@@ -25,7 +25,7 @@ export default class BattleItem extends React.PureComponent {
     }
   }
 
-  shouldComponentUpdate = (props, state) => props.modeInfo.isNightMode !== this.props.modeInfo.isNightMode || this.state.modalVisible !== state.modalVisible
+  shouldComponentUpdate = (props, state) => props.modeInfo.themeName !== this.props.modeInfo.themeName || this.state.modalVisible !== state.modalVisible
 
   _onRowPressed = (rowData) => {
     const { navigation } = this.props;
@@ -75,7 +75,7 @@ export default class BattleItem extends React.PureComponent {
                   alignSelf: 'center',
                 }}
               />
-              <Text style={{ flex: -1, color: idColor, textAlign: 'center', textAlignVertical: 'center' }}>{rowData.game}</Text>
+              <Text style={{ flex: -1, color: modeInfo.standardColor, textAlign: 'center', textAlignVertical: 'center' }}>{rowData.game}</Text>
             </View>
             {
               this.state.modalVisible && modalList.length && (
@@ -131,7 +131,7 @@ export default class BattleItem extends React.PureComponent {
               </Text>
               <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between' }}>
                 <Text style={{ flex: -1, color: modeInfo.standardTextColor, textAlign: 'center', textAlignVertical: 'center' }}>{rowData.platform.join(' ')}</Text>
-                <Text style={{ flex: -1, color: idColor, marginRight: -60, textAlignVertical: 'center' }} onPress={
+                <Text style={{ flex: -1, color: modeInfo.standardColor, marginRight: -60, textAlignVertical: 'center' }} onPress={
                 () => {
                   this.props.screenProps.navigation.navigate('Home', {
                     title: rowData.psnid,

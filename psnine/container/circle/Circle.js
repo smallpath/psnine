@@ -370,7 +370,7 @@ export default class extends Component {
               justifyContent: 'center',
               alignItems: 'center'
             }}
-            color={accentColor}
+            color={modeInfo.accentColor}
             size={50}
           />
         )}*/}
@@ -383,14 +383,14 @@ export default class extends Component {
               <RefreshControl
                 refreshing={this.state.isRefreshing}
                 onRefresh={this._onRefresh}
-                colors={[modeInfo.standardColor]}
+                colors={[modeInfo.accentColor]}
                 progressBackgroundColor={modeInfo.backgroundColor}
                 ref={ref => this.refreshControl = ref}
               />
             }
             data={data}
             keyExtractor={(item, index) => item.id}
-            ListFooterComponent={() => <FooterProgress isLoadingMore={this.state.isLoadingMore} />}
+            ListFooterComponent={() => <FooterProgress isLoadingMore={this.state.isLoadingMore} modeInfo={modeInfo} />}
             renderItem={({ item: rowData, index }) => index === 0 ? this.renderHeader(rowData) : this._renderItem({item: rowData, index})}
             extraData={modeInfo}
             windowSize={21}

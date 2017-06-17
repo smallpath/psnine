@@ -43,7 +43,7 @@ const getLevelColorFromProgress = (progress) => {
 
 export default class extends React.PureComponent {
 
-  shouldComponentUpdate = (props) => props.modeInfo.isNightMode !== this.props.modeInfo.isNightMode
+  shouldComponentUpdate = (props) => props.modeInfo.themeName !== this.props.modeInfo.themeName
 
   _onRowPressed = (rowData) => {
     const { navigation } = this.props

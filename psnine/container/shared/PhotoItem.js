@@ -45,7 +45,7 @@ export default class PhotoItem extends React.PureComponent {
   }
 
   shouldComponentUpdate = (props, state) => {
-    if (props.modeInfo.isNightMode !== this.props.modeInfo.isNightMode) return true
+    if (props.modeInfo.themeName !== this.props.modeInfo.themeName) return true
     if (this.state.modalVisible !== state.modalVisible) return true
     if (props.isChecked !== this.props.isChecked) return true
     return false
@@ -57,11 +57,9 @@ export default class PhotoItem extends React.PureComponent {
 
     return (
       <View key={rowData.id || index} style={{
-        borderBottomWidth: StyleSheet.hairlineWidth,
         alignSelf: 'flex-start',
         alignContent: 'flex-end',
         backgroundColor: modeInfo.backgroundColor,
-        borderBottomColor: modeInfo.brighterLevelOne,
         width: ITEM_HEIGHT,
         height: ITEM_HEIGHT,
       }}>
@@ -81,7 +79,7 @@ export default class PhotoItem extends React.PureComponent {
           background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
         >
           <View style={{ flex: 1, flexDirection: 'row', padding: 5, 
-          backgroundColor: isChecked ? modeInfo.standardColor : modeInfo.backgroundColor }}>
+          backgroundColor: isChecked ? modeInfo.accentColor : modeInfo.backgroundColor }}>
             {
               this.state.modalVisible && (
                 <MyDialog modeInfo={modeInfo}
