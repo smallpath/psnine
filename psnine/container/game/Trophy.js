@@ -32,7 +32,7 @@ let screen = Dimensions.get('window');
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = screen;
 
 let toolbarActions = [
-  { title: '回复', iconName: 'md-create', show: 'always' },
+  { title: '回复', iconName: 'md-create', show: 'always', iconSize: 22 },
   { title: '刷新', iconName: 'md-refresh', show: 'always' },
 ];
 let title = "TOPIC";

@@ -33,7 +33,7 @@ const ds = new ListView.DataSource({
 });
 
 let toolbarActions = [
-  { title: '回复', iconName: 'md-create', show: 'always' },
+  { title: '回复', iconName: 'md-create', iconSize: 22, show: 'always' },
 ];
 
 class UserBoard extends Component {

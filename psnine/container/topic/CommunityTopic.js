@@ -39,7 +39,7 @@ let screen = Dimensions.get('window');
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = screen;
 
 let toolbarActions = [
-  { title: '回复', iconName: 'md-create', show: 'always', onPress: function() {
+  { title: '回复', iconName: 'md-create', iconSize: 22, show: 'always', onPress: function() {
     const { params } = this.props.navigation.state
     if (this.isReplyShowing === true) return
     const cb = () => {
@@ -548,7 +548,7 @@ class CommunityTopic extends Component {
 
     if (shouldPushData && this.state.data.titleInfo && this.state.data.titleInfo.shareInfo  && this.state.data.titleInfo.shareInfo.edit) {
       targetActions.push(
-        { title: '编辑', iconName: 'md-create', show: 'never', onPress: function() {
+        { title: '编辑', iconName: 'md-create', iconSize: 22, show: 'never', onPress: function() {
             const { navigation } = this.props
             // console.log(params.type)
             const target = params.type === 'gene' ? 'NewGene' : 'NewTopic'

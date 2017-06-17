@@ -22,7 +22,7 @@ import Toolbar from './Toolbar';
 import { standardColor } from '../constants/colorConfig';
 
 let DRAWER_REF = 'drawer';
-let DRAWER_WIDTH_LEFT = 90;
+let DRAWER_WIDTH_LEFT = 80;
 
 class Psnine extends Component {
   constructor(props) {

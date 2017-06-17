@@ -35,7 +35,7 @@ let screen = Dimensions.get('window');
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = screen;
 
 let toolbarActions = [
-  { title: '回复', iconName: 'md-create', show: 'always', onPress: function() {
+  { title: '回复', iconName: 'md-create', iconSize: 22, show: 'always', onPress: function() {
       const { params } = this.props.navigation.state
       if (this.isReplyShowing === true) return
       this.props.navigation.navigate('Reply', {
@@ -354,7 +354,7 @@ export default class extends Component {
     const targetActions = toolbarActions.slice()
     if (shouldPushData && source.titleInfo) {
       source.titleInfo.edit && targetActions.push(
-        { title: '编辑', iconName: 'md-create', show: 'never', onPress: function() {
+        { title: '编辑', iconName: 'md-create', iconSize: 22, show: 'never', onPress: function() {
             const { navigation } = this.props
             navigation.navigate('NewTrade', {
               URL: source.titleInfo.edit
@@ -362,7 +362,7 @@ export default class extends Component {
           }},
       )
       source.titleInfo.dalao && targetActions.push(
-        { title: '打捞', iconName: 'md-create', show: 'never', onPress: function() {
+        { title: '打捞', iconName: 'md-create', iconSize: 22, show: 'never', onPress: function() {
             const { navigation } = this.props
             // dalao()
             postReply({

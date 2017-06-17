@@ -11,7 +11,8 @@ import {
   TouchableWithoutFeedback,
   TouchableHighlight,
   ToastAndroid,
-  Alert
+  Alert,
+  StatusBar
 } from 'react-native';
 
 import {

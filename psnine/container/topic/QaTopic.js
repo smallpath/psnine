@@ -47,7 +47,7 @@ let CIRCLE_SIZE = 56;
 let config = { tension: 30, friction: 7, ease: Easing.in(Easing.ease(1, 0, 1, 1)), duration: 200 };
 
 let toolbarActions = [
-  { title: '回复', iconName: 'md-create', show: 'always', onPress: function() {
+  { title: '回复', iconName: 'md-create', iconSize: 22, show: 'always', onPress: function() {
     const { params } = this.props.navigation.state
     if (this.isReplyShowing === true) return
     const cb = () => {
@@ -392,7 +392,7 @@ class QaTopic extends Component {
 
     if (shouldPushData && this.state.data.titleInfo && this.state.data.titleInfo.shareInfo  && this.state.data.titleInfo.shareInfo.edit) {
       targetActions.push(
-        { title: '编辑', iconName: 'md-create', show: 'never', onPress: function() {
+        { title: '编辑', iconName: 'md-create', iconSize: 22, show: 'never', onPress: function() {
             const { navigation } = this.props
             navigation.navigate('NewGene', {
               URL: this.state.data.titleInfo.shareInfo.edit

@@ -93,10 +93,8 @@ const RightDrawer = DrawerNavigator({
                 key={route.key}
                 onPress={() => {
                   navigation.navigate('DrawerClose');
-                  {/*setTimeout(() => {*/}
-                    screenProps.toolbarDispatch(changeSegmentIndex(index))
-                    navigation.navigate(route.routeName);
-                  {/*}, 300)*/}
+                  screenProps.toolbarDispatch(changeSegmentIndex(index))
+                  navigation.navigate(route.routeName);
 
                 }}
                 delayPressIn={0}
