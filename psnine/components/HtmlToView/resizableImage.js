@@ -6,6 +6,7 @@ import {
   ActivityIndicator,
   PixelRatio,
   View,
+  Text,
   TouchableNativeFeedback
 } from 'react-native';
 
@@ -29,7 +30,8 @@ export default class ResizableImage extends Component {
       height: this.props.style.height || (maxWidth / 16 * 9),
       isLoading: this.props.isLoading || true,
       alignCenter: this.props.alignCenter || false,
-      hasError: false
+      hasError: false,
+      shouldLoad: global.netInfo === 'WIFI' || global.loadImageWithoutWifi
     }
   }
 
@@ -39,23 +41,29 @@ export default class ResizableImage extends Component {
 
   componentDidMount = () => {
     this.mounted = true
+    this.loadImage() 
+  }
+
+  loadImage = () => {
     if (this.props.style.width !== 0 && this.props.style.height !== 0) {
       this.setState({
         isLoading: false
       })
       return
     }
-    Image.getSize(this.props.source.uri, (w, h) => {
+    return this.state.shouldLoad && Image.getSize(this.props.source.uri, (w, h) => {
       if (this.mounted !== false) {
         this.setState({
           width: w,
           height: h,
-          isLoading: false
+          isLoading: false,
+          hasError: false
         })
       }
-    }, () => {
+    }, (err) => {
       this.setState({
-        hasError: true
+        isLoading: false,
+        hasError: err.toString() || '加载失败'
       })
     })
   }
@@ -78,13 +86,26 @@ export default class ResizableImage extends Component {
       source = Object.assign(source, this.props.source, finalSize)
     }
 
+    const { modeInfo } = this.props
     const alignSelf = this.state.alignCenter ? { alignContent: 'center' } : {}
-    // console.log(maxWidth, this.state.width, source.width)
+    let loadImageWithoutWifi = global.loadImageWithoutWifi
+    // console.log(global.netInfo, global.loadImageWithoutWifi)
+    const onPress = loadImageWithoutWifi ? () => {} : () => {
+      this.setState({
+        shouldLoad: true
+      }, () => {
+        this.loadImage()
+      })
+    }
+    
     return (
-      <TouchableNativeFeedback onLongPress={this.props.linkPressHandler} style={[{ justifyContent: 'center', alignItems: 'center' }, alignSelf]}>
-        <View style={{ width: source.width, height: source.height }}>
+      <TouchableNativeFeedback onLongPress={this.props.linkPressHandler} onPress={onPress} style={[{ justifyContent: 'center', alignItems: 'center' }, alignSelf]}>
+        {<View style={{ width: source.width, height: source.height }}>
+          {this.state.shouldLoad === false && (<View style={{flex: 1, backgroundColor: modeInfo.brighterLevelOne, alignItems: 'center', justifyContent: 'center' }}>
+            <Text style={{color: modeInfo.standardTextColor, textAlign: 'center', textAlignVertical: 'center'}}>点击加载图片</Text>
+          </View>) || undefined}
           {
-            this.state.isLoading &&
+            this.state.isLoading && this.state.shouldLoad && 
             <ActivityIndicator
               animating={true}
               style={{
@@ -94,17 +115,22 @@ export default class ResizableImage extends Component {
                 height: source.height,
                 width: source.width
               }}
-              color={this.state.hasError ? '#000' : this.props.modeInfo.accentColor} />
+              color={modeInfo.accentColor} /> || undefined
           }
-          {!this.state.isLoading &&
+          {
+            !this.state.isLoading && this.state.shouldLoad && this.state.hasError && <View style={{flex: 1, backgroundColor: modeInfo.brighterLevelOne, alignItems: 'center', justifyContent: 'center' }}>
+              <Text style={{color: modeInfo.standardTextColor, textAlign: 'center', textAlignVertical: 'center'}}>{'加载失败: ' + this.state.hasError}</Text>
+            </View> || undefined
+          }
+          {!this.state.isLoading && this.state.shouldLoad && !this.state.hasError &&
             <Image
               resizeMode={'contain'}
               resizeMethod={'resize'}
               onError={(e) => { }}
               key={`${source.width}:${source.height}`}
-              source={source} />
+              source={source} /> || undefined
           }
-        </View>
+        </View>}
       </TouchableNativeFeedback>
     )
   }

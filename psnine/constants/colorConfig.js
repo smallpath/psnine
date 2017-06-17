@@ -47,7 +47,7 @@ for (const name of colorNameArr) {
     tintColor: getColor(name, 300),
     accentColor: getColor(getAccentColorName(name), 'A400')
   }
-  console.log(getColor(getAccentColorName(name), 'A200'), getColor(getAccentColorName(name), 'A400'))
+  // console.log(getColor(getAccentColorName(name), 'A200'), getColor(getAccentColorName(name), 'A400'))
 }
 
 Object.assign(exports, common)

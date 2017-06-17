@@ -41,6 +41,7 @@ import About from './container/setting/About'
 import PsnineAbout from './container/setting/PsnineAbout'
 import Setting from './container/setting/Setting'
 import Theme from './container/setting/Theme'
+import Reading from './container/setting/Reading'
 import General from './container/setting/General'
 import ImageViewer from './components/ImageViewer'
 import Search from './container/Search'
@@ -157,6 +158,9 @@ const Navigator = StackNavigator({
   },
   Reply: {
     screen: Reply
+  },
+  Reading: {
+    screen: Reading
   },
   UserGame: {
     screen: UserGame,

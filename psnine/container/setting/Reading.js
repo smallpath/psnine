@@ -9,7 +9,9 @@ import {
   AsyncStorage,
   StatusBar,
   Dimensions,
-  Easing
+  Easing,
+  Picker,
+  Alert
 } from 'react-native';
 
 import { pngPrefix, getDealURL, getHappyPlusOneURL, getStoreURL } from '../../dao';
@@ -21,7 +23,7 @@ import HTMLView from '../../components/HtmlToView';
 
 import { connect } from 'react-redux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { standardColor, nodeColor, idColor, accentColor } from '../../constants/colorConfig';
+import ColorConfig, { standardColor, nodeColor, idColor, accentColor } from '../../constants/colorConfig';
 
 let screen = Dimensions.get('window');
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = screen;
@@ -38,92 +40,51 @@ const ACTUAL_SCREEN_HEIGHT = SCREEN_HEIGHT - StatusBar.currentHeight + 1;
 let CIRCLE_SIZE = 56;
 let config = { tension: 30, friction: 7, ease: Easing.in(Easing.ease(1, 0, 1, 1)), duration: 200 };
 
-const items = [
-  {
-    iconName: 'md-color-palette',
-    text: '主题',
-    onPress: function() {
-      this.props.navigation.navigate('Theme')
-    }
-  },
-  {
-    iconName: 'md-construct',
-    text: '高级',
-    onPress: function() {
-      this.props.navigation.navigate('Reading')
-    }
-  },
-  {
-    iconName: 'md-information-circle',
-    text: 'PSNINE',
-    onPress: function() {
-      this.props.navigation.navigate('PsnineAbout')
-    }
-  },
-  {
-    iconName: 'md-help-circle',
-    text: '关于',
-    onPress: function() {
-      this.props.navigation.navigate('About')
-    }
-  },
-]
-
-class Setting extends Component {
+class Theme extends Component {
 
   constructor(props) {
     super(props);
 
     this.state = {
-      checkUpdateTip: '点击检查更新',
-      sourceCodeURL: 'https://github.com/smallpath/psnine',
-      icon: false,
-      switchMethod: true
+      loadImageWithoutWifi: global.loadImageWithoutWifi || false
     }
   }
 
-  componentDidMount = () => {
-
-  }
-
-  componentWillMount = async () => {
-
-  }
-
-  renderRow = (item, index) => {
+  loadImageWithoutWIFI = (item, index) => {
     const { modeInfo } = this.props.screenProps
     return (
-      <TouchableNativeFeedback
-        onPress={item.onPress.bind(this)}
-        key={index}
-      >
-        <View pointerEvents={'box-only'} style={[styles.themeItem, {
+      <View key={index} style={[styles.themeItem, {
           flex: -1,
           height: 80,
           flexDirection: 'row',
-        }]}>
-          <View style={{ width: 30, height: 30, flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-            <Ionicons name={item.iconName} size={30} color={modeInfo.accentColor} />
-          </View>
-          <View style={{
-            borderBottomWidth: StyleSheet.hairlineWidth,
-            borderBottomColor: modeInfo.standradTextColor,
-            alignItems: 'flex-start',
-            justifyContent: 'center',
-            flex: 4,
-            height: 80
-          }}>
-            <Text style={[styles.themeName, { alignContent:'stretch', textAlignVertical: 'center',flex: 1, color: modeInfo.titleTextColor }]}>
-              {item.text}
-            </Text>
-          </View>
+          padding: 10,
+          borderBottomWidth: StyleSheet.hairlineWidth,
+          borderBottomColor: modeInfo.brighterLevelOne,
+      }]}>
+        <View style={{flex: 4, justifyContent: 'center', alignItems: 'flex-start'}}>
+          <Text style={[styles.themeName, { marginTop: 12, flex: 1, color: modeInfo.titleTextColor }]}>
+            {'使用移动网络时默认加载图片'}
+          </Text>
+          <Text style={[styles.themeName, { marginTop: -12, fontSize: 13, flex: 1, color: modeInfo.standardTextColor }]}>
+            {'当前:' + (this.state.loadImageWithoutWifi ? '是' : '否')}
+          </Text>
         </View>
-      </TouchableNativeFeedback>
+        <Switch
+          style={{
+            flex: 1
+          }}
+          onValueChange={(value) => this.setState({ loadImageWithoutWifi: value }, () => {
+            global.loadImageWithoutWifi = value
+            AsyncStorage.setItem('@Theme:loadImageWithoutWifi', value.toString())
+          })}
+          value={this.state.loadImageWithoutWifi} />
+      </View>
     )
   }
 
   render() {
     const { modeInfo } = this.props.screenProps
+
     return (
       <View style={{ flex: 1, backgroundColor: modeInfo.backgroundColor }}
         onStartShouldSetResponder={() => false}
@@ -132,7 +93,7 @@ class Setting extends Component {
           navIconName="md-arrow-back"
           overflowIconName="md-more"
           iconColor={modeInfo.isNightMode ? '#000' : '#fff'}
-          title={`设置`}
+          title={`高级`}
           titleColor={modeInfo.isNightMode ? '#000' : '#fff'}
           style={[styles.toolbar, { backgroundColor: modeInfo.standardColor }]}
           onIconClicked={() => {
@@ -140,7 +101,7 @@ class Setting extends Component {
           }}
         />
         <View style={{flex:1}}>
-          {items.map((...args) => this.renderRow(...args))}
+          {this.loadImageWithoutWIFI()}
         </View>
       </View>
     );
@@ -193,4 +154,4 @@ const styles = StyleSheet.create({
 });
 
 
-export default Setting
+export default Theme

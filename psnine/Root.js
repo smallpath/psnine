@@ -11,7 +11,8 @@ import {
   Easing,
   Linking,
   InteractionManager,
-  AsyncStorage
+  AsyncStorage,
+  NetInfo
 } from 'react-native';
 import { Provider } from 'react-redux'
 import StackNavigator from './Navigator'
@@ -44,7 +45,6 @@ export default class Root extends React.Component {
       settingInfo: {
         tabMode: 'tab',
         psnid: '',
-        loadImageWithoutWifi: true,
         userInfo: {
           avatar: require('./img/comment_avatar.png'),
           platinum: '白',
@@ -115,14 +115,14 @@ export default class Root extends React.Component {
           exp: '' 
         },
         isNightMode: JSON.parse(result[3]) || false,
-        loadImageWithoutWifi: result[4] || true,
         colorTheme: result[5] || 'lightBlue'
       })
       this.setState({
         settingInfo,
         colorTheme: settingInfo.colorTheme,
-        isNightMode: settingInfo.isNightMode
+        isNightMode: settingInfo.isNightMode,
       })
+      global.loadImageWithoutWifi = JSON.parse(result[4]) || false
     }).catch(err => {
       // console.log(err)
       toast && toast(err.toString())
@@ -148,9 +148,9 @@ export default class Root extends React.Component {
         psnid: result[1] || this.state.settingInfo.psnid,
         userInfo: JSON.parse(result[2]) || this.state.settingInfo.userInfo,
         isNightMode: JSON.parse(result[3]) || this.state.settingInfo.isNightMode,
-        loadImageWithoutWifi: result[4] || true,
         colorTheme: result[5] || 'lightBlue'
       })
+      global.loadImageWithoutWifi = JSON.parse(result[4]) || false
     })
     Animated.timing(this.state.progress, {
       toValue: 0.65,
@@ -170,12 +170,25 @@ export default class Root extends React.Component {
   componentDidMount() {
     
     this.loadSetting()
+
     Linking.getInitialURL().then((url) => {
       if (url) {
-        console.log('Initial url is: ' + url);
+        // console.log('Initial url is: ' + url);
       }
     }).catch(err => console.error('An error occurred linking', err));
     Linking.addEventListener('url', this._handleOpenURL);
+
+    NetInfo.fetch().then((reach) => {
+      // console.log('Initial: ' + reach);
+      global.netInfo = reach
+    });
+    NetInfo.addEventListener(
+      'change',
+      (reach) =>  {
+        // console.log('Change: ' + reach)
+        global.netInfo = reach
+      }
+    );
   }
   componentWillUnmount() {
     Linking.removeEventListener('url', this._handleOpenURL);
