@@ -572,7 +572,7 @@ export default class Reply extends Component {
 
   onPressEmotion = ({ text, url }) => {
     this.addText(
-      `[img]${url}[/img]`
+      text
     )
   }
 

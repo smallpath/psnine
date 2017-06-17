@@ -266,7 +266,7 @@ class CommunityTopic extends Component {
               />
 
               <View style={{ flex: 1.1, flexDirection: 'row', justifyContent: 'space-between' }}>
-                <Text selectable={false} style={{ flex: -1, color: idColor, textAlign: 'center', textAlignVertical: 'center' }}  onPress={
+                <Text selectable={false} style={{ flex: -1, color: modeInfo.standardColor, textAlign: 'center', textAlignVertical: 'center' }}  onPress={
                   () => {
                     this.props.navigation.navigate('Home', {
                       title: titleInfo.psnid,
@@ -349,7 +349,7 @@ class CommunityTopic extends Component {
                 </Text>
 
                 <View style={{ flex: 1.1, flexDirection: 'row', justifyContent: 'space-between' }}>
-                  <Text selectable={false} style={{ flex: -1, color: idColor, textAlign: 'center', textAlignVertical: 'center' }}>{rowData.platform}</Text>
+                  <Text selectable={false} style={{ flex: -1, color: modeInfo.standardColor, textAlign: 'center', textAlignVertical: 'center' }}>{rowData.platform}</Text>
                   <Text selectable={false} style={{ flex: -1, color: modeInfo.standardTextColor, textAlign: 'center', textAlignVertical: 'center' }}>{rowData.region}</Text>
                   <Text selectable={false} style={{ flex: -1, color: modeInfo.standardTextColor, textAlign: 'center', textAlignVertical: 'center' }}>{
                     rowData.platium + rowData.gold + rowData.selver + rowData.bronze
@@ -477,7 +477,7 @@ class CommunityTopic extends Component {
           })
         }}>
           <View style={{ flex: -1, padding: 2 }}>
-            <Text style={{ color: idColor }}>{item.text}</Text>
+            <Text style={{ color: modeInfo.standardColor }}>{item.text}</Text>
           </View>
         </TouchableNativeFeedback>
       )

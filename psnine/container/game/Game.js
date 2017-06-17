@@ -207,11 +207,11 @@ export default class GamePage extends Component {
 
     return (
           <View style={{ 
-            flex: 1, 
+            flex: 0, 
             flexDirection: 'row',
-            alignItems: 'flex-start',
+            alignItems: 'center',
             flexWrap:'wrap',
-            padding: 12,
+            padding: 2,
             backgroundColor: modeInfo.backgroundColor
             }}>
           {list.map((item, index) => /*['讨论', '评论'].includes(item.text) && */(
@@ -229,8 +229,7 @@ export default class GamePage extends Component {
                   })
                 }
               }}>
-              <View style={{ flex: 1, alignItems:'center', justifyContent: 'center' }}  key={index}>
-                <Image source={{uri:item.img}} style={{ width: 30, height: 30}}/>
+              <View style={{ flex: 1, alignItems:'center', justifyContent: 'center', height: 55, width: 55 }}  key={index}>
                 <Text style={{ color: idColor, textAlign:'left', fontSize: 12 }}>{item.text}</Text>
               </View>
             </TouchableNativeFeedback>
@@ -302,7 +301,7 @@ export default class GamePage extends Component {
           })
         }
       }>
-        <View key={rowData.id || index}  style={{
+        <View key={rowData.id || index} pointerEvents={'box-only'} style={{
           backgroundColor: modeInfo.backgroundColor,
           flexDirection: 'row',
           borderBottomWidth: StyleSheet.hairlineWidth,
@@ -369,7 +368,7 @@ export default class GamePage extends Component {
       <View key={index} style={{ backgroundColor: modeInfo.backgroundColor }}>
         { index !== 0 && <Text style={{textAlign:'left', color: modeInfo.standardTextColor, padding: 5, paddingLeft: 10, paddingBottom: 0,fontSize: 15}}>第{index}个DLC</Text>}
         <View>
-          { this.renderGameHeader(rowData.banner, index) }
+          { index !== 0 && this.renderGameHeader(rowData.banner, index) }
           { rowData.list.map((item , index) => this.renderTrophy(item ,index)) }
         </View>
       </View>

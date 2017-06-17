@@ -42,7 +42,7 @@ class EmotionItem extends Component {
         const { text, url, width = 32, height = 32 } = emotionList[thisIndex]
         ImageList.push(
           <TouchableNativeFeedback key={`${i}:${j}`} onPress={() => {
-              this.props.onPress && this.props.onPress({ text, url})
+              this.props.onPress && this.props.onPress({ text, url })
             }}>
             <View style={{
                 width: width || itemWidth || 32,

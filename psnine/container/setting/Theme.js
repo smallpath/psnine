@@ -127,7 +127,7 @@ class Theme extends Component {
           flex: 3,
           color: modeInfo.standardTextColor
         }}
-          prompt='首页模式'
+          prompt='选择主题颜色'
           selectedValue={this.state.colorTheme}
           onValueChange={this.onValueChange.bind(this, 'colorTheme')}>
           {Object.keys(mapper).map((name, index) => {

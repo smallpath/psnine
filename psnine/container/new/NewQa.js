@@ -496,7 +496,7 @@ export default class NewTopic extends Component {
 
   onPressEmotion = ({ text, url }) => {
     this.addText(
-      `[img]${url}[/img]`
+      text
     )
   }
 
