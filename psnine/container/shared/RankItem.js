@@ -152,9 +152,9 @@ export default class extends React.PureComponent {
     return (
       <View style={{flex: 4, flexDirection: 'row', height: ITEM_HEIGHT - 7- 7 }}>
         <View style={{flex: 2, flexDirection: 'column'}}>
-          <View style={{ flex: 1, flexDirection: 'column' }}>
+          { rowData.rank && <View style={{ flex: 1, flexDirection: 'column' }}>
             <Text style={{color: modeInfo.titleTextColor}}>{rowData.rank ? 'No.' + rowData.rank : ''}</Text>
-          </View>
+          </View> || undefined}
           <View style={{ flex: 1, flexDirection: 'column' }}>
             <Text style={{color: levelColor}}>{rowData.level + ' '}<Text style={{color: modeInfo.standardTextColor}}>{rowData.exp}</Text></Text>
           </View>

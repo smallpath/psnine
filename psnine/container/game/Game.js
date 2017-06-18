@@ -216,7 +216,7 @@ export default class GamePage extends Component {
             }}>
           {list.map((item, index) => /*['讨论', '评论'].includes(item.text) && */(
             <TouchableNativeFeedback key={index} onPress={() => {
-                if (item.text === '讨论') {
+                if (item.text === '主题') {
                   this.props.navigation.navigate('GameTopic', {
                     URL: `${item.url}?page=1`
                   })
