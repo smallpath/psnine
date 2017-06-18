@@ -2,7 +2,7 @@ import palette from 'google-material-color'
 
 import * as common from './commonColor'
 
-const colorNameArr = Object.keys(palette.palette).filter(name => ['Black', 'White'].includes(name) === false)
+export const colorNameArr = Object.keys(palette.palette).filter(name => ['Black', 'White'].includes(name) === false)
 
 const dayColor = {
   backgroundColor: '#fff',
@@ -42,7 +42,7 @@ for (const name of colorNameArr) {
     deepColor: getColor(name, 700),
     standardColor: getColor(name, 500),
     tintColor: getColor(name, 100),
-    accentColor: getColor(getAccentColorName(name), 'A200')
+    secondaryColorBackup: getColor(name, 'A200'),
   }
 
   exports[`${finalName}Night`] = {
@@ -51,7 +51,7 @@ for (const name of colorNameArr) {
     deepColor: getColor(name, 900),
     standardColor: getColor(name, 700),
     tintColor: getColor(name, 300),
-    accentColor: getColor(getAccentColorName(name), 'A400')
+    secondaryColorBackup: getColor(name, 'A400'),
   }
   // console.log(getColor(getAccentColorName(name), 'A200'), getColor(getAccentColorName(name), 'A400'))
 }
@@ -59,3 +59,4 @@ for (const name of colorNameArr) {
 Object.assign(exports, common)
 export default exports
 export * from './commonColor'
+export const getAccentColorFromName = (name, isNight) => exports[`${name}${isNight ? 'Night' : ''}`].secondaryColorBackup

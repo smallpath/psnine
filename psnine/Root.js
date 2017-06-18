@@ -19,7 +19,8 @@ import StackNavigator, { getCurrentRoute, tracker, format } from './Navigator'
 import ColorConfig, {
   accentColor,
   okColor,
-  deepColor
+  deepColor,
+  getAccentColorFromName
 } from './constants/colorConfig';
 
 import configureStore from './store/store.js'
@@ -63,22 +64,31 @@ export default class Root extends React.Component {
         colorTheme: 'lightBlue',
       },
       colorTheme: 'lightBlue',
+      secondaryColor: 'pink',
       loadingText: 'PSNINE\nP9 · 酷玩趣友'
     };
   }
 
-  switchModeOnRoot = (themeName) => {
-    if (!themeName) {
+  switchModeOnRoot = (theme) => {
+    if (!theme) {
       let targetState = !this.state.isNightMode;
       this.setState({
         isNightMode: targetState,
       });
       return AsyncStorage.setItem('@Theme:isNightMode', targetState.toString())
     } else {
-      this.setState({
-        colorTheme: themeName.toString(),
-      });
-      return AsyncStorage.setItem('@Theme:colorTheme', themeName.toString())
+      const { colorTheme, secondaryColor } = theme
+      if (colorTheme) {
+        this.setState({
+          colorTheme: colorTheme.toString(),
+        });
+        return AsyncStorage.setItem('@Theme:colorTheme', colorTheme.toString())
+      } else if (secondaryColor) {
+        this.setState({
+          secondaryColor: secondaryColor.toString(),
+        });
+        return AsyncStorage.setItem('@Theme:secondaryColor', secondaryColor.toString())
+      }
     }
   }
 
@@ -105,6 +115,7 @@ export default class Root extends React.Component {
       AsyncStorage.getItem('@Theme:isNightMode'),
       AsyncStorage.getItem('@Theme:loadImageWithoutWifi'),
       AsyncStorage.getItem('@Theme:colorTheme'),
+      AsyncStorage.getItem('@Theme:secondaryColor'),
     ]).then(result => {
       // console.log('getting psnid: ' + result[1])
       Object.assign(settingInfo, {
@@ -120,12 +131,14 @@ export default class Root extends React.Component {
           exp: '' 
         },
         isNightMode: JSON.parse(result[3]) || false,
-        colorTheme: result[5] || 'lightBlue'
+        colorTheme: result[5] || 'lightBlue',
+        secondaryColor: result[6] || 'pink'
       })
       this.setState({
         settingInfo,
         colorTheme: settingInfo.colorTheme,
         isNightMode: settingInfo.isNightMode,
+        secondaryColor: settingInfo.secondaryColor
       })
       global.loadImageWithoutWifi = JSON.parse(result[4]) || false
     }).catch(err => {
@@ -147,14 +160,16 @@ export default class Root extends React.Component {
       AsyncStorage.getItem('@Theme:isNightMode'),
       AsyncStorage.getItem('@Theme:loadImageWithoutWifi'),
       AsyncStorage.getItem('@Theme:colorTheme'),
-      AsyncStorage.getItem('@Theme:shouldSendGA')
+      AsyncStorage.getItem('@Theme:shouldSendGA'),
+      AsyncStorage.getItem('@Theme:secondaryColor'),
     ]).then(result => {
       Object.assign(settingInfo, {
         tabMode: result[0] || this.state.settingInfo.tabMode,
         psnid: result[1] || this.state.settingInfo.psnid,
         userInfo: JSON.parse(result[2]) || this.state.settingInfo.userInfo,
         isNightMode: JSON.parse(result[3]) || this.state.settingInfo.isNightMode,
-        colorTheme: result[5] || 'lightBlue'
+        colorTheme: result[5] || 'lightBlue',
+        secondaryColor: result[6] || 'pink'
       })
       global.loadImageWithoutWifi = JSON.parse(result[4]) || false
       // console.log('==> GA', JSON.parse(result[6]), JSON.parse(result[6] || 'true'), result[6], typeof result[6])
@@ -170,7 +185,8 @@ export default class Root extends React.Component {
         isLoadingAsyncStorage: false,
         settingInfo,
         colorTheme: settingInfo.colorTheme,
-        isNightMode: settingInfo.isNightMode
+        isNightMode: settingInfo.isNightMode,
+        secondaryColor: settingInfo.secondaryColor
       }, () => checkVersion().catch(err => {}))
     }, 1300)
   }
@@ -249,18 +265,23 @@ export default class Root extends React.Component {
     const nightModeInfo = ColorConfig[this.state.colorTheme + 'Night']
     const targetModeInfo = this.state.isNightMode ? nightModeInfo : dayModeInfo
     const { isLoadingAsyncStorage, progress } = this.state
+    const { colorTheme, secondaryColor, isNightMode } = this.state
     const modeInfo = Object.assign({}, targetModeInfo, {
       loadSetting: this.loadSetting,
       reloadSetting: this.reloadSetting,
       settingInfo: this.state.settingInfo,
-      isNightMode: this.state.isNightMode,
-      reverseModeInfo: this.state.isNightMode ? dayModeInfo : nightModeInfo,
+      isNightMode,
+      reverseModeInfo: isNightMode ? dayModeInfo : nightModeInfo,
       dayModeInfo: dayModeInfo,
       nightModeInfo: nightModeInfo,
       switchModeOnRoot: this.switchModeOnRoot,
-      themeName: this.state.isNightMode ? this.state.colorTheme + 'Night' : this.state.colorTheme,
-      colorTheme: this.state.colorTheme
+      themeName: isNightMode ? colorTheme + 'Night:' + secondaryColor  : colorTheme + ':' + secondaryColor,
+      colorTheme,
+      secondaryColor,
+      accentColor: getAccentColorFromName(secondaryColor, isNightMode)
     })
+
+    console.log(modeInfo.accentColor)
 
     const onNavigationStateChange = global.shouldSendGA ? (prevState, currentState) => {
       const currentScreen = getCurrentRoute(currentState);

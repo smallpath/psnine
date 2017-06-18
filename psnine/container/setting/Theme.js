@@ -69,7 +69,8 @@ class Theme extends Component {
 
     this.state = {
       tabMode: this.props.screenProps.modeInfo.settingInfo.tabMode,
-      colorTheme: this.props.screenProps.modeInfo.colorTheme
+      colorTheme: this.props.screenProps.modeInfo.colorTheme,
+      secondaryColor: this.props.screenProps.modeInfo.secondaryColor,
     }
   }
 
@@ -120,19 +121,54 @@ class Theme extends Component {
       }]}>
         <View style={{flex: 4, justifyContent: 'center', alignItems: 'flex-start'}}>
           <Text style={[styles.themeName, { marginTop: 12, flex: 1, color: modeInfo.titleTextColor }]}>
-            {'切换主题颜色'}
+            {'主题的默认颜色'}
           </Text>
           <Text style={[styles.themeName, { marginTop: -12, fontSize: 13, flex: 1, color: modeInfo.standardTextColor }]}>
-            {`当前颜色: ${mapper[this.state.colorTheme]}`}
+            {`当前颜色: `}<Text style={{color: modeInfo.standardColor}}>{mapper[this.state.colorTheme]}</Text>
           </Text>
         </View>
         <Picker style={{
           flex: 3,
           color: modeInfo.standardTextColor
         }}
-          prompt='选择主题颜色'
+          prompt='选择主题的默认颜色'
           selectedValue={this.state.colorTheme}
           onValueChange={this.onValueChange.bind(this, 'colorTheme')}>
+          {Object.keys(mapper).map((name, index) => {
+            return <Picker.Item key={index} color={ColorConfig[name].standardColor} label={mapper[name]} value={name} />
+          })}
+        </Picker>
+      </View>
+    )
+  }
+
+  renderSwitchSecondaryColor = (item, index) => {
+    const { modeInfo } = this.props.screenProps
+    // const mapper = modeInfo.themeName
+    return (
+      <View key={index} style={[styles.themeItem, {
+          flex: -1,
+          height: 80,
+          flexDirection: 'row',
+          padding: 10,
+          borderBottomWidth: StyleSheet.hairlineWidth,
+          borderBottomColor: modeInfo.brighterLevelOne,
+      }]}>
+        <View style={{flex: 4, justifyContent: 'center', alignItems: 'flex-start'}}>
+          <Text style={[styles.themeName, { marginTop: 12, flex: 1, color: modeInfo.titleTextColor }]}>
+            {'主题的强调颜色'}
+          </Text>
+          <Text style={[styles.themeName, { marginTop: -12, fontSize: 13, flex: 1, color: modeInfo.standardTextColor }]}>
+            {`当前颜色: `}<Text style={{color: modeInfo.accentColor}}>{mapper[this.state.secondaryColor]}</Text>
+          </Text>
+        </View>
+        <Picker style={{
+          flex: 3,
+          color: modeInfo.standardTextColor
+        }}
+          prompt='选择主题的默认颜色'
+          selectedValue={this.state.secondaryColor}
+          onValueChange={this.onValueChange.bind(this, 'secondaryColor')}>
           {Object.keys(mapper).map((name, index) => {
             return <Picker.Item key={index} color={ColorConfig[name].standardColor} label={mapper[name]} value={name} />
           })}
@@ -151,10 +187,9 @@ class Theme extends Component {
           return modeInfo.reloadSetting && modeInfo.reloadSetting()
         })
       } else {
-        if (key === 'colorTheme') {
-          // console.log(value)
-          return modeInfo.switchModeOnRoot && modeInfo.switchModeOnRoot(value)
-        }
+        return modeInfo.switchModeOnRoot && modeInfo.switchModeOnRoot({
+          [key]: value
+        })
       }
     });
   };
@@ -180,6 +215,7 @@ class Theme extends Component {
         <View style={{flex:1}}>
           {this.renderSwitchType()}
           {this.renderSwitchThemeColor()}
+          {this.renderSwitchSecondaryColor()}
         </View>
       </View>
     );
