@@ -46,13 +46,13 @@ export default class ComplexComment extends React.PureComponent {
   }
 
   render() {
-    const { modeInfo, rowData, onPress, modalList = [] } = this.props
+    const { modeInfo, rowData, onPress, modalList = [], isChecked = false } = this.props
 
     return (
       <View key={rowData.id} style={{
         marginVertical: 3.5,
         elevation: 1,
-        backgroundColor: modeInfo.backgroundColor
+        backgroundColor: isChecked ? modeInfo.tintColor : modeInfo.backgroundColor
       }}>
         <TouchableNativeFeedback
           onPress={() => onPress(rowData)}

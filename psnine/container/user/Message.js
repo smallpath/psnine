@@ -106,11 +106,13 @@ class Message extends Component {
     const { modeInfo } = this.props.screenProps
     const { ITEM_HEIGHT, _pressRow: onPress } = this
     const { navigation } = this.props
+    const { nums = 0 } = navigation.state.params
     return <MessageItem {...{
       navigation,
       rowData,
       modeInfo,
       onPress,
+      isChecked: nums >= index + 1, 
       modalList: [{
         text: '回复',
         onPress: (rowData) => {
