@@ -55,6 +55,8 @@ class HtmlView extends Component {
   componentWillReceiveProps(nextProps) {
     if (this.props.value !== nextProps.value) {
       this.startHtmlRender(nextProps.value)
+    } else if (this.props.forceMark !== nextProps.forceMark) {
+      this.startHtmlRender(nextProps.value, nextProps.forceMark)
     }
   }
 
@@ -62,7 +64,7 @@ class HtmlView extends Component {
     this.mounted = false
   }
 
-  startHtmlRender(value) {
+  startHtmlRender(value, forceMark) {
     if (!value) {
       this.setState({ element: null })
     }
@@ -77,6 +79,7 @@ class HtmlView extends Component {
       alignCenter: this.props.alignCenter,
       onImageLongPress: this.props.onImageLongPress,
       shouldForceInline: this.props.shouldForceInline,
+      forceMark: typeof forceMark !== 'undefined' ? forceMark : this.props.forceMark,
       imageArr: []
     }
     // 加一个空文字来将最开头的表情内联
@@ -98,6 +101,7 @@ class HtmlView extends Component {
 
   render() {
     const TargetView = this.props.shouldForceInline ? Text : View
+    // console.log(this.props.forceMark)
     if (this.state.element) {
       const alignSelf = this.props.alignCenter ? { justifyContent: 'center' } : {}
       Object.assign(alignSelf, { flexDirection: 'column', flexWrap: 'wrap' })
@@ -117,7 +121,8 @@ HtmlView.propTypes = {
   modeInfo: PropTypes.object,
   shouldShowLoadingIndicator: PropTypes.bool,
   alignCenter: PropTypes.bool,
-  shouldForceInline: PropTypes.bool
+  shouldForceInline: PropTypes.bool,
+  forceMark: PropTypes.bool
 }
 
 HtmlView.defaultProps = {
@@ -139,7 +144,8 @@ HtmlView.defaultProps = {
   modeInfo: {},
   shouldShowLoadingIndicator: false,
   alignCenter: false,
-  shouldForceInline: false
+  shouldForceInline: false,
+  forceMark: false
 }
 
 export default HtmlView

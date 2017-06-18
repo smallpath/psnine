@@ -12,6 +12,7 @@ import entities from 'entities';
 import AutoSizedImage from './resizableImage';
 import InlineImage from './inlineImage';
 import AutoSizedWebview from './webview';
+import MarkText from './markText'
 
 const LINE_BREAK = '\n';
 const PARAGRAPH_BREAK = '\n\n';
@@ -153,8 +154,9 @@ export default function htmlToElement(rawHtml, opts, done) {
               styleObj.fontSize = 12;
               break;
             case 'mark':
-              styleObj.backgroundColor = opts.modeInfo.reverseModeInfo.backgroundColor
-              styleObj.color = opts.modeInfo.backgroundColor
+              styleObj.backgroundColor = opts.modeInfo.backgroundColor
+              styleObj.color = opts.modeInfo.reverseModeInfo.backgroundColor
+              styleObj.isMark = true
           }
         }
         const styles = (parent.attribs.style || '').split(';')
@@ -229,7 +231,17 @@ export default function htmlToElement(rawHtml, opts, done) {
         renderInlineStyle(parent, classStyle)
 
         let inlineArr = renderInlineNode(index)
-
+        const content = entities.decodeHTML(node.data)
+        const isMark = classStyle.isMark === true
+        if (isMark) delete classStyle.isMark
+        const text = isMark ? (
+          <MarkText {...{
+            color: classStyle.color,
+            backgroundColor: classStyle.backgroundColor,
+            text: content,
+            forceMark: opts.forceMark
+          }}/>
+        ) : content
         return (
           <Text key={index} onPress={linkPressHandler} style={[
             { color: opts.modeInfo.standardTextColor },
@@ -242,7 +254,7 @@ export default function htmlToElement(rawHtml, opts, done) {
             {parent && parent.name === 'h1' || parent && parent.name === 'h2' || parent && parent.name === 'h3'
               || parent && parent.name === 'h4' || parent && parent.name === 'h5' ? PARAGRAPH_BREAK : null}
 
-            {entities.decodeHTML(node.data)}
+            {text}
 
             {inlineArr}
 

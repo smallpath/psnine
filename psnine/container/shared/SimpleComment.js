@@ -36,19 +36,22 @@ export default class extends React.PureComponent {
     super(props)
 
     this.state = {
-      modalVisible: false
+      modalVisible: false,
+      forceMark: false
     }
   }
 
   shouldComponentUpdate = (props, state) => {
     if (props.modeInfo.themeName !== this.props.modeInfo.themeName) return true
     if (this.state.modalVisible !== state.modalVisible) return true
+    if (this.state.forceMark !== state.forceMark) return true
     return false
   }
 
   render() {
     const { modeInfo, rowData, index, onLongPress } = this.props
-
+    const shouldShowMark = (rowData.content || '').includes('<span class="mark">')
+    // console.log(shouldShowMark, this.state.forceMark)
     return (
       <View key={rowData.id || index} style={{
         borderBottomWidth: StyleSheet.hairlineWidth,
@@ -121,6 +124,25 @@ export default class extends React.PureComponent {
                         </TouchableNativeFeedback>
                         )
                       }
+                      {
+                        shouldShowMark && (
+                          <TouchableNativeFeedback onPress={() => {
+                            this.setState({
+                              modalVisible: false
+                            }, () => {
+                              requestAnimationFrame(() => {
+                                this.setState({
+                                  forceMark: !this.state.forceMark
+                                })
+                              })
+                            })
+                          }}>
+                          <View style={{height: 50, paddingVertical: 10, paddingLeft: 20 ,alignSelf: 'stretch', alignContent: 'stretch', justifyContent: 'center'}}>
+                            <Text style={{textAlignVertical: 'center', fontSize: 18, color: modeInfo.standardTextColor}}>{!this.state.forceMark && '显示刮刮卡' || '隐藏刮刮卡'}</Text>
+                          </View>
+                        </TouchableNativeFeedback>
+                        )
+                      }
                     </View>
                   )} />
               )
@@ -140,6 +162,7 @@ export default class extends React.PureComponent {
                     { url }
                   ]
                 })}
+                forceMark={shouldShowMark ? this.state.forceMark : false}
                 imagePaddingOffset={30 + 50 + 10}
               />
 

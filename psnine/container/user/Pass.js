@@ -304,7 +304,7 @@ class Login extends Component {
             width: 56,
             height: 56,
             borderRadius: 30,
-            backgroundColor: accentColor,
+            backgroundColor: modeInfo.accentColor,
             position: 'absolute',
             /*top: this.state.avoidKeyboardMarginTop.interpolate({
               inputRange: [0, 1],
@@ -331,7 +331,7 @@ class Login extends Component {
               borderRadius: 30,
               flex: 1,
               zIndex: 1,
-              backgroundColor: accentColor,
+              backgroundColor: modeInfo.accentColor,
             }}>
             <View style={{ borderRadius: 30 }}>
               {this.state.addIcon && (<Image source={this.state.addIcon}
@@ -358,7 +358,7 @@ class Login extends Component {
         }, avoidKeyboardStyle]}>
 
           <View style={[styles.loginTextView, { marginLeft: marginLeft / 2 * 1.5, marginTop: 27 }]}>
-            <Text style={[styles.mainFont, { fontSize: 30, marginLeft: 0, marginBottom: 0 }]}>修改密码</Text>
+            <Text style={[styles.mainFont, { fontSize: 30, marginLeft: 0, marginBottom: 0, color: modeInfo.accentColor }]}>修改密码</Text>
           </View>
 
           <View style={[styles.KeyboardAvoidingView, {
@@ -371,7 +371,7 @@ class Login extends Component {
                 ]}>
                 {'旧密码'}
               </Animated.Text>
-              <TextInput underlineColorAndroid={accentColor}
+              <TextInput underlineColorAndroid={modeInfo.accentColor}
                 onChange={({ nativeEvent }) => { this.setState({ oldpass: nativeEvent.text }) }}
                 ref={ref => this.accountTextInput = ref}
                 onFocus={this.onAccountTextFocus}
@@ -391,7 +391,7 @@ class Login extends Component {
                 ]}>
                 {'新密码'}
               </Animated.Text>
-              <TextInput underlineColorAndroid={accentColor} secureTextEntry={true}
+              <TextInput underlineColorAndroid={modeInfo.accentColor} secureTextEntry={true}
                 onChange={({ nativeEvent }) => { this.setState({ newpass: nativeEvent.text }) }}
                 ref={ref => this.passwordTextInput = ref}
                 onFocus={this.onPasswordTextFocus}
@@ -411,7 +411,7 @@ class Login extends Component {
                 ]}>
                 {'新密码第二次'}
               </Animated.Text>
-              <TextInput underlineColorAndroid={accentColor} secureTextEntry={true}
+              <TextInput underlineColorAndroid={modeInfo.accentColor} secureTextEntry={true}
                 onChange={({ nativeEvent }) => { this.setState({ newpass2: nativeEvent.text }) }}
                 ref={ref => this.password2TextInput = ref}
                 onFocus={this.onPassword2TextFocus}
@@ -432,7 +432,7 @@ class Login extends Component {
               <TouchableNativeFeedback
                 onPress={this.onSubmit}
               >
-                <View style={styles.submitButton}>
+                <View style={[styles.submitButton, {backgroundColor: modeInfo.accentColor}]}>
                   <Text style={[styles.textInput, { color: modeInfo.backgroundColor }]}>提交</Text>
                 </View>
               </TouchableNativeFeedback>

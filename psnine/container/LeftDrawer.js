@@ -298,7 +298,7 @@ class navigationDrawer extends Component {
     }
 
     let URL = getHomeURL(this.state.psnid);
-    alert(this.state.userInfo.nums)
+    // alert(this.state.userInfo.nums)
     navigation.navigate('Message', {
       URL,
       title: this.state.psnid,

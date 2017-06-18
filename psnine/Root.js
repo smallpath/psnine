@@ -115,6 +115,7 @@ export default class Root extends React.Component {
       AsyncStorage.getItem('@Theme:isNightMode'),
       AsyncStorage.getItem('@Theme:loadImageWithoutWifi'),
       AsyncStorage.getItem('@Theme:colorTheme'),
+      AsyncStorage.getItem('@Theme:shouldSendGA'),
       AsyncStorage.getItem('@Theme:secondaryColor'),
     ]).then(result => {
       // console.log('getting psnid: ' + result[1])
@@ -132,7 +133,7 @@ export default class Root extends React.Component {
         },
         isNightMode: JSON.parse(result[3]) || false,
         colorTheme: result[5] || 'lightBlue',
-        secondaryColor: result[6] || 'pink'
+        secondaryColor: result[7] || 'pink'
       })
       this.setState({
         settingInfo,
@@ -140,6 +141,7 @@ export default class Root extends React.Component {
         isNightMode: settingInfo.isNightMode,
         secondaryColor: settingInfo.secondaryColor
       })
+      global.shouldSendGA = JSON.parse(result[6] || 'true')
       global.loadImageWithoutWifi = JSON.parse(result[4]) || false
     }).catch(err => {
       // console.log(err)
@@ -169,8 +171,9 @@ export default class Root extends React.Component {
         userInfo: JSON.parse(result[2]) || this.state.settingInfo.userInfo,
         isNightMode: JSON.parse(result[3]) || this.state.settingInfo.isNightMode,
         colorTheme: result[5] || 'lightBlue',
-        secondaryColor: result[6] || 'pink'
+        secondaryColor: result[7] || 'pink'
       })
+      // alert(result[7])
       global.loadImageWithoutWifi = JSON.parse(result[4]) || false
       // console.log('==> GA', JSON.parse(result[6]), JSON.parse(result[6] || 'true'), result[6], typeof result[6])
       global.shouldSendGA = JSON.parse(result[6] || 'true')
