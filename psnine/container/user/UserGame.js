@@ -55,13 +55,17 @@ class UserGame extends Component {
   componentWillMount = async () => {
     const { screenProps } = this.props
     const name = '游戏'
-    const params = {}
+    let params = {}
     screenProps.toolbar.forEach(({ text, url}) => {
-      if (text === name) {
+      // console.log(text, name, text.includes(name))
+      if (text.includes(name)) {
         params.text = text
         params.URL = url
       }
     })
+    if (!params.URL) {
+      params = { ...screenProps.toolbar[1] }
+    }
     this.URL = params.URL.includes('?page') ? params.URL : `${params.URL}?page=1`
     this.fetchMessages(params.URL, 'jump');
   }

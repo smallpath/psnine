@@ -182,8 +182,8 @@ export default class Home extends Component {
   renderDiary = (rowData, index) => {
     const { modeInfo } = this.props.screenProps
     const shouldShowImage = rowData.thumbs.length !== 0
-    const suffix = '<div>' + rowData.thumbs.map(text => `<img src="${text}">`) + '</div>'
-    const content = `<div>${rowData.content}${shouldShowImage ? suffix : ''}</div>`
+    const suffix = '<div>' + rowData.thumbs.map(text => `<img src="${text}">`).join('') + '</div>'
+    const content = `<div>${rowData.content}<br><br>${shouldShowImage ? suffix : ''}</div>`
 
     return (
       <TouchableNativeFeedback key={rowData.id || index}   onPress={() => {
@@ -211,7 +211,7 @@ export default class Home extends Component {
               stylesheet={styles}
               onImageLongPress={this.handleImageOnclick}
               imagePaddingOffset={30 + 10}
-              shouldForceInline={false}
+              shouldForceInline={true}
             />
           </View>
           <View style={{ 

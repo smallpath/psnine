@@ -298,6 +298,7 @@ export default class Home extends Component {
     const { params } = this.props.navigation.state
     const { marginTop } = this.state
     // console.log('re-rendered tab')
+    // console.log(this.state.data)
     return (
       <CreateUserTab screenProps={{
         modeInfo: modeInfo,

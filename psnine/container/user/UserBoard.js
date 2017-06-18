@@ -86,14 +86,17 @@ class UserBoard extends Component {
 
   componentWillMount = async () => {
     const { screenProps } = this.props
-    const name = '留言板'
-    const params = {}
+    const name = '评论'
+    let params = {}
     screenProps.toolbar.forEach(({ text, url}) => {
       if (text === name) {
         params.text = text
         params.URL = url
       }
     })
+    if (!params.URL) {
+      params = { ...screenProps.toolbar[2] }
+    }
     this.URL = params.URL
     this.preFetch();
   }
