@@ -38,7 +38,7 @@ let toolbarActions = [
 
 class UserBoard extends Component {
   static navigationOptions = {
-     tabBarLabel: '留言板'
+     tabBarLabel: '评论'
   }
   constructor(props) {
     super(props);

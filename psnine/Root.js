@@ -15,7 +15,7 @@ import {
   NetInfo
 } from 'react-native';
 import { Provider } from 'react-redux'
-import StackNavigator from './Navigator'
+import StackNavigator, { getCurrentRoute, tracker, format } from './Navigator'
 import ColorConfig, {
   accentColor,
   okColor,
@@ -31,6 +31,11 @@ const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 let toolbarHeight = 56
 const tipHeight = toolbarHeight * 0.8
 let backPressClickTimeStamp = 0
+
+const netInfoHandler = (reach) =>  {
+  // console.log('Change: ' + reach)
+  global.netInfo = reach
+}
 
 export default class Root extends React.Component {
   constructor(props) {
@@ -142,6 +147,7 @@ export default class Root extends React.Component {
       AsyncStorage.getItem('@Theme:isNightMode'),
       AsyncStorage.getItem('@Theme:loadImageWithoutWifi'),
       AsyncStorage.getItem('@Theme:colorTheme'),
+      AsyncStorage.getItem('@Theme:shouldSendGA')
     ]).then(result => {
       Object.assign(settingInfo, {
         tabMode: result[0] || this.state.settingInfo.tabMode,
@@ -151,6 +157,8 @@ export default class Root extends React.Component {
         colorTheme: result[5] || 'lightBlue'
       })
       global.loadImageWithoutWifi = JSON.parse(result[4]) || false
+      // console.log('==> GA', JSON.parse(result[6]), JSON.parse(result[6] || 'true'), result[6], typeof result[6])
+      global.shouldSendGA = JSON.parse(result[6] || 'true')
     })
     Animated.timing(this.state.progress, {
       toValue: 0.65,
@@ -184,14 +192,12 @@ export default class Root extends React.Component {
     });
     NetInfo.addEventListener(
       'change',
-      (reach) =>  {
-        // console.log('Change: ' + reach)
-        global.netInfo = reach
-      }
+      netInfoHandler
     );
   }
   componentWillUnmount() {
     Linking.removeEventListener('url', this._handleOpenURL);
+    NetInfo.removeEventListener('change', netInfoHandler)
   }
   _handleOpenURL(event) {
     // console.log(event.url);
@@ -256,6 +262,17 @@ export default class Root extends React.Component {
       colorTheme: this.state.colorTheme
     })
 
+    const onNavigationStateChange = global.shouldSendGA ? (prevState, currentState) => {
+      const currentScreen = getCurrentRoute(currentState);
+      const prevScreen = getCurrentRoute(prevState);
+
+      if (global.shouldSendGA && prevScreen && currentScreen && prevScreen.routeName !== currentScreen.routeName) {
+        const { routeName = 'Unknow'} = currentScreen
+        console.log(routeName)
+        tracker.trackScreenView(routeName)
+      }
+    } : null
+
     const child = isLoadingAsyncStorage ? (
       <View style={{ flex: 1, backgroundColor: 'rgb(0,208,192)'}}>
         <StatusBar translucent={false} backgroundColor={'rgb(0,208,192)'} barStyle={"light-content"} />
@@ -283,7 +300,7 @@ export default class Root extends React.Component {
         <StatusBar translucent={false} backgroundColor={modeInfo.deepColor} barStyle={"light-content"} />
         <StackNavigator
           uriPrefix={'p9://psnine.com/'}
-          onNavigationStateChange={null} screenProps={{
+          onNavigationStateChange={onNavigationStateChange} screenProps={{
             modeInfo,
             switchModeOnRoot: this.switchModeOnRoot,
             tipBarMarginBottom: this.state.tipBarMarginBottom,

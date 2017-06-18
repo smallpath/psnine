@@ -4,6 +4,8 @@ import {
   StackNavigator,
 } from 'react-navigation';
 
+import { GoogleAnalyticsTracker } from 'react-native-google-analytics-bridge';
+
 import App from './container/App.js'
 
 import Home from './container/user/Home'
@@ -270,9 +272,22 @@ Object.assign(Navigator.router, {
           break;
       }
     }
-
     return action
   }
 })
 
 export default Navigator
+
+export function getCurrentRoute(navigationState) {
+  if (!navigationState) {
+    return null;
+  }
+  const route = navigationState.routes[navigationState.index]
+  // dive into nested navigators
+  if (route.routes) {
+    return getCurrentRoute(route)
+  }
+  return route
+}
+
+export const tracker = new GoogleAnalyticsTracker('UA-101225387-1')

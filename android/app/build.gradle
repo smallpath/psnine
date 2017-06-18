@@ -129,10 +129,14 @@ android {
         }
     }
     buildTypes {
+        debug {
+            manifestPlaceholders = [excludeSystemAlertWindowPermission: "false"]
+        }
         release {
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
             signingConfig signingConfigs.release
+            manifestPlaceholders = [excludeSystemAlertWindowPermission: "true"]
         }
     }
     // applicationVariants are e.g. debug, release
@@ -158,6 +162,7 @@ dependencies {
     // 矢量图片
     compile project(':react-native-vector-icons')
     compile project(':lottie-react-native')
+    compile project(':react-native-google-analytics-bridge')
 
     // For animated GIF support
     compile 'com.facebook.fresco:animated-base-support:0.14.1'
