@@ -2,7 +2,7 @@ import palette from 'google-material-color'
 
 import * as common from './commonColor'
 
-const colorNameArr = Object.keys(palette.palette).filter(name => ['Black', 'White', 'Grey', 'Blue Grey', 'Brown'].includes(name) === false)
+const colorNameArr = Object.keys(palette.palette).filter(name => ['Black', 'White'].includes(name) === false)
 
 const dayColor = {
   backgroundColor: '#fff',
@@ -18,7 +18,13 @@ const nightColor = {
   titleTextColor: '#fff',
 }
 
-const getColor = palette.get.bind(palette)
+const prevGetColor = palette.get.bind(palette)
+const getColor = (...args) => {
+  const value = prevGetColor(...args)
+  if (value) return value
+  const safe = prevGetColor(args[0], '500')
+  return safe
+}
 const exports = {}
 
 const getAccentColorName = name => {

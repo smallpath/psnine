@@ -56,7 +56,10 @@ const mapper = {
   'yellow': '黄色',
   'amber': '琥珀色',
   'orange': '橘黄色',
-  'deepOrange': '深橘色'
+  'deepOrange': '深橘色',
+  'brown': '棕色',
+  'grey': '灰色',
+  'blueGrey': '蓝灰色'
 }
 
 class Theme extends Component {
