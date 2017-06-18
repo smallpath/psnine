@@ -221,12 +221,12 @@ export default class Root extends React.Component {
 
   toast = (text) => {
     const value = this.state.tipBarMarginBottom._value
-    if (value === 0) {
+    if (this.state.text === '') {
       this.setText(text)
     } else {
       setTimeout(() => {
         this.toast(text)
-      }, 3000)
+      }, 1000)
     }
   }
 
@@ -251,7 +251,11 @@ export default class Root extends React.Component {
           duration: 200,
           easing: Easing.ease,
           useNativeDriver: true
-        }).start(() => {
+        }).start(({ finished }) => {
+          // console.log(this.state.tipBarMarginBottom._value,
+          //   this.state.tipBarMarginBottom._offset,
+          //   finished)
+          this.state.tipBarMarginBottom.setValue(0)
           this.setState({
             text: ''
           })
@@ -281,7 +285,7 @@ export default class Root extends React.Component {
       accentColor: getAccentColorFromName(secondaryColor, isNightMode)
     })
 
-    console.log(modeInfo.accentColor)
+    // console.log(modeInfo.accentColor)
 
     const onNavigationStateChange = global.shouldSendGA ? (prevState, currentState) => {
       const currentScreen = getCurrentRoute(currentState);
@@ -289,7 +293,7 @@ export default class Root extends React.Component {
 
       if (global.shouldSendGA && prevScreen && currentScreen && prevScreen.routeName !== currentScreen.routeName) {
         const { routeName = 'Unknow'} = currentScreen
-        console.log(routeName)
+        // console.log(routeName)
         tracker.trackScreenView(routeName)
       }
     } : null
@@ -337,8 +341,8 @@ export default class Root extends React.Component {
           transform: [
             {
               translateY: this.state.tipBarMarginBottom.interpolate({
-                inputRange: [0, 1],
-                outputRange: [tipHeight, 0]
+                inputRange: [-1, 0, 1, 2],
+                outputRange: [tipHeight * 2, tipHeight, 0, -tipHeight]
               })
             }
           ]
