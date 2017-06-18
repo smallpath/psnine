@@ -40,7 +40,7 @@ class Message extends Component {
     navigation.goBack()
   }
 
-  _pressRow = (rowData) => {
+  _pressRow = (rowData, getParams = false) => {
     const { navigation } = this.props;
     let URL = rowData.url;
     let type = 'CommunityTopic'
@@ -60,12 +60,22 @@ class Message extends Component {
     } else if (URL.includes('/psnid/') && URL.includes('#comment')) {
       type = 'Home'
       replyType = ''
+      if (getParams) return [type, {
+        URL: URL.replace(/#comment-\d+$/, ''),
+        title: rowData.psnid
+      }]
       navigation.navigate(type, {
         URL: URL.replace(/#comment-\d+$/, ''),
         title: rowData.psnid
       });
       return
     }
+    if (getParams) return [type, {
+      URL,
+      title: '@' + rowData.psnid ,
+      type: replyType,
+      rowData
+    }]
     navigation.navigate(type, {
       URL,
       title: '@' + rowData.psnid ,
@@ -100,7 +110,19 @@ class Message extends Component {
       navigation,
       rowData,
       modeInfo,
-      onPress
+      onPress,
+      modalList: [{
+        text: '回复',
+        onPress: (rowData) => {
+          const [type, params] = this._pressRow(rowData, true)
+          navigation.navigate('Reply', {
+            type: params.type,
+            id: params.rowData.id,
+            at: rowData.psnid,
+            shouldSeeBackground: true
+          })
+        }
+      }]
     }} />
   }
 
