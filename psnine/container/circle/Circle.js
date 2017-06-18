@@ -258,8 +258,8 @@ export default class extends Component {
 
         { rowData.isLogined && rowData.isJoined && (
           <View style={{ justifyContent: 'space-around', alignItems: 'center', flexDirection: 'row', padding: 7}}>
-            <Button style={{flex:1}} title={'发基因'} color={modeInfo.standardColor} onPress={() => this.handlePress(0)}></Button>
-            {/*<Button style={{flex:1}} title={'基因列表'} color={modeInfo.standardColor} onPress={() => this.handlePress(1)}></Button>*/}
+            <Button style={{flex:1}} title={'发机因'} color={modeInfo.standardColor} onPress={() => this.handlePress(0)}></Button>
+            {/*<Button style={{flex:1}} title={'机因列表'} color={modeInfo.standardColor} onPress={() => this.handlePress(1)}></Button>*/}
             <Button style={{flex:1}} title={'玩家排行榜'} color={modeInfo.standardColor} onPress={() => this.handlePress(2)}></Button>
             <Button style={{flex:1}} title={'贵圈真乱'} color={modeInfo.accentColor} onPress={() => this.handlePress(3)}></Button>
           </View>

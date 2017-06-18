@@ -32,7 +32,7 @@ import HTMLView from '../../components/HtmlToView'
 import MyDialog from '../../components/Dialog'
 import Emotion from '../../components/Emotion'
 
-let title = '创建基因';
+let title = '创建机因';
 
 let toolbarActions = [
 
@@ -258,7 +258,7 @@ export default class NewTopic extends Component {
             navIconName="md-arrow-back"
             overflowIconName="md-more"
             iconColor={modeInfo.isNightMode ? '#000' : '#fff'}
-            title={params.URL ? '编辑基因' : '创建基因'}
+            title={params.URL ? '编辑机因' : '创建机因'}
             style={[styles.toolbar, { backgroundColor: modeInfo.standardColor }]}
             titleColor={modeInfo.isNightMode ? '#000' : '#fff'}
             subtitleColor={modeInfo.isNightMode ? '#000' : '#fff'}

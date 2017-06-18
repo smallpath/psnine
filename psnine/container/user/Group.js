@@ -99,7 +99,7 @@ export default class Group extends Component {
 
     const sections = Object.keys(data).filter(sectionName => data[sectionName].length !== 0).map(sectionName => {
       return {
-        key: sectionName === 'joinedList' ? '我加入的基因圈' : '我创建的基因圈',
+        key: sectionName === 'joinedList' ? '我加入的机因圈' : '我创建的机因圈',
         modeInfo,
         data: data[sectionName]
       }

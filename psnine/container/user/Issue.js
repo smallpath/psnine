@@ -211,7 +211,7 @@ export default class Issue extends Component {
           title={'发布'}
           subtitle={({ 
             'topic' : '社区',
-            'gene' : '基因',
+            'gene' : '机因',
             'battle' : '约战',
             'qa' : '问答',
             'trade' : '闲游',
@@ -289,7 +289,7 @@ export default class Issue extends Component {
                     onValueChange={this.onValueChange.bind(this, 'type')}>
                     <Picker.Item label="主题" value="topic" />
                     <Picker.Item label="问答" value="qa" />
-                    <Picker.Item label="基因" value="gene" />
+                    <Picker.Item label="机因" value="gene" />
                     <Picker.Item label="约战" value="battle" />
                     <Picker.Item label="交易" value="trade" />
                   </Picker>

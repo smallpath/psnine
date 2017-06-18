@@ -208,7 +208,7 @@ class Fav extends Component {
           title={'收藏'}
           subtitle={({ 
             'topic' : '社区',
-            'gene' : '基因',
+            'gene' : '机因',
             'psnid' : '用户',
             'qa' : '问答',
           })[this.state.finalType]}
@@ -284,7 +284,7 @@ class Fav extends Component {
                     selectedValue={this.state.type}
                     onValueChange={this.onValueChange.bind(this, 'type')}>
                     <Picker.Item label="主题" value="topic" />
-                    <Picker.Item label="基因" value="gene" />
+                    <Picker.Item label="机因" value="gene" />
                     <Picker.Item label="用户" value="psnid" />
                     <Picker.Item label="问答" value="qa" />
                   </Picker>

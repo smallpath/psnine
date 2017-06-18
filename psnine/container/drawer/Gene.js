@@ -25,8 +25,8 @@ import FooterProgress from '../shared/FooterProgress'
 
 class Gene extends Component {
   static navigationOptions = {
-    tabBarLabel: '基因',
-    drawerLabel: '基因'
+    tabBarLabel: '机因',
+    drawerLabel: '机因'
   };
 
   constructor(props) {
