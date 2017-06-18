@@ -54,16 +54,14 @@ export default class PhotoItem extends React.PureComponent {
   render() {
     const { modeInfo, rowData, index, onLongPress, navigation,
       isChecked = false, onPress, width = 150, ITEM_HEIGHT } = this.props
-
+    // console.log(ITEM_HEIGHT)
     return (
       <View key={rowData.id || index} style={{
-        borderBottomWidth: StyleSheet.hairlineWidth,
         alignSelf: 'flex-start',
         alignContent: 'flex-end',
         backgroundColor: modeInfo.backgroundColor,
-        borderBottomColor: modeInfo.brighterLevelOne,
-        width: SCREEN_WIDTH / 2,
-        height: SCREEN_WIDTH / 2,
+        width: ITEM_HEIGHT,
+        height: ITEM_HEIGHT,
       }}>
         <TouchableNativeFeedback
           onPress={
@@ -129,7 +127,8 @@ export default class PhotoItem extends React.PureComponent {
             }
             <Image
               source={{ uri: rowData.node.image.uri || rowData.href }}
-              style={[styles.avatar, { width: SCREEN_WIDTH / 2 - 10, height: SCREEN_WIDTH / 2 - 10 }]}
+              resizeMethod={'resize'}
+              style={[styles.avatar, { width: ITEM_HEIGHT - 2, height: ITEM_HEIGHT - 2 }]}
             />
           </View>
         </TouchableNativeFeedback>

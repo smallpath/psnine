@@ -160,7 +160,7 @@ export default class Photo extends Component {
       navigation,
       rowData,
       modeInfo,
-      ITEM_HEIGHT,
+      ITEM_HEIGHT: SCREEN_WIDTH / 3,
       onPress: () => {
         Alert.alert(
           '图片上传',
@@ -237,7 +237,7 @@ export default class Photo extends Component {
           onEndReachedThreshold={0.5}
           extraData={modeInfo}
           windowSize={21}
-          numColumns={2}
+          numColumns={3}
           columnWrapperStyle={{
             flex:1
           }}
