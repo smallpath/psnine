@@ -114,7 +114,7 @@ const Web = props => {
 };
 
 export default function htmlToElement(rawHtml, opts, done) {
-  function domToElement(dom, parent, inInsideView = true, depth = 0) {
+  function domToElement(dom, parent, inInsideView = true, depth = 0, parentIframe = 0) {
     
     // debug开关函数
     const log = () =>{}
@@ -301,6 +301,7 @@ export default function htmlToElement(rawHtml, opts, done) {
               });
           }
           log('渲染Img标签', '此时是否在View中?', inInsideView, ImageComponent === ResizableImgComponent)
+          // console.log(parentIframe)
           return (
             <ImageComponent key={index} attribs={node.attribs}
                 isLoading={opts.shouldShowLoadingIndicator}
@@ -308,7 +309,7 @@ export default function htmlToElement(rawHtml, opts, done) {
                 alignCenter={opts.alignCenter}
                 modeInfo={opts.modeInfo}
                 imageArr={opts.imageArr}
-                imagePaddingOffset={opts.imagePaddingOffset} />
+                imagePaddingOffset={opts.imagePaddingOffset + parentIframe} />
             );
         } else if (node.name === 'embed' || node.name === 'iframe') {
           if (inInsideView) {
@@ -370,6 +371,7 @@ export default function htmlToElement(rawHtml, opts, done) {
 
 
         const classStyle = {}
+        let isIframe = parentIframe || 0
         if (node.name === 'div') {
           if (node.attribs.align === 'center') {
             classStyle.alignItems = 'center'
@@ -399,6 +401,7 @@ export default function htmlToElement(rawHtml, opts, done) {
                   classStyle.marginTop = 2
                   classStyle.marginBottom = 2
                   classStyle.backgroundColor = opts.modeInfo.backgroundColor
+                  isIframe = 104
                   break;
               }
             }
@@ -457,7 +460,7 @@ export default function htmlToElement(rawHtml, opts, done) {
           log('渲染View组件', node.name, isNestedImage, depth)
           return (
             <View key={index} style={flattenStyles}>
-              {domToElement(node.children, node, inInsideView, depth+1)}
+              {domToElement(node.children, node, inInsideView, depth+1, isIframe)}
               {shouldSetLineAfter && linebreakAfter && <Text key={index} onPress={linkPressHandler} style={parent ? opts.styles[parent.name] : null}>{linebreakAfter}</Text>}
             </View>
           )
@@ -466,7 +469,7 @@ export default function htmlToElement(rawHtml, opts, done) {
           let inlineNode = renderInlineNode(index, [], inInsideView)
 
           return (
-            <Text key={index} style={flattenStyles}>{domToElement(node.children, node, false, depth+1)}
+            <Text key={index} style={flattenStyles}>{domToElement(node.children, node, false, depth+1, isIframe)}
               {inlineNode.length !== 0 && inlineNode}
             </Text>
           )
