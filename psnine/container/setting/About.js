@@ -36,6 +36,7 @@ class About extends Component {
       checkVersionURL: 'https://api.github.com/repos/smallpath/psnine/git/refs/tags',
       tagURL: 'https://github.com/smallpath/psnine/releases/tag',
       version: packages['version'],
+      backup: 'https://fir.im/mf24',
       icon: false
     }
   }
@@ -64,17 +65,26 @@ class About extends Component {
     let supported = await Linking.canOpenURL(this.state.sourceCodeURL);
     try {
       if (supported)
-        Linking.openURL(this.state.sourceCodeURL);
+        await Linking.openURL(this.state.sourceCodeURL);
       else
         global.toast && global.toast(`未找到浏览器, 如果您使用了冰箱, 请先解冻浏览器`, 2000);
     } catch (err) { }
   }
 
+  goToBackup = async () => {
+    let supported = await Linking.canOpenURL(this.state.backup);
+    try {
+      if (supported)
+        await Linking.openURL(this.state.backup);
+      else
+        global.toast && global.toast(`未找到浏览器, 如果您使用了冰箱, 请先解冻浏览器`, 2000);
+    } catch (err) { }
+  }
   goToRelease = async () => {
     let supported = await Linking.canOpenURL(this.state.sourceCodeURL + '/releases');
     try {
       if (supported)
-        Linking.openURL(this.state.sourceCodeURL + '/releases');
+        await Linking.openURL(this.state.sourceCodeURL + '/releases');
       else
         global.toast && global.toast(`未找到浏览器, 如果您使用了冰箱, 请先解冻浏览器`, 2000);
     } catch (err) { }
@@ -142,6 +152,11 @@ class About extends Component {
         title: '更新日志',
         desc: this.state.sourceCodeURL + '/releases',
         onPress: this.goToRelease
+      },
+      {
+        title: '备用下载地址',
+        desc: this.state.backup,
+        onPress: this.goToBackup
       },
     ]
     return (
