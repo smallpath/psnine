@@ -1,7 +1,7 @@
 import * as ActionTypes from '../constants/actionTypes';
 
 const initialState = {
-  segmentedIndex: 0,
+  segmentedIndex: 1,
   communityType: '',
   geneType: '',
   circleType: 'all',

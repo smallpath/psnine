@@ -11,6 +11,7 @@ import {
 
 import { changeSegmentIndex } from '../actions/app';
 
+import Recommend from './drawer/Recommend';
 import Community from './drawer/Community';
 import Qa from './drawer/Qa';
 import Game from './drawer/Game';
@@ -31,6 +32,9 @@ const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
 
 const RightDrawer = DrawerNavigator({
+  Recommend: {
+    screen: Recommend,
+  },
   Community: {
     screen: Community,
   },

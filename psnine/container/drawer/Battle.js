@@ -111,7 +111,7 @@ class Battle extends Component {
         data: data[sectionName]
       }
     });
-
+    // console.log('?? battle rendered')
     return (
       <AnimatedSectionList
         enableVirtualization={false}

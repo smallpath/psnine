@@ -109,7 +109,7 @@ class Game extends Component {
 
   shouldOnRefreshForSearch = false
   componentWillReceiveProps = (nextProps) => {
-    let shouldCall = nextProps.segmentedIndex === 3
+    let shouldCall = nextProps.segmentedIndex === 4
     let empty = () => {}
     let cb = empty
     if (this.props.screenProps.modeInfo.themeName != nextProps.screenProps.modeInfo.themeName) {
@@ -150,8 +150,8 @@ class Game extends Component {
       if (this.shouldOnRefreshForSearch === true) this.shouldOnRefreshForSearch = false
       return true
     }
-    if (nextProps.segmentedIndex !== 3) return false
-    if (this.props.segmentedIndex !== 3) {
+    if (nextProps.segmentedIndex !== 4) return false
+    if (this.props.segmentedIndex !== 4) {
       if (this.shouldOnRefreshForSearch === true) {
         this.shouldOnRefreshForSearch = false
         return true

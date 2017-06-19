@@ -23,6 +23,7 @@ import {
 
 import { changeSegmentIndex } from '../actions/app';
 
+import Recommend from './drawer/Recommend';
 import Community from './drawer/Community';
 import Qa from './drawer/Qa';
 import Game from './drawer/Game';
@@ -72,6 +73,9 @@ export default class TabContainer extends Component {
 }
 
 const Tabs = TabNavigator({
+  Recommend: {
+    screen: Recommend,
+  },
   Community: {
     screen: Community,
   },
@@ -100,7 +104,7 @@ const Tabs = TabNavigator({
     screen: Trade,
   }
 }, {
-  // initialRouteName: 'Circle',
+  initialRouteName: 'Community',
   tabBarComponent: props => {
     const { modeInfo } = props.screenProps
     const titleTextColor = modeInfo.modeInfo ? '#000' : '#fff'

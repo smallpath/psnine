@@ -124,7 +124,7 @@ class Store extends Component {
 
   shouldOnRefreshForSearch = false
   componentWillReceiveProps = (nextProps) => {
-    let shouldCall = nextProps.segmentedIndex === 7
+    let shouldCall = nextProps.segmentedIndex === 8
     let empty = () => {}
     let cb = empty
     if (this.props.screenProps.modeInfo.themeName != nextProps.screenProps.modeInfo.themeName) {
@@ -186,8 +186,8 @@ class Store extends Component {
       if (this.shouldOnRefreshForSearch === true) this.shouldOnRefreshForSearch = false
       return true
     }
-    if (nextProps.segmentedIndex !== 7) return false
-    if (this.props.segmentedIndex !== 7) {
+    if (nextProps.segmentedIndex !== 8) return false
+    if (this.props.segmentedIndex !== 8) {
       if (this.shouldOnRefreshForSearch === true) {
         this.shouldOnRefreshForSearch = false
         return true

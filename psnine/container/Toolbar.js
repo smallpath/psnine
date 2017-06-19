@@ -53,6 +53,10 @@ let indexWithoutFloatButton = [2];
 
 const searchAction = { title: '搜索', iconName: 'md-search', value: '', show: 'always' }
 
+let recommendActions = [
+  searchAction
+]
+
 let communityActions = [
   { title: '新建', iconName: 'md-create', value: '', show: 'always', iconSize: 22 },
   searchAction,
@@ -112,7 +116,7 @@ let tradeActions = [
   searchAction
 ]
 
-let toolbarActions = [communityActions, qaActions, geneActions, gameActions, battleActions, rankActions, circleActions, storeActions, tradeActions]
+let toolbarActions = [recommendActions, communityActions, qaActions, geneActions, gameActions, battleActions, rankActions, circleActions, storeActions, tradeActions]
 
 let titlesArr = ["社区", "问答", "游戏", "约战", "机因"];
 
@@ -225,7 +229,7 @@ class Toolbar extends Component {
   onActionSelected = (index) => {
     const { segmentedIndex } = this.props.app;
     const { dispatch } = this.props;
-    if (segmentedIndex === 0) {
+    if (segmentedIndex === 1) {
       if (index !== 0 && index !== 1) {
         let type = toolbarActions[segmentedIndex][index].value;
         dispatch(changeCommunityType(type));
@@ -233,26 +237,26 @@ class Toolbar extends Component {
         index === 1 && this._onSearchClicked()
         index === 0 && this.props.navigation.navigate('NewTopic', {})
       }
-    } else if (segmentedIndex === 1) {
+    } else if (segmentedIndex === 2) {
       index === 0 && this.props.navigation.navigate('NewQa', {})
       index === 1 && this._onSearchClicked()
-    } else if (segmentedIndex === 2) {
+    } else if (segmentedIndex === 3) {
       if (index !== 0) {
         let type = toolbarActions[segmentedIndex][index].value;
         dispatch(changeGeneType(type));
       } else {
         this._onSearchClicked()
       }
-    } else if (segmentedIndex === 6) {  
+    } else if (segmentedIndex === 7) {  
       if (index !== 0) {
         let type = toolbarActions[segmentedIndex][index].value;
         dispatch(changeCircleType(type));
       } else {
         this._onSearchClicked()
       }
-    } else if (segmentedIndex === 4) {
+    } else if (segmentedIndex === 5) {
       this.props.navigation.navigate('NewBattle', {})
-    } else if (segmentedIndex === 8) {
+    } else if (segmentedIndex === 9) {
       index === 0 && this.props.navigation.navigate('NewTrade', {})
       index === 1 && this._onSearchClicked()
     } else {

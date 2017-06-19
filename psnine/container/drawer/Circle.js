@@ -46,7 +46,7 @@ class Circle extends Component {
   shouldOnRefreshForSearch = false
 
   componentWillReceiveProps = (nextProps) => {
-    let shouldCall = nextProps.segmentedIndex === 6
+    let shouldCall = nextProps.segmentedIndex === 7
     let empty = () => {}
     let cb = empty
     if (this.props.screenProps.circleType != nextProps.screenProps.circleType) {
@@ -105,8 +105,8 @@ class Circle extends Component {
       if (this.shouldOnRefreshForSearch === true) this.shouldOnRefreshForSearch = false
       return true
     }
-    if (nextProps.segmentedIndex !== 6) return false
-    if (this.props.segmentedIndex !== 6) {
+    if (nextProps.segmentedIndex !== 7) return false
+    if (this.props.segmentedIndex !== 7) {
       if (this.shouldOnRefreshForSearch === true) {
         this.shouldOnRefreshForSearch = false
         return true

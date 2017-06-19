@@ -94,7 +94,7 @@ class Qa extends Component {
 
   shouldOnRefreshForSearch = false
   componentWillReceiveProps = (nextProps) => {
-    let shouldCall = nextProps.segmentedIndex === 1
+    let shouldCall = nextProps.segmentedIndex === 2
     let empty = () => {}
     let cb = empty
     if (this.props.screenProps.modeInfo.themeName != nextProps.screenProps.modeInfo.themeName) {
@@ -143,8 +143,8 @@ class Qa extends Component {
       if (this.shouldOnRefreshForSearch === true) this.shouldOnRefreshForSearch = false
       return true
     }
-    if (nextProps.segmentedIndex !== 1) return false
-    if (this.props.segmentedIndex !== 1) {
+    if (nextProps.segmentedIndex !== 2) return false
+    if (this.props.segmentedIndex !== 2) {
       if (this.shouldOnRefreshForSearch === true) {
         this.shouldOnRefreshForSearch = false
         return true

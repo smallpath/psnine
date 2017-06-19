@@ -48,10 +48,11 @@ class Community extends Component {
   shouldOnRefreshForSearch = false
 
   componentWillReceiveProps = (nextProps) => {
-    let shouldCall = nextProps.segmentedIndex === 0
+    let shouldCall = nextProps.segmentedIndex === 1
     let empty = () => {}
     let cb = empty
     if (this.props.screenProps.communityType != nextProps.screenProps.communityType) {
+      shouldCall = true
       cb = () => this._onRefresh(nextProps.screenProps.communityType);
     } else if (this.props.screenProps.modeInfo.themeName != nextProps.screenProps.modeInfo.themeName) {
       cb = () => {}
@@ -78,7 +79,7 @@ class Community extends Component {
             isRefreshing: false,
             isLoadingMore: false
           }, () => {
-            // this.props.community.topicPage === 1 && this.flatlist.getNode().scrollToOffset({ offset: 0, animated: true })
+            // this.props.community.topicPage === 1 && this.flatlist.getNode().scrollToOffset({ offset: 1, animated: true })
             // if (item.topicPage > 1) {
             //   const max = item.topics.length / item.topicPage
             //   const target = max * (item.topicPage - 1)
@@ -102,8 +103,8 @@ class Community extends Component {
       if (this.shouldOnRefreshForSearch === true) this.shouldOnRefreshForSearch = false
       return true
     }
-    if (nextProps.segmentedIndex !== 0) return false
-    if (this.props.segmentedIndex !== 0) {
+    if (nextProps.segmentedIndex !== 1) return false
+    if (this.props.segmentedIndex !== 1) {
       if (this.shouldOnRefreshForSearch === true) {
         this.shouldOnRefreshForSearch = false
         return true
