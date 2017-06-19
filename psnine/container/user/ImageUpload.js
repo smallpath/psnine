@@ -237,7 +237,7 @@ export default class Photo extends Component {
           onEndReachedThreshold={0.5}
           extraData={modeInfo}
           windowSize={21}
-          numColumns={3}
+          numColumns={2}
           columnWrapperStyle={{
             flex:1
           }}

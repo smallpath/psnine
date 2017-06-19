@@ -65,7 +65,10 @@ class UserGame extends Component {
       }
     })
     if (!params.URL) {
-      params = { ...screenProps.toolbar[4] }
+      params = { 
+        text: '主题',
+        URL: screenProps.toolbar[0].url
+      }
     }
     this.URL = params.URL.includes('?page') ? params.URL : `${params.URL}?page=1`
     this.fetchMessages(params.URL, 'jump');
@@ -118,7 +121,7 @@ class UserGame extends Component {
             }
             componentDidFocus()
           });
-        })
+        }).catch(err => {})
       })
     })
   }

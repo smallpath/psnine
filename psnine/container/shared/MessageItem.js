@@ -68,10 +68,10 @@ export default class ComplexComment extends React.PureComponent {
           background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
         >
           <View style={{ flex: 1, flexDirection: 'row', padding: 12 }}>
-            <Image
-              source={{ uri: rowData.img }}
-              style={styles.avatar}
-            />
+            { rowData.avatar && <Image
+              source={{ uri: rowData.avatar }}
+              style={styles.avatar} 
+            /> || undefined }
             {
               this.state.modalVisible && modalList.length && (
                 <MyDialog modeInfo={modeInfo}

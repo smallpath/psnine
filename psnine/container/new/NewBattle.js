@@ -384,7 +384,6 @@ export default class NewTopic extends Component {
               onSelectionChange={this.onSelectionChange}
               blurOnSubmit={true}
               numberOfLines={100}
-              selection={this.state.selection}
               ref={ref => this.content = ref}
               onChange={({ nativeEvent }) => { this.setState({ content: nativeEvent.text }) }}
               value={this.state.content}

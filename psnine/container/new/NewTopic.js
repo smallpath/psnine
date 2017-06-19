@@ -306,7 +306,6 @@ export default class NewTopic extends Component {
               returnKeyType='go'
               returnKeyLabel='go'
               onSelectionChange={this.onSelectionChange}
-              selection={this.state.selection}
               blurOnSubmit={true}
               numberOfLines={100}
               ref={ref => this.content = ref}

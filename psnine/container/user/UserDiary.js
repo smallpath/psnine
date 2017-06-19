@@ -72,7 +72,10 @@ class UserBoard extends Component {
       }
     })
     if (!params.URL) {
-      params = { ...screenProps.toolbar[2] }
+      params = { 
+        text: '日志',
+        URL: screenProps.toolbar[0].url + '/diary' 
+      }
     }
     this.URL = params.URL
     this.preFetch();

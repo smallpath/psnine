@@ -60,8 +60,8 @@ export default class PhotoItem extends React.PureComponent {
         alignSelf: 'flex-start',
         alignContent: 'flex-end',
         backgroundColor: modeInfo.backgroundColor,
-        width: ITEM_HEIGHT,
-        height: ITEM_HEIGHT,
+        width: SCREEN_WIDTH / 2,
+        height: SCREEN_WIDTH / 2,
       }}>
         <TouchableNativeFeedback
           onPress={
@@ -127,8 +127,8 @@ export default class PhotoItem extends React.PureComponent {
             }
             <Image
               source={{ uri: rowData.node.image.uri || rowData.href }}
-              resizeMethod={'resize'}
-              style={[styles.avatar, { width: ITEM_HEIGHT - 2, height: ITEM_HEIGHT - 2 }]}
+              resizeMethod={'scale'}
+              style={[styles.avatar, { width: SCREEN_WIDTH / 2 - 10, height: SCREEN_WIDTH / 2 - 10 }]}
             />
           </View>
         </TouchableNativeFeedback>

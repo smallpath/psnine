@@ -182,6 +182,32 @@ export default class Custom extends Component {
       </View>
     )
   }
+  renderTheme = ({ item: rowData, index}) => {
+    const { modeInfo } = this.props.screenProps
+    const { ITEM_HEIGHT } = this
+    const { navigation } = this.props
+    // console.log(index, rowData)
+    const topicopen = this.state.data.form.topicopen
+    return (
+      <View style={{ flex: 1, padding: 10 }}>
+        <Button title={'显示主题'} color={topicopen === '0' ? modeInfo.standardColor : modeInfo.standardTextColor}
+          onPress={() => {
+            Alert.alert(
+              '个性设定',
+              `是否在个人主页中${topicopen === '0' ? '隐藏' : '显示'}主题?`,
+              [
+                {text: '取消', style: 'cancel'},
+                {text: '确定', onPress: () => this.setSetting({
+                  topicopen: topicopen === '0' ? '1' : '0'
+                })}
+              ]
+            )
+          }} style={{
+            flex: 1
+          }}/>
+      </View>
+    )
+  }
 
   renderBG = ({ item: rowData, index}) => {
     const { modeInfo } = this.props.screenProps
@@ -233,7 +259,7 @@ export default class Custom extends Component {
 
     let keys = Object.keys(data);
 
-    const sections = data.sections ? data.sections.map((item, index) => ({
+    let sections = data.sections ? data.sections.map((item, index) => ({
       key: item,
       modeInfo,
       data: (() => {
@@ -256,16 +282,26 @@ export default class Custom extends Component {
               text: '自定义头像'
             }
           ]]
+        } else if (index === 3) {
+          return [[
+            {
+              text: '显示主题'
+            }
+          ]]
         }
       })(),
       renderItem: [
         this.renderBG,
         this.renderShow,
+        this.renderTheme,
         this.renderVIP
       ][index]
     })) : []
-    if (!this.state.data.isVIP) {
-      sections.length = 1
+    if (!this.state.data.isVIP && data.sections) {
+      sections = [
+        sections[0],
+        sections[2]
+      ]
     }
 
     let NUM_SECTIONS = sections.length
