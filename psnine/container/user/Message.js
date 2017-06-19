@@ -9,7 +9,8 @@ import {
   TouchableNativeFeedback,
   RefreshControl,
   InteractionManager,
-  FlatList
+  FlatList,
+  Alert
 } from 'react-native';
 
 import HTMLView from '../../components/HtmlToView'
@@ -57,15 +58,15 @@ class Message extends Component {
     } else if (URL.includes('/trade/')) {
       type = 'TradeTopic'
       replyType = 'trade'
-    } else if (URL.includes('/psnid/') && URL.includes('#comment')) {
+    } else if (URL.includes('/psnid/') && URL.includes('comment')) {
       type = 'Home'
       replyType = ''
       if (getParams) return [type, {
-        URL: URL.replace(/#comment-\d+$/, ''),
+        URL: URL.replace(/\/comment(.*?)$/, ''),
         title: rowData.psnid
       }]
       navigation.navigate(type, {
-        URL: URL.replace(/#comment-\d+$/, ''),
+        URL: URL.replace(/\/comment(.*?)$/, ''),
         title: rowData.psnid
       });
       return
@@ -117,6 +118,7 @@ class Message extends Component {
         text: '回复',
         onPress: (rowData) => {
           const [type, params] = this._pressRow(rowData, true)
+          if (type === 'Home') return Alert.alert('提示', '留言板暂不支持快捷回复')
           navigation.navigate('Reply', {
             type: params.type,
             id: params.rowData.id,

@@ -38,7 +38,7 @@ let toolbarActions = [
 
 class UserBoard extends Component {
   static navigationOptions = {
-     tabBarLabel: '评论'
+     tabBarLabel: '留言板'
   }
   constructor(props) {
     super(props);
@@ -86,7 +86,7 @@ class UserBoard extends Component {
 
   componentWillMount = async () => {
     const { screenProps } = this.props
-    const name = '评论'
+    const name = '留言板'
     let params = {}
     screenProps.toolbar.forEach(({ text, url}) => {
       if (text === name) {
@@ -95,7 +95,7 @@ class UserBoard extends Component {
       }
     })
     if (!params.URL) {
-      params = { ...screenProps.toolbar[2] }
+      params = { ...screenProps.toolbar[3] }
     }
     this.URL = params.URL
     this.preFetch();
