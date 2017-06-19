@@ -22,10 +22,17 @@ import {
   TabNavigator
 } from 'react-navigation';
 
+let screen = Dimensions.get('window');
+
+const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = screen;
+
 import HomeProfile from './HomeProfile'
 import UserGame from './UserGame'
 import UserBoard from './UserBoard'
 import UserCircle from './UserCircle'
+import UserDiary from './UserDiary'
+import UserTopic from './UserTopic'
+import UserGene from './UserGene'
 
 const DefaultTabBar = TabNavigator.Presets.Default.tabBarComponent;
 
@@ -43,8 +50,17 @@ const container = {
   UserGame: {
     screen: UserGame
   },
+  UserDiary: {
+    screen: UserDiary
+  },
   UserBoard: {
     screen: UserBoard
+  },
+  UserTopic: {
+    screen: UserTopic
+  },
+  UserGene: {
+    screen: UserGene
   },
   UserCircle: {
     screen: UserCircle
@@ -62,14 +78,8 @@ const Tab = TabNavigator(container, {
         indicatorStyle={{
           backgroundColor: modeInfo.accentColor,
         }}
-        scrollEnabled={false}
-        tabStyle={{
-          height: 40,
-          elevation: 0
-        }}
         style={{
-          elevation: 0,
-          height: 40,
+          ...props.style,
           backgroundColor: modeInfo.backgroundColor
         }}
       />
@@ -77,7 +87,20 @@ const Tab = TabNavigator(container, {
   },
   lazy: true,
   animationEnabled: false,
-  backBehavior: 'none'
+  scrollEnabled: true,
+  backBehavior: 'none',
+  tabBarOptions: {
+    scrollEnabled: true,
+    animationEnabled: false,
+    tabStyle: {
+      height: 40,
+      width: SCREEN_WIDTH / 4
+    },
+    style: {
+      elevation: 0,
+      height: 40
+    }
+  }
 })
 
 export default class TabContainer extends React.PureComponent {
