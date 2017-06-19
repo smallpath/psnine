@@ -119,7 +119,7 @@ class UserBoard extends Component {
                   toolbar: toolbarActions,
                   toolbarActions: this.onActionSelected,
                   componentDidFocus: {
-                    index: 2,
+                    index: 3,
                     handler: componentDidFocus
                   }
                 })

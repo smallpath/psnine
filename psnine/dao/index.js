@@ -41,7 +41,9 @@ import qaEditParser from '../parser/edit/qa'
 import geneEditParser from '../parser/edit/gene'
 import battleEditParser from '../parser/edit/battle'
 import tradeEditParser from '../parser/edit/trade'
-
+import userDiaryParser from '../parser/user/diary'
+import userTopicParser from '../parser/user/topic'
+import userGeneParser from '../parser/user/gene'
 
 const safeFetch = function(reqUrl, type = 'text') {
   return new Promise((resolve, reject) => {
@@ -80,6 +82,12 @@ export const getGameAPI = uri => safeFetch(uri).then(res => gameParser(res))
 export const getTrophyAPI = uri => safeFetch(uri).then(res => trophyParser(res))
 
 export const getUserBoardCommentAPI = uri => safeFetch(uri).then(res => userBoardParser(res))
+
+export const getUserDiaryAPI = uri => safeFetch(uri).then(res => userDiaryParser(res))
+
+export const getUserTopicAPI = uri => safeFetch(uri).then(res => userTopicParser(res))
+
+export const getUserGeneAPI = uri => safeFetch(uri).then(res => userGeneParser(res))
 
 export const getFavoriteAPI = (uri, type = 'topic') => safeFetch(`${uri}&channel=${type}`).then(res => favoriteParser(res, type))
 

@@ -92,6 +92,7 @@ class UserGame extends Component {
             this.pageArr = [thisPage]
           }
           this.pageArr = this.pageArr.sort((a, b) => a - b)
+          
           this.setState({
             list: thisList,
             numberPerPage: data.numberPerPage,

@@ -105,7 +105,7 @@ class UserGame extends Component {
                   toolbar: [],
                   toolbarActions: this.onActionSelected,
                   componentDidFocus: {
-                    index: 3,
+                    index: 6,
                     handler: componentDidFocus
                   }
                 })

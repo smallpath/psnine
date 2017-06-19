@@ -24,9 +24,10 @@ import { connect } from 'react-redux';
 import { standardColor, nodeColor, idColor } from '../../constants/colorConfig';
 
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { getMyGameAPI } from '../../dao';
+import { getUserGeneAPI } from '../../dao';
 
 import UserGameItem from '../shared/UserGameItem'
+import TopicItem from '../shared/GeneItem'
 import FooterProgress from '../shared/FooterProgress'
 
 let toolbarActions = [
@@ -54,7 +55,7 @@ class UserGame extends Component {
 
   componentWillMount = async () => {
     const { screenProps } = this.props
-    const name = '游戏'
+    const name = '机因'
     let params = {}
     screenProps.toolbar.forEach(({ text, url}) => {
       // console.log(text, name, text.includes(name))
@@ -64,7 +65,7 @@ class UserGame extends Component {
       }
     })
     if (!params.URL) {
-      params = { ...screenProps.toolbar[1] }
+      params = { ...screenProps.toolbar[5] }
     }
     this.URL = params.URL.includes('?page') ? params.URL : `${params.URL}?page=1`
     this.fetchMessages(params.URL, 'jump');
@@ -75,7 +76,7 @@ class UserGame extends Component {
       [type === 'down' ? 'isLoadingMore' : 'isRefreshing'] : true
     }, () => {
       InteractionManager.runAfterInteractions(() => {
-        getMyGameAPI(url).then(data => {
+        getUserGeneAPI(url).then(data => {
           let thisList = []
           const thisPage = parseInt((url.match(/\?page=(\d+)/) || [0, 1])[1])
           let cb = () => { }
@@ -108,7 +109,7 @@ class UserGame extends Component {
                   toolbar: toolbarActions,
                   toolbarActions: this.onActionSelected,
                   componentDidFocus: {
-                    index: 1,
+                    index: 5,
                     handler: componentDidFocus
                   }
                 })
@@ -161,11 +162,10 @@ class UserGame extends Component {
   _renderItem = ({ item: rowData, index }) => {
     const { modeInfo, navigation } = this.props.screenProps
     const { ITEM_HEIGHT } = this
-    return <UserGameItem {...{
+    return <TopicItem {...{
       navigation,
       rowData,
-      modeInfo,
-      ITEM_HEIGHT
+      modeInfo
     }} />
   }
 
@@ -197,7 +197,7 @@ class UserGame extends Component {
           }
           ListFooterComponent={() => <FooterProgress isLoadingMore={this.state.isLoadingMore} modeInfo={modeInfo}/>}
           data={this.state.list}
-          keyExtractor={(item, index) => item.href}
+          keyExtractor={(item, index) => item.id}
           renderItem={this._renderItem}
           onEndReached={this._onEndReached}
           onEndReachedThreshold={0.5}

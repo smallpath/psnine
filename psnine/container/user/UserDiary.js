@@ -25,16 +25,15 @@ import { connect } from 'react-redux';
 import { standardColor, nodeColor, idColor } from '../../constants/colorConfig';
 
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { getUserBoardCommentAPI } from '../../dao';
+import { getUserDiaryAPI } from '../../dao';
 import ComplexComment from '../shared/ComplexComment'
+import DiaryItem from '../shared/DiaryItem'
 
 const ds = new ListView.DataSource({
   rowHasChanged: (row1, row2) => row1.href !== row2.href,
 });
 
-let toolbarActions = [
-  { title: '回复', iconName: 'md-create', iconSize: 22, show: 'always' },
-];
+let toolbarActions = [];
 
 class UserBoard extends Component {
   static navigationOptions = {
@@ -44,7 +43,7 @@ class UserBoard extends Component {
     super(props);
     this.state = {
       data: false,
-      commentList: [],
+      diary: [],
       isLoading: true,
       modalVisible: false,
       sliderValue: 1
@@ -52,29 +51,7 @@ class UserBoard extends Component {
   }
 
   onActionSelected = (index) => {
-    const { psnid } = this.props.screenProps
-
-    switch (index) {
-      case 0:
-        if (this.isReplyShowing === true) return
-        const cb = () => {
-          this.isReplyShowing = true
-          this.props.screenProps.navigation.navigate('Reply', {
-            type: 'psnid',
-            id: psnid,
-            callback: () => {
-              this.preFetch()
-              this.isReplyShowing = false
-            },
-            shouldSeeBackground: true
-          })
-        }
-        cb()
-        return;
-      case 1:
-        this.preFetch()
-        return
-    }
+    
   }
 
 
@@ -86,7 +63,7 @@ class UserBoard extends Component {
 
   componentWillMount = async () => {
     const { screenProps } = this.props
-    const name = '留言板'
+    const name = '日志'
     let params = {}
     screenProps.toolbar.forEach(({ text, url}) => {
       if (text === name) {
@@ -95,7 +72,7 @@ class UserBoard extends Component {
       }
     })
     if (!params.URL) {
-      params = { ...screenProps.toolbar[3] }
+      params = { ...screenProps.toolbar[2] }
     }
     this.URL = params.URL
     this.preFetch();
@@ -106,11 +83,11 @@ class UserBoard extends Component {
       isLoading: true
     }, () => {
       InteractionManager.runAfterInteractions(() => {
-        getUserBoardCommentAPI(this.URL).then(data => {
+        getUserDiaryAPI(this.URL).then(data => {
           // console.log(data)
           this.setState({
             data,
-            commentList: data.commentList,
+            diary: data.diary,
             isLoading: false
           }, () => {
             const componentDidFocus = () => {
@@ -132,19 +109,18 @@ class UserBoard extends Component {
     })
   }
 
-  hasComment = false
-  renderComment = (rowData, index) => {
+  renderDiary = (rowData, index) => {
     const { modeInfo, navigation } = this.props.screenProps
-    return (
-      <ComplexComment key={rowData.id || index} {...{
-        navigation,
-        rowData,
-        modeInfo,
-        onLongPress: () => {},
-        preFetch: this.preFetch,
-        index
-      }} />
-    )
+    const shouldShowImage = rowData.thumbs.length !== 0
+    const suffix = '<div>' + rowData.thumbs.map(text => `<img src="${text}">`).join('') + '</div>'
+    const content = `<div>${rowData.content}<br><br>${shouldShowImage ? suffix : ''}</div>`
+    // console.log('here', typeof DiaryItem)
+    return <DiaryItem {...{
+      navigation,
+      rowData,
+      modeInfo,
+      content
+    }} />
   }
 
 
@@ -178,10 +154,10 @@ class UserBoard extends Component {
           backgroundColor: modeInfo.backgroundColor
         }}
           ref={flatlist => this.flatlist = flatlist}
-          data={this.state.commentList}
+          data={this.state.diary}
           keyExtractor={(item, index) => item.id || index}
           renderItem={({ item, index }) => {
-            return this.renderComment(item, index)
+            return this.renderDiary(item, index)
           }}
           extraData={this.state}
           windowSize={999}
