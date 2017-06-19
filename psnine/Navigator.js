@@ -33,6 +33,7 @@ import Circle from './container/circle/Circle'
 import CircleRank from './container/circle/CircleRank'
 
 import Reply from './container/new/Reply'
+import Toolbar from './container/new/Toolbar'
 import NewTopic from './container/new/NewTopic'
 import NewBattle from './container/new/NewBattle'
 import NewGene from './container/new/NewGene'
@@ -184,6 +185,9 @@ const Navigator = StackNavigator({
   },
   NewTrade: {
     screen: NewTrade
+  },
+  Toolbar: {
+    screen: Toolbar
   },
   NewGene: {
     screen: NewGene

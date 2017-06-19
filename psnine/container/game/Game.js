@@ -229,7 +229,7 @@ export default class GamePage extends Component {
                   })
                 }
               }}>
-              <View style={{ flex: 1, alignItems:'center', justifyContent: 'center', height: 55, width: 55 }}  key={index}>
+              <View pointerEvents={'box-only'} style={{ flex: 1, alignItems:'center', justifyContent: 'center', height: 55, width: 55 }}  key={index}>
                 <Text style={{ color: idColor, textAlign:'left', fontSize: 12 }}>{item.text}</Text>
               </View>
             </TouchableNativeFeedback>

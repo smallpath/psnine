@@ -85,7 +85,7 @@ export default class NewTopic extends Component {
       marginTop: new Animated.Value(0),
       toolbarOpenVal: new Animated.Value(0),
       modalVisible: false,
-      selection: {}
+      selection: { start: 0, end: 0 }
     }
   }
 
@@ -255,7 +255,7 @@ export default class NewTopic extends Component {
       Ionicons.getImageSource('md-happy', 50, '#fff'),
       Ionicons.getImageSource('md-photos', 50, '#fff'),
       Ionicons.getImageSource('md-send', 50, '#fff'),
-      Ionicons.getImageSource('md-eye', 50, '#fff'),
+      Ionicons.getImageSource('md-color-wand', 50, '#fff'),
     ])
     this.setState({
       icon: {
@@ -398,7 +398,6 @@ export default class NewTopic extends Component {
                 keyboardType="default"
                 returnKeyType="next"
                 returnKeyLabel='next'
-                onSelectionChange={this.onSelectionChange}
                 blurOnSubmit={false}
                 numberOfLines={1}
                 ref={ref => this.title = ref}
@@ -652,6 +651,8 @@ export default class NewTopic extends Component {
     this.setState({
       content: input,
       selection: { start, end }
+    }, () => {
+      this.content && this.content.focus()
     })
   }
 

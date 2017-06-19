@@ -234,7 +234,7 @@ export default class Reply extends Component {
       Ionicons.getImageSource('md-happy', 50, '#fff'),
       Ionicons.getImageSource('md-photos', 50, '#fff'),
       Ionicons.getImageSource('md-send', 50, '#fff'),
-      Ionicons.getImageSource('md-eye', 50, '#fff'),
+      Ionicons.getImageSource('md-color-wand', 50, '#fff'),
     ])
     this.setState({
       icon: {
@@ -422,6 +422,7 @@ export default class Reply extends Component {
               returnKeyType='go'
               returnKeyLabel='go'
               onSelectionChange={this.onSelectionChange}
+              selection={this.state.selection}
               blurOnSubmit={true}
               numberOfLines={100}
               ref={ref => this.content = ref}
@@ -476,11 +477,7 @@ export default class Reply extends Component {
                   </TouchableNativeFeedback>
                 </View>
                 <TouchableNativeFeedback
-                  onPress={() => {
-                    this.setState({
-                      modalVisible: true
-                    })
-                  }}
+                  onPress={this.toolbar}
                   delayPressIn={0}
                   background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
                   style={{ borderRadius: 25 }}
@@ -588,6 +585,8 @@ export default class Reply extends Component {
     this.setState({
       content: input,
       selection: { start, end }
+    }, () => {
+      this.content && this.content.focus()
     })
   }
 
@@ -597,8 +596,16 @@ export default class Reply extends Component {
       selection: nativeEvent.selection
     })
   }
-
-
+  
+  toolbar = () => {
+    const { params } = this.props.navigation.state
+    Keyboard.dismiss()
+    this.props.navigation.navigate('Toolbar', {
+      callback: ({ text, offset }) => {
+        this.addText(text, true)
+      }
+    })
+  }
   _pressImageButton = (callback) => {
     const { params } = this.props.navigation.state
     Keyboard.dismiss()

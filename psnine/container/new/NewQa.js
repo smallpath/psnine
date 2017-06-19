@@ -78,7 +78,7 @@ export default class NewTopic extends Component {
       marginTop: new Animated.Value(0),
       toolbarOpenVal: new Animated.Value(0),
       modalVisible: false,
-      selection: {}
+      selection: { start: 0, end: 0 }
     }
   }
 
@@ -173,7 +173,7 @@ export default class NewTopic extends Component {
       Ionicons.getImageSource('md-happy', 50, '#fff'),
       Ionicons.getImageSource('md-photos', 50, '#fff'),
       Ionicons.getImageSource('md-send', 50, '#fff'),
-      Ionicons.getImageSource('md-eye', 50, '#fff'),
+      Ionicons.getImageSource('md-color-wand', 50, '#fff'),
     ])
     this.setState({
       icon: {
@@ -297,7 +297,6 @@ export default class NewTopic extends Component {
             keyboardType="default"
             returnKeyType="next"
             returnKeyLabel='next'
-            onSelectionChange={this.onSelectionChange}
             blurOnSubmit={false}
             numberOfLines={100}
             ref={ref => this.title = ref}
@@ -381,6 +380,7 @@ export default class NewTopic extends Component {
               returnKeyType='go'
               returnKeyLabel='go'
               onSelectionChange={this.onSelectionChange}
+              selection={this.state.selection}
               blurOnSubmit={true}
               numberOfLines={100}
               ref={ref => this.content = ref}
@@ -435,11 +435,7 @@ export default class NewTopic extends Component {
                   </TouchableNativeFeedback>
                 </View>
                 <TouchableNativeFeedback
-                  onPress={() => {
-                    this.setState({
-                      modalVisible: true
-                    })
-                  }}
+                  onPress={this.toolbar}
                   delayPressIn={0}
                   background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
                   style={{ borderRadius: 25 }}
@@ -500,6 +496,16 @@ export default class NewTopic extends Component {
     )
   }
 
+  toolbar = () => {
+    const { params } = this.props.navigation.state
+    Keyboard.dismiss()
+    this.props.navigation.navigate('Toolbar', {
+      callback: ({ text, offset }) => {
+        this.addText(text, true)
+      }
+    })
+  }
+
   addText = (text) => {
     const origin = this.state.content
     let { start = 0, end = 0 } = this.state.selection
@@ -512,6 +518,8 @@ export default class NewTopic extends Component {
     this.setState({
       content: input,
       selection: { start, end }
+    }, () => {
+      this.content && this.content.focus()
     })
   }
 
