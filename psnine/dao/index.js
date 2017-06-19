@@ -160,7 +160,7 @@ export const getRanksAPI = ({ page = 1, sort = 'point', server = 'hk', cheat = '
 
 export const getGamesAPI = ({ page = 1, sort = 'newest', pf = 'all', dlc = 'all', title }) => `${webHost}/psngame?page=${page}&ob=${sort}&pf=${pf}&dlc=${dlc}${title ? `&title=${title}` : '' }`
 
-export const getStoresAPI = ({ page, server, ob, pf, plus, title }) => `${webHost}/store?page=${page}&ob=${ob}&pf=${pf}&plus=${plus}${title ? `&title=${title}` : '' }`
+export const getStoresAPI = ({ page, server, ob, pf, plus, title }) => `${webHost}/store?page=${page}&server=${server}&ob=${ob}&pf=${pf}&plus=${plus}${title ? `&title=${title}` : '' }`
 
 export const fetchStores = (...args) => safeFetch(getStoresAPI(...args)).then(res => storeParser(res));
 
