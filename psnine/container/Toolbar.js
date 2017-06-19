@@ -33,6 +33,7 @@ import { connect } from 'react-redux';
 import NewTopic from './new/NewTopic';
 
 import { changeSegmentIndex, changeCommunityType, changeGeneType, changeCircleType } from '../actions/app';
+import { getRecommend } from '../actions/recommend';
 
 import { standardColor, accentColor } from '../constants/colorConfig';
 
@@ -191,6 +192,10 @@ class Toolbar extends Component {
           searchTitle: this.state.search
         }}/>
     )
+  }
+
+  componentWillMount = () => {
+    this.props.dispatch(getRecommend())
   }
 
 

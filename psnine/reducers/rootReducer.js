@@ -9,6 +9,7 @@ import rank from './Rank';
 import circle from './Circle';
 import store from './Store';
 import trade from './Trade';
+import recommend from './Recommend';
 
 const rootReducer = combineReducers({
   app,
@@ -20,7 +21,8 @@ const rootReducer = combineReducers({
   rank,
   circle,
   store,
-  trade
+  trade,
+  recommend
 });
 
 export default rootReducer;

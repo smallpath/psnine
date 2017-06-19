@@ -44,6 +44,7 @@ import tradeEditParser from '../parser/edit/trade'
 import userDiaryParser from '../parser/user/diary'
 import userTopicParser from '../parser/user/topic'
 import userGeneParser from '../parser/user/gene'
+import mainParser from '../parser/main'
 
 const safeFetch = function(reqUrl, type = 'text') {
   return new Promise((resolve, reject) => {
@@ -88,6 +89,8 @@ export const getUserDiaryAPI = uri => safeFetch(uri).then(res => userDiaryParser
 export const getUserTopicAPI = uri => safeFetch(uri).then(res => userTopicParser(res))
 
 export const getUserGeneAPI = uri => safeFetch(uri).then(res => userGeneParser(res))
+
+export const getMainAPI = () => safeFetch(webHost).then(res => mainParser(res))
 
 export const getFavoriteAPI = (uri, type = 'topic') => safeFetch(`${uri}&channel=${type}`).then(res => favoriteParser(res, type))
 
