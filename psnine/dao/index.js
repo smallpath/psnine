@@ -45,6 +45,7 @@ import userDiaryParser from '../parser/user/diary'
 import userTopicParser from '../parser/user/topic'
 import userGeneParser from '../parser/user/gene'
 import mainParser from '../parser/main'
+import gameNewTopicParser from '../parser/game/gameNewTopic'
 
 const safeFetch = function(reqUrl, type = 'text') {
   return new Promise((resolve, reject) => {
@@ -103,6 +104,8 @@ export const getMyGameAPI = uri => safeFetch(uri).then(res => myGameParser(res, 
 export const getTradeTopicAPI = uri => safeFetch(uri).then(res => tradeTopicParser(res, uri.split('/').pop()))
 
 export const getGameTopicAPI = uri => safeFetch(uri).then(res => gameTopicParser(res, uri.split('/').pop()))
+
+export const getGameNewTopicAPI = uri => safeFetch(uri).then(res => gameNewTopicParser(res, uri.split('/').pop()))
 
 export const getHomeAPI = uri => safeFetch(uri).then(res => homeParser(res, uri.split('/').pop()))
 

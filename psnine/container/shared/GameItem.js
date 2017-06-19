@@ -66,10 +66,10 @@ export default class extends React.PureComponent {
 
               <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                 <Text selectable={false} style={{ flex: -1, color: modeInfo.standardColor, textAlign: 'center', textAlignVertical: 'center' }}>{rowData.platform}</Text>
-                <Text selectable={false} style={{ flex: -1, color: modeInfo.standardTextColor, textAlign: 'center', textAlignVertical: 'center' }}>{rowData.region}</Text>
-                <Text selectable={false} style={{ flex: -1, color: modeInfo.standardTextColor, textAlign: 'center', textAlignVertical: 'center' }}>{
+                { rowData.region && <Text selectable={false} style={{ flex: -1, color: modeInfo.standardTextColor, textAlign: 'center', textAlignVertical: 'center' }}>{rowData.region}</Text> || undefined}
+                { rowData.platium && <Text selectable={false} style={{ flex: -1, color: modeInfo.standardTextColor, textAlign: 'center', textAlignVertical: 'center' }}>{
                   rowData.platium + rowData.gold + rowData.selver + rowData.bronze
-                }</Text>
+                }</Text> || undefined}
               </View>
 
             </View>

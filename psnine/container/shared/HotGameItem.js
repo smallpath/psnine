@@ -36,6 +36,13 @@ export default class PhotoItem extends React.PureComponent {
     return false
   }
 
+  onPress = () => {
+    const { modeInfo, rowData, navigation } = this.props
+    navigation.navigate('GameNewTopic', {
+      URL: `${rowData.href}?page=1`,
+    })
+  }
+
   render() {
     const { modeInfo, rowData, navigation, width = ( SCREEN_WIDTH - 24 ) / 3 } = this.props
 
@@ -50,6 +57,7 @@ export default class PhotoItem extends React.PureComponent {
         <TouchableNativeFeedback
           useForeground={true}
           delayPressIn={0}
+          onPress={this.onPress}
           background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
         >
           <View style={{ flex: 1, flexDirection: 'row', padding: 5, backgroundColor: modeInfo.backgroundColor }}>
