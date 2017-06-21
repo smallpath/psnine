@@ -1,7 +1,8 @@
 import * as ActionTypes from '../constants/actionTypes';
 import {
   AsyncStorage,
-  Alert
+  Alert,
+  Linking
 } from 'react-native'
 
 const initialState = {
@@ -43,23 +44,37 @@ function callWarning (text) {
     const isDisabled = !!arr[0]
     const origin = arr[1] || ''
     
-    const shouldCall = origin !== text || (origin === text && isDisabled === false)
+    const shouldCall = text !== '' && origin !== text || (origin === text && isDisabled === false)
     if (!shouldCall) {
       // if (isDisabled)
     } else {
       AsyncStorage.setItem('@psnine:disableWarning', '')
       AsyncStorage.setItem('@psnine:warning', text)
+      const targetText = text.replace(/<a\s.*?>.*?<\/a>/igm, '').trim().replace('：', '')
+      const matched = text.match(/<a\shref=\"(.*?)\">/)
+      let button = undefined
+      if (matched) {
+        let url = matched[1]
+        if (url.startsWith('/')) {
+          url = 'http://psnine.com' + url
+        }
+        button = {
+          text: '点我查看',
+          onPress: () => {
+            onP9LinkPress(url)
+          }
+        }
+      }
       Alert.alert(
         '提示',
-        text,
+        targetText,
         [
           {
             text: '不再提示', onPress: () => {
               AsyncStorage.setItem('@psnine:disableWarning', 'yes')
             }
           },
-
-          ,
+          button,
           {
             text: '确定', onPress: () => {}
           }
@@ -67,4 +82,18 @@ function callWarning (text) {
       )
     }
   })
+}
+
+const onP9LinkPress = url => {
+  const reg = /^(https|http)\:\/\//
+  const errHandler = (err) => Linking.openURL(url).catch(err => console.error('Web linking occurred', err))
+  if (reg.exec(url)) {
+    const target = url.replace(reg, 'p9://')
+    return Linking.openURL(target).catch(errHandler);
+  } else if (/^(.*?):\/\//.exec(url)) {
+    return Linking.openURL(url).catch(err => console.error('Web linking occurred', err));
+  } else {
+    const target = 'p9://psnine.com' + url
+    return Linking.openURL(target).catch(errHandler);
+  }
 }

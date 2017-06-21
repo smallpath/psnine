@@ -166,7 +166,7 @@ class Theme extends Component {
           flex: 3,
           color: modeInfo.standardTextColor
         }}
-          prompt='选择主题的默认颜色'
+          prompt='选择主题的强调颜色'
           selectedValue={this.state.secondaryColor}
           onValueChange={this.onValueChange.bind(this, 'secondaryColor')}>
           {Object.keys(mapper).map((name, index) => {

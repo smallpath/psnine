@@ -41,8 +41,7 @@ export default class ComplexComment extends React.PureComponent {
     super(props)
 
     this.state = {
-      modalVisible: false,
-      forceMark: false
+      modalVisible: false
     }
   }
 
@@ -50,14 +49,12 @@ export default class ComplexComment extends React.PureComponent {
     if (props.modeInfo.themeName !== this.props.modeInfo.themeName) return true
     if (props.rowData.isAccepted !== this.props.rowData.isAccepted) return true
     if (this.state.modalVisible !== state.modalVisible) return true
-    if (this.state.forceMark !== state.forceMark) return true
     return false
   }
 
   renderSonComment = (list, parentRowData) => {
     const { modeInfo, onLongPress } = this.props
     const result = list.map((rowData, index) => {
-      const shouldShowMark = (rowData.text || '').includes('<span class="mark">')
       return (
         <View key={rowData.id || index} style={{
             backgroundColor: modeInfo.brighterLevelOne,
@@ -98,25 +95,6 @@ export default class ComplexComment extends React.PureComponent {
                         <Text style={{textAlignVertical: 'center', fontSize: 18, color: modeInfo.standardTextColor}}>回复</Text>
                       </View>
                     </TouchableNativeFeedback>
-                    {
-                      shouldShowMark && (
-                        <TouchableNativeFeedback onPress={() => {
-                          this.setState({
-                            modalVisible: false
-                          }, () => {
-                            requestAnimationFrame(() => {
-                              this.setState({
-                                forceMark: !this.state.forceMark
-                              })
-                            })
-                          })
-                        }}>
-                        <View style={{height: 50, paddingVertical: 10, paddingLeft: 20 ,alignSelf: 'stretch', alignContent: 'stretch', justifyContent: 'center'}}>
-                          <Text style={{textAlignVertical: 'center', fontSize: 18, color: modeInfo.standardTextColor}}>{!this.state.forceMark && '显示刮刮卡' || '隐藏刮刮卡'}</Text>
-                        </View>
-                      </TouchableNativeFeedback>
-                      )
-                    }
                   </View>
                 )} />
             )
@@ -138,7 +116,6 @@ export default class ComplexComment extends React.PureComponent {
               onImageLongPress={this.handleImageOnclick}
               imagePaddingOffset={30 + 50 + 10}
               shouldForceInline={true}
-              forceMark={shouldShowMark ? this.state.forceMark : false}
             />
 
           </Text>
@@ -172,7 +149,6 @@ export default class ComplexComment extends React.PureComponent {
 
   render() {
     const { modeInfo, rowData, onLongPress, index } = this.props
-    const shouldShowMark = (rowData.text || '').includes('<span class="mark">')
     return (
       <View key={rowData.id || index} style={{
         backgroundColor: rowData.isAccepted ? modeInfo.tintColor : modeInfo.backgroundColor,
@@ -219,7 +195,7 @@ export default class ComplexComment extends React.PureComponent {
                           })
                         }}>
                         <View style={{height: 50, paddingVertical: 10, paddingLeft: 20 ,alignSelf: 'stretch', alignContent: 'stretch', justifyContent: 'center'}}>
-                          <Text style={{textAlignVertical: 'center', fontSize: 18}}>回复</Text>
+                          <Text style={{textAlignVertical: 'center', fontSize: 18, color: modeInfo.standardTextColor}}>回复</Text>
                         </View>
                       </TouchableNativeFeedback>
                       {
@@ -270,25 +246,6 @@ export default class ComplexComment extends React.PureComponent {
                         </TouchableNativeFeedback>
                         )
                       }
-                      {
-                        shouldShowMark && (
-                          <TouchableNativeFeedback onPress={() => {
-                            this.setState({
-                              modalVisible: false
-                            }, () => {
-                              requestAnimationFrame(() => {
-                                this.setState({
-                                  forceMark: !this.state.forceMark
-                                })
-                              })
-                            })
-                          }}>
-                          <View style={{height: 50, paddingVertical: 10, paddingLeft: 20 ,alignSelf: 'stretch', alignContent: 'stretch', justifyContent: 'center'}}>
-                            <Text style={{textAlignVertical: 'center', fontSize: 18, color: modeInfo.standardTextColor}}>{!this.state.forceMark && '显示刮刮卡' || '隐藏刮刮卡'}</Text>
-                          </View>
-                        </TouchableNativeFeedback>
-                        )
-                      }
                     </View>
                   )} />
               )
@@ -304,7 +261,6 @@ export default class ComplexComment extends React.PureComponent {
                 modeInfo={modeInfo}
                 stylesheet={styles}
                 onImageLongPress={this.handleImageOnclick}
-                forceMark={shouldShowMark ? this.state.forceMark : false}
                 imagePaddingOffset={30 + 50 + 10}
                 shouldForceInline={true}
               />
