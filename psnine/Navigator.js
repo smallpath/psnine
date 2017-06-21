@@ -248,6 +248,14 @@ let backPressClickTimeStamp = 0
 
 const previousGetActionForPathAndParams = Navigator.router.getActionForPathAndParams;
 
+const replyTypeMapper = {
+  'CommunityTopic': 'community',
+  'GeneTopic': 'gene',
+  'QaTopic': 'qa',
+  'BattleTopic': 'battle',
+  'GamePage': 'game',
+}
+
 Object.assign(Navigator.router, {
   getActionForPathAndParams(path, params) {
     const action = previousGetActionForPathAndParams(path, params)
@@ -264,6 +272,7 @@ Object.assign(Navigator.router, {
         case 'BattleTopic':
         case 'GamePage':
           action.params.URL = `http://psnine.com/${path}`
+          action.params.type = replyTypeMapper[action.routeName] || 'gene'
           action.params.rowData = {
             id
           }
