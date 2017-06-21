@@ -19,7 +19,7 @@ import {
   Keyboard
 } from 'react-native';
 
-import { sync, updown, fav } from '../../dao/sync'
+import { sync, updown, fav, upBase } from '../../dao/sync'
 import MyDialog from '../../components/Dialog'
 import HTMLView from '../../components/HtmlToView';
 import { connect } from 'react-redux';
@@ -52,9 +52,10 @@ let CIRCLE_SIZE = 56;
 let config = { tension: 30, friction: 7, ease: Easing.in(Easing.ease(1, 0, 1, 1)), duration: 200 };
 
 const iconMapper = {
-  '同步': 'md-sync',
+  '游戏同步': 'md-sync',
   '关注': 'md-star-half',
-  '感谢': 'md-thumbs-up'
+  '感谢': 'md-thumbs-up',
+  '等级同步': 'md-sync'
 }
 
 export default class Home extends Component {
@@ -100,7 +101,7 @@ export default class Home extends Component {
     const psnid = params.URL.split('/').filter(item => item.trim()).pop()
     // alert(index)
     switch (index) {
-      case 2:
+      case 3:
         fav({ 
           type: 'psnid',
           param: psnid
@@ -108,7 +109,7 @@ export default class Home extends Component {
           // console.log(text)
           // ToastAndroid.show('同步成功', ToastAndroid.SHORT);
           if (text) return toast(text)
-          toast('收藏成功')
+          toast('关注成功')
           preFetch && preFetch()
         }).catch(err => {
           const msg = `操作失败: ${err.toString()}`
@@ -116,7 +117,7 @@ export default class Home extends Component {
           // ToastAndroid.show(msg, ToastAndroid.SHORT);
         })
         return;
-      case 1:
+      case 2:
         updown({ 
           type: 'psnid',
           param: psnid,
@@ -124,7 +125,7 @@ export default class Home extends Component {
         }).then(res => res.text()).then(text => {
           // ToastAndroid.show('同步成功', ToastAndroid.SHORT);
           if (text) return toast(text)
-          toast('操作成功')
+          toast('感谢成功')
           preFetch && preFetch()
         }).catch(err => {
           const msg = `操作失败: ${err.toString()}`
@@ -132,8 +133,30 @@ export default class Home extends Component {
           // ToastAndroid.show(msg, ToastAndroid.SHORT);
         })
         return
+      case 1:
+        ToastAndroid.show('等级同步中..', ToastAndroid.SHORT)
+        upBase(psnid).then(res => res.text()).then(text => {
+          // console.log(text)
+          if (text.includes('玩脱了')) {
+            const arr = text.match(/\<title\>(.*?)\<\/title\>/)
+            if (arr && arr[1]) {
+              const msg = `同步失败: ${arr[1]}`
+              // ToastAndroid.show(msg, ToastAndroid.SHORT);
+              global.toast(msg)
+              return
+            }
+          }
+          // ToastAndroid.show('同步成功', ToastAndroid.SHORT);
+          global.toast('同步成功')
+          preFetch && preFetch()
+        }).catch(err => {
+          const msg = `同步失败: ${err.toString()}`
+          global.toast(msg)
+          // ToastAndroid.show(msg, ToastAndroid.SHORT);
+        })
+        return;
       case 0:
-        ToastAndroid.show('同步中..', ToastAndroid.SHORT)
+        ToastAndroid.show('游戏同步中..', ToastAndroid.SHORT)
         sync(psnid).then(res => res.text()).then(text => {
           if (text.includes('玩脱了')) {
             const arr = text.match(/\<title\>(.*?)\<\/title\>/)

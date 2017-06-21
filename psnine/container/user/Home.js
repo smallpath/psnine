@@ -60,9 +60,10 @@ let CIRCLE_SIZE = 56;
 let config = { tension: 30, friction: 7, ease: Easing.in(Easing.ease(1, 0, 1, 1)), duration: 200 };
 
 const iconMapper = {
-  '同步': 'md-sync',
+  '游戏同步': 'md-sync',
   '关注': 'md-star-half',
-  '感谢': 'md-thumbs-up'
+  '感谢': 'md-thumbs-up',
+  '等级同步': 'md-sync'
 }
 
 const limit = SCREEN_WIDTH - toolbarHeight
@@ -297,7 +298,7 @@ export default class Home extends Component {
     const { modeInfo } = this.props.screenProps
     const { params } = this.props.navigation.state
     const { marginTop } = this.state
-    // console.log('re-rendered tab')
+    // console.log(this.state.data.psnButtonInfo)
     // console.log(this.state.data)
     return (
       <CreateUserTab screenProps={{
@@ -319,7 +320,7 @@ export default class Home extends Component {
           this.setState(obj)
         },
         profileToolbar: this.state.data.psnButtonInfo.reverse().map(item => {
-          const result = { title: item.text, iconName: iconMapper[item.text], show: item.text.includes('同步') ? 'always' : 'never' }
+          const result = { title: item.text, iconName: iconMapper[item.text], show: item.text.includes('游戏同步') ? 'always' : 'never' }
           if (!iconMapper[item.text]) delete result.iconName
           if (item.text.includes('冷却') || iconMapper[item.text]) return result
           return undefined
