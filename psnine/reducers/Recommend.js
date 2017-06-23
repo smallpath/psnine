@@ -44,7 +44,7 @@ function callWarning (text) {
     const isDisabled = !!arr[0]
     const origin = arr[1] || ''
     
-    const shouldCall = text !== '' && origin !== text || (origin === text && isDisabled === false)
+    const shouldCall = text !== '' && (origin !== text || (origin === text && isDisabled === false))
     if (!shouldCall) {
       // if (isDisabled)
     } else {
@@ -65,6 +65,7 @@ function callWarning (text) {
           }
         }
       }
+      // console.log(text, text.length)
       Alert.alert(
         '提示',
         targetText,
