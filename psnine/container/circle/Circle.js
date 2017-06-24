@@ -38,7 +38,7 @@ import {
   rankColor,
 } from '../../constants/colorConfig';
 
-import { fetchCircle as getAPI } from '../../dao';
+import { fetchNewGeneElement as getAPI } from '../../dao';
 import Item from '../shared/GeneItem'
 import FooterProgress from '../shared/FooterProgress'
 // import CreateUserTab from './UserTab'
@@ -102,8 +102,16 @@ export default class extends Component {
     const { navigation } = this.props
     const { params } = navigation.state
     let URL
-    const id = (params.URL.match(/\/group\/(\d+)/) || [0, -1])[1]
+    const id = params.URL.split('ele=').pop()
+    // alert(params.URL)
     switch(index) {
+      case -1: 
+        // alert(id)
+        this.props.navigation.navigate('NewGene', {
+          // shouldSeeBackground: true,
+          element: id
+        })
+        break;
       case 0:
         this.props.navigation.navigate('NewGene', {
           // shouldSeeBackground: true,
@@ -136,7 +144,8 @@ export default class extends Component {
 
   componentWillMount = () => {
     const { params } = this.props.navigation.state
-    this.URL = params.URL.includes('?page=') ? params.URL : `${params.URL}?page=1`
+    this.URL = params.URL.includes('&page=') ? params.URL : `${params.URL}&page=1`
+    // alert(this.URL)
     this.fetchMessages(this.URL, 'jump');
   }
 
@@ -224,61 +233,32 @@ export default class extends Component {
         padding: 12 
       }}>
 
-        <View style={{ justifyContent:'center', alignItems: 'center', alignSelf: 'center', flex: -1,
+        <View style={{ justifyContent: 'space-between', alignItems: 'center', flexDirection: 'row', flex: -1,
           backgroundColor: modeInfo.backgroundColor,    
         }}>
-          <View style={{ justifyContent: 'space-between', alignItems: 'center', flexDirection: 'row' }}> 
-            <View style={{
-              width: 85,
-              height: 85,
-              flexDirection: 'column',
-              alignSelf: 'center'
-            }} borderRadius={85/2}>
-              <Image
-                source={{ uri: rowData.avatar }}
-                borderRadius={85/2}
-                style={{
-                  width: 85,
-                  height: 85,
-                  alignSelf: 'center',
-                }}
-              />
+          <View style={{ alignItems: 'flex-start', padding: 12}}>
+            <View>
+              <Text style={{ color: modeInfo.titleTextColor }}>{rowData.name}</Text>
             </View>
-            <View style={{ justifyContent: 'space-between', alignItems: 'flex-start', padding: 12}}>
-              <View>
-                <Text style={{ color: modeInfo.titleTextColor }}>{rowData.name}</Text>
-              </View>
 
-              <View style={{ justifyContent: 'space-between', alignItems: 'center' }}>
-                <Text style={{color: modeInfo.standardTextColor}}><Text style={{fontSize: 12, color: modeInfo.standardTextColor}}>机长：</Text>{rowData.owner}</Text>
-              </View>
-            </View> 
-          </View>
-        </View>
-
-        { rowData.isLogined && rowData.isJoined && (
-          <View style={{ justifyContent: 'space-around', alignItems: 'center', flexDirection: 'row', padding: 7}}>
-            <Button style={{flex:1}} title={'发机因'} color={modeInfo.standardColor} onPress={() => this.handlePress(0)}></Button>
+            <View style={{ alignItems: 'center' }}>
+              <Text style={{color: modeInfo.accentColor}}><Text onPress={() => {
+                  this.props.navigation.navigate('Home', {
+                    title: rowData.owner,
+                    id: rowData.owner,
+                    URL: `http://psnine.com/psnid/${rowData.owner}`
+                  })
+                }} style={{fontSize: 12, color: modeInfo.standardTextColor}}>元素发起者：</Text>{rowData.owner}</Text>
+            </View>
+          </View> 
+          <View style={{ alignItems: 'center', flexDirection: 'row', padding: 7}}>
+            <Button style={{flex:1}} title={'发机因'} color={modeInfo.standardColor} onPress={() => this.handlePress(-1)}></Button>
             {/*<Button style={{flex:1}} title={'机因列表'} color={modeInfo.standardColor} onPress={() => this.handlePress(1)}></Button>*/}
-            <Button style={{flex:1}} title={'玩家排行榜'} color={modeInfo.standardColor} onPress={() => this.handlePress(2)}></Button>
-            <Button style={{flex:1}} title={'贵圈真乱'} color={modeInfo.accentColor} onPress={() => this.handlePress(3)}></Button>
+            {/*<Button style={{flex:1}} title={'玩家排行榜'} color={modeInfo.standardColor} onPress={() => this.handlePress(2)}></Button>
+            <Button style={{flex:1}} title={'贵圈真乱'} color={modeInfo.accentColor} onPress={() => this.handlePress(3)}></Button>*/}
           </View>
-        ) || (rowData.isLogined && (
-          <View style={{ justifyContent: 'center', alignItems: 'center', flexDirection: 'row', padding: 7}}>
-            <Button style={{flex:1}} title={'申请加入'} color={modeInfo.standardColor} onPress={() => this.handlePress(4)}></Button>
-          </View>
-        ) || undefined )}
-
-        <View style={{padding: 7, marginTop: 0}}>
-          <HTMLView
-            value={rowData.limit}
-            modeInfo={modeInfo}
-            stylesheet={styles}
-            onImageLongPress={() => {}}
-            imagePaddingOffset={30 + 85 + 10}
-            shouldForceInline={true}
-          />
         </View>
+
 
         <View style={{padding: 7}}>
           <HTMLView

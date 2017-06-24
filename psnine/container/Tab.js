@@ -94,9 +94,9 @@ const Tabs = TabNavigator({
   Rank: {
     screen: Rank
   },
-  Circle: {
-    screen: Circle
-  },
+  // Circle: {
+  //   screen: Circle
+  // },
   Store: {
     screen: Store,
   },

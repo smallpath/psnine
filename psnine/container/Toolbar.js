@@ -98,14 +98,14 @@ let geneActions = [
   { title: '视频类', value: 'video', show: 'never' },
 ];
 
-let circleActions = [
-  searchAction,
-  { title: '全部', value: 'all', show: 'never' },
-  { title: '图文类', value: 'photo', show: 'never' },
-  { title: '音乐类', value: 'music', show: 'never' },
-  { title: '影视类', value: 'movie', show: 'never' },
-  { title: '视频类', value: 'video', show: 'never' },
-]
+// let circleActions = [
+//   searchAction,
+//   { title: '全部', value: 'all', show: 'never' },
+//   { title: '图文类', value: 'photo', show: 'never' },
+//   { title: '音乐类', value: 'music', show: 'never' },
+//   { title: '影视类', value: 'movie', show: 'never' },
+//   { title: '视频类', value: 'video', show: 'never' },
+// ]
 
 let storeActions = [
   searchAction
@@ -116,7 +116,7 @@ let tradeActions = [
   searchAction
 ]
 
-let toolbarActions = [recommendActions, communityActions, qaActions, geneActions, gameActions, battleActions, rankActions, circleActions, storeActions, tradeActions]
+let toolbarActions = [recommendActions, communityActions, qaActions, geneActions, gameActions, battleActions, rankActions, /*circleActions,*/ storeActions, tradeActions]
 
 let titlesArr = ["社区", "问答", "游戏", "约战", "机因"];
 
@@ -247,16 +247,9 @@ class Toolbar extends Component {
       } else {
         this._onSearchClicked()
       }
-    } else if (segmentedIndex === 7) {  
-      if (index !== 0) {
-        let type = toolbarActions[segmentedIndex][index].value;
-        dispatch(changeCircleType(type));
-      } else {
-        this._onSearchClicked()
-      }
     } else if (segmentedIndex === 5) {
       this.props.navigation.navigate('NewBattle', {})
-    } else if (segmentedIndex === 9) {
+    } else if (segmentedIndex === 8) {
       index === 0 && this.props.navigation.navigate('NewTrade', {})
       index === 1 && this._onSearchClicked()
     } else {

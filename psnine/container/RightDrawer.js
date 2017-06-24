@@ -53,9 +53,9 @@ const RightDrawer = DrawerNavigator({
   Rank: {
     screen: Rank
   },
-  Circle: {
-    screen: Circle
-  },
+  // Circle: {
+  //   screen: Circle
+  // },
   Store: {
     screen: Store,
   },
