@@ -277,6 +277,14 @@ class CommunityTopic extends Component {
                 }>{titleInfo.psnid}</Text>
                 <Text selectable={false} style={textStyle}>{titleInfo.date}</Text>
                 <Text selectable={false} style={textStyle}>{titleInfo.reply}</Text>
+                { isNotGene === false && <Text selectable={false} style={{ flex: -1, color: modeInfo.standardColor, textAlign: 'center', textAlignVertical: 'center' }}  onPress={
+                  () => {
+                    this.props.navigation.navigate('Circle', {
+                      URL: `http://psnine.com/gene?ele=${(titleInfo.node || []).join('')}`,
+                      title: (titleInfo.node || []).join('')
+                    })
+                  }
+                }>{(titleInfo.node || []).join('')}</Text> }
               </View>
             </View>
 
