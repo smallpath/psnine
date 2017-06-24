@@ -62,7 +62,8 @@ export const block = (form) => {
     formBody.push(encodedKey + "=" + encodedValue);
   }
   formBody = formBody.join("&");
-  return fetch('http://psnine.com/set/blocked/ajax', {
+  const target = typeof form.unblock !== 'undefined' ? 'http://psnine.com/my/block' : 'http://psnine.com/set/blocked/ajax'
+  return fetch(target, {
     method: 'POST',
     headers: {
       'Accept': 'text/html,application/xhtml+xml,application/xml',

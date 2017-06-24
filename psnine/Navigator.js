@@ -54,6 +54,7 @@ import UserElement from './container/user/Element'
 import UserPhoto from './container/user/Photo'
 import UserDetail from './container/user/Detail'
 import UserCustom from './container/user/Custom'
+import UserBlock from './container/user/Block'
 import ImageUpload from './container/user/ImageUpload'
 
 import { transitionConfig, onTransitionStart } from './utils/transitionConfig'
@@ -185,6 +186,9 @@ const Navigator = StackNavigator({
   },
   NewTrade: {
     screen: NewTrade
+  },
+  UserBlock: {
+    screen: UserBlock
   },
   Toolbar: {
     screen: Toolbar

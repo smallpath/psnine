@@ -91,6 +91,21 @@ const ListItems = [
     }
   },
   {
+    text: '我屏蔽的',
+    iconName: 'md-bookmarks',
+    onPress: function () {
+      const { navigation, closeDrawer } = this.props;
+      closeDrawer();
+
+      let URL = 'http://psnine.com/my/block'
+
+      navigation.navigate('UserBlock', {
+        URL,
+        title: '屏蔽'
+      });
+    }
+  },
+  {
     text: '元素',
     iconName: 'md-snow',
     onPress: function () {

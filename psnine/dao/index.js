@@ -47,6 +47,7 @@ import userGeneParser from '../parser/user/gene'
 import mainParser from '../parser/main'
 import gameNewTopicParser from '../parser/game/gameNewTopic'
 import newGeneElementParser from '../parser/circle/element'
+import userBlockParser from '../parser/user/block'
 
 const safeFetch = function(reqUrl, type = 'text') {
   return new Promise((resolve, reject) => {
@@ -208,6 +209,8 @@ export const parseNewGeneElement = url => url.includes('psnine.com/gene') ? url 
 export const fetchNewGeneElement = url => safeFetch(parseNewGeneElement(url)).then(res => newGeneElementParser(res));
 
 export const getGroupAPI = url => safeFetch(url).then(res => userGroupParser(res));
+
+export const getBlockAPI = url => safeFetch(url).then(res => userBlockParser(res));
 
 export const fetchCircleLeader = url => safeFetch(url).then(res => circleLeaderParser(res));
 
