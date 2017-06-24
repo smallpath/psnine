@@ -50,7 +50,7 @@ import General from './container/setting/General'
 import ImageViewer from './components/ImageViewer'
 import Search from './container/Search'
 import Pass from './container/user/Pass'
-import UserGroup from './container/user/Group'
+import UserElement from './container/user/Element'
 import UserPhoto from './container/user/Photo'
 import UserDetail from './container/user/Detail'
 import UserCustom from './container/user/Custom'
@@ -83,8 +83,8 @@ const Navigator = StackNavigator({
   Issue: {
     screen: Issue
   },
-  UserGroup: {
-    screen: UserGroup
+  UserElement: {
+    screen: UserElement
   },
   UserDetail: {
     screen: UserDetail

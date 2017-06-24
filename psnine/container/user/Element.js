@@ -24,6 +24,40 @@ let releasedMarginTop = 0;
 
 let toolbarActions = []
 
+class NodeItem extends React.PureComponent {
+
+  shouldComponentUpdate = (props, state) => {
+    if (props.modeInfo.themeName !== this.props.modeInfo.themeName) return true
+    return false
+  }
+
+  render() {
+    const { modeInfo, onPress, rowData, navigation } = this.props
+
+    return (
+      <View style={{
+        alignSelf: 'flex-start',
+        alignContent: 'flex-end',
+        backgroundColor: modeInfo.backgroundColor,
+        flex: -1,
+        padding: 4
+      }}>
+        <TouchableNativeFeedback
+          useForeground={true}
+          delayPressIn={0}
+          onPress={onPress}
+          background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
+        >
+          <View style={{ flex: -1, flexDirection: 'row', padding: 5, backgroundColor: modeInfo.backgroundColor }}>
+            <Text style={{color: modeInfo.accentColor}}>{rowData.text}</Text>
+          </View>
+        </TouchableNativeFeedback>
+      </View>
+    )
+  }
+
+}
+
 const renderSectionHeader = ({ section }) => {
   // console.log(section)
   return (
@@ -40,16 +74,13 @@ const renderSectionHeader = ({ section }) => {
   );
 }
 
-export default class Group extends Component {
+export default class Element extends Component {
 
   constructor(props) {
     super(props);
     this.state = {
       isLoading: false,
-      data: {
-        joinedList : [],
-        ownedList : []
-      }
+      data: []
     }
   }
 
@@ -79,15 +110,28 @@ export default class Group extends Component {
   }
 
   ITEM_HEIGHT = 78 + 7
-  _renderItemComponent = ({ item: rowData, index }) => {
+  _renderItemComponent = ({ item: rowData, index: outerIndex }) => {
     const { modeInfo } = this.props.screenProps
     const { ITEM_HEIGHT } = this
     const { navigation } = this.props
-    return (<CircleItem {...{
-      modeInfo,
-      navigation,
-      rowData
-    }}/>)
+    // console.log(rowData)
+    return (
+      <View style={{ flexDirection: 'row', flexWrap: 'wrap', marginHorizontal: 7, backgroundColor: modeInfo.backgroundColor}}>
+        {rowData.map((item, index) => (<NodeItem key={index} {...{
+          modeInfo,
+          navigation,
+          rowData: item,
+          onPress: () => {
+            {/*console.log(rowData)*/}
+            this.props.navigation.navigate('Circle', {
+              URL: item.url,
+              title: item.text,
+              rowData: item
+            })
+          }
+        }}/>))}
+      </View>
+    )
   }
 
   render() {
@@ -97,13 +141,11 @@ export default class Group extends Component {
     let keys = Object.keys(data);
     let NUM_SECTIONS = keys.length;
 
-    const sections = Object.keys(data).filter(sectionName => data[sectionName].length !== 0).map(sectionName => {
-      return {
-        key: sectionName === 'joinedList' ? '我加入的机因圈' : '我创建的机因圈',
-        modeInfo,
-        data: data[sectionName]
-      }
-    });
+    const sections = [{
+      key: '曾使用过的所有元素',
+      modeInfo,
+      data: [data]
+    }]
 
     return (
       <View

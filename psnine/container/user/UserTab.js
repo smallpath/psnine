@@ -61,9 +61,6 @@ const container = {
   },
   UserGene: {
     screen: UserGene
-  },
-  UserCircle: {
-    screen: UserCircle
   }
 }
 

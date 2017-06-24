@@ -91,17 +91,17 @@ const ListItems = [
     }
   },
   {
-    text: '圈子',
-    iconName: 'md-globe',
+    text: '元素',
+    iconName: 'md-snow',
     onPress: function () {
       const { navigation, closeDrawer } = this.props;
       closeDrawer();
 
-      let URL = 'http://psnine.com/my/group'
+      let URL = 'http://psnine.com/my/element'
 
-      navigation.navigate('UserGroup', {
+      navigation.navigate('UserElement', {
         URL,
-        title: '圈子'
+        title: '元素'
       });
     }
   },
