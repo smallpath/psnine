@@ -92,7 +92,7 @@ const ListItems = [
   },
   {
     text: '我屏蔽的',
-    iconName: 'md-bookmarks',
+    iconName: 'md-eye-off',
     onPress: function () {
       const { navigation, closeDrawer } = this.props;
       closeDrawer();
