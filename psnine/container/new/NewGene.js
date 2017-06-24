@@ -61,11 +61,19 @@ export default class NewTopic extends Component {
     // console.log(params)
     this.state = {
       icon: false,
+
       content: '',
+      element: '',
       photo: [],
+      video: '',
+      music: '',
+      muparam: '',
+      muid: '',
       url: '',
-      groupid: params.groupid || '-1',
+      id: params.id || '',
       key: 'addgene',
+
+
       openVal: new Animated.Value(1),
       marginTop: new Animated.Value(0),
       toolbarOpenVal: new Animated.Value(0),
@@ -171,9 +179,27 @@ export default class NewTopic extends Component {
   }
 
   sendReply = () => {
-    const { content, photo, url, groupid, key, id }  = this.state
+    const { 
+      content, 
+      photo, 
+      url, 
+      key, 
+      id, 
+      element,
+      video,
+      music,
+      muparam,
+      muid
+    }  = this.state
     const result = {
-      content, photo: photo.join(',') || '', url, groupid
+      content, photo: photo.join(',') || '', url,
+      key, 
+      id, 
+      element,
+      video,
+      music,
+      muparam,
+      muid
     }
     result[key] = ''
     if (id !== '') {
@@ -297,6 +323,12 @@ export default class NewTopic extends Component {
               // underlineColorAndroid={accentColor}
               underlineColorAndroid='rgba(0,0,0,0)'
             />
+            <Button style={{flex:1, padding: 5, margin: 5}} title={'编辑元素(选填)'} onPress={() => {
+              Keyboard.dismiss()
+              this.setState({
+                modalVisible: true
+              })
+            }} color={modeInfo.standardColor}/>
             <Button style={{flex:1, padding: 5, margin: 5}} title={'点我选择图片(已选择' + this.state.photo.length + '张)'} onPress={() => {
               Keyboard.dismiss()
               this.props.navigation.navigate('UserPhoto', {
@@ -310,29 +342,6 @@ export default class NewTopic extends Component {
                 }
               })
             }} color={modeInfo.standardColor}/>
-            <TextInput placeholder="选填项，内容可以带一个链接地址，http://开头哦"
-              autoCorrect={false}
-              multiline={false}
-              keyboardType="default"
-              returnKeyType="next"
-              returnKeyLabel='next'
-              blurOnSubmit={false}
-              numberOfLines={1}
-              ref={ref => this.url = ref}
-              onChange={({ nativeEvent }) => { this.setState({ url: nativeEvent.text }) }}
-              value={this.state.url}
-              style={[styles.textInput, {
-                color: modeInfo.titleTextColor,
-                textAlign: 'left',
-                height: 56,
-                /*flex: 0,*/
-                borderBottomColor: modeInfo.brighterLevelOne,
-                borderBottomWidth: StyleSheet.hairlineWidth
-              }]}
-              placeholderTextColor={modeInfo.standardTextColor}
-              // underlineColorAndroid={accentColor}
-              underlineColorAndroid='rgba(0,0,0,0)'
-            />
             <Animated.View style={[{
               elevation: 4,
               bottom: 0 //toolbarOpenVal.interpolate({ inputRange: [0, 1], outputRange: [0, 1] })
@@ -416,20 +425,121 @@ export default class NewTopic extends Component {
                       position: 'absolute',
                       left: 20,
                       right: 20,
-                      opacity: 1
+                      opacity: 1,
+                      flex: 0
                     }} borderRadius={2}>
-                      <HTMLView
-                        value={this.state.content || '暂无内容'}
-                        modeInfo={modeInfo}
-                        stylesheet={styles}
-                        onImageLongPress={(url) => this.props.navigation.navigate('ImageViewer', {
-                          images: [
-                            { url }
-                          ]
-                        })}
-                        imagePaddingOffset={60}
-                        shouldForceInline={true}
+                      <View style={{flex: 1, flexDirection: 'row'}}>
+                      <TextInput placeholder="元素，只能由2~15个中文字母数字组成"
+                        autoCorrect={false}
+                        multiline={false}
+                        keyboardType="default"
+                        returnKeyType="next"
+                        returnKeyLabel='next'
+                        blurOnSubmit={false}
+                        numberOfLines={1}
+                        ref={ref => this.element = ref}
+                        onChange={({ nativeEvent }) => { this.setState({ element: nativeEvent.text }) }}
+                        value={this.state.element}
+                        style={[styles.textInput, {
+                          color: modeInfo.titleTextColor,
+                          textAlign: 'left',
+                          flex: 1,
+                          borderBottomColor: modeInfo.brighterLevelOne,
+                          borderBottomWidth: StyleSheet.hairlineWidth
+                        }]}
+                        placeholderTextColor={modeInfo.standardTextColor}
+                        // underlineColorAndroid={accentColor}
+                        underlineColorAndroid='rgba(0,0,0,0)'
                       />
+                      </View>
+                      <View style={{flex: 1, flexDirection: 'row'}}>
+                      <TextInput placeholder="视频地址，目前仅支持youku和bilibili"
+                        autoCorrect={false}
+                        multiline={false}
+                        keyboardType="default"
+                        returnKeyType="next"
+                        returnKeyLabel='next'
+                        blurOnSubmit={false}
+                        numberOfLines={1}
+                        ref={ref => this.element = ref}
+                        onChange={({ nativeEvent }) => { this.setState({ video: nativeEvent.text }) }}
+                        value={this.state.video}
+                        style={[styles.textInput, {
+                          color: modeInfo.titleTextColor,
+                          textAlign: 'left',
+                          flex: 1,
+                          borderBottomColor: modeInfo.brighterLevelOne,
+                          borderBottomWidth: StyleSheet.hairlineWidth
+                        }]}
+                        placeholderTextColor={modeInfo.standardTextColor}
+                        // underlineColorAndroid={accentColor}
+                        underlineColorAndroid='rgba(0,0,0,0)'
+                      />
+                      </View>
+                      <View style={{flex: 1, flexDirection: 'row'}}>
+                        <Picker style={{
+                          flex: 1,
+                          borderWidth: 1,
+                          color: modeInfo.standardTextColor,
+                          borderBottomColor: modeInfo.standardTextColor
+                        }}
+                          prompt='音乐类型'
+                          selectedValue={this.state.muparam}
+                          onValueChange={this.onValueChange.bind(this, 'muparam')}>
+                          <Picker.Item label="音乐类型" value="" />
+                          <Picker.Item label="单曲" value="mu" />
+                          <Picker.Item label="专辑" value="al" />
+                          <Picker.Item label="电台" value="dj" />
+                          <Picker.Item label="歌单" value="pl" />
+                        </Picker>
+                        <TextInput placeholder="网易音乐的纯数字ID"
+                          autoCorrect={false}
+                          multiline={false}
+                          keyboardType="default"
+                          returnKeyType="next"
+                          returnKeyLabel='next'
+                          blurOnSubmit={false}
+                          numberOfLines={1}
+                          ref={ref => this.muid = ref}
+                          onChange={({ nativeEvent }) => { this.setState({ muid: nativeEvent.text }) }}
+                          value={this.state.muid}
+                          style={[styles.textInput, {
+                            color: modeInfo.titleTextColor,
+                            textAlign: 'left',
+                            flex: 1.5,
+                            borderBottomColor: modeInfo.brighterLevelOne,
+                            borderBottomWidth: StyleSheet.hairlineWidth
+                          }]}
+                          placeholderTextColor={modeInfo.standardTextColor}
+                          // underlineColorAndroid={accentColor}
+                          underlineColorAndroid='rgba(0,0,0,0)'
+                        />
+                      </View>
+                      <View style={{flex: 1, flexDirection: 'row'}}>
+                        <TextInput placeholder="出处，选填，http开头哦"
+                          autoCorrect={false}
+                          multiline={false}
+                          keyboardType="default"
+                          returnKeyType="next"
+                          returnKeyLabel='next'
+                          blurOnSubmit={false}
+                          numberOfLines={1}
+                          ref={ref => this.url = ref}
+                          onChange={({ nativeEvent }) => { this.setState({ url: nativeEvent.text }) }}
+                          value={this.state.url}
+                          style={[styles.textInput, {
+                            color: modeInfo.titleTextColor,
+                            textAlign: 'left',
+                            height: 56,
+                            flex: 1,
+                            borderBottomColor: modeInfo.brighterLevelOne,
+                            borderBottomWidth: StyleSheet.hairlineWidth
+                          }]}
+                          placeholderTextColor={modeInfo.standardTextColor}
+                          // underlineColorAndroid={accentColor}
+                          underlineColorAndroid='rgba(0,0,0,0)'
+                        />
+                      </View>
                     </View>
                   )} />
               )

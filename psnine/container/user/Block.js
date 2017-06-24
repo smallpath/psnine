@@ -66,7 +66,7 @@ class Fav extends Component {
     }, () => {
       InteractionManager.runAfterInteractions(() => {
         getAPI(url, this.state.type).then(data => {
-          console.log(data)
+          // console.log(data)
           let thisList = []
           const thisPage = parseInt((url.match(/\?page=(\d+)/) || [0, 1])[1])
           let cb = () => { }

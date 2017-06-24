@@ -90,6 +90,7 @@ let battleActions = [
 ];
 
 let geneActions = [
+  { title: '新建', iconName: 'md-create', value: '', show: 'always', iconSize: 22 },
   searchAction,
   { title: '全部', value: 'all', show: 'never' },
   { title: '图文类', value: 'photo', show: 'never' },
@@ -241,11 +242,12 @@ class Toolbar extends Component {
       index === 0 && this.props.navigation.navigate('NewQa', {})
       index === 1 && this._onSearchClicked()
     } else if (segmentedIndex === 3) {
-      if (index !== 0) {
+      if (index !== 0 && index !== 1) {
         let type = toolbarActions[segmentedIndex][index].value;
         dispatch(changeGeneType(type));
       } else {
-        this._onSearchClicked()
+        index === 1 && this._onSearchClicked()
+        index === 0 && this.props.navigation.navigate('NewGene', {})
       }
     } else if (segmentedIndex === 5) {
       this.props.navigation.navigate('NewBattle', {})

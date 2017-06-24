@@ -109,7 +109,7 @@ export default class extends Component {
         // alert(id)
         this.props.navigation.navigate('NewGene', {
           // shouldSeeBackground: true,
-          element: id
+          URL: `http://psnine.com/set/gene?ele=${id}`
         })
         break;
       case 0:
