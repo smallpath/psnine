@@ -19,7 +19,7 @@ import {
   Keyboard
 } from 'react-native';
 
-import { sync, updown, fav, upBase } from '../../dao/sync'
+import { sync, updown, fav, upBase, block } from '../../dao/sync'
 import MyDialog from '../../components/Dialog'
 import HTMLView from '../../components/HtmlToView';
 import { connect } from 'react-redux';
@@ -77,9 +77,14 @@ export default class Home extends Component {
   }
 
   componentWillMount = () => {
-    const { profileToolbar: toolbar } = this.props.screenProps
+    let { profileToolbar: toolbar, psnid = '' } = this.props.screenProps
     if (!toolbar) return
     if (!toolbar.length) return
+    const { modeInfo } = this.props.screenProps
+    if (modeInfo.settingInfo.psnid.toLowerCase() === psnid.toLowerCase()) {
+      toolbar = toolbar.slice(0, -1)
+    }
+    // console.log(modeInfo.settingInfo.psnid, psnid)
     const componentDidFocus = () => {
       InteractionManager.runAfterInteractions(() => {
         this.props.screenProps.setToolbar({
@@ -101,6 +106,22 @@ export default class Home extends Component {
     const psnid = params.URL.split('/').filter(item => item.trim()).pop()
     // alert(index)
     switch (index) {
+      case 4:
+        block({ 
+          type: 'psnid',
+          param: psnid
+        }).then(res => res.text()).then(text => {
+          // console.log(text)
+          // ToastAndroid.show('同步成功', ToastAndroid.SHORT);
+          if (text) return toast(text)
+          toast('屏蔽成功')
+          preFetch && preFetch()
+        }).catch(err => {
+          const msg = `屏蔽失败: ${err.toString()}`
+          global.toast(msg)
+          // ToastAndroid.show(msg, ToastAndroid.SHORT);
+        })
+        return;
       case 3:
         fav({ 
           type: 'psnid',

@@ -50,6 +50,7 @@ export default class extends React.PureComponent {
   _onRowPressed = (rowData) => {
     const { navigation } = this.props;
     const URL = getGeneURL(rowData.id);
+    // console.log(rowData)
     navigation.navigate('CommunityTopic', {
       URL,
       title: rowData.title,

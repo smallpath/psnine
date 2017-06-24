@@ -270,7 +270,7 @@ export default class Issue extends Component {
                 alignItems: 'flex-start',
                 backgroundColor: modeInfo.backgroundColor,
                 position: 'absolute',
-                paddingVertical: 30,
+                paddingVertical: 20,
                 left: 30,
                 right: 30,
                 paddingHorizontal: 20,
@@ -319,7 +319,7 @@ export default class Issue extends Component {
                 justifyContent: 'center',
                 alignItems: 'center',
                 backgroundColor: modeInfo.backgroundColor,
-                paddingVertical: 30,
+                paddingVertical: 20,
                 paddingHorizontal: 40,
                 elevation: 4,
                 opacity: 1

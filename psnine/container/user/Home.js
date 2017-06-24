@@ -63,7 +63,8 @@ const iconMapper = {
   '游戏同步': 'md-sync',
   '关注': 'md-star-half',
   '感谢': 'md-thumbs-up',
-  '等级同步': 'md-sync'
+  '等级同步': 'md-sync',
+  '屏蔽': 'md-sync'
 }
 
 const limit = SCREEN_WIDTH - toolbarHeight

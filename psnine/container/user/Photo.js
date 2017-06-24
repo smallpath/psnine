@@ -303,7 +303,7 @@ export default class Photo extends Component {
                 justifyContent: 'center',
                 alignItems: 'center',
                 backgroundColor: modeInfo.backgroundColor,
-                paddingVertical: 30,
+                paddingVertical: 20,
                 paddingHorizontal: 40,
                 elevation: 4,
                 opacity: 1

@@ -53,3 +53,21 @@ export const fav = (form) => {
     body: formBody
   })
 }
+export const block = (form) => {
+  // console.log(form)
+  let formBody = []
+  for (let property in form) {
+    const encodedKey = encodeURIComponent(property);
+    const encodedValue = encodeURIComponent(form[property]);
+    formBody.push(encodedKey + "=" + encodedValue);
+  }
+  formBody = formBody.join("&");
+  return fetch('http://psnine.com/set/blocked/ajax', {
+    method: 'POST',
+    headers: {
+      'Accept': 'text/html,application/xhtml+xml,application/xml',
+      'Content-Type': 'application/x-www-form-urlencoded'
+    },
+    body: formBody
+  })
+}
