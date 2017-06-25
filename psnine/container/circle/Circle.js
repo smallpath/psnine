@@ -242,13 +242,13 @@ export default class extends Component {
             </View>
 
             <View style={{ alignItems: 'center' }}>
-              <Text style={{color: modeInfo.accentColor}}><Text onPress={() => {
+              <Text style={{color: modeInfo.accentColor}} onPress={() => {
                   this.props.navigation.navigate('Home', {
                     title: rowData.owner,
                     id: rowData.owner,
                     URL: `http://psnine.com/psnid/${rowData.owner}`
                   })
-                }} style={{fontSize: 12, color: modeInfo.standardTextColor}}>元素发起者：</Text>{rowData.owner}</Text>
+                }}><Text style={{fontSize: 12, color: modeInfo.standardTextColor}}>元素发起者：</Text>{rowData.owner}</Text>
             </View>
           </View> 
           <View style={{ alignItems: 'center', flexDirection: 'row', padding: 7}}>

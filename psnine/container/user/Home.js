@@ -67,7 +67,7 @@ const iconMapper = {
   '屏蔽': 'md-sync'
 }
 
-const limit = SCREEN_WIDTH - toolbarHeight
+const limit = 360 // - toolbarHeight
 
 export default class Home extends Component {
 
@@ -122,9 +122,9 @@ export default class Home extends Component {
         const target = e.nativeEvent.pageY - this._previousTop - 40
         // console.log(this._previousTop)
         if (target <= limit) {
-          // console.log('===>1')
+          // console.log('===>1', target, limit)
           return true
-        } else if (target <= SCREEN_WIDTH) {
+        } else if (target <= limit + toolbarHeight) {
           // console.log('===>2')
           return false
         } else {
@@ -141,8 +141,8 @@ export default class Home extends Component {
       },
       onMoveShouldSetPanResponderCapture: (e, gesture) => {
         const target = e.nativeEvent.pageY - this._previousTop - 40
-        if (target > limit && target <= SCREEN_WIDTH) {
-          // console.log('===>4')
+        if (target > limit && target <= limit + toolbarHeight) {
+          // console.log('===>4', target)
           return Math.abs(gesture.dy) >= 2
         }
         // console.log('===>5')
@@ -220,7 +220,7 @@ export default class Home extends Component {
     return (
       <View key={rowData.id} style={{
         backgroundColor: 'transparent',
-        height: SCREEN_WIDTH - toolbarHeight
+        height: 360
       }}>
         <View style={{ flexDirection: 'row', justifyContent:'space-around', alignItems: 'center', flex: 1, padding: 5, marginTop: -10  }}>
           <View style={{ justifyContent:'center', alignItems: 'center', flex: 2  }}>
@@ -427,7 +427,7 @@ export default class Home extends Component {
               resizeMode={'cover'}
               resizeMethod={'resize'}
               style={{ 
-                height: 360 + 1,
+                height: 360 + toolbarHeight + 1,
                 top: 0, // why??
               }}
             />
@@ -467,7 +467,7 @@ export default class Home extends Component {
                   outputRange: [modeInfo.standardColor, 'rgba(255, 255, 255, 0)', 'rgba(255, 255, 255, 0)', modeInfo.standardColor],
                 }),
                 flex: 1,
-                height: SCREEN_WIDTH
+                height: 360
               }}/>
             </View>
             <View style={{flex: 0, height: SCREEN_HEIGHT - toolbarHeight - StatusBar.currentHeight + 1, backgroundColor: modeInfo.backgroundColor}} contentContainerStyle={{
