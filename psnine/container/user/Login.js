@@ -179,7 +179,7 @@ class Login extends Component {
     let marginLeft = 40;
 
     const { modeInfo } = this.props.screenProps
-
+    const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
     let avoidKeyboardStyle = {
       bottom: marginLeft * 1.5,
       top: SCREEN_HEIGHT / 10 * 4 - marginLeft * 1.5,
@@ -288,7 +288,7 @@ class Login extends Component {
           backgroundColor: modeInfo.backgroundColor,
           position: 'absolute',
           width: SCREEN_WIDTH - marginLeft * 2,
-          height: SCREEN_HEIGHT / 10 * 6,
+          height: 384,
           marginLeft: marginLeft,
           bottom: marginLeft,
           borderRadius: 5,

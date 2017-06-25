@@ -239,7 +239,6 @@ class Qa extends Component {
           maxToRenderPerBatch={8}
           numColumns={modeInfo.numColumns}
           key={modeInfo.themeName}
-          columnWrapperStyle={{flex: 1}}
           disableVirtualization={false}
           contentContainerStyle={styles.list}
           getItemLayout={(data, index) => (

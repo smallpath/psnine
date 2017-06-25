@@ -154,7 +154,15 @@ class CommunityTopic extends Component {
       }}>
         <TouchableNativeFeedback
           onPress={() => {
-
+            if (rowData.url) {
+              this.props.navigation.navigate('GamePage', {
+                // URL: 'http://psnine.com/psngame/5424?psnid=Smallpath',
+                URL: rowData.url,
+                title: rowData.title,
+                rowData,
+                type: 'game'
+              })
+            }
           }}
           useForeground={true}
           delayPressIn={0}

@@ -365,7 +365,6 @@ class Store extends Component {
           initialNumToRender={42}
           maxToRenderPerBatch={8}
           disableVirtualization={false}
-          columnWrapperStyle={{flex: 1}}
           contentContainerStyle={styles.list}
           getItemLayout={(data, index) => (
             {length: this.ITEM_HEIGHT, offset: this.ITEM_HEIGHT * index, index}

@@ -206,7 +206,6 @@ class Community extends Component {
         onEndReachedThreshold={0.5}
         extraData={modeInfo}
         windowSize={21}
-        columnWrapperStyle={{flex: 1}}
         updateCellsBatchingPeriod={1}
         initialNumToRender={42}
         maxToRenderPerBatch={8}
