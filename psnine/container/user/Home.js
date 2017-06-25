@@ -54,7 +54,7 @@ let WEBVIEW_REF = `WEBVIEW_REF`;
 let toolbarHeight = 56;
 let releasedMarginTop = 0;
 
-const ACTUAL_SCREEN_HEIGHT = SCREEN_HEIGHT - StatusBar.currentHeight + 1;
+let ACTUAL_SCREEN_HEIGHT = SCREEN_HEIGHT - StatusBar.currentHeight + 1;
 
 let CIRCLE_SIZE = 56;
 let config = { tension: 30, friction: 7, ease: Easing.in(Easing.ease(1, 0, 1, 1)), duration: 200 };
@@ -370,7 +370,8 @@ export default class Home extends Component {
     const shouldPushData = !this.state.isLoading 
 
     this.viewBottomIndex = Math.max(data.length - 1, 0)
-
+    let { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window')
+    let ACTUAL_SCREEN_HEIGHT = SCREEN_HEIGHT - StatusBar.currentHeight + 1;
     return (
       <View
         style={{ flex: 1, backgroundColor: modeInfo.backgroundColor }}

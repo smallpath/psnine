@@ -22,7 +22,7 @@ import {
   TabNavigator
 } from 'react-navigation';
 
-let screen = Dimensions.get('window');
+let screen = Dimensions.get('screen');
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = screen
 const minWidth = Math.min(SCREEN_HEIGHT, SCREEN_WIDTH)

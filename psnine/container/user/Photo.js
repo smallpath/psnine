@@ -176,8 +176,8 @@ export default class Photo extends Component {
       navigation,
       rowData,
       modeInfo,
-      ITEM_HEIGHT: SCREEN_WIDTH / 3,
-      width: SCREEN_WIDTH / 3 - 10,
+      ITEM_HEIGHT: SCREEN_WIDTH / 3 / modeInfo.numColumns,
+      width: SCREEN_WIDTH / 3 / modeInfo.numColumns - 10,
       isChecked: selections.includes(rowData.id),
       onPress: () => {
         if (params.alertText && params.afterAlert) {
@@ -275,7 +275,8 @@ export default class Photo extends Component {
           onEndReachedThreshold={0.5}
           extraData={modeInfo}
           windowSize={21}
-          numColumns={3}
+          key={modeInfo.themeName}
+          numColumns={3 * modeInfo.numColumns}
           columnWrapperStyle={{
             flex:1
           }}

@@ -177,9 +177,6 @@ class Gene extends Component {
         extraData={modeInfo}
         windowSize={21}
         updateCellsBatchingPeriod={1}
-        key={modeInfo.themeName}
-        numColumns={modeInfo.numColumns}
-        columnWrapperStyle={{flex: 1}}
         initialNumToRender={42}
         maxToRenderPerBatch={8}
         disableVirtualization={true}

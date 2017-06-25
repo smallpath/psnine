@@ -69,9 +69,20 @@ class HtmlView extends Component {
       this.setState({ element: null })
     }
 
+    const { modeInfo } = this.props
+
+    const editStyles = {
+      blockquote: {
+        backgroundColor: modeInfo.brighterLevelOne,
+        paddingVertical: 6,
+        paddingHorizontal: 6,
+        margin: 10
+      }
+    } 
+
     const opts = {
       linkHandler: this.props.onLinkPress,
-      styles: Object.assign({}, baseStyles, this.props.stylesheet),
+      styles: Object.assign({}, baseStyles, this.props.stylesheet, editStyles),
       customRenderer: this.props.renderNode,
       imagePaddingOffset: this.props.imagePaddingOffset,
       modeInfo: this.props.modeInfo,

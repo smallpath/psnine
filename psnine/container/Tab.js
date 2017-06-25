@@ -10,7 +10,7 @@ import {
   Button
 } from 'react-native';
 
-let screen = Dimensions.get('window');
+let screen = Dimensions.get('screen');
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = screen
 
