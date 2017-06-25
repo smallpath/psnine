@@ -253,7 +253,10 @@ class Game extends Component {
           windowSize={21}
           updateCellsBatchingPeriod={1}
           initialNumToRender={42}
+          columnWrapperStyle={{flex: 1}}
           maxToRenderPerBatch={8}
+          key={modeInfo.themeName}
+          numColumns={modeInfo.numColumns}
           disableVirtualization={false}
           contentContainerStyle={styles.list}
           getItemLayout={(data, index) => (

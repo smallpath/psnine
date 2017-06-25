@@ -24,7 +24,8 @@ import {
 
 let screen = Dimensions.get('window');
 
-const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = screen;
+const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = screen
+const minWidth = Math.min(SCREEN_HEIGHT, SCREEN_WIDTH)
 
 import HomeProfile from './HomeProfile'
 import UserGame from './UserGame'
@@ -34,7 +35,7 @@ import UserDiary from './UserDiary'
 import UserTopic from './UserTopic'
 import UserGene from './UserGene'
 
-const DefaultTabBar = TabNavigator.Presets.Default.tabBarComponent;
+const DefaultTabBar = TabNavigator.Presets.Default.tabBarComponent
 
 const styles = StyleSheet.create({
   icon: {
@@ -91,7 +92,7 @@ const Tab = TabNavigator(container, {
     animationEnabled: false,
     tabStyle: {
       height: 40,
-      width: SCREEN_WIDTH / 4
+      width: minWidth / 4
     },
     style: {
       elevation: 0,

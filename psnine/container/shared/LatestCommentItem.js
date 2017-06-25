@@ -48,14 +48,14 @@ export default class PhotoItem extends React.PureComponent {
 
   render() {
     const { modeInfo, rowData, navigation } = this.props
-
+    const width = (SCREEN_WIDTH - 24) / 2 / modeInfo.numColumns
     return (
       <View key={rowData.id || index} style={{
         alignSelf: 'flex-start',
         alignContent: 'flex-end',
         backgroundColor: modeInfo.backgroundColor,
         height: 56,
-        width: (SCREEN_WIDTH - 14) / 2
+        width: width
       }}>
         <TouchableNativeFeedback
           useForeground={true}

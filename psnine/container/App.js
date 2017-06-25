@@ -25,7 +25,7 @@ let DRAWER_REF = 'drawer';
 let DRAWER_WIDTH_LEFT = 80;
 
 let drawerWidth = Dimensions.get('window').width - DRAWER_WIDTH_LEFT
-if (drawerWidth > 560) {
+if (drawerWidth > 720) {
   drawerWidth = drawerWidth / 2
 }
 // console.log(Dimensions.get('window').width)

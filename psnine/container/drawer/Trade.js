@@ -182,6 +182,9 @@ class Trade extends Component {
         initialNumToRender={42}
         maxToRenderPerBatch={8}
         disableVirtualization={false}
+        numColumns={modeInfo.numColumns}
+        key={modeInfo.themeName}
+        columnWrapperStyle={{flex: 1}}
         contentContainerStyle={styles.list}
         viewabilityConfig={{
           minimumViewTime: 1,

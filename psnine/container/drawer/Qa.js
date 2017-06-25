@@ -237,6 +237,9 @@ class Qa extends Component {
           updateCellsBatchingPeriod={1}
           initialNumToRender={42}
           maxToRenderPerBatch={8}
+          numColumns={modeInfo.numColumns}
+          key={modeInfo.themeName}
+          columnWrapperStyle={{flex: 1}}
           disableVirtualization={false}
           contentContainerStyle={styles.list}
           getItemLayout={(data, index) => (

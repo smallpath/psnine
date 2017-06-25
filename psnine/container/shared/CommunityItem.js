@@ -59,11 +59,14 @@ export default class ComplexComment extends React.PureComponent {
   render = () => {
     const { modeInfo, rowData, navigation, ITEM_HEIGHT, modalList = [] } = this.props
     // console.log(modalList)
+    const { numColumns = 1 } = modeInfo
     return (
       <View style={{
-        marginTop: 7,
+        marginVertical: 3.5,
+        marginHorizontal: numColumns === 1 ? 0 : 3.5,
         backgroundColor: modeInfo.backgroundColor,
         elevation: 1,
+        flex: numColumns === 1 ? -1 : 1,
         height: ITEM_HEIGHT - 7
       }}>
         <TouchableNativeFeedback

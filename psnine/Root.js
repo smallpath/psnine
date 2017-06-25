@@ -12,7 +12,8 @@ import {
   Linking,
   InteractionManager,
   AsyncStorage,
-  NetInfo
+  NetInfo,
+  DeviceEventEmitter
 } from 'react-native';
 import { Provider } from 'react-redux'
 import StackNavigator, { getCurrentRoute, tracker, format } from './Navigator'
@@ -41,9 +42,13 @@ const netInfoHandler = (reach) =>  {
 export default class Root extends React.Component {
   constructor(props) {
     super(props);
+    const { height, width } = Dimensions.get('window')
     this.store = configureStore();
     this.state = {
       text: '',
+      width,
+      height,
+      minWidth: Math.min(height, width),
       isNightMode: false,
       tipBarMarginBottom: new Animated.Value(0),
       progress: new Animated.Value(0),
@@ -208,18 +213,38 @@ export default class Root extends React.Component {
     NetInfo.fetch().then((reach) => {
       // console.log('Initial: ' + reach);
       global.netInfo = reach
-    });
+    })
     NetInfo.addEventListener(
       'change',
       netInfoHandler
-    );
+    )
+    this._orientationSubscription = DeviceEventEmitter.addListener('namedOrientationDidChange', this._handleOrientation)
   }
   componentWillUnmount() {
     Linking.removeEventListener('url', this._handleOpenURL);
     NetInfo.removeEventListener('change', netInfoHandler)
+    this._orientationSubscription && this._orientationSubscription.remove()
   }
   _handleOpenURL(event) {
     // console.log(event.url);
+  }
+
+  _handleOrientation = orientation => {
+    let screen = {}
+    const { height, width } = Dimensions.get('window')
+    const min = Math.min(height, width)
+    const max = Math.max(height, width)
+    const { isLandscape } = orientation
+    screen = {
+      height: isLandscape ? min : max,
+      width: isLandscape ? max : min
+    }
+    // console.log(orientation, screen)
+    this.setState({
+      width: screen.width,
+      height: screen.height,
+      minWidth:  min
+    })
   }
 
   toast = (text) => {
@@ -272,7 +297,7 @@ export default class Root extends React.Component {
     const nightModeInfo = ColorConfig[this.state.colorTheme + 'Night']
     const targetModeInfo = this.state.isNightMode ? nightModeInfo : dayModeInfo
     const { isLoadingAsyncStorage, progress } = this.state
-    const { colorTheme, secondaryColor, isNightMode } = this.state
+    const { colorTheme, secondaryColor, isNightMode, width } = this.state
     const modeInfo = Object.assign({}, targetModeInfo, {
       loadSetting: this.loadSetting,
       reloadSetting: this.reloadSetting,
@@ -282,13 +307,15 @@ export default class Root extends React.Component {
       dayModeInfo: dayModeInfo,
       nightModeInfo: nightModeInfo,
       switchModeOnRoot: this.switchModeOnRoot,
-      themeName: isNightMode ? colorTheme + 'Night:' + secondaryColor  : colorTheme + ':' + secondaryColor,
+      themeName: isNightMode ? `${colorTheme}Night:${secondaryColor}:${width}` : `${colorTheme}:${secondaryColor}:${width}`,
       colorTheme,
       secondaryColor,
+      width,
+      numColumns: Math.floor(width/360),
       accentColor: getAccentColorFromName(secondaryColor, isNightMode)
     })
 
-    // console.log(modeInfo.accentColor)
+    // console.log(modeInfo.numColumns)
 
     const onNavigationStateChange = global.shouldSendGA ? (prevState, currentState) => {
       const currentScreen = getCurrentRoute(currentState);
@@ -339,7 +366,8 @@ export default class Root extends React.Component {
           position: 'absolute',
           bottom: 0,
           elevation: 6,
-          width: SCREEN_WIDTH,
+          left: 0,
+          right: 0,
           backgroundColor: modeInfo.reverseModeInfo.backgroundColor,
           transform: [
             {

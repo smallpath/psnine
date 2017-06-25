@@ -12,7 +12,9 @@ import {
 
 let screen = Dimensions.get('window');
 
-const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = screen;
+const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = screen
+
+const minWidth = Math.min(SCREEN_HEIGHT, SCREEN_WIDTH)
 
 import {
   accentColor,
@@ -137,7 +139,7 @@ const Tabs = TabNavigator({
     animationEnabled: false,
     tabStyle: {
       height: 40,
-      width: SCREEN_WIDTH / 6
+      width: minWidth / 6
     },
     style: {
       elevation: 4,

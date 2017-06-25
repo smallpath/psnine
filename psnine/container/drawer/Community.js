@@ -55,7 +55,10 @@ class Community extends Component {
       shouldCall = true
       cb = () => this._onRefresh(nextProps.screenProps.communityType);
     } else if (this.props.screenProps.modeInfo.themeName != nextProps.screenProps.modeInfo.themeName) {
-      cb = () => {}
+      cb = () => {
+        // this.forceUpdate()
+      }
+      // shouldCall = true
     } else if (this.props.screenProps.searchTitle !== nextProps.screenProps.searchTitle) {
       if (shouldCall) {
         cb = () => this._onRefresh(
@@ -179,7 +182,7 @@ class Community extends Component {
     const { community: reducer } = this.props;
     const { modeInfo } = this.props.screenProps
     log('Community.js rendered');
-
+    // console.log(modeInfo.themeName)
     return (
       <AnimatedFlatList style={{
         flex: 1,
@@ -203,10 +206,13 @@ class Community extends Component {
         onEndReachedThreshold={0.5}
         extraData={modeInfo}
         windowSize={21}
+        columnWrapperStyle={{flex: 1}}
         updateCellsBatchingPeriod={1}
         initialNumToRender={42}
         maxToRenderPerBatch={8}
         disableVirtualization={false}
+        key={modeInfo.themeName}
+        numColumns={modeInfo.numColumns}
         contentContainerStyle={styles.list}
         getItemLayout={(data, index) => (
           {length: this.ITEM_HEIGHT, offset: this.ITEM_HEIGHT * index, index}

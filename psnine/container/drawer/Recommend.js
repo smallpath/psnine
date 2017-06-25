@@ -213,6 +213,7 @@ class Recommend extends Component {
         renderItem={this._renderItemComponent}
         renderSectionHeader={renderSectionHeader}
         stickySectionHeadersEnabled
+        key={modeInfo.themeName}
         sections={sections}
         style={styles.list}
       />

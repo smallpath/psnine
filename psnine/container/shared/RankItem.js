@@ -65,13 +65,15 @@ export default class extends React.PureComponent {
 
   render = () => {
     const { modeInfo, rowData, ITEM_HEIGHT, modalList = [] } = this.props
-
+    const { numColumns = 1 } = modeInfo
     return (
       <View style={{
         marginVertical: 3.5,
+        marginHorizontal: numColumns === 1 ? 0 : 3.5,
         backgroundColor: modeInfo.backgroundColor,
-        height: ITEM_HEIGHT - 7,
-        elevation: 1
+        elevation: 1,
+        flex: numColumns === 1 ? -1 : 1,
+        height: ITEM_HEIGHT - 7
       }}>
         <TouchableNativeFeedback
           onPress={() => {

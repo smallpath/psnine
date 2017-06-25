@@ -44,8 +44,8 @@ export default class PhotoItem extends React.PureComponent {
   }
 
   render() {
-    const { modeInfo, rowData, navigation, width = ( SCREEN_WIDTH - 24 ) / 3 } = this.props
-
+    let { modeInfo, rowData, navigation, width = ( SCREEN_WIDTH - 24 ) / 3 } = this.props
+    width = width / modeInfo.numColumns
     return (
       <View key={rowData.id || index} style={{
         alignSelf: 'flex-start',

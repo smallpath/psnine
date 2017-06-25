@@ -49,11 +49,13 @@ export default class TradeItem extends React.PureComponent {
     let type = rowData.type;
 
     const imageItems = imageArr.map((value, index) => (<Image key={rowData.id + '' + index} source={{ uri: value }} style={styles.geneImage} />));
-
+    const { numColumns = 1 } = modeInfo
     return (
       <View style={{
         marginVertical: 3.5,
+        marginHorizontal: numColumns === 1 ? 0 : 3.5,
         backgroundColor: modeInfo.backgroundColor,
+        flex: numColumns === 1 ? -1 : 1,
         elevation: 1
       }}>
         <TouchableNativeFeedback

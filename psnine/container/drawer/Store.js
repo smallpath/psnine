@@ -44,12 +44,14 @@ class StoreItem extends React.PureComponent {
   render = () => {
     // console.log(rowData)
     const { modeInfo, rowData, ITEM_HEIGHT } = this.props
-
+    const { numColumns = 1 } = modeInfo
     return (
       <View style={{
         marginVertical: 3.5,
         backgroundColor: modeInfo.backgroundColor,
+        marginHorizontal: numColumns === 1 ? 0 : 3.5,
         elevation: 1,
+        flex: numColumns === 1 ? -1 : 1,
         height: ITEM_HEIGHT - 7,
         justifyContent: 'center', alignItems: 'center'
       }}>
@@ -357,10 +359,13 @@ class Store extends Component {
           onEndReachedThreshold={0.5}
           extraData={modeInfo}
           windowSize={21}
+          numColumns={modeInfo.numColumns}
+          key={modeInfo.themeName}
           updateCellsBatchingPeriod={1}
           initialNumToRender={42}
           maxToRenderPerBatch={8}
           disableVirtualization={false}
+          columnWrapperStyle={{flex: 1}}
           contentContainerStyle={styles.list}
           getItemLayout={(data, index) => (
             {length: this.ITEM_HEIGHT, offset: this.ITEM_HEIGHT * index, index}
