@@ -77,7 +77,7 @@ export const fetchTopics = (...args) => safeFetch(getTopicsAPI(...args)).then(re
 
 export const fetchGenes = (...args) => safeFetch(getGenesAPI(...args)).then(res => geneParser(res));
 
-export const getTopicAPI = uri => safeFetch(uri).then(res => topicApiParser(res))
+export const getTopicAPI = uri => safeFetch(uri).then(res => topicApiParser(res, uri.includes('/gene/') ? 'gene' : 'topic'))
 
 export const getBattleAPI = uri => safeFetch(uri).then(res => battleTopicParser(res))
 
