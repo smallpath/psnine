@@ -423,9 +423,9 @@ export default function htmlToElement(rawHtml, opts, done) {
             case 'table':
               classStyle.backgroundColor = opts.modeInfo.brighterLevelOne
               // classStyle.minWidth = (opts.modeInfo.width - opts.imagePaddingOffset) / 4 * 3
-              const { width: SCEEN_WIDTH } = Dimensions.get('window')
-              classStyle.width = SCEEN_WIDTH - opts.imagePaddingOffset
-              classStyle.minWidth = SCEEN_WIDTH - opts.imagePaddingOffset
+              // const { width: SCEEN_WIDTH } = Dimensions.get('window')
+              classStyle.width = opts.modeInfo.width - opts.imagePaddingOffset - isIframe
+              classStyle.minWidth = opts.modeInfo.width - opts.imagePaddingOffset - isIframe
               break;
             case 'tr':
               classStyle.flexDirection =  'row'
