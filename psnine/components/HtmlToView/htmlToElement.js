@@ -405,7 +405,7 @@ export default function htmlToElement(rawHtml, opts, done) {
                 case 't3':
                 case 't2':
                 case 't1':
-                  classStyle.maxWidth = SCEEN_WIDTH - opts.imagePaddingOffset
+                  classStyle.maxWidth = opts.modeInfo.width - opts.imagePaddingOffset
                   classStyle.flexDirection = 'row'
                   classStyle.justifyContent = 'center'
                   classStyle.alignItems = 'flex-start'
@@ -422,6 +422,10 @@ export default function htmlToElement(rawHtml, opts, done) {
           switch (node.name) {
             case 'table':
               classStyle.backgroundColor = opts.modeInfo.brighterLevelOne
+              // classStyle.minWidth = (opts.modeInfo.width - opts.imagePaddingOffset) / 4 * 3
+              const { width: SCEEN_WIDTH } = Dimensions.get('window')
+              classStyle.width = SCEEN_WIDTH - opts.imagePaddingOffset
+              classStyle.minWidth = SCEEN_WIDTH - opts.imagePaddingOffset
               break;
             case 'tr':
               classStyle.flexDirection =  'row'
@@ -431,9 +435,11 @@ export default function htmlToElement(rawHtml, opts, done) {
               break;
             case 'td':
               classStyle.flex = index === 1 ? 2 : 1
+              classStyle.alignItems = 'center'
+              classStyle.justifyContent = 'flex-start'
               classStyle.padding = 2
-              classStyle.borderBottomWidth = classStyle.borderRightWidth = 1
-              classStyle.borderBottomColor = classStyle.borderRightColor = opts.modeInfo.backgroundColor
+              classStyle.borderWidth = 1
+              classStyle.borderColor = opts.modeInfo.backgroundColor
               break;
             default:
               // console.log(node.name, node.children.length)

@@ -57,7 +57,7 @@ export default class extends React.PureComponent {
 
   render = () => {
     const { modeInfo, navigation, rowData, ITEM_HEIGHT } = this.props
-    
+    const { numColumns = 1 } = modeInfo
     return (
       <TouchableNativeFeedback key={rowData.href || rowID}   onPress={() => this._onRowPressed(rowData)}>
         <View pointerEvents={'box-only'} style={{
@@ -65,8 +65,10 @@ export default class extends React.PureComponent {
           flexDirection: 'row',
           borderBottomWidth: StyleSheet.hairlineWidth,
           borderBottomColor: modeInfo.brighterLevelOne,
+          marginHorizontal: numColumns === 1 ? 0 : 3.5,
           padding: 0,
           height: ITEM_HEIGHT,
+          flex: numColumns === 1 ? -1 : 1,
           alignItems: 'center'
         }}>
 

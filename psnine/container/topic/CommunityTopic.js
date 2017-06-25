@@ -311,6 +311,7 @@ class CommunityTopic extends Component {
           shouldShowLoadingIndicator={true}
           stylesheet={styles}
           imagePaddingOffset={30}
+          key={modeInfo.themeName}
           onImageLongPress={this.handleImageOnclick}
         />
       </View>

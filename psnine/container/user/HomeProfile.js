@@ -301,7 +301,7 @@ export default class Home extends Component {
 
 
     this.viewBottomIndex = Math.max(data.length - 1, 0)
-
+    // console.log(modeInfo.themeName)
     return (
       <View
         style={{ flex: 1, backgroundColor: modeInfo.backgroundColor }}
@@ -332,6 +332,8 @@ export default class Home extends Component {
           }}
           extraData={this.state}
           windowSize={999}
+          key={modeInfo.themeName}
+          numColumns={diaryTable.length ? 1 : modeInfo.numColumns}
           disableVirtualization={true}
           viewabilityConfig={{
             minimumViewTime: 3000,

@@ -213,6 +213,8 @@ class UserGame extends Component {
           maxToRenderPerBatch={8}
           disableVirtualization={false}
           contentContainerStyle={styles.list}
+          key={modeInfo.themeName}
+          numColumns={modeInfo.numColumns}
           getItemLayout={(data, index) => (
             {length: this.ITEM_HEIGHT, offset: this.ITEM_HEIGHT * index, index}
           )}
