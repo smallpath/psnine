@@ -24,6 +24,12 @@ import { standardColor } from '../constants/colorConfig';
 let DRAWER_REF = 'drawer';
 let DRAWER_WIDTH_LEFT = 80;
 
+let drawerWidth = Dimensions.get('window').width - DRAWER_WIDTH_LEFT
+if (drawerWidth > 560) {
+  drawerWidth = drawerWidth / 2
+}
+// console.log(Dimensions.get('window').width)
+
 class Psnine extends Component {
   constructor(props) {
     super(props);
@@ -51,7 +57,7 @@ class Psnine extends Component {
     return (
       <DrawerLayoutAndroid
         ref={DRAWER_REF}
-        drawerWidth={Dimensions.get('window').width - DRAWER_WIDTH_LEFT}
+        drawerWidth={drawerWidth}
         drawerPosition={DrawerLayoutAndroid.positions.Left}
         renderNavigationView={() => (
           <LeftDrawer {...{
