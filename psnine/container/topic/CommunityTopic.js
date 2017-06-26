@@ -150,6 +150,7 @@ class CommunityTopic extends Component {
       isLoading: true
     })
     getTopicCommentSnapshotAPI(params.URL).then(data => {
+      // console.log(data.commentList)
       this.setState({
         isLoading: false,
         commentList: data.commentList

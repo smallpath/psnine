@@ -236,7 +236,9 @@ export default class Home extends Component {
             this.props.screenProps.navigation.navigate('CommunityTopic', {
               URL: res.url,
               title: rowData.psnid,
-              rowData,
+              rowData: {
+                id: res.url.split('/').pop()
+              },
               type: res.url.includes('gene') ? 'gene' : 'community', // todo
             })
           }
