@@ -40,13 +40,6 @@ let config = { tension: 30, friction: 7, ease: Easing.in(Easing.ease(1, 0, 1, 1)
 
 const items = [
   {
-    iconName: 'md-color-palette',
-    text: '主题',
-    onPress: function() {
-      this.props.navigation.navigate('Theme')
-    }
-  },
-  {
     iconName: 'md-construct',
     text: '高级',
     onPress: function() {

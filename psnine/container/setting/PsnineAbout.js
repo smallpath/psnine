@@ -88,7 +88,7 @@ export default class PsnineAbout extends Component {
       <TouchableNativeFeedback
         onPress={rowData.onPress}
       >
-        <View style={[styles.themeItem, {
+        <View pointerEvents={'box-only'} style={[styles.themeItem, {
           padding: 6,
           height: 80,
           flexDirection: 'column',

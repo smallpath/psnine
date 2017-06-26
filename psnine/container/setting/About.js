@@ -37,6 +37,7 @@ class About extends Component {
       tagURL: 'https://github.com/smallpath/psnine/releases/tag',
       version: packages['version'],
       backup: 'https://fir.im/mf24',
+      help: 'https://smallpath.me/psnine-help',
       icon: false
     }
   }
@@ -89,6 +90,15 @@ class About extends Component {
         global.toast && global.toast(`未找到浏览器, 如果您使用了冰箱, 请先解冻浏览器`, 2000);
     } catch (err) { }
   }
+  goToHelp = async () => {
+    let supported = await Linking.canOpenURL(this.state.help);
+    try {
+      if (supported)
+        await Linking.openURL(this.state.help);
+      else
+        global.toast && global.toast(`未找到浏览器, 如果您使用了冰箱, 请先解冻浏览器`, 2000);
+    } catch (err) { }
+  }
 
   linkAuthor = async () => {
     Alert.alert(
@@ -108,7 +118,7 @@ class About extends Component {
       <TouchableNativeFeedback
         onPress={rowData.onPress}
       >
-        <View style={[styles.themeItem, {
+        <View pointerEvents={'box-only'} style={[styles.themeItem, {
           padding: 6,
           height: 80,
           flexDirection: 'column',
@@ -157,6 +167,11 @@ class About extends Component {
         title: '备用下载地址',
         desc: this.state.backup,
         onPress: this.goToBackup
+      },
+      {
+        title: '使用帮助',
+        desc: this.state.help,
+        onPress: this.goToHelp
       },
     ]
     return (

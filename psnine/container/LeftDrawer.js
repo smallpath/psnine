@@ -170,6 +170,15 @@ const ListItems = [
     iconName: 'md-home'
   },
   {
+    text: '主题',
+    iconName: 'md-color-palette',
+    onPress: function() {
+      const { navigation, closeDrawer } = this.props;
+      closeDrawer()
+      navigation.navigate('Theme')
+    }
+  },
+  {
     text: '设置',
     iconName: 'md-options',
     onPress: function () {
