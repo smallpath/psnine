@@ -231,12 +231,17 @@ export default class Home extends Component {
 
     return (
       <TouchableNativeFeedback key={rowData.id || index}   onPress={() => {
-          this.props.screenProps.navigation.navigate('CommunityTopic', {
-            URL: rowData.href,
-            title: rowData.psnid,
-            rowData,
-            type: 'gene', // todo
-          })
+        fetch(rowData.href).then(res => {
+          if (res.url && typeof res.url === 'string') {
+            this.props.screenProps.navigation.navigate('CommunityTopic', {
+              URL: res.url,
+              title: rowData.psnid,
+              rowData,
+              type: res.url.includes('gene') ? 'gene' : 'community', // todo
+            })
+          }
+        }).catch(err => global.toast(err.toString()))
+          
         }}>
         <View pointerEvents={'box-only'} style={{
           backgroundColor: modeInfo.backgroundColor,
