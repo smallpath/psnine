@@ -223,15 +223,28 @@ export default class Home extends Component {
         height: 360
       }}>
         <View style={{ flexDirection: 'row', justifyContent:'space-around', alignItems: 'center', flex: 1, padding: 5, marginTop: -10  }}>
-          <View style={{ justifyContent:'center', alignItems: 'center', flex: 2  }}>
+          <View style={{ justifyContent:'center', alignItems: 'center', flex: 2, marginTop: 4  }}>
             <Text style={{ flex: -1, color: infoColor, fontSize: 15, textAlign: 'center' }}>{rowData.description}</Text>
+            {
+                rowData.icons && rowData.icons.length && <View style={{flexDirection:'row', marginVertical: 2}}>{rowData.icons.filter((item, index) => index <= 2).map((item, index) => {
+                  return (
+                    <Image
+                      key={index}
+                      borderRadius={12}
+                      source={{ uri: item}}
+                      style={[styles.avatar, { width: 20, height: 20,overlayColor: 'rgba(0,0,0,0.0)',backgroundColor: 'transparent'
+                       }]}
+                    />
+                  )
+                })}</View>
+              }
           </View>
           <View style={{ justifyContent:'center', alignItems: 'center', flex: 1  }}>
             <Text style={{ flex: -1, color: levelColor, fontSize: 20 }}>{rowData.exp.split('经验')[0]}</Text>
             <Text style={{ flex: -1, color: infoColor, fontSize: 12 }}>{rowData.exp.split('经验')[1]}</Text>
           </View>
           <View style={{ justifyContent:'center', alignItems: 'center', flex: 1  }}>
-            <Text style={{ flex: -1, color: rankColor, fontSize: 20 }}>{rowData.ranking}</Text>
+            <Text style={{ flex: -1, color: rankColor, fontSize: 20 }}>{rowData.ranking || 'None'}</Text>
             <Text style={{ flex: -1, color: infoColor, fontSize: 12 }}>所在服排名</Text>
           </View>
         </View>
@@ -242,7 +255,7 @@ export default class Home extends Component {
               <Image
                 borderRadius={75}
                 source={{ uri: rowData.avatar}}
-                style={[styles.avatar, { width: 150, height: 150,overlayColor: 'rgba(0,0,0,0.0)',backgroundColor: 'transparent', }]}
+                style={[styles.avatar, { width: 150, height: 150,overlayColor: 'rgba(0,0,0,0.0)',backgroundColor: 'transparent' }]}
               />
             </View>
           </View>
