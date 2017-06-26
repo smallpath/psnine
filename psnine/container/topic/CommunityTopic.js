@@ -343,7 +343,7 @@ class CommunityTopic extends Component {
             delayPressIn={0}
             background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
           >
-            <View pointerEvents='box-only' style={{ flex: 1, flexDirection: 'row', padding: 12 }}>
+            <View pointerEvents='box-only' style={{ flex: 1, flexDirection: 'row', alignItems: 'flex-start',padding: 12 }}>
               <Image
                 source={{ uri: rowData.avatar }}
                 style={[styles.avatar, { width: 91 }]}
@@ -364,6 +364,18 @@ class CommunityTopic extends Component {
                     rowData.platium + rowData.gold + rowData.selver + rowData.bronze
                   }</Text>
                 </View>
+
+                {rowData.blockquote && <View style={{flex: -1}}>
+                  <HTMLView
+                    value={rowData.blockquote}
+                    modeInfo={modeInfo}
+                    shouldShowLoadingIndicator={true}
+                    stylesheet={styles}
+                    imagePaddingOffset={144}
+                    key={modeInfo.themeName}
+                    onImageLongPress={this.handleImageOnclick}
+                  />
+                </View> || undefined}
 
               </View>
 
