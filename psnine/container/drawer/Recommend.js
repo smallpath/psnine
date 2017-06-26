@@ -152,7 +152,7 @@ class Recommend extends Component {
           rowData: item,
           onPress: () => {
             this.props.dispatch(changeCommunityType(item.id))
-            toast('已更新节点, 请在社区页面查看')
+            this.props.navigation.navigate('Community', {})
           }
         }}/>))
         break;

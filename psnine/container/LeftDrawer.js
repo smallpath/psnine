@@ -494,13 +494,6 @@ class navigationDrawer extends Component {
           <View
             style={{ backgroundColor: 'rgba(0,0,0,0.1)', height: rowID === '0' ? 0 : 1, }}
           />
-          <View style={[styles.themeItem, {
-            padding: 6, paddingLeft: 10
-          }]}>
-            <Text style={[styles.themeName, { fontSize: 13, color: this.props.modeInfo.standardTextColor }]}>
-              {rowData.text}
-            </Text>
-          </View>
         </View>
       )
     }
@@ -533,7 +526,7 @@ class navigationDrawer extends Component {
           ref="themeslistview"
           dataSource={this.state.psnid !== '' ? this.state.dataSource : this.state.dataSource.cloneWithRows(ListItems.slice(-2))}
           renderRow={this.renderRow}
-          key={this.props.modeInfo.isNightMode ? 'night' : 'day'}
+          key={this.props.modeInfo.themeName}
           keyboardDismissMode="on-drag"
           keyboardShouldPersistTaps="always"
           renderHeader={this.renderHeader}
