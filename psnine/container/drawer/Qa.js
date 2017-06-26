@@ -130,9 +130,20 @@ class Qa extends Component {
 
   componentWillMount = () => {
     const { qa: qaReducer } = this.props;
+    const { registerAfterEach, searchTitle } = this.props.screenProps
     if (qaReducer.page === 0) {
-      this._onRefresh();
+      this._onRefresh(
+        searchTitle
+      );
     }
+    registerAfterEach({
+      index: 2,
+      handler: () => {
+        this._onRefresh(
+          searchTitle
+        )
+      }
+    })
   }
 
   shouldComponentUpdate = (nextProps, nextState) => {
@@ -160,7 +171,7 @@ class Qa extends Component {
     this.setState({
       isRefreshing: true
     })
-
+    this.flatlist && this.flatlist.scrollToOffset({ offset: 0, animated: true })
     const { type, sort } = this.state
     dispatch(getQAList(1, {
         type,

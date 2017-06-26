@@ -119,13 +119,22 @@ class Community extends Component {
 
   componentWillMount = () => {
     const { community: communityReducer } = this.props;
-    const { communityType, searchTitle } = this.props.screenProps
+    const { communityType, searchTitle, registerAfterEach } = this.props.screenProps
     if (communityReducer.topicPage == 0) {
       this._onRefresh(
         communityType, 
         searchTitle
       )
     }
+    registerAfterEach({
+      index: 1,
+      handler: () => {
+        this._onRefresh(
+          communityType, 
+          searchTitle
+        )
+      }
+    })
   }
 
   _onRefresh = (type = '', searchTitle) => {
@@ -182,7 +191,6 @@ class Community extends Component {
     const { community: reducer } = this.props;
     const { modeInfo } = this.props.screenProps
     log('Community.js rendered');
-    // console.log(modeInfo.themeName)
     return (
       <AnimatedFlatList style={{
         flex: 1,

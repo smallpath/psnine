@@ -99,6 +99,7 @@ const RightDrawer = DrawerNavigator({
                   navigation.navigate('DrawerClose');
                   screenProps.toolbarDispatch(changeSegmentIndex(index))
                   navigation.navigate(route.routeName);
+                  screenProps.onTabPress && screenProps.onTabPress(route)
 
                 }}
                 delayPressIn={0}

@@ -99,8 +99,20 @@ class Gene extends Component {
 
   componentWillMount = () => {
     const { gene: geneReducer } = this.props;
-    if (geneReducer.genePage == 0)
-      this._onRefresh();
+    const { registerAfterEach, searchTitle } = this.props.screenProps
+    if (geneReducer.genePage == 0) {
+      this._onRefresh(
+        searchTitle
+      )
+    }
+    registerAfterEach({
+      index: 3,
+      handler: () => {
+        this._onRefresh(
+          searchTitle
+        )
+      }
+    })
   }
 
 

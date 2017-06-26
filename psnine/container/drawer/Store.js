@@ -266,13 +266,21 @@ class Store extends Component {
 
   componentWillMount = () => {
     const { reducer } = this.props;
-    const { searchTitle } = this.props.screenProps
+    const { searchTitle, registerAfterEach } = this.props.screenProps
 
     if (reducer.page === 0) {
       this._onRefresh(
         searchTitle
       )
     }
+    registerAfterEach({
+      index: 7,
+      handler: () => {
+        this._onRefresh(
+          searchTitle
+        )
+      }
+    })
   }
 
   _onRefresh = (searchTitle) => {
@@ -282,7 +290,7 @@ class Store extends Component {
     this.setState({
       isRefreshing: true
     })
-
+    this.flatlist && this.flatlist.getNode().scrollToOffset({ offset: 0, animated: true })
     dispatch(getList(1, {
         title: typeof searchTitle !== 'undefined' ? searchTitle : this.props.screenProps.searchTitle,
         server,

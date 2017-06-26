@@ -74,7 +74,7 @@ export default class TabContainer extends Component {
   }
 }
 
-const Tabs = TabNavigator({
+export const routes = {
   Recommend: {
     screen: Recommend,
   },
@@ -105,7 +105,9 @@ const Tabs = TabNavigator({
   Trade: {
     screen: Trade,
   }
-}, {
+}
+
+const Tabs = TabNavigator(routes, {
   initialRouteName: 'Community',
   tabBarComponent: props => {
     const { modeInfo } = props.screenProps
@@ -113,6 +115,7 @@ const Tabs = TabNavigator({
     return (
         <DefaultTabBar
           {...props}
+          onTabPress={props.screenProps.onTabPress}
           activeTintColor={titleTextColor}
           inactiveTintColor={titleTextColor}
           indicatorStyle={{

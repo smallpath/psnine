@@ -163,9 +163,20 @@ class Game extends Component {
 
   componentWillMount = () => {
     const { game: gameReducer } = this.props;
+    const { registerAfterEach, searchTitle } = this.props.screenProps
     if (gameReducer.page === 0) {
-      this._onRefresh();
+      this._onRefresh(
+        searchTitle
+      );
     }
+    registerAfterEach({
+      index: 4,
+      handler: () => {
+        this._onRefresh(
+          searchTitle
+        )
+      }
+    })
   }
 
   _onRefresh = (title) => {
@@ -174,7 +185,7 @@ class Game extends Component {
     this.setState({
       isRefreshing: true
     })
-
+    this.flatlist && this.flatlist.scrollToOffset({ offset: 0, animated: true })
     const { pf, sort, dlc } = this.state
     dispatch(
       getGameList(1, {

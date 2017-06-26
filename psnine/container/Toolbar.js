@@ -38,7 +38,7 @@ import { getRecommend } from '../actions/recommend';
 import { standardColor, accentColor } from '../constants/colorConfig';
 
 import RightDrawer from './RightDrawer'
-import TabContainer from './Tab'
+import TabContainer, { routes } from './Tab'
 
 let screen = Dimensions.get('window');
 
@@ -144,6 +144,7 @@ class Toolbar extends Component {
 
     this.state = {
       search: '',
+      afterEachHooks: [],
       rotation: new Animated.Value(1),
       scale: new Animated.Value(1),
       opacity: new Animated.Value(1),
@@ -163,16 +164,43 @@ class Toolbar extends Component {
         onNavigationStateChange={(prevRoute, nextRoute, action) => {
 
         }} screenProps={{
-        communityType: this.props.app.communityType,
-        geneType: this.props.app.geneType,
-        circleType: this.props.app.circleType,
-        navigation: this.props.navigation,
-        toolbarDispatch: this.props.dispatch,
-        segmentedIndex: this.props.app.segmentedIndex,
-        modeInfo: this.props.modeInfo,
-        setMarginTop: this.setMarginTop,
-        modalVisible: this.state.modalVisible,
-        searchTitle: this.state.search
+          onTabPress: (route) => {
+            const currentIndex = this.props.app.segmentedIndex
+            const targetIndex = Object.keys(routes).indexOf(route.routeName)
+            
+            if (targetIndex === currentIndex) {
+              const callback = this.state.afterEachHooks[currentIndex]
+              {/*console.log(targetIndex, currentIndex, callback, 'rightdrawer')*/}
+              if (callback) {
+                if (this.timeout) clearTimeout(this.timeout)
+                this.timeout = setTimeout(() => {
+                  callback()
+                }, 200)
+              }
+            }
+          },
+          communityType: this.props.app.communityType,
+          geneType: this.props.app.geneType,
+          circleType: this.props.app.circleType,
+          navigation: this.props.navigation,
+          toolbarDispatch: this.props.dispatch,
+          segmentedIndex: this.props.app.segmentedIndex,
+          modeInfo: this.props.modeInfo,
+          setMarginTop: this.setMarginTop,
+          modalVisible: this.state.modalVisible,
+          searchTitle: this.state.search,
+          registerAfterEach: componentDidFocus => {
+            const obj = {}
+            if (componentDidFocus) {
+              const { index, handler } = componentDidFocus
+              console.log(index, handler)
+              {/*if (!this.state.afterEachHooks[index]) {*/}
+                obj.afterEachHooks = [...this.state.afterEachHooks]
+                obj.afterEachHooks[index] = handler
+              {/*}*/}
+            }
+            this.setState(obj)
+          }
       }}/>
     )
   }
@@ -185,6 +213,21 @@ class Toolbar extends Component {
           }
         }}
         screenProps={{
+          onTabPress: (route) => {
+            const currentIndex = this.props.app.segmentedIndex
+            const targetIndex = Object.keys(routes).indexOf(route.routeName)
+            
+            if (targetIndex === currentIndex) {
+              const callback = this.state.afterEachHooks[currentIndex]
+              {/*console.log(targetIndex, currentIndex, callback)*/}
+              if (callback) {
+                if (this.timeout) clearTimeout(this.timeout)
+                this.timeout = setTimeout(() => {
+                  callback()
+                }, 200)
+              }
+            }
+          },
           communityType: this.props.app.communityType,
           geneType: this.props.app.geneType,
           circleType: this.props.app.circleType,
@@ -194,7 +237,18 @@ class Toolbar extends Component {
           modeInfo: this.props.modeInfo,
           setMarginTop: this.setMarginTop,
           modalVisible: this.state.modalVisible,
-          searchTitle: this.state.search
+          searchTitle: this.state.search,
+          registerAfterEach: componentDidFocus => {
+            const obj = {}
+            if (componentDidFocus) {
+              const { index, handler } = componentDidFocus
+              {/*if (!this.state.afterEachHooks[index]) {*/}
+                obj.afterEachHooks = [...this.state.afterEachHooks]
+                obj.afterEachHooks[index] = handler
+              {/*}*/}
+            }
+            this.setState(obj)
+          }
         }}/>
     )
   }

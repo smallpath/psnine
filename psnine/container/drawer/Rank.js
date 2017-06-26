@@ -179,9 +179,20 @@ class Rank extends Component {
 
   componentWillMount = () => {
     const { rank: reducer } = this.props;
+    const { registerAfterEach, searchTitle } = this.props.screenProps
     if (reducer.page === 0) {
-      this._onRefresh();
+      this._onRefresh(
+        searchTitle
+      );
     }
+    registerAfterEach({
+      index: 6,
+      handler: () => {
+        this._onRefresh(
+          searchTitle
+        )
+      }
+    })
   }
 
   _onRefresh = (title) => {
@@ -190,7 +201,7 @@ class Rank extends Component {
     this.setState({
       isRefreshing: true
     })
-
+    this.flatlist && this.flatlist.scrollToOffset({ offset: 0, animated: true })
     const { server, sort, cheat } = this.state
     dispatch(getRankList(1, {
       sort, server, cheat,
