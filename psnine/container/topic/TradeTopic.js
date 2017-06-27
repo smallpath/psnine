@@ -15,7 +15,8 @@ import {
   FlatList,
   PanResponder,
   Modal,
-  Keyboard
+  Keyboard,
+  Linking
 } from 'react-native';
 
 import HTMLView from '../../components/HtmlToView';
@@ -49,6 +50,10 @@ let toolbarActions = [
   }},
   { title: '刷新', iconName: 'md-refresh', show: 'never', onPress: function() {
     this.preFetch()
+  }},
+  { title: '在浏览器中打开', iconName: 'md-refresh', show: 'never', onPress: function() {
+    const { params = {} } = this.props.navigation.state
+    Linking.openURL(params.URL).catch(err => toast(err.toString()))
   }},
 ];
 

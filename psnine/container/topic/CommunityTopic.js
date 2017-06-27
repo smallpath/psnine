@@ -59,6 +59,10 @@ let toolbarActions = [
   { title: '刷新', iconName: 'md-refresh', show: 'never', onPress: function() {
     this._refreshComment()
   }},
+  { title: '在浏览器中打开', iconName: 'md-refresh', show: 'never', onPress: function() {
+    const { params = {} } = this.props.navigation.state
+    Linking.openURL(params.URL).catch(err => toast(err.toString()))
+  }},
   { title: '收藏', iconName: 'md-star-half', show: 'never', onPress: function() {
     const { params } = this.props.navigation.state
     // console.log(params.type)
