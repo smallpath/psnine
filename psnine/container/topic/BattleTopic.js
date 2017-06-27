@@ -142,7 +142,12 @@ class CommunityTopic extends Component {
         }}>
           <TouchableNativeFeedback
             onPress={() => {
-
+              this.props.navigation.navigate('GamePage', {
+                URL: rowData.url,
+                title: rowData.title,
+                rowData,
+                type: 'game'
+              })
             }}
             useForeground={true}
             delayPressIn={0}
@@ -195,7 +200,12 @@ class CommunityTopic extends Component {
         }}>
           <TouchableNativeFeedback
             onPress={() => {
-
+              this.props.navigation.navigate('Trophy', {
+                URL: rowData.href,
+                title: '@' + rowData.title,
+                rowData,
+                type: 'trophy'
+              })
             }}
             useForeground={true}
             delayPressIn={0}

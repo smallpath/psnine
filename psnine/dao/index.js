@@ -120,7 +120,7 @@ export const getGameTopicAPI = uri => safeFetch(uri).then(res => gameTopicParser
 
 export const getGameMapperAPI = uri => safeFetch(uri).then(res => {
   
-  const id = uri.split('/').pop()
+  const id = uri.replace(/\?(.*?)$/, '').split('/').pop()
   switch (id) {
     case 'news':
       return newGameNewsParser(res)

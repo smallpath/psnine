@@ -35,7 +35,7 @@ export default class BattleItem extends React.PureComponent {
       title: rowData.title,
       rowData,
       type: 'battle',
-      shouldBeSawBackground: true
+      // shouldBeSawBackground: true
     })
   }
 

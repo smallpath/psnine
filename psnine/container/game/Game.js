@@ -227,6 +227,22 @@ export default class GamePage extends Component {
                       id: (item.url.match(/\/psngame\/(\d+)\/comment/) || [0,-1])[1]
                     }
                   })
+                } else if (item.text === '问答') {
+                  this.props.navigation.navigate('GameQa', {
+                    URL: `${item.url}?page=1`
+                  })
+                } else if (item.text === '约战') {
+                  this.props.navigation.navigate('GameBattle', {
+                    URL: `${item.url}?page=1`
+                  })
+                } else if (item.text === '游列') {
+                  this.props.navigation.navigate('GameList', {
+                    URL: `${item.url}?page=1`
+                  })
+                } else if (item.text === '排行') {
+                  this.props.navigation.navigate('GameRank', {
+                    URL: `${item.url}?page=1`
+                  })
                 }
               }}>
               <View pointerEvents={'box-only'} style={{ flex: 1, alignItems:'center', justifyContent: 'center', height: 55, width: 55 }}  key={index}>

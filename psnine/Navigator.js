@@ -21,6 +21,10 @@ import GameTopic from './container/game/GameTopic'
 import GameNewTopic from './container/game/GameNewTopic'
 import GamePage from './container/game/Game'
 import GamePoint from './container/game/GamePoint'
+import GameBattle from './container/game/GameBattle'
+import GameQa from './container/game/GameQa'
+import GameRank from './container/game/GameRank'
+import GameList from './container/game/GameList'
 
 import CommentList from './container/topic/CommentList'
 import CommunityTopic from './container/topic/CommunityTopic'
@@ -108,6 +112,18 @@ const Navigator = StackNavigator({
   },
   GameNewTopic: {
     screen: GameNewTopic
+  },
+  GameBattle: {
+    screen: GameBattle
+  },
+  GameQa: {
+    screen: GameQa
+  },
+  GameRank: {
+    screen: GameRank
+  },
+  GameList: {
+    screen: GameList
   },
   CommentList: {
     screen: CommentList,
