@@ -91,12 +91,7 @@ let battleActions = [
 
 let geneActions = [
   { title: '新建', iconName: 'md-create', value: '', show: 'always', iconSize: 22 },
-  searchAction,
-  { title: '全部', value: 'all', show: 'never' },
-  { title: '图文类', value: 'photo', show: 'never' },
-  { title: '音乐类', value: 'music', show: 'never' },
-  { title: '影视类', value: 'movie', show: 'never' },
-  { title: '视频类', value: 'video', show: 'never' },
+  searchAction
 ];
 
 // let circleActions = [

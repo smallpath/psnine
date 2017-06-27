@@ -17,6 +17,17 @@ import homeParser from '../parser/user/home'
 import trophyParser from '../parser/game/trophy'
 import myGameParser from '../parser/user/myGame'
 import gameTopicParser from '../parser/game/gameTopic'
+
+import gameBattleParser from '../parser/game/gameBattle'
+import gameListParser from '../parser/game/gameList'
+import gameQaParser from '../parser/game/gameQa'
+import gameRankParser from '../parser/game/gameRank'
+import newGameDiscountParser from '../parser/game/newGameDiscount'
+import newGameGuideParser from '../parser/game/newGameGuide'
+import newGameNewsParser from '../parser/game/newGameNews'
+import newGameQaParser from '../parser/game/newGameQa'
+import newGameExpParser from '../parser/game/newGameExp'
+
 import favoriteParser from '../parser/user/favorite'
 import issueParser from '../parser/user/issue'
 import qaTopicParser from '../parser/qa/qa'
@@ -106,6 +117,31 @@ export const getMyGameAPI = uri => safeFetch(uri).then(res => myGameParser(res, 
 export const getTradeTopicAPI = uri => safeFetch(uri).then(res => tradeTopicParser(res, uri.split('/').pop()))
 
 export const getGameTopicAPI = uri => safeFetch(uri).then(res => gameTopicParser(res, uri.split('/').pop()))
+
+export const getGameMapperAPI = uri => safeFetch(uri).then(res => {
+  
+  const id = uri.split('/').pop()
+  switch (id) {
+    case 'news':
+      return newGameNewsParser(res)
+    case 'guide':
+      return newGameGuideParser(res)
+    case 'exp':
+      return newGameExpParser(res)
+    case 'qa':
+      return uri.includes('/psngame/') ? gameQaParser(res) : newGameQaParser(res)
+    case 'discount':
+      return newGameDiscountParser(res)
+    case 'rank':
+      return gameRankParser(res)
+    case 'battle':
+      return gameBattleParser(res)
+    case 'gamelist':
+      return gameListParser(res)
+    default:
+      return {}
+  }
+})
 
 export const getGameNewTopicAPI = uri => safeFetch(uri).then(res => gameNewTopicParser(res, uri.split('/').pop()))
 
