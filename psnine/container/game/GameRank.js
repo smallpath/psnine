@@ -110,9 +110,9 @@ class TopicItem extends React.PureComponent {
           elevation: 1,
         }}>
           <View style={{ flex: 1, flexDirection: 'row', flexWrap: 'nowrap',padding: 8, justifyContent: 'space-around', alignItems: 'center' }}>
-            <View style={{ flex: -1, justifyContent: 'center', alignItems: 'center', paddingHorizontal: 10}}>
+            <View style={{ flex: -1, justifyContent: 'center', alignItems: 'center', paddingHorizontal: 5}}>
               <Text style={{textAlign: 'center', textAlignVertical: 'center', color: modeInfo.titleTextColor}}>
-                No.{rowData.rank}
+                {rowData.rank}
               </Text>
             </View>
             <TouchableNativeFeedback onPress={() => {

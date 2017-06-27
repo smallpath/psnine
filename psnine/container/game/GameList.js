@@ -62,7 +62,7 @@ class TopicItem extends React.PureComponent {
         >
           <View pointerEvents={'box-only'} style={{ flex: -1, flexDirection: 'column', padding: 12 }}>
             <Text style={{ flex: -1, color: modeInfo.standardColor, textAlign: 'left', textAlignVertical: 'center' }}>{rowData.title}</Text>
-            {rowData.content && <View>
+            {rowData.content && <View style={{backgroundColor: modeInfo.brighterLevelOne, padding: 5}}>
               <HTMLView
                 value={`<div>${rowData.content}</div>`}
                 modeInfo={modeInfo}

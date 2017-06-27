@@ -224,6 +224,7 @@ export default function htmlToElement(rawHtml, opts, done) {
       if (node.type == 'text' && node.data.trim() !== '') {
         let linkPressHandler = null;
         if (parent && parent.name === 'a' && parent.attribs && parent.attribs.href) {
+          // console.log('???')
           linkPressHandler = () => opts.linkHandler(entities.decodeHTML(parent.attribs.href))
         }
 

@@ -18,7 +18,8 @@ import {
   Modal,
   Keyboard,
   ScrollView,
-  BackHandler
+  BackHandler,
+  Linking
 } from 'react-native';
 
 import { sync } from '../../dao/sync'
@@ -47,7 +48,11 @@ import CreateNewGameTab from './NewGameTab'
 let screen = Dimensions.get('window');
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = screen;
 
-let toolbarActions = [];
+let toolbarActions = [
+  {
+    title: '官网', show: 'never'
+  }
+];
 let title = "TOPIC";
 let WEBVIEW_REF = `WEBVIEW_REF`;
 
@@ -90,6 +95,21 @@ export default class Home extends Component {
     }
   }
 
+  onActionSelected = (index) => {
+    const { data: source } = this.state
+    if (source && source.titleInfo && source.titleInfo.content && source.titleInfo.content.length) {
+      const item = source.titleInfo.content.filter(item => item.includes('href')).pop()
+      if (item) {
+        let match = item.match(/\'(.*?)\'/)
+        if (!match) match = item.match(/\"(.*?)\"/)
+        if (match && match[1]) Linking.openURL(match[1]).catch(err => toast(err.toString()))
+      } else {
+        toast('官方网站尚未收录')
+      }
+    } else {
+      toast('官方网站尚未收录')
+    }
+  }
 
   componentWillUnmount = () => {
     this.removeListener && this.removeListener.remove()
@@ -120,7 +140,7 @@ export default class Home extends Component {
 
       onStartShouldSetPanResponderCapture: (e, gesture) => {
         const target = e.nativeEvent.pageY - this._previousTop - 40
-        // console.log(this._previousTop)
+        // console.log(e.nativeEvent, gesture)
         if (target <= limit) {
           // console.log('===>1', target, limit)
           return true
@@ -240,14 +260,15 @@ export default class Home extends Component {
             flexWrap: 'nowrap', padding: 10, paddingLeft: 30 }}>
           {rowData.content.map((item, index) => {
             return item.includes('href') ? (
-              <HTMLView
+              undefined
+              /*<HTMLView
                 value={item}
                 key={index}
                 modeInfo={modeInfo}
                 stylesheet={styles}
                 imagePaddingOffset={120 + 10}
                 shouldForceInline={true}
-              />
+              />*/
             ) : <Text key={index} style={{ fontSize: index === 0 ? 18 : 12}}>{item}</Text>
           })}
 
@@ -305,6 +326,13 @@ export default class Home extends Component {
     this.viewBottomIndex = Math.max(data.length - 1, 0)
     let { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window')
     let ACTUAL_SCREEN_HEIGHT = SCREEN_HEIGHT - StatusBar.currentHeight + 1;
+    const actions = toolbarActions.slice()
+    if (source && source.titleInfo && source.titleInfo.content && source.titleInfo.content.length) {
+      const has = source.titleInfo.content.some(item => item.includes('href'))
+      if (!has) {
+        actions.pop()
+      }
+    }
     return (
       <View
         style={{ flex: 1, backgroundColor: modeInfo.backgroundColor }}
@@ -318,7 +346,7 @@ export default class Home extends Component {
           title={`${source.titleInfo ? source.titleInfo.title : '加载中...' }`}
           titleColor={modeInfo.isNightMode ? '#000' : '#fff'}
           style={[styles.toolbar, { backgroundColor: this.state.isLoading ? modeInfo.standardColor : 'transparent' }]}
-          actions={this.state.toolbar}
+          actions={actions}
           key={this.state.toolbar.map(item => item.text || '').join('::')}
           onIconClicked={() => {
             if (marginTop._value === 0) {
@@ -329,7 +357,7 @@ export default class Home extends Component {
             this._previousTop = 0
             Animated.timing(marginTop, { toValue: 0, ...config, duration: 200 }).start();
           }}
-          onActionSelected={this.state.onActionSelected}
+          onActionSelected={this.onActionSelected}
         />
         {this.state.isLoading && (
           <ActivityIndicator

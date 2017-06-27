@@ -51,17 +51,19 @@ class NewsItem extends React.PureComponent {
   }
 
   render = () => {
-    const { modeInfo, rowData, navigation, ITEM_HEIGHT = 200, modalList = [], width = 260 } = this.props
+    const { modeInfo, index = 0, rowData, navigation, ITEM_HEIGHT = 200, modalList = [], width = 260 } = this.props
     // console.log(rowData)
     return (
-      <View style={{ height: ITEM_HEIGHT - 10, justifyContent: 'center', alignItems: 'center' }}>
+      <View style={{ height: ITEM_HEIGHT - 5, justifyContent: 'center', alignItems: 'center' }}>
         <View style={{
-          marginVertical: 5,
+          marginVertical: 2.5,
+          marginLeft: index % 2 ? 0 : 5,
+          marginRight: index % 2 ? 0 : 5,
           marginHorizontal: 5,
           backgroundColor: modeInfo.backgroundColor,
           elevation: 1,
           flex: -1,
-          height: ITEM_HEIGHT - 10,
+          height: ITEM_HEIGHT - 5,
           width
         }}>
           <TouchableNativeFeedback
@@ -73,10 +75,10 @@ class NewsItem extends React.PureComponent {
             background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
           >
             <View style={{ flex: 1 }}>
-              <View style={{ width, height: ITEM_HEIGHT - 10 - 60, backgroundColor: modeInfo.backgroundColor }}>
+              <View style={{ width, height: ITEM_HEIGHT - 5 - 50, backgroundColor: modeInfo.titleTextColor }}>
               { rowData.avatar && <Image
                 source={{ uri: rowData.avatar }}
-                style={{ width, height: ITEM_HEIGHT - 10 - 60 }}
+                style={{ width, height: ITEM_HEIGHT - 5 - 50 }}
               /> || undefined}
                 <View style={{ 
                   position: 'absolute', 
@@ -116,11 +118,11 @@ class NewsItem extends React.PureComponent {
                 </View>
               </View>
 
-              <View style={{ height: 60, padding: 8  }}>
+              <View style={{ height: 45, padding: 5 }}>
                 <Text
                   ellipsizeMode={'tail'}
                   numberOfLines={2}
-                  style={{ flex: 1, color: modeInfo.titleTextColor, }}>
+                  style={{ flex: 1, color: modeInfo.titleTextColor, textAlignVertical: 'center' }}>
                   {rowData.title}
                 </Text>
               </View>
@@ -199,9 +201,10 @@ class GameTopic extends Component {
     return <NewsItem {...{
       navigation,
       rowData,
-      width: this.width - 10 * 2,
+      width: this.width - 10 * 2 + 2.5,
       modeInfo,
-      ITEM_HEIGHT: this.width / 26  * 20 + 10
+      index,
+      ITEM_HEIGHT: this.width / 26  * 20
     }} />
   }
 
@@ -213,7 +216,7 @@ class GameTopic extends Component {
     const data = this.state.list
     // console.log('Message.js rendered');
     const { width, height } = Dimensions.get('window')
-    this.width = Math.min(width, height)
+    this.width = Math.min(width, height) / 2 + 10
     return (
       <View
         style={{ flex: 1, backgroundColor: modeInfo.backgroundColor }}
@@ -244,6 +247,7 @@ class GameTopic extends Component {
           updateCellsBatchingPeriod={1}
           initialNumToRender={42}
           maxToRenderPerBatch={8}
+          numColumns={2}
           disableVirtualization={false}
           contentContainerStyle={styles.list}
           getItemLayout={(data, index) => (
