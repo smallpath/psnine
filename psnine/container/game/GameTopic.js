@@ -29,6 +29,7 @@ import TopicItem from '../shared/CommunityItem'
 import FooterProgress from '../shared/FooterProgress'
 
 let toolbarActions = [
+  { title: '创建', iconName: 'md-create', show: 'always', iconSize: 22 },
   { title: '跳页', iconName: 'md-map', show: 'always' },
 ];
 
@@ -44,7 +45,8 @@ class GameTopic extends Component {
       isRefreshing: true,
       isLoadingMore: false,
       modalVisible: false,
-      sliderValue: 1
+      sliderValue: 1,
+      canCreate: false
     }
   }
 
@@ -81,6 +83,7 @@ class GameTopic extends Component {
           }
           this.pageArr = this.pageArr.sort((a, b) => a - b)
           // alert(`${this.state.currentPage} ${thisPage} ${data.numPages}`)
+          const canCreate = data.canCreate || false
           this.setState({
             list: thisList,
             numberPerPage: data.numberPerPage,
@@ -88,7 +91,8 @@ class GameTopic extends Component {
             commentTotal: data.len,
             currentPage: thisPage,
             isLoadingMore: false,
-            isRefreshing: false
+            isRefreshing: false,
+            canCreate
           }, cb);
         })
       })
@@ -122,6 +126,15 @@ class GameTopic extends Component {
   onActionSelected = (index) => {
     switch (index) {
       case 0:
+        if (!this.state.canCreate) return toast('本游戏暂时无法发布相关讨论')
+        const { params } = this.props.navigation.state
+        const id = (params.URL.match(/\d+/) || [0])[0]
+        this.props.navigation.navigate('NewTopic', {
+          URL: this.state.canCreate
+        })
+        // console.log(id)
+        return
+      case 1:
         this.setState({
           modalVisible: true
         })

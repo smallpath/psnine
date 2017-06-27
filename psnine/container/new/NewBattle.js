@@ -142,6 +142,12 @@ export default class NewTopic extends Component {
     InteractionManager.runAfterInteractions(() => {
       getNewBattleAPI().then(data => {
         // console.log(data)
+        if ((params.URL || '').includes('?psngameid=')) {
+          data.game = data.game.concat({
+            text: params.URL.split('=').pop(),
+            value: params.URL.split('=').pop()
+          })
+        }
         this.setState({
           data,
           isLoading: false,

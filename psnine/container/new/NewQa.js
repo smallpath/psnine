@@ -138,6 +138,12 @@ export default class NewTopic extends Component {
     InteractionManager.runAfterInteractions(() => {
       getNewQaAPI().then(data => {
         // console.log(data)
+        if ((params.URL || '').includes('?psngameid=')) {
+          data.game = data.game.concat({
+            text: params.URL.split('=').pop(),
+            value: params.URL.split('=').pop()
+          })
+        }
         this.setState({
           data,
           isLoading: false
@@ -145,7 +151,9 @@ export default class NewTopic extends Component {
           // console.log(params)
           if (params.URL) {
             getQaEditAPI(params.URL).then(data => {
-              // console.log(data)
+              if (params.URL.includes('?psngameid=')) {
+                toast('已设置对应游戏ID' + data.psngameid)
+              }
               this.setState(data)
             })
           }

@@ -29,6 +29,7 @@ import TopicItem from '../shared/QaItem'
 import FooterProgress from '../shared/FooterProgress'
 
 let toolbarActions = [
+  { title: '创建', iconName: 'md-create', show: 'always', iconSize: 22},
   { title: '跳页', iconName: 'md-map', show: 'always' },
 ];
 
@@ -122,6 +123,14 @@ class GameTopic extends Component {
   onActionSelected = (index) => {
     switch (index) {
       case 0:
+        const { params } = this.props.navigation.state
+        const id = (params.URL.match(/\d+/) || [0])[0]
+        this.props.navigation.navigate('NewQa', {
+          URL: `http://psnine.com/set/qa?psngameid=${id}`
+        })
+        // console.log(id)
+        return
+      case 1:
         this.setState({
           modalVisible: true
         })

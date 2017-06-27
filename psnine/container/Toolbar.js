@@ -277,7 +277,7 @@ class Toolbar extends Component {
   }
 
   onActionSelected = (index) => {
-    const { segmentedIndex } = this.props.app;
+    const { segmentedIndex, communityType } = this.props.app;
     const { dispatch } = this.props;
     if (segmentedIndex === 1) {
       if (index !== 0 && index !== 1) {
@@ -285,7 +285,11 @@ class Toolbar extends Component {
         dispatch(changeCommunityType(type));
       } else {
         index === 1 && this._onSearchClicked()
-        index === 0 && this.props.navigation.navigate('NewTopic', {})
+        const obj = {}
+        if (communityType) {
+          obj.URL = `http://psnine.com/node/${communityType}/add`
+        }
+        index === 0 && this.props.navigation.navigate('NewTopic', obj)
       }
     } else if (segmentedIndex === 2) {
       index === 0 && this.props.navigation.navigate('NewQa', {})

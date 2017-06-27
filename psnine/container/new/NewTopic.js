@@ -121,6 +121,15 @@ export default class NewTopic extends Component {
     if (params.URL) {
       InteractionManager.runAfterInteractions(() => {
         getTopicEditAPI(params.URL).then(data => {
+          const match = params.URL.match(/node\/(.*?)\//)
+          if (data.node === 'talk' && (match && match[1] !== 'talk')) {
+            toast('本板块无法发布新帖')
+            return this.props.navigation.goBack()
+          }
+          
+          if (match && match[1]) {
+            toast('已设置为对应板块' + match[1])
+          }
           this.setState(data)
         })
       })
