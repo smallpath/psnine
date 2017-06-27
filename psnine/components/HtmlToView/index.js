@@ -23,6 +23,7 @@ const baseStyles = StyleSheet.create({
     color: '#007AFF',
   },
   u: { textDecorationLine: 'underline' },
+  s: { textDecorationLine: 'line-through' },
   h1: { fontWeight: '500', fontSize: 36 },
   h2: { fontWeight: '500', fontSize: 30 },
   h3: { fontWeight: '500', fontSize: 24 },
