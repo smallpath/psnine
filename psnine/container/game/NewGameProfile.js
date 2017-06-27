@@ -30,20 +30,20 @@ import GameItem from '../shared/GameItem'
 import FooterProgress from '../shared/FooterProgress'
 
 let toolbarActions = [
-  { title: '跳页', iconName: 'md-map', show: 'always' },
+  // { title: '跳页', iconName: 'md-map', show: 'always' },
 ];
 
 class GameTopic extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      list: [],
-      gameTable: [],
+      list: this.props.screenProps.list,
+      gameTable: this.props.screenProps.gameTable,
       numberPerPage: 60,
       numPages: 1,
       commentTotal: 1,
       currentPage: 1,
-      isRefreshing: true,
+      isRefreshing: false,
       isLoadingMore: false,
       modalVisible: false,
       sliderValue: 1
@@ -51,13 +51,13 @@ class GameTopic extends Component {
   }
 
   onNavClicked = (rowData) => {
-    const { navigation } = this.props;
+    const { navigation } = this.props.screenProps;
     navigation.goBack();
   }
 
   componentWillMount = async () => {
-    const { params } = this.props.navigation.state
-    this.fetchMessages(params.URL, 'jump');
+    const { params } = this.props.screenProps.navigation.state
+    // this.fetchMessages(params.URL, 'jump');
   }
 
   fetchMessages = (url, type = 'down') => {
@@ -101,7 +101,7 @@ class GameTopic extends Component {
 
   pageArr = [1]
   _onRefresh = () => {
-    const { URL } = this.props.navigation.state.params;
+    const { URL } = this.props.screenProps.navigation.state.params;
     const currentPage = this.pageArr[0] || 1
     let type = currentPage === 1 ? 'jump' : 'up'
     let targetPage = currentPage - 1
@@ -114,7 +114,7 @@ class GameTopic extends Component {
   }
 
   _onEndReached = () => {
-    const { URL } = this.props.navigation.state.params;
+    const { URL } = this.props.screenProps.navigation.state.params;
     const currentPage = this.pageArr[this.pageArr.length - 1]
     const targetPage = currentPage + 1
     if (targetPage > this.state.numPages) return
@@ -139,7 +139,7 @@ class GameTopic extends Component {
   _renderItem = ({ item: rowData, index }) => {
     const { modeInfo } = this.props.screenProps
     const { ITEM_HEIGHT } = this
-    const { navigation } = this.props
+    const { navigation } = this.props.screenProps
     return rowData.date ? <TopicItem {...{
       navigation,
       rowData,
@@ -156,7 +156,7 @@ class GameTopic extends Component {
   sliderValue = 1
   render() {
     const { modeInfo } = this.props.screenProps
-    const { params } = this.props.navigation.state
+    const { params } = this.props.screenProps.navigation.state
     const data = this.state.gameTable.concat(this.state.list)
     // console.log('Message.js rendered');
     return (
@@ -165,17 +165,6 @@ class GameTopic extends Component {
         onStartShouldSetResponder={() => false}
         onMoveShouldSetResponder={() => false}
       >
-        <Ionicons.ToolbarAndroid
-          navIconName="md-arrow-back"
-          overflowIconName="md-more"
-          iconColor={modeInfo.isNightMode ? '#000' : '#fff'}
-          title={'主题'}
-          style={[styles.toolbar, { backgroundColor: modeInfo.standardColor }]}
-          titleColor={modeInfo.isNightMode ? '#000' : '#fff'}
-          actions={toolbarActions}
-          onIconClicked={this.onNavClicked}
-          onActionSelected={this.onActionSelected}
-        />
         <FlatList style={{
           flex: 1,
           backgroundColor: modeInfo.backgroundColor

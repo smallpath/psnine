@@ -18,7 +18,7 @@ import Issue from './container/user/Issue'
 
 import Trophy from './container/game/Trophy'
 import GameTopic from './container/game/GameTopic'
-import GameNewTopic from './container/game/GameNewTopic'
+import NewGame from './container/game/NewGame'
 import GamePage from './container/game/Game'
 import GamePoint from './container/game/GamePoint'
 import GameBattle from './container/game/GameBattle'
@@ -110,8 +110,8 @@ const Navigator = StackNavigator({
   PsnineAbout: {
     screen: PsnineAbout
   },
-  GameNewTopic: {
-    screen: GameNewTopic
+  NewGame: {
+    screen: NewGame
   },
   GameBattle: {
     screen: GameBattle

@@ -38,7 +38,7 @@ export default class PhotoItem extends React.PureComponent {
 
   onPress = () => {
     const { modeInfo, rowData, navigation } = this.props
-    navigation.navigate('GameNewTopic', {
+    navigation.navigate('NewGame', {
       URL: `${rowData.href}?page=1`,
     })
   }

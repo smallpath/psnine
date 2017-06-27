@@ -194,7 +194,7 @@ class Recommend extends Component {
         renderItem: (...args) => this._renderItemComponent(...args, index)
       }
     });
-    // console.log('recommend re-rendered')
+    console.log('recommend re-rendered')
     return (
       <AnimatedSectionList
         enableVirtualization={false}
@@ -212,8 +212,8 @@ class Recommend extends Component {
         keyExtractor={(item, index) => `${item.id}`}
         renderItem={this._renderItemComponent}
         renderSectionHeader={renderSectionHeader}
-        stickySectionHeadersEnabled
         key={modeInfo.themeName}
+        stickySectionHeadersEnabled
         sections={sections}
         style={styles.list}
       />
