@@ -13,7 +13,8 @@ import {
   Modal,
   Slider,
   ActivityIndicator,
-  FlatList
+  FlatList,
+  Button
 } from 'react-native';
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
@@ -51,7 +52,11 @@ class UserBoard extends Component {
   }
 
   onActionSelected = (index) => {
-    
+    if (index === 0) {
+      return this.props.screenProps.navigation.navigate('WebView', {
+        URL: 'http://psnine.com/set/diary'
+      })
+    }
   }
 
 
@@ -93,10 +98,20 @@ class UserBoard extends Component {
             diary: data.diary,
             isLoading: false
           }, () => {
+            const targetToolbar = toolbarActions.slice()
+            const { modeInfo, psnid } = this.props.screenProps
+            const { URL } = this
+            // console.log('Message.js rendered');
+            const isOwner = modeInfo.settingInfo.psnid.toLowerCase() === psnid.toLowerCase()
+            if (isOwner) {
+              targetToolbar.push({
+                iconName: 'md-create', title: '创建日志', iconSize: 22, show: 'always'
+              })
+            }
             const componentDidFocus = () => {
               InteractionManager.runAfterInteractions(() => {
                 this.props.screenProps.setToolbar({
-                  toolbar: toolbarActions,
+                  toolbar: targetToolbar,
                   toolbarActions: this.onActionSelected,
                   componentDidFocus: {
                     index: 2,
@@ -117,7 +132,7 @@ class UserBoard extends Component {
     const shouldShowImage = rowData.thumbs.length !== 0
     const suffix = '<div>' + rowData.thumbs.map(text => `<img src="${text}">`).join('') + '</div>'
     const content = `<div>${rowData.content}<br><br>${shouldShowImage ? suffix : ''}</div>`
-    // console.log('here', typeof DiaryItem)
+    // console.log('here', rowData)
     return <DiaryItem {...{
       navigation,
       rowData,
@@ -130,10 +145,9 @@ class UserBoard extends Component {
   isReplyShowing = false
 
   render() {
-    const { modeInfo } = this.props.screenProps
+    const { modeInfo, psnid } = this.props.screenProps
     const { URL } = this
     // console.log('Message.js rendered');
-
     return (
       <View
         style={{ flex: 1, backgroundColor: modeInfo.backgroundColor }}

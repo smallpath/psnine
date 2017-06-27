@@ -140,7 +140,7 @@ export default class extends React.PureComponent {
           }}>
             <Text        
               style={{ 
-                flex: 1,             
+                flex: 2,             
                 textAlign: 'left',
                 textAlignVertical: 'center',
                 color: modeInfo.standardTextColor, }}>{rowData.psnid}</Text>
@@ -149,7 +149,13 @@ export default class extends React.PureComponent {
                 flex: 1,             
                 textAlign: 'left',
                 textAlignVertical: 'center',
-                color: modeInfo.standardTextColor, }}>{rowData.date + ' '}{rowData.count}</Text>
+                color: modeInfo.standardTextColor, }}>{rowData.date}</Text>
+            <Text             
+              style={{ 
+                flex: 1,             
+                textAlign: 'left',
+                textAlignVertical: 'center',
+                color: modeInfo.standardTextColor, }}>{rowData.count}</Text>
           </View>
         </View>
       </TouchableNativeFeedback>

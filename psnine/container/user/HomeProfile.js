@@ -275,7 +275,7 @@ export default class Home extends Component {
           }}>
             <Text        
               style={{ 
-                flex: 1,             
+                flex: 2,             
                 textAlign: 'left',
                 textAlignVertical: 'center',
                 color: modeInfo.standardTextColor, }}>{rowData.psnid}</Text>
@@ -284,7 +284,13 @@ export default class Home extends Component {
                 flex: 1,             
                 textAlign: 'left',
                 textAlignVertical: 'center',
-                color: modeInfo.standardTextColor, }}>{rowData.date + ' '}{rowData.count}</Text>
+                color: modeInfo.standardTextColor, }}>{rowData.date}</Text>
+            <Text             
+              style={{ 
+                flex: 1,             
+                textAlign: 'left',
+                textAlignVertical: 'center',
+                color: modeInfo.standardTextColor, }}>{rowData.count}</Text>
           </View>
         </View>
       </TouchableNativeFeedback>
