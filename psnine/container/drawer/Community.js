@@ -177,13 +177,14 @@ class Community extends Component {
   ITEM_HEIGHT = 78 + 7
 
   _renderItem = ({ item: rowData, index }) => {
-    const { modeInfo, navigation } = this.props.screenProps
+    const { modeInfo, navigation, toolbarDispatch } = this.props.screenProps
     const { ITEM_HEIGHT } = this
     return <TopicItem {...{
       navigation,
       rowData,
       modeInfo,
-      ITEM_HEIGHT
+      ITEM_HEIGHT,
+      toolbarDispatch
     }} />
   }
 
@@ -208,7 +209,7 @@ class Community extends Component {
         }
         ListFooterComponent={() => <FooterProgress isLoadingMore={this.state.isLoadingMore} modeInfo={modeInfo} />}
         data={reducer.topics}
-        keyExtractor={(item, index) => `${item.id}::${item.views}::${item.count}`}
+        keyExtractor={(item, index) => `${item.id}::${item.views}::${item.count}::${item.avatar}`}
         renderItem={this._renderItem}
         onEndReached={this._onEndReached}
         onEndReachedThreshold={0.5}

@@ -223,7 +223,7 @@ export default class Home extends Component {
         height: 360
       }}>
         <View style={{ flexDirection: 'row', justifyContent:'space-around', alignItems: 'center', flex: 1, padding: 5, marginTop: -10  }}>
-          <View style={{ justifyContent:'center', alignItems: 'center', flex: 2, marginTop: 4  }}>
+          <View style={{ justifyContent:'center', alignItems: 'center', flex: 2, marginTop: 2  }}>
             <Text style={{ flex: -1, color: infoColor, fontSize: 15, textAlign: 'center' }}>{rowData.description}</Text>
             {
                 rowData.icons && rowData.icons.length && <View style={{flexDirection:'row', marginVertical: 2}}>{rowData.icons.filter((item, index) => index <= 2).map((item, index) => {

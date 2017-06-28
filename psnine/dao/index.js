@@ -80,7 +80,14 @@ const host = `http://120.55.124.66`;
 
 const webHost = `http://psnine.com`;
 
-const getTopicsAPI = ({ page, type, title }) => !type ? `${webHost}/topic?page=${page}&node=${type}${title ? `&title=${title}` : '' }` : `${webHost}/node/${type}?page=${page}${title ? `&title=${title}` : '' }`;
+const getTopicsAPI = ({ page, type, title }) => {
+  if (!type) { 
+    return `${webHost}/topic?page=${page}&node=${type}${title ? `&title=${title}` : '' }` 
+  } else {
+    const target = type === 'news' ? '/news/' : '/node/' + type
+    return `${webHost}${target}?page=${page}${title ? `&title=${title}` : '' }`
+  }
+}
 
 const getGenesAPI = ({ page, type, title }) => `${webHost}/gene?page=${page}&type=${type}${title ? `&title=${title}` : '' }`;
 

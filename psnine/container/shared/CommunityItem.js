@@ -23,6 +23,7 @@ import HTMLView from '../../components/HtmlToView';
 import { connect } from 'react-redux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { standardColor, nodeColor, idColor, accentColor } from '../../constants/colorConfig';
+import { changeSegmentIndex, changeCommunityType, changeGeneType, changeCircleType } from '../../actions/app';
 
 import {
   getGamePointAPI,
@@ -57,7 +58,7 @@ export default class ComplexComment extends React.PureComponent {
   }
 
   render = () => {
-    const { modeInfo, rowData, navigation, ITEM_HEIGHT, modalList = [] } = this.props
+    const { modeInfo, rowData, navigation, ITEM_HEIGHT, modalList = [], toolbarDispatch } = this.props
     // console.log(modalList)
     const { numColumns = 1 } = modeInfo
     return (
@@ -143,7 +144,11 @@ export default class ComplexComment extends React.PureComponent {
                   }}>{rowData.psnid}</Text>
                 <Text selectable={false} style={{ flex: -1, color: modeInfo.standardTextColor, textAlign: 'center', textAlignVertical: 'center' }}>{rowData.date}</Text>
                 <Text selectable={false} style={{ flex: -1, color: modeInfo.standardTextColor, textAlign: 'center', textAlignVertical: 'center' }}>{rowData.count}回复</Text>
-                <Text selectable={false} style={{ flex: -1, color: modeInfo.standardTextColor, textAlign: 'center', textAlignVertical: 'center' }}>{rowData.type}</Text>
+                <Text selectable={false} style={{ flex: -1, color: rowData.type && toolbarDispatch ? modeInfo.standardColor : modeInfo.standardTextColor, textAlign: 'center', textAlignVertical: 'center' }} onPress={
+                  rowData.type && toolbarDispatch ? () => {
+                    toolbarDispatch(changeCommunityType(rowData.type));
+                  } : null
+                }>{rowData.type}</Text>
               </View>
 
             </View>
