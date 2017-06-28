@@ -172,6 +172,7 @@ class Game extends Component {
     registerAfterEach({
       index: 4,
       handler: () => {
+        const { searchTitle } = this.props.screenProps
         this._onRefresh(
           searchTitle
         )

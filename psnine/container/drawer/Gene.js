@@ -108,6 +108,7 @@ class Gene extends Component {
     registerAfterEach({
       index: 3,
       handler: () => {
+        const { searchTitle } = this.props.screenProps
         this._onRefresh(
           searchTitle
         )
@@ -116,7 +117,7 @@ class Gene extends Component {
   }
 
 
-  _onRefresh = (type = '', title) => {
+  _onRefresh = (title, type = '') => {
     const { gene: geneReducer, dispatch } = this.props;
 
     this.setState({

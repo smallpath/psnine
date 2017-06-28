@@ -121,14 +121,18 @@ class Community extends Component {
     const { community: communityReducer } = this.props;
     const { communityType, searchTitle, registerAfterEach } = this.props.screenProps
     if (communityReducer.topicPage == 0) {
-      this._onRefresh(
-        communityType, 
-        searchTitle
-      )
+      // this._onRefresh(
+      //   communityType, 
+      //   searchTitle
+      // )
+      this.setState({
+        isRefreshing: true
+      })
     }
     registerAfterEach({
       index: 1,
       handler: () => {
+        const { communityType, searchTitle } = this.props.screenProps
         this._onRefresh(
           communityType, 
           searchTitle

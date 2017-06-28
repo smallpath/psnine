@@ -188,6 +188,7 @@ class Rank extends Component {
     registerAfterEach({
       index: 6,
       handler: () => {
+        const { searchTitle } = this.props.screenProps
         this._onRefresh(
           searchTitle
         )

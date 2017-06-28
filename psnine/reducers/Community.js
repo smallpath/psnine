@@ -21,6 +21,15 @@ function reducer(state = initialState, action) {
         });
       }
       return newState;
+    case ActionTypes.GET_TOPICS_RECOMMEND_SUCCESS:
+      if (state.topicPage === 0) {
+        return newState = Object.assign({}, state, {
+          topics: state.topics.concat(action.value),
+          topicPage: 1,
+        });
+      } else {
+        return state
+      }
     case ActionTypes.GET_TOPICS_ERROR:
       newState = Object.assign({}, state, {
         topicPage: 0,

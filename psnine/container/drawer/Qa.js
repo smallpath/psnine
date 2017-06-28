@@ -139,6 +139,7 @@ class Qa extends Component {
     registerAfterEach({
       index: 2,
       handler: () => {
+        const { searchTitle } = this.props.screenProps
         this._onRefresh(
           searchTitle
         )

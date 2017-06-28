@@ -108,6 +108,7 @@ class Trade extends Component {
     registerAfterEach({
       index: 8,
       handler: () => {
+        const { searchTitle } = this.props.screenProps
         this._onRefresh(
           searchTitle
         )

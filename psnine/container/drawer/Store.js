@@ -276,6 +276,7 @@ class Store extends Component {
     registerAfterEach({
       index: 7,
       handler: () => {
+        const { searchTitle } = this.props.screenProps
         this._onRefresh(
           searchTitle
         )
