@@ -216,7 +216,7 @@ class GameTopic extends Component {
     const data = this.state.list
     // console.log('Message.js rendered');
     const { width, height } = Dimensions.get('window')
-    this.width = Math.min(width, height) / 2 + 10
+    this.width = width / 2 + 10 //Math.min(width, height) / 2 + 10
     return (
       <View
         style={{ flex: 1, backgroundColor: modeInfo.backgroundColor }}

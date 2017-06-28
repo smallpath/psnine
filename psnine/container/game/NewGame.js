@@ -72,7 +72,7 @@ const iconMapper = {
   '屏蔽': 'md-sync'
 }
 
-const limit = 210 // - toolbarHeight
+const limit = 160 // - toolbarHeight
 
 export default class Home extends Component {
 
@@ -240,13 +240,13 @@ export default class Home extends Component {
     return (
       <View style={{
         backgroundColor: 'transparent',
-        height: 210,
+        height: limit,
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
         padding: 10
       }}>
-        <View style={{ justifyContent:'center', alignItems: 'center', flex: -1, marginLeft: 20, marginBottom: 30  }}>
+        <View style={{ justifyContent:'center', alignItems: 'center', flex: -1, marginLeft: 20, marginBottom: 15  }}>
           <Image
             source={{ uri: rowData.avatar}}
             style={[styles.avatar, { width: 120, height: 120,overlayColor: 'rgba(0,0,0,0.0)',backgroundColor: 'transparent' }]}
@@ -254,10 +254,10 @@ export default class Home extends Component {
         </View>
 
         <View style={{ justifyContent:'center', alignItems: 'flex-start', 
-            marginBottom: 30,
+            marginBottom: 15,
             maxWidth: SCREEN_WIDTH - 120,
             overflow: 'scroll',
-            flexWrap: 'nowrap', padding: 10, paddingLeft: 30 }}>
+            flexWrap: 'nowrap', padding: 10, paddingTop: 0, paddingLeft: 30 }}>
           {rowData.content.map((item, index) => {
             return item.includes('href') ? (
               undefined
@@ -390,7 +390,7 @@ export default class Home extends Component {
               resizeMethod={'resize'}
               blurRadius={10}
               style={{ 
-                height: 210 + toolbarHeight + 1,
+                height: limit + toolbarHeight + 1,
                 top: 0, // why??
               }}
             />
@@ -404,7 +404,7 @@ export default class Home extends Component {
           style={{
             overflow: 'visible',
             flex:0, 
-            height: ACTUAL_SCREEN_HEIGHT + 210 - toolbarHeight + ACTUAL_SCREEN_HEIGHT    ,         
+            height: ACTUAL_SCREEN_HEIGHT + limit - toolbarHeight + ACTUAL_SCREEN_HEIGHT    ,         
             transform: [
                 {
                   translateY: this.state.marginTop.interpolate({
@@ -430,7 +430,7 @@ export default class Home extends Component {
                   outputRange: [modeInfo.standardColor, 'rgba(255, 255, 255, 0)', 'rgba(255, 255, 255, 0)', modeInfo.standardColor],
                 }),
                 flex: 1,
-                height: 210
+                height: limit
               }}/>
             </View>
             <View style={{flex: 0, height: SCREEN_HEIGHT - toolbarHeight - StatusBar.currentHeight + 1, backgroundColor: modeInfo.backgroundColor}} contentContainerStyle={{
