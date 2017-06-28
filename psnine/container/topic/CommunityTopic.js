@@ -561,28 +561,39 @@ class CommunityTopic extends Component {
     this.viewBottomIndex = Math.max(data.length - 1, 0)
     const targetActions = toolbarActions.slice()
 
-    try {
-      if (this.state.data && this.state.data.titleInfo && 
-          this.state.data.titleInfo.shareInfo && 
-            this.state.data.titleInfo.shareInfo.source
-            ) {
-        //
-      } else {
-        targetActions.pop()
+    if (shouldPushData && this.state.data && this.state.data.titleInfo && this.state.data.titleInfo.shareInfo) {
+      const shareInfo = this.state.data.titleInfo && this.state.data.titleInfo.shareInfo
+      const link = shareInfo.linkGameUrl
+      if (link) {
+        const name = shareInfo.linkGame
+        targetActions.unshift({ 
+          title: name, iconName: 'md-game-controller-b', iconSize: 22, show: 'always',
+          onPress: function() {
+            const { params } = this.props.navigation.state
+            this.props.navigation.navigate('NewGame', {
+              URL: link + '?page=1',
+              title: shareInfo.linkGame
+            })
+          }
+        })
       }
-    } catch(err) {}
-
-    if (shouldPushData && this.state.data.titleInfo && this.state.data.titleInfo.shareInfo  && this.state.data.titleInfo.shareInfo.edit) {
-      targetActions.push(
-        { title: '编辑', iconName: 'md-create', iconSize: 22, show: 'never', onPress: function() {
+      try {
+        if (!shareInfo.source) {
+          targetActions.pop()
+        }
+      } catch(err) {}
+      if (shareInfo.edit) {
+        targetActions.push({ 
+          title: '编辑', iconName: 'md-create', iconSize: 22, show: 'never', 
+          onPress: function() {
             const { navigation } = this.props
-            // console.log(params.type)
             const target = params.type === 'gene' ? 'NewGene' : 'NewTopic'
             navigation.navigate(target, {
-              URL: this.state.data.titleInfo.shareInfo.edit
+              URL: shareInfo.edit
             })
-          }},
-      )
+          }
+        })
+      }
     }
 
     return (
