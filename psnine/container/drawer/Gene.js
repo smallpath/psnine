@@ -49,7 +49,7 @@ class Gene extends Component {
     } else if (this.props.screenProps.searchTitle !== nextProps.screenProps.searchTitle) {
       if (shouldCall) {
         cb = () => this._onRefresh(
-          this.props.screenProps.geneType, 
+          // this.props.screenProps.geneType, 
           nextProps.screenProps.searchTitle
         )
       } else {
@@ -60,7 +60,7 @@ class Gene extends Component {
       if (this.shouldOnRefreshForSearch === true && shouldCall) {
         this.shouldOnRefreshForSearch = false
         cb = () => this._onRefresh(
-          this.props.screenProps.geneType, 
+          // this.props.screenProps.geneType, 
           nextProps.screenProps.searchTitle
         )
       } else {
