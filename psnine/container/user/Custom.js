@@ -208,6 +208,32 @@ export default class Custom extends Component {
       </View>
     )
   }
+  renderGene = ({ item: rowData, index}) => {
+    const { modeInfo } = this.props.screenProps
+    const { ITEM_HEIGHT } = this
+    const { navigation } = this.props
+    // console.log(index, rowData)
+    const geneopen = this.state.data.form.geneopen
+    return (
+      <View style={{ flex: 1, padding: 10 }}>
+        <Button title={'显示机因'} color={geneopen === '0' ? modeInfo.standardColor : modeInfo.standardTextColor}
+          onPress={() => {
+            Alert.alert(
+              '个性设定',
+              `是否在个人主页中${geneopen === '0' ? '隐藏' : '显示'}机因?`,
+              [
+                {text: '取消', style: 'cancel'},
+                {text: '确定', onPress: () => this.setSetting({
+                  geneopen: geneopen === '0' ? '1' : '0'
+                })}
+              ]
+            )
+          }} style={{
+            flex: 1
+          }}/>
+      </View>
+    )
+  }
 
   renderBG = ({ item: rowData, index}) => {
     const { modeInfo } = this.props.screenProps
@@ -288,19 +314,27 @@ export default class Custom extends Component {
               text: '显示主题'
             }
           ]]
+        } else if (index === 4) {
+          return [[
+            {
+              text: '显示机因'
+            }
+          ]]
         }
       })(),
       renderItem: [
         this.renderBG,
         this.renderShow,
         this.renderTheme,
+        this.renderGene,
         this.renderVIP
       ][index]
     })) : []
     if (!this.state.data.isVIP && data.sections) {
       sections = [
         sections[0],
-        sections[2]
+        sections[2],
+        sections[3]
       ]
     }
 
