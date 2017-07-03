@@ -23,7 +23,11 @@ import { sync, updown, fav } from '../../dao/sync'
 import HTMLView from '../../components/HtmlToView';
 import { connect } from 'react-redux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { standardColor, nodeColor, idColor, accentColor } from '../../constants/colorConfig';
+import colorConfig, { standardColor, nodeColor, idColor, accentColor,
+  getLevelColorFromProgress,
+  getAccentColorFromName,
+  getContentFromTrophy
+} from '../../constants/colorConfig';
 
 import {
   getTopicAPI,
@@ -360,13 +364,23 @@ class CommunityTopic extends Component {
                   numberOfLines={3}
                   style={{ flex: 2.5, color: modeInfo.titleTextColor, }}>
                   {rowData.title}
+                  <Text selectable={false} style={{ fontSize: 12, flex: -1, color: modeInfo.standardTextColor, textAlign: 'center', textAlignVertical: 'center' }}>{rowData.region}</Text>
                 </Text>
 
                 <View style={{ flex: 1.1, flexDirection: 'row', justifyContent: 'space-between' }}>
-                  <Text selectable={false} style={{ flex: -1, color: modeInfo.standardColor, textAlign: 'center', textAlignVertical: 'center' }}>{rowData.platform}</Text>
-                  <Text selectable={false} style={{ flex: -1, color: modeInfo.standardTextColor, textAlign: 'center', textAlignVertical: 'center' }}>{rowData.region}</Text>
-                  <Text selectable={false} style={{ flex: -1, color: modeInfo.standardTextColor, textAlign: 'center', textAlignVertical: 'center' }}>{
-                    rowData.platium + rowData.gold + rowData.selver + rowData.bronze
+                  <Text selectable={false} style={{ fontSize: 12, flex: -1, color: modeInfo.standardColor, textAlign: 'center', textAlignVertical: 'center' }}>{rowData.platform}</Text>
+                  { rowData.alert && <Text selectable={false} style={{ fontSize: 12, flex: -1, 
+                    color: getLevelColorFromProgress(rowData.allPercent), textAlign: 'center', textAlignVertical: 'center' }}>{
+                    rowData.alert + ' '
+                    }<Text style={{ fontSize: 12, flex: -1, color: modeInfo.standardTextColor, textAlign: 'center', textAlignVertical: 'center' }}>{rowData.allPercent}</Text></Text> || undefined}
+                  <Text selectable={false} style={{ fontSize: 12, flex: -1, color: modeInfo.standardTextColor, textAlign: 'center', textAlignVertical: 'center' }}>{
+                    [rowData.platium, rowData.gold, rowData.selver, rowData.bronze].map((item, index) => {
+                      return (
+                        <Text key={index} style={{color: colorConfig['trophyColor' + (index + 1)]}}>
+                          {item}
+                        </Text>
+                      )
+                    })
                   }</Text>
                 </View>
 

@@ -22,4 +22,31 @@ export const trophyColor3 = '#a6a6a6'
 export const trophyColor4 = '#bf6a3a'
 export const trophyColor5 = 'rgba(0000.5)'
 
+export const getColorFromProgress = (progress) => {
+  const value = parseInt(progress)
+  if (value < 25) return errorColor
+  if (value < 50) return warningColor
+  if (value < 75) return successColor
+  return perfectColor
+}
 
+export const getLevelColorFromProgress = (progress) => {
+  const value = parseFloat(progress)
+  if (value <= 5) return textErrorColor
+  if (value <= 25) return textWarningColor
+  if (value <= 60) return textSuccessColor
+  return textPerfectColor
+}
+
+export const getContentFromTrophy = text => {
+  const item1 = text.split('金')[0]
+  const item2 = text.split('银')[0].replace(item1, '')
+  const item3 = text.split('铜')[0].replace(item1 + item2, '')
+  const item4 = '铜' + text.split('铜').pop()
+  return [
+    item1,
+    item2,
+    item3,
+    item4
+  ]
+}
