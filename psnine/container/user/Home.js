@@ -222,7 +222,7 @@ export default class Home extends Component {
         backgroundColor: 'transparent',
         height: 360
       }}>
-        <View style={{ flexDirection: 'row', justifyContent:'space-around', alignItems: 'center', flex: 1, padding: 5, marginTop: -10  }}>
+        <View style={{ flexDirection: 'row', justifyContent:'space-around', alignItems: 'center', flex: -1, padding: 5, marginTop: -10  }}>
           <View style={{ justifyContent:'center', alignItems: 'center', flex: 2, marginTop: 2  }}>
             <Text style={{ flex: -1, color: infoColor, fontSize: 15, textAlign: 'center' }}>{rowData.description}</Text>
             {

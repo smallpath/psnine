@@ -59,6 +59,7 @@ class Community extends Component {
         isLoadingMore: false
       }, () => {
         // this.props.community.topicPage === 1 && this.flatlist.getNode().scrollToOffset({ offset: 1, animated: true })
+        // const { community: item } = this.props
         // if (item.topicPage > 1) {
         //   const max = item.topics.length / item.topicPage
         //   const target = max * (item.topicPage - 1)
