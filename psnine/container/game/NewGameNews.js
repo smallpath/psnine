@@ -27,13 +27,14 @@ import { getGameMapperAPI, getTopicURL } from '../../dao';
 
 import TopicItem from '../shared/CommunityItem'
 import GameItem from '../shared/GameItem'
+import NewsItem from '../shared/NewsItem'
 import FooterProgress from '../shared/FooterProgress'
 
 let toolbarActions = [
   // { title: '跳页', iconName: 'md-map', show: 'always' },
 ];
 
-class NewsItem extends React.PureComponent {
+class NewsItemBackup extends React.PureComponent {
 
   shouldComponentUpdate = (props, state) => props.modeInfo.themeName !== this.props.modeInfo.themeName
 
@@ -247,12 +248,8 @@ class GameTopic extends Component {
           updateCellsBatchingPeriod={1}
           initialNumToRender={42}
           maxToRenderPerBatch={8}
-          numColumns={2}
           disableVirtualization={false}
           contentContainerStyle={styles.list}
-          getItemLayout={(data, index) => (
-            {length: this.ITEM_HEIGHT, offset: this.ITEM_HEIGHT * index, index}
-          )}
           viewabilityConfig={{
             minimumViewTime: 1,
             viewAreaCoveragePercentThreshold: 0,

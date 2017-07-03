@@ -23,6 +23,7 @@ import { getTopicURL } from '../../dao';
 import { changeScrollType } from '../../actions/app';
 
 import TopicItem from '../shared/CommunityItem'
+import NewsItem from '../shared/NewsItem'
 import FooterProgress from '../shared/FooterProgress'
 
 let toolbarHeight = 56;
@@ -183,6 +184,15 @@ class Community extends Component {
   _renderItem = ({ item: rowData, index }) => {
     const { modeInfo, navigation, toolbarDispatch } = this.props.screenProps
     const { ITEM_HEIGHT } = this
+    // console.log(rowData)
+    if (rowData.newsType) {
+      return <NewsItem {...{
+        navigation,
+        rowData,
+        modeInfo,
+        toolbarDispatch
+      }} />
+    }
     return <TopicItem {...{
       navigation,
       rowData,
@@ -195,6 +205,7 @@ class Community extends Component {
   render() {
     const { community: reducer } = this.props;
     const { modeInfo } = this.props.screenProps
+    const { communityType, searchTitle } = this.props.screenProps
     log('Community.js rendered');
     return (
       <AnimatedFlatList style={{
@@ -223,12 +234,12 @@ class Community extends Component {
         initialNumToRender={42}
         maxToRenderPerBatch={8}
         disableVirtualization={false}
-        key={modeInfo.themeName}
+        key={modeInfo.themeName + communityType}
         numColumns={modeInfo.numColumns}
         contentContainerStyle={styles.list}
-        getItemLayout={(data, index) => (
+        getItemLayout={communityType !== 'news' ? (data, index) => (
           {length: this.ITEM_HEIGHT, offset: this.ITEM_HEIGHT * index, index}
-        )}
+        ) : null}
         viewabilityConfig={{
           minimumViewTime: 1,
           viewAreaCoveragePercentThreshold: 0,

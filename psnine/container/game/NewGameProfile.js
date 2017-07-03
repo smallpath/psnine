@@ -27,6 +27,7 @@ import { getGameNewTopicAPI } from '../../dao';
 
 import TopicItem from '../shared/CommunityItem'
 import GameItem from '../shared/GameItem'
+import NewsItem from '../shared/NewsItem'
 import FooterProgress from '../shared/FooterProgress'
 
 let toolbarActions = [
@@ -140,11 +141,10 @@ class GameTopic extends Component {
     const { modeInfo } = this.props.screenProps
     const { ITEM_HEIGHT } = this
     const { navigation } = this.props.screenProps
-    return rowData.date ? <TopicItem {...{
+    return rowData.date ? <NewsItem {...{
       navigation,
       rowData,
       modeInfo,
-      ITEM_HEIGHT
     }} /> : <GameItem {...{
       navigation,
       rowData,
@@ -192,9 +192,6 @@ class GameTopic extends Component {
           maxToRenderPerBatch={8}
           disableVirtualization={false}
           contentContainerStyle={styles.list}
-          getItemLayout={(data, index) => (
-            {length: this.ITEM_HEIGHT, offset: this.ITEM_HEIGHT * index, index}
-          )}
           viewabilityConfig={{
             minimumViewTime: 1,
             viewAreaCoveragePercentThreshold: 0,

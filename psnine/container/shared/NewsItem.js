@@ -27,12 +27,13 @@ import { changeSegmentIndex, changeCommunityType, changeGeneType, changeCircleTy
 
 import {
   getGamePointAPI,
-  getTopicURL
+  getTopicURL,
+  getGeneURL
 } from '../../dao'
 
 let screen = Dimensions.get('window');
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = screen;
-export default class ComplexComment extends React.PureComponent {
+export default class NewsItem extends React.PureComponent {
 
   constructor(props) {
     super(props)
@@ -47,13 +48,21 @@ export default class ComplexComment extends React.PureComponent {
   _onRowPressed = (rowData) => {
     const { navigation } = this.props;
     const id = rowData.id || parseInt(rowData.url.split('/').pop())
+    if (rowData.newsType === 'gene') {
+      const URL = getGeneURL(id)
+      return navigation.navigate('CommunityTopic', {
+        URL,
+        title: rowData.title,
+        rowData,
+        type: 'gene'
+      })
+    }
     const URL = getTopicURL(id)
     navigation.navigate('CommunityTopic', {
       URL,
       title: rowData.title,
       rowData,
-      type: 'community',
-      shouldBeSawBackground: true
+      type: 'community'
     })
   }
 
@@ -61,6 +70,7 @@ export default class ComplexComment extends React.PureComponent {
     const { modeInfo, rowData, navigation, ITEM_HEIGHT, modalList = [], toolbarDispatch } = this.props
     // console.log(modalList)
     const { numColumns = 1 } = modeInfo
+    const imageItems = rowData.thumbs.map((value, index) => (<Image key={rowData.id + '' + index} source={{ uri: value }} style={styles.image} />));
     return (
       <View style={{
         marginVertical: 3.5,
@@ -68,16 +78,10 @@ export default class ComplexComment extends React.PureComponent {
         backgroundColor: modeInfo.backgroundColor,
         elevation: 1,
         flex: numColumns === 1 ? -1 : 1,
-        height: ITEM_HEIGHT - 7
       }}>
         <TouchableNativeFeedback
           onPress={() => {
             this._onRowPressed(rowData)
-          }}
-          onLongPress={() => {
-             modalList.length && this.setState({
-              modalVisible: true
-            })
           }}
           useForeground={true}
           delayPressIn={0}
@@ -88,51 +92,16 @@ export default class ComplexComment extends React.PureComponent {
               source={{ uri: rowData.avatar }}
               style={styles.avatar}
             />
-            {
-            this.state.modalVisible && modalList.length && (
-              <MyDialog modeInfo={modeInfo}
-                modalVisible={this.state.modalVisible}
-                onDismiss={() => { this.setState({ modalVisible: false }); }}
-                onRequestClose={() => { this.setState({ modalVisible: false }); }}
-                renderContent={() => (
-                  <View style={{
-                    justifyContent: 'center',
-                    alignItems: 'flex-start',
-                    backgroundColor: modeInfo.backgroundColor,
-                    position: 'absolute',
-                    left: 30,
-                    right: 30,
-                    paddingVertical: 15,
-                    elevation: 4,
-                    opacity: 1
-                  }} borderRadius={2}>
-                  {
-                    modalList.map((item, index) => (
-                      <TouchableNativeFeedback key={index + item.text} onPress={() => {
-                          this.setState({
-                            modalVisible: false
-                          }, () => {
-                            item.onPress(rowData)
-                          })
-                        }}>
-                        <View style={{height: 50, paddingVertical: 10, paddingLeft: 20 ,alignSelf: 'stretch', alignContent: 'stretch', justifyContent: 'center'}}>
-                          <Text style={{textAlignVertical: 'center', fontSize: 18, color: modeInfo.standardTextColor}}>{item.text}</Text>
-                        </View>
-                      </TouchableNativeFeedback>
-                    ))
-                  }
-                  </View>
-                )} />
-              )
-            }
             <View style={{ marginLeft: 10, flex: 1, flexDirection: 'column', justifyContent: 'space-between'  }}>
               <Text
                 ellipsizeMode={'tail'}
                 numberOfLines={2}
-                style={{ flex: -1, color: modeInfo.titleTextColor }}>
+                style={{ flex: -1, color: modeInfo.titleTextColor, }}>
                 {rowData.title}
               </Text>
-
+              <View style={{ flex: -1, flexDirection: 'row', flexWrap: 'wrap', marginTop: 5, marginBottom: 5 }}>
+                {imageItems}
+              </View>
               <View style={{ flex: -1, flexDirection: 'row', justifyContent: 'space-between' }}>
                 <Text selectable={false} style={{ fontSize: 12,flex: -1, color: modeInfo.standardColor, textAlign: 'center', textAlignVertical: 'center' }} onPress={() => {
                     // this.flatlist.getNode().recordInteraction()
@@ -143,12 +112,7 @@ export default class ComplexComment extends React.PureComponent {
                     })
                   }}>{rowData.psnid}</Text>
                 <Text selectable={false} style={{ fontSize: 12,flex: -1, color: modeInfo.standardTextColor, textAlign: 'center', textAlignVertical: 'center' }}>{rowData.date}</Text>
-                <Text selectable={false} style={{ fontSize: 12,flex: -1, color: modeInfo.standardTextColor, textAlign: 'center', textAlignVertical: 'center' }}>{rowData.count}回复</Text>
-                <Text selectable={false} style={{ fontSize: 12,flex: -1, color: rowData.type && toolbarDispatch ? modeInfo.standardColor : modeInfo.standardTextColor, textAlign: 'center', textAlignVertical: 'center' }} onPress={
-                  rowData.type && toolbarDispatch ? () => {
-                    toolbarDispatch(changeCommunityType(rowData.type));
-                  } : null
-                }>{rowData.type}</Text>
+                <Text selectable={false} style={{ fontSize: 12,flex: -1, color: modeInfo.standardTextColor, textAlign: 'center', textAlignVertical: 'center' }}>{rowData.count}</Text>
               </View>
 
             </View>
@@ -179,6 +143,11 @@ const styles = StyleSheet.create({
   avatar: {
     width: 50,
     height: 50,
+  },
+  image: {
+    width: 68,
+    height: 68,
+    margin: StyleSheet.hairlineWidth
   },
   a: {
     fontWeight: '300',
