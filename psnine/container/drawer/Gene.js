@@ -8,7 +8,8 @@ import {
   TouchableNativeFeedback,
   RefreshControl,
   InteractionManager,
-  FlatList
+  FlatList,
+  Animated
 } from 'react-native';
 
 import { connect } from 'react-redux';
@@ -22,6 +23,8 @@ let releasedMarginTop = 0;
 
 import TopicItem from '../shared/GeneItem'
 import FooterProgress from '../shared/FooterProgress'
+
+const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
 
 class Gene extends Component {
   static navigationOptions = {
@@ -37,64 +40,25 @@ class Gene extends Component {
     }
   }
 
-  shouldOnRefreshForSearch = false
   componentWillReceiveProps = (nextProps) => {
-    let shouldCall = nextProps.segmentedIndex === 3
-    let empty = () => {}
-    let cb = empty
-    if (this.props.screenProps.geneType != nextProps.screenProps.geneType) {
-      cb = () => this._onRefresh(nextProps.screenProps.geneType);
-    } else if (this.props.screenProps.modeInfo.themeName != nextProps.screenProps.modeInfo.themeName) {
-      cb = () => {}
-    } else if (this.props.screenProps.searchTitle !== nextProps.screenProps.searchTitle) {
-      if (shouldCall) {
-        cb = () => this._onRefresh(
-          // this.props.screenProps.geneType, 
-          nextProps.screenProps.searchTitle
-        )
-      } else {
-        cb = () => this.shouldOnRefreshForSearch = true
-        shouldCall = true
-      }
-    } else {
-      if (this.shouldOnRefreshForSearch === true && shouldCall) {
-        this.shouldOnRefreshForSearch = false
-        cb = () => this._onRefresh(
-          // this.props.screenProps.geneType, 
-          nextProps.screenProps.searchTitle
-        )
-      } else {
-        cb = () => this.setState({
-          isRefreshing: false,
-          isLoadingMore: false
-        }, () => {
-          // this.props.gene.genePage === 1 && this.flatlist.scrollToOffset({ offset: 0, animated: true })
-        })
-      }
-    }
-    if (shouldCall) {
-      cb && cb()
-    }
-  }
-
-
-  shouldComponentUpdate = (nextProps, nextState) => {
     if (this.props.screenProps.modeInfo.themeName != nextProps.screenProps.modeInfo.themeName) {
-      return true
+
+    } else if (this.props.screenProps.searchTitle !== nextProps.screenProps.searchTitle) {
+
+    } else {
+      this.setState({
+        isRefreshing: false,
+        isLoadingMore: false
+      }, () => {
+        // this.props.community.topicPage === 1 && this.flatlist.getNode().scrollToOffset({ offset: 1, animated: true })
+        // if (item.topicPage > 1) {
+        //   const max = item.topics.length / item.topicPage
+        //   const target = max * (item.topicPage - 1)
+        //   setTimeout(() => this.flatlist.getNode().scrollToIndex({ index: target, viewPosition: 1, viewOffset: 50, animated: true }))
+        //   // console.log(this.contentOffset + 50)
+        // }
+      })
     }
-    if (nextState.isRefreshing !== this.state.isRefreshing) {
-      if (this.shouldOnRefreshForSearch === true) this.shouldOnRefreshForSearch = false
-      return true
-    }
-    if (nextProps.segmentedIndex !== 3) return false
-    if (this.props.segmentedIndex !== 3) {
-      if (this.shouldOnRefreshForSearch === true) {
-        this.shouldOnRefreshForSearch = false
-        return true
-      }
-      if (nextProps.screenProps.searchTitle === this.props.screenProps.searchTitle) return false
-    }
-    return true
   }
 
   componentWillMount = () => {
@@ -107,8 +71,7 @@ class Gene extends Component {
     }
     registerAfterEach({
       index: 3,
-      handler: () => {
-        const { searchTitle } = this.props.screenProps
+      handler: (searchTitle) => {
         this._onRefresh(
           searchTitle
         )
@@ -123,7 +86,7 @@ class Gene extends Component {
     this.setState({
       isRefreshing: true
     })
-    this.flatlist && this.flatlist.scrollToOffset({ offset: 0, animated: true })
+    this.flatlist && this.flatlist.getNode().scrollToOffset({ offset: 0, animated: true })
     dispatch(getGeneList(1, {
       type,
       title: typeof title !== 'undefined' ? title : this.props.screenProps.searchTitle
@@ -167,7 +130,7 @@ class Gene extends Component {
     const { modeInfo } = this.props.screenProps
 
     return (
-      <FlatList style={{
+      <AnimatedFlatList style={{
         flex: 1,
         backgroundColor: modeInfo.backgroundColor
       }}
@@ -219,8 +182,7 @@ const styles = StyleSheet.create({
 
 function mapStateToProps(state) {
   return {
-    gene: state.gene,
-    segmentedIndex: state.app.segmentedIndex
+    gene: state.gene
   };
 }
 

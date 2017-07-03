@@ -46,76 +46,27 @@ class Community extends Component {
     }
   }
 
-  shouldOnRefreshForSearch = false
-
   componentWillReceiveProps = (nextProps) => {
-    let shouldCall = nextProps.segmentedIndex === 1
-    let empty = () => {}
-    let cb = empty
     if (this.props.screenProps.communityType != nextProps.screenProps.communityType) {
-      shouldCall = true
-      cb = () => this._onRefresh(nextProps.screenProps.communityType);
+      this._onRefresh(nextProps.screenProps.communityType);
     } else if (this.props.screenProps.modeInfo.themeName != nextProps.screenProps.modeInfo.themeName) {
-      cb = () => {
-        // this.forceUpdate()
-      }
-      // shouldCall = true
-    } else if (this.props.screenProps.searchTitle !== nextProps.screenProps.searchTitle) {
-      if (shouldCall) {
-        cb = () => this._onRefresh(
-          this.props.screenProps.communityType, 
-          nextProps.screenProps.searchTitle
-        )
-      } else {
-        cb = () => this.shouldOnRefreshForSearch = true
-        shouldCall = true
-      }
-    } else {
-      if (this.shouldOnRefreshForSearch === true && shouldCall) {
-        // this.shouldOnRefreshForSearch = false
-        cb = () => this._onRefresh(
-          this.props.screenProps.communityType, 
-          nextProps.screenProps.searchTitle
-        )
-      } else {
-        cb = () => {
-          this.setState({
-            isRefreshing: false,
-            isLoadingMore: false
-          }, () => {
-            // this.props.community.topicPage === 1 && this.flatlist.getNode().scrollToOffset({ offset: 1, animated: true })
-            // if (item.topicPage > 1) {
-            //   const max = item.topics.length / item.topicPage
-            //   const target = max * (item.topicPage - 1)
-            //   setTimeout(() => this.flatlist.getNode().scrollToIndex({ index: target, viewPosition: 1, viewOffset: 50, animated: true }))
-            //   // console.log(this.contentOffset + 50)
-            // }
-          })
-        }
-      }
-    }
-    if (shouldCall) {
-      cb && cb()
-    }
-  }
 
-  shouldComponentUpdate = (nextProps, nextState) => {
-    if (this.props.screenProps.modeInfo.themeName != nextProps.screenProps.modeInfo.themeName) {
-      return true
+    } else if (this.props.screenProps.searchTitle !== nextProps.screenProps.searchTitle) {
+
+    } else {
+      this.setState({
+        isRefreshing: false,
+        isLoadingMore: false
+      }, () => {
+        // this.props.community.topicPage === 1 && this.flatlist.getNode().scrollToOffset({ offset: 1, animated: true })
+        // if (item.topicPage > 1) {
+        //   const max = item.topics.length / item.topicPage
+        //   const target = max * (item.topicPage - 1)
+        //   setTimeout(() => this.flatlist.getNode().scrollToIndex({ index: target, viewPosition: 1, viewOffset: 50, animated: true }))
+        //   // console.log(this.contentOffset + 50)
+        // }
+      })
     }
-    if (nextState.isRefreshing !== this.state.isRefreshing) {
-      if (this.shouldOnRefreshForSearch === true) this.shouldOnRefreshForSearch = false
-      return true
-    }
-    if (nextProps.segmentedIndex !== 1) return false
-    if (this.props.segmentedIndex !== 1) {
-      if (this.shouldOnRefreshForSearch === true) {
-        this.shouldOnRefreshForSearch = false
-        return true
-      }
-      if (nextProps.screenProps.searchTitle === this.props.screenProps.searchTitle) return false
-    }
-    return true
   }
 
   componentWillMount = () => {
@@ -132,8 +83,10 @@ class Community extends Component {
     }
     registerAfterEach({
       index: 1,
-      handler: () => {
-        const { communityType, searchTitle } = this.props.screenProps
+      handler: (
+        searchTitle
+      ) => {
+        const { communityType } = this.props.screenProps
         this._onRefresh(
           communityType, 
           searchTitle
@@ -207,6 +160,7 @@ class Community extends Component {
     const { modeInfo } = this.props.screenProps
     const { communityType, searchTitle } = this.props.screenProps
     log('Community.js rendered');
+    // console.log('Community.js rendered');
     return (
       <AnimatedFlatList style={{
         flex: 1,
@@ -260,8 +214,7 @@ const styles = StyleSheet.create({
 
 function mapStateToProps(state, ownProps) {
   return {
-    community: state.community,
-    segmentedIndex: state.app.segmentedIndex
+    community: state.community
   };
 }
 

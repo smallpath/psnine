@@ -9,7 +9,8 @@ import {
   RefreshControl,
   InteractionManager,
   Picker,
-  FlatList
+  FlatList,
+  Animated
 } from 'react-native';
 
 import HTMLView from '../../components/HtmlToView';
@@ -24,6 +25,8 @@ import { changeScrollType } from '../../actions/app';
 
 import TopicItem from '../shared/RankItem'
 import FooterProgress from '../shared/FooterProgress'
+
+const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
 
 let toolbarHeight = 56;
 let releasedMarginTop = 0;
@@ -119,62 +122,25 @@ class Rank extends Component {
     });
   };
 
-  shouldOnRefreshForSearch = false
   componentWillReceiveProps = (nextProps) => {
-    let shouldCall = nextProps.segmentedIndex === 6
-    let empty = () => {}
-    let cb = empty
     if (this.props.screenProps.modeInfo.themeName != nextProps.screenProps.modeInfo.themeName) {
-      cb = () => {}
+
     } else if (this.props.screenProps.searchTitle !== nextProps.screenProps.searchTitle) {
-      if (shouldCall) {
-        cb = () => this._onRefresh(
-          nextProps.screenProps.searchTitle
-        )
-      } else {
-        cb = () => this.shouldOnRefreshForSearch = true
-        shouldCall = true
-      }
+
     } else {
-      if (this.shouldOnRefreshForSearch === true && shouldCall) {
-        this.shouldOnRefreshForSearch = false
-        cb = () => this._onRefresh(
-          nextProps.screenProps.searchTitle
-        )
-      } else {
-        cb = () => this.setState({
-          isRefreshing: false,
-          isLoadingMore: false
-        })
-      }
+      this.setState({
+        isRefreshing: false,
+        isLoadingMore: false
+      }, () => {
+        // this.props.community.topicPage === 1 && this.flatlist.getNode().scrollToOffset({ offset: 1, animated: true })
+        // if (item.topicPage > 1) {
+        //   const max = item.topics.length / item.topicPage
+        //   const target = max * (item.topicPage - 1)
+        //   setTimeout(() => this.flatlist.getNode().scrollToIndex({ index: target, viewPosition: 1, viewOffset: 50, animated: true }))
+        //   // console.log(this.contentOffset + 50)
+        // }
+      })
     }
-    if (shouldCall) {
-      cb && cb()
-    }
-  }
-
-
-  shouldComponentUpdate = (nextProps, nextState) => {
-    if (this.props.screenProps.modeInfo.themeName != nextProps.screenProps.modeInfo.themeName) {
-      return true
-    }
-    if (nextState.isRefreshing !== this.state.isRefreshing) {
-      if (this.shouldOnRefreshForSearch === true) this.shouldOnRefreshForSearch = false
-      return true
-    }
-    if (nextProps.segmentedIndex !== 6) return false
-    if (this.props.segmentedIndex !== 6) {
-      if (this.shouldOnRefreshForSearch === true) {
-        this.shouldOnRefreshForSearch = false
-        return true
-      }
-      if (nextProps.screenProps.searchTitle === this.props.screenProps.searchTitle) return false
-    }
-    return true
-  }
-
-  componentDidUpdate = () => {
-
   }
 
   componentWillMount = () => {
@@ -187,8 +153,7 @@ class Rank extends Component {
     }
     registerAfterEach({
       index: 6,
-      handler: () => {
-        const { searchTitle } = this.props.screenProps
+      handler: (searchTitle) => {
         this._onRefresh(
           searchTitle
         )
@@ -202,7 +167,7 @@ class Rank extends Component {
     this.setState({
       isRefreshing: true
     })
-    this.flatlist && this.flatlist.scrollToOffset({ offset: 0, animated: true })
+    this.flatlist && this.flatlist.getNode().scrollToOffset({ offset: 0, animated: true })
     const { server, sort, cheat } = this.state
     dispatch(getRankList(1, {
       sort, server, cheat,
@@ -252,7 +217,7 @@ class Rank extends Component {
     return (
       <View style={{ backgroundColor: modeInfo.backgroundColor, flex: 1 }}>
         {this._renderHeader()}
-        <FlatList style={{
+        <AnimatedFlatList style={{
           flex: 1,
           backgroundColor: modeInfo.backgroundColor
         }}
@@ -306,8 +271,7 @@ const styles = StyleSheet.create({
 
 function mapStateToProps(state) {
   return {
-    rank: state.rank,
-    segmentedIndex: state.app.segmentedIndex
+    rank: state.rank
   };
 }
 

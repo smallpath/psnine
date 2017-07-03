@@ -128,58 +128,24 @@ class Store extends Component {
     }
   }
 
-  shouldOnRefreshForSearch = false
   componentWillReceiveProps = (nextProps) => {
-    let shouldCall = nextProps.segmentedIndex === 7
-    let empty = () => {}
-    let cb = empty
     if (this.props.screenProps.modeInfo.themeName != nextProps.screenProps.modeInfo.themeName) {
-      cb = () => {}
+
     } else if (this.props.screenProps.searchTitle !== nextProps.screenProps.searchTitle) {
-      if (shouldCall) {
-        cb = () => this._onRefresh(
-          nextProps.screenProps.searchTitle
-        )
-      } else {
-        cb = () => this.shouldOnRefreshForSearch = true
-        shouldCall = true
-      }
+
     } else {
-      if (this.shouldOnRefreshForSearch === true && shouldCall) {
-        this.shouldOnRefreshForSearch = false
-        cb = () => this._onRefresh(
-          nextProps.screenProps.searchTitle
-        )
-      } else {
-        cb = () => this.setState({
-          isRefreshing: false,
-          isLoadingMore: false
-        }, () => {
-          // const len = this.props.community.topics.length
-          // const per = this.props.community.topicPage
-          // const target = len / per * (per - 1)
-          // if (per === 1) {
-          //   setTimeout(() => {
-          //     this.flatlist.getNode().scrollToIndex({
-          //       animated: true,
-          //       viewPosition: 0,
-          //       index: 0
-          //     })
-          //   })
-          // } else if(per > 1) {
-          //   setTimeout(() => {
-          //     this.flatlist.getNode().scrollToIndex({
-          //       animated: true,
-          //       viewPosition: 0.9,
-          //       index: target - 1
-          //     })
-          //   })
-          // }
-        })
-      }
-    }
-    if (shouldCall) {
-      cb && cb()
+      this.setState({
+        isRefreshing: false,
+        isLoadingMore: false
+      }, () => {
+        // this.props.community.topicPage === 1 && this.flatlist.getNode().scrollToOffset({ offset: 1, animated: true })
+        // if (item.topicPage > 1) {
+        //   const max = item.topics.length / item.topicPage
+        //   const target = max * (item.topicPage - 1)
+        //   setTimeout(() => this.flatlist.getNode().scrollToIndex({ index: target, viewPosition: 1, viewOffset: 50, animated: true }))
+        //   // console.log(this.contentOffset + 50)
+        // }
+      })
     }
   }
 
@@ -190,25 +156,6 @@ class Store extends Component {
       this._onRefresh()
     });
   };
-
-  shouldComponentUpdate = (nextProps, nextState) => {
-    if (this.props.screenProps.modeInfo.themeName != nextProps.screenProps.modeInfo.themeName) {
-      return true
-    }
-    if (nextState.isRefreshing !== this.state.isRefreshing) {
-      if (this.shouldOnRefreshForSearch === true) this.shouldOnRefreshForSearch = false
-      return true
-    }
-    if (nextProps.segmentedIndex !== 7) return false
-    if (this.props.segmentedIndex !== 7) {
-      if (this.shouldOnRefreshForSearch === true) {
-        this.shouldOnRefreshForSearch = false
-        return true
-      }
-      if (nextProps.screenProps.searchTitle === this.props.screenProps.searchTitle) return false
-    }
-    return true
-  }
 
   _renderHeader = () => {
     const { modeInfo } = this.props.screenProps
@@ -275,8 +222,7 @@ class Store extends Component {
     }
     registerAfterEach({
       index: 7,
-      handler: () => {
-        const { searchTitle } = this.props.screenProps
+      handler: (searchTitle) => {
         this._onRefresh(
           searchTitle
         )
@@ -400,8 +346,7 @@ const styles = StyleSheet.create({
 
 function mapStateToProps(state) {
   return {
-    reducer: state.store,
-    segmentedIndex: state.app.segmentedIndex
+    reducer: state.store
   };
 }
 

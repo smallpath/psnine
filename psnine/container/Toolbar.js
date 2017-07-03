@@ -136,7 +136,7 @@ class Toolbar extends Component {
 
   constructor(props) {
     super(props);
-
+    
     this.state = {
       search: '',
       afterEachHooks: [],
@@ -153,11 +153,18 @@ class Toolbar extends Component {
     }
   }
 
+  searchMapper = Object.keys(routes).reduce((prev, curr) => (prev[curr] = '', prev), {})
   _renderDrawerView = () => {
     return (
       <RightDrawer         
         onNavigationStateChange={(prevRoute, nextRoute, action) => {
-
+          const { index, routes } = nextRoute
+          const preSearch = this.searchMapper[routes[index].routeName]
+          if (preSearch !== this.state.search) {
+              this.searchMapper[routes[index].routeName] = this.state.search
+              const callback = this.state.afterEachHooks[nextRoute.index]
+              typeof callback === 'function' && callback(this.state.search)
+            }
         }} screenProps={{
           onTabPress: (route) => {
             const currentIndex = this.props.app.segmentedIndex
@@ -188,7 +195,7 @@ class Toolbar extends Component {
             const obj = {}
             if (componentDidFocus) {
               const { index, handler } = componentDidFocus
-              console.log(index, handler)
+              {/*console.log(index, handler)*/}
               {/*if (!this.state.afterEachHooks[index]) {*/}
                 obj.afterEachHooks = [...this.state.afterEachHooks]
                 obj.afterEachHooks[index] = handler
@@ -205,6 +212,15 @@ class Toolbar extends Component {
         onNavigationStateChange={(prevRoute, nextRoute, action) => {
           if (prevRoute.index !== nextRoute.index && action.type === 'Navigation/NAVIGATE') {
             this.props.dispatch(changeSegmentIndex(nextRoute.index))
+            const { index, routes } = nextRoute
+            const preSearch = this.searchMapper[routes[index].routeName]
+            {/*console.log(this.searchMapper, nextRoute)*/}
+            if (preSearch !== this.state.search) {
+              this.searchMapper[routes[index].routeName] = this.state.search
+              const callback = this.state.afterEachHooks[nextRoute.index]
+              {/*console.log(callback, preSearch, this.state.search, nextRoute.index, routes[index].routeName, 'calling')*/}
+              typeof callback === 'function' && callback(this.state.search)
+            }
           }
         }}
         screenProps={{
@@ -237,6 +253,7 @@ class Toolbar extends Component {
             const obj = {}
             if (componentDidFocus) {
               const { index, handler } = componentDidFocus
+              {/*console.log(index, 'registered')*/}
               {/*if (!this.state.afterEachHooks[index]) {*/}
                 obj.afterEachHooks = [...this.state.afterEachHooks]
                 obj.afterEachHooks[index] = handler
@@ -266,6 +283,11 @@ class Toolbar extends Component {
     this.setState({
       search: text
     })
+    const currentIndex = this.props.app.segmentedIndex
+    const callback = this.state.afterEachHooks[currentIndex]
+    typeof callback === 'function' && callback(text)
+    const currentRouteName = Object.keys(routes)[currentIndex]
+    this.searchMapper[currentRouteName] = this.state.search
   }
 
   _onSearchClicked = () => {

@@ -9,7 +9,8 @@ import {
   RefreshControl,
   InteractionManager,
   Picker,
-  FlatList
+  FlatList,
+  Animated
 } from 'react-native';
 
 import { connect } from 'react-redux';
@@ -23,6 +24,8 @@ import { changeScrollType } from '../../actions/app';
 
 import TopicItem from '../shared/QaItem'
 import FooterProgress from '../shared/FooterProgress'
+
+const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
 
 let toolbarHeight = 56;
 let releasedMarginTop = 0;
@@ -92,39 +95,24 @@ class Qa extends Component {
     });
   };
 
-  shouldOnRefreshForSearch = false
   componentWillReceiveProps = (nextProps) => {
-    let shouldCall = nextProps.segmentedIndex === 2
-    let empty = () => {}
-    let cb = empty
     if (this.props.screenProps.modeInfo.themeName != nextProps.screenProps.modeInfo.themeName) {
-      cb = () => {}
+
     } else if (this.props.screenProps.searchTitle !== nextProps.screenProps.searchTitle) {
-      if (shouldCall) {
-        cb = () => this._onRefresh(
-          nextProps.screenProps.searchTitle
-        )
-      } else {
-        cb = () => this.shouldOnRefreshForSearch = true
-        shouldCall = true
-      }
+
     } else {
-      if (this.shouldOnRefreshForSearch === true && shouldCall) {
-        // this.shouldOnRefreshForSearch = false
-        cb = () => this._onRefresh(
-          nextProps.screenProps.searchTitle
-        )
-      } else {
-        cb = () => {
-          this.setState({
-            isRefreshing: false,
-            isLoadingMore: false
-          })
-        }
-      }
-    }
-    if (shouldCall) {
-      cb && cb()
+      this.setState({
+        isRefreshing: false,
+        isLoadingMore: false
+      }, () => {
+        // this.props.community.topicPage === 1 && this.flatlist.getNode().scrollToOffset({ offset: 1, animated: true })
+        // if (item.topicPage > 1) {
+        //   const max = item.topics.length / item.topicPage
+        //   const target = max * (item.topicPage - 1)
+        //   setTimeout(() => this.flatlist.getNode().scrollToIndex({ index: target, viewPosition: 1, viewOffset: 50, animated: true }))
+        //   // console.log(this.contentOffset + 50)
+        // }
+      })
     }
   }
 
@@ -138,32 +126,12 @@ class Qa extends Component {
     }
     registerAfterEach({
       index: 2,
-      handler: () => {
-        const { searchTitle } = this.props.screenProps
+      handler: (searchTitle) => {
         this._onRefresh(
           searchTitle
         )
       }
     })
-  }
-
-  shouldComponentUpdate = (nextProps, nextState) => {
-    if (this.props.screenProps.modeInfo.themeName != nextProps.screenProps.modeInfo.themeName) {
-      return true
-    }
-    if (nextState.isRefreshing !== this.state.isRefreshing) {
-      if (this.shouldOnRefreshForSearch === true) this.shouldOnRefreshForSearch = false
-      return true
-    }
-    if (nextProps.segmentedIndex !== 2) return false
-    if (this.props.segmentedIndex !== 2) {
-      if (this.shouldOnRefreshForSearch === true) {
-        this.shouldOnRefreshForSearch = false
-        return true
-      }
-      if (nextProps.screenProps.searchTitle === this.props.screenProps.searchTitle) return false
-    }
-    return true
   }
 
   _onRefresh = (title) => {
@@ -172,7 +140,7 @@ class Qa extends Component {
     this.setState({
       isRefreshing: true
     })
-    this.flatlist && this.flatlist.scrollToOffset({ offset: 0, animated: true })
+    this.flatlist && this.flatlist.getNode().scrollToOffset({ offset: 0, animated: true })
     const { type, sort } = this.state
     dispatch(getQAList(1, {
         type,
@@ -224,7 +192,7 @@ class Qa extends Component {
     return (
       <View style={{ backgroundColor: modeInfo.backgroundColor, flex: 1 }}>
         {this._renderHeader()}
-        <FlatList style={{
+        <AnimatedFlatList style={{
           flex: 1,
           backgroundColor: modeInfo.backgroundColor
         }}
@@ -278,8 +246,7 @@ const styles = StyleSheet.create({
 
 function mapStateToProps(state) {
   return {
-    qa: state.qa,
-    segmentedIndex: state.app.segmentedIndex
+    qa: state.qa
   };
 }
 
