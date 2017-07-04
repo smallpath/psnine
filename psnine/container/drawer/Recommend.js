@@ -77,36 +77,12 @@ class Recommend extends Component {
       //   isLoading: false
       // })
     } else {
-      if (nextProps.segmentedIndex !== 0) return
+      // if (nextProps.segmentedIndex !== 0) return
       this.setState({
         isLoading: false,
         data: this.props.data
       })
     }
-  }
-
-  shouldComponentUpdate(nextProps, nextState) {
-    if (this.state.isLoading !== nextState.isLoading) return true
-
-    const { communityType, geneType, circleType, modeInfo, searchTitle } = nextProps.screenProps
-
-    if (searchTitle !== this.props.screenProps.searchTitle) return true
-    if (modeInfo.themeName !== this.props.screenProps.modeInfo.themeName) return true
-    if (geneType !== this.props.screenProps.geneType) return true
-    if (communityType !== this.props.screenProps.communityType) return true
-    if (circleType !== this.props.screenProps.circleType) return true
-
-    if (this.props.data.hotGames.length < nextProps.data.hotGames.length) {
-      return true
-    }
-    // console.log(nextProps.segmentedIndex, nextProps.segmentedIndex !== 0)
-    if (nextProps.segmentedIndex !== 0) return false
-    if (this.props.screenProps.searchTitle !== nextProps.screenProps.searchTitle) {
-      return false
-    }
-    
-    
-    return true
   }
 
   componentWillMount = () => {
@@ -194,7 +170,7 @@ class Recommend extends Component {
         renderItem: (...args) => this._renderItemComponent(...args, index)
       }
     });
-    console.log('recommend re-rendered')
+    log('recommend re-rendered')
     return (
       <AnimatedSectionList
         enableVirtualization={false}
@@ -239,8 +215,7 @@ const styles = StyleSheet.create({
 
 function mapStateToProps(state) {
   return {
-    data: state.recommend,
-    segmentedIndex: state.app.segmentedIndex
+    data: state.recommend
   };
 }
 
