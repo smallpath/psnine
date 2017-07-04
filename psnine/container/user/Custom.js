@@ -85,7 +85,7 @@ export default class Custom extends Component {
     this.props.navigation.goBack()
   }
 
-  ITEM_HEIGHT = 78 + 7
+  ITEM_HEIGHT = 74 + 7
 
 
   renderVIP = ({ item: rowData, index}) => {

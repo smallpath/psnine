@@ -133,7 +133,7 @@ class Community extends Component {
     this._loadMoreData();
   }
 
-  ITEM_HEIGHT = 78 + 7
+  ITEM_HEIGHT = 74 + 7
 
   _renderItem = ({ item: rowData, index }) => {
     const { modeInfo, navigation, toolbarDispatch } = this.props.screenProps

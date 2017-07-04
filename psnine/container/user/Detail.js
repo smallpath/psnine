@@ -66,7 +66,7 @@ export default class Detail extends Component {
     this.props.navigation.goBack()
   }
 
-  ITEM_HEIGHT = 78 + 7
+  ITEM_HEIGHT = 74 + 7
   _renderItemComponent = ({ item, rowData, index }) => {
     // console.log(...args)
     const { modeInfo } = this.props.screenProps

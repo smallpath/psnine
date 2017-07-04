@@ -135,7 +135,7 @@ class GameTopic extends Component {
   }
 
 
-  ITEM_HEIGHT = 78 + 7
+  ITEM_HEIGHT = 74 + 7
 
   _renderItem = ({ item: rowData, index }) => {
     const { modeInfo } = this.props.screenProps
