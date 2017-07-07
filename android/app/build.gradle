@@ -163,6 +163,9 @@ dependencies {
     compile project(':react-native-vector-icons')
     compile project(':lottie-react-native')
     compile project(':react-native-google-analytics-bridge')
+    compile project(':react-native-image-picker')
+    compile project(':react-native-fs')
+    compile project(':mao-rn-android-kit')
 
     // For animated GIF support
     compile 'com.facebook.fresco:animated-base-support:0.14.1'

@@ -47,8 +47,8 @@ class Community extends Component {
   }
 
   componentWillReceiveProps = (nextProps) => {
-    if (this.props.screenProps.communityType != nextProps.screenProps.communityType) {
-      this._onRefresh(nextProps.screenProps.communityType);
+    if (this.props.communityType != nextProps.communityType) {
+      this._onRefresh(nextProps.communityType);
     } else if (this.props.screenProps.modeInfo.themeName != nextProps.screenProps.modeInfo.themeName) {
 
     } else if (this.props.screenProps.searchTitle !== nextProps.screenProps.searchTitle) {
@@ -71,8 +71,8 @@ class Community extends Component {
   }
 
   componentWillMount = () => {
-    const { community: communityReducer } = this.props;
-    const { communityType, searchTitle, registerAfterEach } = this.props.screenProps
+    const { community: communityReducer, communityType } = this.props;
+    const { searchTitle, registerAfterEach } = this.props.screenProps
     if (communityReducer.topicPage == 0) {
       // this._onRefresh(
       //   communityType, 
@@ -87,7 +87,7 @@ class Community extends Component {
       handler: (
         searchTitle
       ) => {
-        const { communityType } = this.props.screenProps
+        const { communityType } = this.props
         this._onRefresh(
           communityType, 
           searchTitle
@@ -97,9 +97,7 @@ class Community extends Component {
   }
 
   _onRefresh = (type = '', searchTitle) => {
-    const { community: communityReducer, dispatch } = this.props;
-    const { communityType } = this.props.screenProps
-
+    const { community: communityReducer, dispatch, communityType } = this.props;
     this.setState({
       isRefreshing: true
     })
@@ -113,8 +111,8 @@ class Community extends Component {
   }
 
   _loadMoreData = () => {
-    const { community: communityReducer, dispatch } = this.props;
-    const { communityType, searchTitle } = this.props.screenProps
+    const { community: communityReducer, dispatch, communityType } = this.props;
+    const { searchTitle } = this.props.screenProps
 
     let page = communityReducer.topicPage + 1;
     dispatch(getTopicList(page, {
@@ -157,9 +155,9 @@ class Community extends Component {
   }
 
   render() {
-    const { community: reducer } = this.props;
+    const { community: reducer, communityType } = this.props;
     const { modeInfo } = this.props.screenProps
-    const { communityType, searchTitle } = this.props.screenProps
+    const { searchTitle } = this.props.screenProps
     log('Community.js rendered');
     // console.log('Community.js rendered');
     return (
@@ -215,7 +213,8 @@ const styles = StyleSheet.create({
 
 function mapStateToProps(state, ownProps) {
   return {
-    community: state.community
+    community: state.community,
+    communityType: state.app.communityType
   };
 }
 

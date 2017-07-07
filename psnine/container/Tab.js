@@ -62,7 +62,7 @@ export default class TabContainer extends Component {
     if (searchTitle !== this.props.screenProps.searchTitle) return true
     if (modeInfo.themeName !== this.props.screenProps.modeInfo.themeName) return true
     if (geneType !== this.props.screenProps.geneType) return true
-    if (communityType !== this.props.screenProps.communityType) return true
+    // if (communityType !== this.props.screenProps.communityType) return true
     if (circleType !== this.props.screenProps.circleType) return true
     return false
   }

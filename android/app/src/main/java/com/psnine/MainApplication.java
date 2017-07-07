@@ -4,11 +4,14 @@ import android.app.Application;
 
 import com.oblador.vectoricons.VectorIconsPackage;
 import com.facebook.react.ReactApplication;
+import com.imagepicker.ImagePickerPackage;
+import com.rnfs.RNFSPackage;
 import com.idehub.GoogleAnalyticsBridge.GoogleAnalyticsBridgePackage;
 import com.airbnb.android.react.lottie.LottiePackage;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
+import com.maornandroidkit.KitsPackage;
 import com.facebook.soloader.SoLoader;
 
 import java.util.Arrays;
@@ -26,8 +29,12 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new ImagePickerPackage(),
+            new RNFSPackage(),
             new GoogleAnalyticsBridgePackage(),
-            new LottiePackage(), new VectorIconsPackage()
+            new LottiePackage(),
+            new VectorIconsPackage(),
+            new KitsPackage()
       );
     }
   };

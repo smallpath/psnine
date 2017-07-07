@@ -131,6 +131,12 @@ let config = { tension: 30, friction: 7, ease: Easing.in(Easing.ease(1, 0, 1, 1)
 const timeout = 190
 const delay = 50
 
+import {
+  ExtraDimensionsAndroid,
+  AppBarLayoutAndroid,
+  CoordinatorLayoutAndroid,
+  NestedScrollViewAndroid
+} from 'mao-rn-android-kit'
 
 class Toolbar extends Component {
 
