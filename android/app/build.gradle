@@ -166,6 +166,7 @@ dependencies {
     compile project(':react-native-image-picker')
     compile project(':react-native-fs')
     compile project(':mao-rn-android-kit')
+    compile project(':react-native-nested-scrollview')
 
     // For animated GIF support
     compile 'com.facebook.fresco:animated-base-support:0.14.1'

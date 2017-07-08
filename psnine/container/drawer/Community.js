@@ -54,6 +54,7 @@ class Community extends Component {
     } else if (this.props.screenProps.searchTitle !== nextProps.screenProps.searchTitle) {
 
     } else {
+      
       this.setState({
         isRefreshing: false,
         isLoadingMore: false
@@ -101,7 +102,6 @@ class Community extends Component {
     this.setState({
       isRefreshing: true
     })
-    // console.log(typeof this.flatlist)
     this.flatlist && this.flatlist.getNode().scrollToOffset({ offset: 0, animated: true })
     dispatch(getTopicList(1, {
         type,
@@ -188,6 +188,7 @@ class Community extends Component {
         maxToRenderPerBatch={8}
         disableVirtualization={false}
         key={modeInfo.themeName + communityType}
+        renderScrollComponent={props => <NestedScrollView {...props} showsVerticalScrollIndicator={true}/>}
         numColumns={modeInfo.numColumns}
         contentContainerStyle={styles.list}
         getItemLayout={communityType !== 'news' ? (data, index) => (

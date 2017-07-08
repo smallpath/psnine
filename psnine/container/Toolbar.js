@@ -22,7 +22,8 @@ import {
   StatusBar,
   Modal,
   Keyboard,
-  AsyncStorage
+  AsyncStorage,
+  ViewPagerAndroid
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import MyDialog from '../components/Dialog'
@@ -135,8 +136,12 @@ import {
   ExtraDimensionsAndroid,
   AppBarLayoutAndroid,
   CoordinatorLayoutAndroid,
-  NestedScrollViewAndroid
+  NestedScrollViewAndroid,
+  TabLayoutAndroid,
+  PopupWindowAndroid
 } from 'mao-rn-android-kit'
+
+ import NestedScrollView from 'react-native-nested-scrollview';
 
 class Toolbar extends Component {
 
@@ -160,119 +165,10 @@ class Toolbar extends Component {
   }
 
   searchMapper = Object.keys(routes).reduce((prev, curr) => (prev[curr] = '', prev), {})
-  _renderDrawerView = () => {
-    return (
-      <RightDrawer         
-        onNavigationStateChange={(prevRoute, nextRoute, action) => {
-          const { index, routes } = nextRoute
-          const preSearch = this.searchMapper[routes[index].routeName]
-          if (preSearch !== this.state.search) {
-              this.searchMapper[routes[index].routeName] = this.state.search
-              const callback = this.state.afterEachHooks[nextRoute.index]
-              typeof callback === 'function' && callback(this.state.search)
-            }
-        }} screenProps={{
-          onTabPress: (route) => {
-            const currentIndex = this.props.app.segmentedIndex
-            const targetIndex = Object.keys(routes).indexOf(route.routeName)
-            
-            if (targetIndex === currentIndex) {
-              const callback = this.state.afterEachHooks[currentIndex]
-              {/*console.log(targetIndex, currentIndex, callback, 'rightdrawer')*/}
-              if (callback) {
-                if (this.timeout) clearTimeout(this.timeout)
-                this.timeout = setTimeout(() => {
-                  callback()
-                }, 200)
-              }
-            }
-          },
-          communityType: this.props.app.communityType,
-          geneType: this.props.app.geneType,
-          circleType: this.props.app.circleType,
-          navigation: this.props.navigation,
-          toolbarDispatch: this.props.dispatch,
-          segmentedIndex: this.props.app.segmentedIndex,
-          modeInfo: this.props.modeInfo,
-          setMarginTop: this.setMarginTop,
-          modalVisible: this.state.modalVisible,
-          searchTitle: this.state.search,
-          registerAfterEach: componentDidFocus => {
-            const obj = {}
-            if (componentDidFocus) {
-              const { index, handler } = componentDidFocus
-              {/*console.log(index, handler)*/}
-              {/*if (!this.state.afterEachHooks[index]) {*/}
-                obj.afterEachHooks = [...this.state.afterEachHooks]
-                obj.afterEachHooks[index] = handler
-              {/*}*/}
-            }
-            this.setState(obj)
-          }
-      }}/>
-    )
-  }
-  _renderTabView = () => {
-    return (
-      <TabContainer
-        onNavigationStateChange={(prevRoute, nextRoute, action) => {
-          if (prevRoute.index !== nextRoute.index && action.type === 'Navigation/NAVIGATE') {
-            this.props.dispatch(changeSegmentIndex(nextRoute.index))
-            const { index, routes } = nextRoute
-            const preSearch = this.searchMapper[routes[index].routeName]
-            {/*console.log(this.searchMapper, nextRoute)*/}
-            if (preSearch !== this.state.search) {
-              this.searchMapper[routes[index].routeName] = this.state.search
-              const callback = this.state.afterEachHooks[nextRoute.index]
-              {/*console.log(callback, preSearch, this.state.search, nextRoute.index, routes[index].routeName, 'calling')*/}
-              typeof callback === 'function' && callback(this.state.search)
-            }
-          }
-        }}
-        screenProps={{
-          onTabPress: (route) => {
-            const currentIndex = this.props.app.segmentedIndex
-            const targetIndex = Object.keys(routes).indexOf(route.routeName)
-            
-            if (targetIndex === currentIndex) {
-              const callback = this.state.afterEachHooks[currentIndex]
-              {/*console.log(targetIndex, currentIndex, callback)*/}
-              if (callback) {
-                if (this.timeout) clearTimeout(this.timeout)
-                this.timeout = setTimeout(() => {
-                  callback()
-                }, 200)
-              }
-            }
-          },
-          communityType: this.props.app.communityType,
-          geneType: this.props.app.geneType,
-          circleType: this.props.app.circleType,
-          navigation: this.props.navigation,
-          toolbarDispatch: this.props.dispatch,
-          segmentedIndex: this.props.app.segmentedIndex,
-          modeInfo: this.props.modeInfo,
-          setMarginTop: this.setMarginTop,
-          modalVisible: this.state.modalVisible,
-          searchTitle: this.state.search,
-          registerAfterEach: componentDidFocus => {
-            const obj = {}
-            if (componentDidFocus) {
-              const { index, handler } = componentDidFocus
-              {/*console.log(index, 'registered')*/}
-              {/*if (!this.state.afterEachHooks[index]) {*/}
-                obj.afterEachHooks = [...this.state.afterEachHooks]
-                obj.afterEachHooks[index] = handler
-              {/*}*/}
-            }
-            this.setState(obj)
-          }
-        }}/>
-    )
-  }
 
   componentWillMount = () => {
     this.props.dispatch(getRecommend())
+    this._pages.length = 0;
   }
 
 
@@ -290,6 +186,7 @@ class Toolbar extends Component {
       search: text
     })
     const currentIndex = this.props.app.segmentedIndex
+    log(this.state.afterEachHooks)
     const callback = this.state.afterEachHooks[currentIndex]
     typeof callback === 'function' && callback(text)
     const currentRouteName = Object.keys(routes)[currentIndex]
@@ -340,39 +237,302 @@ class Toolbar extends Component {
     }
   }
 
-
+  _scrollHeight = (
+    ExtraDimensionsAndroid.getStatusBarHeight() +
+    ExtraDimensionsAndroid.getAppClientHeight() -
+    ExtraDimensionsAndroid.getStatusBarHeight() - 38
+  )
+                  
   render() {
     const { app: appReducer, switchModeOnRoot, modeInfo } = this.props;
     const { segmentedIndex } = this.props.app;
     const { openVal } = this.state
     const tipHeight = toolbarHeight * 0.8
-
-    // console.log(appReducer.segmentedIndex, toolbarActions[appReducer.segmentedIndex].length)
     return (
-      <Animated.View
-        style={[styles.container, {
-          marginTop: this.state.marginTop,
-          backgroundColor: modeInfo.backgroundColor
-        }]}
-      >
-        <Icon.ToolbarAndroid
-          navIconName="md-menu"
-          title={title}
-          style={[styles.toolbar, { backgroundColor: modeInfo.standardColor, elevation: this.state.tabMode === 'tab' ? 0 : 4 }]}
-          titleColor={modeInfo.isNightMode ? '#000' : '#fff'}
-          subtitle={this.state.search ? `当前搜索: ${this.state.search}` : ''}
-          subtitleColor={modeInfo.isNightMode ? '#000' : '#fff'}
-          overflowIconName="md-more"
-          iconColor={modeInfo.isNightMode ? '#000' : '#fff'}
-          actions={toolbarActions[appReducer.segmentedIndex]}
-          onActionSelected={this.onActionSelected}
-          onIconClicked={this.props._callDrawer()}
-        />
-        {this.state.tabMode === 'tab' ? this._renderTabView() : this._renderDrawerView()}
-      </Animated.View>
+      <View style={{flex:1}}>
+        <CoordinatorLayoutAndroid
+          fitsSystemWindows={false}
+          ref={this._setCoordinatorLayout}>
+
+          <AppBarLayoutAndroid
+            ref={this._setAppBarLayout}
+            layoutParams={{
+              height: 94 // required
+            }}
+            style={styles.appbar} >
+            <View
+              style={styles.navbar}
+              layoutParams={{
+                height: 56, // required
+                scrollFlags: (
+                  AppBarLayoutAndroid.SCROLL_FLAG_SCROLL |
+                  AppBarLayoutAndroid.SCROLL_FLAG_ENTRY_ALWAYS
+                )
+              }}>
+              <View style={styles.toolbar}>
+              <Icon.ToolbarAndroid
+                navIconName="md-menu"
+                title={title}
+                style={[styles.toolbar, { backgroundColor: modeInfo.standardColor, elevation: this.state.tabMode === 'tab' ? 0 : 4 }]}
+                titleColor={modeInfo.isNightMode ? '#000' : '#fff'}
+                subtitle={this.state.search ? `当前搜索: ${this.state.search}` : ''}
+                subtitleColor={modeInfo.isNightMode ? '#000' : '#fff'}
+                overflowIconName="md-more"
+                iconColor={modeInfo.isNightMode ? '#000' : '#fff'}
+                actions={toolbarActions[appReducer.segmentedIndex]}
+                onActionSelected={this.onActionSelected}
+                onIconClicked={this.props._callDrawer()}
+              />
+              </View>
+              <View style={styles.actionBar}>
+              </View>
+            </View>
+            <View
+              style={styles.tabBar}>
+              <TabLayoutAndroid
+                tabMode="scrollable"
+                tabSelectedTextColor="#fff"
+                tabIndicatorColor="#fff"
+                tabTextColor="rgba(255, 255, 255, .6)"
+                tabIndicatorHeight={2}
+                tabTextSize={3}
+                tabSidePadding={20}
+                tabGravity='center'
+                tabHeight={38}
+                ref={this._setTabLayout}
+                style={{
+                  backgroundColor: modeInfo.standardColor
+                }} />
+            </View>
+          </AppBarLayoutAndroid>
+
+          <View
+            style={[styles.scrollView, { height: this._scrollHeight }]}
+            ref={this._setScrollView}>
+            <ViewPagerAndroid
+              onPageScroll={this._handleViewPagerPageScroll}
+              onPageScrollStateChanged={this._handleViewPagerPageScrollStateChanged}
+              onPageSelected={this._handleViewPagerPageSelected}
+              style={[styles.viewPager, { height: this._scrollHeight }]}
+              initialPage={1}
+              ref={this._setViewPager}>
+              {this._getPages({
+                height: this._scrollHeight,
+                initialPage: 1
+              })}
+            </ViewPagerAndroid>
+          </View>
+        </CoordinatorLayoutAndroid>
+        <PopupWindowAndroid
+          ref={this._setMenuPopup}>
+          <View style={styles.menu}>
+          </View>
+        </PopupWindowAndroid>
+      </View>
+    );
+  }
+
+  _tabTexts = Object.keys(routes).map(name => ({ text: routes[name].screen.navigationOptions.tabBarLabel}))
+
+  _coordinatorLayout = null;
+  _appBarLayout = null;
+  _scrollView = null;
+  _viewPager = null;
+  _menuPopup = null;
+  _menuBtn = null;
+  _tabLayout = null;
+  _pages = [];
+  _currentViewPagerPageIndex = 0;
+
+
+  _handleMenuButtonPess = () => {
+    this._menuPopup.showAsDropdown(this._menuBtn, 0, -10);
+  }
+
+  _setMenuBtn = component => {
+    this._menuBtn = component
+  }
+
+  _handleMenuItemPress = () => {
+    this._menuPopup.hide();
+  }
+
+  _setMenuPopup = component => {
+    this._menuPopup = component;
+  }
+
+  _setCoordinatorLayout = component => {
+    this._coordinatorLayout = component;
+  };
+
+  _setAppBarLayout = component => {
+    this._appBarLayout = component;
+  };
+
+  _setTabLayout = component => {
+    this._tabLayout = component;
+  }
+
+  _setScrollView = component => {
+    this._scrollView = component;
+  }
+
+  _setViewPager = component => {
+    this._viewPager = component;
+  }
+
+  _addPage = component => {
+    this._pages.push(component);
+  }
+
+  _handleViewPagerPageScroll = event => {
+    let nativeEvent = event.nativeEvent;
+    let offset = nativeEvent.offset;
+
+    if (offset > 0) {
+      this._currentViewPagerPageIndex = nativeEvent.position + 1;
+    }
+  }
+
+  _handleViewPagerPageScrollStateChanged = scrollState => {
+    if (scrollState === 'settling') {
+      this._loadPage(this._currentViewPagerPageIndex);
+    }
+  }
+
+  _handleViewPagerPageSelected = event => {
+    let nativeEvent = event.nativeEvent;
+    this._loadPage(nativeEvent.position);
+  }
+
+  _loadPage(index) {
+    let page = this.refs['page_' + index];
+    if (page && !page.isLoaded()) {
+      page.load();
+    }
+    this.props.dispatch(changeSegmentIndex(index))
+  }
+
+  shouldComponentUpdate = (nextProps, nextState) => {
+    const { modeInfo, app } = this.props
+    if (modeInfo.themeName !== this.props.modeInfo.themeName) return true
+    if (nextProps.app.segmentedIndex !== this.props.modeInfo.segmentedIndex) return true
+    return false
+  }
+
+  _getPages({ height, initialPage = 1 }) {
+    const { modeInfo } = this.props
+    return this._tabTexts.map((tab, index) => {
+      return (
+        <View
+          key={index}
+          style={{backgroundColor: modeInfo.backgroundColor}}>
+          <Page
+            ref={'page_' + index}
+            tab={tab}
+            pageIndex={index}
+            index={index}
+            height={height}
+            initialPage={initialPage}
+            screenProps={{
+              communityType: this.props.app.communityType,
+              geneType: this.props.app.geneType,
+              circleType: this.props.app.circleType,
+              navigation: this.props.navigation,
+              toolbarDispatch: this.props.dispatch,
+              segmentedIndex: this.props.app.segmentedIndex,
+              modeInfo: this.props.modeInfo,
+              setMarginTop: this.setMarginTop,
+              modalVisible: this.state.modalVisible,
+              searchTitle: this.state.search,
+              registerAfterEach: componentDidFocus => {
+                const obj = {}
+                if (componentDidFocus) {
+                  const { index, handler } = componentDidFocus
+                  obj.afterEachHooks = [...this.state.afterEachHooks]
+                  obj.afterEachHooks[index] = handler
+                }
+                this.setState(obj)
+              }
+            }}
+            navigation={{
+              navigate: (name) => name === 'Community' && this._viewPager.setPage(1)
+            }}
+            key={index} />
+        </View>
+      )
+    });
+  }
+
+  componentDidMount() {
+    this._coordinatorLayout.setScrollingViewBehavior(this._scrollView)
+    this._tabLayout.setViewPager(this._viewPager, this._tabTexts)
+    // this._viewPager.setViewSize
+    // this.refs['page_1'].load();
+  }
+
+
+}
+
+class Page extends Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      loaded:  this.props.initialPage === this.props.index ? true : false
+    }
+  }
+
+  shouldComponentUpdate = (nextProps, nextState) => {
+    if (modeInfo.themeName !== this.props.screenProps.modeInfo.themeName) return true
+    return false
+  }
+
+  render() {
+    let content = null;
+    if (this.state.loaded) {
+      content = this._getContent()
+    } else {
+      content = <View></View>
+    }
+
+    return content;
+  }
+
+  isLoaded() {
+    return this.state.loaded;
+  }
+
+  load() {
+    if (this.state.loaded) return
+
+    this.state.loaded = true
+
+    this.setState({
+      loaded: true
+    });
+  }
+
+  _getContent() {
+    const Name = Object.keys(routes)[this.props.index]
+    const TargetRoute = routes[Name]
+    if (!TargetRoute) return null
+    let Target = TargetRoute.screen
+    let items = (
+      <Target
+        {...this.props}
+      />
     )
+    return items
+    // return <NestedScrollViewAndroid showVerticalScrollIndicator={true} showsVerticalScrollIndicator={true}>{items}</NestedScrollViewAndroid>
   }
 }
+
+function mapStateToProps(state) {
+  return {
+    app: state.app,
+  };
+}
+
 
 const styles = StyleSheet.create({
   container: {
@@ -392,19 +552,99 @@ const styles = StyleSheet.create({
     //backgroundColor: '#00ffff'
     //fontSize: 20
   },
+  appbar: {
+    backgroundColor: "#2278F6"
+  },
+
   avatar: {
     width: 50,
     height: 50,
+  },
+  navbar: {
+    height: 56,
+    // alignItems: "center",
+    // justifyContent: "center",
+    // backgroundColor: "transparent",
+    // position: 'relative'
+  },
+
+  backBtn: {
+    top: 0,
+    left: 0,
+    height: 56,
+    position: 'absolute'
+  },
+
+  caption: {
+    color: '#fff',
+    fontSize: 20
+  },
+
+  actionBar: {
+    position: 'absolute',
+    top: 0,
+    right: 0,
+    height: 56,
+    flexDirection: 'column',
+    flexWrap: 'nowrap',
+    justifyContent: 'center',
+    paddingLeft: 10
+  },
+
+  actionBtn: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+
+  menuBtn: {
+    width: 34,
+    paddingRight: 10
+  },
+
+  menuBtnIcon: {
+    width: 16,
+    height: 16,
+    tintColor: 'rgba(255, 255, 255, .8)'
+  },
+
+
+  menu: {
+    width: 150,
+    backgroundColor: 'rgba(0, 0, 0, 0.8)'
+  },
+
+  tabBar: {
+    height: 38,
+    backgroundColor: '#4889F1'
+  },
+
+  scrollView: {
+    backgroundColor: "#f2f2f2"
+  },
+
+  viewPager: {
+    flex: 1,
+    backgroundColor: 'transparent'
+  },
+
+  pageItem: {
+    borderRadius: 2,
+    height: 200,
+    marginLeft: 10,
+    marginRight: 10,
+    marginTop: 5,
+    marginBottom: 5,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+
+  pageItemContent: {
+    fontSize: 30,
+    color: '#FFF'
   }
 });
-
-function mapStateToProps(state) {
-  return {
-    app: state.app,
-  };
-}
 
 export default connect(
   mapStateToProps
 )(Toolbar);
-

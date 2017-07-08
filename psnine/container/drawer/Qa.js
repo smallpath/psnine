@@ -216,6 +216,7 @@ class Qa extends Component {
           windowSize={21}
           updateCellsBatchingPeriod={1}
           initialNumToRender={42}
+          renderScrollComponent={props => <NestedScrollView {...props}/>}
           maxToRenderPerBatch={8}
           numColumns={modeInfo.numColumns}
           key={modeInfo.themeName}

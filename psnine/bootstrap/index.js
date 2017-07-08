@@ -12,3 +12,5 @@ global.log = debug ? (...args) => console.log(...args) : () => {}
 global.netInfo = 'WIFI'
 global.loadImageWithoutWifi = false
 global.shouldSendGA = true
+
+import './import'

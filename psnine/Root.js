@@ -315,6 +315,8 @@ export default class Root extends React.Component {
       accentColor: getAccentColorFromName(secondaryColor, isNightMode)
     })
 
+    console.log(modeInfo.themeName, modeInfo.isNightMode, '===>')
+
     // console.log(modeInfo.numColumns)
 
     const onNavigationStateChange = global.shouldSendGA ? (prevState, currentState) => {
