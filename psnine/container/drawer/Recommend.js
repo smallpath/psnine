@@ -127,8 +127,8 @@ class Recommend extends Component {
           navigation,
           rowData: item,
           onPress: () => {
-            this.props.dispatch(changeCommunityType(item.id))
             this.props.navigation.navigate('Community', {})
+            setTimeout(() => this.props.dispatch(changeCommunityType(item.id)), 0)
           }
         }}/>))
         break;
@@ -185,6 +185,7 @@ class Recommend extends Component {
           />
         }
         disableVirtualization={true}
+        renderScrollComponent={props => <NestedScrollView {...props}/>}
         keyExtractor={(item, index) => `${item.id}`}
         renderItem={this._renderItemComponent}
         renderSectionHeader={renderSectionHeader}

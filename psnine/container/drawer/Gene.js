@@ -150,6 +150,7 @@ class Gene extends Component {
         renderItem={this._renderItem}
         onEndReached={this._onEndReached}
         onEndReachedThreshold={0.5}
+        renderScrollComponent={props => <NestedScrollView {...props}/>}
         extraData={modeInfo}
         windowSize={21}
         updateCellsBatchingPeriod={1}

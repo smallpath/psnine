@@ -4,6 +4,7 @@ import android.app.Application;
 
 import com.oblador.vectoricons.VectorIconsPackage;
 import com.facebook.react.ReactApplication;
+import com.mohtada.nestedscrollview.ReactNestedScrollViewPackage;
 import com.imagepicker.ImagePickerPackage;
 import com.rnfs.RNFSPackage;
 import com.idehub.GoogleAnalyticsBridge.GoogleAnalyticsBridgePackage;
@@ -29,6 +30,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new ReactNestedScrollViewPackage(),
             new ImagePickerPackage(),
             new RNFSPackage(),
             new GoogleAnalyticsBridgePackage(),

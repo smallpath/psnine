@@ -127,6 +127,7 @@ class Battle extends Component {
         }
         disableVirtualization={true}
         keyExtractor={(item, index) => `${item.id}`}
+        renderScrollComponent={props => <NestedScrollView {...props}/>}
         renderItem={this._renderItemComponent}
         renderSectionHeader={renderSectionHeader}
         stickySectionHeadersEnabled
