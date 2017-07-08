@@ -19,7 +19,8 @@ import {
   Keyboard,
   ScrollView,
   BackHandler,
-  Linking
+  Linking,
+  ToolbarAndroid
 } from 'react-native';
 
 import { sync } from '../../dao/sync'
@@ -72,7 +73,18 @@ const iconMapper = {
   '屏蔽': 'md-sync'
 }
 
+import {
+  ExtraDimensionsAndroid,
+  AppBarLayoutAndroid,
+  CoordinatorLayoutAndroid,
+  CollapsingToolbarLayoutAndroid,
+  NestedScrollViewAndroid,
+  LayoutParamsAndroid
+} from 'mao-rn-android-kit';
+
 const limit = 160 // - toolbarHeight
+
+import ImageBackground from '../shared/ImageBackground'
 
 export default class Home extends Component {
 
@@ -91,7 +103,9 @@ export default class Home extends Component {
       modalVisible: false,
       modalOpenVal: new Animated.Value(0),
       marginTop: new Animated.Value(0),
-      onActionSelected: this._onActionSelected
+      onActionSelected: this._onActionSelected,
+      leftIcon: false,
+      rightIcon: false
     }
   }
 
@@ -119,91 +133,6 @@ export default class Home extends Component {
 
   componentWillMount = () => {
     this.preFetch()
-    this._previousTop = 0
-    const { openVal, marginTop } = this.state
-    this._viewStyles= {
-      style: {
-        top: this._previousTop
-      }
-    }
-    // this.removeListener = BackHandler.addEventListener('hardwareBackPress', () => {
-    //   if (marginTop._value === 0) {
-        
-    //     return false;
-    //   }
-    //   this._viewStyles.style.top = 0
-    //   this._previousTop = 0
-    //   Animated.timing(marginTop, { toValue: 0, ...config, duration: 200 }).start();
-    //   return true
-    // })
-    this.PanResponder = PanResponder.create({
-
-      onStartShouldSetPanResponderCapture: (e, gesture) => {
-        const target = e.nativeEvent.pageY - this._previousTop - 40
-        // console.log(e.nativeEvent, gesture)
-        if (target <= limit) {
-          // console.log('===>1', target, limit)
-          return true
-        } else if (target <= limit + toolbarHeight) {
-          // console.log('===>2')
-          return false
-        } else {
-          // console.log('===>3')
-          this._viewStyles.style.top = -limit
-          this._previousTop = -limit
-          this._viewStyles.style.top
-          Animated.timing(marginTop, {
-            toValue: this._previousTop,
-            ...config
-          }).start()
-          return false
-        }
-      },
-      onMoveShouldSetPanResponderCapture: (e, gesture) => {
-        const target = e.nativeEvent.pageY - this._previousTop - 40
-        if (target > limit && target <= limit + toolbarHeight) {
-          // console.log('===>4', target)
-          return Math.abs(gesture.dy) >= 2
-        }
-        // console.log('===>5')
-        return false
-      },
-      onPanResponderGrant: (e, gesture) => {
-
-      },
-      onPanResponderMove: (e, gesture) => {
-        this._viewStyles.style.top = this._previousTop + gesture.dy
-        if (this._viewStyles.style.top > 0) {
-          this._viewStyles.style.top = 0
-          // this._previousTop = 0
-        } else if (this._viewStyles.style.top < -limit) {
-          this._viewStyles.style.top = -limit
-          // this._previousTop = -limit
-        }
-        marginTop.setValue(this._viewStyles.style.top)
-      },
-
-      onPanResponderRelease: (e, gesture) => {
-
-      },
-      onPanResponderTerminationRequest: (evt, gesture) => {
-        return false;
-      },
-      onPanResponderTerminate: (evt, gesture) => {
-
-      },
-      onPanResponderReject: (evt, gesture) => {
-        return false;
-      },
-      onPanResponderEnd: (evt, gesture) => {
-        this._previousLeft += gesture.dx;
-        // console.log(gesture.dy, this._previousTop, '==>', gesture.dy + this._previousTop)
-        this._previousTop += gesture.dy;
-        if (this._previousTop > 0) this._previousTop = 0
-        if (this._previousTop < -limit) this._previousTop = -limit
-      },
-
-    });
   }
 
   preFetch = () => {
@@ -213,11 +142,10 @@ export default class Home extends Component {
     })
     InteractionManager.runAfterInteractions(() => {
       const data = getGameNewTopicAPI(params.URL).then(data => {
-
         this.setState({
           data,
           isLoading: false
-        })
+        }, () => this._coordinatorLayout.setScrollingViewBehavior(this._scrollView))
       })
     });
   }
@@ -238,13 +166,22 @@ export default class Home extends Component {
     const infoColor = 'rgba(255,255,255,0.8)'
     const { width: SCREEN_WIDTH } = Dimensions.get('window')
     return (
+      <ImageBackground
+        style={{width: 50, height: 50}}
+        source={{uri: rowData.backgroundImage}}
+        style={{ 
+          height: limit + toolbarHeight + 1,
+          width: SCREEN_WIDTH
+        }}
+        >
       <View style={{
         backgroundColor: 'transparent',
         height: limit,
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
-        padding: 10
+        padding: 10,
+        marginTop: 56
       }}>
         <View style={{ justifyContent:'center', alignItems: 'center', flex: -1, marginLeft: 20, marginBottom: 15  }}>
           <Image
@@ -275,20 +212,15 @@ export default class Home extends Component {
         </View>
 
       </View>
+      </ImageBackground>
     )
   }
 
-  // shouldComponentUpdate (nextProps, nextState) {
-  //   console.log(Object.keys(nextProps), Object.keys(nextState))
-  //   return true
-  // }
 
   renderTabContainer = (list) => {
     const { modeInfo } = this.props.screenProps
     const { params } = this.props.navigation.state
     const { marginTop } = this.state
-    // console.log(this.state.data.psnButtonInfo)
-    // console.log(this.state.data)
     return (
       <CreateNewGameTab screenProps={{
         modeInfo: modeInfo,
@@ -298,21 +230,10 @@ export default class Home extends Component {
         list: this.state.data.list,
         gameTable: this.state.data.gameTable,
         navigation: this.props.navigation
-      }} onNavigationStateChange={(prevRoute, nextRoute, action) => {
-        if (prevRoute.index !== nextRoute.index && action.type === 'Navigation/NAVIGATE') {
-          if (marginTop._value !== -limit) {
-            this._viewStyles.style.top = -limit
-            this._previousTop = -limit
-            this._viewStyles.style.top
-            Animated.timing(marginTop, {
-              toValue: this._previousTop,
-              ...config
-            }).start()
-          }
-        }
       }}/> 
     )
   }
+
 
   render() {
     const { params } = this.props.navigation.state
@@ -333,120 +254,161 @@ export default class Home extends Component {
         actions.pop()
       }
     }
-    return (
-      <View
-        style={{ flex: 1, backgroundColor: modeInfo.backgroundColor }}
-        onStartShouldSetResponder={() => false}
-        onMoveShouldSetResponder={() => false}
-      >
-        <Ionicons.ToolbarAndroid
-          navIconName="md-arrow-back"
-          overflowIconName="md-more"
-          iconColor={modeInfo.isNightMode ? '#000' : '#fff'}
-          title={`${source.titleInfo ? source.titleInfo.title : '加载中...' }`}
-          titleColor={modeInfo.isNightMode ? '#000' : '#fff'}
-          style={[styles.toolbar, { backgroundColor: this.state.isLoading ? modeInfo.standardColor : 'transparent' }]}
-          actions={actions}
-          key={this.state.toolbar.map(item => item.text || '').join('::')}
-          onIconClicked={() => {
-            if (marginTop._value === 0) {
-              this.props.navigation.goBack()
-              return
-            }
-            this._viewStyles.style.top = 0
-            this._previousTop = 0
-            Animated.timing(marginTop, { toValue: 0, ...config, duration: 200 }).start();
-          }}
-          onActionSelected={this.onActionSelected}
-        />
-        {this.state.isLoading && (
-          <ActivityIndicator
-            animating={this.state.isLoading}
-            style={{
-              flex: 999,
-              justifyContent: 'center',
-              alignItems: 'center'
-            }}
-            color={modeInfo.accentColor}
-            size={50}
-          />
-        )}
-        { (!this.state.isLoading && source.titleInfo && source.titleInfo.backgroundImage) && (
-          <Animated.View style={{
-            position: 'absolute',
-            top: -1, left: 0, right: 0,
-            transform: [
-              {
-                translateY: this.state.marginTop.interpolate({
-                  inputRange: [-1000, 0, 1000],
-                  outputRange: [-500, 0 , 500]
-                })
-              }
-            ]
-          }}>
-            <Image
-              source={{ uri: source.titleInfo.backgroundImage }}
-              resizeMode={'cover'}
-              resizeMethod={'resize'}
-              blurRadius={10}
-              style={{ 
-                height: limit + toolbarHeight + 1,
-                top: 0, // why??
-              }}
-            />
-          </Animated.View>
-        )}
-        {
-          !this.state.isLoading && (<Animated.View ref={(view) => {
-            this.view = view;
-          }} 
-          
-          style={{
-            overflow: 'visible',
-            flex:0, 
-            height: ACTUAL_SCREEN_HEIGHT + limit - toolbarHeight + ACTUAL_SCREEN_HEIGHT    ,         
-            transform: [
-                {
-                  translateY: this.state.marginTop.interpolate({
-                    inputRange: [-1000, 0, 1000],
-                    outputRange: [-1000, 0 , 1000]
-                  })
-                }
-              ]
-            }}
-            {...this.PanResponder.panHandlers}
-            >
-            {
-              this.renderHeader(source.titleInfo)
-            }
-            <View style={{
-              position: 'absolute',
-              right: 0,
-              left: 0
-            }}>
-              <Animated.View style={{
-                backgroundColor: this.state.marginTop.interpolate({
-                  inputRange: [-limit, -limit/2, 0, limit],
-                  outputRange: [modeInfo.standardColor, 'rgba(255, 255, 255, 0)', 'rgba(255, 255, 255, 0)', modeInfo.standardColor],
-                }),
-                flex: 1,
-                height: limit
-              }}/>
-            </View>
-            <View style={{flex: 0, height: SCREEN_HEIGHT - toolbarHeight - StatusBar.currentHeight + 1, backgroundColor: modeInfo.backgroundColor}} contentContainerStyle={{
-              height: SCREEN_HEIGHT - toolbarHeight  - StatusBar.currentHeight + 1
-            }}
-              >
-              {this.renderTabContainer()}
-            </View>
-            </Animated.View>
-          )
-        }
-      </View>
-    );
-  }
-}
+    return source.titleInfo && this.state.leftIcon ? (
+      <View style={{flex:1}}>
+        <CoordinatorLayoutAndroid
+          fitsSystemWindows={false}
+          ref={this._setCoordinatorLayout}>
 
+          <AppBarLayoutAndroid
+            ref={this._setAppBarLayout}
+            style={styles.appbar} >
+            <CollapsingToolbarLayoutAndroid
+              expandedTitleMarginTop={100}
+              expandedTitleMarginStart={20}
+              expandedTitleMarginBottom={100}
+              collapsedTitleColor={modeInfo.backgroundColor}
+              contentScrimColor={modeInfo.standardColor}
+              expandedTitleColor={modeInfo.titleTextColor}
+              statusBarScrimColor={modeInfo.standardColor}
+              titleEnable={false}
+              layoutParams={{
+                scrollFlags: (
+                  AppBarLayoutAndroid.SCROLL_FLAG_SCROLL |
+                  AppBarLayoutAndroid.SCROLL_FLAG_SNAP |
+                  AppBarLayoutAndroid.SCROLL_FLAG_EXIT_UNTIL_COLLAPSED
+                )
+              }}>
+              <View
+                style={{
+                  flex: 1,
+                  backgroundColor: '#4CAF50'
+                }}
+                layoutParams={{
+                  collapseParallaxMultiplie: 0.7,
+                  collapseMode: CollapsingToolbarLayoutAndroid.CollapseMode.COLLAPSE_MODE_PARALLAX
+                }}>
+                {source.titleInfo && this.renderHeader(source.titleInfo)}
+              </View>
+              <Ionicons.ToolbarAndroid
+                navIconName="md-arrow-back"
+                overflowIconName="md-more"
+                iconColor={modeInfo.isNightMode ? '#000' : '#fff'}
+                title={source.titleInfo.title}
+                onIconClicked={() => this.props.navigation.goBack()}
+                titleColor={modeInfo.isNightMode ? '#000' : '#fff'}
+                actions={actions}
+                key={this.state.toolbar.map(item => item.text || '').join('::')}
+                onActionSelected={this.onActionSelected}
+                layoutParams={{
+                  height: 56, // required
+                  collapseMode: CollapsingToolbarLayoutAndroid.CollapseMode.COLLAPSE_MODE_PIN // required
+                }}
+              />
+              {/*<ToolbarAndroid
+                title="Collapsing Toolbar Layout"
+                titleColor="#ffffff"
+                onIconClicked={this._goBack}
+                layoutParams={{
+                  height: 56, // required
+                  collapseMode: CollapsingToolbarLayoutAndroid.CollapseMode.COLLAPSE_MODE_PIN // required
+                }}>
+              </ToolbarAndroid>*/}
+            </CollapsingToolbarLayoutAndroid>
+          </AppBarLayoutAndroid>
+
+          <View
+            style={[styles.scrollView, { height: this._scrollHeight }]}
+            ref={this._setScrollView}>
+            {this.renderTabContainer()}
+            {/*<NestedScrollViewAndroid>
+              {this._getItems(30)}
+            </NestedScrollViewAndroid>*/}
+          </View>
+        </CoordinatorLayoutAndroid>
+      </View>
+    ) : <View style={{ flex: 1, backgroundColor: modeInfo.backgroundColor }}>
+      <Ionicons.ToolbarAndroid
+        navIconName="md-arrow-back"
+        overflowIconName="md-more"
+        iconColor={modeInfo.isNightMode ? '#000' : '#fff'}
+        title={`${source.titleInfo ? source.titleInfo.title : '加载中...' }`}
+        titleColor={modeInfo.isNightMode ? '#000' : '#fff'}
+        style={[styles.toolbar, { backgroundColor: this.state.isLoading ? modeInfo.standardColor : 'transparent' }]}
+        actions={actions}
+        key={this.state.toolbar.map(item => item.text || '').join('::')}
+        onIconClicked={() => this.props.navigation.goBack()}
+        onActionSelected={this.onActionSelected}
+      />
+      <ActivityIndicator
+        animating={this.state.isLoading}
+        style={{
+          flex: 999,
+          justifyContent: 'center',
+          alignItems: 'center'
+        }}
+        color={modeInfo.accentColor}
+        size={50}
+      />
+    </View>
+  }
+
+  _scrollHeight = (
+    ExtraDimensionsAndroid.getStatusBarHeight() +
+    ExtraDimensionsAndroid.getAppClientHeight() -
+    ExtraDimensionsAndroid.getStatusBarHeight() -
+    56
+  );
+
+  _coordinatorLayout = null;
+  _appBarLayout = null;
+  _scrollView = null;
+
+  _setCoordinatorLayout = component => {
+    this._coordinatorLayout = component;
+  };
+
+  _setAppBarLayout = component => {
+    this._appBarLayout = component;
+  };
+
+  _setScrollView = component => {
+    this._scrollView = component;
+  };
+
+  componentDidMount() {
+    Promise.all([
+      Ionicons.getImageSource('md-arrow-back', 24, '#fff'),
+      Ionicons.getImageSource('md-more', 24, '#fff')
+    ]).then(result => {
+      this.setState({
+        leftIcon: result[0],
+        rightIcon: result[1]
+      })
+    })
+  }
+
+  _getItems(count) {
+    let items = [];
+
+    for (let i = 0; i < count; i++) {
+      items.push(
+        <View
+          key={i}
+          style={[
+            styles.item,
+            { backgroundColor: ITEM_COLORS[i % ITEM_COLORS.length] }
+          ]}>
+          <Text style={styles.itemContent}>ITEM #{i}</Text>
+        </View>
+      );
+    }
+
+    return items;
+  }
+
+}
+const ITEM_COLORS = ['#E91E63', '#673AB7', '#2196F3', '#00BCD4', '#4CAF50', '#CDDC39']
 
 const styles = StyleSheet.create({
   container: {
@@ -471,5 +433,60 @@ const styles = StyleSheet.create({
     fontWeight: '300',
     color: idColor, // make links coloured pink,
     fontSize: 12
+  },
+  appbar: {
+    backgroundColor: "#2278F6",
+    height: 160 + 56
+  },
+
+  navbar: {
+    height: 56,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "transparent",
+    position: 'relative'
+  },
+
+  backBtn: {
+    top: 0,
+    left: 0,
+    height: 56,
+    position: 'absolute'
+  },
+
+  caption: {
+    color: '#fff',
+    fontSize: 20
+  },
+
+  heading: {
+    height: 38,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#4889F1"
+  },
+
+  headingText: {
+    color: 'rgba(255, 255, 255, .6)'
+  },
+
+  scrollView: {
+    backgroundColor: "#f2f2f2"
+  },
+
+  item: {
+    borderRadius: 2,
+    height: 200,
+    marginLeft: 10,
+    marginRight: 10,
+    marginTop: 5,
+    marginBottom: 5,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+
+  itemContent: {
+    fontSize: 30,
+    color: '#FFF'
   }
 });
