@@ -192,6 +192,7 @@ class GameTopic extends Component {
           maxToRenderPerBatch={8}
           disableVirtualization={false}
           contentContainerStyle={styles.list}
+          renderScrollComponent={props => <NestedScrollView {...props}/>}
           viewabilityConfig={{
             minimumViewTime: 1,
             viewAreaCoveragePercentThreshold: 0,

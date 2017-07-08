@@ -248,6 +248,7 @@ class Toolbar extends Component {
     const { segmentedIndex } = this.props.app;
     const { openVal } = this.state
     const tipHeight = toolbarHeight * 0.8
+    log(modeInfo.themeName, '====> Toolbar inner')
     return (
       <View style={{flex:1}}>
         <CoordinatorLayoutAndroid
@@ -485,6 +486,11 @@ class Toolbar extends Component {
     this._tabLayout.setViewPager(this._viewPager, this._tabTexts)
     // this._viewPager.setViewSize
     this.refs['page_1'].load();
+
+    this.props.navigation.navigate('NewGame', {
+      URL: 'http://psnine.com/game/10504',
+      title: '女神异闻录5　ペルソナ5　Persona 5'
+    })
   }
 
 
