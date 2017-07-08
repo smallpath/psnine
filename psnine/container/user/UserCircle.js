@@ -201,6 +201,7 @@ class UserGame extends Component {
           onEndReachedThreshold={0.5}
           extraData={modeInfo}
           windowSize={21}
+          renderScrollComponent={props => <NestedScrollView {...props}/>}
           updateCellsBatchingPeriod={1}
           initialNumToRender={42}
           maxToRenderPerBatch={8}

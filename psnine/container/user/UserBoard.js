@@ -185,6 +185,7 @@ class UserBoard extends Component {
           }}
           extraData={this.state}
           windowSize={999}
+          renderScrollComponent={props => <NestedScrollView {...props}/>}
           disableVirtualization={true}
           viewabilityConfig={{
             minimumViewTime: 3000,

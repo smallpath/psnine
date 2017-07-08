@@ -215,6 +215,7 @@ class UserGame extends Component {
           contentContainerStyle={styles.list}
           key={modeInfo.themeName}
           numColumns={modeInfo.numColumns}
+          renderScrollComponent={props => <NestedScrollView {...props}/>}
           getItemLayout={(data, index) => (
             {length: this.ITEM_HEIGHT, offset: this.ITEM_HEIGHT * index, index}
           )}

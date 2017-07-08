@@ -345,6 +345,7 @@ export default class Home extends Component {
           }}
           extraData={this.state}
           windowSize={999}
+          renderScrollComponent={props => <NestedScrollView {...props}/>}
           key={modeInfo.themeName}
           numColumns={diaryTable.length ? 1 : modeInfo.numColumns}
           disableVirtualization={true}

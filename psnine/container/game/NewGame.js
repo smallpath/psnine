@@ -167,7 +167,6 @@ export default class Home extends Component {
     const { width: SCREEN_WIDTH } = Dimensions.get('window')
     return (
       <ImageBackground
-        style={{width: 50, height: 50}}
         source={{uri: rowData.backgroundImage}}
         style={{ 
           height: limit + toolbarHeight + 1,
@@ -305,15 +304,6 @@ export default class Home extends Component {
                   collapseMode: CollapsingToolbarLayoutAndroid.CollapseMode.COLLAPSE_MODE_PIN // required
                 }}
               />
-              {/*<ToolbarAndroid
-                title="Collapsing Toolbar Layout"
-                titleColor="#ffffff"
-                onIconClicked={this._goBack}
-                layoutParams={{
-                  height: 56, // required
-                  collapseMode: CollapsingToolbarLayoutAndroid.CollapseMode.COLLAPSE_MODE_PIN // required
-                }}>
-              </ToolbarAndroid>*/}
             </CollapsingToolbarLayoutAndroid>
           </AppBarLayoutAndroid>
 
@@ -321,9 +311,6 @@ export default class Home extends Component {
             style={[styles.scrollView, { height: this._scrollHeight }]}
             ref={this._setScrollView}>
             {this.renderTabContainer()}
-            {/*<NestedScrollViewAndroid>
-              {this._getItems(30)}
-            </NestedScrollViewAndroid>*/}
           </View>
         </CoordinatorLayoutAndroid>
       </View>
