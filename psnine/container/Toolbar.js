@@ -272,17 +272,32 @@ class Toolbar extends Component {
               <View style={styles.toolbar}>
               <Icon.ToolbarAndroid
                 navIconName="md-menu"
-                title={title}
                 style={[styles.toolbar, { backgroundColor: modeInfo.standardColor, elevation: this.state.tabMode === 'tab' ? 0 : 4 }]}
-                titleColor={modeInfo.isNightMode ? '#000' : '#fff'}
-                subtitle={this.state.search ? `当前搜索: ${this.state.search}` : ''}
-                subtitleColor={modeInfo.isNightMode ? '#000' : '#fff'}
                 overflowIconName="md-more"
                 iconColor={modeInfo.isNightMode ? '#000' : '#fff'}
                 actions={toolbarActions[appReducer.segmentedIndex]}
                 onActionSelected={this.onActionSelected}
                 onIconClicked={this.props._callDrawer()}
-              />
+              >
+                <TouchableWithoutFeedback>
+                <View style={{height: 56, flex: 1, flexDirection: 'column', justifyContent: 'center'}}>
+                  <Text style={{fontSize: 20, fontWeight: '300', color: modeInfo.isNightMode ? '#000' : '#fff'}} onPress={() => {
+                      const index = this._currentViewPagerPageIndex
+                      const callback = this.state.afterEachHooks[index]
+                      typeof callback === 'function' && callback()
+                    }}>
+                    {title}
+                  </Text>
+                  {this.state.search && <Text
+                    onPress={() => {
+                      this._onSearch('')
+                    }}
+                    style={{fontSize: 15, color: modeInfo.isNightMode ? '#000' : '#fff'}}>
+                    {`当前搜索: ${this.state.search}`}
+                  </Text> || undefined}
+                </View>
+                </TouchableWithoutFeedback>
+              </Icon.ToolbarAndroid>
               </View>
               <View style={styles.actionBar}>
               </View>
@@ -314,11 +329,11 @@ class Toolbar extends Component {
               onPageScrollStateChanged={this._handleViewPagerPageScrollStateChanged}
               onPageSelected={this._handleViewPagerPageSelected}
               style={[styles.viewPager, { height: this._scrollHeight }]}
-              initialPage={1}
+              initialPage={this._currentViewPagerPageIndex}
               ref={this._setViewPager}>
               {this._getPages({
                 height: this._scrollHeight,
-                initialPage: 1
+                initialPage: this._currentViewPagerPageIndex
               })}
             </ViewPagerAndroid>
           </View>
@@ -342,7 +357,7 @@ class Toolbar extends Component {
   _menuBtn = null;
   _tabLayout = null;
   _pages = [];
-  _currentViewPagerPageIndex = 0;
+  _currentViewPagerPageIndex = 1;
 
 
   _handleMenuButtonPess = () => {
@@ -410,13 +425,14 @@ class Toolbar extends Component {
     if (page && !page.isLoaded()) {
       page.load();
     }
-    this.props.dispatch(changeSegmentIndex(index))
+    // this.props.dispatch(changeSegmentIndex(index))
   }
 
   shouldComponentUpdate = (nextProps, nextState) => {
-    const { modeInfo, app } = this.props
+    // return true
+    const { modeInfo } = this.props
     if (modeInfo.themeName !== this.props.modeInfo.themeName) return true
-    if (nextProps.app.segmentedIndex !== this.props.modeInfo.segmentedIndex) return true
+    // if (nextProps.app.segmentedIndex !== this.props.modeInfo.segmentedIndex) return true
     return false
   }
 
@@ -468,7 +484,7 @@ class Toolbar extends Component {
     this._coordinatorLayout.setScrollingViewBehavior(this._scrollView)
     this._tabLayout.setViewPager(this._viewPager, this._tabTexts)
     // this._viewPager.setViewSize
-    // this.refs['page_1'].load();
+    this.refs['page_1'].load();
   }
 
 
@@ -478,11 +494,16 @@ class Page extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      loaded:  this.props.initialPage === this.props.index ? true : false
+      loaded:  false
     }
   }
 
   shouldComponentUpdate = (nextProps, nextState) => {
+    return true
+    if (nextState.loaded !== this.state.loaded) {
+      return true
+    }
+    const { modeInfo } = nextProps.screenProps
     if (modeInfo.themeName !== this.props.screenProps.modeInfo.themeName) return true
     return false
   }

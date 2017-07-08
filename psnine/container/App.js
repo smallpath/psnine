@@ -55,7 +55,7 @@ class Psnine extends Component {
     // console.log('App.js rendered');
     const { navigation: { state }, screenProps } = this.props;
     const {modeInfo} = screenProps
-     console.log(modeInfo.themeName, modeInfo.isNightMode, '===>')
+     log(modeInfo.themeName, modeInfo.isNightMode, '===>')
     return (
       <DrawerLayoutAndroid
         ref={DRAWER_REF}
