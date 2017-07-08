@@ -209,6 +209,7 @@ class UserGame extends Component {
           maxToRenderPerBatch={8}
           disableVirtualization={false}
           key={modeInfo.themeName}
+          renderScrollComponent={props => <NestedScrollView {...props}/>}
           numColumns={modeInfo.numColumns}
           contentContainerStyle={styles.list}
           getItemLayout={(data, index) => (

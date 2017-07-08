@@ -7,7 +7,7 @@ import {
 
 export default class ImageBackground extends React.Component {
   render() {
-    const {children, style, imageStyle, imageRef, ...props} = this.props;
+    const {children, style, imageStyle, imageRef, blurRadis = 10, ...props} = this.props;
 
     return (
       <View style={style}>
@@ -15,7 +15,7 @@ export default class ImageBackground extends React.Component {
           {...props}
           resizeMode={'cover'}
           resizeMethod={'resize'}
-          blurRadius={10}
+          blurRadius={blurRadis}
           style={[
             StyleSheet.absoluteFill,
             {

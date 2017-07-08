@@ -487,9 +487,10 @@ class Toolbar extends Component {
     // this._viewPager.setViewSize
     this.refs['page_1'].load();
 
-    this.props.navigation.navigate('NewGame', {
-      URL: 'http://psnine.com/game/10504',
-      title: '女神异闻录5　ペルソナ5　Persona 5'
+    this.props.navigation.navigate('Home', {
+      title: 'secondlife_xhm',
+      id: 'secondlife_xhm',
+      URL: `http://psnine.com/psnid/${'secondlife_xhm'}`
     })
   }
 
