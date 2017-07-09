@@ -22,7 +22,7 @@ import {
   ToolbarAndroid
 } from 'react-native';
 
-import { sync } from '../../dao/sync'
+import { sync, updown, fav, upBase, block } from '../../dao/sync'
 import MyDialog from '../../components/Dialog'
 import HTMLView from '../../components/HtmlToView';
 import { connect } from 'react-redux';
@@ -303,7 +303,7 @@ export default class Home extends Component {
 
  _onActionSelected = (index) => {
     const { params } = this.props.navigation.state
-    const { preFetch } = this.props
+    const { preFetch } = this
     const { modeInfo } = this.props.screenProps
     const psnid = params.URL.split('/').filter(item => item.trim()).pop()
     // alert(index)
@@ -432,8 +432,8 @@ export default class Home extends Component {
       if (item.text.includes('冷却') || iconMapper[item.text]) return result
       return undefined
     }).filter(item => item) : []
-    console.log(JSON.stringify(profileToolbar))
-    return source.playerInfo && this.state.leftIcon ? (
+    // console.log(JSON.stringify(profileToolbar))
+    return source.playerInfo && this.state.leftIcon && !this.state.isLoading ? (
       <View style={{flex:1}}>
         <CoordinatorLayoutAndroid
           fitsSystemWindows={false}
