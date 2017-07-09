@@ -230,7 +230,7 @@ export default class Reply extends Component {
 
 
     const icon = await Promise.all([
-      Ionicons.getImageSource('md-arrow-back', 20, '#fff'),
+      Ionicons.getImageSource('md-arrow-back', 50, '#fff'),
       Ionicons.getImageSource('md-happy', 50, '#fff'),
       Ionicons.getImageSource('md-photos', 50, '#fff'),
       Ionicons.getImageSource('md-send', 50, '#fff'),
@@ -366,19 +366,21 @@ export default class Reply extends Component {
             flexDirection: 'row',
             alignItems: 'center',
           }}>
+            <View style={{ width: 56, height: 56, justifyContent: 'center', alignItems: 'center'}}>
             <TouchableNativeFeedback
               onPress={this._pressButton}
               delayPressIn={0}
               background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
-              style={{ borderRadius: 25 }}
+              style={{ borderRadius: 14 }}
             >
-              <View style={{ width: 50, height: 50, marginLeft: 0, borderRadius: 25 }}>
+              <View style={{ width: 28, height: 28, borderRadius: 14, justifyContent: 'center', alignItems: 'center' }}>
                 {icon && <Image
                   source={icon.backIcon}
-                  style={{ width: 20, height: 20, marginTop: 15, marginLeft: 15 }}
+                  style={{ width: 16, height: 16 }}
                 />}
               </View>
             </TouchableNativeFeedback>
+            </View>
             <Text style={{ color: 'white', fontSize: 23, marginLeft: 10, }}>{title}</Text>
           </View>
 
