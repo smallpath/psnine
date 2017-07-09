@@ -77,7 +77,7 @@ class Psnine extends Component {
             switchModeOnRoot: screenProps.switchModeOnRoot,
             tipBarMarginBottom: screenProps.tipBarMarginBottom
           }}
-          key={screenProps.modeInfo.themeName}
+
           _callDrawer={() => this.callDrawer.bind(this)}
         />
       </DrawerLayoutAndroid>
