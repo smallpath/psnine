@@ -150,7 +150,6 @@ class Toolbar extends Component {
     
     this.state = {
       search: '',
-      afterEachHooks: [],
       rotation: new Animated.Value(1),
       scale: new Animated.Value(1),
       opacity: new Animated.Value(1),
@@ -165,6 +164,7 @@ class Toolbar extends Component {
   }
 
   searchMapper = Object.keys(routes).reduce((prev, curr) => (prev[curr] = '', prev), {})
+  afterEachHooks = []
 
   componentWillMount = () => {
     this.props.dispatch(getRecommend())
@@ -173,7 +173,8 @@ class Toolbar extends Component {
 
 
   componentWillReceiveProps(nextProps) {
-    this.props.app = nextProps.app;
+    // this.props.app = 
+    // console.log('??? receving', nextProps.app.segmentedIndex, this.props.app.segmentedIndex)
     if (this.state.tabMode !== nextProps.modeInfo.settingInfo.tabMode) {
       this.setState({
         tabMode: nextProps.modeInfo.settingInfo.tabMode
@@ -186,8 +187,7 @@ class Toolbar extends Component {
       search: text
     })
     const currentIndex = this.props.app.segmentedIndex
-    log(this.state.afterEachHooks)
-    const callback = this.state.afterEachHooks[currentIndex]
+    const callback = this.afterEachHooks[currentIndex]
     typeof callback === 'function' && callback(text)
     const currentRouteName = Object.keys(routes)[currentIndex]
     this.searchMapper[currentRouteName] = this.state.search
@@ -250,6 +250,7 @@ class Toolbar extends Component {
     const { openVal } = this.state
     const tipHeight = toolbarHeight * 0.8
     log(modeInfo.themeName, '====> Toolbar inner')
+    // alert(appReducer.segmentedIndex)
     return (
       <View style={{flex:1}}>
         <CoordinatorLayoutAndroid
@@ -286,7 +287,8 @@ class Toolbar extends Component {
                 <View style={{height: 56, flex: 1, flexDirection: 'column', justifyContent: 'center'}}>
                   <Text style={{fontSize: 20, fontWeight: '300', color: modeInfo.isNightMode ? '#000' : '#fff'}} onPress={() => {
                       const index = this._currentViewPagerPageIndex
-                      const callback = this.state.afterEachHooks[index]
+                      const callback = this.afterEachHooks[index]
+                      {/*log(callback, this.state.afterEachHooks, index)*/}
                       typeof callback === 'function' && callback()
                     }}>
                     {title}
@@ -427,16 +429,19 @@ class Toolbar extends Component {
     let page = this.refs['page_' + index];
     if (page && !page.isLoaded()) {
       page.load();
+      
     }
-    this.props.dispatch(changeSegmentIndex(index))
-  }
-
-  shouldComponentUpdate = (nextProps, nextState) => {
-    // return true
-    const { modeInfo } = this.props
-    if (modeInfo.themeName !== this.props.modeInfo.themeName) return true
-    if (nextProps.app.segmentedIndex !== this.props.app.segmentedIndex) return true
-    return false
+    if (index !== this.props.app.segmentedIndex) {
+      this.props.dispatch(changeSegmentIndex(index))
+      setTimeout(() => {
+        const callback = this.afterEachHooks[index]
+        const currentRouteName = Object.keys(routes)[index]
+        if (this.searchMapper[currentRouteName] !== this.state.search) {
+          typeof callback === 'function' && callback(this.state.search)
+          this.searchMapper[currentRouteName] = this.state.search
+        } 
+      })
+    }
   }
 
   _getPages({ height, initialPage = 1 }) {
@@ -468,10 +473,9 @@ class Toolbar extends Component {
                 const obj = {}
                 if (componentDidFocus) {
                   const { index, handler } = componentDidFocus
-                  obj.afterEachHooks = [...this.state.afterEachHooks]
-                  obj.afterEachHooks[index] = handler
+                  this.afterEachHooks = [...this.afterEachHooks]
+                  this.afterEachHooks[index] = handler
                 }
-                this.setState(obj)
               }
             }}
             navigation={{
@@ -513,12 +517,6 @@ class Page extends Component {
       return false
     }
     return true
-    if (nextState.loaded !== this.state.loaded) {
-      return true
-    }
-    const { modeInfo } = nextProps.screenProps
-    if (modeInfo.themeName !== this.props.screenProps.modeInfo.themeName) return true
-    return false
   }
 
   render() {
@@ -566,6 +564,11 @@ function mapStateToProps(state) {
     app: state.app,
   };
 }
+
+
+export default connect(
+  mapStateToProps
+)(Toolbar);
 
 
 const styles = StyleSheet.create({
@@ -678,7 +681,3 @@ const styles = StyleSheet.create({
     color: '#FFF'
   }
 });
-
-export default connect(
-  mapStateToProps
-)(Toolbar);
