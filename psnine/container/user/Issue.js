@@ -12,7 +12,8 @@ import {
   InteractionManager,
   Modal,
   Slider,
-  FlatList
+  FlatList,
+  Button
 } from 'react-native';
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
@@ -209,13 +210,7 @@ export default class Issue extends Component {
           overflowIconName="md-more"
           iconColor={modeInfo.isNightMode ? '#000' : '#fff'}
           title={'发布'}
-          subtitle={({ 
-            'topic' : '社区',
-            'gene' : '机因',
-            'battle' : '约战',
-            'qa' : '问答',
-            'trade' : '闲游',
-          })[this.state.finalType]}
+          subtitle={TYPES[this.state.finalType]}
           style={[styles.toolbar, { backgroundColor: modeInfo.standardColor }]}
           titleColor={modeInfo.isNightMode ? '#000' : '#fff'}
           subtitleColor={modeInfo.isNightMode ? '#000' : '#fff'}
@@ -278,34 +273,24 @@ export default class Issue extends Component {
                 opacity: 1
               }} borderRadius={2}>
                 <Text style={{ alignSelf: 'flex-start', fontSize: 18, color: modeInfo.titleTextColor }}>选择类型: </Text>
-                <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-                  <Picker style={{
-                    flex: 1,
-                    borderWidth: 1,
-                    color: modeInfo.standardTextColor
-                  }}
-                    prompt='选择类型'
-                    selectedValue={this.state.type}
-                    onValueChange={this.onValueChange.bind(this, 'type')}>
-                    <Picker.Item label="主题" value="topic" />
-                    <Picker.Item label="问答" value="qa" />
-                    <Picker.Item label="机因" value="gene" />
-                    <Picker.Item label="约战" value="battle" />
-                    <Picker.Item label="交易" value="trade" />
-                  </Picker>
-                </View>
-                <TouchableNativeFeedback onPress={() => {
-                    this.setState({
-                      typeModalVisible: false,
-                      isLoading: true
-                    }, () => {
-                      this.fetchMessages(params.URL, 'jump');
+                <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginTop: 5 }}>
+                  {
+                    Object.keys(TYPES).map(value => ({
+                      name: TYPES[value],
+                      value
+                    })).map((item, index) => {
+                      return <View style={{margin: 2}}><Button key={index} onPress={() => {
+                          this.setState({
+                            type: item.value,
+                            typeModalVisible: false,
+                            isLoading: true
+                          }, () => {
+                            this.fetchMessages(params.URL, 'jump')
+                          })
+                        }} title={item.name} color={modeInfo.accentColor}/></View>
                     })
-                  }}>
-                  <View style={{ alignSelf: 'flex-end', paddingHorizontal: 8, paddingVertical: 5 }}>
-                    <Text style={{color: '#009688'}}>确定</Text>
-                  </View>
-                </TouchableNativeFeedback>
+                  }
+                </View>
               </View>
             )} />
         )}
@@ -372,6 +357,13 @@ export default class Issue extends Component {
 
 }
 
+const TYPES = { 
+  'topic' : '社区',
+  'gene' : '机因',
+  'battle' : '约战',
+  'qa' : '问答',
+  'trade' : '闲游',
+}
 
 const styles = StyleSheet.create({
   container: {
