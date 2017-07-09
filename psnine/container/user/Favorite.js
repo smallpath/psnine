@@ -12,7 +12,8 @@ import {
   InteractionManager,
   Modal,
   Slider,
-  FlatList
+  FlatList,
+  Button
 } from 'react-native';
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
@@ -274,33 +275,24 @@ class Fav extends Component {
                 opacity: 1
               }} borderRadius={2}>
                 <Text style={{ alignSelf: 'flex-start', fontSize: 18, color: modeInfo.titleTextColor }}>选择类型: </Text>
-                <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-                  <Picker style={{
-                    flex: 1,
-                    borderWidth: 1,
-                    color: modeInfo.standardTextColor
-                  }}
-                    prompt='选择类型'
-                    selectedValue={this.state.type}
-                    onValueChange={this.onValueChange.bind(this, 'type')}>
-                    <Picker.Item label="主题" value="topic" />
-                    <Picker.Item label="机因" value="gene" />
-                    <Picker.Item label="用户" value="psnid" />
-                    <Picker.Item label="问答" value="qa" />
-                  </Picker>
+                <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginTop: 5 }}>
+                  {
+                    Object.keys(TYPES).map(value => ({
+                      name: TYPES[value],
+                      value
+                    })).map((item, index) => {
+                      return <View style={{margin: 2}}><Button key={index} onPress={() => {
+                          this.setState({
+                            type: item.value,
+                            typeModalVisible: false,
+                            isLoading: true
+                          }, () => {
+                            this.fetchMessages(params.URL, 'jump')
+                          })
+                        }} title={item.name} color={modeInfo.accentColor}/></View>
+                    })
+                  }
                 </View>
-                <TouchableNativeFeedback onPress={() => {
-                  this.setState({
-                    typeModalVisible: false,
-                    isLoading: true
-                  }, () => {
-                    this.fetchMessages(params.URL, 'jump');
-                  })
-                }}>
-                  <View style={{ alignSelf: 'flex-end', paddingHorizontal: 8, paddingVertical: 5 }}>
-                    <Text style={{color: '#009688'}}>确定</Text>
-                  </View>
-                </TouchableNativeFeedback>
               </View>
             )} />
         )}
@@ -367,6 +359,12 @@ class Fav extends Component {
 
 }
 
+const TYPES = { 
+  'topic' : '社区',
+  'gene' : '机因',
+  'psnid' : '用户',
+  'qa' : '问答',
+}
 
 const styles = StyleSheet.create({
   container: {

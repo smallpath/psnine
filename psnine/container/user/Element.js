@@ -9,7 +9,8 @@ import {
   RefreshControl,
   InteractionManager,
   SectionList,
-  Animated
+  Animated,
+  Button
 } from 'react-native';
 
 import { connect } from 'react-redux';
@@ -40,18 +41,9 @@ class NodeItem extends React.PureComponent {
         alignContent: 'flex-end',
         backgroundColor: modeInfo.backgroundColor,
         flex: -1,
-        padding: 4
+        margin: 4
       }}>
-        <TouchableNativeFeedback
-          useForeground={true}
-          delayPressIn={0}
-          onPress={onPress}
-          background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
-        >
-          <View style={{ flex: -1, flexDirection: 'row', padding: 5, backgroundColor: modeInfo.backgroundColor }}>
-            <Text style={{color: modeInfo.accentColor}}>{rowData.text}</Text>
-          </View>
-        </TouchableNativeFeedback>
+        <Button onPress={onPress} color={modeInfo.accentColor} title={rowData.text}/>
       </View>
     )
   }
