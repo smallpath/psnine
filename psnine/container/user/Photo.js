@@ -26,7 +26,7 @@ import { standardColor, nodeColor, idColor } from '../../constants/colorConfig';
 
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { getPhotoAPI } from '../../dao';
-import { postDeleteImage } from '../../dao/post';
+import { postDeleteImage, postImage } from '../../dao/post';
 
 import TopicItem from '../shared/CommunityItem'
 import GeneItem from '../shared/GeneItem'
@@ -47,6 +47,22 @@ let toolbarActions = [
 ];
 
 import Item from '../shared/PhotoItem'
+
+import ImagePicker from 'react-native-image-picker'
+
+
+const uploadOptions = {
+  title: '选择图片',
+  cancelButtonTitle: '取消',
+  takePhotoButtonTitle: '拍摄',
+  chooseFromLibraryButtonTitle: '选择图片',
+  mediaType: 'photo',
+  noData: true,
+  storageOptions: {
+    skipBackup: true,
+    path: 'images'
+  }
+}
 
 export default class Photo extends Component {
   constructor(props) {
@@ -142,11 +158,38 @@ export default class Photo extends Component {
   onActionSelected = (index) => {
     switch (index) {
       case 0:
-        this.props.navigation.navigate('ImageUpload', {
-          callback: () => {
-            this.fetchMessages()
+
+        ImagePicker.showImagePicker(uploadOptions, (response) => {
+          // console.log('Response = ', response);
+
+          if (response.didCancel) {
+            // console.log('User cancelled image picker');
           }
-        })
+          else if (response.error) {
+            // console.log('ImagePicker Error: ', response.error);
+          } else {
+
+            const { height, width, uri = '', type = '', fileSize } = response
+            // console.log('??')
+            if (fileSize > 1024 * 1024) {
+              // return global.toast('PSNINE上传的图片文件最大为1M')
+            }
+            global.toast('上传中')
+            postImage({
+              image: {
+                uri
+              },
+              type
+            }).then(res => {
+              return res.text()
+            }).then(html => {
+              toast('图片上传成功')
+              const { navigation } = this.props
+              const { params } = navigation.state
+              this.fetchMessages(params.URL, 'jump');
+            }).catch(err => toast(err.toString()))
+          }
+        });
       return
       case 1:
         this.setState({
