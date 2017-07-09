@@ -315,18 +315,23 @@ export default class Root extends React.Component {
       accentColor: getAccentColorFromName(secondaryColor, isNightMode)
     })
 
-    console.log(modeInfo.themeName, modeInfo.isNightMode, '===>')
+    // console.log(modeInfo.themeName, modeInfo.isNightMode, '===>')
 
     // console.log(modeInfo.numColumns)
 
     const onNavigationStateChange = global.shouldSendGA ? (prevState, currentState) => {
       const currentScreen = getCurrentRoute(currentState);
       const prevScreen = getCurrentRoute(prevState);
-
-      if (global.shouldSendGA && prevScreen && currentScreen && prevScreen.routeName !== currentScreen.routeName) {
-        const { routeName = 'Unknow'} = currentScreen
-        // console.log(routeName)
-        tracker.trackScreenView(routeName)
+      if (prevScreen && currentScreen && prevScreen.routeName !== currentScreen.routeName) {
+        // if (currentScreen.routeName === 'Home') {
+        //   StatusBar.setHidden(true)
+        // } else if (prevScreen.routeName === 'Home') {
+        //   StatusBar.setHidden(false)
+        // }
+        if (global.shouldSendGA) {
+          const { routeName = 'Unknow'} = currentScreen
+          tracker.trackScreenView(routeName)
+        }
       }
     } : null
 

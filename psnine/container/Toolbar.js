@@ -489,11 +489,11 @@ class Toolbar extends Component {
     // this._viewPager.setViewSize
     this.refs['page_1'].load();
 
-    // this.props.navigation.navigate('Home', {
-    //   title: 'secondlife_xhm',
-    //   id: 'secondlife_xhm',
-    //   URL: `http://psnine.com/psnid/${'secondlife_xhm'}`
-    // })
+    this.props.navigation.navigate('Home', {
+      title: 'secondlife_xhm',
+      id: 'secondlife_xhm',
+      URL: `http://psnine.com/psnid/${'secondlife_xhm'}`
+    })
   }
 
 
