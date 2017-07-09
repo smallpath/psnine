@@ -13,7 +13,8 @@ import {
   Modal,
   Slider,
   ActivityIndicator,
-  FlatList
+  FlatList,
+  Button
 } from 'react-native';
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
@@ -108,6 +109,7 @@ class UserBoard extends Component {
       InteractionManager.runAfterInteractions(() => {
         getUserBoardCommentAPI(this.URL).then(data => {
           // console.log(data)
+          data.commentList.unshift({ id: 'new' })
           this.setState({
             data,
             commentList: data.commentList,
@@ -135,6 +137,13 @@ class UserBoard extends Component {
   hasComment = false
   renderComment = (rowData, index) => {
     const { modeInfo, navigation } = this.props.screenProps
+    if (index === 0) {
+      return (
+        <View key={'new'} style={{ margin: 5 }}>
+          <Button onPress={this.onPress} color={modeInfo.accentColor} title='创建' style={{color: '#0f0'}}/>
+        </View>
+      )
+    }
     return (
       <ComplexComment key={rowData.id || index} {...{
         navigation,
@@ -147,6 +156,18 @@ class UserBoard extends Component {
     )
   }
 
+  onPress = () => {
+    const { psnid } = this.props.screenProps
+    this.props.screenProps.navigation.navigate('Reply', {
+      type: 'psnid',
+      id: psnid,
+      callback: () => {
+        this.preFetch()
+        this.isReplyShowing = false
+      },
+      shouldSeeBackground: true
+    })
+  }
 
   isReplyShowing = false
 
