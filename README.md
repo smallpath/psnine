@@ -104,7 +104,13 @@ Psnine第三方安卓客户端, 基于React Native, 支持安卓5.0及以上系�
     - [x] 旧版游戏页面内支持快捷创建帖子
     - [x] 花式回复工具栏增加文本框弹窗
 - [ ] 重构 (1.0.0)
-  - [ ] 使用安卓原生路由
+  - [ ] react-native-navigation
+  - [ ] react-native-interactable
+  - [x] collapse-toolbar-layout
+  - [x] coordinator-layout
+  - [x] nested-scroll-view
+  - [ ] react-native-fs
+  - [ ] react-native-image-picker
 
 
 # Changelog
