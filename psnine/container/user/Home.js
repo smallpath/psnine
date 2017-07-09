@@ -117,18 +117,32 @@ export default class Home extends Component {
     this.preFetch()
   }
 
-  preFetch = () => {
+  preFetch = async () => {
     const { params } = this.props.navigation.state
-    this.setState({
+    await this.setState({
       isLoading: true
     })
+
+    const result = await Promise.all([
+      Ionicons.getImageSource('md-arrow-back', 24, '#fff'),
+      Ionicons.getImageSource('md-sync', 24, '#fff'),
+      Ionicons.getImageSource('md-more', 24, '#fff')
+    ])
+    await this.setState({
+      leftIcon: result[0],
+      middleIcon: result[1],
+      rightIcon: result[2],
+    })
+
     InteractionManager.runAfterInteractions(() => {
+
       const data = getHomeAPI(params.URL).then(data => {
 
         this.hasGameTable = data.gameTable.length !== 0
+        // console.log(profileToolbar)
         this.setState({
           data,
-          isLoading: false
+          isLoading: false,
         }, () => this._coordinatorLayout.setScrollingViewBehavior(this._scrollView))
       })
     });
@@ -281,14 +295,7 @@ export default class Home extends Component {
         navigation: this.props.navigation
       }} onNavigationStateChange={(prevRoute, nextRoute, action) => {
         if (prevRoute.index !== nextRoute.index && action.type === 'Navigation/NAVIGATE') {
-          const callback = this.state.afterEachHooks[nextRoute.index]
-          if (callback) {
-            if (this.timeout) clearTimeout(this.timeout)
-            this.timeout = setTimeout(() => {
-              callback()
-              /*console.log('called hooks on', nextRoute.index)*/
-            }, 200)
-          }
+
         }
       }}/> 
     )
@@ -297,10 +304,12 @@ export default class Home extends Component {
  _onActionSelected = (index) => {
     const { params } = this.props.navigation.state
     const { preFetch } = this.props
+    const { modeInfo } = this.props.screenProps
     const psnid = params.URL.split('/').filter(item => item.trim()).pop()
     // alert(index)
     switch (index) {
       case 4:
+        // if (psnid === modeInfo.settingInfo.psnid) return toast('不可以屏蔽自己')
         block({ 
           type: 'psnid',
           param: psnid
@@ -394,6 +403,16 @@ export default class Home extends Component {
     }
   }
 
+  onIconClicked = () => this.props.navigation.goBack()
+
+  toolbar = [
+    {"title":"游戏同步","iconName":"md-sync","show":"never"},
+    {"title":"等级同步","iconName":"md-sync","show":"never"},
+    {"title":"感谢","iconName":"md-thumbs-up","show":"never"},
+    {"title":"关注","iconName":"md-star-half","show":"never"},
+    {"title":"屏蔽","iconName":"md-sync","show":"never"}
+  ]
+
   render() {
     const { params } = this.props.navigation.state
     // console.log('GamePage.js rendered');
@@ -412,7 +431,8 @@ export default class Home extends Component {
       if (index === 0) result.icon = this.state.middleIcon
       if (item.text.includes('冷却') || iconMapper[item.text]) return result
       return undefined
-    }).filter(item => item) : undefined
+    }).filter(item => item) : []
+    console.log(JSON.stringify(profileToolbar))
     return source.playerInfo && this.state.leftIcon ? (
       <View style={{flex:1}}>
         <CoordinatorLayoutAndroid
@@ -451,12 +471,12 @@ export default class Home extends Component {
                 overflowIcon={this.state.rightIcon}
                 title={`${params.title}`}
                 titleColor={modeInfo.isNightMode ? '#000' : '#fff'}
-                actions={profileToolbar}
+                actions={this.toolbar}
                 layoutParams={{
                   height: 56, // required
                   collapseMode: CollapsingToolbarLayoutAndroid.CollapseMode.COLLAPSE_MODE_PIN // required
                 }}
-                onIconClicked={() => this.props.navigation.goBack()}
+                onIconClicked={this.onIconClicked}
                 onActionSelected={this._onActionSelected}
               />
             </CollapsingToolbarLayoutAndroid>
@@ -522,17 +542,7 @@ export default class Home extends Component {
   };
 
   componentDidMount() {
-    Promise.all([
-      Ionicons.getImageSource('md-arrow-back', 24, '#fff'),
-      Ionicons.getImageSource('md-sync', 24, '#fff'),
-      Ionicons.getImageSource('md-more', 24, '#fff')
-    ]).then(result => {
-      this.setState({
-        leftIcon: result[0],
-        middleIcon: result[1],
-        rightIcon: result[2]
-      })
-    })
+
   }
 
   _getItems(count) {
