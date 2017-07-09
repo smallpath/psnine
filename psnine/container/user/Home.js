@@ -456,6 +456,7 @@ export default class Home extends Component {
                   height: 56, // required
                   collapseMode: CollapsingToolbarLayoutAndroid.CollapseMode.COLLAPSE_MODE_PIN // required
                 }}
+                onIconClicked={() => this.props.navigation.goBack()}
                 onActionSelected={this._onActionSelected}
               />
             </CollapsingToolbarLayoutAndroid>
