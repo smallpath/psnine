@@ -203,6 +203,7 @@ class Toolbar extends Component {
 
   onActionSelected = (index) => {
     const { segmentedIndex, communityType } = this.props.app;
+    // console.log(segmentedIndex)
     const { dispatch } = this.props;
     if (segmentedIndex === 1) {
       if (index !== 0 && index !== 1) {
@@ -277,6 +278,7 @@ class Toolbar extends Component {
                 overflowIconName="md-more"
                 iconColor={modeInfo.isNightMode ? '#000' : '#fff'}
                 actions={toolbarActions[appReducer.segmentedIndex]}
+                key={appReducer.segmentedIndex}
                 onActionSelected={this.onActionSelected}
                 onIconClicked={this.props._callDrawer()}
               >
@@ -426,14 +428,14 @@ class Toolbar extends Component {
     if (page && !page.isLoaded()) {
       page.load();
     }
-    // this.props.dispatch(changeSegmentIndex(index))
+    this.props.dispatch(changeSegmentIndex(index))
   }
 
   shouldComponentUpdate = (nextProps, nextState) => {
     // return true
     const { modeInfo } = this.props
     if (modeInfo.themeName !== this.props.modeInfo.themeName) return true
-    // if (nextProps.app.segmentedIndex !== this.props.modeInfo.segmentedIndex) return true
+    if (nextProps.app.segmentedIndex !== this.props.app.segmentedIndex) return true
     return false
   }
 
@@ -487,11 +489,11 @@ class Toolbar extends Component {
     // this._viewPager.setViewSize
     this.refs['page_1'].load();
 
-    this.props.navigation.navigate('Home', {
-      title: 'secondlife_xhm',
-      id: 'secondlife_xhm',
-      URL: `http://psnine.com/psnid/${'secondlife_xhm'}`
-    })
+    // this.props.navigation.navigate('Home', {
+    //   title: 'secondlife_xhm',
+    //   id: 'secondlife_xhm',
+    //   URL: `http://psnine.com/psnid/${'secondlife_xhm'}`
+    // })
   }
 
 
@@ -506,6 +508,10 @@ class Page extends Component {
   }
 
   shouldComponentUpdate = (nextProps, nextState) => {
+    if (nextProps.screenProps.segmentedIndex !== this.props.screenProps.segmentedIndex) {
+      if (nextProps.screenProps.segmentedIndex === this.props.index) return true
+      return false
+    }
     return true
     if (nextState.loaded !== this.state.loaded) {
       return true

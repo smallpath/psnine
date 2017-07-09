@@ -438,7 +438,7 @@ export default class Home extends Component {
               <View
                 style={{
                   flex: 1,
-                  backgroundColor: '#4CAF50'
+                  backgroundColor: modeInfo.standardColor
                 }}
                 layoutParams={{
                   collapseParallaxMultiplie: 0.7,
@@ -451,9 +451,7 @@ export default class Home extends Component {
                 overflowIcon={this.state.rightIcon}
                 title={`${params.title}`}
                 titleColor={modeInfo.isNightMode ? '#000' : '#fff'}
-                style={[styles.toolbar, { backgroundColor: this.state.isLoading ? modeInfo.standardColor : 'transparent' }]}
                 actions={profileToolbar}
-                key={profileToolbar.map(item => item.text || '').join('::')}
                 layoutParams={{
                   height: 56, // required
                   collapseMode: CollapsingToolbarLayoutAndroid.CollapseMode.COLLAPSE_MODE_PIN // required

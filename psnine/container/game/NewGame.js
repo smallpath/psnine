@@ -281,7 +281,7 @@ export default class Home extends Component {
               <View
                 style={{
                   flex: 1,
-                  backgroundColor: '#4CAF50'
+                  backgroundColor: modeInfo.standardColor
                 }}
                 layoutParams={{
                   collapseParallaxMultiplie: 0.7,
@@ -297,7 +297,6 @@ export default class Home extends Component {
                 onIconClicked={() => this.props.navigation.goBack()}
                 titleColor={modeInfo.isNightMode ? '#000' : '#fff'}
                 actions={actions}
-                key={this.state.toolbar.map(item => item.text || '').join('::')}
                 onActionSelected={this.onActionSelected}
                 layoutParams={{
                   height: 56, // required
