@@ -121,6 +121,7 @@ export const postImage = image => {
   }
   const body = new FormData()
   body.append('upimg', upimg)
+  // console.log(body)
   return fetch(imageURL, {
     method: 'POST',
     body

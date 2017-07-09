@@ -279,7 +279,7 @@ export default class Issue extends Component {
                       name: TYPES[value],
                       value
                     })).map((item, index) => {
-                      return <View style={{margin: 2}}><Button key={index} onPress={() => {
+                      return <View key={index} style={{margin: 2}}><Button key={index} onPress={() => {
                           this.setState({
                             type: item.value,
                             typeModalVisible: false,
