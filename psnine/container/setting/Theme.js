@@ -213,7 +213,6 @@ class Theme extends Component {
           }}
         />
         <View style={{flex:1}}>
-          {this.renderSwitchType()}
           {this.renderSwitchThemeColor()}
           {this.renderSwitchSecondaryColor()}
         </View>

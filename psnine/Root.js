@@ -297,7 +297,7 @@ export default class Root extends React.Component {
     const nightModeInfo = ColorConfig[this.state.colorTheme + 'Night']
     const targetModeInfo = this.state.isNightMode ? nightModeInfo : dayModeInfo
     const { isLoadingAsyncStorage, progress } = this.state
-    const { colorTheme, secondaryColor, isNightMode, width } = this.state
+    const { colorTheme, secondaryColor, isNightMode, width, height, minWidth } = this.state
     const modeInfo = Object.assign({}, targetModeInfo, {
       loadSetting: this.loadSetting,
       reloadSetting: this.reloadSetting,
@@ -311,6 +311,8 @@ export default class Root extends React.Component {
       colorTheme,
       secondaryColor,
       width,
+      height,
+      minWidth,
       numColumns: Math.floor(width/360),
       accentColor: getAccentColorFromName(secondaryColor, isNightMode)
     })

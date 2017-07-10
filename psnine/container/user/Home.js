@@ -102,10 +102,18 @@ export default class Home extends Component {
       icons: false,
       leftIcon: false,
       rightIcon: false,
-      middleIcon: false
+      middleIcon: false,
+      _scrollHeight: this.props.screenProps.modeInfo.height - StatusBar.currentHeight - 56
     }
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (this.props.screenProps.modeInfo.width !== nextProps.screenProps.modeInfo.width) {
+      const { params } = this.props.navigation.state
+      this.props.navigation.goBack()
+      // this.props.navigation.navigate('Home', params)
+    }
+  }
 
   componentWillUnmount = () => {
     this.removeListener && this.removeListener.remove()
@@ -483,7 +491,7 @@ export default class Home extends Component {
           </AppBarLayoutAndroid>
 
           <View
-            style={[styles.scrollView, { height: this._scrollHeight, backgroundColor: modeInfo.backgroundColor }]}
+            style={[styles.scrollView, { height: this.state._scrollHeight, backgroundColor: modeInfo.backgroundColor }]}
             ref={this._setScrollView}>
             {/*<NestedScrollViewAndroid>
               {this._getItems(30)}
@@ -517,13 +525,6 @@ export default class Home extends Component {
       />
     </View>
   }
-
-  _scrollHeight = (
-    ExtraDimensionsAndroid.getStatusBarHeight() +
-    ExtraDimensionsAndroid.getAppClientHeight() -
-    ExtraDimensionsAndroid.getStatusBarHeight() -
-    56
-  );
 
   _coordinatorLayout = null;
   _appBarLayout = null;

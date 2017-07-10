@@ -105,7 +105,16 @@ export default class Home extends Component {
       marginTop: new Animated.Value(0),
       onActionSelected: this._onActionSelected,
       leftIcon: false,
-      rightIcon: false
+      rightIcon: false,
+      _scrollHeight: this.props.screenProps.modeInfo.height - StatusBar.currentHeight - 56
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (this.props.screenProps.modeInfo.width !== nextProps.screenProps.modeInfo.width) {
+      const { params } = this.props.navigation.state
+      this.props.navigation.goBack()
+      // this.props.navigation.navigate('Home', params)
     }
   }
 
@@ -307,7 +316,7 @@ export default class Home extends Component {
           </AppBarLayoutAndroid>
 
           <View
-            style={[styles.scrollView, { height: this._scrollHeight }]}
+            style={[styles.scrollView, { height: this.state._scrollHeight, backgroundColor: modeInfo.backgroundColor }]}
             ref={this._setScrollView}>
             {this.renderTabContainer()}
           </View>
