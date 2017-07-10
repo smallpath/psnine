@@ -147,7 +147,7 @@ class Toolbar extends Component {
 
   constructor(props) {
     super(props);
-    
+
     this.state = {
       search: '',
       rotation: new Animated.Value(1),
@@ -159,7 +159,8 @@ class Toolbar extends Component {
       modalVisible: false,
       modalOpenVal: new Animated.Value(0),
       topicMarginTop: new Animated.Value(0),
-      tabMode: this.props.modeInfo.settingInfo.tabMode
+      tabMode: this.props.modeInfo.settingInfo.tabMode,
+      _scrollHeight: this.props.modeInfo.height - StatusBar.currentHeight -38
     }
   }
 
@@ -178,6 +179,10 @@ class Toolbar extends Component {
     if (this.state.tabMode !== nextProps.modeInfo.settingInfo.tabMode) {
       this.setState({
         tabMode: nextProps.modeInfo.settingInfo.tabMode
+      })
+    } else if (this.props.modeInfo.width !== nextProps.modeInfo.width) {
+      this.setState({
+        _scrollHeight: nextProps.modeInfo.height - StatusBar.currentHeight -38
       })
     }
   }
@@ -237,12 +242,6 @@ class Toolbar extends Component {
       this._onSearchClicked()
     }
   }
-
-  _scrollHeight = (
-    ExtraDimensionsAndroid.getStatusBarHeight() +
-    ExtraDimensionsAndroid.getAppClientHeight() -
-    ExtraDimensionsAndroid.getStatusBarHeight() - 38
-  )
                   
   render() {
     const { app: appReducer, switchModeOnRoot, modeInfo } = this.props;
@@ -327,17 +326,17 @@ class Toolbar extends Component {
           </AppBarLayoutAndroid>
 
           <View
-            style={[styles.scrollView, { height: this._scrollHeight }]}
+            style={[styles.scrollView, { height: this.state._scrollHeight }]}
             ref={this._setScrollView}>
             <ViewPagerAndroid
               onPageScroll={this._handleViewPagerPageScroll}
               onPageScrollStateChanged={this._handleViewPagerPageScrollStateChanged}
               onPageSelected={this._handleViewPagerPageSelected}
-              style={[styles.viewPager, { height: this._scrollHeight }]}
+              style={[styles.viewPager, { height: this.state._scrollHeight }]}
               initialPage={this._currentViewPagerPageIndex}
               ref={this._setViewPager}>
               {this._getPages({
-                height: this._scrollHeight,
+                height: this.state._scrollHeight,
                 initialPage: this._currentViewPagerPageIndex
               })}
             </ViewPagerAndroid>
