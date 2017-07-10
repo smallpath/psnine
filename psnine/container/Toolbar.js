@@ -361,7 +361,7 @@ class Toolbar extends Component {
   _menuBtn = null;
   _tabLayout = null;
   _pages = [];
-  _currentViewPagerPageIndex = 1;
+  _currentViewPagerPageIndex = 0;
 
 
   _handleMenuButtonPess = () => {
@@ -489,6 +489,7 @@ class Toolbar extends Component {
   componentDidMount() {
     this._coordinatorLayout.setScrollingViewBehavior(this._scrollView)
     this._tabLayout.setViewPager(this._viewPager, this._tabTexts)
+    this._viewPager.setPageWithoutAnimation(1)
     // this._viewPager.setViewSize
     this.refs['page_1'].load();
 
