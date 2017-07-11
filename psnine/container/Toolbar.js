@@ -23,7 +23,8 @@ import {
   Modal,
   Keyboard,
   AsyncStorage,
-  ViewPagerAndroid
+  ViewPagerAndroid,
+  Platform
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import MyDialog from '../components/Dialog'
@@ -57,6 +58,8 @@ const searchAction = { title: '搜索', iconName: 'md-search', value: '', show: 
 let recommendActions = [
   searchAction
 ]
+
+const shouldIncreaseTabTextSize = Platform.Version === '21' 
 
 let communityActions = [
   { title: '新建', iconName: 'md-create', value: '', show: 'always', iconSize: 22 },
@@ -314,7 +317,7 @@ class Toolbar extends Component {
                 tabIndicatorColor="#fff"
                 tabTextColor="rgba(255, 255, 255, .6)"
                 tabIndicatorHeight={2}
-                tabTextSize={3}
+                tabTextSize={3 * (shouldIncreaseTabTextSize ? 2 : 1)}
                 tabSidePadding={20}
                 tabGravity='center'
                 tabHeight={38}
