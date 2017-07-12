@@ -313,7 +313,7 @@ export default class Root extends React.Component {
       width,
       height,
       minWidth,
-      numColumns: Math.floor(width/360),
+      numColumns: Math.max(1, Math.floor(width/360)),
       accentColor: getAccentColorFromName(secondaryColor, isNightMode)
     })
 
