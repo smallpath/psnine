@@ -24,7 +24,8 @@ import {
   Keyboard,
   AsyncStorage,
   ViewPagerAndroid,
-  Platform
+  Platform,
+  PixelRatio
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import MyDialog from '../components/Dialog'
@@ -59,7 +60,7 @@ let recommendActions = [
   searchAction
 ]
 
-const shouldIncreaseTabTextSize = Platform.Version === '21' 
+const TAB_TEXT_MULTI = PixelRatio.get() < 2 ? 2 : 1 
 
 let communityActions = [
   { title: '新建', iconName: 'md-create', value: '', show: 'always', iconSize: 22 },
@@ -317,7 +318,7 @@ class Toolbar extends Component {
                 tabIndicatorColor="#fff"
                 tabTextColor="rgba(255, 255, 255, .6)"
                 tabIndicatorHeight={2}
-                tabTextSize={3 * (shouldIncreaseTabTextSize ? 2 : 1)}
+                tabTextSize={3 * TAB_TEXT_MULTI}
                 tabSidePadding={20}
                 tabGravity='center'
                 tabHeight={38}
