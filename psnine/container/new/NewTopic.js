@@ -343,7 +343,7 @@ export default class NewTopic extends Component {
                 <View style={{ flexDirection: 'row', }}>
                   <TouchableNativeFeedback
                     onPress={this._pressEmotion}
-                    delayPressIn={0}
+                    
                     background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
                     style={{ borderRadius: 25 }}
                   >
@@ -356,7 +356,7 @@ export default class NewTopic extends Component {
                   </TouchableNativeFeedback>
                   <TouchableNativeFeedback
                     onPress={this._pressImageButton}
-                    delayPressIn={0}
+                    
                     background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
                     style={{ borderRadius: 25 }}
                   >
@@ -370,7 +370,7 @@ export default class NewTopic extends Component {
                 </View>
                 <TouchableNativeFeedback
                   onPress={this.toolbar}
-                  delayPressIn={0}
+                  
                   background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
                   style={{ borderRadius: 25 }}
                 >
@@ -383,7 +383,7 @@ export default class NewTopic extends Component {
                 </TouchableNativeFeedback>
                 <TouchableNativeFeedback
                   onPress={this.sendReply}
-                  delayPressIn={0}
+                  
                   background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
                   style={{ borderRadius: 25 }}
                 >

@@ -223,7 +223,7 @@ export default class Search extends Component {
             }}>
               <TouchableNativeFeedback
                 onPress={this._pressBack}
-                delayPressIn={0}
+                
                 background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
                 style={{ borderRadius: searchHeight/2 }}
               >
@@ -281,7 +281,7 @@ export default class Search extends Component {
             }}>
               <TouchableNativeFeedback
                 onPress={() => this._pressBack(callback)}
-                delayPressIn={0}
+                
                 background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
                 style={{ borderRadius: searchHeight/2 }}
               >

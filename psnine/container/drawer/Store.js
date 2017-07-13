@@ -57,7 +57,7 @@ class StoreItem extends React.PureComponent {
       }}>
         <TouchableNativeFeedback
           onPress={() => { this._onRowPressed(rowData) }}
-          delayPressIn={0}
+          
           background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
         >
           <View pointerEvents={'box-only'} style={{ flex: -1, flexDirection: 'row', padding: 5, justifyContent: 'center', alignItems: 'center' }}>

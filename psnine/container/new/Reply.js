@@ -369,7 +369,7 @@ export default class Reply extends Component {
             <View style={{ width: 56, height: 56, justifyContent: 'center', alignItems: 'center'}}>
             <TouchableNativeFeedback
               onPress={this._pressButton}
-              delayPressIn={0}
+              
               background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
               style={{ borderRadius: 14 }}
             >
@@ -452,7 +452,7 @@ export default class Reply extends Component {
                 <View style={{ flexDirection: 'row', }}>
                   <TouchableNativeFeedback
                     onPress={this._pressEmotion}
-                    delayPressIn={0}
+                    
                     background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
                     style={{ borderRadius: 25 }}
                   >
@@ -465,7 +465,7 @@ export default class Reply extends Component {
                   </TouchableNativeFeedback>
                   <TouchableNativeFeedback
                     onPress={this._pressImageButton}
-                    delayPressIn={0}
+                    
                     background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
                     style={{ borderRadius: 25 }}
                   >
@@ -479,7 +479,7 @@ export default class Reply extends Component {
                 </View>
                 <TouchableNativeFeedback
                   onPress={this.toolbar}
-                  delayPressIn={0}
+                  
                   background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
                   style={{ borderRadius: 25 }}
                 >
@@ -492,7 +492,7 @@ export default class Reply extends Component {
                 </TouchableNativeFeedback>
                 <TouchableNativeFeedback
                   onPress={this.sendReply}
-                  delayPressIn={0}
+                  
                   background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
                   style={{ borderRadius: 25 }}
                 >

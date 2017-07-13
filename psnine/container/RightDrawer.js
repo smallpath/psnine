@@ -102,7 +102,7 @@ const RightDrawer = DrawerNavigator({
                   screenProps.onTabPress && screenProps.onTabPress(route)
 
                 }}
-                delayPressIn={0}
+                
               >
                 <View style={[styles.item, { backgroundColor }]}>
                   {icon

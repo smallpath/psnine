@@ -49,7 +49,7 @@ export default class extends React.PureComponent {
             this._onRowPressed(rowData)
           }}
           useForeground={true}
-          delayPressIn={0}
+          
           background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
         >
           <View pointerEvents={'box-only'} style={{ flex: 1, flexDirection: 'row', padding: 12 }}>

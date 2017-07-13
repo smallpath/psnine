@@ -101,7 +101,7 @@ export default class ComplexComment extends React.PureComponent {
           }
           <Text
             useForeground={true}
-            delayPressIn={0}
+            
             onLongPress={() => {
               this.setState({
                 modalVisible: true
@@ -163,7 +163,7 @@ export default class ComplexComment extends React.PureComponent {
             })
           }}
           useForeground={true}
-          delayPressIn={0}
+          
           background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
         >
           <View style={{ flex: 1, flexDirection: 'row', padding: 12 }}>

@@ -323,7 +323,7 @@ class Login extends Component {
 
           <TouchableNativeFeedback
             onPress={this.regist}
-            delayPressIn={0}
+            
             background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
             style={{
               width: 56,

@@ -165,7 +165,7 @@ class CommunityTopic extends Component {
             }
           }}
           useForeground={true}
-          delayPressIn={0}
+          
           background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
         >
           <View pointerEvents='box-only' style={{ flex: 1, flexDirection: 'row', padding: 12 }}>
@@ -201,7 +201,7 @@ class CommunityTopic extends Component {
 
           }}
           useForeground={true}
-          delayPressIn={0}
+          
           background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
         >
           <View pointerEvents='box-only' style={{ flex: 1, flexDirection: 'row', padding: 12 }}>

@@ -511,7 +511,7 @@ class navigationDrawer extends Component {
       <View>
         <TouchableNativeFeedback
           onPress={() => item.onPress.bind(this)(rowData)}
-          delayPressIn={0}
+          
         >
           <View pointerEvents={'box-only'} style={[styles.themeItem]}>
             <View style={{width: 30, alignItems: 'center', justifyContent: 'center'}}>

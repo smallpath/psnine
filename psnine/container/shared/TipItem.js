@@ -61,7 +61,7 @@ export default class PhotoItem extends React.PureComponent {
       }}>
         <TouchableNativeFeedback
           useForeground={true}
-          delayPressIn={0}
+          
           onPress={this.onPress}
           background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
         >
