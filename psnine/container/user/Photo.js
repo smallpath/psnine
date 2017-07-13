@@ -169,17 +169,20 @@ export default class Photo extends Component {
             // console.log('ImagePicker Error: ', response.error);
           } else {
 
-            const { height, width, uri = '', type = '', fileSize } = response
+            let { height, width, uri = '', type = '', fileSize, fileName = '' } = response
             // console.log('??')
             if (fileSize > 1024 * 1024) {
               // return global.toast('PSNINE上传的图片文件最大为1M')
+            }
+            if (!type) {
+              type = 'image/' + (fileName || '').split('.').pop()
             }
             global.toast('上传中')
             postImage({
               image: {
                 uri
               },
-              type
+              type: type || ''
             }).then(res => {
               return res.text()
             }).then(html => {
@@ -187,7 +190,9 @@ export default class Photo extends Component {
               const { navigation } = this.props
               const { params } = navigation.state
               this.fetchMessages(params.URL, 'jump');
-            }).catch(err => toast(err.toString()))
+            }).catch(err => {
+              toast(err.toString())
+            })
           }
         });
       return
