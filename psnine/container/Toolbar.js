@@ -60,23 +60,6 @@ let recommendActions = [
   searchAction
 ]
 
-const TAB_TEXT_MULTI = 1
-
-const pixelRatio = PixelRatio.get()
-
-switch (pixelRatio) {
-  case 3.5:
-    break;
-  case 3:
-    TAB_TEXT_MULTI *= 2
-  case 2:
-    TAB_TEXT_MULTI *= 3
-  case 1:
-    TAB_TEXT_MULTI *= 4
-  default:
-    break;
-}
-
 let communityActions = [
   { title: '新建', iconName: 'md-create', value: '', show: 'always', iconSize: 22 },
   searchAction,
@@ -333,8 +316,8 @@ class Toolbar extends Component {
                 tabIndicatorColor="#fff"
                 tabTextColor="rgba(255, 255, 255, .6)"
                 tabIndicatorHeight={2}
-                tabTextSize={3 * TAB_TEXT_MULTI}
-                tabSidePadding={20}
+
+                tabSidePadding={16}
                 tabGravity='center'
                 tabHeight={38}
                 ref={this._setTabLayout}
@@ -427,8 +410,10 @@ class Toolbar extends Component {
     let nativeEvent = event.nativeEvent;
     let offset = nativeEvent.offset;
 
-    if (offset > 0) {
+    if (offset >= 0.60) {
       this._currentViewPagerPageIndex = nativeEvent.position + 1;
+    } else {
+      this._currentViewPagerPageIndex = nativeEvent.position
     }
   }
 
@@ -511,6 +496,7 @@ class Toolbar extends Component {
     this._viewPager.setPageWithoutAnimation(1)
     // this._viewPager.setViewSize
     this.refs['page_1'].load();
+    this._currentViewPagerPageIndex = 1
 
     // this.props.navigation.navigate('Home', {
     //   title: 'secondlife_xhm',
