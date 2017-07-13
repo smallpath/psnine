@@ -8,8 +8,6 @@ import {
   Modal
 } from 'react-native';
 
-const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
-
 import { standardColor, nodeColor, idColor } from '../../constants/colorConfig';
 
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -21,6 +19,7 @@ class Dialog extends Component {
 
   render() {
     const { modeInfo, renderContent, onRequestClose, onDismiss } = this.props
+    const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
     return (
       <Modal
         animationType={"fade"}

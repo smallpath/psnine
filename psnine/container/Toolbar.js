@@ -60,7 +60,7 @@ let recommendActions = [
   searchAction
 ]
 
-const TAB_TEXT_MULTI = PixelRatio.get() < 2 ? 2 : 1 
+const TAB_TEXT_MULTI = PixelRatio.get() < 2 ? 3 : 1 
 
 let communityActions = [
   { title: '新建', iconName: 'md-create', value: '', show: 'always', iconSize: 22 },
