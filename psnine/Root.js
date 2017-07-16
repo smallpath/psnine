@@ -13,7 +13,8 @@ import {
   InteractionManager,
   AsyncStorage,
   NetInfo,
-  DeviceEventEmitter
+  DeviceEventEmitter,
+  Image
 } from 'react-native';
 import { Provider } from 'react-redux'
 import StackNavigator, { getCurrentRoute, tracker, format } from './Navigator'
@@ -39,6 +40,9 @@ const netInfoHandler = (reach) =>  {
   global.netInfo = reach
 }
 
+// let now = Date.now()
+// const lottie = require('./animations/splash.json')
+// console.log(Date.now() - now)
 export default class Root extends React.Component {
   constructor(props) {
     super(props);
@@ -70,7 +74,7 @@ export default class Root extends React.Component {
       },
       colorTheme: 'lightBlue',
       secondaryColor: 'pink',
-      loadingText: 'PSNINE\nP9 · 酷玩趣友'
+      loadingText: 'P9 · 酷玩趣友'
     };
   }
 
@@ -155,7 +159,6 @@ export default class Root extends React.Component {
   }
 
   loadSetting = () => {
-    this.state.progress.setValue(0)
     this.setState({
       isLoadingAsyncStorage: true
     })
@@ -183,11 +186,14 @@ export default class Root extends React.Component {
       // console.log('==> GA', JSON.parse(result[6]), JSON.parse(result[6] || 'true'), result[6], typeof result[6])
       global.shouldSendGA = JSON.parse(result[6] || 'true')
     })
-    Animated.timing(this.state.progress, {
-      toValue: 0.65,
-      // ease: Easing.in(Easing.ease(1, 0, 1, 1)), 
-      duration: 1500
-    }).start()
+    // setTimeout(() => {
+      Animated.timing(this.state.progress, {
+        toValue: 1,
+        // ease: Easing.in(Easing.ease(1, 0, 1, 1)), 
+        duration: 800
+      }).start()
+    // }, 400)
+
     setTimeout(() => {
       this.setState({
         isLoadingAsyncStorage: false,
@@ -196,11 +202,12 @@ export default class Root extends React.Component {
         isNightMode: settingInfo.isNightMode,
         secondaryColor: settingInfo.secondaryColor
       }, () => checkVersion().catch(err => {}))
-    }, 1300)
+    }, 1400)
   }
 
   componentDidMount() {
-    
+
+    this.animation && this.animation.play()
     this.loadSetting()
 
     Linking.getInitialURL().then((url) => {
@@ -340,24 +347,34 @@ export default class Root extends React.Component {
     const child = isLoadingAsyncStorage ? (
       <View style={{ flex: 1, backgroundColor: 'rgb(0,208,192)'}}>
         <StatusBar translucent={false} backgroundColor={'rgb(0,208,192)'} barStyle={"light-content"} />
-        <Animation
+        {/* <Animation
           ref={animation => { this.animation = animation; }}
           style={{
-            width: SCREEN_WIDTH,
-            height: SCREEN_HEIGHT - StatusBar.currentHeight * 6,
+            
           }}
-          progress={progress}
-          source={require('./animations/LottieLogo1.json')}
+          source={lottie}
+        /> */}
+        <Image
+          source={{ uri: 'https://oebegwmfv.qnssl.com/psnine/splash/1/test.gif', width: SCREEN_WIDTH,
+            height: SCREEN_HEIGHT - StatusBar.currentHeight * 4 }}
+          style={{ width: SCREEN_WIDTH,
+            height: SCREEN_HEIGHT - StatusBar.currentHeight * 4 }}
+          resizeMode='contain'
+          resizeMethod={'resize'}
         />
-        <Text numberOfLines={2} style={{
+        <Animated.View style={{
           position: 'absolute',
           left: 0,
-          top: SCREEN_HEIGHT / 10 * 1,
+          top: SCREEN_HEIGHT / 10 * 5,
+          right: 0,
+          bottom: 0,
+          opacity: progress
+        }}>
+        <Text numberOfLines={1} style={{
           textAlign: 'center',
           textAlignVertical: 'center',
-          right: 0,
-          bottom: 0
         }}>{this.state.loadingText}</Text>
+        </Animated.View>
       </View>
     ) : (
       <View style={{ flex: 1 }}>

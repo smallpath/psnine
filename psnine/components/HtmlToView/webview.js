@@ -13,8 +13,6 @@ import {
 import MyDialog from '../../components/Dialog'
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-const { width, height: SCEEN_HEIGHT } = Dimensions.get('window')
-
 let WEBVIEW_REF = `WEBVIEW_REF`;
 let toolbarActions = [
   { title: '刷新', iconName: 'md-refresh', show: 'always' },
@@ -26,6 +24,7 @@ export default class HtmlView extends Component {
   constructor(props) {
     super(props)
     let height = this.props.style.height || '100%'
+    const { width, height: SCEEN_HEIGHT } = Dimensions.get('window')
     if (height === '100%') {
       height = SCEEN_HEIGHT - 100
     }
@@ -55,6 +54,7 @@ export default class HtmlView extends Component {
   }
 
   render() {
+    const { width, height: SCEEN_HEIGHT } = Dimensions.get('window')
     const cb = () => {
       if (this.state.canGoBack === true) {
         this.webview.goBack();
@@ -69,7 +69,8 @@ export default class HtmlView extends Component {
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', padding: 5, alignSelf: 'center', alignContent: 'center'  }}>
         <Button color={this.props.modeInfo.accentColor} style={{
 
-        }} title={'打开网页'} onPress={() => { 
+        }} title={'查看视频'} onPress={() => { 
+          return Linking.openURL(this.props.url).catch(err => global.toast && global.toast())
           if (this.props.url.includes('player.youku.com') || this.props.url.includes('music.163.com')) {
             return this.setState({
               modalVisible: false
@@ -112,7 +113,7 @@ export default class HtmlView extends Component {
                   scalesPageToFit={true}
                   domStorageEnabled={true}
                   style={{ flex: 1, padding: 0, width: width, height: this.state.height }}
-                  injectedJavaScript={'<script>window.location.hash = 1;document.title = document.height;</script>'}
+                  injectedJavaScript={'<script>window.location.hash = 1;document.title = document.height;console.log("fuckyou")</script>'}
                   javaScriptEnabled={true}
                   onNavigationStateChange={(navState) => {
                     this.setState({

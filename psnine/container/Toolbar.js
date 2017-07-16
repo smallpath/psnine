@@ -318,7 +318,7 @@ class Toolbar extends Component {
                 tabTextColor="rgba(255, 255, 255, .6)"
                 tabIndicatorHeight={2}
 
-                tabSidePadding={16}
+                tabSidePadding={22}
                 tabGravity='center'
                 tabHeight={38}
                 ref={this._setTabLayout}
