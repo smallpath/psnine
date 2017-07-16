@@ -130,11 +130,11 @@ export default class Home extends Component {
     await this.setState({
       isLoading: true
     })
-
+    const targetColor = this.props.screenProps.modeInfo.isNightMode ? '#000' : '#fff'
     const result = await Promise.all([
-      Ionicons.getImageSource('md-arrow-back', 24, '#fff'),
-      Ionicons.getImageSource('md-sync', 24, '#fff'),
-      Ionicons.getImageSource('md-more', 24, '#fff')
+      Ionicons.getImageSource('md-arrow-back', 24, targetColor),
+      Ionicons.getImageSource('md-sync', 24, targetColor),
+      Ionicons.getImageSource('md-more', 24, targetColor)
     ])
     await this.setState({
       leftIcon: result[0],

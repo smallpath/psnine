@@ -162,7 +162,8 @@ class Toolbar extends Component {
       modalOpenVal: new Animated.Value(0),
       topicMarginTop: new Animated.Value(0),
       tabMode: this.props.modeInfo.settingInfo.tabMode,
-      _scrollHeight: this.props.modeInfo.height - StatusBar.currentHeight -38
+      _scrollHeight: this.props.modeInfo.height - StatusBar.currentHeight - 38 + 1
+      // _scrollHeight: 
     }
   }
 
@@ -184,7 +185,7 @@ class Toolbar extends Component {
       })
     } else if (this.props.modeInfo.width !== nextProps.modeInfo.width) {
       this.setState({
-        _scrollHeight: nextProps.modeInfo.height - StatusBar.currentHeight -38
+        _scrollHeight: nextProps.modeInfo.height - StatusBar.currentHeight - 38 + 1
       })
     }
   }
