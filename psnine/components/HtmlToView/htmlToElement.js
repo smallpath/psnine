@@ -444,6 +444,7 @@ export default function htmlToElement(rawHtml, opts, done) {
               classStyle.padding = 2
               classStyle.borderWidth = 1
               classStyle.borderColor = opts.modeInfo.backgroundColor
+              inInsideView = false
               break;
             default:
               // console.log(node.name, node.children.length)
