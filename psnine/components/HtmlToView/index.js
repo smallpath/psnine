@@ -38,6 +38,7 @@ const baseStyles = StyleSheet.create({
   }
 });
 
+const urlMapper = /(http:\/\/|https:\/\/)((\w|=|\?|\.|\/|#|\&|-)+)/igm;
 
 class HtmlView extends Component {
   constructor() {
@@ -95,7 +96,19 @@ class HtmlView extends Component {
       imageArr: []
     }
     // 加一个空文字来将最开头的表情内联
-    let target = value || ''
+    let target = (value || '').replace(urlMapper, (...args) => {
+      const preText = args.length >= 6 ? args[5][args[4] - 1] : 'ignore'
+      const nextText = args.length >= 6 ? args[5].substring(args[4] + 0 + args[0].length, args[4] + 3 + args[0].length) : 'ignore'
+      const shouldNotReplace = [`"`, `'`].includes(preText) || (nextText === '</a')
+      if (shouldNotReplace) {
+        // console.log('shouldNotReplace', args[0], nextText === '</a')
+        return args[0]
+      } else {
+        // console.log('shouldReplace', args[0])
+        return `<a href="${args[0]}">${args[0]}</a>`
+      }
+    })
+
     if (target.indexOf('<img src="http://photo.psnine.com/face/') === 0) {
       target = '<span/>' + target
     }

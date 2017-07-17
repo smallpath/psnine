@@ -16,7 +16,8 @@ import {
   PanResponder,
   Modal,
   Keyboard,
-  Alert
+  Alert,
+  Clipboard
 } from 'react-native';
 
 import HTMLView from '../../components/HtmlToView';
@@ -35,6 +36,7 @@ import {
 
 let screen = Dimensions.get('window');
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = screen;
+
 export default class ComplexComment extends React.PureComponent {
 
   constructor(props) {
@@ -95,13 +97,26 @@ export default class ComplexComment extends React.PureComponent {
                         <Text style={{textAlignVertical: 'center', fontSize: 18, color: modeInfo.standardTextColor}}>回复</Text>
                       </View>
                     </TouchableNativeFeedback>
+                    <TouchableNativeFeedback onPress={() => {
+                        this.setState({
+                          modalVisible: false
+                        }, () => {
+                          requestAnimationFrame(() => {
+                            Clipboard.setString(rowData.text)
+                            toast('评论文字已复制到剪贴板')
+                          })
+                        })
+                      }}>
+                      <View style={{height: 50, paddingVertical: 10, paddingLeft: 20 ,alignSelf: 'stretch', alignContent: 'stretch', justifyContent: 'center'}}>
+                        <Text style={{textAlignVertical: 'center', fontSize: 18, color: modeInfo.standardTextColor}}>复制评论</Text>
+                      </View>
+                    </TouchableNativeFeedback>
                   </View>
                 )} />
             )
           }
           <Text
             useForeground={true}
-            
             onLongPress={() => {
               this.setState({
                 modalVisible: true
@@ -196,6 +211,20 @@ export default class ComplexComment extends React.PureComponent {
                         }}>
                         <View style={{height: 50, paddingVertical: 10, paddingLeft: 20 ,alignSelf: 'stretch', alignContent: 'stretch', justifyContent: 'center'}}>
                           <Text style={{textAlignVertical: 'center', fontSize: 18, color: modeInfo.standardTextColor}}>回复</Text>
+                        </View>
+                      </TouchableNativeFeedback>
+                      <TouchableNativeFeedback onPress={() => {
+                          this.setState({
+                            modalVisible: false
+                          }, () => {
+                            requestAnimationFrame(() => {
+                              Clipboard.setString(rowData.text)
+                              toast('评论文字已复制到剪贴板')
+                            })
+                          })
+                        }}>
+                        <View style={{height: 50, paddingVertical: 10, paddingLeft: 20 ,alignSelf: 'stretch', alignContent: 'stretch', justifyContent: 'center'}}>
+                          <Text style={{textAlignVertical: 'center', fontSize: 18, color: modeInfo.standardTextColor}}>复制评论</Text>
                         </View>
                       </TouchableNativeFeedback>
                       {

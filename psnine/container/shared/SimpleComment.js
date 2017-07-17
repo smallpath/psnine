@@ -15,7 +15,8 @@ import {
   FlatList,
   PanResponder,
   Modal,
-  Keyboard
+  Keyboard,
+  Clipboard
 } from 'react-native';
 
 import HTMLView from '../../components/HtmlToView';
@@ -94,6 +95,20 @@ export default class extends React.PureComponent {
                         }}>
                         <View style={{height: 50, paddingVertical: 10, paddingLeft: 20 ,alignSelf: 'stretch', alignContent: 'stretch', justifyContent: 'center'}}>
                           <Text style={{textAlignVertical: 'center', fontSize: 18, color: modeInfo.standardTextColor}}>回复</Text>
+                        </View>
+                      </TouchableNativeFeedback>
+                      <TouchableNativeFeedback onPress={() => {
+                          this.setState({
+                            modalVisible: false
+                          }, () => {
+                            requestAnimationFrame(() => {
+                              Clipboard.setString(rowData.content)
+                              toast('评论文字已复制到剪贴板')
+                            })
+                          })
+                        }}>
+                        <View style={{height: 50, paddingVertical: 10, paddingLeft: 20 ,alignSelf: 'stretch', alignContent: 'stretch', justifyContent: 'center'}}>
+                          <Text style={{textAlignVertical: 'center', fontSize: 18, color: modeInfo.standardTextColor}}>复制评论文字</Text>
                         </View>
                       </TouchableNativeFeedback>
                       {
