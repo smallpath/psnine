@@ -12,7 +12,8 @@ import {
   Animated,
   FlatList,
   ScrollView,
-  Button
+  Button,
+  ActivityIndicator
 } from 'react-native';
 
 import { connect } from 'react-redux';
@@ -145,12 +146,27 @@ export default class Detail extends Component {
           onIconClicked={this.onNavClicked}
           onActionSelected={this.onActionSelected}
         />
-        <ScrollView
-          ref={flatlist => this.flatlist = flatlist}
-          style={styles.list}
-        >
-        { this.state.data.vipInfo && this.renderVIP(this.state.data.vipInfo)}
-        </ScrollView>
+        {
+          this.state.isLoading && (
+            <ActivityIndicator
+              animating={this.state.isLoading}
+              style={{
+                flex: 999,
+                justifyContent: 'center',
+                alignItems: 'center'
+              }}
+              color={modeInfo.accentColor}
+              size={50}
+            />
+          ) || (
+            <ScrollView
+              ref={flatlist => this.flatlist = flatlist}
+              style={styles.list}
+              >
+              { this.state.data.vipInfo && this.renderVIP(this.state.data.vipInfo)}
+            </ScrollView>
+          )
+        }
       </View>
     )
   }

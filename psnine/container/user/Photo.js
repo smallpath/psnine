@@ -172,7 +172,7 @@ export default class Photo extends Component {
             let { height, width, uri = '', type = '', fileSize, fileName = '' } = response
             // console.log('??')
             if (fileSize > 1024 * 1024) {
-              // return global.toast('PSNINE上传的图片文件最大为1M')
+              return global.toast('PSNINE上传的图片文件最大为1M')
             }
             if (!type) {
               type = 'image/' + (fileName || '').split('.').pop()
