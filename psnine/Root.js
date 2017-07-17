@@ -384,7 +384,6 @@ export default class Root extends React.Component {
           onNavigationStateChange={onNavigationStateChange} screenProps={{
             modeInfo,
             switchModeOnRoot: this.switchModeOnRoot,
-            tipBarMarginBottom: this.state.tipBarMarginBottom,
             bottomText: this.state.text
           }} />
         <Animated.View style={{

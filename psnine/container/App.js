@@ -66,16 +66,14 @@ class Psnine extends Component {
             closeDrawer: this.closeDrawer,
             navigation: this.props.navigation,
             modeInfo: screenProps.modeInfo,
-            switchModeOnRoot: screenProps.switchModeOnRoot,
-            tipBarMarginBottom: screenProps.tipBarMarginBottom
+            switchModeOnRoot: screenProps.switchModeOnRoot
           }} />
         )}>
         <Toolbar
           {...{
             navigation: this.props.navigation,
             modeInfo: screenProps.modeInfo,
-            switchModeOnRoot: screenProps.switchModeOnRoot,
-            tipBarMarginBottom: screenProps.tipBarMarginBottom
+            switchModeOnRoot: screenProps.switchModeOnRoot
           }}
 
           _callDrawer={() => this.callDrawer.bind(this)}

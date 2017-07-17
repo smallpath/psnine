@@ -483,7 +483,13 @@ class Toolbar extends Component {
               }
             }}
             navigation={{
-              navigate: (name) => name === 'Community' && this._viewPager.setPage(1)
+              navigate: (name) => {
+                if (name === 'Community') {
+                  this._currentViewPagerPageIndex = 1
+                  this._viewPager.setPage(1)
+                  this._loadPage(1)
+                }
+              }
             }}
             key={index} />
         </View>
