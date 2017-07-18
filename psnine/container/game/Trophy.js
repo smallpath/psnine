@@ -15,10 +15,14 @@ import {
   FlatList,
   PanResponder,
   Modal,
-  Keyboard
+  Keyboard,
+  Linking,
+  TextInput,
+  Button
 } from 'react-native';
 
 import HTMLView from '../../components/HtmlToView';
+import MyDialog from '../../components/Dialog';
 import { connect } from 'react-redux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { standardColor, nodeColor, idColor, accentColor } from '../../constants/colorConfig';
@@ -27,6 +31,10 @@ import ComplexComment from '../shared/ComplexComment'
 import {
   getTrophyAPI
 } from '../../dao'
+
+import {
+  translate
+} from '../../dao/post'
 
 let screen = Dimensions.get('window');
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = screen;
@@ -54,6 +62,8 @@ class CommunityTopic extends Component {
       data: false,
       isLoading: true,
       mainContent: false,
+      title: '',
+      content: '',
       rotation: new Animated.Value(1),
       scale: new Animated.Value(1),
       opacity: new Animated.Value(1),
@@ -168,7 +178,7 @@ class CommunityTopic extends Component {
           
           background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
         >
-          <View pointerEvents='box-only' style={{ flex: 1, flexDirection: 'row', padding: 12 }}>
+          <View style={{ flex: 1, flexDirection: 'row', padding: 12 }}>
             <Image
               source={{ uri: rowData.avatar }}
               style={[styles.avatar, { width: 54, height: 54 }]}
@@ -182,6 +192,13 @@ class CommunityTopic extends Component {
 
               <Text selectable={false} numberOfLines={1} style={{ flex: -1, color: modeInfo.standardTextColor}}>{rowData.text}</Text>
 
+            </View>
+            <View style={{justifyContent: 'center', alignItems: 'center'}}>
+              <Text onPress={() => {
+                  this.setState({
+                    modalVisible: true
+                  })
+                }} style={{ backgroundColor: '#f2c230', color: modeInfo.reverseModeInfo.titleTextColor, padding: 5, paddingHorizontal: 8}}>翻译</Text>
             </View>
           </View>
         </TouchableNativeFeedback>
@@ -246,6 +263,37 @@ class CommunityTopic extends Component {
       preFetch,
       rowData
     }}/>)
+  }
+
+
+  focusNextField = (nextField) => {
+    this[nextField] && this[nextField].focus();
+  }
+
+  submit = () => {
+    const { params } = this.props.navigation.state
+    
+    const tid = (params.URL || '').split('/').pop()
+    translate({
+      title: this.state.title,
+      detail: this.state.content,
+      tid,
+      cn: ''
+    }).then(res => res.text()).then(html => {
+      if (html.includes('玩脱了')) {
+        const arr = html.match(/\<title\>(.*?)\<\/title\>/)
+        if (arr && arr[1]) {
+          const msg = `翻译失败: ${arr[1]}`
+          global.toast(msg)
+          return
+        }
+      }
+      toast('翻译成功')
+      this.setState({
+        modalVisible: false
+      })
+      this.preFetch()
+    }).catch(err => toast('翻译失败: ' + err.toString()))
   }
 
   viewTopIndex = 0
@@ -325,6 +373,78 @@ class CommunityTopic extends Component {
         >
         </FlatList>
         }
+        { this.state.modalVisible && (
+          <MyDialog modeInfo={this.props.modeInfo}
+            modalVisible={this.state.modalVisible}
+            onDismiss={() => this.setState({modalVisible: false})}
+            onRequestClose={() => this.setState({modalVisible: false})}
+            renderContent={() => (
+              <View style={{
+                justifyContent: 'center',
+                alignItems: 'center',
+                backgroundColor: modeInfo.backgroundColor,
+                paddingVertical: 20,
+                paddingHorizontal: 20,
+                position: 'absolute',
+                left: 30,
+                right: 30,
+                elevation: 4,
+                opacity: 1
+              }} borderRadius={2}>
+                <Text style={{color: modeInfo.standardTextColor}}>为了更好的帮助他人，奖杯翻译请严格遵循 <Text 
+                  style={{color: modeInfo.accentColor}} 
+                    onPress={() => this.setState({ modalVisible: false}, () => Linking.openURL('p9://psnine.com/topic/1317'))}>「翻译」使用全指南</Text></Text>
+                 <View style={{ flexDirection: 'row'}}>
+                  <TextInput placeholder="奖杯标题（对奖杯标题文字的翻译）"
+                    autoCorrect={false}
+                    multiline={false}
+                    keyboardType="default"
+                    returnKeyType='go'
+                    returnKeyLabel='go'
+                    blurOnSubmit={true}
+                    numberOfLines={1}
+                    ref={ref => this.title = ref}
+                    onSubmitEditing={() => this.focusNextField('content')}
+                    onChange={({ nativeEvent }) => { this.setState({ title: nativeEvent.text }) }}
+                    value={this.state.title}
+                    style={[styles.textInput, {
+                      color: modeInfo.titleTextColor,
+                      textAlign: 'left',
+                      textAlignVertical: 'center',
+                      flex: 1,
+                      backgroundColor: modeInfo.brighterLevelOne,
+                      marginBottom: 2
+                    }]}
+                    placeholderTextColor={modeInfo.standardTextColor}
+                    // underlineColorAndroid={accentColor}
+                    underlineColorAndroid='rgba(0,0,0,0)'
+                  />
+                </View>
+                <View style={{flexDirection: 'row'}}>
+                  <TextInput placeholder="奖杯说明（不是奖杯攻略，是对奖杯说明文字的翻译）"
+                    autoCorrect={false}
+                    multiline={true}
+                    keyboardType="default"
+                    blurOnSubmit={true}
+                    numberOfLines={4}
+                    ref={ref => this.content = ref}
+                    onChange={({ nativeEvent }) => { this.setState({ content: nativeEvent.text }) }}
+                    value={this.state.content}
+                    style={[styles.textInput, {
+                      color: modeInfo.titleTextColor,
+                      flex: 2,
+                      marginBottom: 2,
+                      backgroundColor: modeInfo.brighterLevelOne
+                    }]}
+                    placeholderTextColor={modeInfo.standardTextColor}
+                    // underlineColorAndroid={accentColor}
+                    underlineColorAndroid='rgba(0,0,0,0)'
+                  />
+                </View> 
+                <Button title='提交' onPress={() => this.submit()} color={modeInfo.standardColor}/>
+              </View>
+            )} />
+        )}
       </View>
     );
   }

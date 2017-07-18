@@ -247,7 +247,7 @@ class CommunityTopic extends Component {
     if (shouldRenderAvatar) {
       avatar = params.rowData.avatar.replace('@50w.png', '@75w.png')
     } else {
-      if (titleInfo.avatar) avatar = titleInfo.avatar
+      if (isNotGene && titleInfo.avatar) avatar = titleInfo.avatar
     }
     return ['battle'].includes(params.type) ? undefined : (
       <View key={'header'} style={{
