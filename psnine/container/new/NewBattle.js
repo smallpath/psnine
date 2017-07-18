@@ -16,7 +16,8 @@ import {
   Easing,
   PanResponder,
   StatusBar,
-  Picker
+  Picker,
+  Button
 } from 'react-native';
 
 import { connect } from 'react-redux';
@@ -314,28 +315,26 @@ export default class NewTopic extends Component {
             flex: 1,
             flexDirection: 'row'
           }}>
-            <TextInput placeholder="选填项，联机奖杯的编号，多个请用逗号分割"
-              autoCorrect={false}
-              multiline={false}
-              keyboardType="default"
-              returnKeyType="next"
-              returnKeyLabel='next'
-              blurOnSubmit={false}
-              numberOfLines={100}
-              ref={ref => this.trophies = ref}
-              onChange={({ nativeEvent }) => { this.setState({ trophies: nativeEvent.text }) }}
-              value={this.state.trophies}
-              style={[styles.textInput, {
-                color: modeInfo.titleTextColor,
-                textAlign: 'left',
-                flex: 2,
-                borderBottomColor: modeInfo.brighterLevelOne,
-                borderBottomWidth: StyleSheet.hairlineWidth
-              }]}
-              placeholderTextColor={modeInfo.standardTextColor}
-              // underlineColorAndroid={accentColor}
-              underlineColorAndroid='rgba(0,0,0,0)'
-            />
+            <View style={{ justifyContent: 'center', alignItems: 'center', padding: 10}}>
+            <Button title='选择联机奖杯' color={modeInfo.standardColor} onPress={() => {
+              if (this.state.psngameid === '') return toast('请先选择游戏')
+              this.props.navigation.navigate('GamePage', {
+                URL: 'http://psnine.com/psngame/' + this.state.psngameid,
+                title: this.state.data.game.reduce((prev, curr) => {
+                  if (this.state.psngameid === curr.value) return curr.text
+                  return prev
+                }, ''),
+                rowData: {},
+                selections: this.state.trophies.split(',').filter(item => item),
+                type: 'game',
+                callbackAfterAll: (arr) => {
+                  this.setState({ trophies: arr.join(',') }, () => {
+                    toast('已选择对应奖杯' + this.state.trophies)
+                  })
+                }
+              })
+            }}/>
+            </View>
             <Picker style={{
               flex: 1.5,
               color: modeInfo.standardTextColor,

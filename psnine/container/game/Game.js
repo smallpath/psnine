@@ -47,6 +47,9 @@ export default class GamePage extends Component {
 
   constructor(props) {
     super(props);
+    const { navigation } = this.props
+    const { params } = navigation.state
+    const { selections = [], type = 'general' } = params
     this.state = {
       data: false,
       isLoading: true,
@@ -57,7 +60,8 @@ export default class GamePage extends Component {
       openVal: new Animated.Value(0),
       modalVisible: false,
       modalOpenVal: new Animated.Value(0),
-      topicMarginTop: new Animated.Value(0)
+      topicMarginTop: new Animated.Value(0),
+      selections
     }
   }
 
@@ -65,6 +69,10 @@ export default class GamePage extends Component {
     const { params } = this.props.navigation.state
     switch (index) {
       case 0:
+        const { navigation } = this.props
+        const { params } = navigation.state
+        params.callbackAfterAll && params.callbackAfterAll(this.state.selections)
+        navigation.goBack()
         return;
       case 1:
         this.preFetch()
@@ -306,19 +314,32 @@ export default class GamePage extends Component {
 
   renderTrophy = (rowData, index) => {
     const { modeInfo } = this.props.screenProps
+    const { selections } = this.state
+    // console.log(this.props.navigation)
+    const { callbackAfterAll } = this.props.navigation.state.params
+    const isChecked = selections.includes(rowData.indexID)
     return (
       <TouchableNativeFeedback key={rowData.id || index} onPress={
         () => {
-          this.props.navigation.navigate('Trophy', {
-            URL: rowData.href,
-            title: rowData.title,
-            rowData,
-            type: 'trophy'
-          })
+          if (callbackAfterAll) {
+            const target = this.state.selections.includes(rowData.indexID) ? 
+              this.state.selections.filter(item => item !== rowData.indexID) : 
+              this.state.selections.slice().concat(rowData.indexID)
+            this.setState({
+              selections: target
+            })
+          } else {
+            this.props.navigation.navigate('Trophy', {
+              URL: rowData.href,
+              title: rowData.title,
+              rowData,
+              type: 'trophy'
+            })
+          }
         }
       }>
         <View key={rowData.id || index} pointerEvents={'box-only'} style={{
-          backgroundColor: modeInfo.backgroundColor,
+          backgroundColor: isChecked ? modeInfo.tintColor : modeInfo.backgroundColor,
           flexDirection: 'row',
           borderBottomWidth: StyleSheet.hairlineWidth,
           borderBottomColor: modeInfo.brighterLevelOne,
@@ -427,6 +448,10 @@ export default class GamePage extends Component {
 
     this.viewBottomIndex = Math.max(data.length - 1, 0)
     const title = params.rowData.id ? `No.${params.rowData.id}` : (params.title || params.rowData.title)
+    const targetToolbar = toolbarActions.slice()
+    if (params.callbackAfterAll) {
+      targetToolbar.push({ title: '确定', iconName: 'md-done-all', show: 'always' },)
+    }
     return (
       <View
         style={{ flex: 1, backgroundColor: modeInfo.backgroundColor }}
@@ -440,7 +465,7 @@ export default class GamePage extends Component {
           title={title}
           titleColor={modeInfo.isNightMode ? '#000' : '#fff'}
           style={[styles.toolbar, { backgroundColor: modeInfo.standardColor }]}
-          actions={toolbarActions}
+          actions={targetToolbar}
           onIconClicked={() => {
             this.props.navigation.goBack()
           }}
