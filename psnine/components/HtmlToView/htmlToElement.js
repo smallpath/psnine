@@ -327,8 +327,6 @@ export default function htmlToElement(rawHtml, opts, done) {
         } else if (node.name === 'embed' || node.name === 'iframe') {
           if (inInsideView) {
             const target = Object.assign({}, node.attribs)
-            const matched = target.src.match(/miniloader\.swf\?aid\=(\d+)/)
-            target.src =  matched ? `https://m.bilibili.com/video/av${matched[1]}.html` : target.src
             return (
               <Web key={index} attribs={target} imagePaddingOffset={opts.imagePaddingOffset} modeInfo={opts.modeInfo} name={node.name} />
             )

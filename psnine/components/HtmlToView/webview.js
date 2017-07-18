@@ -7,7 +7,8 @@ import {
   WebView,
   View,
   Dimensions,
-  Button
+  Button,
+  ToastAndroid
 } from 'react-native'
 
 import MyDialog from '../../components/Dialog'
@@ -65,20 +66,40 @@ export default class HtmlView extends Component {
         canGoBack: false
       });
     }
+    let title = '打开网页'
+    const { url } = this.props
+    let target = url
+    let type = 'general'
+    // console.log(url)
+    if (url.includes('music.163.com')) {
+      const matched = url.match(/id\=(\d+)/)
+      if (matched) {
+        target = `orpheus://song/${matched[1]}`
+        type = 'music163'
+        title = `网易云音乐: ${matched[1]}`
+      }
+    } else if (url.includes('html5player.html?aid=')) {
+      const matched = url.match(/aid\=(\d+)/)
+      // console.log(matched, '====> ')
+      if (matched) {
+        target = `bilibili://video/${matched[1]}`
+        type = 'bilibili'
+        title = `B站视频: av${matched[1]}`
+      }
+    }
+
+
+
     return (
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', padding: 5, alignSelf: 'center', alignContent: 'center'  }}>
         <Button color={this.props.modeInfo.accentColor} style={{
 
-        }} title={'查看视频'} onPress={() => { 
-          return Linking.openURL(this.props.url).catch(err => global.toast && global.toast())
-          if (this.props.url.includes('player.youku.com') || this.props.url.includes('music.163.com')) {
-            return this.setState({
-              modalVisible: false
-            }, () => {
-              Linking.openURL(this.props.url).catch(err => global.toast && global.toast())
-            })
-          }
-          this.setState({ modalVisible: true })
+        }} title={title} onPress={() => { 
+          return Linking.openURL(target).catch(err => {
+            if (type === 'music163') ToastAndroid.show('未找到网易云音乐客户端', ToastAndroid.SHORT)
+            else if (type === 'bilibili') ToastAndroid.show('未找到B站客户端', ToastAndroid.SHORT)
+            Linking.openURL(url).catch(err => {})
+          })
         }}></Button>
         {this.state.modalVisible && (
           <MyDialog modeInfo={this.props.modeInfo}
