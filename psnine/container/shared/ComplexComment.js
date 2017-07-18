@@ -25,6 +25,7 @@ import { connect } from 'react-redux';
 import MyDialog from '../../components/Dialog';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { standardColor, nodeColor, idColor, accentColor } from '../../constants/colorConfig';
+import entities from 'entities';
 
 import {
   getGamePointAPI
@@ -43,7 +44,8 @@ export default class ComplexComment extends React.PureComponent {
     super(props)
 
     this.state = {
-      modalVisible: false
+      modalVisible: false,
+      modalIndex: -1
     }
   }
 
@@ -51,6 +53,7 @@ export default class ComplexComment extends React.PureComponent {
     if (props.modeInfo.themeName !== this.props.modeInfo.themeName) return true
     if (props.rowData.isAccepted !== this.props.rowData.isAccepted) return true
     if (this.state.modalVisible !== state.modalVisible) return true
+    if (this.state.modalIndex !== state.modalIndex) return true
     return false
   }
 
@@ -67,11 +70,11 @@ export default class ComplexComment extends React.PureComponent {
             padding: 5,
         }}>
           {
-            this.state.modalVisible && onLongPress && (
+            this.state.modalIndex !== -1 && onLongPress && (
               <MyDialog modeInfo={modeInfo}
-                modalVisible={this.state.modalVisible}
-                onDismiss={() => { this.setState({ modalVisible: false }); }}
-                onRequestClose={() => { this.setState({ modalVisible: false }); }}
+                modalVisible={this.state.modalIndex === index}
+                onDismiss={() => { this.setState({ modalIndex: -1 }); }}
+                onRequestClose={() => { this.setState({ modalIndex: -1 }); }}
                 renderContent={() => (
                   <View style={{
                     justifyContent: 'center',
@@ -86,7 +89,7 @@ export default class ComplexComment extends React.PureComponent {
                   }} borderRadius={2}>
                     <TouchableNativeFeedback onPress={() => {
                         this.setState({
-                          modalVisible: false
+                          modalIndex: -1
                         }, () => {
                           requestAnimationFrame(() => {
                             this.onCommentLongPress(parentRowData, rowData.psnid)
@@ -99,10 +102,10 @@ export default class ComplexComment extends React.PureComponent {
                     </TouchableNativeFeedback>
                     <TouchableNativeFeedback onPress={() => {
                         this.setState({
-                          modalVisible: false
+                          modalIndex: -1
                         }, () => {
                           requestAnimationFrame(() => {
-                            Clipboard.setString(rowData.text)
+                            Clipboard.setString(entities.decodeHTML(rowData.text))
                             toast('评论文字已复制到剪贴板')
                           })
                         })
@@ -119,7 +122,7 @@ export default class ComplexComment extends React.PureComponent {
             useForeground={true}
             onLongPress={() => {
               this.setState({
-                modalVisible: true
+                modalIndex: index
               })
             }}
             background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
@@ -218,7 +221,7 @@ export default class ComplexComment extends React.PureComponent {
                             modalVisible: false
                           }, () => {
                             requestAnimationFrame(() => {
-                              Clipboard.setString(rowData.text)
+                              Clipboard.setString(entities.decodeHTML(rowData.text))
                               toast('评论文字已复制到剪贴板')
                             })
                           })

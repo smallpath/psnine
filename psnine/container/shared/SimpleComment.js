@@ -24,6 +24,7 @@ import MyDialog from '../../components/Dialog';
 import { connect } from 'react-redux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { standardColor, nodeColor, idColor, accentColor } from '../../constants/colorConfig';
+import entities from 'entities';
 
 import {
   getGamePointAPI
@@ -102,7 +103,7 @@ export default class extends React.PureComponent {
                             modalVisible: false
                           }, () => {
                             requestAnimationFrame(() => {
-                              Clipboard.setString(rowData.content)
+                              Clipboard.setString(entities.decodeHTML(rowData.content))
                               toast('评论文字已复制到剪贴板')
                             })
                           })
