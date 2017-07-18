@@ -55,6 +55,17 @@ let toolbarActions = [
     const { params = {} } = this.props.navigation.state
     Linking.openURL(params.URL).catch(err => toast(err.toString()))
   }},
+  { title: '分享', iconName: 'md-share-alt', show: 'never', onPress: function() {
+    try {
+      const { params } = this.props.navigation.state
+      Share.open({
+        url: params.URL,
+        message: '[PSNINE] ' + this.state.data.titleInfo.title,
+        title: 'PSNINE'
+      }).catch((err) => { err && console.log(err); })
+      url && Linking.openURL(url).catch(err => toast(err.toString())) || toast('暂无出处')
+    } catch (err) {}
+  }}
 ];
 
 let title = "TOPIC";

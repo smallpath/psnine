@@ -95,9 +95,14 @@ let toolbarActions = [
       toast(msg)
     })
   }},
-  { title: '微博', iconName: 'md-share-alt', show: 'never', onPress: function() {
+  { title: '分享', iconName: 'md-share-alt', show: 'never', onPress: function() {
     try {
-      const url = this.state.data.titleInfo.shareInfo.weibo
+      const { params } = this.props.navigation.state
+      Share.open({
+        url: params.URL,
+        message: '[PSNINE] ' + this.state.data.titleInfo.title,
+        title: 'PSNINE'
+      }).catch((err) => { err && console.log(err); })
       url && Linking.openURL(url).catch(err => toast(err.toString())) || toast('暂无出处')
     } catch (err) {}
   }},
@@ -106,7 +111,7 @@ let toolbarActions = [
       const url = this.state.data.titleInfo.shareInfo.source
       url && Linking.openURL(url).catch(err => toast(err.toString())) || toast('暂无出处')
     } catch (err) {}
-  }},
+  }}
 ];
 let title = "TOPIC";
 let WEBVIEW_REF = `WEBVIEW_REF`;
