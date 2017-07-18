@@ -242,7 +242,13 @@ class CommunityTopic extends Component {
     const nodeStyle = { flex: -1, color: modeInfo.standardTextColor, textAlign: 'center', textAlignVertical: 'center' }
     const textStyle = { flex: -1, color: modeInfo.standardTextColor, textAlign: 'center', textAlignVertical: 'center' }
     const isNotGene = params.type !== 'gene'
-    const shouldRenderAvatar = isNotGene && !!(params.rowData && params.rowData.avatar)
+    let shouldRenderAvatar = isNotGene && !!(params.rowData && params.rowData.avatar)
+    let avatar = ''
+    if (shouldRenderAvatar) {
+      avatar = params.rowData.avatar.replace('@50w.png', '@75w.png')
+    } else {
+      if (titleInfo.avatar) avatar = titleInfo.avatar
+    }
     return ['battle'].includes(params.type) ? undefined : (
       <View key={'header'} style={{
         flex: 1,
@@ -258,10 +264,10 @@ class CommunityTopic extends Component {
           background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
         >
           <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', padding: 5 }}>
-            {shouldRenderAvatar && <Image
-              source={{ uri: params.rowData.avatar.replace('@50w.png', '@75w.png') }}
+            {avatar && <Image
+              source={{ uri: avatar }}
               style={{ width: 75, height: 75 }}
-            />
+            /> || undefined
             }
 
             <View style={{ flex: 1, flexDirection: 'column', padding: 5 }}>

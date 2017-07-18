@@ -223,8 +223,9 @@ export default function htmlToElement(rawHtml, opts, done) {
     let renderText = (node, index, parent, shouldRenderInline = false) => {
       if (node.type == 'text' && node.data.trim() !== '') {
         let linkPressHandler = null;
+        // console.log(parent && parent.name === 'a' && parent.attribs && parent.attribs.href, '==>')
         if (parent && parent.name === 'a' && parent.attribs && parent.attribs.href) {
-          // console.log('???')
+          // console.log('???', parent.attribs.href)
           linkPressHandler = () => opts.linkHandler(entities.decodeHTML(parent.attribs.href))
         }
 
@@ -488,7 +489,7 @@ export default function htmlToElement(rawHtml, opts, done) {
         } else {
           log('渲染Text组件', inInsideView, node.name, depth)
           let inlineNode = renderInlineNode(index, [], inInsideView)
-
+          // console.log('???', parent && parent.attribs && parent.attribs.href, parent && parent.name, '====>')
           return (
             <Text key={index} style={flattenStyles}>{domToElement(node.children, node, false, depth+1, isIframe)}
               {inlineNode.length !== 0 && inlineNode}

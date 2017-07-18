@@ -137,6 +137,10 @@ const Navigator = StackNavigator({
     screen: CommunityTopic,
     path: 'topic/:linkingID'
   },
+  OlderCommunityTopic: {
+    screen: CommunityTopic,
+    path: 't/:linkingID'
+  },
   GeneTopic: {
     screen: CommunityTopic,
     path: 'gene/:linkingID'
@@ -274,6 +278,7 @@ const replyTypeMapper = {
   'QaTopic': 'qa',
   'BattleTopic': 'battle',
   'GamePage': 'game',
+  'OlderCommunityTopic': 'community'
 }
 
 Object.assign(Navigator.router, {
@@ -286,6 +291,7 @@ Object.assign(Navigator.router, {
           action.params.title = `${id}`
           action.params.URL = `http://psnine.com/${path}`
           break;
+        case 'OlderCommunityTopic':
         case 'CommunityTopic':
         case 'GeneTopic':
         case 'QaTopic':

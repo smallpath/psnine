@@ -70,6 +70,11 @@ class UserGame extends Component {
         URL: screenProps.toolbar[0].url
       }
     }
+    if (!params.URL) {
+      return this.setState({
+        isRefreshing: false
+      })
+    }
     this.URL = params.URL.includes('?page') ? params.URL : `${params.URL}?page=1`
     this.fetchMessages(params.URL, 'jump');
   }
@@ -121,7 +126,11 @@ class UserGame extends Component {
             }
             componentDidFocus()
           });
-        }).catch(err => {})
+        }).catch(err => {
+          this.setState({
+            isRefreshing: false
+          })
+        })
       })
     })
   }
