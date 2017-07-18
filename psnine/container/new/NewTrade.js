@@ -391,7 +391,7 @@ export default class NewTopic extends Component {
           />
 
         </Animated.View >
-          <View style={{flex:1, flexDirection: 'row'}}>
+          <View style={{height: 56, flexDirection: 'row'}}>
               <TextInput placeholder="游戏 or 数码产品名"
                 autoCorrect={false}
                 multiline={false}
@@ -418,114 +418,140 @@ export default class NewTopic extends Component {
         <Animated.View style={[styles.KeyboardAvoidingView, {
           flex: openVal.interpolate({ inputRange: [0, 1], outputRange: [0, 10] }),
         }]} >
-          <AnimatedKeyboardAvoidingView behavior={'position'} keyboardVerticalOffset={-50} contentContainerStyle={{flex:1}} style={[styles.contentView, {
+          <Animated.View behavior={'position'} keyboardVerticalOffset={-50} contentContainerStyle={{flex:1}} style={[styles.contentView, {
             flex: openVal.interpolate({ inputRange: [0, 1], outputRange: [0, 12] }),
           }]}>
-              <View style={{flex: 1, flexDirection: 'row'}}>
-                <Picker style={{
-                  flex: 1,
-                  borderWidth: 1,
-                  color: modeInfo.standardTextColor,
-                  borderBottomColor: modeInfo.standardTextColor
-                }}
-                  prompt='分类'
-                  selectedValue={this.state.category}
-                  onValueChange={this.onValueChange.bind(this, 'category')}>
-                  <Picker.Item label="分类: 游戏" value="game" />
-                  <Picker.Item label="分类: 游戏机" value="console" />
-                  <Picker.Item label="分类: 数码产品" value="digital" />
-                </Picker>
-                <Picker style={{
-                  flex: 1,
-                  borderWidth: 1,
-                  color: modeInfo.standardTextColor,
-                  borderBottomColor: modeInfo.standardTextColor
-                }}
-                  prompt='类型'
-                  selectedValue={this.state.type}
-                  onValueChange={this.onValueChange.bind(this, 'type')}>
-                  <Picker.Item label="类型: 出售" value="sell" />
-                  <Picker.Item label="类型: 求购" value="buy" />
-                </Picker>
-              </View>
-              <View style={{flex: 1, flexDirection: 'row'}}>
-                <Picker style={{
-                  flex: 1,
-                  borderWidth: 1,
-                  color: modeInfo.standardTextColor,
-                  borderBottomColor: modeInfo.standardTextColor
-                }}
-                  prompt='平台'
-                  selectedValue={this.state.pf}
-                  onValueChange={this.onValueChange.bind(this, 'pf')}>
-                  <Picker.Item label="平台: PSV" value="psv" />
-                  <Picker.Item label="平台: PS3" value="ps3" />
-                  <Picker.Item label="平台: PS4" value="ps4" />
-                  <Picker.Item label="平台: Xboxone" value="xboxone" />
-                  <Picker.Item label="平台: Xbox360" value="xbox360" />
-                  <Picker.Item label="平台: 3DS" value="3ds" />
-                  <Picker.Item label="平台: WiiU" value="wiiu" />
-                </Picker>
-                <Picker style={{
-                  flex: 1,
-                  borderWidth: 1,
-                  color: modeInfo.standardTextColor,
-                  borderBottomColor: modeInfo.standardTextColor
-                }}
-                  prompt='方式'
-                  selectedValue={this.state.way}
-                  onValueChange={this.onValueChange.bind(this, 'way')}>
-                  <Picker.Item label="方式: 包邮" value="freepost" />
-                  <Picker.Item label="方式: 不包邮" value="paypost" />
-                  <Picker.Item label="方式: 面交" value="face" />
-                </Picker>
-              </View>
-              <View style={{flex: 1, flexDirection: 'row'}}>
-                <Picker style={{
-                  flex: 1,
-                  borderWidth: 1,
-                  color: modeInfo.standardTextColor,
-                  borderBottomColor: modeInfo.standardTextColor
-                }}
-                  prompt='版本'
-                  selectedValue={this.state.version}
-                  onValueChange={this.onValueChange.bind(this, 'version')}>
-                  <Picker.Item label="版本: 港版" value="hk" />
-                  <Picker.Item label="版本: 日版" value="jp" />
-                  <Picker.Item label="版本: 美版" value="us" />
-                  <Picker.Item label="版本: 国行" value="cn" />
-                  <Picker.Item label="版本: 欧版" value="eu" />
-                  <Picker.Item label="版本: 韩版" value="kr" />
-                  <Picker.Item label="版本: 台版" value="tw" />
-                </Picker>
-                <Picker style={{
-                  flex: 1,
-                  borderWidth: 1,
-                  color: modeInfo.standardTextColor,
-                  borderBottomColor: modeInfo.standardTextColor
-                }}
-                  prompt='语言'
-                  selectedValue={this.state.lang}
-                  onValueChange={this.onValueChange.bind(this, 'lang')}>
-                  <Picker.Item label="语言: 中文" value="cn" />
-                  <Picker.Item label="语言: 日文" value="jp" />
-                  <Picker.Item label="语言: 英文" value="en" />
-                  <Picker.Item label="语言: 韩文" value="kr" />
-                </Picker>
-              </View>
-              <Picker style={{
-                flex: 1,
-                borderWidth: 1,
-                color: modeInfo.standardTextColor,
-                borderBottomColor: modeInfo.standardTextColor
-              }}
-                prompt='地区'
-                selectedValue={this.state.province}
-                onValueChange={this.onValueChange.bind(this, 'province')}>
-                {areas}
-              </Picker>
+          {
+            this.state.modalVisible && (
+              <MyDialog modeInfo={modeInfo}
+                modalVisible={this.state.modalVisible}
+                onDismiss={() => { this.setState({ modalVisible: false }); this.isValueChanged = false }}
+                onRequestClose={() => { this.setState({ modalVisible: false }); this.isValueChanged = false }}
+                renderContent={() => (
+                  <View style={{
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      backgroundColor: modeInfo.backgroundColor,
+                      paddingVertical: 10,
+                      paddingHorizontal: 10,
+                      elevation: 4,
+                      position: 'absolute',
+                      left: 20,
+                      right: 20,
+                      opacity: 1,
+                      flex: 0
+                    }} borderRadius={2}>
+                    <View style={{flex: 1, flexDirection: 'row'}}>
+                      <Picker style={{
+                        flex: 1,
+                        borderWidth: 1,
+                        color: modeInfo.standardTextColor,
+                        borderBottomColor: modeInfo.standardTextColor
+                      }}
+                        prompt='分类'
+                        selectedValue={this.state.category}
+                        onValueChange={this.onValueChange.bind(this, 'category')}>
+                        <Picker.Item label="分类: 游戏" value="game" />
+                        <Picker.Item label="分类: 游戏机" value="console" />
+                        <Picker.Item label="分类: 数码产品" value="digital" />
+                      </Picker>
+                      <Picker style={{
+                        flex: 1,
+                        borderWidth: 1,
+                        color: modeInfo.standardTextColor,
+                        borderBottomColor: modeInfo.standardTextColor
+                      }}
+                        prompt='类型'
+                        selectedValue={this.state.type}
+                        onValueChange={this.onValueChange.bind(this, 'type')}>
+                        <Picker.Item label="类型: 出售" value="sell" />
+                        <Picker.Item label="类型: 求购" value="buy" />
+                      </Picker>
+                    </View>
+                    <View style={{flex: 1, flexDirection: 'row'}}>
+                      <Picker style={{
+                        flex: 1,
+                        borderWidth: 1,
+                        color: modeInfo.standardTextColor,
+                        borderBottomColor: modeInfo.standardTextColor
+                      }}
+                        prompt='平台'
+                        selectedValue={this.state.pf}
+                        onValueChange={this.onValueChange.bind(this, 'pf')}>
+                        <Picker.Item label="平台: PSV" value="psv" />
+                        <Picker.Item label="平台: PS3" value="ps3" />
+                        <Picker.Item label="平台: PS4" value="ps4" />
+                        <Picker.Item label="平台: Xboxone" value="xboxone" />
+                        <Picker.Item label="平台: Xbox360" value="xbox360" />
+                        <Picker.Item label="平台: 3DS" value="3ds" />
+                        <Picker.Item label="平台: WiiU" value="wiiu" />
+                      </Picker>
+                      <Picker style={{
+                        flex: 1,
+                        borderWidth: 1,
+                        color: modeInfo.standardTextColor,
+                        borderBottomColor: modeInfo.standardTextColor
+                      }}
+                        prompt='方式'
+                        selectedValue={this.state.way}
+                        onValueChange={this.onValueChange.bind(this, 'way')}>
+                        <Picker.Item label="方式: 包邮" value="freepost" />
+                        <Picker.Item label="方式: 不包邮" value="paypost" />
+                        <Picker.Item label="方式: 面交" value="face" />
+                      </Picker>
+                    </View>
+                    <View style={{flex: 1, flexDirection: 'row'}}>
+                      <Picker style={{
+                        flex: 1,
+                        borderWidth: 1,
+                        color: modeInfo.standardTextColor,
+                        borderBottomColor: modeInfo.standardTextColor
+                      }}
+                        prompt='版本'
+                        selectedValue={this.state.version}
+                        onValueChange={this.onValueChange.bind(this, 'version')}>
+                        <Picker.Item label="版本: 港版" value="hk" />
+                        <Picker.Item label="版本: 日版" value="jp" />
+                        <Picker.Item label="版本: 美版" value="us" />
+                        <Picker.Item label="版本: 国行" value="cn" />
+                        <Picker.Item label="版本: 欧版" value="eu" />
+                        <Picker.Item label="版本: 韩版" value="kr" />
+                        <Picker.Item label="版本: 台版" value="tw" />
+                      </Picker>
+                      <Picker style={{
+                        flex: 1,
+                        borderWidth: 1,
+                        color: modeInfo.standardTextColor,
+                        borderBottomColor: modeInfo.standardTextColor
+                      }}
+                        prompt='语言'
+                        selectedValue={this.state.lang}
+                        onValueChange={this.onValueChange.bind(this, 'lang')}>
+                        <Picker.Item label="语言: 中文" value="cn" />
+                        <Picker.Item label="语言: 日文" value="jp" />
+                        <Picker.Item label="语言: 英文" value="en" />
+                        <Picker.Item label="语言: 韩文" value="kr" />
+                      </Picker>
+                    </View>
+                    <View style={{flex: 1, flexDirection: 'row'}}>
+                      <Picker style={{
+                        flex: 1,
+                        borderWidth: 1,
+                        color: modeInfo.standardTextColor,
+                        borderBottomColor: modeInfo.standardTextColor
+                      }}
+                        prompt='地区'
+                        selectedValue={this.state.province}
+                        onValueChange={this.onValueChange.bind(this, 'province')}>
+                        {areas}
+                      </Picker>
+                    </View>
+                  </View>
+                )}/>
+              )
+            }
 
-            <View style={{flex: 1, flexDirection: 'row'}}>
+            <View style={{height: 56, flexDirection: 'row'}}>
               <TextInput placeholder="价格"
                 autoCorrect={false}
                 multiline={false}
@@ -580,7 +606,7 @@ export default class NewTopic extends Component {
               style={[styles.textInput, {
                 color: modeInfo.titleTextColor,
                 textAlign: 'left',
-                flex: 1,
+                height: 56,
                 borderBottomColor: modeInfo.brighterLevelOne,
                 borderBottomWidth: StyleSheet.hairlineWidth
               }]}
@@ -609,7 +635,13 @@ export default class NewTopic extends Component {
                 underlineColorAndroid='rgba(0,0,0,0)'
               />
             </View>
-            <View style={{flex:5, padding: 5}}>
+            <View style={{flex:5}}>
+              <Button style={{flex:1, padding: 5, margin: 5}} title={'编辑选填项'} onPress={() => {
+                Keyboard.dismiss()
+                this.setState({
+                  modalVisible: true
+                })
+              }} color={modeInfo.standardColor}/>
               <Button style={{flex:1}} title={'点我选择图片(已选择' + this.state.photo.length + '张)'} onPress={() => {
                 Keyboard.dismiss()
                 this.props.navigation.navigate('UserPhoto', {
@@ -625,7 +657,7 @@ export default class NewTopic extends Component {
               }} color={modeInfo.standardColor}/>
               <Button style={{flex:1}} title={'提交'} onPress={this.sendReply} color={modeInfo.standardColor}/>
             </View>
-          </AnimatedKeyboardAvoidingView>
+          </Animated.View>
 
         </Animated.View>
 

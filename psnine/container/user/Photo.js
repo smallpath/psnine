@@ -43,7 +43,7 @@ import FooterProgress from '../shared/FooterProgress'
 let toolbarActions = [
   { title: '上传', iconName: 'md-cloud-upload', show: 'always' },
   { title: '跳页', iconName: 'md-map', show: 'always' },
-  { title: '确定', iconName: 'md-checkmark', show: 'always' },
+  { title: '确定', iconName: 'md-done-all', show: 'always' },
 ];
 
 import Item from '../shared/PhotoItem'

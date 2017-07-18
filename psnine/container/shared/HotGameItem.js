@@ -15,7 +15,8 @@ import {
   FlatList,
   PanResponder,
   Modal,
-  Keyboard
+  Keyboard,
+  TouchableWithoutFeedback
 } from 'react-native';
 
 import HTMLView from '../../components/HtmlToView';
@@ -44,7 +45,7 @@ export default class PhotoItem extends React.PureComponent {
   }
 
   render() {
-    let { modeInfo, rowData, navigation, width = ( SCREEN_WIDTH - 19 ) / 3 } = this.props
+    let { modeInfo, rowData, navigation, width = ( SCREEN_WIDTH - 14 ) / 3 } = this.props
     width = width / modeInfo.numColumns
     return (
       <View key={rowData.id || index} style={{
@@ -60,7 +61,7 @@ export default class PhotoItem extends React.PureComponent {
           onPress={this.onPress}
           background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
         >
-          <View style={{ flex: 1, flexDirection: 'row', padding: 5, backgroundColor: modeInfo.backgroundColor }}>
+          <View style={{ flex: 1, flexDirection: 'row', backgroundColor: modeInfo.backgroundColor }}>
             <Image
               source={{ uri: rowData.img || rowData.href }}
               style={[styles.avatar, { width: width, height: width }]}
