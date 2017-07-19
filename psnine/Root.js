@@ -355,7 +355,7 @@ export default class Root extends React.Component {
           source={lottie}
         /> */}
         <Image
-          source={{ uri: 'https://oebegwmfv.qnssl.com/psnine/splash/1/test.gif', width: SCREEN_WIDTH,
+          source={{ uri: 'http://ww4.sinaimg.cn/large/bfae17b6gy1fhpjvt6jukg21hc0u0ds5.jpg', width: SCREEN_WIDTH,
             height: SCREEN_HEIGHT - StatusBar.currentHeight * 4 }}
           style={{ width: SCREEN_WIDTH,
             height: SCREEN_HEIGHT - StatusBar.currentHeight * 4 }}
