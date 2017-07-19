@@ -419,10 +419,10 @@ export default class NewTopic extends Component {
                     background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
                     style={{ borderRadius: 25 }}
                   >
-                    <View style={{ width: 50, height: 50, marginLeft: 0, borderRadius: 25 }}>
+                    <View style={{ width: 50, height: 50, marginLeft: 0, borderRadius: 25, justifyContent: 'center', alignItems: 'center' }}>
                       {icon && <Image
                         source={icon.emotionIcon}
-                        style={{ width: 25, height: 25, marginTop: 12.5, marginLeft: 12.5 }}
+                        style={{ width: 22, height: 22}}
                       />}
                     </View>
                   </TouchableNativeFeedback>
@@ -432,10 +432,10 @@ export default class NewTopic extends Component {
                     background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
                     style={{ borderRadius: 25 }}
                   >
-                    <View style={{ width: 50, height: 50, marginLeft: 0, borderRadius: 25, }}>
+                    <View style={{ width: 50, height: 50, marginLeft: 0, borderRadius: 25, justifyContent: 'center', alignItems: 'center' }}>
                       {icon && <Image
                         source={icon.photoIcon}
-                        style={{ width: 25, height: 25, marginTop: 12.5, marginLeft: 12.5 }}
+                        style={{ width: 22, height: 22 }}
                       />}
                     </View>
                   </TouchableNativeFeedback>
@@ -446,10 +446,10 @@ export default class NewTopic extends Component {
                   background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
                   style={{ borderRadius: 25 }}
                 >
-                  <View style={{ width: 50, height: 50, marginLeft: 0, borderRadius: 25, }}>
+                  <View style={{ width: 50, height: 50, marginLeft: 0, borderRadius: 25, justifyContent: 'center', alignItems: 'center' }}>
                     {icon && <Image
                       source={icon.previewIcon}
-                      style={{ width: 25, height: 25, marginTop: 12.5, marginLeft: 12.5 }}
+                      style={{ width: 22, height: 22 }}
                     />}
                   </View>
                 </TouchableNativeFeedback>
@@ -459,10 +459,10 @@ export default class NewTopic extends Component {
                   background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
                   style={{ borderRadius: 25 }}
                 >
-                  <View style={{ width: 50, height: 50, marginLeft: 0, borderRadius: 25, }}>
+                  <View style={{ width: 50, height: 50, marginLeft: 0, borderRadius: 25, justifyContent: 'center', alignItems: 'center' }}>
                     {icon && <Image
                       source={icon.sendIcon}
-                      style={{ width: 25, height: 25, marginTop: 12.5, marginLeft: 12.5 }}
+                      style={{ width: 22, height: 22 }}
                     />}
                   </View>
                 </TouchableNativeFeedback>

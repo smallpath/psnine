@@ -216,7 +216,6 @@ const styles = StyleSheet.create({
     height: 50,
   },
   a: {
-    fontWeight: '300',
     color: idColor, // make links coloured pink
   },
 });

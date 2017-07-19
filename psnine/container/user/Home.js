@@ -171,6 +171,9 @@ export default class Home extends Component {
     const color = 'rgba(255,255,255,1)'
     const infoColor = 'rgba(255,255,255,0.8)'
     const { width: SCREEN_WIDTH } = Dimensions.get('window')
+    const onPressPoint = () => {
+      toast(rowData.point)
+    }
     return (
       <ImageBackground
         source={{uri: rowData.backgroundImage}}
@@ -203,8 +206,8 @@ export default class Home extends Component {
               }
           </View>
           <View style={{ justifyContent:'center', alignItems: 'center', flex: 1  }}>
-            <Text style={{ flex: -1, color: levelColor, fontSize: 20 }}>{rowData.exp.split('经验')[0]}</Text>
-            <Text style={{ flex: -1, color: infoColor, fontSize: 12 }}>{rowData.exp.split('经验')[1]}</Text>
+            <Text style={{ flex: -1, color: levelColor, fontSize: 20 }} onPress={onPressPoint}>{rowData.exp.split('经验')[0]}</Text>
+            <Text style={{ flex: -1, color: infoColor, fontSize: 12 }} onPress={onPressPoint}>经验{rowData.exp.split('经验')[1]}</Text>
           </View>
           <View style={{ justifyContent:'center', alignItems: 'center', flex: 1  }}>
             <Text style={{ flex: -1, color: rankColor, fontSize: 20 }}>{rowData.ranking || 'None'}</Text>

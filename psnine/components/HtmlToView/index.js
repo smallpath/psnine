@@ -7,6 +7,8 @@ import {
   View
 } from 'react-native'
 
+import { standardColor, nodeColor, idColor } from '../../constants/colorConfig';
+
 const boldStyle = { fontWeight: '500' };
 const italicStyle = { fontStyle: 'italic' };
 const codeStyle = { fontFamily: 'Menlo' };
@@ -19,8 +21,7 @@ const baseStyles = StyleSheet.create({
   pre: codeStyle,
   code: codeStyle,
   a: {
-    fontWeight: '500',
-    color: '#007AFF',
+    color: idColor,
   },
   u: { textDecorationLine: 'underline' },
   s: { textDecorationLine: 'line-through' },
@@ -152,15 +153,16 @@ HtmlView.propTypes = {
 
 HtmlView.defaultProps = {
   onLinkPress: url => {
+    const targetURL = url.includes('d7vg.com') ? url.replace('d7vg.com', 'psnine.com') : url
     const reg = /^(https|http)\:\/\//
-    const errHandler = (err) => Linking.openURL(url).catch(err => console.error('Web linking occurred', err))
-    if (reg.exec(url)) {
-      const target = url.replace(reg, 'p9://')
+    const errHandler = (err) => Linking.openURL(targetURL).catch(err => console.error('Web linking occurred', err))
+    if (reg.exec(targetURL)) {
+      const target = targetURL.replace(reg, 'p9://')
       return Linking.openURL(target).catch(errHandler);
-    } else if (/^(.*?):\/\//.exec(url)) {
-      return Linking.openURL(url).catch(err => console.error('Web linking occurred', err));
+    } else if (/^(.*?):\/\//.exec(targetURL)) {
+      return Linking.openURL(targetURL).catch(err => console.error('Web linking occurred', err));
     } else {
-      const target = 'p9://psnine.com' + url
+      const target = 'p9://psnine.com' + targetURL
       return Linking.openURL(target).catch(errHandler);
     }
   },
