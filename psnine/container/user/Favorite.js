@@ -281,7 +281,7 @@ class Fav extends Component {
                       name: TYPES[value],
                       value
                     })).map((item, index) => {
-                      return <View style={{margin: 2}}><Button key={index} onPress={() => {
+                      return <View style={{margin: 2}} key={index}><Button key={index} onPress={() => {
                           this.setState({
                             type: item.value,
                             typeModalVisible: false,

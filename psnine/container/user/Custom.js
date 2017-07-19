@@ -11,7 +11,8 @@ import {
   SectionList,
   Animated,
   Alert,
-  Button
+  Button,
+  Dimensions
 } from 'react-native';
 
 import { connect } from 'react-redux';
@@ -239,13 +240,13 @@ export default class Custom extends Component {
     const { modeInfo } = this.props.screenProps
     const { ITEM_HEIGHT } = this
     const { navigation } = this.props
-
+    const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
     const items = rowData.items.map((rowData, index) => <PhotoItem key={index} {...{
       modeInfo,
       navigation,
       rowData,
-      width: 80,
-      ITEM_HEIGHT: 90,
+      width: SCREEN_WIDTH / 4 - 10,
+      ITEM_HEIGHT: SCREEN_WIDTH / 4,
       isChecked: this.state.data.form.bg === rowData.value,
       onPress: () => {
         Alert.alert(
