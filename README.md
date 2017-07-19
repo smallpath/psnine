@@ -120,6 +120,8 @@ Psnine第三方安卓客户端, 基于React Native, 支持安卓5.0及以上系�
   - [x] nested-scroll-view
   - [x] react-native-fs
   - [x] react-native-image-picker
+  - [x] react-native-linear-gradient
+  - [x] react-native-linear-share
 
 
 # Changelog
