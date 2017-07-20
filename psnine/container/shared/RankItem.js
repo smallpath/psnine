@@ -67,84 +67,84 @@ export default class extends React.PureComponent {
     const { modeInfo, rowData, ITEM_HEIGHT, modalList = [] } = this.props
     const { numColumns = 1 } = modeInfo
     return (
-      <View style={{
-        marginVertical: 3.5,
-        marginHorizontal: numColumns === 1 ? 0 : 3.5,
-        backgroundColor: modeInfo.backgroundColor,
-        elevation: 1,
-        flex: numColumns === 1 ? -1 : 1,
-        height: ITEM_HEIGHT - 7
-      }}>
-        <TouchableNativeFeedback
-          onPress={() => {
-            this._onRowPressed(rowData)
-          }}
-          onLongPress={() => {
-             modalList.length && this.setState({
-              modalVisible: true
-            })
-          }}
-          useForeground={true}
-          
-          background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
-        >
-          <View pointerEvents={'box-only'} style={{ flex: 1, flexDirection: 'row', flexWrap: 'nowrap',padding: 8, justifyContent: 'space-around', alignItems: 'center' }}>
-            <Image
-              source={{ uri: rowData.avatar }}
-              style={[styles.avatar, { width: 50 }]}
+      <TouchableNativeFeedback
+        onPress={() => {
+          this._onRowPressed(rowData)
+        }}
+        onLongPress={() => {
+            modalList.length && this.setState({
+            modalVisible: true
+          })
+        }}
+        useForeground={true}
+        
+        background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
+      >
+        <View pointerEvents={'box-only'} style={{ 
+          flex: 1, flexDirection: 'row', 
+          flexWrap: 'nowrap',padding: 8, justifyContent: 'space-around', alignItems: 'center',
+          marginVertical: 3.5,
+          marginHorizontal: numColumns === 1 ? 0 : 3.5,
+          backgroundColor: modeInfo.backgroundColor,
+          elevation: 1,
+          flex: numColumns === 1 ? -1 : 1,
+          height: ITEM_HEIGHT - 7
+        }}>
+          <Image
+            source={{ uri: rowData.avatar }}
+            style={[styles.avatar, { width: 50 }]}
+          />
+          {
+            this.state.modalVisible && modalList.length && (
+            <MyDialog modeInfo={modeInfo}
+              modalVisible={this.state.modalVisible}
+              onDismiss={() => { this.setState({ modalVisible: false }); }}
+              onRequestClose={() => { this.setState({ modalVisible: false }); }}
+              renderContent={() => (
+                <View style={{
+                  justifyContent: 'center',
+                  alignItems: 'flex-start',
+                  backgroundColor: modeInfo.backgroundColor,
+                  position: 'absolute',
+                  left: 30,
+                  right: 30,
+                  paddingVertical: 15,
+                  elevation: 4,
+                  opacity: 1
+                }} borderRadius={2}>
+                {
+                  modalList.map((item, index) => (
+                    <TouchableNativeFeedback key={index + item.text} onPress={() => {
+                        this.setState({
+                          modalVisible: false
+                        }, () => {
+                          item.onPress(rowData)
+                        })
+                      }}>
+                      <View style={{height: 50, paddingVertical: 10, paddingLeft: 20 ,alignSelf: 'stretch', alignContent: 'stretch', justifyContent: 'center'}}>
+                        <Text style={{textAlignVertical: 'center', fontSize: 18, color: modeInfo.standardTextColor}}>{item.text}</Text>
+                      </View>
+                    </TouchableNativeFeedback>
+                  ))
+                }
+                </View>
+              )} />
+            )
+          }
+          <View style={{ flex: 3, padding: 5}}>
+            <Text style={{color: modeInfo.accentColor}}>{rowData.psnid}</Text>
+            <HTMLView
+              value={rowData.content}
+              modeInfo={modeInfo}
+              stylesheet={styles}
+              onImageLongPress={this.handleImageOnclick}
+              imagePaddingOffset={30 + 10}
+              shouldForceInline={true}
             />
-            {
-              this.state.modalVisible && modalList.length && (
-              <MyDialog modeInfo={modeInfo}
-                modalVisible={this.state.modalVisible}
-                onDismiss={() => { this.setState({ modalVisible: false }); }}
-                onRequestClose={() => { this.setState({ modalVisible: false }); }}
-                renderContent={() => (
-                  <View style={{
-                    justifyContent: 'center',
-                    alignItems: 'flex-start',
-                    backgroundColor: modeInfo.backgroundColor,
-                    position: 'absolute',
-                    left: 30,
-                    right: 30,
-                    paddingVertical: 15,
-                    elevation: 4,
-                    opacity: 1
-                  }} borderRadius={2}>
-                  {
-                    modalList.map((item, index) => (
-                      <TouchableNativeFeedback key={index + item.text} onPress={() => {
-                          this.setState({
-                            modalVisible: false
-                          }, () => {
-                            item.onPress(rowData)
-                          })
-                        }}>
-                        <View style={{height: 50, paddingVertical: 10, paddingLeft: 20 ,alignSelf: 'stretch', alignContent: 'stretch', justifyContent: 'center'}}>
-                          <Text style={{textAlignVertical: 'center', fontSize: 18, color: modeInfo.standardTextColor}}>{item.text}</Text>
-                        </View>
-                      </TouchableNativeFeedback>
-                    ))
-                  }
-                  </View>
-                )} />
-              )
-            }
-            <View style={{ flex: 3, padding: 5}}>
-              <Text style={{color: modeInfo.accentColor}}>{rowData.psnid}</Text>
-              <HTMLView
-                value={rowData.content}
-                modeInfo={modeInfo}
-                stylesheet={styles}
-                onImageLongPress={this.handleImageOnclick}
-                imagePaddingOffset={30 + 10}
-                shouldForceInline={true}
-              />
-            </View>
-            { rowData.type === 'general' ? this.renderGeneral(rowData) : this.renderOther(rowData) }
           </View>
-        </TouchableNativeFeedback>
-      </View>
+          { rowData.type === 'general' ? this.renderGeneral(rowData) : this.renderOther(rowData) }
+        </View>
+      </TouchableNativeFeedback>
     )
   }
 

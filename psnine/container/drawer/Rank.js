@@ -215,11 +215,11 @@ class Rank extends Component {
     const { modeInfo } = this.props.screenProps
     log('Rank.js rerendered')
     return (
-      <View style={{ backgroundColor: modeInfo.backgroundColor, flex: 1 }}>
+      <View style={{ backgroundColor: modeInfo.background, flex: 1 }}>
         {this._renderHeader()}
         <AnimatedFlatList style={{
           flex: 1,
-          backgroundColor: modeInfo.backgroundColor
+          backgroundColor: modeInfo.background
         }}
           ref={flatlist => this.flatlist = flatlist}
           refreshControl={

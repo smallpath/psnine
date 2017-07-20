@@ -132,7 +132,7 @@ class Gene extends Component {
     return (
       <AnimatedFlatList style={{
         flex: 1,
-        backgroundColor: modeInfo.backgroundColor
+        backgroundColor: modeInfo.background
       }}
         ref={flatlist => this.flatlist = flatlist}
         refreshControl={

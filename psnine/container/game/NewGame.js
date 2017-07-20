@@ -316,7 +316,7 @@ export default class Home extends Component {
           </AppBarLayoutAndroid>
 
           <View
-            style={[styles.scrollView, { height: this.state._scrollHeight, backgroundColor: modeInfo.backgroundColor }]}
+            style={[styles.scrollView, { height: this.state._scrollHeight, backgroundColor: modeInfo.brighterLevelOne }]}
             ref={this._setScrollView}>
             {this.renderTabContainer()}
           </View>

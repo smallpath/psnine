@@ -40,24 +40,21 @@ export default class PhotoItem extends React.PureComponent {
     const { modeInfo, onPress, rowData, navigation } = this.props
 
     return (
-      <View key={rowData.id || index} style={{
-        alignSelf: 'flex-start',
-        alignContent: 'flex-end',
-        backgroundColor: modeInfo.backgroundColor,
-        flex: -1,
-        padding: 4
-      }}>
-        <TouchableNativeFeedback
-          useForeground={true}
-          
-          onPress={onPress}
-          background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
-        >
-          <View style={{ flex: -1, flexDirection: 'row', padding: 5, backgroundColor: modeInfo.backgroundColor }}>
-            <Text style={{color: modeInfo.accentColor}}>{rowData.text}</Text>
-          </View>
-        </TouchableNativeFeedback>
-      </View>
+      <TouchableNativeFeedback
+        useForeground={true}
+        onPress={onPress}
+        background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
+      >
+        <View style={{ 
+          flex: -1, flexDirection: 'row', padding: 5, backgroundColor: modeInfo.backgroundColor, 
+          alignSelf: 'flex-start',
+          alignContent: 'flex-end',
+          backgroundColor: modeInfo.backgroundColor,
+          flex: -1,
+          padding: 4 }}>
+          <Text style={{color: modeInfo.accentColor}}>{rowData.text}</Text>
+        </View>
+      </TouchableNativeFeedback>
     )
   }
 

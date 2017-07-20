@@ -212,51 +212,51 @@ export default class GamePage extends Component {
 
   renderToolbar = (list) => {
     const { modeInfo } = this.props.screenProps
-
+    let screen = Dimensions.get('window');
+    const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = screen;
     return (
-          <View style={{ 
-            flex: 0, 
-            flexDirection: 'row',
-            alignItems: 'center',
-            flexWrap:'wrap',
-            padding: 2,
-            backgroundColor: modeInfo.backgroundColor
+      <View style={{ 
+        flex: 0, 
+        flexDirection: 'row',
+        alignItems: 'center',
+        flexWrap:'wrap',
+        backgroundColor: modeInfo.backgroundColor
+      }}>
+        {list.map((item, index) => /*['讨论', '评论'].includes(item.text) && */(
+          <TouchableNativeFeedback key={index} onPress={() => {
+              if (item.text === '主题') {
+                this.props.navigation.navigate('GameTopic', {
+                  URL: `${item.url}?page=1`
+                })
+              } else if (item.text === '评论') {
+                this.props.navigation.navigate('GamePoint', {
+                  URL: `${item.url}`,
+                  rowData: {
+                    id: (item.url.match(/\/psngame\/(\d+)\/comment/) || [0,-1])[1]
+                  }
+                })
+              } else if (item.text === '问答') {
+                this.props.navigation.navigate('GameQa', {
+                  URL: `${item.url}?page=1`
+                })
+              } else if (item.text === '约战') {
+                this.props.navigation.navigate('GameBattle', {
+                  URL: `${item.url}?page=1`
+                })
+              } else if (item.text === '游列') {
+                this.props.navigation.navigate('GameList', {
+                  URL: `${item.url}?page=1`
+                })
+              } else if (item.text === '排行') {
+                this.props.navigation.navigate('GameRank', {
+                  URL: `${item.url}?page=1`
+                })
+              }
             }}>
-          {list.map((item, index) => /*['讨论', '评论'].includes(item.text) && */(
-            <TouchableNativeFeedback key={index} onPress={() => {
-                if (item.text === '主题') {
-                  this.props.navigation.navigate('GameTopic', {
-                    URL: `${item.url}?page=1`
-                  })
-                } else if (item.text === '评论') {
-                  this.props.navigation.navigate('GamePoint', {
-                    URL: `${item.url}`,
-                    rowData: {
-                      id: (item.url.match(/\/psngame\/(\d+)\/comment/) || [0,-1])[1]
-                    }
-                  })
-                } else if (item.text === '问答') {
-                  this.props.navigation.navigate('GameQa', {
-                    URL: `${item.url}?page=1`
-                  })
-                } else if (item.text === '约战') {
-                  this.props.navigation.navigate('GameBattle', {
-                    URL: `${item.url}?page=1`
-                  })
-                } else if (item.text === '游列') {
-                  this.props.navigation.navigate('GameList', {
-                    URL: `${item.url}?page=1`
-                  })
-                } else if (item.text === '排行') {
-                  this.props.navigation.navigate('GameRank', {
-                    URL: `${item.url}?page=1`
-                  })
-                }
-              }}>
-              <View pointerEvents={'box-only'} style={{ flex: 1, alignItems:'center', justifyContent: 'center', height: 55, width: 55 }}  key={index}>
-                <Text style={{ color: idColor, textAlign:'left', fontSize: 12 }}>{item.text}</Text>
-              </View>
-            </TouchableNativeFeedback>
+            <View pointerEvents={'box-only'} style={{ flex: 1, alignItems:'center', justifyContent: 'center', height: 55, width: SCREEN_WIDTH / (list.length) }}  key={index}>
+              <Text style={{ color: idColor, textAlign:'left', fontSize: 12 }}>{item.text}</Text>
+            </View>
+          </TouchableNativeFeedback>
         ) || undefined )}
       </View>
     )

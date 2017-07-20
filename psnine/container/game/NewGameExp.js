@@ -114,13 +114,13 @@ export default class NewGameGuide extends Component {
     this.width = Math.min(width, height)
     return (
       <View
-        style={{ flex: 1, backgroundColor: modeInfo.backgroundColor }}
+        style={{ flex: 1, backgroundColor: modeInfo.background }}
         onStartShouldSetResponder={() => false}
         onMoveShouldSetResponder={() => false}
       >
         <FlatList style={{
           flex: 1,
-          backgroundColor: modeInfo.backgroundColor
+          backgroundColor: modeInfo.background
         }}
           ref={flatlist => this.flatlist = flatlist}
           refreshControl={

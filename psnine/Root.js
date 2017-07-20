@@ -14,7 +14,8 @@ import {
   AsyncStorage,
   NetInfo,
   DeviceEventEmitter,
-  Image
+  Image,
+  Platform
 } from 'react-native';
 import { Provider } from 'react-redux'
 import StackNavigator, { getCurrentRoute, tracker, format } from './Navigator'
@@ -36,13 +37,11 @@ const tipHeight = toolbarHeight * 0.8
 let backPressClickTimeStamp = 0
 
 const netInfoHandler = (reach) =>  {
-  // console.log('Change: ' + reach)
   global.netInfo = reach
 }
 
-// let now = Date.now()
-// const lottie = require('./animations/splash.json')
-// console.log(Date.now() - now)
+const shouldChangeBackground = Platform.OS !== 'android' || (Platform.OS === 'android' && Platform.Version <= 20)
+
 export default class Root extends React.Component {
   constructor(props) {
     super(props);
@@ -321,12 +320,9 @@ export default class Root extends React.Component {
       height,
       minWidth,
       numColumns: Math.max(1, Math.floor(width/360)),
-      accentColor: getAccentColorFromName(secondaryColor, isNightMode)
+      accentColor: getAccentColorFromName(secondaryColor, isNightMode),
+      background: (shouldChangeBackground || isNightMode) ? targetModeInfo.brighterLevelOne : targetModeInfo.backgroundColor
     })
-
-    // console.log(modeInfo.themeName, modeInfo.isNightMode, '===>')
-
-    // console.log(modeInfo.numColumns)
 
     const onNavigationStateChange = global.shouldSendGA ? (prevState, currentState) => {
       const currentScreen = getCurrentRoute(currentState);

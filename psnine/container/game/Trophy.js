@@ -157,52 +157,50 @@ class CommunityTopic extends Component {
   renderHeader = (rowData) => {
     const { modeInfo } = this.props.screenProps
     return (
-      <View style={{
-        backgroundColor: modeInfo.backgroundColor,
-        elevation: 2,
-        height: 74,
-      }}>
-        <TouchableNativeFeedback
-          onPress={() => {
-            if (rowData.url) {
-              this.props.navigation.navigate('GamePage', {
-                // URL: 'http://psnine.com/psngame/5424?psnid=Smallpath',
-                URL: rowData.url,
-                title: rowData.title,
-                rowData,
-                type: 'game'
-              })
-            }
-          }}
-          useForeground={true}
-          
-          background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
-        >
-          <View style={{ flex: 1, flexDirection: 'row', padding: 12 }}>
-            <Image
-              source={{ uri: rowData.avatar }}
-              style={[styles.avatar, { width: 54, height: 54 }]}
-            />
+      <TouchableNativeFeedback
+        onPress={() => {
+          if (rowData.url) {
+            this.props.navigation.navigate('GamePage', {
+              // URL: 'http://psnine.com/psngame/5424?psnid=Smallpath',
+              URL: rowData.url,
+              title: rowData.title,
+              rowData,
+              type: 'game'
+            })
+          }
+        }}
+        useForeground={true}
+        
+        background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
+      >
+        <View style={{ flex: -1, flexDirection: 'row', padding: 12,
+          backgroundColor: modeInfo.backgroundColor,
+          elevation: 2,
+          height: 74
+        }}>
+          <Image
+            source={{ uri: rowData.avatar }}
+            style={[styles.avatar, { width: 54, height: 54 }]}
+          />
 
-            <View style={{ marginLeft: 10, flex: 1, flexDirection: 'column' }}>
-              <Text
-                style={{ flex: 1, color: modeInfo.titleTextColor, }}>
-                {rowData.title}
-              </Text>
+          <View style={{ marginLeft: 10, flex: 1, flexDirection: 'column' }}>
+            <Text
+              style={{ flex: 1, color: modeInfo.titleTextColor, }}>
+              {rowData.title}
+            </Text>
 
-              <Text selectable={false} numberOfLines={1} style={{ flex: -1, color: modeInfo.standardTextColor}}>{rowData.text}</Text>
+            <Text selectable={false} numberOfLines={1} style={{ flex: -1, color: modeInfo.standardTextColor}}>{rowData.text}</Text>
 
-            </View>
-            <View style={{justifyContent: 'center', alignItems: 'center'}}>
-              <Text onPress={() => {
-                  this.setState({
-                    modalVisible: true
-                  })
-                }} style={{ backgroundColor: '#f2c230', color: modeInfo.reverseModeInfo.titleTextColor, padding: 5, paddingHorizontal: 8}}>翻译</Text>
-            </View>
           </View>
-        </TouchableNativeFeedback>
-      </View>
+          <View style={{justifyContent: 'center', alignItems: 'center'}}>
+            <Text onPress={() => {
+                this.setState({
+                  modalVisible: true
+                })
+              }} style={{ backgroundColor: '#f2c230', color: modeInfo.reverseModeInfo.titleTextColor, padding: 5, paddingHorizontal: 8}}>翻译</Text>
+          </View>
+        </View>
+      </TouchableNativeFeedback>
     )
   }
 

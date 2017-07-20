@@ -36,49 +36,47 @@ export default class extends React.PureComponent {
     const { modeInfo, rowData, ITEM_HEIGHT } = this.props
     const { numColumns = 1 } = modeInfo
     return (
-      <View style={{
-        marginVertical: 3.5,
-        marginHorizontal: numColumns === 1 ? 0 : 3.5,
-        backgroundColor: modeInfo.backgroundColor,
-        elevation: 1,
-        flex: numColumns === 1 ? -1 : 1,
-        height: ITEM_HEIGHT - 7
-      }}>
-        <TouchableNativeFeedback
-          onPress={() => {
-            this._onRowPressed(rowData)
-          }}
-          useForeground={true}
-          
-          background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
-        >
-          <View pointerEvents={'box-only'} style={{ flex: 1, flexDirection: 'row', padding: 12 }}>
-            <Image
-              source={{ uri: rowData.avatar }}
-              style={[styles.avatar, { width: 91 }]}
-            />
+      <TouchableNativeFeedback
+        onPress={() => {
+          this._onRowPressed(rowData)
+        }}
+        useForeground={true}
+        background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
+      >
+        <View pointerEvents={'box-only'} style={{ 
+          flex: 1, flexDirection: 'row', padding: 12,
+          marginVertical: 3.5,
+          marginHorizontal: numColumns === 1 ? 0 : 3.5,
+          backgroundColor: modeInfo.backgroundColor,
+          elevation: 1,
+          flex: numColumns === 1 ? -1 : 1,
+          height: ITEM_HEIGHT - 7
+        }}>
+          <Image
+            source={{ uri: rowData.avatar }}
+            style={[styles.avatar, { width: 91 }]}
+          />
 
-            <View style={{ marginLeft: 10, flex: 1, flexDirection: 'column', justifyContent: 'space-between' }}>
-              <Text
-                ellipsizeMode={'tail'}
-                numberOfLines={3}
-                style={{ color: modeInfo.titleTextColor, }}>
-                {rowData.title}
-              </Text>
+          <View style={{ marginLeft: 10, flex: 1, flexDirection: 'column', justifyContent: 'space-between' }}>
+            <Text
+              ellipsizeMode={'tail'}
+              numberOfLines={3}
+              style={{ color: modeInfo.titleTextColor, }}>
+              {rowData.title}
+            </Text>
 
-              <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                <Text selectable={false} style={{ flex: -1, color: modeInfo.standardColor, textAlign: 'center', textAlignVertical: 'center' }}>{rowData.platform}</Text>
-                { rowData.region && <Text selectable={false} style={{ flex: -1, color: modeInfo.standardTextColor, textAlign: 'center', textAlignVertical: 'center' }}>{rowData.region}</Text> || undefined}
-                { rowData.platium && <Text selectable={false} style={{ flex: -1, color: modeInfo.standardTextColor, textAlign: 'center', textAlignVertical: 'center' }}>{
-                  rowData.platium + rowData.gold + rowData.selver + rowData.bronze
-                }</Text> || undefined}
-              </View>
-
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+              <Text selectable={false} style={{ flex: -1, color: modeInfo.standardColor, textAlign: 'center', textAlignVertical: 'center' }}>{rowData.platform}</Text>
+              { rowData.region && <Text selectable={false} style={{ flex: -1, color: modeInfo.standardTextColor, textAlign: 'center', textAlignVertical: 'center' }}>{rowData.region}</Text> || undefined}
+              { rowData.platium && <Text selectable={false} style={{ flex: -1, color: modeInfo.standardTextColor, textAlign: 'center', textAlignVertical: 'center' }}>{
+                rowData.platium + rowData.gold + rowData.selver + rowData.bronze
+              }</Text> || undefined}
             </View>
 
           </View>
-        </TouchableNativeFeedback>
-      </View>
+
+        </View>
+      </TouchableNativeFeedback>
     )
   }
 

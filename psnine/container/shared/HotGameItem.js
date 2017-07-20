@@ -48,27 +48,26 @@ export default class PhotoItem extends React.PureComponent {
     let { modeInfo, rowData, navigation, width = ( SCREEN_WIDTH - 14 ) / 3 } = this.props
     width = width / modeInfo.numColumns
     return (
-      <View key={rowData.id || index} style={{
-        alignSelf: 'flex-start',
-        alignContent: 'flex-end',
-        backgroundColor: modeInfo.backgroundColor,
-        width: width,
-        height: width
-      }}>
-        <TouchableNativeFeedback
-          useForeground={true}
-          
-          onPress={this.onPress}
-          background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
-        >
-          <View style={{ flex: 1, flexDirection: 'row', backgroundColor: modeInfo.backgroundColor }}>
-            <Image
-              source={{ uri: rowData.img || rowData.href }}
-              style={[styles.avatar, { width: width, height: width }]}
-            />
-          </View>
-        </TouchableNativeFeedback>
-      </View>
+      <TouchableNativeFeedback
+        useForeground={true}
+        
+        onPress={this.onPress}
+        background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
+      >
+        <View style={{ 
+          flex: 1, flexDirection: 'row', backgroundColor: modeInfo.backgroundColor,
+          alignSelf: 'flex-start',
+          alignContent: 'flex-end',
+          backgroundColor: modeInfo.backgroundColor,
+          width: width,
+          height: width 
+        }}>
+          <Image
+            source={{ uri: rowData.img || rowData.href }}
+            style={[styles.avatar, { width: width, height: width }]}
+          />
+        </View>
+      </TouchableNativeFeedback>
     )
   }
 

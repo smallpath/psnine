@@ -454,7 +454,7 @@ class Toolbar extends Component {
       return (
         <View
           key={index}
-          style={{backgroundColor: modeInfo.backgroundColor}}>
+          style={{backgroundColor: modeInfo.background}}>
           <Page
             ref={'page_' + index}
             tab={tab}

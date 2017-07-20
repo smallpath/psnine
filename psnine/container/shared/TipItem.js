@@ -51,39 +51,38 @@ export default class PhotoItem extends React.PureComponent {
     const { modeInfo, rowData, navigation } = this.props
     const width = (SCREEN_WIDTH - 19) / 2 / modeInfo.numColumns
     return (
-      <View key={rowData.id || index} style={{
-        alignSelf: 'flex-start',
-        alignContent: 'center',
-        alignItems: 'center',
-        backgroundColor: modeInfo.backgroundColor,
-        height: 56,
-        width: width
-      }}>
-        <TouchableNativeFeedback
-          useForeground={true}
-          
-          onPress={this.onPress}
-          background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
-        >
-          <View style={{ flex: 1, flexDirection: 'row', padding: 2,alignItems: 'center', backgroundColor: modeInfo.backgroundColor }}>
-            <Image
-              source={{ uri: rowData.img || rowData.href }}
-              style={[styles.avatar, { marginHorizontal: 2 }]}
-            />
-            <View style={{flex: 2}}>
-              <Text numberOfLines={1} ellipsizeMode='tail' selectable={false} style={{ flex: -1, color: modeInfo.standardColor, textAlign: 'center', textAlignVertical: 'center' }} onPress={() => {
-                  // this.flatlist.getNode().recordInteraction()
-                  navigation.navigate('Home', {
-                    title: rowData.psnid,
-                    id: rowData.psnid,
-                    URL: `http://psnine.com/psnid/${rowData.psnid}`
-                  })
-                }}>{rowData.psnid}</Text>
-              <Text numberOfLines={1} ellipsizeMode='tail' selectable={false} style={{ flex: -1, color: modeInfo.standardTextColor, textAlign: 'center', textAlignVertical: 'center', fontSize: 12 }}>{rowData.date}</Text>
-            </View>
+      <TouchableNativeFeedback
+        useForeground={true}
+        
+        onPress={this.onPress}
+        background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
+      >
+        <View style={{ 
+          flex: 1, flexDirection: 'row', padding: 2,alignItems: 'center',
+          alignSelf: 'flex-start',
+          alignContent: 'center',
+          alignItems: 'center',
+          backgroundColor: modeInfo.backgroundColor,
+          height: 56,
+          width: width
+        }}>
+          <Image
+            source={{ uri: rowData.img || rowData.href }}
+            style={[styles.avatar, { marginHorizontal: 2 }]}
+          />
+          <View style={{flex: 2}}>
+            <Text numberOfLines={1} ellipsizeMode='tail' selectable={false} style={{ flex: -1, color: modeInfo.standardColor, textAlign: 'center', textAlignVertical: 'center' }} onPress={() => {
+                // this.flatlist.getNode().recordInteraction()
+                navigation.navigate('Home', {
+                  title: rowData.psnid,
+                  id: rowData.psnid,
+                  URL: `http://psnine.com/psnid/${rowData.psnid}`
+                })
+              }}>{rowData.psnid}</Text>
+            <Text numberOfLines={1} ellipsizeMode='tail' selectable={false} style={{ flex: -1, color: modeInfo.standardTextColor, textAlign: 'center', textAlignVertical: 'center', fontSize: 12 }}>{rowData.date}</Text>
           </View>
-        </TouchableNativeFeedback>
-      </View>
+        </View>
+      </TouchableNativeFeedback>
     )
   }
 

@@ -164,7 +164,7 @@ class GameTopic extends Component {
     // console.log('Message.js rendered');
     return (
       <View
-        style={{ flex: 1, backgroundColor: modeInfo.backgroundColor }}
+        style={{ flex: 1, backgroundColor: modeInfo.background }}
         onStartShouldSetResponder={() => false}
         onMoveShouldSetResponder={() => false}
       >
@@ -181,7 +181,7 @@ class GameTopic extends Component {
         />
         <FlatList style={{
           flex: 1,
-          backgroundColor: modeInfo.backgroundColor
+          backgroundColor: modeInfo.background
         }}
           ref={flatlist => this.flatlist = flatlist}
           refreshControl={

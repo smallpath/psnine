@@ -220,13 +220,13 @@ class GameTopic extends Component {
     this.width = width / 2 + 10 //Math.min(width, height) / 2 + 10
     return (
       <View
-        style={{ flex: 1, backgroundColor: modeInfo.backgroundColor }}
+        style={{ flex: 1, backgroundColor: modeInfo.background }}
         onStartShouldSetResponder={() => false}
         onMoveShouldSetResponder={() => false}
       >
         <FlatList style={{
           flex: 1,
-          backgroundColor: modeInfo.backgroundColor
+          backgroundColor: modeInfo.background
         }}
           ref={flatlist => this.flatlist = flatlist}
           refreshControl={

@@ -192,7 +192,9 @@ class Recommend extends Component {
         key={modeInfo.themeName}
         stickySectionHeadersEnabled
         sections={sections}
-        style={styles.list}
+        style={{
+          backgroundColor: modeInfo.background
+        }}
       />
     )
   }

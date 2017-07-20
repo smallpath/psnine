@@ -142,79 +142,78 @@ class CommunityTopic extends Component {
   renderHeader = (rowData) => {
     const { modeInfo } = this.props.screenProps
     return (
-      <View key={'header'} style={{
-        height: 64,
-        elevation: 2,
-        backgroundColor:  modeInfo.backgroundColor,
-      }}>
-        <TouchableNativeFeedback
-          onPress={() => {
-            if (rowData.url) {
-              this.props.navigation.navigate('GamePage', {
-                // URL: 'http://psnine.com/psngame/5424?psnid=Smallpath',
-                URL: rowData.url,
-                title: rowData.title,
-                rowData,
-                type: 'game'
-              })
-            }
-          }}
-          useForeground={true}
-          
-          background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
-        >
-          <View pointerEvents='box-only' style={{ flex: 1, flexDirection: 'row', padding: 8, alignContent: 'center', justifyContent: 'center', backgroundColor:  modeInfo.backgroundColor, }}>
-            <Image
-              source={{ uri: rowData.avatar }}
-              style={[styles.avatar, { width: 91 }]}
-            />
+      <TouchableNativeFeedback
+        onPress={() => {
+          if (rowData.url) {
+            this.props.navigation.navigate('GamePage', {
+              // URL: 'http://psnine.com/psngame/5424?psnid=Smallpath',
+              URL: rowData.url,
+              title: rowData.title,
+              rowData,
+              type: 'game'
+            })
+          }
+        }}
+        useForeground={true}
+        
+        background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
+      >
+        <View pointerEvents='box-only' style={{ 
+          flex: -1, flexDirection: 'row', padding: 8, alignContent: 'center', justifyContent: 'center', 
+          backgroundColor:  modeInfo.backgroundColor,
+          height: 64,
+          elevation: 2
+        }}>
+          <Image
+            source={{ uri: rowData.avatar }}
+            style={[styles.avatar, { width: 91 }]}
+          />
 
-            <View style={{ marginLeft: 10, flex: 1, flexDirection: 'column', alignContent: 'center', justifyContent: 'center' }}>
-              <View style={{ flexDirection: 'row', alignItems: 'flex-start',justifyContent: 'space-between' }}>
-                <Text
-                  ellipsizeMode={'tail'}
-                  style={{ flex: -1, color: modeInfo.titleTextColor, }}>
-                  {rowData.title}
-                </Text>
-                <Text selectable={false} style={{
-                  flex: -1,
-                  marginLeft: 5,
-                  color: idColor,
-                  textAlign: 'center',
-                  textAlignVertical: 'center'
-                }}>{rowData.tip || rowData.platform && rowData.platform.join(' ')}</Text>
-              </View>
+          <View style={{ marginLeft: 10, flex: 1, flexDirection: 'column', alignContent: 'center', justifyContent: 'center' }}>
+            <View style={{ flexDirection: 'row', alignItems: 'flex-start',justifyContent: 'space-between' }}>
+              <Text
+                ellipsizeMode={'tail'}
+                style={{ flex: -1, color: modeInfo.titleTextColor, }}>
+                {rowData.title}
+              </Text>
+              <Text selectable={false} style={{
+                flex: -1,
+                marginLeft: 5,
+                color: idColor,
+                textAlign: 'center',
+                textAlignVertical: 'center'
+              }}>{rowData.tip || rowData.platform && rowData.platform.join(' ')}</Text>
+            </View>
 
-              <View style={{ flex: -1, flexDirection: 'row', justifyContent: 'space-between' }}>
-                {/*<Text selectable={false} style={{ flex: -1, color: idColor, textAlign: 'center', textAlignVertical: 'center' }}>{rowData.text}</Text>*/}
-                <Text selectable={false} style={{
-                  flex: -1,
-                  color: modeInfo.standardTextColor,
-                  textAlign: 'center',
-                  textAlignVertical: 'center',
-                  fontSize: 10
-                }}>{rowData.trophyArr.join('')}</Text>
-                <Text selectable={false} style={{
-                  flex: -1,
-                  color: modeInfo.standardTextColor,
-                  textAlign: 'center',
-                  textAlignVertical: 'center',
-                  fontSize: 10
-                }}>{rowData.alert}</Text>
-                <Text selectable={false} style={{
-                  flex: -1,
-                  color: modeInfo.standardTextColor,
-                  textAlign: 'center',
-                  textAlignVertical: 'center',
-                  fontSize: 10
-                }}>{rowData.rare}</Text>
-              </View>
-
+            <View style={{ flex: -1, flexDirection: 'row', justifyContent: 'space-between' }}>
+              {/*<Text selectable={false} style={{ flex: -1, color: idColor, textAlign: 'center', textAlignVertical: 'center' }}>{rowData.text}</Text>*/}
+              <Text selectable={false} style={{
+                flex: -1,
+                color: modeInfo.standardTextColor,
+                textAlign: 'center',
+                textAlignVertical: 'center',
+                fontSize: 10
+              }}>{rowData.trophyArr.join('')}</Text>
+              <Text selectable={false} style={{
+                flex: -1,
+                color: modeInfo.standardTextColor,
+                textAlign: 'center',
+                textAlignVertical: 'center',
+                fontSize: 10
+              }}>{rowData.alert}</Text>
+              <Text selectable={false} style={{
+                flex: -1,
+                color: modeInfo.standardTextColor,
+                textAlign: 'center',
+                textAlignVertical: 'center',
+                fontSize: 10
+              }}>{rowData.rare}</Text>
             </View>
 
           </View>
-        </TouchableNativeFeedback>
-      </View>
+
+        </View>
+      </TouchableNativeFeedback>
     )
   }
 

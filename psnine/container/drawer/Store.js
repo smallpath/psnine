@@ -46,67 +46,65 @@ class StoreItem extends React.PureComponent {
     const { modeInfo, rowData, ITEM_HEIGHT } = this.props
     const { numColumns = 1 } = modeInfo
     return (
-      <View style={{
-        marginVertical: 3.5,
-        backgroundColor: modeInfo.backgroundColor,
-        marginHorizontal: numColumns === 1 ? 0 : 3.5,
-        elevation: 1,
-        flex: numColumns === 1 ? -1 : 1,
-        height: ITEM_HEIGHT - 7,
-        justifyContent: 'center', alignItems: 'center'
-      }}>
-        <TouchableNativeFeedback
-          onPress={() => { this._onRowPressed(rowData) }}
-          
-          background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
-        >
-          <View pointerEvents={'box-only'} style={{ flex: -1, flexDirection: 'row', padding: 5, justifyContent: 'center', alignItems: 'center' }}>
-            <View style={{
-              flex: 1,
-              flexDirection: 'column',
-              marginLeft: -2,
-              alignSelf: 'center'
-            }}>
-              <Image
-                source={{ uri: rowData.avatar }}
-                style={{
-                  width: 100,
-                  height: 100,
-                  alignSelf: 'center',
-                }}
-              />
-            </View>
-            <View style={{ marginLeft: 10, flex: 2, flexDirection: 'column' }}>
-              <Text
-                ellipsizeMode={'tail'}
-                numberOfLines={1}
-                style={{ flex: -1, color: modeInfo.titleTextColor, fontSize: 15 }}>
-                {rowData.title}
-              </Text>
-              <Text>
-                <Text style={{ flex: -1, color: modeInfo.standardTextColor, fontSize: 12 }} numberOfLines={1}>类别：</Text>
-                <Text style={{ flex: -1, color: modeInfo.titleTextColor, fontSize: 12 }} numberOfLines={1}>{rowData.type}</Text>
-              </Text>
-              <Text>
-                <Text style={{ flex: -1, color: modeInfo.standardTextColor, fontSize: 12 }} numberOfLines={1}>平台：</Text>
-                <Text style={{ flex: -1, color: modeInfo.titleTextColor, fontSize: 12 }} numberOfLines={1}>{rowData.platform}</Text>
-              </Text>
-              <Text>
-                <Text style={{ flex: -1, color: modeInfo.standardTextColor, fontSize: 12 }} numberOfLines={1}>发行：</Text>
-                <Text style={{ flex: -1, color: modeInfo.titleTextColor, fontSize: 12 }} numberOfLines={1}>{rowData.date}</Text>
-              </Text>
-              <Text>
-                <Text style={{ flex: -1, color: modeInfo.standardTextColor, fontSize: 12 }} numberOfLines={1}>售价：</Text>
-                <Text style={{ flex: -1, color: modeInfo.titleTextColor, fontSize: 12 }} numberOfLines={1}>{rowData.price}</Text>
-              </Text>
-              <Text>
-                <Text style={{ flex: -1, color: modeInfo.standardTextColor, fontSize: 12 }} numberOfLines={1}>备注：</Text>
-                <Text style={{ flex: -1, color: modeInfo.titleTextColor, fontSize: 12 }} numberOfLines={1}>{rowData.comment}</Text>
-              </Text>
-            </View>
+      <TouchableNativeFeedback
+        onPress={() => { this._onRowPressed(rowData) }}
+        background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
+      >
+        <View pointerEvents={'box-only'} style={{ 
+          flex: -1, flexDirection: 'row', padding: 5, justifyContent: 'center', alignItems: 'center',
+          marginVertical: 3.5,
+          backgroundColor: modeInfo.backgroundColor,
+          marginHorizontal: numColumns === 1 ? 0 : 3.5,
+          elevation: 1,
+          flex: numColumns === 1 ? -1 : 1,
+          height: ITEM_HEIGHT - 7,
+          justifyContent: 'center', alignItems: 'center'
+        }}>
+          <View style={{
+            flex: 1,
+            flexDirection: 'column',
+            marginLeft: -2,
+            alignSelf: 'center'
+          }}>
+            <Image
+              source={{ uri: rowData.avatar }}
+              style={{
+                width: 100,
+                height: 100,
+                alignSelf: 'center',
+              }}
+            />
           </View>
-        </TouchableNativeFeedback>
-      </View>
+          <View style={{ marginLeft: 10, flex: 2, flexDirection: 'column' }}>
+            <Text
+              ellipsizeMode={'tail'}
+              numberOfLines={1}
+              style={{ flex: -1, color: modeInfo.titleTextColor, fontSize: 15 }}>
+              {rowData.title}
+            </Text>
+            <Text>
+              <Text style={{ flex: -1, color: modeInfo.standardTextColor, fontSize: 12 }} numberOfLines={1}>类别：</Text>
+              <Text style={{ flex: -1, color: modeInfo.titleTextColor, fontSize: 12 }} numberOfLines={1}>{rowData.type}</Text>
+            </Text>
+            <Text>
+              <Text style={{ flex: -1, color: modeInfo.standardTextColor, fontSize: 12 }} numberOfLines={1}>平台：</Text>
+              <Text style={{ flex: -1, color: modeInfo.titleTextColor, fontSize: 12 }} numberOfLines={1}>{rowData.platform}</Text>
+            </Text>
+            <Text>
+              <Text style={{ flex: -1, color: modeInfo.standardTextColor, fontSize: 12 }} numberOfLines={1}>发行：</Text>
+              <Text style={{ flex: -1, color: modeInfo.titleTextColor, fontSize: 12 }} numberOfLines={1}>{rowData.date}</Text>
+            </Text>
+            <Text>
+              <Text style={{ flex: -1, color: modeInfo.standardTextColor, fontSize: 12 }} numberOfLines={1}>售价：</Text>
+              <Text style={{ flex: -1, color: modeInfo.titleTextColor, fontSize: 12 }} numberOfLines={1}>{rowData.price}</Text>
+            </Text>
+            <Text>
+              <Text style={{ flex: -1, color: modeInfo.standardTextColor, fontSize: 12 }} numberOfLines={1}>备注：</Text>
+              <Text style={{ flex: -1, color: modeInfo.titleTextColor, fontSize: 12 }} numberOfLines={1}>{rowData.comment}</Text>
+            </Text>
+          </View>
+        </View>
+      </TouchableNativeFeedback>
     )
   }
 }
@@ -290,11 +288,11 @@ class Store extends Component {
     log('Store.js rendered');
     // console.log(reducer.page, reducer.list)
     return (
-      <View style={{ backgroundColor: modeInfo.backgroundColor, flex: 1 }}>
+      <View style={{ backgroundColor: modeInfo.background, flex: 1 }}>
         {this._renderHeader()}
         <AnimatedFlatList style={{
           flex: 1,
-          backgroundColor: modeInfo.backgroundColor
+          backgroundColor: modeInfo.background
         }}
           ref={flatlist => this.flatlist = flatlist}
           refreshControl={
