@@ -134,6 +134,7 @@ class CommunityTopic extends Component {
 
   constructor(props) {
     super(props);
+    // console.log(this.props.navigation.state.params)
     this.state = {
       data: false,
       isLoading: true,
