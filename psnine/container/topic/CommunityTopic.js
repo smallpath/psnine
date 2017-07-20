@@ -98,9 +98,13 @@ let toolbarActions = [
   { title: '分享', iconName: 'md-share-alt', show: 'never', onPress: function() {
     try {
       const { params } = this.props.navigation.state
+      let title = this.state.data.titleInfo.title || ''
+      if (title.length > 50) {
+        title = title.slice(0, 50) + '... '
+      }
       Share.open({
         url: params.URL,
-        message: '[PSNINE] ' + this.state.data.titleInfo.title,
+        message: '[PSNINE] ' + title.replace(/<.*?>/igm, ''),
         title: 'PSNINE'
       }).catch((err) => { err && console.log(err); })
       url && Linking.openURL(url).catch(err => toast(err.toString())) || toast('暂无出处')
