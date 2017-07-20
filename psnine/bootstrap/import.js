@@ -1,13 +1,9 @@
 import NestedScrollView from 'react-native-nested-scrollview'
-
-global.NestedScrollView = NestedScrollView
-
 import Share from 'react-native-share'
-
-global.Share = Share
-
 import LinearGradient from 'react-native-linear-gradient'
 
+global.NestedScrollView = NestedScrollView
+global.Share = Share
 global.LinearGradient = LinearGradient
 
 import ReactNative, {
@@ -19,11 +15,11 @@ import ReactNative, {
 
 let TouchableComponent;
 
-// if (Platform.OS === 'android') {
-//   TouchableComponent = Platform.Version <= 20 ? TouchableOpacity : TouchableNativeFeedback;
-// } else {
+if (Platform.OS === 'android') {
+  TouchableComponent = Platform.Version <= 20 ? TouchableOpacity : TouchableNativeFeedback;
+} else {
   TouchableComponent = TouchableOpacity;
-// }
+}
 
 if (TouchableComponent !== TouchableNativeFeedback) {
   TouchableComponent.SelectableBackground = () => ({});
@@ -38,5 +34,3 @@ Object.defineProperty(ReactNative, 'TouchableNativeFeedback', {
     return TouchableComponent
   }
 })
-
-console.log(ReactNative.TouchableNativeFeedback === TouchableOpacity)

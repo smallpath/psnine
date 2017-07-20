@@ -144,7 +144,7 @@ class Fav extends Component {
 
     return (
       <View
-        style={{ flex: 1, backgroundColor: modeInfo.backgroundColor }}
+        style={{ flex: 1, backgroundColor: modeInfo.background }}
         onStartShouldSetResponder={() => false}
         onMoveShouldSetResponder={() => false}
       >
@@ -161,7 +161,7 @@ class Fav extends Component {
         />
         <FlatList style={{
           flex: 1,
-          backgroundColor: modeInfo.backgroundColor
+          backgroundColor: modeInfo.background
         }}
           ref={flatlist => this.flatlist = flatlist}
           refreshControl={

@@ -131,7 +131,7 @@ export default class Detail extends Component {
 
     return (
       <View
-        style={{ flex: 1, backgroundColor: modeInfo.backgroundColor }}
+        style={{ flex: 1, backgroundColor: modeInfo.background }}
         onStartShouldSetResponder={() => false}
         onMoveShouldSetResponder={() => false}
       >

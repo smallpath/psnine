@@ -248,7 +248,14 @@ class navigationDrawer extends Component {
       psnid,
       userInfo,
       hasMessage: userInfo.hasMessage
+    }, () => {
+      if (this.state.psnid != '') {
+        if (this.state.userInfo.isSigned == false) {
+          this.pressSign()
+        }
+      }
     })
+    
   }
 
   pressLogin = () => {
@@ -430,22 +437,6 @@ class navigationDrawer extends Component {
         </View>
       </TouchableNativeFeedback>
     );
-
-    if (this.state.psnid != '') {
-      if (this.state.userInfo.isSigned == false) {
-        toolActions.push(
-          <TouchableNativeFeedback
-            background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
-            key={'log-in'}
-            onPress={this.pressSign}
-          >
-            <View borderRadius={borderRadius} style={iconStyle}>
-              <Icon name="md-checkbox-outline" size={size} color={color} />
-            </View>
-          </TouchableNativeFeedback>
-        )
-      }
-    }
 
     const infoColor = 'rgba(255,255,255,0.8)'
     // console.log(userInfo, userInfo.exp)

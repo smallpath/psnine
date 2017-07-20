@@ -103,7 +103,7 @@ export default class Home extends Component {
       leftIcon: false,
       rightIcon: false,
       middleIcon: false,
-      _scrollHeight: this.props.screenProps.modeInfo.height - StatusBar.currentHeight - 56
+      _scrollHeight: this.props.screenProps.modeInfo.height - StatusBar.currentHeight - 56 + 1
     }
   }
 
@@ -130,7 +130,7 @@ export default class Home extends Component {
     await this.setState({
       isLoading: true
     })
-    const targetColor = this.props.screenProps.modeInfo.isNightMode ? '#000' : '#fff'
+    const targetColor = '#fff'
     const result = await Promise.all([
       Ionicons.getImageSource('md-arrow-back', 24, targetColor),
       Ionicons.getImageSource('md-sync', 24, targetColor),
@@ -184,7 +184,7 @@ export default class Home extends Component {
         blurRadis={0}
         >
         <LinearGradient 
-          colors={['rgba(0,0,0,0.5)', 'rgba(0,0,0,0)', 'rgba(0,0,0,0)', 'rgba(0,0,0,0.5)']}
+          colors={['rgba(0,0,0,0.3)', 'rgba(0,0,0,0)', 'rgba(0,0,0,0)', 'rgba(0,0,0,0.3)']}
           locations={[0, 0.4, 0.6, 1]}
           start={{x: 0.5, y: 0}} end={{x: 0.5, y: 1}}>
           <View key={rowData.id} style={{
@@ -486,7 +486,7 @@ export default class Home extends Component {
                 navIcon={this.state.leftIcon}
                 overflowIcon={this.state.rightIcon}
                 title={`${params.title}`}
-                titleColor={modeInfo.isNightMode ? '#000' : '#fff'}
+                titleColor={'#fff'}
                 actions={this.toolbar}
                 layoutParams={{
                   height: 56, // required

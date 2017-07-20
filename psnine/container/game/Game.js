@@ -22,7 +22,12 @@ import HTMLView from '../../components/HtmlToView';
 
 import { connect } from 'react-redux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { standardColor, nodeColor, idColor, accentColor } from '../../constants/colorConfig';
+import colorConfig, { 
+  standardColor, nodeColor, idColor, accentColor, 
+  getColorFromProgress,
+  getLevelColorFromProgress,
+  getContentFromTrophy
+} from '../../constants/colorConfig';
 
 import {
   getGameAPI
@@ -156,10 +161,16 @@ export default class GamePage extends Component {
                   textAlign: 'center',
                   textAlignVertical: 'center',
                   fontSize: 10
-                }}>{rowData.trophyArr.join('')}</Text>
+                }}>{getContentFromTrophy(rowData.trophyArr.join('')).map((item, index) => {
+                  return (
+                    <Text key={index} style={{color: colorConfig['trophyColor' + (index + 1)]}}>
+                      {item}
+                    </Text>
+                  )
+                })}</Text>
                 <Text selectable={false} style={{
                   flex: -1,
-                  color: modeInfo.standardTextColor,
+                  color: getLevelColorFromProgress(rowData.rare),
                   textAlign: 'center',
                   textAlignVertical: 'center',
                   fontSize: 10
@@ -303,7 +314,13 @@ export default class GamePage extends Component {
                   textAlign: 'center',
                   textAlignVertical: 'center',
                   fontSize: 10
-                }}>{rowData.trophyArr.join('')}</Text>
+                }}>{getContentFromTrophy(rowData.trophyArr.join('')).map((item, index) => {
+                  return (
+                    <Text key={index} style={{color: colorConfig['trophyColor' + (index + 1)]}}>
+                      {item}
+                    </Text>
+                  )
+                })}</Text>
               </View>
             </View>
           </View>

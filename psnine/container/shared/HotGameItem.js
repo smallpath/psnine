@@ -55,7 +55,7 @@ export default class PhotoItem extends React.PureComponent {
         background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
       >
         <View style={{ 
-          flex: 1, flexDirection: 'row', backgroundColor: modeInfo.backgroundColor,
+          flex: -1, flexDirection: 'row', backgroundColor: modeInfo.backgroundColor,
           alignSelf: 'flex-start',
           alignContent: 'flex-end',
           backgroundColor: modeInfo.backgroundColor,

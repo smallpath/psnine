@@ -13,7 +13,7 @@ import {
 
 import { getGameUrl } from '../../dao';
 
-import { standardColor, nodeColor, idColor } from '../../constants/colorConfig';
+import colorConfig, { standardColor, nodeColor, idColor, getContentFromTrophy } from '../../constants/colorConfig';
 
 
 export default class extends React.PureComponent {
@@ -69,7 +69,13 @@ export default class extends React.PureComponent {
               <Text selectable={false} style={{ flex: -1, color: modeInfo.standardColor, textAlign: 'center', textAlignVertical: 'center' }}>{rowData.platform}</Text>
               { rowData.region && <Text selectable={false} style={{ flex: -1, color: modeInfo.standardTextColor, textAlign: 'center', textAlignVertical: 'center' }}>{rowData.region}</Text> || undefined}
               { rowData.platium && <Text selectable={false} style={{ flex: -1, color: modeInfo.standardTextColor, textAlign: 'center', textAlignVertical: 'center' }}>{
-                rowData.platium + rowData.gold + rowData.selver + rowData.bronze
+                getContentFromTrophy((rowData.platium + rowData.gold + rowData.selver + rowData.bronze)).map((item, index) => {
+                  return (
+                    <Text key={index} style={{color: colorConfig['trophyColor' + (index + 1)]}}>
+                      {item}
+                    </Text>
+                  )
+                })
               }</Text> || undefined}
             </View>
 
