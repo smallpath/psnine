@@ -2,11 +2,9 @@ import React from 'react'
 import {
   BackHandler,
   Dimensions,
-  ToastAndroid,
   StatusBar,
   View,
   Animated,
-  Button,
   Text,
   Easing,
   Linking,
@@ -16,21 +14,17 @@ import {
   DeviceEventEmitter,
   Image,
   Platform
-} from 'react-native';
+} from 'react-native'
 import { Provider } from 'react-redux'
-import StackNavigator, { getCurrentRoute, tracker, format } from './Navigator'
+import StackNavigator, { getCurrentRoute, tracker } from './Navigator'
 import ColorConfig, {
-  accentColor,
-  okColor,
-  deepColor,
   getAccentColorFromName
-} from './constants/colorConfig';
+} from './constants/colorConfig'
 
 import configureStore from './store/store.js'
-import Animation from 'lottie-react-native';
 import checkVersion from './bootstrap/checkVersion'
 
-const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
+const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window')
 
 const toolbarHeight = 56
 const tipHeight = toolbarHeight * 0.8
@@ -60,7 +54,7 @@ export default class Root extends React.Component {
         tabMode: 'tab',
         psnid: '',
         userInfo: {
-          avatar: require('./img/comment_avatar.png'),
+          avatar: require('./../psnine/img/comment_avatar.png'),
           platinum: '白',
           gold: '金',
           silver: '银',
@@ -89,7 +83,7 @@ export default class Root extends React.Component {
       if (colorTheme) {
         this.setState({
           colorTheme: colorTheme.toString(),
-        });
+        })
         return AsyncStorage.setItem('@Theme:colorTheme', colorTheme.toString())
       } else if (secondaryColor) {
         this.setState({
@@ -111,7 +105,7 @@ export default class Root extends React.Component {
       } else {
         return false;
       }
-    });
+    })
   }
 
   reloadSetting = () => {
@@ -131,7 +125,7 @@ export default class Root extends React.Component {
         tabMode: result[0] || 'tab',
         psnid: result[1] || '',
         userInfo: JSON.parse(result[2]) || {
-          avatar: require('./img/comment_avatar.png'),
+          avatar: require('./../psnine/img/comment_avatar.png'),
           platinum: '白',
           gold: '金',
           silver: '银',
@@ -188,7 +182,7 @@ export default class Root extends React.Component {
     // setTimeout(() => {
     Animated.timing(this.state.progress, {
       toValue: 1,
-      // ease: Easing.in(Easing.ease(1, 0, 1, 1)), 
+      // ease: Easing.in(Easing.ease(1, 0, 1, 1)),
       duration: 800
     }).start()
     // }, 400)
@@ -345,7 +339,7 @@ export default class Root extends React.Component {
         {/* <Animation
           ref={animation => { this.animation = animation; }}
           style={{
-            
+
           }}
           source={lottie}
         /> */}
@@ -371,13 +365,13 @@ export default class Root extends React.Component {
         }}>
           <Text numberOfLines={1} style={{
             textAlign: 'center',
-            textAlignVertical: 'center',
+            textAlignVertical: 'center'
           }}>{this.state.loadingText}</Text>
         </Animated.View>
       </View>
     ) : (
         <View style={{ flex: 1 }}>
-          <StatusBar translucent={false} backgroundColor={modeInfo.deepColor} barStyle={"light-content"} />
+          <StatusBar translucent={false} backgroundColor={modeInfo.deepColor} barStyle={'light-content'} />
           <StackNavigator
             uriPrefix={'p9://psnine.com/'}
             onNavigationStateChange={onNavigationStateChange} screenProps={{
@@ -419,6 +413,6 @@ export default class Root extends React.Component {
       <Provider store={this.store}>
         {child}
       </Provider>
-    );
+    )
   }
 }

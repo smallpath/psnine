@@ -1,8 +1,8 @@
-import './psnine/bootstrap'
+import './build/bootstrap'
 
 import React, { Component } from 'react';
 import { AppRegistry } from 'react-native';
 
-import Root from './psnine/Root';
+import Root from './build/Root';
 
 AppRegistry.registerComponent('Psnine', () => Root);

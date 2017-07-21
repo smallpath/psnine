@@ -1,0 +1,35 @@
+{
+  "compilerOptions": {
+    "target": "es2017",
+    "jsx": "react-native",
+    "removeComments": true,
+    "preserveConstEnums": true,
+    "moduleResolution": "node",
+    "experimentalDecorators": true,
+    "noImplicitAny": false,
+    "allowSyntheticDefaultImports": true,
+    "outDir": "build",
+    "noUnusedParameters": true,
+    "noUnusedLocals": true,
+    "strictNullChecks": true,
+    "noImplicitThis": true,
+    "sourceMap": true,
+    "allowJs": true
+  },
+  "filesGlob": [
+    "psnine/**/*.ts",
+    "psnine/**/*.tsx"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "tests",
+    "jest",
+    "lib",
+    "__tests__",
+    "**/*.test.ts",
+    "index.android.js",
+    "index.ios.js"
+  ],
+  "compileOnSave": false
+}

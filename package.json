@@ -6,7 +6,12 @@
     "start": "node node_modules/react-native/local-cli/cli.js start",
     "install": "react-native run-android",
     "log": "react-native log-android",
-    "test": "jest"
+    "test": "jest",
+    "lint": "tslint -c tslint.json -p tsconfig.json psnine/**/*.ts",
+    "tsc": "tsc",
+    "clean": "rimraf build",
+    "build": "npm run clean && npm run tsc --",
+    "watch": "tsc -w"
   },
   "dependencies": {
     "babel-plugin-transform-remove-console": "^6.8.4",
@@ -31,14 +36,26 @@
     "redux-thunk": "^2.1.0"
   },
   "devDependencies": {
+    "@types/isomorphic-fetch": "0.0.34",
+    "@types/jest": "^20.0.4",
+    "@types/lodash": "^4.14.70",
+    "@types/react": "^15.0.38",
+    "@types/react-native": "^0.46.5",
+    "@types/react-redux": "^4.4.46",
+    "@types/redux-actions": "^1.2.6",
+    "awesome-typescript-loader": "^3.2.1",
     "babel-jest": "19.0.0",
     "babel-plugin-transform-react-jsx-source": "^6.22.0",
     "babel-preset-react-native": "1.9.1",
+    "concurrently": "^3.5.0",
     "entities": "^1.1.1",
     "htmlparser2-without-node-native": "^3.9.0",
     "jest": "19.0.2",
     "react-test-renderer": "15.4.2",
-    "redux-logger": "^2.6.1"
+    "redux-logger": "^2.6.1",
+    "rimraf": "^2.6.1",
+    "source-map-loader": "^0.2.1",
+    "typescript": "^2.4.2"
   },
   "jest": {
     "preset": "react-native"
