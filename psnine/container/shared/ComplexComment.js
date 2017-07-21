@@ -105,7 +105,7 @@ export default class ComplexComment extends React.PureComponent {
                           modalIndex: -1
                         }, () => {
                           requestAnimationFrame(() => {
-                            Clipboard.setString(entities.decodeHTML(rowData.text))
+                            Clipboard.setString(entities.decodeHTML(rowData.text).replace(/<.*?>/igm, ''))
                             toast('评论文字已复制到剪贴板')
                           })
                         })
@@ -221,7 +221,7 @@ export default class ComplexComment extends React.PureComponent {
                             modalVisible: false
                           }, () => {
                             requestAnimationFrame(() => {
-                              Clipboard.setString(entities.decodeHTML(rowData.text))
+                              Clipboard.setString(entities.decodeHTML(rowData.text).replace(/<.*?>/igm, ''))
                               toast('评论文字已复制到剪贴板')
                             })
                           })

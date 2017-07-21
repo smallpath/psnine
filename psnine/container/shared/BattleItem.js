@@ -133,7 +133,7 @@ export default class BattleItem extends React.PureComponent {
                 <Text style={{ flex: -1, color: modeInfo.standardTextColor, textAlign: 'center', textAlignVertical: 'center' }}>{rowData.platform.join(' ')}</Text>
                 <Text style={{ flex: -1, color: modeInfo.standardColor, marginRight: -60, textAlignVertical: 'center' }} onPress={
                 () => {
-                  this.props.screenProps.navigation.navigate('Home', {
+                  this.props.navigation.navigate('Home', {
                     title: rowData.psnid,
                     id: rowData.psnid,
                     URL: `http://psnine.com/psnid/${rowData.psnid}`

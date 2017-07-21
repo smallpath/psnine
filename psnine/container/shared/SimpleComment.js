@@ -103,7 +103,7 @@ export default class extends React.PureComponent {
                             modalVisible: false
                           }, () => {
                             requestAnimationFrame(() => {
-                              Clipboard.setString(entities.decodeHTML(rowData.content))
+                              Clipboard.setString(entities.decodeHTML(rowData.content).replace(/<.*?>/igm, ''))
                               toast('评论文字已复制到剪贴板')
                             })
                           })

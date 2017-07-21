@@ -194,7 +194,7 @@ class CommunityTopic extends Component {
                 <View style={{ flex: 1.1, flexDirection: 'row', justifyContent: 'space-between' }}>
                   <Text selectable={false} style={{ flex: -1, color: modeInfo.standardColor, textAlign: 'center', textAlignVertical: 'center' }} onPress={
                     () => {
-                      this.props.screenProps.navigation.navigate('Home', {
+                      this.props.navigation.navigate('Home', {
                         title: rowData.psnid,
                         id: rowData.psnid,
                         URL: `http://psnine.com/psnid/${rowData.psnid}`
