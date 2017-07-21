@@ -185,7 +185,7 @@ export default class Home extends Component {
         >
         <LinearGradient 
           colors={['rgba(0,0,0,0.3)', 'rgba(0,0,0,0)', 'rgba(0,0,0,0)', 'rgba(0,0,0,0.3)']}
-          locations={[0, 0.4, 0.6, 1]}
+          locations={[0, 0.2, 0.8, 1]}
           start={{x: 0.5, y: 0}} end={{x: 0.5, y: 1}}>
           <View key={rowData.id} style={{
             backgroundColor: 'transparent',

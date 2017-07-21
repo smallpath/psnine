@@ -23,7 +23,8 @@ import { sync, updown, fav } from '../../dao/sync'
 import HTMLView from '../../components/HtmlToView';
 import { connect } from 'react-redux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import colorConfig, { standardColor, nodeColor, idColor, accentColor,
+import colorConfig, {
+  standardColor, nodeColor, idColor, accentColor,
   getLevelColorFromProgress,
   getAccentColorFromName,
   getContentFromTrophy
@@ -43,79 +44,92 @@ let screen = Dimensions.get('window');
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = screen;
 
 let toolbarActions = [
-  { title: '回复', iconName: 'md-create', iconSize: 22, show: 'always', onPress: function() {
-    const { params } = this.props.navigation.state
-    if (this.isReplyShowing === true) return
-    const cb = () => {
-      this.props.navigation.navigate('Reply', {
-        type: params.type,
-        id: params.rowData ? params.rowData.id : this.state.data && this.state.data.titleInfo && this.state.data.titleInfo.psnid,
-        callback: this._refreshComment,
-        shouldSeeBackground: true
+  {
+    title: '回复', iconName: 'md-create', iconSize: 22, show: 'always', onPress: function () {
+      const { params } = this.props.navigation.state
+      if (this.isReplyShowing === true) return
+      const cb = () => {
+        this.props.navigation.navigate('Reply', {
+          type: params.type,
+          id: params.rowData ? params.rowData.id : this.state.data && this.state.data.titleInfo && this.state.data.titleInfo.psnid,
+          callback: this._refreshComment,
+          shouldSeeBackground: true
+        })
+      }
+      if (this.state.openVal._value === 1) {
+        this._animateToolbar(0, cb)
+      } else if (this.state.openVal._value === 0) {
+        cb()
+      }
+    }
+  },
+  {
+    title: '刷新', iconName: 'md-refresh', show: 'never', onPress: function () {
+      this._refreshComment()
+    }
+  },
+  {
+    title: '在浏览器中打开', iconName: 'md-refresh', show: 'never', onPress: function () {
+      const { params = {} } = this.props.navigation.state
+      Linking.openURL(params.URL).catch(err => toast(err.toString()))
+    }
+  },
+  {
+    title: '收藏', iconName: 'md-star-half', show: 'never', onPress: function () {
+      const { params } = this.props.navigation.state
+      // console.log(params.type)
+      fav({
+        type: params.type === 'community' ? 'topic' : params.type,
+        param: params.rowData && params.rowData.id,
+      }).then(res => res.text()).then(text => {
+        if (text) return toast(text)
+        toast('操作成功')
+      }).catch(err => {
+        const msg = `操作失败: ${err.toString()}`
+        toast(msg)
       })
     }
-    if (this.state.openVal._value === 1) {
-      this._animateToolbar(0, cb)
-    } else if (this.state.openVal._value === 0) {
-      cb()
-    }
-  }},
-  { title: '刷新', iconName: 'md-refresh', show: 'never', onPress: function() {
-    this._refreshComment()
-  }},
-  { title: '在浏览器中打开', iconName: 'md-refresh', show: 'never', onPress: function() {
-    const { params = {} } = this.props.navigation.state
-    Linking.openURL(params.URL).catch(err => toast(err.toString()))
-  }},
-  { title: '收藏', iconName: 'md-star-half', show: 'never', onPress: function() {
-    const { params } = this.props.navigation.state
-    // console.log(params.type)
-    fav({ 
-      type: params.type === 'community' ? 'topic' : params.type,
-      param: params.rowData && params.rowData.id,
-    }).then(res => res.text()).then(text => {
-      if (text) return toast(text)
-      toast('操作成功')
-    }).catch(err => {
-      const msg = `操作失败: ${err.toString()}`
-      toast(msg)
-    })
-  }},
-  { title: '顶', iconName: 'md-star-half', show: 'never', onPress: function() {
-    const { params } = this.props.navigation.state
-    updown({ 
-      type: params.type === 'community' ? 'topic' : params.type,
-      param: params.rowData && params.rowData.id,
-      updown: 'up'
-    }).then(res => res.text()).then(text => {
-      if (text) return toast(text)
-      toast('操作成功')
-    }).catch(err => {
-      const msg = `操作失败: ${err.toString()}`
-      toast(msg)
-    })
-  }},
-  { title: '分享', iconName: 'md-share-alt', show: 'never', onPress: function() {
-    try {
+  },
+  {
+    title: '顶', iconName: 'md-star-half', show: 'never', onPress: function () {
       const { params } = this.props.navigation.state
-      let title = this.state.data.titleInfo.title || ''
-      if (title.length > 50) {
-        title = title.slice(0, 50) + '... '
-      }
-      Share.open({
-        url: params.URL,
-        message: '[PSNINE] ' + title.replace(/<.*?>/igm, ''),
-        title: 'PSNINE'
-      }).catch((err) => { err && console.log(err); })
-      url && Linking.openURL(url).catch(err => toast(err.toString())) || toast('暂无出处')
-    } catch (err) {}
-  }},
-  { title: '出处', iconName: 'md-share-alt', show: 'never', onPress: function() {
-    try {
-      const url = this.state.data.titleInfo.shareInfo.source
-      url && Linking.openURL(url).catch(err => toast(err.toString())) || toast('暂无出处')
-    } catch (err) {}
-  }}
+      updown({
+        type: params.type === 'community' ? 'topic' : params.type,
+        param: params.rowData && params.rowData.id,
+        updown: 'up'
+      }).then(res => res.text()).then(text => {
+        if (text) return toast(text)
+        toast('操作成功')
+      }).catch(err => {
+        const msg = `操作失败: ${err.toString()}`
+        toast(msg)
+      })
+    }
+  },
+  {
+    title: '分享', iconName: 'md-share-alt', show: 'never', onPress: function () {
+      try {
+        const { params } = this.props.navigation.state
+        let title = this.state.data.titleInfo.title || ''
+        if (title.length > 50) {
+          title = title.slice(0, 50) + '... '
+        }
+        Share.open({
+          url: params.URL,
+          message: '[PSNINE] ' + title.replace(/<.*?>/igm, ''),
+          title: 'PSNINE'
+        }).catch((err) => { err && console.log(err); })
+      } catch (err) { }
+    }
+  },
+  {
+    title: '出处', iconName: 'md-share-alt', show: 'never', onPress: function () {
+      try {
+        const url = this.state.data.titleInfo.shareInfo.source
+        url && Linking.openURL(url).catch(err => toast(err.toString())) || toast('暂无出处')
+      } catch (err) { }
+    }
+  }
 ];
 let title = "TOPIC";
 let WEBVIEW_REF = `WEBVIEW_REF`;
@@ -129,9 +143,9 @@ let CIRCLE_SIZE = 56;
 let config = { tension: 30, friction: 7, ease: Easing.in(Easing.ease(1, 0, 1, 1)), duration: 200 };
 
 const ApiMapper = {
-  'community' : getTopicAPI,
-  'gene' : getTopicAPI,
-  'battle' : getBattleAPI
+  'community': getTopicAPI,
+  'gene': getTopicAPI,
+  'battle': getBattleAPI
 }
 
 class CommunityTopic extends Component {
@@ -168,7 +182,7 @@ class CommunityTopic extends Component {
       isLoading: true
     })
     getTopicCommentSnapshotAPI(params.URL).then(data => {
-      // console.log(data.commentList)
+      this.hasComment = data.commentList.length !== 0
       this.setState({
         isLoading: false,
         commentList: data.commentList
@@ -270,7 +284,7 @@ class CommunityTopic extends Component {
       }}>
         <TouchableNativeFeedback
           useForeground={true}
-          
+
           background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
         >
           <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', padding: 5 }}>
@@ -291,7 +305,7 @@ class CommunityTopic extends Component {
               />
 
               <View style={{ flex: 1.1, flexDirection: 'row', justifyContent: 'space-between' }}>
-                <Text selectable={false} style={{ flex: -1, color: modeInfo.standardColor, textAlign: 'center', textAlignVertical: 'center' }}  onPress={
+                <Text selectable={false} style={{ flex: -1, color: modeInfo.standardColor, textAlign: 'center', textAlignVertical: 'center' }} onPress={
                   () => {
                     this.props.navigation.navigate('Home', {
                       title: titleInfo.psnid,
@@ -302,14 +316,14 @@ class CommunityTopic extends Component {
                 }>{titleInfo.psnid}</Text>
                 <Text selectable={false} style={textStyle}>{titleInfo.date}</Text>
                 <Text selectable={false} style={textStyle}>{titleInfo.reply}</Text>
-                { isNotGene === false && <Text selectable={false} style={{ flex: -1, color: modeInfo.standardColor, textAlign: 'center', textAlignVertical: 'center' }}  onPress={
+                {isNotGene === false && <Text selectable={false} style={{ flex: -1, color: modeInfo.standardColor, textAlign: 'center', textAlignVertical: 'center' }} onPress={
                   () => {
                     this.props.navigation.navigate('Circle', {
                       URL: `http://psnine.com/gene?ele=${(titleInfo.node || []).join('')}`,
                       title: (titleInfo.node || []).join('')
                     })
                   }
-                }>{(titleInfo.node || []).join('')}</Text> }
+                }>{(titleInfo.node || []).join('')}</Text>}
               </View>
             </View>
 
@@ -365,10 +379,10 @@ class CommunityTopic extends Component {
               })
             }}
             useForeground={true}
-            
+
             background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
           >
-            <View pointerEvents='box-only' style={{ flex: 1, flexDirection: 'row', alignItems: 'flex-start',padding: 12 }}>
+            <View pointerEvents='box-only' style={{ flex: 1, flexDirection: 'row', alignItems: 'flex-start', padding: 12 }}>
               <Image
                 source={{ uri: rowData.avatar }}
                 style={[styles.avatar, { width: 91 }]}
@@ -385,14 +399,16 @@ class CommunityTopic extends Component {
 
                 <View style={{ flex: 1.1, flexDirection: 'row', justifyContent: 'space-between' }}>
                   <Text selectable={false} style={{ fontSize: 12, flex: -1, color: modeInfo.standardColor, textAlign: 'center', textAlignVertical: 'center' }}>{rowData.platform}</Text>
-                  { rowData.alert && <Text selectable={false} style={{ fontSize: 12, flex: -1, 
-                    color: getLevelColorFromProgress(rowData.allPercent), textAlign: 'center', textAlignVertical: 'center' }}>{
-                    rowData.alert + ' '
+                  {rowData.alert && <Text selectable={false} style={{
+                    fontSize: 12, flex: -1,
+                    color: getLevelColorFromProgress(rowData.allPercent), textAlign: 'center', textAlignVertical: 'center'
+                  }}>{
+                      rowData.alert + ' '
                     }<Text style={{ fontSize: 12, flex: -1, color: modeInfo.standardTextColor, textAlign: 'center', textAlignVertical: 'center' }}>{rowData.allPercent}</Text></Text> || undefined}
                   <Text selectable={false} style={{ fontSize: 12, flex: -1, color: modeInfo.standardTextColor, textAlign: 'center', textAlignVertical: 'center' }}>{
                     [rowData.platium, rowData.gold, rowData.selver, rowData.bronze].map((item, index) => {
                       return (
-                        <Text key={index} style={{color: colorConfig['trophyColor' + (index + 1)]}}>
+                        <Text key={index} style={{ color: colorConfig['trophyColor' + (index + 1)] }}>
                           {item}
                         </Text>
                       )
@@ -400,7 +416,7 @@ class CommunityTopic extends Component {
                   }</Text>
                 </View>
 
-                {rowData.blockquote && <View style={{flex: -1}}>
+                {rowData.blockquote && <View style={{ flex: -1 }}>
                   <HTMLView
                     value={rowData.blockquote}
                     modeInfo={modeInfo}
@@ -457,7 +473,7 @@ class CommunityTopic extends Component {
                 this._readMore(`${this.props.navigation.state.params.URL}/comment?page=1`)
               }}
               useForeground={true}
-              
+
               background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
             >
               <View pointerEvents='box-only' style={{ flex: 1, flexDirection: 'row', padding: 12 }}>
@@ -596,9 +612,9 @@ class CommunityTopic extends Component {
       const link = shareInfo.linkGameUrl
       if (link) {
         const name = shareInfo.linkGame
-        targetActions.unshift({ 
+        targetActions.unshift({
           title: name, iconName: 'md-game-controller-b', iconSize: 22, show: 'always',
-          onPress: function() {
+          onPress: function () {
             const { params } = this.props.navigation.state
             this.props.navigation.navigate('NewGame', {
               URL: link + '?page=1',
@@ -611,11 +627,11 @@ class CommunityTopic extends Component {
         if (!shareInfo.source) {
           targetActions.pop()
         }
-      } catch(err) {}
+      } catch (err) { }
       if (shareInfo.edit) {
-        targetActions.push({ 
-          title: '编辑', iconName: 'md-create', iconSize: 22, show: 'never', 
-          onPress: function() {
+        targetActions.push({
+          title: '编辑', iconName: 'md-create', iconSize: 22, show: 'never',
+          onPress: function () {
             const { navigation } = this.props
             const target = params.type === 'gene' ? 'NewGene' : 'NewTopic'
             navigation.navigate(target, {
@@ -636,7 +652,7 @@ class CommunityTopic extends Component {
           navIconName="md-arrow-back"
           overflowIconName="md-more"
           iconColor={modeInfo.isNightMode ? '#000' : '#fff'}
-          title={params.title ? params.title : `No.${params.rowData.id}`  }
+          title={params.title ? params.title : `No.${params.rowData.id}`}
           titleColor={modeInfo.isNightMode ? '#000' : '#fff'}
           style={[styles.toolbar, { backgroundColor: modeInfo.standardColor }]}
           actions={targetActions}

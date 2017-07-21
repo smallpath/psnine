@@ -28,8 +28,8 @@ import HTMLView from '../../components/HtmlToView';
 import { connect } from 'react-redux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {
-  standardColor, 
-  nodeColor, 
+  standardColor,
+  nodeColor,
   idColor,
   accentColor,
   levelColor,
@@ -82,12 +82,12 @@ export default class extends Component {
     this.preFetch()
     this._previousTop = 0
     const { openVal, marginTop } = this.state
-    this._viewStyles= {
+    this._viewStyles = {
       style: {
         top: this._previousTop
       }
     }
-  
+
   }
 
   preFetch = () => {
@@ -121,16 +121,16 @@ export default class extends Component {
     const infoColor = 'rgba(255,255,255,0.8)'
     // console.log(rowData.content)
     return (
-        <View style={{padding: 12, margin: 7, backgroundColor: modeInfo.backgroundColor, elevation: 1, flex: 1 }}>
-          <HTMLView
-            value={rowData.content}
-            modeInfo={modeInfo}
-            stylesheet={styles}
-            onImageLongPress={() => {}}
-            imagePaddingOffset={30}
-            shouldForceInline={true}
-          />
-        </View>
+      <View style={{ padding: 12, margin: 7, backgroundColor: modeInfo.backgroundColor, elevation: 1, flex: 1 }}>
+        <HTMLView
+          value={rowData.content}
+          modeInfo={modeInfo}
+          stylesheet={styles}
+          onImageLongPress={() => { }}
+          imagePaddingOffset={30}
+          shouldForceInline={true}
+        />
+      </View>
     )
   }
 
@@ -141,7 +141,7 @@ export default class extends Component {
     const { data: source, marginTop } = this.state
     const data = []
     const renderFuncArr = []
-    const shouldPushData = !this.state.isLoading 
+    const shouldPushData = !this.state.isLoading
 
     this.viewBottomIndex = Math.max(data.length - 1, 0)
 
@@ -183,7 +183,7 @@ export default class extends Component {
             size={50}
           />
         )}
-        { !this.state.isLoading && <ScrollView style={{flex: 1}}>{this.renderHeader(this.state.data)}</ScrollView>}
+        {!this.state.isLoading && <ScrollView style={{ flex: 1 }}>{this.renderHeader(this.state.data)}</ScrollView>}
       </View>
     );
   }

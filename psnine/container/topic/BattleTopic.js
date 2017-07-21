@@ -32,35 +32,43 @@ let screen = Dimensions.get('window');
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = screen;
 
 let toolbarActions = [
-  { title: '回复', iconName: 'md-create', show: 'always', iconSize: 22, onPress: function() {
+  {
+    title: '回复', iconName: 'md-create', show: 'always', iconSize: 22, onPress: function () {
       const { params } = this.props.navigation.state
       if (this.isReplyShowing === true) return
       this.props.navigation.navigate('Reply', {
         type: params.type,
         id: params.rowData.id,
-        callback: this.preFetch(),
+        callback: this.preFetch,
         shouldSeeBackground: true
       })
       return;
-  }},
-  { title: '刷新', iconName: 'md-refresh', show: 'never', onPress: function() {
-    this.preFetch()
-  }},
-  { title: '在浏览器中打开', iconName: 'md-refresh', show: 'never', onPress: function() {
-    const { params = {} } = this.props.navigation.state
-    Linking.openURL(params.URL).catch(err => toast(err.toString()))
-  }},
-  { title: '分享', iconName: 'md-share-alt', show: 'never', onPress: function() {
-    try {
-      const { params } = this.props.navigation.state
-      Share.open({
-        url: params.URL,
-        message: '[PSNINE] ' + this.state.data.titleInfo.title,
-        title: 'PSNINE'
-      }).catch((err) => { err && console.log(err); })
-      url && Linking.openURL(url).catch(err => toast(err.toString())) || toast('暂无出处')
-    } catch (err) {}
-  }}
+    }
+  },
+  {
+    title: '刷新', iconName: 'md-refresh', show: 'never', onPress: function () {
+      this.preFetch()
+    }
+  },
+  {
+    title: '在浏览器中打开', iconName: 'md-refresh', show: 'never', onPress: function () {
+      const { params = {} } = this.props.navigation.state
+      Linking.openURL(params.URL).catch(err => toast(err.toString()))
+    }
+  },
+  {
+    title: '分享', iconName: 'md-share-alt', show: 'never', onPress: function () {
+      try {
+        const { params } = this.props.navigation.state
+        Share.open({
+          url: params.URL,
+          message: '[PSNINE] ' + this.state.data.titleInfo.title,
+          title: 'PSNINE'
+        }).catch((err) => { err && console.log(err); })
+        url && Linking.openURL(url).catch(err => toast(err.toString())) || toast('暂无出处')
+      } catch (err) { }
+    }
+  }
 ];
 let title = "TOPIC";
 let WEBVIEW_REF = `WEBVIEW_REF`;
@@ -104,7 +112,7 @@ class CommunityTopic extends Component {
       const data = getBattleAPI(params.URL).then(data => {
 
         const html = data.contentInfo.html
-        const emptyHTML = '<div></div>' 
+        const emptyHTML = '<div></div>'
         this.hasContent = html !== emptyHTML
         this.hasTrophyTable = data.contentInfo.trophyTable.length !== 0
         this.hasComment = data.commentList.length !== 0
@@ -166,7 +174,7 @@ class CommunityTopic extends Component {
               })
             }}
             useForeground={true}
-            
+
             background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
           >
             <View style={{ flex: 1, flexDirection: 'row', padding: 12 }}>
@@ -224,7 +232,7 @@ class CommunityTopic extends Component {
               })
             }}
             useForeground={true}
-            
+
             background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
           >
             <View pointerEvents='box-only' style={{ flex: 1, flexDirection: 'row', padding: 12 }}>
@@ -233,8 +241,8 @@ class CommunityTopic extends Component {
                 style={[styles.avatar, { width: 91 }]}
               />
 
-              <View style={{ marginLeft: 10, flex: 1, flexDirection: 'column', alignContent:'center'  }}>
-                <View style={{flexDirection:'row', alignItems: 'flex-start'}}>
+              <View style={{ marginLeft: 10, flex: 1, flexDirection: 'column', alignContent: 'center' }}>
+                <View style={{ flexDirection: 'row', alignItems: 'flex-start' }}>
                   <Text
                     ellipsizeMode={'tail'}
                     style={{ flex: -1, color: modeInfo.titleTextColor, }}>
@@ -243,10 +251,10 @@ class CommunityTopic extends Component {
                   <Text selectable={false} style={{
                     flex: -1,
                     marginLeft: 5,
-                    color: idColor, 
-                    textAlign: 'center', 
-                    textAlignVertical: 'center' 
-                    }}>{rowData.tip}</Text>
+                    color: idColor,
+                    textAlign: 'center',
+                    textAlignVertical: 'center'
+                  }}>{rowData.tip}</Text>
                 </View>
 
                 <View style={{ flex: 1.1, flexDirection: 'row', justifyContent: 'space-between' }}>
@@ -257,14 +265,14 @@ class CommunityTopic extends Component {
                     textAlign: 'center',
                     textAlignVertical: 'center',
                     fontSize: 10
-                    }}>{rowData.text}</Text>
+                  }}>{rowData.text}</Text>
                   <Text selectable={false} style={{
                     flex: 1,
                     color: modeInfo.standardTextColor,
-                    textAlign: 'center', 
-                    textAlignVertical: 'center' ,
+                    textAlign: 'center',
+                    textAlignVertical: 'center',
                     fontSize: 10
-                    }}>{rowData.rare}</Text>
+                  }}>{rowData.rare}</Text>
                 </View>
 
               </View>
@@ -312,7 +320,7 @@ class CommunityTopic extends Component {
                 this._readMore(`${this.props.navigation.state.params.URL}/comment?page=1`)
               }}
               useForeground={true}
-              
+
               background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
             >
               <View pointerEvents='box-only' style={{ flex: 1, flexDirection: 'row', padding: 12 }}>
@@ -392,12 +400,14 @@ class CommunityTopic extends Component {
     const targetActions = toolbarActions.slice()
     if (shouldPushData && source.contentInfo.game && source.contentInfo.game.edit) {
       targetActions.push(
-        { title: '编辑', iconName: 'md-create', show: 'never', iconSize: 22, onPress: function() {
+        {
+          title: '编辑', iconName: 'md-create', show: 'never', iconSize: 22, onPress: function () {
             const { navigation } = this.props
             navigation.navigate('NewBattle', {
               URL: source.contentInfo.game.edit
             })
-          }},
+          }
+        },
       )
     }
 

@@ -32,11 +32,11 @@ import checkVersion from './bootstrap/checkVersion'
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
-let toolbarHeight = 56
+const toolbarHeight = 56
 const tipHeight = toolbarHeight * 0.8
 let backPressClickTimeStamp = 0
 
-const netInfoHandler = (reach) =>  {
+const netInfoHandler = (reach) => {
   global.netInfo = reach
 }
 
@@ -137,7 +137,7 @@ export default class Root extends React.Component {
           silver: '银',
           bronze: '铜',
           isSigned: true,
-          exp: '' 
+          exp: ''
         },
         isNightMode: JSON.parse(result[3]) || false,
         colorTheme: result[5] || 'lightBlue',
@@ -186,11 +186,11 @@ export default class Root extends React.Component {
       global.shouldSendGA = JSON.parse(result[6] || 'true')
     })
     // setTimeout(() => {
-      Animated.timing(this.state.progress, {
-        toValue: 1,
-        // ease: Easing.in(Easing.ease(1, 0, 1, 1)), 
-        duration: 800
-      }).start()
+    Animated.timing(this.state.progress, {
+      toValue: 1,
+      // ease: Easing.in(Easing.ease(1, 0, 1, 1)), 
+      duration: 800
+    }).start()
     // }, 400)
 
     setTimeout(() => {
@@ -200,7 +200,7 @@ export default class Root extends React.Component {
         colorTheme: settingInfo.colorTheme,
         isNightMode: settingInfo.isNightMode,
         secondaryColor: settingInfo.secondaryColor
-      }, () => checkVersion().catch(err => {}))
+      }, () => checkVersion().catch(err => { }))
     }, 1400)
   }
 
@@ -217,7 +217,6 @@ export default class Root extends React.Component {
     Linking.addEventListener('url', this._handleOpenURL);
 
     NetInfo.fetch().then((reach) => {
-      // console.log('Initial: ' + reach);
       global.netInfo = reach
     })
     NetInfo.addEventListener(
@@ -249,7 +248,7 @@ export default class Root extends React.Component {
     this.setState({
       width: screen.width,
       height: screen.height,
-      minWidth:  min
+      minWidth: min
     })
   }
 
@@ -319,7 +318,7 @@ export default class Root extends React.Component {
       width,
       height,
       minWidth,
-      numColumns: Math.max(1, Math.floor(width/360)),
+      numColumns: Math.max(1, Math.floor(width / 360)),
       accentColor: getAccentColorFromName(secondaryColor, isNightMode),
       background: (shouldChangeBackground || isNightMode) ? targetModeInfo.brighterLevelOne : targetModeInfo.backgroundColor
     })
@@ -334,14 +333,14 @@ export default class Root extends React.Component {
         //   StatusBar.setHidden(false)
         // }
         if (global.shouldSendGA) {
-          const { routeName = 'Unknow'} = currentScreen
+          const { routeName = 'Unknow' } = currentScreen
           tracker.trackScreenView(routeName)
         }
       }
     } : null
 
     const child = isLoadingAsyncStorage ? (
-      <View style={{ flex: 1, backgroundColor: 'rgb(0,208,192)'}}>
+      <View style={{ flex: 1, backgroundColor: 'rgb(0,208,192)' }}>
         <StatusBar translucent={false} backgroundColor={'rgb(0,208,192)'} barStyle={"light-content"} />
         {/* <Animation
           ref={animation => { this.animation = animation; }}
@@ -351,10 +350,14 @@ export default class Root extends React.Component {
           source={lottie}
         /> */}
         <Image
-          source={{ uri: 'http://ww4.sinaimg.cn/large/bfae17b6gy1fhpjvt6jukg21hc0u0ds5.jpg', width: SCREEN_WIDTH,
-            height: SCREEN_HEIGHT - StatusBar.currentHeight * 4 }}
-          style={{ width: SCREEN_WIDTH,
-            height: SCREEN_HEIGHT - StatusBar.currentHeight * 4 }}
+          source={{
+            uri: 'http://ww4.sinaimg.cn/large/bfae17b6gy1fhpjvt6jukg21hc0u0ds5.jpg', width: SCREEN_WIDTH,
+            height: SCREEN_HEIGHT - StatusBar.currentHeight * 4
+          }}
+          style={{
+            width: SCREEN_WIDTH,
+            height: SCREEN_HEIGHT - StatusBar.currentHeight * 4
+          }}
           resizeMode='contain'
           resizeMethod={'resize'}
         />
@@ -366,52 +369,52 @@ export default class Root extends React.Component {
           bottom: 0,
           opacity: progress
         }}>
-        <Text numberOfLines={1} style={{
-          textAlign: 'center',
-          textAlignVertical: 'center',
-        }}>{this.state.loadingText}</Text>
+          <Text numberOfLines={1} style={{
+            textAlign: 'center',
+            textAlignVertical: 'center',
+          }}>{this.state.loadingText}</Text>
         </Animated.View>
       </View>
     ) : (
-      <View style={{ flex: 1 }}>
-        <StatusBar translucent={false} backgroundColor={modeInfo.deepColor} barStyle={"light-content"} />
-        <StackNavigator
-          uriPrefix={'p9://psnine.com/'}
-          onNavigationStateChange={onNavigationStateChange} screenProps={{
-            modeInfo,
-            switchModeOnRoot: this.switchModeOnRoot,
-            bottomText: this.state.text
-          }} />
-        <Animated.View style={{
-          height: tipHeight,
-          position: 'absolute',
-          bottom: 0,
-          elevation: 6,
-          left: 0,
-          right: 0,
-          backgroundColor: modeInfo.reverseModeInfo.backgroundColor,
-          transform: [
-            {
-              translateY: this.state.tipBarMarginBottom.interpolate({
-                inputRange: [-1, 0, 1, 2],
-                outputRange: [tipHeight * 2, tipHeight, 0, -tipHeight]
-              })
-            }
-          ]
-        }}>
-          <View style={{
-            flex: 1,
-            justifyContent: 'center',
-            padding: 20
+        <View style={{ flex: 1 }}>
+          <StatusBar translucent={false} backgroundColor={modeInfo.deepColor} barStyle={"light-content"} />
+          <StackNavigator
+            uriPrefix={'p9://psnine.com/'}
+            onNavigationStateChange={onNavigationStateChange} screenProps={{
+              modeInfo,
+              switchModeOnRoot: this.switchModeOnRoot,
+              bottomText: this.state.text
+            }} />
+          <Animated.View style={{
+            height: tipHeight,
+            position: 'absolute',
+            bottom: 0,
+            elevation: 6,
+            left: 0,
+            right: 0,
+            backgroundColor: modeInfo.reverseModeInfo.backgroundColor,
+            transform: [
+              {
+                translateY: this.state.tipBarMarginBottom.interpolate({
+                  inputRange: [-1, 0, 1, 2],
+                  outputRange: [tipHeight * 2, tipHeight, 0, -tipHeight]
+                })
+              }
+            ]
           }}>
-            <Text style={{
-              fontSize: 15,
-              color: modeInfo.reverseModeInfo.titleTextColor
-            }}>{this.state.text}</Text>
-          </View>
-        </Animated.View>
-      </View>
-    )
+            <View style={{
+              flex: 1,
+              justifyContent: 'center',
+              padding: 20
+            }}>
+              <Text style={{
+                fontSize: 15,
+                color: modeInfo.reverseModeInfo.titleTextColor
+              }}>{this.state.text}</Text>
+            </View>
+          </Animated.View>
+        </View>
+      )
     return (
       <Provider store={this.store}>
         {child}

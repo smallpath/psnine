@@ -47,75 +47,89 @@ let CIRCLE_SIZE = 56;
 let config = { tension: 30, friction: 7, ease: Easing.in(Easing.ease(1, 0, 1, 1)), duration: 200 };
 
 let toolbarActions = [
-  { title: '回复', iconName: 'md-create', iconSize: 22, show: 'always', onPress: function() {
-    const { params } = this.props.navigation.state
-    if (this.isReplyShowing === true) return
-    const cb = () => {
-      this.props.navigation.navigate('Reply', {
-        type: params.type,
-        id: params.rowData ? params.rowData.id : this.state.data && this.state.data.titleInfo && this.state.data.titleInfo.psnid,
-        callback: this.preFetch,
-        shouldSeeBackground: true
+  {
+    title: '回复', iconName: 'md-create', iconSize: 22, show: 'always', onPress: function () {
+      const { params } = this.props.navigation.state
+      if (this.isReplyShowing === true) return
+      const cb = () => {
+        this.props.navigation.navigate('Reply', {
+          type: params.type,
+          id: params.rowData ? params.rowData.id : this.state.data && this.state.data.titleInfo && this.state.data.titleInfo.psnid,
+          callback: this.preFetch,
+          shouldSeeBackground: true
+        })
+      }
+      if (this.state.openVal._value === 1) {
+        this._animateToolbar(0, cb)
+      } else if (this.state.openVal._value === 0) {
+        cb()
+      }
+    }
+  },
+  {
+    title: '刷新', iconName: 'md-refresh', show: 'never', onPress: function () {
+      this.preFetch()
+    }
+  },
+  {
+    title: '在浏览器中打开', iconName: 'md-refresh', show: 'never', onPress: function () {
+      const { params = {} } = this.props.navigation.state
+      Linking.openURL(params.URL).catch(err => toast(err.toString()))
+    }
+  },
+  {
+    title: '收藏', iconName: 'md-star-half', show: 'never', onPress: function () {
+      const { params } = this.props.navigation.state
+      // console.log(params)
+      fav({
+        type: 'qa',
+        param: params.rowData && params.rowData.id,
+      }).then(res => res.text()).then(text => {
+        if (text) return toast(text)
+        toast('操作成功')
+      }).catch(err => {
+        const msg = `操作失败: ${err.toString()}`
+        toast(msg)
       })
     }
-    if (this.state.openVal._value === 1) {
-      this._animateToolbar(0, cb)
-    } else if (this.state.openVal._value === 0) {
-      cb()
-    }
-  }},
-  { title: '刷新', iconName: 'md-refresh', show: 'never', onPress: function() {
-    this.preFetch()
-  }},
-  { title: '在浏览器中打开', iconName: 'md-refresh', show: 'never', onPress: function() {
-    const { params = {} } = this.props.navigation.state
-    Linking.openURL(params.URL).catch(err => toast(err.toString()))
-  }},
-  { title: '收藏', iconName: 'md-star-half', show: 'never', onPress: function() {
-    const { params } = this.props.navigation.state
-    // console.log(params)
-    fav({ 
-      type: 'qa',
-      param: params.rowData && params.rowData.id,
-    }).then(res => res.text()).then(text => {
-      if (text) return toast(text)
-      toast('操作成功')
-    }).catch(err => {
-      const msg = `操作失败: ${err.toString()}`
-      toast(msg)
-    })
-  }},
-  { title: '顶', iconName: 'md-star-half', show: 'never', onPress: function() {
-    const { params } = this.props.navigation.state
-    updown({ 
-      type: 'qa',
-      param: params.rowData && params.rowData.id,
-      updown: 'up'
-    }).then(res => res.text()).then(text => {
-      if (text) return toast(text)
-      toast('操作成功')
-    }).catch(err => {
-      const msg = `操作失败: ${err.toString()}`
-      toast(msg)
-    })
-  }},
-  { title: '分享', iconName: 'md-share-alt', show: 'never', onPress: function() {
-    try {
+  },
+  {
+    title: '顶', iconName: 'md-star-half', show: 'never', onPress: function () {
       const { params } = this.props.navigation.state
-      Share.open({
-        url: params.URL,
-        message: '[PSNINE] ' + this.state.data.titleInfo.title,
-        title: 'PSNINE'
-      }).catch((err) => { err && console.log(err); })
-      url && Linking.openURL(url).catch(err => toast(err.toString())) || toast('暂无出处')
-    } catch (err) {}
-  }},
-  { title: '出处', iconName: 'md-share-alt', show: 'never', onPress: function() {
-    try {
-      const url = this.state.data.titleInfo.shareInfo.source
-      url && Linking.openURL(url).catch(err => toast(err.toString())) || toast('暂无出处')
-    } catch (err) {}
-  }},
+      updown({
+        type: 'qa',
+        param: params.rowData && params.rowData.id,
+        updown: 'up'
+      }).then(res => res.text()).then(text => {
+        if (text) return toast(text)
+        toast('操作成功')
+      }).catch(err => {
+        const msg = `操作失败: ${err.toString()}`
+        toast(msg)
+      })
+    }
+  },
+  {
+    title: '分享', iconName: 'md-share-alt', show: 'never', onPress: function () {
+      try {
+        const { params } = this.props.navigation.state
+        Share.open({
+          url: params.URL,
+          message: '[PSNINE] ' + this.state.data.titleInfo.title,
+          title: 'PSNINE'
+        }).catch((err) => { err && console.log(err); })
+        url && Linking.openURL(url).catch(err => toast(err.toString())) || toast('暂无出处')
+      } catch (err) { }
+    }
+  },
+  {
+    title: '出处', iconName: 'md-share-alt', show: 'never', onPress: function () {
+      try {
+        const url = this.state.data.titleInfo.shareInfo.source
+        url && Linking.openURL(url).catch(err => toast(err.toString())) || toast('暂无出处')
+      } catch (err) { }
+    }
+  },
 ];
 
 class QaTopic extends Component {
@@ -212,7 +226,7 @@ class QaTopic extends Component {
       }}>
         <TouchableNativeFeedback
           useForeground={true}
-          
+
           background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
         >
           <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', padding: 5 }}>
@@ -232,7 +246,7 @@ class QaTopic extends Component {
               />
 
               <View style={{ flex: 1.1, flexDirection: 'row', justifyContent: 'space-between' }}>
-                <Text selectable={false} style={{ flex: -1, color: modeInfo.standardColor, textAlign: 'center', textAlignVertical: 'center' }}  onPress={
+                <Text selectable={false} style={{ flex: -1, color: modeInfo.standardColor, textAlign: 'center', textAlignVertical: 'center' }} onPress={
                   () => {
                     this.props.navigation.navigate('Home', {
                       title: titleInfo.psnid,
@@ -278,7 +292,7 @@ class QaTopic extends Component {
   renderGame = (rowData) => {
     const { modeInfo } = this.props.screenProps
     return (
-    <View style={{
+      <View style={{
         backgroundColor: modeInfo.backgroundColor,
         elevation: 1, margin: 5, marginTop: 0,
       }}>
@@ -294,7 +308,7 @@ class QaTopic extends Component {
             })
           }}
           useForeground={true}
-          
+
           background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
         >
           <View pointerEvents='box-only' style={{ flex: 1, flexDirection: 'row', padding: 12 }}>
@@ -334,7 +348,7 @@ class QaTopic extends Component {
           navigation,
           rowData,
           modeInfo,
-          onLongPress: () => {},
+          onLongPress: () => { },
           preFetch: this.preFetch,
           index: list.length
         }} />
@@ -391,22 +405,24 @@ class QaTopic extends Component {
 
     const targetActions = toolbarActions.slice()
     try {
-      if (this.state.data && this.state.data.titleInfo && 
-          this.state.data.titleInfo.shareInfo && this.state.data.titleInfo.shareInfo.source) {
+      if (this.state.data && this.state.data.titleInfo &&
+        this.state.data.titleInfo.shareInfo && this.state.data.titleInfo.shareInfo.source) {
         //
       } else {
         targetActions.pop()
       }
-    } catch(err) {}
+    } catch (err) { }
 
-    if (shouldPushData && this.state.data.titleInfo && this.state.data.titleInfo.shareInfo  && this.state.data.titleInfo.shareInfo.edit) {
+    if (shouldPushData && this.state.data.titleInfo && this.state.data.titleInfo.shareInfo && this.state.data.titleInfo.shareInfo.edit) {
       targetActions.push(
-        { title: '编辑', iconName: 'md-create', iconSize: 22, show: 'never', onPress: function() {
+        {
+          title: '编辑', iconName: 'md-create', iconSize: 22, show: 'never', onPress: function () {
             const { navigation } = this.props
             navigation.navigate('NewGene', {
               URL: this.state.data.titleInfo.shareInfo.edit
             })
-          }},
+          }
+        },
       )
     }
 

@@ -61,7 +61,7 @@ class CommentList extends Component {
 
   fetchMessages = (url, type = 'down') => {
     const state = {
-      [type === 'down' ? 'isLoadingMore' : 'isRefreshing'] : true
+      [type === 'down' ? 'isLoadingMore' : 'isRefreshing']: true
     }
     this.setState(state, () => {
       InteractionManager.runAfterInteractions(() => {
@@ -125,7 +125,7 @@ class CommentList extends Component {
         this.setState({
           modalVisible: true
         })
-      return
+        return
     }
   }
 
@@ -190,7 +190,7 @@ class CommentList extends Component {
           disableVirtualization={false}
           contentContainerStyle={styles.list}
           getItemLayout={(data, index) => (
-            {length: this.ITEM_HEIGHT, offset: this.ITEM_HEIGHT * index, index}
+            { length: this.ITEM_HEIGHT, offset: this.ITEM_HEIGHT * index, index }
           )}
           viewabilityConfig={{
             minimumViewTime: 1,
@@ -217,7 +217,7 @@ class CommentList extends Component {
                   this.isValueChanged ? this.state.sliderValue : this.state.currentPage
                 }</Text>
                 <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-                  <Text style={{color: modeInfo.standardTextColor}}>{this.state.currentPage}</Text>
+                  <Text style={{ color: modeInfo.standardTextColor }}>{this.state.currentPage}</Text>
                   <Slider
                     maximumValue={this.state.numPages}
                     minimumValue={1}
@@ -236,20 +236,20 @@ class CommentList extends Component {
                       })
                     }}
                   />
-                  <Text style={{color: modeInfo.standardTextColor}}>{this.state.numPages}</Text>
+                  <Text style={{ color: modeInfo.standardTextColor }}>{this.state.numPages}</Text>
                 </View>
                 <TouchableNativeFeedback onPress={() => {
-                    this.setState({
-                      modalVisible: false,
-                      isLoading: true
-                    }, () => {
-                      const currentPage = this.state.currentPage
-                      const targetPage = params.URL.split('=').slice(0, -1).concat(this.state.sliderValue).join('=')
-                      this.fetchMessages(targetPage, 'jump');
-                    })
-                  }}>
+                  this.setState({
+                    modalVisible: false,
+                    isLoading: true
+                  }, () => {
+                    const currentPage = this.state.currentPage
+                    const targetPage = params.URL.split('=').slice(0, -1).concat(this.state.sliderValue).join('=')
+                    this.fetchMessages(targetPage, 'jump');
+                  })
+                }}>
                   <View style={{ alignSelf: 'flex-end', paddingHorizontal: 8, paddingVertical: 5 }}>
-                    <Text style={{color: '#009688'}}>确定</Text>
+                    <Text style={{ color: '#009688' }}>确定</Text>
                   </View>
                 </TouchableNativeFeedback>
               </View>

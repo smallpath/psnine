@@ -36,7 +36,8 @@ let screen = Dimensions.get('window');
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = screen;
 
 let toolbarActions = [
-  { title: '回复', iconName: 'md-create', iconSize: 22, show: 'always', onPress: function() {
+  {
+    title: '回复', iconName: 'md-create', iconSize: 22, show: 'always', onPress: function () {
       const { params } = this.props.navigation.state
       if (this.isReplyShowing === true) return
       this.props.navigation.navigate('Reply', {
@@ -47,25 +48,32 @@ let toolbarActions = [
         shouldSeeBackground: true
       })
       return;
-  }},
-  { title: '刷新', iconName: 'md-refresh', show: 'never', onPress: function() {
-    this.preFetch()
-  }},
-  { title: '在浏览器中打开', iconName: 'md-refresh', show: 'never', onPress: function() {
-    const { params = {} } = this.props.navigation.state
-    Linking.openURL(params.URL).catch(err => toast(err.toString()))
-  }},
-  { title: '分享', iconName: 'md-share-alt', show: 'never', onPress: function() {
-    try {
-      const { params } = this.props.navigation.state
-      Share.open({
-        url: params.URL,
-        message: '[PSNINE] ' + this.state.data.titleInfo.title,
-        title: 'PSNINE'
-      }).catch((err) => { err && console.log(err); })
-      url && Linking.openURL(url).catch(err => toast(err.toString())) || toast('暂无出处')
-    } catch (err) {}
-  }}
+    }
+  },
+  {
+    title: '刷新', iconName: 'md-refresh', show: 'never', onPress: function () {
+      this.preFetch()
+    }
+  },
+  {
+    title: '在浏览器中打开', iconName: 'md-refresh', show: 'never', onPress: function () {
+      const { params = {} } = this.props.navigation.state
+      Linking.openURL(params.URL).catch(err => toast(err.toString()))
+    }
+  },
+  {
+    title: '分享', iconName: 'md-share-alt', show: 'never', onPress: function () {
+      try {
+        const { params } = this.props.navigation.state
+        Share.open({
+          url: params.URL,
+          message: '[PSNINE] ' + this.state.data.titleInfo.title,
+          title: 'PSNINE'
+        }).catch((err) => { err && console.log(err); })
+        url && Linking.openURL(url).catch(err => toast(err.toString())) || toast('暂无出处')
+      } catch (err) { }
+    }
+  }
 ];
 
 let title = "TOPIC";
@@ -111,7 +119,7 @@ export default class extends Component {
       const data = getAPI(params.URL).then(data => {
 
         const html = data.contentInfo.html
-        const emptyHTML = '<div></div>' 
+        const emptyHTML = '<div></div>'
         this.hasContent = html !== emptyHTML
         this.hasComment = data.commentList.length !== 0
         this.hasReadMore = this.hasComment ? data.commentList[0].isGettingMoreComment === true ? true : false : false
@@ -173,7 +181,7 @@ export default class extends Component {
       }}>
         <TouchableNativeFeedback
           useForeground={true}
-          
+
           background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
         >
           <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'flex-start', padding: 5 }}>
@@ -191,43 +199,43 @@ export default class extends Component {
               </View>
               {/*<Text selectable={false} style={textStyle}>{titleInfo.warning}</Text>*/}
               <View style={{ flex: 1.1, flexDirection: 'column', justifyContent: 'space-between' }}>
-                <View style={{flex: 1, flexDirection: 'row', justifyContent: 'center'}}>
-                  <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-around'}}>
+                <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center' }}>
+                  <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-around' }}>
                     <Text selectable={false} style={tableDescStyle}><Text selectable={false} style={tableStyle}>分类：</Text>{titleInfo.table.slice().shift() || '暂无'}</Text>
                   </View>
-                  <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-around'}}>
+                  <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-around' }}>
                     <Text selectable={false} style={tableDescStyle}><Text selectable={false} style={tableStyle}>类型：</Text>{titleInfo.table.slice(1).shift() || '暂无'}</Text>
                   </View>
                 </View>
-                <View style={{flex: 1, flexDirection: 'row', justifyContent: 'center'}}>
-                  <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-around'}}>
+                <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center' }}>
+                  <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-around' }}>
                     <Text selectable={false} style={tableDescStyle}><Text selectable={false} style={tableStyle}>方式：</Text>{titleInfo.table.slice(2).shift() || '暂无'}</Text>
                   </View>
-                  <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-around'}}>
+                  <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-around' }}>
                     <Text selectable={false} style={tableDescStyle}><Text selectable={false} style={tableStyle}>地区：</Text>{titleInfo.table.slice(3).shift() || '暂无'}</Text>
                   </View>
                 </View>
-                <View style={{flex: 1, flexDirection: 'row', justifyContent: 'center'}}>
-                  <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-around'}}>
+                <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center' }}>
+                  <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-around' }}>
                     <Text selectable={false} style={tableDescStyle}><Text selectable={false} style={tableStyle}>平台：</Text>{titleInfo.table.slice(4).shift() || '暂无'}</Text>
                   </View>
-                  <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-around'}}>
+                  <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-around' }}>
                     <Text selectable={false} style={tableDescStyle}><Text selectable={false} style={tableStyle}>版本：</Text>{titleInfo.table.slice(5).shift() || '暂无'}</Text>
                   </View>
                 </View>
-                <View style={{flex: 1, flexDirection: 'row', justifyContent: 'center'}}>
-                  <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-around'}}>
+                <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center' }}>
+                  <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-around' }}>
                     <Text selectable={false} style={tableDescStyle}><Text selectable={false} style={tableStyle}>语言：</Text>{titleInfo.table.slice(6).shift() || '暂无'}</Text>
                   </View>
-                  <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-around'}}>
+                  <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-around' }}>
                     <Text selectable={false} style={tableDescStyle}><Text selectable={false} style={tableStyle}>QQ：</Text>{titleInfo.table.slice(7).shift() || '暂无'}</Text>
                   </View>
                 </View>
-                <View style={{flex: 1, flexDirection: 'row', justifyContent: 'center'}}>
-                  <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-around'}}>
+                <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center' }}>
+                  <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-around' }}>
                     <Text selectable={false} style={tableDescStyle}><Text selectable={false} style={tableStyle}>闲鱼：</Text>{titleInfo.table.slice(8).shift() || '暂无'}</Text>
                   </View>
-                  <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-around'}}/>
+                  <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-around' }} />
                 </View>
               </View>
               <HTMLView
@@ -240,7 +248,7 @@ export default class extends Component {
               />
 
               <View style={{ flex: 1.1, flexDirection: 'row', justifyContent: 'space-between' }}>
-                <Text selectable={false} style={{ flex: -1, color: modeInfo.accentColor, textAlign: 'center', textAlignVertical: 'center' }}  onPress={
+                <Text selectable={false} style={{ flex: -1, color: modeInfo.accentColor, textAlign: 'center', textAlignVertical: 'center' }} onPress={
                   () => {
                     this.props.navigation.navigate('Home', {
                       title: titleInfo.psnid,
@@ -292,7 +300,7 @@ export default class extends Component {
                 this._readMore(`${this.props.navigation.state.params.URL}/comment?page=1`)
               }}
               useForeground={true}
-              
+
               background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
             >
               <View pointerEvents='box-only' style={{ flex: 1, flexDirection: 'row', padding: 12 }}>
@@ -370,15 +378,18 @@ export default class extends Component {
     const targetActions = toolbarActions.slice()
     if (shouldPushData && source.titleInfo) {
       source.titleInfo.edit && targetActions.push(
-        { title: '编辑', iconName: 'md-create', iconSize: 22, show: 'never', onPress: function() {
+        {
+          title: '编辑', iconName: 'md-create', iconSize: 22, show: 'never', onPress: function () {
             const { navigation } = this.props
             navigation.navigate('NewTrade', {
               URL: source.titleInfo.edit
             })
-          }},
+          }
+        },
       )
       source.titleInfo.dalao && targetActions.push(
-        { title: '打捞', iconName: 'md-create', iconSize: 22, show: 'never', onPress: function() {
+        {
+          title: '打捞', iconName: 'md-create', iconSize: 22, show: 'never', onPress: function () {
             const { navigation } = this.props
             // dalao()
             postReply({
@@ -388,7 +399,8 @@ export default class extends Component {
               if (html) return toast(html.replace(/<(.*?)>/igm, ''))
               return toast('已成功打捞')
             }).catch(err => toast(err.toString()))
-          }},
+          }
+        },
       )
     }
 
