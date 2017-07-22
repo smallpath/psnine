@@ -1,3 +1,4 @@
+import { encodeForm } from '../utils'
 
 const loginURL = 'http://psnine.com/sign/in'
 
@@ -5,15 +6,8 @@ export const registURL = `http://psnine.com/psnauth`
 
 export const safeLogin = function (psnid, pass) {
   let signin = ''
-  let formBody = []
   let details = { psnid, pass, signin }
-  for (let property in details) {
-    let encodedKey = encodeURIComponent(property)
-    let encodedValue = encodeURIComponent(details[property])
-    formBody.push(encodedKey + '=' + encodedValue)
-  }
-  formBody = formBody.join('&')
-
+  const formBody = encodeForm(details)
   return new Promise((resolve, reject) => {
     fetch(loginURL, {
       method: 'POST',
@@ -22,9 +16,8 @@ export const safeLogin = function (psnid, pass) {
         'Content-Type': 'application/x-www-form-urlencoded'
       },
       body: formBody
+    }).then((responseData) => {
+      return resolve(responseData.text())
     })
-      .then((responseData) => {
-        return resolve(responseData.text())
-      })
   })
 }

@@ -14,16 +14,16 @@ import {
 } from 'react-native';
 
 import { connect } from 'react-redux';
-import { getGameList } from '../../actions/game.js';
-import { standardColor, nodeColor, idColor } from '../../constants/colorConfig';
+import { getGameList } from '../../redux/action/game.js';
+import { standardColor, nodeColor, idColor } from '../../constant/colorConfig';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 import { getGameUrl } from '../../dao';
 
-import { changeScrollType } from '../../actions/app';
+import { changeScrollType } from '../../redux/action/app';
 
-import TopicItem from '../shared/GameItem'
-import FooterProgress from '../shared/FooterProgress'
+import TopicItem from '../../component/GameItem'
+import FooterProgress from '../../component/FooterProgress'
 
 const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
 

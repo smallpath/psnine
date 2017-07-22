@@ -14,18 +14,18 @@ import {
 } from 'react-native';
 
 import { connect } from 'react-redux';
-import { getCircleList as getList } from '../../actions/circle';
-import { standardColor, nodeColor, idColor, accentColor } from '../../constants/colorConfig';
+import { getCircleList as getList } from '../../redux/action/circle';
+import { standardColor, nodeColor, idColor, accentColor } from '../../constant/colorConfig';
 
 import { getBattleURL, getGamePngURL } from '../../dao';
-import FooterProgress from '../shared/FooterProgress'
+import FooterProgress from '../../component/FooterProgress'
 
 const AnimatedSectionList = Animated.createAnimatedComponent(SectionList);
 
 let toolbarHeight = 56;
 let releasedMarginTop = 0;
 
-import CircleItem from '../shared/CircleItem'
+import CircleItem from '../../component/CircleItem'
 
 const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
 

@@ -19,16 +19,16 @@ import {
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
-import MyDialog from '../../components/Dialog'
 
-import HTMLView from '../../components/HtmlToView';
+
+
 import { connect } from 'react-redux';
-import { standardColor, nodeColor, idColor } from '../../constants/colorConfig';
+import { standardColor, nodeColor, idColor } from '../../constant/colorConfig';
 
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { getUserDiaryAPI } from '../../dao';
-import ComplexComment from '../shared/ComplexComment'
-import DiaryItem from '../shared/DiaryItem'
+import ComplexComment from '../../component/ComplexComment'
+import DiaryItem from '../../component/DiaryItem'
 
 const ds = new ListView.DataSource({
   rowHasChanged: (row1, row2) => row1.href !== row2.href,

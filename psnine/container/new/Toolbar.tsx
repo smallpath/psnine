@@ -14,8 +14,8 @@ import {
 
 import { connect } from 'react-redux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { standardColor, accentColor } from '../../constants/colorConfig';
-import MyDialog from '../../components/Dialog'
+import { standardColor, accentColor } from '../../constant/colorConfig';
+
 import { pngPrefix, getDealURL, getHappyPlusOneURL, getStoreURL } from '../../dao';
 
 import { safeLogin, registURL } from '../../dao/login';

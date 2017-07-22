@@ -1,7 +1,3 @@
-import {
-  AsyncStorage
-} from 'react-native'
-
 let numStr = '<b style="color:red;">'
 let dayStr = '<b style="color:green;">'
 
@@ -16,7 +12,7 @@ export const fetchSignOn = function (psnid) {
         'Accept': '*/*'
       }
     }).then((response) => {
-      setTimeout(() => null, 0)
+      setTimeout(() => {}, 0)
       return response.text()
     })
     .then(html => {

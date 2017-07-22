@@ -18,7 +18,7 @@ import {
   Keyboard
 } from 'react-native';
 
-import HTMLView from '../../components/HtmlToView';
+
 
 import { connect } from 'react-redux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -27,7 +27,7 @@ import colorConfig, {
   getColorFromProgress,
   getLevelColorFromProgress,
   getContentFromTrophy
-} from '../../constants/colorConfig';
+} from '../../constant/colorConfig';
 
 import {
   getGameAPI

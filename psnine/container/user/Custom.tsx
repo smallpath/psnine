@@ -16,13 +16,13 @@ import {
 } from 'react-native';
 
 import { connect } from 'react-redux';
-import { standardColor, nodeColor, idColor, accentColor } from '../../constants/colorConfig';
+import { standardColor, nodeColor, idColor, accentColor } from '../../constant/colorConfig';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { getCustomAPI } from '../../dao';
 import { postSetting } from '../../dao/post';
-import CircleItem from '../shared/CircleItem'
-import MyDialog from '../../components/Dialog'
-import HTMLView from '../../components/HtmlToView';
+import CircleItem from '../../component/CircleItem'
+
+
 const AnimatedSectionList = Animated.createAnimatedComponent(SectionList);
 
 let toolbarHeight = 56;
@@ -30,7 +30,7 @@ let releasedMarginTop = 0;
 
 let toolbarActions = []
 
-import PhotoItem from '../shared/PhotoItem'
+import PhotoItem from '../../component/PhotoItem'
 
 const renderSectionHeader = ({ section }) => {
   // console.log(section)

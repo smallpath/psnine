@@ -18,11 +18,11 @@ import {
   Keyboard
 } from 'react-native';
 
-import HTMLView from '../../components/HtmlToView';
+
 import { connect } from 'react-redux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { standardColor, nodeColor, idColor, accentColor } from '../../constants/colorConfig';
-import ComplexComment from '../shared/ComplexComment'
+import { standardColor, nodeColor, idColor, accentColor } from '../../constant/colorConfig';
+import ComplexComment from '../../component/ComplexComment'
 
 import {
   getGamePointAPI

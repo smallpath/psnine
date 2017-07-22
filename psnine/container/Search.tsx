@@ -21,14 +21,14 @@ import {
 
 import { connect } from 'react-redux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { standardColor, accentColor } from '../constants/colorConfig';
+import { standardColor, accentColor } from '../constant/colorConfig';
 
 import { pngPrefix, getDealURL, getHappyPlusOneURL, getStoreURL } from '../dao';
 
 import { safeLogin, registURL } from '../dao/login';
 import { postReply } from '../dao/post';
 
-import Emotion from '../components/Emotion'
+import Emotion from '../component/Emotion'
 
 let title = '回复';
 
@@ -63,7 +63,8 @@ export default class Search extends Component {
       content: params.content || '',
       openVal: new Animated.Value(0),
       marginTop: new Animated.Value(0),
-      toolbarOpenVal: new Animated.Value(0)
+      toolbarOpenVal: new Animated.Value(0),
+      placeholder: params.placeholder || '搜索标题'
     }
   }
 
@@ -243,7 +244,7 @@ export default class Search extends Component {
             justifyContent: 'center',
             alignContent: 'center'
           }]}>
-            <TextInput placeholder="搜索标题"
+            <TextInput placeholder={this.state.placeholder}
               autoCorrect={false}
               multiline={false}
               keyboardType="default"

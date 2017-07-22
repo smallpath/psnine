@@ -19,7 +19,7 @@ import {
 import LeftDrawer from './LeftDrawer';
 import Toolbar from './Toolbar';
 
-import { standardColor } from '../constants/colorConfig';
+import { standardColor } from '../constant/colorConfig';
 
 let DRAWER_REF = 'drawer';
 let DRAWER_WIDTH_LEFT = 80;

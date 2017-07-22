@@ -20,11 +20,11 @@ import {
 } from 'react-native';
 
 import { sync, updown, fav, upBase, block } from '../../dao/sync'
-import MyDialog from '../../components/Dialog'
-import HTMLView from '../../components/HtmlToView';
+
+
 import { connect } from 'react-redux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import UserGameItem from '../shared/UserGameItem';
+import UserGameItem from '../../component/UserGameItem';
 import {
   standardColor, 
   nodeColor, 
@@ -32,7 +32,7 @@ import {
   accentColor,
   levelColor,
   rankColor,
-} from '../../constants/colorConfig';
+} from '../../constant/colorConfig';
 
 import { getHomeAPI } from '../../dao';
 

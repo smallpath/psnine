@@ -15,16 +15,16 @@ import {
 } from 'react-native';
 
 import { connect } from 'react-redux';
-import { getTopicList } from '../../actions/community.js';
-import { standardColor, nodeColor, idColor } from '../../constants/colorConfig';
+import { getTopicList } from '../../redux/action/community.js';
+import { standardColor, nodeColor, idColor } from '../../constant/colorConfig';
 
 import { getTopicURL } from '../../dao';
 
-import { changeScrollType } from '../../actions/app';
+import { changeScrollType } from '../../redux/action/app';
 
-import TopicItem from '../shared/CommunityItem'
-import NewsItem from '../shared/NewsItem'
-import FooterProgress from '../shared/FooterProgress'
+import TopicItem from '../../component/CommunityItem'
+import NewsItem from '../../component/NewsItem'
+import FooterProgress from '../../component/FooterProgress'
 
 let toolbarHeight = 56;
 let releasedMarginTop = 0;

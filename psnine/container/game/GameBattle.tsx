@@ -17,16 +17,16 @@ import {
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
-import MyDialog from '../../components/Dialog'
+
 
 import { connect } from 'react-redux';
-import { standardColor, nodeColor, idColor } from '../../constants/colorConfig';
+import { standardColor, nodeColor, idColor } from '../../constant/colorConfig';
 
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { getGameMapperAPI } from '../../dao';
 
-import TopicItem from '../shared/BattleItem'
-import FooterProgress from '../shared/FooterProgress'
+import TopicItem from '../../component/BattleItem'
+import FooterProgress from '../../component/FooterProgress'
 
 let toolbarActions = [
   { title: '创建', iconName: 'md-create', show: 'always', iconSize: 22},

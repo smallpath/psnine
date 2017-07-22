@@ -17,18 +17,18 @@ import {
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
-import MyDialog from '../../components/Dialog'
 
-import HTMLView from '../../components/HtmlToView';
+
+
 import { connect } from 'react-redux';
-import { standardColor, nodeColor, idColor } from '../../constants/colorConfig';
+import { standardColor, nodeColor, idColor } from '../../constant/colorConfig';
 
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { getMyGameAPI, getUserCircleAPI } from '../../dao';
 
-import FooterProgress from '../shared/FooterProgress'
+import FooterProgress from '../../component/FooterProgress'
 
-import CircleItem from '../shared/CircleItem'
+import CircleItem from '../../component/CircleItem'
 
 let toolbarActions = [
   { title: '跳页', iconName: 'md-map', show: 'always' },

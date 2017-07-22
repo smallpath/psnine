@@ -23,8 +23,8 @@ import {
 } from 'react-native';
 
 import { sync } from '../../dao/sync'
-import MyDialog from '../../components/Dialog'
-import HTMLView from '../../components/HtmlToView';
+
+
 import { connect } from 'react-redux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {
@@ -34,7 +34,7 @@ import {
   accentColor,
   levelColor,
   rankColor,
-} from '../../constants/colorConfig';
+} from '../../constant/colorConfig';
 
 import { fetchStore as getAPI } from '../../dao';
 

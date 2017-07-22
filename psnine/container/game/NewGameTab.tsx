@@ -15,7 +15,7 @@ import {
   titleTextColor,
   standardTextColor,
   standardColor
-} from '../../constants/colorConfig'
+} from '../../constant/colorConfig'
 import {
   DrawerNavigator,
   DrawerItems,

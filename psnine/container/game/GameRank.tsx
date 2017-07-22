@@ -18,16 +18,16 @@ import {
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
-import MyDialog from '../../components/Dialog'
-import HTMLView from '../../components/HtmlToView'
+
+
 
 import { connect } from 'react-redux';
-import { standardColor, nodeColor, idColor } from '../../constants/colorConfig';
+import { standardColor, nodeColor, idColor } from '../../constant/colorConfig';
 
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { getGameMapperAPI } from '../../dao';
 
-import FooterProgress from '../shared/FooterProgress'
+import FooterProgress from '../../component/FooterProgress'
 
 let toolbarActions = [
   { title: '跳页', iconName: 'md-map', show: 'always' },
@@ -45,7 +45,7 @@ import colorConfig, {
   getColorFromProgress,
   getLevelColorFromProgress,
   getContentFromTrophy
-} from '../../constants/colorConfig';
+} from '../../constant/colorConfig';
 
 class TopicItem extends React.PureComponent {
 

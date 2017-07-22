@@ -13,16 +13,16 @@ import {
 } from 'react-native';
 
 import { connect } from 'react-redux';
-import { standardColor, nodeColor, idColor } from '../../constants/colorConfig';
-import { getGeneList } from '../../actions/gene.js';
+import { standardColor, nodeColor, idColor } from '../../constant/colorConfig';
+import { getGeneList } from '../../redux/action/gene.js';
 
 import { getGeneURL } from '../../dao';
 
 let toolbarHeight = 56;
 let releasedMarginTop = 0;
 
-import TopicItem from '../shared/GeneItem'
-import FooterProgress from '../shared/FooterProgress'
+import TopicItem from '../../component/GeneItem'
+import FooterProgress from '../../component/FooterProgress'
 
 const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
 

@@ -20,15 +20,14 @@ import {
 } from 'react-native';
 
 import { sync, updown, fav } from '../../dao/sync'
-import HTMLView from '../../components/HtmlToView';
+
 import { connect } from 'react-redux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import colorConfig, {
   standardColor, nodeColor, idColor, accentColor,
   getLevelColorFromProgress,
-  getAccentColorFromName,
   getContentFromTrophy
-} from '../../constants/colorConfig';
+} from '../../constant/colorConfig';
 
 import {
   getTopicAPI,
@@ -36,8 +35,8 @@ import {
   getTopicCommentSnapshotAPI,
   getBattleAPI
 } from '../../dao'
-import ImageViewer from '../../components/ImageViewer'
-import SimpleComment from '../shared/SimpleComment'
+import ImageViewer from '../../component/ImageViewer'
+import SimpleComment from '../../component/SimpleComment'
 import { getGameUrl } from '../../dao';
 
 let screen = Dimensions.get('window');

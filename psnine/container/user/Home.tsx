@@ -23,8 +23,8 @@ import {
 } from 'react-native';
 
 import { sync, updown, fav, upBase, block } from '../../dao/sync'
-import MyDialog from '../../components/Dialog'
-import HTMLView from '../../components/HtmlToView';
+
+
 import { connect } from 'react-redux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {
@@ -39,7 +39,7 @@ import {
   trophyColor3,
   trophyColor4,
   trophyColor5
-} from '../../constants/colorConfig';
+} from '../../constant/colorConfig';
 
 import { getHomeAPI } from '../../dao';
 
@@ -79,7 +79,7 @@ import {
   LayoutParamsAndroid
 } from 'mao-rn-android-kit';
 
-import ImageBackground from '../shared/ImageBackground'
+import ImageBackground from '../../component/ImageBackground'
 
 export default class Home extends Component {
 

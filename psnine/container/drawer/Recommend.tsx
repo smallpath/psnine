@@ -13,16 +13,16 @@ import {
 } from 'react-native';
 
 import { connect } from 'react-redux';
-import { getRecommend } from '../../actions/recommend.js';
-import { getTopicList } from '../../actions/community.js';
-import { standardColor, nodeColor, idColor, accentColor } from '../../constants/colorConfig';
-import { changeSegmentIndex, changeCommunityType, changeGeneType, changeCircleType } from '../../actions/app';
+import { getRecommend } from '../../redux/action/recommend.js';
+import { getTopicList } from '../../redux/action/community.js';
+import { standardColor, nodeColor, idColor, accentColor } from '../../constant/colorConfig';
+import { changeSegmentIndex, changeCommunityType, changeGeneType, changeCircleType } from '../../redux/action/app';
 
 import { getBattleURL, getGamePngURL } from '../../dao';
-import HotGameItem from '../shared/HotGameItem'
-import NodeItem from '../shared/NodeItem'
-import TipItem from '../shared/TipItem'
-import CommentItem from '../shared/LatestCommentItem'
+import HotGameItem from '../../component/HotGameItem'
+import NodeItem from '../../component/NodeItem'
+import TipItem from '../../component/TipItem'
+import CommentItem from '../../component/LatestCommentItem'
 const AnimatedSectionList = Animated.createAnimatedComponent(SectionList);
 
 let toolbarHeight = 56;

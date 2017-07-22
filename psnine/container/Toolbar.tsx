@@ -28,17 +28,17 @@ import {
   PixelRatio
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
-import MyDialog from '../components/Dialog'
+import MyDialog from '../component/Dialog'
 import nativeImageSource from 'nativeImageSource';
 
 import { connect } from 'react-redux';
 
 import NewTopic from './new/NewTopic';
 
-import { changeSegmentIndex, changeCommunityType, changeGeneType, changeCircleType } from '../actions/app';
-import { getRecommend } from '../actions/recommend';
+import { changeSegmentIndex, changeCommunityType, changeGeneType, changeCircleType } from '../redux/action/app';
+import { getRecommend } from '../redux/action/recommend';
 
-import { standardColor, accentColor } from '../constants/colorConfig';
+import { standardColor, accentColor } from '../constant/colorConfig';
 
 import RightDrawer from './RightDrawer'
 import TabContainer, { routes } from './Tab'
@@ -115,7 +115,18 @@ let tradeActions = [
   searchAction
 ]
 
-let toolbarActions = [recommendActions, communityActions, qaActions, geneActions, gameActions, battleActions, rankActions, /*circleActions,*/ storeActions, tradeActions]
+let toolbarActions = [
+  recommendActions,
+  communityActions,
+  qaActions,
+  geneActions,
+  gameActions,
+  battleActions,
+  rankActions,
+  /*circleActions,*/
+  storeActions,
+  tradeActions
+]
 
 let titlesArr = ["社区", "问答", "游戏", "约战", "机因"];
 
@@ -143,7 +154,7 @@ import {
   PopupWindowAndroid
 } from 'mao-rn-android-kit'
 
- import NestedScrollView from 'react-native-nested-scrollview';
+import NestedScrollView from 'react-native-nested-scrollview';
 
 class Toolbar extends Component {
 
@@ -245,7 +256,7 @@ class Toolbar extends Component {
       this._onSearchClicked()
     }
   }
-                  
+
   render() {
     const { app: appReducer, switchModeOnRoot, modeInfo } = this.props;
     const { segmentedIndex } = this.props.app;
@@ -254,7 +265,7 @@ class Toolbar extends Component {
     log(modeInfo.themeName, '====> Toolbar inner')
     // alert(appReducer.segmentedIndex)
     return (
-      <View style={{flex:1}}>
+      <View style={{ flex: 1 }}>
         <CoordinatorLayoutAndroid
           fitsSystemWindows={false}
           ref={this._setCoordinatorLayout}>
@@ -275,36 +286,36 @@ class Toolbar extends Component {
                 )
               }}>
               <View style={styles.toolbar}>
-              <Icon.ToolbarAndroid
-                navIconName="md-menu"
-                style={[styles.toolbar, { backgroundColor: modeInfo.standardColor, elevation: this.state.tabMode === 'tab' ? 0 : 4 }]}
-                overflowIconName="md-more"
-                iconColor={modeInfo.isNightMode ? '#000' : '#fff'}
-                actions={toolbarActions[appReducer.segmentedIndex]}
-                key={appReducer.segmentedIndex}
-                onActionSelected={this.onActionSelected}
-                onIconClicked={this.props._callDrawer()}
-              >
-                <TouchableWithoutFeedback>
-                <View style={{height: 56, flex: 1, flexDirection: 'column', justifyContent: 'center'}}>
-                  <Text style={{fontSize: 20, fontWeight: '300', color: modeInfo.isNightMode ? '#000' : '#fff'}} onPress={() => {
-                      const index = this._currentViewPagerPageIndex
-                      const callback = this.afterEachHooks[index]
-                      {/*log(callback, this.state.afterEachHooks, index)*/}
-                      typeof callback === 'function' && callback()
-                    }}>
-                    {title}
-                  </Text>
-                  {this.state.search && <Text
-                    onPress={() => {
-                      this._onSearch('')
-                    }}
-                    style={{fontSize: 15, color: modeInfo.isNightMode ? '#000' : '#fff'}}>
-                    {`当前搜索: ${this.state.search}`}
-                  </Text> || undefined}
-                </View>
-                </TouchableWithoutFeedback>
-              </Icon.ToolbarAndroid>
+                <Icon.ToolbarAndroid
+                  navIconName="md-menu"
+                  style={[styles.toolbar, { backgroundColor: modeInfo.standardColor, elevation: 0 }]}
+                  overflowIconName="md-more"
+                  iconColor={modeInfo.isNightMode ? '#000' : '#fff'}
+                  actions={toolbarActions[appReducer.segmentedIndex]}
+                  key={appReducer.segmentedIndex}
+                  onActionSelected={this.onActionSelected}
+                  onIconClicked={this.props._callDrawer()}
+                >
+                  <TouchableWithoutFeedback>
+                    <View style={{ height: 56, flex: 1, flexDirection: 'column', justifyContent: 'center' }}>
+                      <Text style={{ fontSize: 20, fontWeight: '300', color: modeInfo.isNightMode ? '#000' : '#fff' }} onPress={() => {
+                        const index = this._currentViewPagerPageIndex
+                        const callback = this.afterEachHooks[index]
+                        {/*log(callback, this.state.afterEachHooks, index)*/ }
+                        typeof callback === 'function' && callback()
+                      }}>
+                        {title}
+                      </Text>
+                      {this.state.search && <Text
+                        onPress={() => {
+                          this._onSearch('')
+                        }}
+                        style={{ fontSize: 15, color: modeInfo.isNightMode ? '#000' : '#fff' }}>
+                        {`当前搜索: ${this.state.search}`}
+                      </Text> || undefined}
+                    </View>
+                  </TouchableWithoutFeedback>
+                </Icon.ToolbarAndroid>
               </View>
               <View style={styles.actionBar}>
               </View>
@@ -354,7 +365,7 @@ class Toolbar extends Component {
     );
   }
 
-  _tabTexts = Object.keys(routes).map(name => ({ text: routes[name].screen.navigationOptions.tabBarLabel}))
+  _tabTexts = Object.keys(routes).map(name => ({ text: routes[name].screen.navigationOptions.tabBarLabel }))
 
   _coordinatorLayout = null;
   _appBarLayout = null;
@@ -433,7 +444,7 @@ class Toolbar extends Component {
     let page = this.refs['page_' + index];
     if (page && !page.isLoaded()) {
       page.load();
-      
+
     }
     if (index !== this.props.app.segmentedIndex) {
       this.props.dispatch(changeSegmentIndex(index))
@@ -443,7 +454,7 @@ class Toolbar extends Component {
         if (this.searchMapper[currentRouteName] !== this.state.search) {
           typeof callback === 'function' && callback(this.state.search)
           this.searchMapper[currentRouteName] = this.state.search
-        } 
+        }
       })
     }
   }
@@ -454,7 +465,7 @@ class Toolbar extends Component {
       return (
         <View
           key={index}
-          style={{backgroundColor: modeInfo.background}}>
+          style={{ backgroundColor: modeInfo.background }}>
           <Page
             ref={'page_' + index}
             tab={tab}
@@ -519,7 +530,7 @@ class Page extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      loaded:  false
+      loaded: false
     }
   }
 
@@ -592,7 +603,7 @@ const styles = StyleSheet.create({
   toolbar: {
     backgroundColor: standardColor,
     height: toolbarHeight,
-    elevation: 4,
+    elevation: 0,
   },
   segmentedView: {
     backgroundColor: '#F5FCFF',

@@ -19,17 +19,17 @@ import {
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
-import MyDialog from '../../components/Dialog'
 
-import HTMLView from '../../components/HtmlToView';
+
+
 import { connect } from 'react-redux';
-import { standardColor, nodeColor, idColor } from '../../constants/colorConfig';
+import { standardColor, nodeColor, idColor } from '../../constant/colorConfig';
 
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { getMyGameAPI } from '../../dao';
 
-import UserGameItem from '../shared/UserGameItem'
-import FooterProgress from '../shared/FooterProgress'
+import UserGameItem from '../../component/UserGameItem'
+import FooterProgress from '../../component/FooterProgress'
 
 let toolbarActions = [
   { title: '跳页', iconName: 'md-map', show: 'always' },
@@ -233,39 +233,42 @@ class UserGame extends Component {
             waitForInteractions: true
           }}
         />
-        <TouchableNativeFeedback
-          background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
-          useForeground={true}
-          onPress={() => this.setState({ modalVisible: true })}
-          onPressIn={() => {
-            this.float.setNativeProps({
-              style: {
-                elevation: 12
-              }
-            });
-          }}
-          onPressOut={() => {
-            this.float.setNativeProps({
-              style: {
-                elevation: 6
-              }
-            });
-          }}>
-          <View ref={float => this.float = float} style={{
+        <View style={{
             position: 'absolute',
             right: 16,
             bottom: 16,
             width: 56,
             height: 56,
             borderRadius: 28,
-            elevation: 6,
             justifyContent: 'center',
-            alignItems: 'center',
-            backgroundColor: modeInfo.accentColor
-          }}>
-            <Ionicons name='md-search' size={26} color={modeInfo.backgroundColor}/>
-          </View>
-        </TouchableNativeFeedback>
+            alignItems: 'center'
+          }} ref={float => this.float = float}>
+          <TouchableNativeFeedback
+            background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
+            useForeground={false}
+            onPress={() => this.setState({ modalVisible: true })}
+            onPressIn={() => {
+              this.float.setNativeProps({
+                style: {
+                  elevation: 12
+                }
+              });
+            }}
+            onPressOut={() => {
+              this.float.setNativeProps({
+                style: {
+                  elevation: 6
+                }
+              });
+            }}>
+            <View pointerEvents='box-only' style={{
+              backgroundColor: modeInfo.accentColor,
+              borderRadius: 28, width: 56, height: 56, flex: -1, justifyContent: 'center', alignItems: 'center'
+            }}>
+              <Ionicons name='md-search' size={24} color={modeInfo.backgroundColor}/>
+            </View>
+          </TouchableNativeFeedback>
+        </View>
         {this.state.modalVisible && (
           <MyDialog modeInfo={modeInfo}
             modalVisible={this.state.modalVisible}
@@ -317,33 +320,34 @@ class UserGame extends Component {
                     )
                   })
                 }
-                {/* <View style={{ width: SCREEN_WIDTH / 2 , flexDirection: 'row', justifyContent: 'center'}}>
-                  <TextInput numberOfLines={1}
-                    onSubmitEditing={this.search}
-                    onChange={({ nativeEvent }) => { this.setState({ text: nativeEvent.text }) }}
-                    value={this.state.text}
-                    style={[styles.textInput, {
-                      color: modeInfo.titleTextColor,
-                      textAlign: 'left',
-                      padding: 2,
-                      flex: 1
-                    }]}
-                    placeholderTextColor={modeInfo.standardTextColor}
-                    // underlineColorAndroid={accentColor}
-                    underlineColorAndroid={modeInfo.accentColor}
-                  />
+                <View style={{ alignSelf: 'stretch', justifyContent: 'center' }}>
                   <TouchableNativeFeedback
-                      useForeground={true} 
-                      background={TouchableNativeFeedback.SelectableBackgroundBorderless()} 
-                      onPress={this.search}>
-                      <View style={{ flex: -1, padding: 4, paddingHorizontal: 6,
-                        margin: 4,
-                        backgroundColor: modeInfo.standardColor,
-                        borderRadius: 2 }}>
-                        <Text style={{ color: modeInfo.backgroundColor, textAlignVertical: 'center' }}>搜索</Text>
-                      </View>
-                    </TouchableNativeFeedback>
-                </View> */}
+                    useForeground={true} 
+                    background={TouchableNativeFeedback.SelectableBackgroundBorderless()} 
+                    onPress={this.goToSearch}>
+                    <View pointerEvents='box-only' style={{ flex: 0, padding: 4, paddingHorizontal: 6,
+                      margin: 4,
+                      backgroundColor: modeInfo.standardColor,
+                      borderRadius: 2,
+                      alignSelf: 'stretch'
+                    }}>
+                      <Text style={{ color: modeInfo.backgroundColor, textAlign: 'center',textAlignVertical: 'center' }}>搜索</Text>
+                    </View>
+                  </TouchableNativeFeedback>
+                  { this.state.text && <TouchableNativeFeedback
+                    useForeground={true} 
+                    background={TouchableNativeFeedback.SelectableBackgroundBorderless()} 
+                    onPress={() => this.search('')}>
+                    <View pointerEvents='box-only' style={{ flex: 0, padding: 4, paddingHorizontal: 6,
+                      margin: 4,
+                      backgroundColor: modeInfo.standardColor,
+                      borderRadius: 2,
+                      alignSelf: 'stretch'
+                    }}>
+                      <Text style={{ color: modeInfo.backgroundColor, textAlign: 'center',textAlignVertical: 'center' }}>清空搜索</Text>
+                    </View>
+                  </TouchableNativeFeedback> || undefined}
+                </View>
               </View>
             )} />
         )}
@@ -351,13 +355,27 @@ class UserGame extends Component {
     )
   }
 
-  search = () => {
+  search = (text) => {
     this.setState({
-      modalVisible: false
+      modalVisible: false,
+      text
     }, () => {
       const { pf, ob, dlc, text } = this.state
       this.URL = this.originURL + `?${text ? 'title=' + text + '&' : ''}pf=${pf}&ob=${ob}&dlc=${dlc}&page=1`
       this.fetchMessages(this.URL, 'jump')
+    })
+  }
+
+  goToSearch = async () => {
+    await this.setState({ modalVisible: false })
+    this.props.screenProps.navigation.navigate('Search', {
+      callback: (text) => {
+        if (text === this.state.text) return
+        this.search(text)
+      },
+      content: this.state.text,
+      placeholder: '搜索游戏',
+      shouldSeeBackground: true
     })
   }
 }

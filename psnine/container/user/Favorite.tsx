@@ -18,26 +18,26 @@ import {
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
-import MyDialog from '../../components/Dialog'
 
-import HTMLView from '../../components/HtmlToView';
+
+
 import { connect } from 'react-redux';
-import { standardColor, nodeColor, idColor } from '../../constants/colorConfig';
+import { standardColor, nodeColor, idColor } from '../../constant/colorConfig';
 
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { getFavoriteAPI } from '../../dao';
 
-import TopicItem from '../shared/CommunityItem'
-import GeneItem from '../shared/GeneItem'
-import RankItem from '../shared/RankItem'
-import QaItem from '../shared/QaItem'
+import TopicItem from '../../component/CommunityItem'
+import GeneItem from '../../component/GeneItem'
+import RankItem from '../../component/RankItem'
+import QaItem from '../../component/QaItem'
 const Mapper = {
   'topic': TopicItem,
   'gene' : GeneItem,
   'psnid': RankItem,
   'qa': QaItem
 }
-import FooterProgress from '../shared/FooterProgress'
+import FooterProgress from '../../component/FooterProgress'
 import { fav } from '../../dao/sync'
 
 let toolbarActions = [

@@ -14,16 +14,16 @@ import {
 } from 'react-native';
 
 import { connect } from 'react-redux';
-import { getQAList } from '../../actions/qa.js';
-import { standardColor, nodeColor, idColor } from '../../constants/colorConfig';
+import { getQAList } from '../../redux/action/qa.js';
+import { standardColor, nodeColor, idColor } from '../../constant/colorConfig';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 import { getQAUrl } from '../../dao';
 
-import { changeScrollType } from '../../actions/app';
+import { changeScrollType } from '../../redux/action/app';
 
-import TopicItem from '../shared/QaItem'
-import FooterProgress from '../shared/FooterProgress'
+import TopicItem from '../../component/QaItem'
+import FooterProgress from '../../component/FooterProgress'
 
 const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
 

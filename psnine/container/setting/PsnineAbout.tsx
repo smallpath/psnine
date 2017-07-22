@@ -11,7 +11,7 @@ import {
 
 import { connect } from 'react-redux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { standardColor, accentColor } from '../../constants/colorConfig';
+import { standardColor, accentColor } from '../../constant/colorConfig';
 
 import { pngPrefix, getDealURL, getHappyPlusOneURL, getStoreURL } from '../../dao';
 

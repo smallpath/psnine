@@ -24,8 +24,8 @@ import {
 } from 'react-native';
 
 import { sync } from '../../dao/sync'
-import MyDialog from '../../components/Dialog'
-import HTMLView from '../../components/HtmlToView';
+
+
 import { connect } from 'react-redux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {
@@ -40,7 +40,7 @@ import {
   trophyColor3,
   trophyColor4,
   trophyColor5
-} from '../../constants/colorConfig';
+} from '../../constant/colorConfig';
 
 import { getGameNewTopicAPI } from '../../dao';
 
@@ -84,7 +84,7 @@ import {
 
 const limit = 160 // - toolbarHeight
 
-import ImageBackground from '../shared/ImageBackground'
+import ImageBackground from '../../component/ImageBackground'
 
 export default class Home extends Component {
 

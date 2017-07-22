@@ -14,7 +14,8 @@
     "strictNullChecks": true,
     "noImplicitThis": true,
     "sourceMap": true,
-    "allowJs": true
+    "allowJs": true,
+    "baseUrl": "."
   },
   "filesGlob": [
     "psnine/**/*.ts",

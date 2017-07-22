@@ -18,20 +18,20 @@ import {
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
-import MyDialog from '../../components/Dialog'
 
-import HTMLView from '../../components/HtmlToView';
+
+
 import { connect } from 'react-redux';
-import { standardColor, nodeColor, idColor } from '../../constants/colorConfig';
+import { standardColor, nodeColor, idColor } from '../../constant/colorConfig';
 
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { getIssueAPI, getTopicURL } from '../../dao';
 
-import TopicItem from '../shared/CommunityItem'
-import GeneItem from '../shared/GeneItem'
-import TradeItem from '../shared/TradeItem'
-import BattleItem from '../shared/BattleItem'
-import QaItem from '../shared/QaItem'
+import TopicItem from '../../component/CommunityItem'
+import GeneItem from '../../component/GeneItem'
+import TradeItem from '../../component/TradeItem'
+import BattleItem from '../../component/BattleItem'
+import QaItem from '../../component/QaItem'
 const Mapper = {
   'topic': TopicItem,
   'gene' : GeneItem,
@@ -39,7 +39,7 @@ const Mapper = {
   'trade': TradeItem,
   'qa': QaItem
 }
-import FooterProgress from '../shared/FooterProgress'
+import FooterProgress from '../../component/FooterProgress'
 
 let toolbarActions = [
   { title: '类型', iconName: 'md-funnel', show: 'always' },

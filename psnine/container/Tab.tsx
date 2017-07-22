@@ -21,9 +21,9 @@ import {
   titleTextColor,
   standardTextColor,
   standardColor
-} from '../constants/colorConfig'
+} from '../constant/colorConfig'
 
-import { changeSegmentIndex } from '../actions/app';
+import { changeSegmentIndex } from '../redux/action/app';
 
 import Recommend from './drawer/Recommend';
 import Community from './drawer/Community';

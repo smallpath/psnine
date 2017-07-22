@@ -32,7 +32,7 @@ import colorConfig, {
   accentColor,
   levelColor,
   rankColor,
-} from '../constants/colorConfig';
+} from '../constant/colorConfig';
 
 
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -282,7 +282,7 @@ class navigationDrawer extends Component {
     const backupInfo = {
       psnid: '',
       userInfo: {
-        avatar: require('../../psnine/img/comment_avatar.png'),
+        avatar: require('../../art/comment_avatar.png'),
         platinum: '白',
         gold: '金',
         silver: '银',

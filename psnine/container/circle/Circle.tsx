@@ -25,8 +25,8 @@ import {
 } from 'react-native';
 
 import { sync } from '../../dao/sync'
-import MyDialog from '../../components/Dialog'
-import HTMLView from '../../components/HtmlToView';
+
+
 import { connect } from 'react-redux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {
@@ -36,11 +36,11 @@ import {
   accentColor,
   levelColor,
   rankColor,
-} from '../../constants/colorConfig';
+} from '../../constant/colorConfig';
 
 import { fetchNewGeneElement as getAPI } from '../../dao';
-import Item from '../shared/GeneItem'
-import FooterProgress from '../shared/FooterProgress'
+import Item from '../../component/GeneItem'
+import FooterProgress from '../../component/FooterProgress'
 // import CreateUserTab from './UserTab'
 
 let screen = Dimensions.get('window');

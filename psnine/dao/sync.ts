@@ -1,3 +1,13 @@
+import { encodeForm } from '../utils'
+
+const config = {
+  method: 'POST',
+  headers: {
+    'Accept': 'text/html,application/xhtml+xml,application/xml',
+    'Content-Type': 'application/x-www-form-urlencoded'
+  }
+}
+
 export const sync = (psnid) => {
   return fetch(`http://psnine.com/psnid/${psnid}/upgame`, {
     headers: {
@@ -17,58 +27,17 @@ export const upBase = (psnid) => {
 }
 
 export const updown = (form) => {
-  let formBody = []
-  for (let property in form) {
-    const encodedKey = encodeURIComponent(property)
-    const encodedValue = encodeURIComponent(form[property])
-    formBody.push(encodedKey + '=' + encodedValue)
-  }
-  formBody = formBody.join('&')
-  return fetch('http://psnine.com/set/updown/ajax', {
-    method: 'POST',
-    headers: {
-      'Accept': 'text/html,application/xhtml+xml,application/xml',
-      'Content-Type': 'application/x-www-form-urlencoded'
-    },
-    body: formBody
-  })
+  const formBody = encodeForm(form)
+  return fetch('http://psnine.com/set/updown/ajax', Object.assign({ body: formBody }, config))
 }
 
 export const fav = (form) => {
-  // console.log(form)
-  let formBody = []
-  for (let property in form) {
-    const encodedKey = encodeURIComponent(property)
-    const encodedValue = encodeURIComponent(form[property])
-    formBody.push(encodedKey + '=' + encodedValue)
-  }
-  formBody = formBody.join('&')
+  const formBody = encodeForm(form)
   const target = typeof form.unfav !== 'undefined' ? 'http://psnine.com/my/fav' : 'http://psnine.com/set/fav/ajax'
-  return fetch(target, {
-    method: 'POST',
-    headers: {
-      'Accept': 'text/html,application/xhtml+xml,application/xml',
-      'Content-Type': 'application/x-www-form-urlencoded'
-    },
-    body: formBody
-  })
+  return fetch(target, Object.assign({ body: formBody }, config))
 }
 export const block = (form) => {
-  // console.log(form)
-  let formBody = []
-  for (let property in form) {
-    const encodedKey = encodeURIComponent(property)
-    const encodedValue = encodeURIComponent(form[property])
-    formBody.push(encodedKey + '=' + encodedValue)
-  }
-  formBody = formBody.join('&')
+  const formBody = encodeForm(form)
   const target = typeof form.unblock !== 'undefined' ? 'http://psnine.com/my/block' : 'http://psnine.com/set/blocked/ajax'
-  return fetch(target, {
-    method: 'POST',
-    headers: {
-      'Accept': 'text/html,application/xhtml+xml,application/xml',
-      'Content-Type': 'application/x-www-form-urlencoded'
-    },
-    body: formBody
-  })
+  return fetch(target, Object.assign({ body: formBody }, config))
 }

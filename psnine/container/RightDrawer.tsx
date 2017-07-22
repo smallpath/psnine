@@ -9,7 +9,7 @@ import {
   Text
 } from 'react-native';
 
-import { changeSegmentIndex } from '../actions/app';
+import { changeSegmentIndex } from '../redux/action/app';
 
 import Recommend from './drawer/Recommend';
 import Community from './drawer/Community';

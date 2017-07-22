@@ -20,17 +20,17 @@ import {
 } from 'react-native';
 
 import { sync, updown, fav } from '../../dao/sync'
-import HTMLView from '../../components/HtmlToView';
+
 import { connect } from 'react-redux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { standardColor, nodeColor, idColor, accentColor } from '../../constants/colorConfig';
+import { standardColor, nodeColor, idColor, accentColor } from '../../constant/colorConfig';
 
 import {
   getQaTopicAPI,
   getGameUrl
 } from '../../dao'
-import ImageViewer from '../../components/ImageViewer'
-import ComplexComment from '../shared/ComplexComment'
+import ImageViewer from '../../component/ImageViewer'
+import ComplexComment from '../../component/ComplexComment'
 
 let screen = Dimensions.get('window');
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = screen;

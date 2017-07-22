@@ -19,11 +19,11 @@ import {
   Linking
 } from 'react-native';
 
-import HTMLView from '../../components/HtmlToView';
+
 import { connect } from 'react-redux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { standardColor, nodeColor, idColor, accentColor } from '../../constants/colorConfig';
-import SimpleComment from '../shared/SimpleComment'
+import { standardColor, nodeColor, idColor, accentColor } from '../../constant/colorConfig';
+import SimpleComment from '../../component/SimpleComment'
 import {
   getTradeTopicAPI as getAPI
 } from '../../dao'

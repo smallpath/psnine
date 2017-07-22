@@ -17,11 +17,11 @@ import {
 } from 'react-native';
 
 import { connect } from 'react-redux';
-import { standardColor, nodeColor, idColor, accentColor } from '../../constants/colorConfig';
+import { standardColor, nodeColor, idColor, accentColor } from '../../constant/colorConfig';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { getDetailAPI } from '../../dao';
-import CircleItem from '../shared/CircleItem'
-import HTMLView from '../../components/HtmlToView'
+import CircleItem from '../../component/CircleItem'
+
 const AnimatedSectionList = Animated.createAnimatedComponent(SectionList);
 
 let toolbarHeight = 56;

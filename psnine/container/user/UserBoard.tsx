@@ -19,15 +19,15 @@ import {
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
-import MyDialog from '../../components/Dialog'
 
-import HTMLView from '../../components/HtmlToView';
+
+
 import { connect } from 'react-redux';
-import { standardColor, nodeColor, idColor } from '../../constants/colorConfig';
+import { standardColor, nodeColor, idColor } from '../../constant/colorConfig';
 
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { getUserBoardCommentAPI } from '../../dao';
-import ComplexComment from '../shared/ComplexComment'
+import ComplexComment from '../../component/ComplexComment'
 
 const ds = new ListView.DataSource({
   rowHasChanged: (row1, row2) => row1.href !== row2.href,
@@ -109,7 +109,7 @@ class UserBoard extends Component {
       InteractionManager.runAfterInteractions(() => {
         getUserBoardCommentAPI(this.URL).then(data => {
           // console.log(data)
-          data.commentList.unshift({ id: 'new' })
+          // data.commentList.unshift({ id: 'new' })
           this.setState({
             data,
             commentList: data.commentList,
@@ -137,13 +137,7 @@ class UserBoard extends Component {
   hasComment = false
   renderComment = (rowData, index) => {
     const { modeInfo, navigation } = this.props.screenProps
-    if (index === 0) {
-      return (
-        <View key={'new'} style={{ margin: 5 }}>
-          <Button onPress={this.onPress} color={modeInfo.accentColor} title='创建' style={{color: '#0f0'}}/>
-        </View>
-      )
-    }
+    // console.log(rowData)
     return (
       <ComplexComment key={rowData.id || index} {...{
         navigation,
@@ -216,7 +210,44 @@ class UserBoard extends Component {
         >
         </FlatList>
         }
-        
+        {
+          !this.state.isLoading && <View style={{
+              position: 'absolute',
+              right: 16,
+              bottom: 16,
+              width: 56,
+              height: 56,
+              borderRadius: 28,
+              justifyContent: 'center',
+              alignItems: 'center'
+            }} ref={float => this.float = float}>
+            <TouchableNativeFeedback
+              background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
+              useForeground={false}
+              onPress={this.onPress}
+              onPressIn={() => {
+                this.float.setNativeProps({
+                  style: {
+                    elevation: 12
+                  }
+                });
+              }}
+              onPressOut={() => {
+                this.float.setNativeProps({
+                  style: {
+                    elevation: 6
+                  }
+                });
+              }}>
+              <View pointerEvents='box-only' style={{
+                backgroundColor: modeInfo.accentColor,
+                borderRadius: 28, width: 56, height: 56, flex: -1, justifyContent: 'center', alignItems: 'center'
+              }}>
+                <Ionicons name='md-create' size={22} color={modeInfo.backgroundColor}/>
+              </View>
+            </TouchableNativeFeedback>
+          </View>
+        }
       </View>
     )
   }

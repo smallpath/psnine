@@ -17,14 +17,14 @@ import {
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
-import MyDialog from '../../components/Dialog'
+
 
 import { connect } from 'react-redux';
-import { standardColor, nodeColor, idColor } from '../../constants/colorConfig';
-import HTMLView from '../../components/HtmlToView'
+import { standardColor, nodeColor, idColor } from '../../constant/colorConfig';
+
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { getGameMapperAPI, getTopicURL } from '../../dao';
-import FooterProgress from '../shared/FooterProgress'
+import FooterProgress from '../../component/FooterProgress'
 
 class TopicItem extends React.PureComponent {
 

@@ -4,7 +4,7 @@ import {
 } from 'react-native'
 
 import packages from '../../package.json'
-import cmp from '../utils/semver'
+import { semver } from '../utils/index'
 
 const versionInfo = {
   sourceCodeURL: 'https://github.com/smallpath/psnine',
@@ -16,8 +16,8 @@ const versionInfo = {
 
 export default () => fetch(versionInfo.checkVersionURL).then(res => res.json()).then(data => {
   let latestTag = (data.tag_name || versionInfo.version).replace('v', '')
-  const isBigger = cmp(versionInfo.version, latestTag) < 0
-  // const isBigger = cmp('0.6.9', '0.6.8') < 0
+  const isBigger = semver(versionInfo.version, latestTag) < 0
+  // const isBigger = semver('0.6.9', '0.6.8') < 0
   if (isBigger) {
     const date = new Date(data.published_at)
     Alert.alert(

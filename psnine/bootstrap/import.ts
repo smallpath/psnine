@@ -1,16 +1,24 @@
 import NestedScrollView from 'react-native-nested-scrollview'
 import Share from 'react-native-share'
 import LinearGradient from 'react-native-linear-gradient'
+import Icons from 'react-native-vector-icons/Ionicons'
 
-global.NestedScrollView = NestedScrollView
-global.Share = Share
-global.LinearGradient = LinearGradient
+import HTMLView from '../component/HTMLView'
+import MyDialog from '../component/Dialog'
+
+Object.assign(global, {
+  NestedScrollView,
+  Share,
+  LinearGradient,
+  HTMLView,
+  MyDialog,
+  Icons
+})
 
 import ReactNative, {
   Platform,
   TouchableNativeFeedback,
-  TouchableOpacity,
-  View
+  TouchableOpacity
 } from 'react-native'
 
 let TouchableComponent
@@ -24,10 +32,8 @@ if (Platform.OS === 'android') {
 if (TouchableComponent !== TouchableNativeFeedback) {
   TouchableComponent.SelectableBackground = () => ({})
   TouchableComponent.SelectableBackgroundBorderless = () => ({})
-  TouchableComponent.Ripple = (color, borderless) => ({})
+  TouchableComponent.Ripple = () => ({})
 }
-
-ReactNative.TouchableNativeFeedback = TouchableOpacity
 
 Object.defineProperty(ReactNative, 'TouchableNativeFeedback', {
   get: function () {

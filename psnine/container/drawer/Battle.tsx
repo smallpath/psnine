@@ -13,11 +13,11 @@ import {
 } from 'react-native';
 
 import { connect } from 'react-redux';
-import { getBattleList } from '../../actions/battle.js';
-import { standardColor, nodeColor, idColor, accentColor } from '../../constants/colorConfig';
+import { getBattleList } from '../../redux/action/battle.js';
+import { standardColor, nodeColor, idColor, accentColor } from '../../constant/colorConfig';
 
 import { getBattleURL, getGamePngURL } from '../../dao';
-import BattleItem from '../shared/BattleItem'
+import BattleItem from '../../component/BattleItem'
 const AnimatedSectionList = Animated.createAnimatedComponent(SectionList);
 
 let toolbarHeight = 56;
