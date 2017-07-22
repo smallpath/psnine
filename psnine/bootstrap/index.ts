@@ -3,7 +3,7 @@ if (__DEV__) {
   window.cancelIdleCallback = null
 }
 
-console.ignoredYellowBox = ['Warning: BackAndroid']
+console.ignoredYellowBox = ['Warning: BackAndroid', 'Warning: flattenChildren']
 
 let debug = true
 // debug = false

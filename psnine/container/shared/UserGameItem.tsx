@@ -107,7 +107,7 @@ export default class extends React.PureComponent {
                     fontSize: 10
                   }}>{rowData.allPercent}</Text>
               </View>
-              ) || undefined
+              ) || <View style={{ flex: 1 }}/>
             }
           <View style={{ flex: 1.5, justifyContent: 'center', padding: 2 }}>
             <Text selectable={false}             

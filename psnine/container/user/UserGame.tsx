@@ -12,7 +12,9 @@ import {
   InteractionManager,
   Modal,
   Slider,
-  FlatList
+  TextInput,
+  FlatList,
+  Button
 } from 'react-native';
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
@@ -48,7 +50,11 @@ class UserGame extends Component {
       isRefreshing: true,
       isLoadingMore: false,
       modalVisible: false,
-      sliderValue: 1
+      sliderValue: 1,
+      pf: 'all',
+      ob: 'date',
+      dlc: 'all',
+      text: ''
     }
   }
 
@@ -67,6 +73,7 @@ class UserGame extends Component {
       params = { ...screenProps.toolbar[1] }
     }
     this.URL = params.URL.includes('?page') ? params.URL : `${params.URL}?page=1`
+    this.originURL = params.URL
     this.fetchMessages(params.URL, 'jump');
   }
 
@@ -74,11 +81,15 @@ class UserGame extends Component {
     this.setState({
       [type === 'down' ? 'isLoadingMore' : 'isRefreshing'] : true
     }, () => {
+      // if (type !== 'down') {
+      //   this.flatlist && this.flatlist.scrollToOffset({ offset: 0, animated: true });
+      // }
       InteractionManager.runAfterInteractions(() => {
+        // alert(url)
         getMyGameAPI(url).then(data => {
           let thisList = []
-          const thisPage = parseInt((url.match(/\?page=(\d+)/) || [0, 1])[1])
-          let cb = () => { }
+          const thisPage = parseInt((url.match(/\page=(\d+)/) || [0, 1])[1])
+          let cb = () => {}
           if (type === 'down') {
             thisList = this.state.list.concat(data.list)
             this.pageArr.push(thisPage)
@@ -175,6 +186,7 @@ class UserGame extends Component {
     const { modeInfo } = this.props.screenProps
     const { URL } = this
     // console.log('Message.js rendered');
+    const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
     return (
       <View
@@ -221,6 +233,39 @@ class UserGame extends Component {
             waitForInteractions: true
           }}
         />
+        <TouchableNativeFeedback
+          background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
+          useForeground={true}
+          onPress={() => this.setState({ modalVisible: true })}
+          onPressIn={() => {
+            this.float.setNativeProps({
+              style: {
+                elevation: 12
+              }
+            });
+          }}
+          onPressOut={() => {
+            this.float.setNativeProps({
+              style: {
+                elevation: 6
+              }
+            });
+          }}>
+          <View ref={float => this.float = float} style={{
+            position: 'absolute',
+            right: 16,
+            bottom: 16,
+            width: 56,
+            height: 56,
+            borderRadius: 28,
+            elevation: 6,
+            justifyContent: 'center',
+            alignItems: 'center',
+            backgroundColor: modeInfo.accentColor
+          }}>
+            <Ionicons name='md-search' size={26} color={modeInfo.backgroundColor}/>
+          </View>
+        </TouchableNativeFeedback>
         {this.state.modalVisible && (
           <MyDialog modeInfo={modeInfo}
             modalVisible={this.state.modalVisible}
@@ -229,52 +274,76 @@ class UserGame extends Component {
             renderContent={() => (
               <View style={{
                 justifyContent: 'center',
-                alignItems: 'center',
+                alignItems: 'flex-start',
                 backgroundColor: modeInfo.backgroundColor,
                 paddingVertical: 20,
-                paddingHorizontal: 40,
+                paddingHorizontal: 20,
                 elevation: 4,
-                opacity: 1
+                opacity: 1,
+                borderRadius: 2
               }} borderRadius={2}>
-                <Text style={{ alignSelf: 'flex-start', fontSize: 18, color: modeInfo.titleTextColor }}>选择页数: {
-                  this.isValueChanged ? this.state.sliderValue : this.state.currentPage
-                }</Text>
-                <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-                  <Text style={{color: modeInfo.standardTextColor}}>{this.state.currentPage}</Text>
-                  <Slider
-                    maximumValue={this.state.numPages}
-                    minimumValue={1}
-                    maximumTrackTintColor={modeInfo.accentColor}
-                    minimumTrackTintColor={modeInfo.standardTextColor}
-                    thumbTintColor={modeInfo.accentColor}
-                    style={{
-                      paddingHorizontal: 90,
-                      height: 50
-                    }}
-                    value={this.state.currentPage}
-                    onValueChange={(value) => {
-                      this.isValueChanged = true
-                      this.setState({
-                        sliderValue: Math.round(value)
-                      })
-                    }}
+                {
+                  Object.keys(filters).map((kind, index) => {
+                    return (
+                      <View style={{flexDirection: 'row', padding: 5}} key={index}>
+                        <Text style={{color: modeInfo.standardTextColor, textAlignVertical: 'center'}}>{filters[kind].text}: </Text>
+                        {
+                          filters[kind].value.map((item, inner) => {
+                            return (
+                              <View key={inner} style={{margin: 2}}>
+                                <TouchableNativeFeedback
+                                  useForeground={true} 
+                                  background={TouchableNativeFeedback.SelectableBackgroundBorderless()} onPress={() => {
+                                  this.setState({
+                                    [kind]: item.value,
+                                    modalVisible: false
+                                  }, () => {
+                                    const { pf, ob, dlc, text } = this.state
+                                    this.URL = this.originURL + `?${text ? 'title=' + text + '&' : ''}&pf=${pf}&ob=${ob}&dlc=${dlc}&page=1`
+                                    this.fetchMessages(this.URL, 'jump')
+                                  })
+                                }}>
+                                  <View style={{ flex: -1, padding: 4, paddingHorizontal: 6,
+                                    backgroundColor: modeInfo[item.value === this.state[kind] ? 'accentColor' : 'standardColor'],
+                                    borderRadius: 2 }}>
+                                    <Text style={{ color: modeInfo.backgroundColor }}>{item.text}</Text>
+                                  </View>
+                                </TouchableNativeFeedback>
+                              </View>
+                            )
+                          })
+                        }
+                      </View>
+                    )
+                  })
+                }
+                {/* <View style={{ width: SCREEN_WIDTH / 2 , flexDirection: 'row', justifyContent: 'center'}}>
+                  <TextInput numberOfLines={1}
+                    onSubmitEditing={this.search}
+                    onChange={({ nativeEvent }) => { this.setState({ text: nativeEvent.text }) }}
+                    value={this.state.text}
+                    style={[styles.textInput, {
+                      color: modeInfo.titleTextColor,
+                      textAlign: 'left',
+                      padding: 2,
+                      flex: 1
+                    }]}
+                    placeholderTextColor={modeInfo.standardTextColor}
+                    // underlineColorAndroid={accentColor}
+                    underlineColorAndroid={modeInfo.accentColor}
                   />
-                  <Text style={{color: modeInfo.standardTextColor}}>{this.state.numPages}</Text>
-                </View>
-                <TouchableNativeFeedback onPress={() => {
-                    this.setState({
-                      modalVisible: false,
-                      isLoading: true
-                    }, () => {
-                      const currentPage = this.state.currentPage
-                      const targetPage = URL.split('=').slice(0, -1).concat(this.state.sliderValue).join('=')
-                      this.fetchMessages(targetPage, 'jump');
-                    })
-                  }}>
-                  <View style={{ alignSelf: 'flex-end', paddingHorizontal: 8, paddingVertical: 5 }}>
-                    <Text style={{color: '#009688'}}>确定</Text>
-                  </View>
-                </TouchableNativeFeedback>
+                  <TouchableNativeFeedback
+                      useForeground={true} 
+                      background={TouchableNativeFeedback.SelectableBackgroundBorderless()} 
+                      onPress={this.search}>
+                      <View style={{ flex: -1, padding: 4, paddingHorizontal: 6,
+                        margin: 4,
+                        backgroundColor: modeInfo.standardColor,
+                        borderRadius: 2 }}>
+                        <Text style={{ color: modeInfo.backgroundColor, textAlignVertical: 'center' }}>搜索</Text>
+                      </View>
+                    </TouchableNativeFeedback>
+                </View> */}
               </View>
             )} />
         )}
@@ -282,8 +351,64 @@ class UserGame extends Component {
     )
   }
 
+  search = () => {
+    this.setState({
+      modalVisible: false
+    }, () => {
+      const { pf, ob, dlc, text } = this.state
+      this.URL = this.originURL + `?${text ? 'title=' + text + '&' : ''}pf=${pf}&ob=${ob}&dlc=${dlc}&page=1`
+      this.fetchMessages(this.URL, 'jump')
+    })
+  }
 }
 
+const filters = {
+  pf: { 
+    text: '平台', 
+    value: [{
+      text: '全部',
+      value: 'all'
+    }, {
+      text: 'PSV',
+      value: 'psvita'
+    }, {
+      text: 'PS3',
+      value: 'ps3'
+    }, {
+      text: 'PS4',
+      value: 'ps4'
+    }]
+  },
+  ob: {
+    text: '排序',
+    value: [{
+      text: '最新',
+      value: 'date'
+    }, {
+      text: '进度最快',
+      value: 'ratio'
+    }, {
+      text: '进度最慢',
+      value: 'hole'
+    }, {
+      text: '完美难度',
+      value: 'difficulty'
+    }]
+  },
+  dlc: {
+    text: 'DLC',
+    value: [{
+      text: '全部',
+      value: 'all'
+    }, {
+      text: '有DLC',
+      value: 'dlc'
+    }, {
+      text: '无DLC',
+      value: 'nodlc'
+    }]
+  }
+}
 
 const styles = StyleSheet.create({
   container: {

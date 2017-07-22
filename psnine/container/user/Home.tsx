@@ -432,7 +432,7 @@ export default class Home extends Component {
 
   render() {
     const { params } = this.props.navigation.state
-    // console.log('GamePage.js rendered');
+    console.log('Home.js rendered');
     const { modeInfo } = this.props.screenProps
     const { data: source, marginTop } = this.state
     const data = []
