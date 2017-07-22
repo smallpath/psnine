@@ -11,7 +11,7 @@
     "tsc": "tsc",
     "clean": "rimraf build",
     "build": "npm run clean && npm run tsc --",
-    "watch": "tsc -w"
+    "watch": "npm run clean && tsc -w"
   },
   "dependencies": {
     "babel-plugin-transform-remove-console": "^6.8.4",

@@ -130,7 +130,8 @@ export default class Home extends Component {
     await this.setState({
       isLoading: true
     })
-    const targetColor = '#fff'
+    const targetColor = this.props.screenProps.modeInfo.isNightMode ? '#000' : '#fff'
+
     const result = await Promise.all([
       Ionicons.getImageSource('md-arrow-back', 24, targetColor),
       Ionicons.getImageSource('md-sync', 24, targetColor),
@@ -486,7 +487,7 @@ export default class Home extends Component {
                 navIcon={this.state.leftIcon}
                 overflowIcon={this.state.rightIcon}
                 title={`${params.title}`}
-                titleColor={'#fff'}
+                titleColor={modeInfo.isNightMode ? '#000' : '#fff'}
                 actions={this.toolbar}
                 layoutParams={{
                   height: 56, // required
