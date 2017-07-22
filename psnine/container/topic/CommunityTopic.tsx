@@ -534,24 +534,28 @@ class CommunityTopic extends Component {
     const list = []
     for (const item of page) {
       const thisJSX = (
-        <TouchableNativeFeedback key={item.url} background={TouchableNativeFeedback.SelectableBackgroundBorderless()} onPress={() => {
-          if (this.state.isLoading === true) {
-            return
-          }
-          this.setState({
-            isLoading: true
-          })
-          getTopicContentAPI(item.url).then(data => {
+        <View style={{margin: 2}} key={item.url}>
+          <TouchableNativeFeedback key={item.url}
+            useForeground={true} 
+            background={TouchableNativeFeedback.SelectableBackgroundBorderless()} onPress={() => {
+            if (this.state.isLoading === true) {
+              return
+            }
             this.setState({
-              mainContent: data.contentInfo.html,
-              isLoading: false
+              isLoading: true
             })
-          })
-        }}>
-          <View style={{ flex: -1, padding: 4, paddingHorizontal: 6, backgroundColor: modeInfo.standardColor, margin: 2, borderRadius: 2 }}>
-            <Text style={{ color: modeInfo.backgroundColor }}>{item.text}</Text>
-          </View>
-        </TouchableNativeFeedback>
+            getTopicContentAPI(item.url).then(data => {
+              this.setState({
+                mainContent: data.contentInfo.html,
+                isLoading: false
+              })
+            })
+          }}>
+            <View style={{ flex: -1, padding: 4, paddingHorizontal: 6, backgroundColor: modeInfo.standardColor, borderRadius: 2 }}>
+              <Text style={{ color: modeInfo.backgroundColor }}>{item.text}</Text>
+            </View>
+          </TouchableNativeFeedback>
+        </View>
       )
       list.push(thisJSX)
     }
