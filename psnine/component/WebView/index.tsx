@@ -1,25 +1,25 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import {
   StyleSheet,
   View,
   WebView,
   KeyboardAvoidingView
-} from 'react-native';
+} from 'react-native'
 
-import { connect } from 'react-redux';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import { standardColor } from '../../constant/colorConfig';
+import { connect } from 'react-redux'
+import Ionicons from 'react-native-vector-icons/Ionicons'
+import { standardColor } from '../../constant/colorConfig'
 
 let toolbarActions = [
   { title: '刷新', iconName: 'md-refresh', show: 'always' }
-];
-let title = "TOPIC";
-let WEBVIEW_REF = `WEBVIEW_REF`;
+]
+let title = 'TOPIC'
+let WEBVIEW_REF = `WEBVIEW_REF`
 
 class Deal extends Component {
 
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       isLogIn: false,
       canGoBack: false,
@@ -30,21 +30,21 @@ class Deal extends Component {
   _onActionSelected = (index) => {
     switch (index) {
       case 0:
-        return this.refs[WEBVIEW_REF].reload();
+        return this.refs[WEBVIEW_REF].reload()
     }
   }
 
   _pressButton = () => {
     if (this.state.canGoBack)
-      this.refs[WEBVIEW_REF].goBack();
+      this.refs[WEBVIEW_REF].goBack()
     else
-      this.props.navigation.goBack();
+      this.props.navigation.goBack()
   }
 
   onNavigationStateChange = (navState) => {
     this.setState({
-      canGoBack: navState.canGoBack,
-    });
+      canGoBack: navState.canGoBack
+    })
   }
 
   render() {
@@ -54,11 +54,11 @@ class Deal extends Component {
     return (
       <View style={{ flex: 1, backgroundColor: modeInfo.backgroundColor }}>
         <Ionicons.ToolbarAndroid
-          navIconName="md-arrow-back"
-          overflowIconName="md-more" iconColor={modeInfo.isNightMode ? '#000' : '#fff'}
+          navIconName='md-arrow-back'
+          overflowIconName='md-more' iconColor={modeInfo.isNightMode ? '#000' : '#fff'}
           title={params.title}
           titleColor={modeInfo.backgroundColor}
-          style={[styles.toolbar, { backgroundColor: modeInfo.standardColor, }]}
+          style={[styles.toolbar, { backgroundColor: modeInfo.standardColor }]}
           actions={toolbarActions}
           onIconClicked={this._pressButton}
           onActionSelected={this._onActionSelected}
@@ -79,21 +79,20 @@ class Deal extends Component {
           />
         {/*</KeyboardAvoidingView>*/}
       </View>
-    );
+    )
   }
 }
-
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: 'column',
-    backgroundColor: '#F5FCFF',
+    backgroundColor: '#F5FCFF'
   },
   toolbar: {
     backgroundColor: standardColor,
     height: 56,
-    elevation: 4,
+    elevation: 4
   },
   selectedTitle: {
     //backgroundColor: '#00ffff'
@@ -101,9 +100,8 @@ const styles = StyleSheet.create({
   },
   avatar: {
     width: 50,
-    height: 50,
+    height: 50
   }
-});
-
+})
 
 export default Deal

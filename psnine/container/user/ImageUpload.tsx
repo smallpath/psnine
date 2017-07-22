@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import {
   StyleSheet,
   Text,
@@ -15,18 +15,15 @@ import {
   CameraRoll,
   FlatList,
   Alert
-} from 'react-native';
+} from 'react-native'
 
-const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
+const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window')
 
+import { connect } from 'react-redux'
+import { standardColor, nodeColor, idColor } from '../../constant/colorConfig'
 
-
-
-import { connect } from 'react-redux';
-import { standardColor, nodeColor, idColor } from '../../constant/colorConfig';
-
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import { postImage } from '../../dao/post';
+import Ionicons from 'react-native-vector-icons/Ionicons'
+import { postImage } from '../../dao/post'
 
 import TopicItem from '../../component/CommunityItem'
 import GeneItem from '../../component/GeneItem'
@@ -41,14 +38,14 @@ const Mapper = {
 import FooterProgress from '../../component/FooterProgress'
 
 let toolbarActions = [
-  { title: '跳页', iconName: 'md-map', show: 'always' },
-];
+  { title: '跳页', iconName: 'md-map', show: 'always' }
+]
 
 import Item from '../../component/ImageUploadItem'
 
 export default class Photo extends Component {
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       list: [],
       numberPerPage: 60,
@@ -64,13 +61,13 @@ export default class Photo extends Component {
   }
 
   onNavClicked = (rowData) => {
-    const { navigation } = this.props;
-    navigation.goBack();
+    const { navigation } = this.props
+    navigation.goBack()
   }
 
   componentWillMount = async () => {
     const { params } = this.props.navigation.state
-    this.fetchMessages(1, 'jump');
+    this.fetchMessages(1, 'jump')
   }
 
   fetchMessages = (page = 1, type = 'down') => {
@@ -108,7 +105,7 @@ export default class Photo extends Component {
             isLoadingMore: false,
             isRefreshing: false,
             finalType: this.state.type
-          });
+          })
         })
       })
     })
@@ -116,7 +113,7 @@ export default class Photo extends Component {
 
   pageArr = [1]
   _onRefresh = () => {
-    const { URL } = this.props.navigation.state.params;
+    const { URL } = this.props.navigation.state.params
     const currentPage = this.pageArr[0] || 1
     let type = currentPage === 1 ? 'jump' : 'up'
     let targetPage = currentPage - 1
@@ -125,16 +122,16 @@ export default class Photo extends Component {
     }
     if (this.pageArr.includes(targetPage)) type = 'jump'
     if (this.state.isLoadingMore || this.state.isRefreshing) return
-    this.fetchMessages(targetPage, type);
+    this.fetchMessages(targetPage, type)
   }
 
   _onEndReached = () => {
-    const { URL } = this.props.navigation.state.params;
+    const { URL } = this.props.navigation.state.params
     const currentPage = this.pageArr[this.pageArr.length - 1]
     const targetPage = currentPage + 1
     if (targetPage > this.state.numPages) return
     if (this.state.isLoadingMore || this.state.isRefreshing) return
-    this.fetchMessages(targetPage, 'down');
+    this.fetchMessages(targetPage, 'down')
   }
 
   onActionSelected = (index) => {
@@ -146,7 +143,6 @@ export default class Photo extends Component {
       return
     }
   }
-
 
   ITEM_HEIGHT = 150 + 10
 
@@ -205,8 +201,8 @@ export default class Photo extends Component {
         onMoveShouldSetResponder={() => false}
       >
         <Ionicons.ToolbarAndroid
-          navIconName="md-arrow-back"
-          overflowIconName="md-more"
+          navIconName='md-arrow-back'
+          overflowIconName='md-more'
           iconColor={modeInfo.isNightMode ? '#000' : '#fff'}
           title={'图片上传'}
           style={[styles.toolbar, { backgroundColor: modeInfo.standardColor }]}
@@ -239,7 +235,7 @@ export default class Photo extends Component {
           windowSize={21}
           numColumns={2}
           columnWrapperStyle={{
-            flex:1
+            flex: 1
           }}
           updateCellsBatchingPeriod={1}
           initialNumToRender={42}
@@ -302,7 +298,7 @@ export default class Photo extends Component {
                     }, () => {
                       const currentPage = this.state.currentPage
                       const targetPage = params.URL.split('=').slice(0, -1).concat(this.state.sliderValue).join('=')
-                      this.fetchMessages(targetPage, 'jump');
+                      this.fetchMessages(targetPage, 'jump')
                     })
                   }}>
                   <View style={{ alignSelf: 'flex-end', paddingHorizontal: 8, paddingVertical: 5 }}>
@@ -318,17 +314,16 @@ export default class Photo extends Component {
 
 }
 
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: 'column',
-    backgroundColor: '#F5FCFF',
+    backgroundColor: '#F5FCFF'
   },
   toolbar: {
     backgroundColor: standardColor,
     height: 56,
-    elevation: 4,
+    elevation: 4
   },
   selectedTitle: {
     //backgroundColor: '#00ffff'
@@ -336,10 +331,10 @@ const styles = StyleSheet.create({
   },
   avatar: {
     width: 50,
-    height: 50,
+    height: 50
   },
   a: {
     fontWeight: '300',
-    color: idColor, // make links coloured pink
-  },
-});
+    color: idColor // make links coloured pink
+  }
+})

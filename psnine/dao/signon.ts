@@ -12,10 +12,8 @@ export const fetchSignOn = function (psnid) {
         'Accept': '*/*'
       }
     }).then((response) => {
-      setTimeout(() => {}, 0)
       return response.text()
-    })
-    .then(html => {
+    }).then(html => {
       if (html === '今天已经签过了') {
         return resolve('今天已经签过了')
       }
@@ -29,9 +27,9 @@ export const fetchSignOn = function (psnid) {
 const parseSignOn = (source, pattern) => {
   let index = source.indexOf(pattern)
   let str = ''
-  if (index != -1) {
+  if (index !== -1) {
     index += pattern.length
-    while (source[index] != '<') {
+    while (source[index] !== '<') {
       str += source[index]
       index++
     }
@@ -42,9 +40,9 @@ const parseSignOn = (source, pattern) => {
 const parseDays = (source, pattern) => {
   let index = source.indexOf(pattern)
   let str = ''
-  if (index != -1) {
+  if (index !== -1) {
     index += pattern.length
-    while (source[index] != '<') {
+    while (source[index] !== '<') {
       str += source[index]
       index++
     }
@@ -53,8 +51,7 @@ const parseDays = (source, pattern) => {
 }
 
 export const safeSignOn = async function (psnid) {
-  if (psnid == null)
-    return
+  if (typeof psnid === 'undefined') return
 
   let data = await fetchSignOn(psnid)
 

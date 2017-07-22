@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import {
   StyleSheet,
   Text,
@@ -10,18 +10,18 @@ import {
   InteractionManager,
   SectionList,
   Animated
-} from 'react-native';
+} from 'react-native'
 
-import { connect } from 'react-redux';
-import { getBattleList } from '../../redux/action/battle.js';
-import { standardColor, nodeColor, idColor, accentColor } from '../../constant/colorConfig';
+import { connect } from 'react-redux'
+import { getBattleList } from '../../redux/action/battle.js'
+import { standardColor, nodeColor, idColor, accentColor } from '../../constant/colorConfig'
 
-import { getBattleURL, getGamePngURL } from '../../dao';
+import { getBattleURL, getGamePngURL } from '../../dao'
 import BattleItem from '../../component/BattleItem'
-const AnimatedSectionList = Animated.createAnimatedComponent(SectionList);
+const AnimatedSectionList = Animated.createAnimatedComponent(SectionList)
 
-let toolbarHeight = 56;
-let releasedMarginTop = 0;
+let toolbarHeight = 56
+let releasedMarginTop = 0
 
 const renderSectionHeader = ({ section }) => {
   // console.log(section)
@@ -32,23 +32,23 @@ const renderSectionHeader = ({ section }) => {
       padding: 7,
       marginLeft: 7,
       marginRight: 7,
-      elevation: 2,
+      elevation: 2
     }}>
       <Text numberOfLines={1}
         style={{ fontSize: 20, color: section.modeInfo.standardColor, textAlign: 'left', lineHeight: 25, marginLeft: 2, marginTop: 2 }}
       >{section.key}</Text>
     </View>
-  );
+  )
 }
 
 class Battle extends Component {
   static navigationOptions = {
     tabBarLabel: '约战',
     drawerLabel: '约战'
-  };
+  }
 
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       isLoading: false
     }
@@ -56,7 +56,7 @@ class Battle extends Component {
 
   componentWillReceiveProps(nextProps) {
     if (this.props.screenProps.modeInfo.themeName != nextProps.screenProps.modeInfo.themeName) {
-      this.props.screenProps.modeInfo = nextProps.screenProps.modeInfo;
+      this.props.screenProps.modeInfo = nextProps.screenProps.modeInfo
     } else if (Object.keys(this.props.battle.battles).length < Object.keys(nextProps.battle.battles).length){
       this.setState({
         isLoading: false
@@ -75,16 +75,16 @@ class Battle extends Component {
   }
 
   componentWillMount = () => {
-    const { battle: battleReducer } = this.props;
-    if (Object.keys(battleReducer.battles).length === 0) this._onRefresh();
+    const { battle: battleReducer } = this.props
+    if (Object.keys(battleReducer.battles).length === 0) this._onRefresh()
   }
 
   _onRefresh = (type = '') => {
-    const { battle: battleReducer, dispatch } = this.props;
+    const { battle: battleReducer, dispatch } = this.props
     this.setState({
       isLoading: true
     })
-    dispatch(getBattleList());
+    dispatch(getBattleList())
   }
 
   _renderItemComponent = ({ item: rowData, index }) => {
@@ -97,12 +97,12 @@ class Battle extends Component {
   }
 
   render() {
-    const { battle: battleReducer } = this.props;
+    const { battle: battleReducer } = this.props
     const { modeInfo } = this.props.screenProps
-    let data = battleReducer.battles;
+    let data = battleReducer.battles
 
-    let keys = Object.keys(data);
-    let NUM_SECTIONS = keys.length;
+    let keys = Object.keys(data)
+    let NUM_SECTIONS = keys.length
 
     const sections = Object.keys(data).map(sectionName => {
       return {
@@ -110,7 +110,7 @@ class Battle extends Component {
         modeInfo,
         data: data[sectionName]
       }
-    });
+    })
     // console.log('?? battle rendered')
     return (
       <AnimatedSectionList
@@ -142,17 +142,16 @@ class Battle extends Component {
 const styles = StyleSheet.create({
   avatar: {
     width: 50,
-    height: 50,
+    height: 50
   }
-});
-
+})
 
 function mapStateToProps(state) {
   return {
-    battle: state.battle,
-  };
+    battle: state.battle
+  }
 }
 
 export default connect(
   mapStateToProps
-)(Battle);
+)(Battle)

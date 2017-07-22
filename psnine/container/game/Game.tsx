@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import {
   AppRegistry,
   StyleSheet,
@@ -16,42 +16,40 @@ import {
   PanResponder,
   Modal,
   Keyboard
-} from 'react-native';
+} from 'react-native'
 
-
-
-import { connect } from 'react-redux';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import colorConfig, { 
-  standardColor, nodeColor, idColor, accentColor, 
+import { connect } from 'react-redux'
+import Ionicons from 'react-native-vector-icons/Ionicons'
+import colorConfig, {
+  standardColor, nodeColor, idColor, accentColor,
   getColorFromProgress,
   getLevelColorFromProgress,
   getContentFromTrophy
-} from '../../constant/colorConfig';
+} from '../../constant/colorConfig'
 
 import {
   getGameAPI
 } from '../../dao'
 
-let screen = Dimensions.get('window');
-const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = screen;
+let screen = Dimensions.get('window')
+const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = screen
 
-let toolbarActions = [];
-let title = "TOPIC";
-let WEBVIEW_REF = `WEBVIEW_REF`;
+let toolbarActions = []
+let title = 'TOPIC'
+let WEBVIEW_REF = `WEBVIEW_REF`
 
-let toolbarHeight = 56;
-let releasedMarginTop = 0;
+let toolbarHeight = 56
+let releasedMarginTop = 0
 
-const ACTUAL_SCREEN_HEIGHT = SCREEN_HEIGHT - StatusBar.currentHeight + 1;
+const ACTUAL_SCREEN_HEIGHT = SCREEN_HEIGHT - StatusBar.currentHeight + 1
 
-let CIRCLE_SIZE = 56;
-let config = { tension: 30, friction: 7, ease: Easing.in(Easing.ease(1, 0, 1, 1)), duration: 200 };
+let CIRCLE_SIZE = 56
+let config = { tension: 30, friction: 7, ease: Easing.in(Easing.ease(1, 0, 1, 1)), duration: 200 }
 
 export default class GamePage extends Component {
 
   constructor(props) {
-    super(props);
+    super(props)
     const { navigation } = this.props
     const { params } = navigation.state
     const { selections = [], type = 'general' } = params
@@ -78,14 +76,14 @@ export default class GamePage extends Component {
         const { params } = navigation.state
         params.callbackAfterAll && params.callbackAfterAll(this.state.selections)
         navigation.goBack()
-        return;
+        return
       case 1:
         this.preFetch()
         return
       case 2:
-        return;
+        return
       case 3:
-        return;
+        return
     }
   }
 
@@ -107,7 +105,7 @@ export default class GamePage extends Component {
           isLoading: false
         })
       })
-    });
+    })
   }
 
   handleImageOnclick = (url) => this.props.navigation.navigate('ImageViewer', {
@@ -115,7 +113,6 @@ export default class GamePage extends Component {
       { url }
     ]
   })
-
 
   renderHeader = (rowData) => {
     const { modeInfo } = this.props.screenProps
@@ -128,7 +125,7 @@ export default class GamePage extends Component {
 
           }}
           useForeground={true}
-          
+
           background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
         >
           <View pointerEvents='box-only' style={{ flex: 1, flexDirection: 'row', padding: 12 }}>
@@ -138,10 +135,10 @@ export default class GamePage extends Component {
             />
 
             <View style={{ marginLeft: 10, flex: 1, flexDirection: 'column', alignContent: 'center' }}>
-              <View style={{ flexDirection: 'row', alignItems: 'flex-start',justifyContent: 'space-between' }}>
+              <View style={{ flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'space-between' }}>
                 <Text
                   ellipsizeMode={'tail'}
-                  style={{ flex: -1, color: modeInfo.titleTextColor, }}>
+                  style={{ flex: -1, color: modeInfo.titleTextColor }}>
                   {rowData.title}
                 </Text>
                 <Text selectable={false} style={{
@@ -195,27 +192,27 @@ export default class GamePage extends Component {
   renderPlayer = (rowData) => {
     const { modeInfo } = this.props.screenProps
     return (
-      <View pointerEvents='box-only' style={{ 
-        flex: 1, 
-        flexDirection: 'row', 
+      <View pointerEvents='box-only' style={{
+        flex: 1,
+        flexDirection: 'row',
         padding: 12,
         backgroundColor: modeInfo.backgroundColor
         }}>
         <View style={{ flex: 1 }}>
-          <Text style={{ color: modeInfo.titleTextColor, textAlign:'center'  }}>{rowData.psnid}</Text>
-          <Text style={{ color: modeInfo.standardTextColor, textAlign:'center' }}>{rowData.total}</Text>
+          <Text style={{ color: modeInfo.titleTextColor, textAlign: 'center'  }}>{rowData.psnid}</Text>
+          <Text style={{ color: modeInfo.standardTextColor, textAlign: 'center' }}>{rowData.total}</Text>
         </View>
         <View style={{ flex: 1 }}>
-          <Text style={{ color: modeInfo.titleTextColor, textAlign:'center' }}>{rowData.first}</Text>
-          <Text style={{ color: modeInfo.standardTextColor, textAlign:'center', fontSize: 12 }}>首个杯</Text>
+          <Text style={{ color: modeInfo.titleTextColor, textAlign: 'center' }}>{rowData.first}</Text>
+          <Text style={{ color: modeInfo.standardTextColor, textAlign: 'center', fontSize: 12 }}>首个杯</Text>
         </View>
         <View style={{ flex: 1 }}>
-          <Text style={{ color: modeInfo.titleTextColor, textAlign:'center' }}>{rowData.last}</Text>
-          <Text style={{ color: modeInfo.standardTextColor, textAlign:'center', fontSize: 12 }}>最后杯</Text>
+          <Text style={{ color: modeInfo.titleTextColor, textAlign: 'center' }}>{rowData.last}</Text>
+          <Text style={{ color: modeInfo.standardTextColor, textAlign: 'center', fontSize: 12 }}>最后杯</Text>
         </View>
         { rowData.time && (<View style={{ flex: 1 }}>
-          <Text style={{ color: modeInfo.titleTextColor, textAlign:'center' }}>{rowData.time}</Text>
-          <Text style={{ color: modeInfo.standardTextColor, textAlign:'center', fontSize: 12 }}>总耗时</Text>
+          <Text style={{ color: modeInfo.titleTextColor, textAlign: 'center' }}>{rowData.time}</Text>
+          <Text style={{ color: modeInfo.standardTextColor, textAlign: 'center', fontSize: 12 }}>总耗时</Text>
         </View>)}
       </View>
     )
@@ -223,14 +220,14 @@ export default class GamePage extends Component {
 
   renderToolbar = (list) => {
     const { modeInfo } = this.props.screenProps
-    let screen = Dimensions.get('window');
-    const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = screen;
+    let screen = Dimensions.get('window')
+    const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = screen
     return (
-      <View style={{ 
-        flex: 0, 
+      <View style={{
+        flex: 0,
         flexDirection: 'row',
         alignItems: 'center',
-        flexWrap:'wrap',
+        flexWrap: 'wrap',
         backgroundColor: modeInfo.backgroundColor
       }}>
         {list.map((item, index) => /*['讨论', '评论'].includes(item.text) && */(
@@ -243,7 +240,7 @@ export default class GamePage extends Component {
                 this.props.navigation.navigate('GamePoint', {
                   URL: `${item.url}`,
                   rowData: {
-                    id: (item.url.match(/\/psngame\/(\d+)\/comment/) || [0,-1])[1]
+                    id: (item.url.match(/\/psngame\/(\d+)\/comment/) || [0, -1])[1]
                   }
                 })
               } else if (item.text === '问答') {
@@ -264,8 +261,8 @@ export default class GamePage extends Component {
                 })
               }
             }}>
-            <View pointerEvents={'box-only'} style={{ flex: 1, alignItems:'center', justifyContent: 'center', height: 55, width: SCREEN_WIDTH / (list.length) }}  key={index}>
-              <Text style={{ color: idColor, textAlign:'left', fontSize: 12 }}>{item.text}</Text>
+            <View pointerEvents={'box-only'} style={{ flex: 1, alignItems: 'center', justifyContent: 'center', height: 55, width: SCREEN_WIDTH / (list.length) }}  key={index}>
+              <Text style={{ color: idColor, textAlign: 'left', fontSize: 12 }}>{item.text}</Text>
             </View>
           </TouchableNativeFeedback>
         ) || undefined )}
@@ -288,7 +285,7 @@ export default class GamePage extends Component {
 
           }}
           useForeground={true}
-          
+
           background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
         >
           <View pointerEvents='box-only' style={{ flex: 1, flexDirection: 'row', padding: 12 }}>
@@ -298,10 +295,10 @@ export default class GamePage extends Component {
             />
 
             <View style={{ marginLeft: 10, flex: 1, flexDirection: 'column', alignContent: 'center' }}>
-              <View style={{ flexDirection: 'row', alignItems: 'flex-start',justifyContent: 'space-between' }}>
+              <View style={{ flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'space-between' }}>
                 <Text
                   ellipsizeMode={'tail'}
-                  style={{ flex: -1, color: modeInfo.titleTextColor, }}>
+                  style={{ flex: -1, color: modeInfo.titleTextColor }}>
                   {rowData.title}
                 </Text>
               </View>
@@ -339,8 +336,8 @@ export default class GamePage extends Component {
       <TouchableNativeFeedback key={rowData.id || index} onPress={
         () => {
           if (callbackAfterAll) {
-            const target = this.state.selections.includes(rowData.indexID) ? 
-              this.state.selections.filter(item => item !== rowData.indexID) : 
+            const target = this.state.selections.includes(rowData.indexID) ?
+              this.state.selections.filter(item => item !== rowData.indexID) :
               this.state.selections.slice().concat(rowData.indexID)
             this.setState({
               selections: target
@@ -371,18 +368,18 @@ export default class GamePage extends Component {
           <View style={{ justifyContent: 'space-around', flex: 3 }}>
             <Text
               ellipsizeMode={'tail'}
-              style={{ flex: -1, color: modeInfo.titleTextColor, }}>
+              style={{ flex: -1, color: modeInfo.titleTextColor }}>
               {rowData.title}
-              { rowData.translate && <Text style={{ color: modeInfo.standardTextColor, marginLeft: 2  }}>{' '+ rowData.translate}</Text> }
-              { rowData.tip && <Text style={{ color: modeInfo.standardColor ,fontSize: 12, marginLeft: 2 }}>{' ' + rowData.tip}</Text> }
+              { rowData.translate && <Text style={{ color: modeInfo.standardTextColor, marginLeft: 2  }}>{' ' + rowData.translate}</Text> }
+              { rowData.tip && <Text style={{ color: modeInfo.standardColor , fontSize: 12, marginLeft: 2 }}>{' ' + rowData.tip}</Text> }
             </Text>
             <Text
               ellipsizeMode={'tail'}
-              style={{ flex: -1, color: modeInfo.titleTextColor, }}>
+              style={{ flex: -1, color: modeInfo.titleTextColor }}>
               {rowData.translateText || rowData.text}
             </Text>
           </View>
-          { rowData.time &&(
+          { rowData.time && (
               <View style={{ flex: 1, justifyContent: 'center', padding: 2 }}>
                 <Text selectable={false} style={{
                   flex: -1,
@@ -395,14 +392,14 @@ export default class GamePage extends Component {
             )
           }
           <View style={{ flex: 1, justifyContent: 'center', padding: 2 }}>
-            <Text selectable={false}             
-              style={{ 
-                flex: -1,             
+            <Text selectable={false}
+              style={{
+                flex: -1,
                 textAlign: 'center',
                 textAlignVertical: 'center',
-                color: modeInfo.titleTextColor, }}>{rowData.rare}</Text>
+                color: modeInfo.titleTextColor }}>{rowData.rare}</Text>
             <Text
-              ellipsizeMode={'tail'} 
+              ellipsizeMode={'tail'}
               style={{
                 flex: -1,
                 color: modeInfo.standardTextColor,
@@ -420,10 +417,10 @@ export default class GamePage extends Component {
     const { modeInfo } = this.props.screenProps
     return (
       <View key={index} style={{ backgroundColor: modeInfo.backgroundColor }}>
-        { index !== 0 && <Text style={{textAlign:'left', color: modeInfo.standardTextColor, padding: 5, paddingLeft: 10, paddingBottom: 0,fontSize: 15}}>第{index}个DLC</Text>}
+        { index !== 0 && <Text style={{textAlign: 'left', color: modeInfo.standardTextColor, padding: 5, paddingLeft: 10, paddingBottom: 0, fontSize: 15}}>第{index}个DLC</Text>}
         <View>
           { index !== 0 && this.renderGameHeader(rowData.banner, index) }
-          { rowData.list.map((item , index) => this.renderTrophy(item ,index)) }
+          { rowData.list.map((item , index) => this.renderTrophy(item , index)) }
         </View>
       </View>
     )
@@ -467,7 +464,7 @@ export default class GamePage extends Component {
     const title = params.rowData.id ? `No.${params.rowData.id}` : (params.title || params.rowData.title)
     const targetToolbar = toolbarActions.slice()
     if (params.callbackAfterAll) {
-      targetToolbar.push({ title: '确定', iconName: 'md-done-all', show: 'always' },)
+      targetToolbar.push({ title: '确定', iconName: 'md-done-all', show: 'always' })
     }
     return (
       <View
@@ -476,8 +473,8 @@ export default class GamePage extends Component {
         onMoveShouldSetResponder={() => false}
       >
         <Ionicons.ToolbarAndroid
-          navIconName="md-arrow-back"
-          overflowIconName="md-more"
+          navIconName='md-arrow-back'
+          overflowIconName='md-more'
           iconColor={modeInfo.isNightMode ? '#000' : '#fff'}
           title={title}
           titleColor={modeInfo.isNightMode ? '#000' : '#fff'}
@@ -522,21 +519,20 @@ export default class GamePage extends Component {
         </FlatList>
         }
       </View>
-    );
+    )
   }
 }
-
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: 'column',
-    backgroundColor: '#F5FCFF',
+    backgroundColor: '#F5FCFF'
   },
   toolbar: {
     backgroundColor: standardColor,
     height: 56,
-    elevation: 4,
+    elevation: 4
   },
   selectedTitle: {
     //backgroundColor: '#00ffff'
@@ -544,10 +540,10 @@ const styles = StyleSheet.create({
   },
   avatar: {
     width: 50,
-    height: 50,
+    height: 50
   },
   a: {
     fontWeight: '300',
-    color: idColor, // make links coloured pink
-  },
-});
+    color: idColor // make links coloured pink
+  }
+})

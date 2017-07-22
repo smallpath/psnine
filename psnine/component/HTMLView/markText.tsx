@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import {
   StyleSheet,
   Image,
@@ -8,9 +8,9 @@ import {
   PixelRatio,
   View,
   TouchableNativeFeedback
-} from 'react-native';
+} from 'react-native'
 
-import { standardColor, nodeColor, idColor, accentColor } from '../../constant/colorConfig';
+import { standardColor, nodeColor, idColor, accentColor } from '../../constant/colorConfig'
 
 export default class InlineImage extends Component {
   constructor(props) {
@@ -31,7 +31,7 @@ export default class InlineImage extends Component {
   }
 
   componentWillUnmount() {
-    this.mounted = false;
+    this.mounted = false
   }
 
   componentDidMount = () => {

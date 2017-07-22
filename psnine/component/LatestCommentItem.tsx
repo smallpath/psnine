@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import {
   AppRegistry,
   StyleSheet,
@@ -16,18 +16,16 @@ import {
   PanResponder,
   Modal,
   Keyboard
-} from 'react-native';
+} from 'react-native'
 
+import { connect } from 'react-redux'
+import Ionicons from 'react-native-vector-icons/Ionicons'
+import { standardColor, nodeColor, idColor, accentColor } from '../constant/colorConfig'
 
-import { connect } from 'react-redux';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import { standardColor, nodeColor, idColor, accentColor } from '../constant/colorConfig';
+import { getHomeURL } from '../dao'
 
-
-import { getHomeURL } from '../dao';
-
-let screen = Dimensions.get('window');
-const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = screen;
+let screen = Dimensions.get('window')
+const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = screen
 
 export default class PhotoItem extends React.PureComponent {
 
@@ -41,7 +39,7 @@ export default class PhotoItem extends React.PureComponent {
     navigation.navigate('GamePoint', {
       URL: `${rowData.href}`,
       rowData: {
-        id: (rowData.href.match(/\/psngame\/(\d+)\/comment/) || [0,-1])[1]
+        id: (rowData.href.match(/\/psngame\/(\d+)\/comment/) || [0, -1])[1]
       }
     })
   }
@@ -55,13 +53,13 @@ export default class PhotoItem extends React.PureComponent {
         onPress={this.onPress}
         background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
       >
-        <View style={{ 
-          flex: -1, flexDirection: 'row', padding: 2, alignItems: 'center', 
+        <View style={{
+          flex: -1, flexDirection: 'row', padding: 2, alignItems: 'center',
           alignSelf: 'flex-start',
           alignContent: 'flex-end',
           backgroundColor: modeInfo.backgroundColor,
           height: 56,
-          width: width 
+          width: width
         }}>
           <Image
             source={{ uri: rowData.img || rowData.href }}
@@ -88,6 +86,6 @@ export default class PhotoItem extends React.PureComponent {
 const styles = StyleSheet.create({
   avatar: {
     width: 91,
-    height: 50,
+    height: 50
   }
-});
+})

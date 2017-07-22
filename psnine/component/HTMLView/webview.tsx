@@ -11,26 +11,24 @@ import {
   ToastAndroid
 } from 'react-native'
 
+import Ionicons from 'react-native-vector-icons/Ionicons'
 
-import Ionicons from 'react-native-vector-icons/Ionicons';
-
-let WEBVIEW_REF = `WEBVIEW_REF`;
+let WEBVIEW_REF = `WEBVIEW_REF`
 let toolbarActions = [
   { title: '刷新', iconName: 'md-refresh', show: 'always' },
-  { title: '在浏览器中打开', show: 'never' },
-];
-let title = "TOPIC";
-
+  { title: '在浏览器中打开', show: 'never' }
+]
+let title = 'TOPIC'
 
 // 显示embed和iframe内容的Modal组件
 export default props => {
-  const width = Number(props.attribs['width']) || Number(props.attribs['data-width']) || 0;
-  const height = Number(props.attribs['height']) || Number(props.attribs['data-height']) || 0;
+  const width = Number(props.attribs.width) || Number(props.attribs['data-width']) || 0
+  const height = Number(props.attribs.height) || Number(props.attribs['data-height']) || 0
 
   const imgStyle = {
     width,
-    height,
-  };
+    height
+  }
 
   const value = `<html><head></head><body><${props.name} ` + Object.keys(props.attribs).map(name => `${name}="${props.attribs[name]}"`).join(' ') + '/></body></html>'
 
@@ -43,8 +41,8 @@ export default props => {
       url={props.attribs.src}
       modeInfo={props.modeInfo}
     />
-  );
-};
+  )
+}
 
 class HtmlView extends Component {
   constructor(props) {
@@ -66,8 +64,8 @@ class HtmlView extends Component {
   _onActionSelected = (index) => {
     switch (index) {
       case 0:
-        return this.webview.reload();
-      case 1:Linking
+        return this.webview.reload()
+      case 1: Linking
         return Linking.openURL(this.props.url).catch(err => global.toast && global.toast())
     }
   }
@@ -89,7 +87,7 @@ class HtmlView extends Component {
       this.setState({
         modalVisible: false,
         canGoBack: false
-      });
+      })
     }
     let title = '打开网页'
     const { url } = this.props
@@ -102,7 +100,7 @@ class HtmlView extends Component {
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', padding: 5, alignSelf: 'center', alignContent: 'center'  }}>
         <Button color={this.props.modeInfo.accentColor} style={{
 
-        }} title={resolved.title} onPress={() => { 
+        }} title={resolved.title} onPress={() => {
           return this.props.linkPressHandler(url)
         }}></Button>
         {this.state.modalVisible && (
@@ -118,8 +116,8 @@ class HtmlView extends Component {
                 opacity: 1
               }} borderRadius={2}>
                 <Ionicons.ToolbarAndroid
-                  navIconName="md-close"
-                  overflowIconName="md-more"
+                  navIconName='md-close'
+                  overflowIconName='md-more'
                   iconColor={this.props.modeInfo.isNightMode ? '#000' : '#fff'}
                   title={this.state.title}
                   titleColor={this.props.modeInfo.isNightMode ? '#000' : '#fff'}
@@ -152,7 +150,7 @@ class HtmlView extends Component {
             )} />
         )}
       </View>
-    );
+    )
   }
 }
 
@@ -160,11 +158,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: 'column',
-    backgroundColor: '#F5FCFF',
+    backgroundColor: '#F5FCFF'
   },
   toolbar: {
     height: 56,
-    elevation: 4,
+    elevation: 4
   },
   selectedTitle: {
     //backgroundColor: '#00ffff'
@@ -172,9 +170,9 @@ const styles = StyleSheet.create({
   },
   avatar: {
     width: 50,
-    height: 50,
+    height: 50
   }
-});
+})
 
 HtmlView.propTypes = {
   value: PropTypes.string,
@@ -188,5 +186,5 @@ HtmlView.propTypes = {
 HtmlView.defaultProps = {
   onLinkPress: url => Linking.openURL(url),
   onError: console.error.bind(console),
-  defaultTextColor: '#000',
+  defaultTextColor: '#000'
 }

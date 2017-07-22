@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import {
   StyleSheet,
   Text,
@@ -26,33 +26,33 @@ import {
   ViewPagerAndroid,
   Platform,
   PixelRatio
-} from 'react-native';
-import Icon from 'react-native-vector-icons/Ionicons';
+} from 'react-native'
+import Icon from 'react-native-vector-icons/Ionicons'
 import MyDialog from '../component/Dialog'
-import nativeImageSource from 'nativeImageSource';
+import nativeImageSource from 'nativeImageSource'
 
-import { connect } from 'react-redux';
+import { connect } from 'react-redux'
 
-import NewTopic from './new/NewTopic';
+import NewTopic from './new/NewTopic'
 
-import { changeSegmentIndex, changeCommunityType, changeGeneType, changeCircleType } from '../redux/action/app';
-import { getRecommend } from '../redux/action/recommend';
+import { changeSegmentIndex, changeCommunityType, changeGeneType, changeCircleType } from '../redux/action/app'
+import { getRecommend } from '../redux/action/recommend'
 
-import { standardColor, accentColor } from '../constant/colorConfig';
+import { standardColor, accentColor } from '../constant/colorConfig'
 
 import RightDrawer from './RightDrawer'
 import TabContainer, { routes } from './Tab'
 
-let screen = Dimensions.get('window');
+let screen = Dimensions.get('window')
 
-const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = screen;
+const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = screen
 
-const ACTUAL_SCREEN_HEIGHT = SCREEN_HEIGHT - StatusBar.currentHeight + 1;
+const ACTUAL_SCREEN_HEIGHT = SCREEN_HEIGHT - StatusBar.currentHeight + 1
 
-let title = "PSNINE";
-let isMounted = false;
-let indexWithFloatButton = [0, 1, 3, 4];
-let indexWithoutFloatButton = [2];
+let title = 'PSNINE'
+let isMounted = false
+let indexWithFloatButton = [0, 1, 3, 4]
+let indexWithoutFloatButton = [2]
 
 const searchAction = { title: '搜索', iconName: 'md-search', value: '', show: 'always' }
 
@@ -72,30 +72,30 @@ let communityActions = [
   { title: '开箱', value: 'openbox', show: 'never' },
   { title: '游列', value: 'gamelist', show: 'never' },
   { title: '活动', value: 'event', show: 'never' }
-];
+]
 
 let qaActions = [
   { title: '新建', iconName: 'md-create', value: '', show: 'always', iconSize: 22 },
-  searchAction,
-];
+  searchAction
+]
 
 let gameActions = [
-  searchAction,
-];
+  searchAction
+]
 
 let rankActions = [
   { title: '新建', iconName: 'md-create', value: '', show: 'always', iconSize: 22 },
-  searchAction,
-];
+  searchAction
+]
 
 let battleActions = [
-  { title: '新建', iconName: 'md-create', value: '', show: 'always', iconSize: 22 },
-];
+  { title: '新建', iconName: 'md-create', value: '', show: 'always', iconSize: 22 }
+]
 
 let geneActions = [
   { title: '新建', iconName: 'md-create', value: '', show: 'always', iconSize: 22 },
   searchAction
-];
+]
 
 // let circleActions = [
 //   searchAction,
@@ -128,20 +128,19 @@ let toolbarActions = [
   tradeActions
 ]
 
-let titlesArr = ["社区", "问答", "游戏", "约战", "机因"];
+let titlesArr = ['社区', '问答', '游戏', '约战', '机因']
 
 const ds = new ListView.DataSource({
-  rowHasChanged: (row1, row2) => row1 !== row2,
-});
+  rowHasChanged: (row1, row2) => row1 !== row2
+})
 
 let clamp = (value, min, max) => {
-  return Math.min(Math.max(value, min), max);
-};
+  return Math.min(Math.max(value, min), max)
+}
 
-
-let toolbarHeight = 56;
-let releasedMarginTop = 0;
-let config = { tension: 30, friction: 7, ease: Easing.in(Easing.ease(1, 0, 1, 1)), duration: 200 };
+let toolbarHeight = 56
+let releasedMarginTop = 0
+let config = { tension: 30, friction: 7, ease: Easing.in(Easing.ease(1, 0, 1, 1)), duration: 200 }
 const timeout = 190
 const delay = 50
 
@@ -154,12 +153,12 @@ import {
   PopupWindowAndroid
 } from 'mao-rn-android-kit'
 
-import NestedScrollView from 'react-native-nested-scrollview';
+import NestedScrollView from 'react-native-nested-scrollview'
 
 class Toolbar extends Component {
 
   constructor(props) {
-    super(props);
+    super(props)
 
     this.state = {
       search: '',
@@ -174,7 +173,7 @@ class Toolbar extends Component {
       topicMarginTop: new Animated.Value(0),
       tabMode: this.props.modeInfo.settingInfo.tabMode,
       _scrollHeight: this.props.modeInfo.height - StatusBar.currentHeight - 38 + 1
-      // _scrollHeight: 
+      // _scrollHeight:
     }
   }
 
@@ -183,12 +182,11 @@ class Toolbar extends Component {
 
   componentWillMount = () => {
     this.props.dispatch(getRecommend())
-    this._pages.length = 0;
+    this._pages.length = 0
   }
 
-
   componentWillReceiveProps(nextProps) {
-    // this.props.app = 
+    // this.props.app =
     // console.log('??? receving', nextProps.app.segmentedIndex, this.props.app.segmentedIndex)
     if (this.state.tabMode !== nextProps.modeInfo.settingInfo.tabMode) {
       this.setState({
@@ -221,13 +219,13 @@ class Toolbar extends Component {
   }
 
   onActionSelected = (index) => {
-    const { segmentedIndex, communityType } = this.props.app;
+    const { segmentedIndex, communityType } = this.props.app
     // console.log(segmentedIndex)
-    const { dispatch } = this.props;
+    const { dispatch } = this.props
     if (segmentedIndex === 1) {
       if (index !== 0 && index !== 1) {
-        let type = toolbarActions[segmentedIndex][index].value;
-        dispatch(changeCommunityType(type));
+        let type = toolbarActions[segmentedIndex][index].value
+        dispatch(changeCommunityType(type))
       } else {
         index === 1 && this._onSearchClicked()
         const obj = {}
@@ -241,8 +239,8 @@ class Toolbar extends Component {
       index === 1 && this._onSearchClicked()
     } else if (segmentedIndex === 3) {
       if (index !== 0 && index !== 1) {
-        let type = toolbarActions[segmentedIndex][index].value;
-        dispatch(changeGeneType(type));
+        let type = toolbarActions[segmentedIndex][index].value
+        dispatch(changeGeneType(type))
       } else {
         index === 1 && this._onSearchClicked()
         index === 0 && this.props.navigation.navigate('NewGene', {})
@@ -258,8 +256,8 @@ class Toolbar extends Component {
   }
 
   render() {
-    const { app: appReducer, switchModeOnRoot, modeInfo } = this.props;
-    const { segmentedIndex } = this.props.app;
+    const { app: appReducer, switchModeOnRoot, modeInfo } = this.props
+    const { segmentedIndex } = this.props.app
     const { openVal } = this.state
     const tipHeight = toolbarHeight * 0.8
     log(modeInfo.themeName, '====> Toolbar inner')
@@ -287,9 +285,9 @@ class Toolbar extends Component {
               }}>
               <View style={styles.toolbar}>
                 <Icon.ToolbarAndroid
-                  navIconName="md-menu"
+                  navIconName='md-menu'
                   style={[styles.toolbar, { backgroundColor: modeInfo.standardColor, elevation: 0 }]}
-                  overflowIconName="md-more"
+                  overflowIconName='md-more'
                   iconColor={modeInfo.isNightMode ? '#000' : '#fff'}
                   actions={toolbarActions[appReducer.segmentedIndex]}
                   key={appReducer.segmentedIndex}
@@ -323,10 +321,10 @@ class Toolbar extends Component {
             <View
               style={styles.tabBar}>
               <TabLayoutAndroid
-                tabMode="scrollable"
-                tabSelectedTextColor="#fff"
-                tabIndicatorColor="#fff"
-                tabTextColor="rgba(255, 255, 255, .6)"
+                tabMode='scrollable'
+                tabSelectedTextColor='#fff'
+                tabIndicatorColor='#fff'
+                tabTextColor='rgba(255, 255, 255, .6)'
                 tabIndicatorHeight={2}
 
                 tabSidePadding={22}
@@ -362,24 +360,23 @@ class Toolbar extends Component {
           </View>
         </PopupWindowAndroid>
       </View>
-    );
+    )
   }
 
   _tabTexts = Object.keys(routes).map(name => ({ text: routes[name].screen.navigationOptions.tabBarLabel }))
 
-  _coordinatorLayout = null;
-  _appBarLayout = null;
-  _scrollView = null;
-  _viewPager = null;
-  _menuPopup = null;
-  _menuBtn = null;
-  _tabLayout = null;
-  _pages = [];
-  _currentViewPagerPageIndex = 0;
-
+  _coordinatorLayout = null
+  _appBarLayout = null
+  _scrollView = null
+  _viewPager = null
+  _menuPopup = null
+  _menuBtn = null
+  _tabLayout = null
+  _pages = []
+  _currentViewPagerPageIndex = 0
 
   _handleMenuButtonPess = () => {
-    this._menuPopup.showAsDropdown(this._menuBtn, 0, -10);
+    this._menuPopup.showAsDropdown(this._menuBtn, 0, -10)
   }
 
   _setMenuBtn = component => {
@@ -387,43 +384,43 @@ class Toolbar extends Component {
   }
 
   _handleMenuItemPress = () => {
-    this._menuPopup.hide();
+    this._menuPopup.hide()
   }
 
   _setMenuPopup = component => {
-    this._menuPopup = component;
+    this._menuPopup = component
   }
 
   _setCoordinatorLayout = component => {
-    this._coordinatorLayout = component;
-  };
+    this._coordinatorLayout = component
+  }
 
   _setAppBarLayout = component => {
-    this._appBarLayout = component;
-  };
+    this._appBarLayout = component
+  }
 
   _setTabLayout = component => {
-    this._tabLayout = component;
+    this._tabLayout = component
   }
 
   _setScrollView = component => {
-    this._scrollView = component;
+    this._scrollView = component
   }
 
   _setViewPager = component => {
-    this._viewPager = component;
+    this._viewPager = component
   }
 
   _addPage = component => {
-    this._pages.push(component);
+    this._pages.push(component)
   }
 
   _handleViewPagerPageScroll = event => {
-    let nativeEvent = event.nativeEvent;
-    let offset = nativeEvent.offset;
+    let nativeEvent = event.nativeEvent
+    let offset = nativeEvent.offset
 
     if (offset >= 0.60) {
-      this._currentViewPagerPageIndex = nativeEvent.position + 1;
+      this._currentViewPagerPageIndex = nativeEvent.position + 1
     } else {
       this._currentViewPagerPageIndex = nativeEvent.position
     }
@@ -431,19 +428,19 @@ class Toolbar extends Component {
 
   _handleViewPagerPageScrollStateChanged = scrollState => {
     if (scrollState === 'settling') {
-      this._loadPage(this._currentViewPagerPageIndex);
+      this._loadPage(this._currentViewPagerPageIndex)
     }
   }
 
   _handleViewPagerPageSelected = event => {
-    let nativeEvent = event.nativeEvent;
-    this._loadPage(nativeEvent.position);
+    let nativeEvent = event.nativeEvent
+    this._loadPage(nativeEvent.position)
   }
 
   _loadPage(index) {
-    let page = this.refs['page_' + index];
+    let page = this.refs['page_' + index]
     if (page && !page.isLoaded()) {
-      page.load();
+      page.load()
 
     }
     if (index !== this.props.app.segmentedIndex) {
@@ -505,7 +502,7 @@ class Toolbar extends Component {
             key={index} />
         </View>
       )
-    });
+    })
   }
 
   componentDidMount() {
@@ -513,7 +510,7 @@ class Toolbar extends Component {
     this._tabLayout.setViewPager(this._viewPager, this._tabTexts)
     this._viewPager.setPageWithoutAnimation(1)
     // this._viewPager.setViewSize
-    this.refs['page_1'].load();
+    this.refs.page_1.load()
     this._currentViewPagerPageIndex = 1
 
     // this.props.navigation.navigate('Home', {
@@ -522,7 +519,6 @@ class Toolbar extends Component {
     //   URL: `http://psnine.com/psnid/${'secondlife_xhm'}`
     // })
   }
-
 
 }
 
@@ -543,18 +539,18 @@ class Page extends Component {
   }
 
   render() {
-    let content = null;
+    let content = null
     if (this.state.loaded) {
       content = this._getContent()
     } else {
       content = <View></View>
     }
 
-    return content;
+    return content
   }
 
   isLoaded() {
-    return this.state.loaded;
+    return this.state.loaded
   }
 
   load() {
@@ -564,7 +560,7 @@ class Page extends Component {
 
     this.setState({
       loaded: true
-    });
+    })
   }
 
   _getContent() {
@@ -584,44 +580,42 @@ class Page extends Component {
 
 function mapStateToProps(state) {
   return {
-    app: state.app,
-  };
+    app: state.app
+  }
 }
-
 
 export default connect(
   mapStateToProps
-)(Toolbar);
-
+)(Toolbar)
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: 'column',
-    backgroundColor: '#F5FCFF',
+    backgroundColor: '#F5FCFF'
   },
   toolbar: {
     backgroundColor: standardColor,
     height: toolbarHeight,
-    elevation: 0,
+    elevation: 0
   },
   segmentedView: {
-    backgroundColor: '#F5FCFF',
+    backgroundColor: '#F5FCFF'
   },
   selectedTitle: {
     //backgroundColor: '#00ffff'
     //fontSize: 20
   },
   appbar: {
-    backgroundColor: "#2278F6"
+    backgroundColor: '#2278F6'
   },
 
   avatar: {
     width: 50,
-    height: 50,
+    height: 50
   },
   navbar: {
-    height: 56,
+    height: 56
     // alignItems: "center",
     // justifyContent: "center",
     // backgroundColor: "transparent",
@@ -668,7 +662,6 @@ const styles = StyleSheet.create({
     tintColor: 'rgba(255, 255, 255, .8)'
   },
 
-
   menu: {
     width: 150,
     backgroundColor: 'rgba(0, 0, 0, 0.8)'
@@ -680,7 +673,7 @@ const styles = StyleSheet.create({
   },
 
   scrollView: {
-    backgroundColor: "#f2f2f2"
+    backgroundColor: '#f2f2f2'
   },
 
   viewPager: {
@@ -703,4 +696,4 @@ const styles = StyleSheet.create({
     fontSize: 30,
     color: '#FFF'
   }
-});
+})

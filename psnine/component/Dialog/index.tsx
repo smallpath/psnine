@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import {
   StyleSheet,
   Text,
@@ -6,23 +6,23 @@ import {
   Dimensions,
   TouchableNativeFeedback,
   Modal
-} from 'react-native';
+} from 'react-native'
 
-import { standardColor, nodeColor, idColor } from '../../constant/colorConfig';
+import { standardColor, nodeColor, idColor } from '../../constant/colorConfig'
 
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import Ionicons from 'react-native-vector-icons/Ionicons'
 
 class Dialog extends Component {
   constructor(props) {
-    super(props);
+    super(props)
   }
 
   render() {
     const { modeInfo, renderContent, onRequestClose, onDismiss } = this.props
-    const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
+    const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window')
     return (
       <Modal
-        animationType={"fade"}
+        animationType={'fade'}
         transparent={this.props.transparent || true}
         visible={this.props.modalVisible}
         onRequestClose={onRequestClose}
@@ -54,6 +54,6 @@ class Dialog extends Component {
 
 }
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({})
 
-export default Dialog;
+export default Dialog

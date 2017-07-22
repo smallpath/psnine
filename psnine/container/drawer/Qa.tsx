@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import {
   StyleSheet,
   Text,
@@ -11,34 +11,34 @@ import {
   Picker,
   FlatList,
   Animated
-} from 'react-native';
+} from 'react-native'
 
-import { connect } from 'react-redux';
-import { getQAList } from '../../redux/action/qa.js';
-import { standardColor, nodeColor, idColor } from '../../constant/colorConfig';
-import Icon from 'react-native-vector-icons/Ionicons';
+import { connect } from 'react-redux'
+import { getQAList } from '../../redux/action/qa.js'
+import { standardColor, nodeColor, idColor } from '../../constant/colorConfig'
+import Icon from 'react-native-vector-icons/Ionicons'
 
-import { getQAUrl } from '../../dao';
+import { getQAUrl } from '../../dao'
 
-import { changeScrollType } from '../../redux/action/app';
+import { changeScrollType } from '../../redux/action/app'
 
 import TopicItem from '../../component/QaItem'
 import FooterProgress from '../../component/FooterProgress'
 
-const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
+const AnimatedFlatList = Animated.createAnimatedComponent(FlatList)
 
-let toolbarHeight = 56;
-let releasedMarginTop = 0;
-let prevPosition = -1;
+let toolbarHeight = 56
+let releasedMarginTop = 0
+let prevPosition = -1
 
 class Qa extends Component {
   static navigationOptions = {
     tabBarLabel: '问答',
     drawerLabel: '问答'
-  };
+  }
 
   constructor(props) {
-    super(props);
+    super(props)
 
     this.state = {
       type: 'all',
@@ -69,9 +69,9 @@ class Qa extends Component {
           prompt='选择类型'
           selectedValue={this.state.type}
           onValueChange={this.onValueChange.bind(this, 'type')}>
-          <Picker.Item label="全部" value="all" />
-          <Picker.Item label="PSN游戏" value="psngame" />
-          <Picker.Item label="节点" value="node" />
+          <Picker.Item label='全部' value='all' />
+          <Picker.Item label='PSN游戏' value='psngame' />
+          <Picker.Item label='节点' value='node' />
         </Picker>
         <Picker style={{
           flex: 1,
@@ -80,20 +80,20 @@ class Qa extends Component {
           prompt='排序'
           selectedValue={this.state.sort}
           onValueChange={this.onValueChange.bind(this, 'sort')}>
-          <Picker.Item label="综合排序" value="obdate" />
-          <Picker.Item label="最新" value="date" />
+          <Picker.Item label='综合排序' value='obdate' />
+          <Picker.Item label='最新' value='date' />
         </Picker>
       </View>
     )
   }
 
   onValueChange = (key: string, value: string) => {
-    const newState = {};
-    newState[key] = value;
+    const newState = {}
+    newState[key] = value
     this.setState(newState, () => {
       this._onRefresh()
-    });
-  };
+    })
+  }
 
   componentWillReceiveProps = (nextProps) => {
     if (this.props.screenProps.modeInfo.themeName != nextProps.screenProps.modeInfo.themeName) {
@@ -117,12 +117,12 @@ class Qa extends Component {
   }
 
   componentWillMount = () => {
-    const { qa: qaReducer } = this.props;
+    const { qa: qaReducer } = this.props
     const { registerAfterEach, searchTitle } = this.props.screenProps
     if (qaReducer.page === 0) {
       this._onRefresh(
         searchTitle
-      );
+      )
     }
     registerAfterEach({
       index: 2,
@@ -135,7 +135,7 @@ class Qa extends Component {
   }
 
   _onRefresh = (title) => {
-    const { qa: qaReducer, dispatch } = this.props;
+    const { qa: qaReducer, dispatch } = this.props
 
     this.setState({
       isRefreshing: true
@@ -147,19 +147,19 @@ class Qa extends Component {
         sort,
         title: typeof title !== 'undefined' ? title : this.props.screenProps.searchTitle
       })
-    );
+    )
   }
 
   _loadMoreData = () => {
-    const { qa: qaReducer, dispatch } = this.props;
+    const { qa: qaReducer, dispatch } = this.props
     const { type, sort } = this.state
-    let page = qaReducer.page + 1;
+    let page = qaReducer.page + 1
     dispatch(getQAList(page, {
-        type, 
+        type,
         sort,
         title: this.props.screenProps.searchTitle
       })
-    );
+    )
   }
 
   _onEndReached = () => {
@@ -168,9 +168,8 @@ class Qa extends Component {
     this.setState({
       isLoadingMore: true
     })
-    this._loadMoreData();
+    this._loadMoreData()
   }
-
 
   ITEM_HEIGHT = 74 + 7
 
@@ -186,9 +185,9 @@ class Qa extends Component {
   }
 
   render() {
-    const { qa: qaReducer } = this.props;
+    const { qa: qaReducer } = this.props
     const { modeInfo } = this.props.screenProps
-    log('Qa.js rendered');
+    log('Qa.js rendered')
     return (
       <View style={{ backgroundColor: modeInfo.background, flex: 1 }}>
         {this._renderHeader()}
@@ -240,17 +239,16 @@ class Qa extends Component {
 const styles = StyleSheet.create({
   avatar: {
     width: 50,
-    height: 50,
+    height: 50
   }
-});
-
+})
 
 function mapStateToProps(state) {
   return {
     qa: state.qa
-  };
+  }
 }
 
 export default connect(
   mapStateToProps
-)(Qa);
+)(Qa)

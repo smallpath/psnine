@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import {
   StyleSheet,
   Image,
@@ -8,9 +8,9 @@ import {
   View,
   TouchableNativeFeedback,
   Text
-} from 'react-native';
+} from 'react-native'
 
-import { standardColor, nodeColor, idColor, accentColor } from '../../constant/colorConfig';
+import { standardColor, nodeColor, idColor, accentColor } from '../../constant/colorConfig'
 
 const { width } = Dimensions.get('window')
 
@@ -21,13 +21,13 @@ const baseStyle = {
 }
 
 export default props => {
-  const width = Number(props.attribs['width']) || Number(props.attribs['data-width']) || 0;
-  const height = Number(props.attribs['height']) || Number(props.attribs['data-height']) || 0;
+  const width = Number(props.attribs.width) || Number(props.attribs['data-width']) || 0
+  const height = Number(props.attribs.height) || Number(props.attribs['data-height']) || 0
 
   const imgStyle = {
     width,
-    height,
-  };
+    height
+  }
   let src = props.attribs.src
   if (/^(.*?):\/\//.exec(src)) {} else {
     src = 'http://psnine.com' + src
@@ -37,7 +37,7 @@ export default props => {
     width,
     height,
     imagePaddingOffset: props.imagePaddingOffset
-  };
+  }
 
   return (
     <Text onLongPress={props.linkPressHandler}>
@@ -49,8 +49,8 @@ export default props => {
         modeInfo={props.modeInfo}
         linkPressHandler={props.linkPressHandler} />
     </Text>
-  );
-};
+  )
+}
 
 class InlineImage extends Component {
   constructor(props) {
@@ -65,7 +65,7 @@ class InlineImage extends Component {
   }
 
   componentWillUnmount() {
-    this.mounted = false;
+    this.mounted = false
   }
 
   componentDidMount = () => {
@@ -88,7 +88,7 @@ class InlineImage extends Component {
     // console.log(this.state.width, this.maxWidth)
     if (this.state.width > this.maxWidth) {
       finalSize.width = this.maxWidth
-      var ratio = this.maxWidth / this.state.width
+      let ratio = this.maxWidth / this.state.width
       finalSize.height = this.state.height * ratio
     }
     const style = Object.assign({}, baseStyle, finalSize)

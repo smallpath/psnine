@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import {
   AppRegistry,
   StyleSheet,
@@ -20,7 +20,7 @@ import {
 
 import { connect } from 'react-redux'
 import Ionicons from 'react-native-vector-icons/Ionicons'
-import { standardColor, nodeColor, idColor, accentColor } from '../constant/colorConfig';
+import { standardColor, nodeColor, idColor, accentColor } from '../constant/colorConfig'
 import { changeSegmentIndex, changeCommunityType, changeGeneType, changeCircleType } from '../redux/action/app'
 
 import {
@@ -28,8 +28,8 @@ import {
   getTopicURL
 } from '../dao'
 
-let screen = Dimensions.get('window');
-const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = screen;
+let screen = Dimensions.get('window')
+const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = screen
 export default class ComplexComment extends React.PureComponent {
 
   constructor(props) {
@@ -43,7 +43,7 @@ export default class ComplexComment extends React.PureComponent {
   shouldComponentUpdate = (props, state) => props.modeInfo.themeName !== this.props.modeInfo.themeName || this.state.modalVisible !== state.modalVisible
 
   _onRowPressed = (rowData) => {
-    const { navigation } = this.props;
+    const { navigation } = this.props
     const id = rowData.id || parseInt(rowData.url.split('/').pop())
     const URL = getTopicURL(id)
     navigation.navigate('CommunityTopic', {
@@ -70,10 +70,10 @@ export default class ComplexComment extends React.PureComponent {
           })
         }}
         useForeground={true}
-        
+
         background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
       >
-      <View style={{ 
+      <View style={{
         flex: 1, flexDirection: 'row', padding: 12,
         marginVertical: 3.5,
         marginHorizontal: numColumns === 1 ? 0 : 3.5,
@@ -90,8 +90,8 @@ export default class ComplexComment extends React.PureComponent {
           this.state.modalVisible && modalList.length && (
             <MyDialog modeInfo={modeInfo}
               modalVisible={this.state.modalVisible}
-              onDismiss={() => { this.setState({ modalVisible: false }); }}
-              onRequestClose={() => { this.setState({ modalVisible: false }); }}
+              onDismiss={() => { this.setState({ modalVisible: false }) }}
+              onRequestClose={() => { this.setState({ modalVisible: false }) }}
               renderContent={() => (
                 <View style={{
                   justifyContent: 'center',
@@ -113,7 +113,7 @@ export default class ComplexComment extends React.PureComponent {
                           item.onPress(rowData)
                         })
                       }}>
-                      <View style={{height: 50, paddingVertical: 10, paddingLeft: 20 ,alignSelf: 'stretch', alignContent: 'stretch', justifyContent: 'center'}}>
+                      <View style={{height: 50, paddingVertical: 10, paddingLeft: 20 , alignSelf: 'stretch', alignContent: 'stretch', justifyContent: 'center'}}>
                         <Text style={{textAlignVertical: 'center', fontSize: 18, color: modeInfo.standardTextColor}}>{item.text}</Text>
                       </View>
                     </TouchableNativeFeedback>
@@ -132,7 +132,7 @@ export default class ComplexComment extends React.PureComponent {
             </Text>
 
             <View style={{ flex: -1, flexDirection: 'row', justifyContent: 'space-between' }}>
-              <Text selectable={false} style={{ fontSize: 12,flex: -1, color: modeInfo.standardColor, textAlign: 'center', textAlignVertical: 'center' }} onPress={() => {
+              <Text selectable={false} style={{ fontSize: 12, flex: -1, color: modeInfo.standardColor, textAlign: 'center', textAlignVertical: 'center' }} onPress={() => {
                   // this.flatlist.getNode().recordInteraction()
                   navigation.navigate('Home', {
                     title: rowData.psnid,
@@ -140,11 +140,11 @@ export default class ComplexComment extends React.PureComponent {
                     URL: `http://psnine.com/psnid/${rowData.psnid}`
                   })
                 }}>{rowData.psnid}</Text>
-              <Text selectable={false} style={{ fontSize: 12,flex: -1, color: modeInfo.standardTextColor, textAlign: 'center', textAlignVertical: 'center' }}>{rowData.date}</Text>
-              <Text selectable={false} style={{ fontSize: 12,flex: -1, color: modeInfo.standardTextColor, textAlign: 'center', textAlignVertical: 'center' }}>{rowData.count}回复</Text>
-              <Text selectable={false} style={{ fontSize: 12,flex: -1, color: rowData.type && toolbarDispatch ? modeInfo.standardColor : modeInfo.standardTextColor, textAlign: 'center', textAlignVertical: 'center' }} onPress={
+              <Text selectable={false} style={{ fontSize: 12, flex: -1, color: modeInfo.standardTextColor, textAlign: 'center', textAlignVertical: 'center' }}>{rowData.date}</Text>
+              <Text selectable={false} style={{ fontSize: 12, flex: -1, color: modeInfo.standardTextColor, textAlign: 'center', textAlignVertical: 'center' }}>{rowData.count}回复</Text>
+              <Text selectable={false} style={{ fontSize: 12, flex: -1, color: rowData.type && toolbarDispatch ? modeInfo.standardColor : modeInfo.standardTextColor, textAlign: 'center', textAlignVertical: 'center' }} onPress={
                 rowData.type && toolbarDispatch ? () => {
-                  toolbarDispatch(changeCommunityType(rowData.type));
+                  toolbarDispatch(changeCommunityType(rowData.type))
                 } : null
               }>{rowData.type}</Text>
             </View>
@@ -162,12 +162,12 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: 'column',
-    backgroundColor: '#F5FCFF',
+    backgroundColor: '#F5FCFF'
   },
   toolbar: {
     backgroundColor: standardColor,
     height: 56,
-    elevation: 4,
+    elevation: 4
   },
   selectedTitle: {
     //backgroundColor: '#00ffff'
@@ -175,10 +175,10 @@ const styles = StyleSheet.create({
   },
   avatar: {
     width: 50,
-    height: 50,
+    height: 50
   },
   a: {
     fontWeight: '300',
-    color: idColor, // make links coloured pink
-  },
-});
+    color: idColor // make links coloured pink
+  }
+})

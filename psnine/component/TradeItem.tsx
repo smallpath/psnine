@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import {
   StyleSheet,
   Text,
@@ -9,12 +9,11 @@ import {
   RefreshControl,
   InteractionManager,
   Picker
-} from 'react-native';
+} from 'react-native'
 
-import { getGameUrl } from '../dao';
+import { getGameUrl } from '../dao'
 
-import { standardColor, nodeColor, idColor } from '../constant/colorConfig';
-
+import { standardColor, nodeColor, idColor } from '../constant/colorConfig'
 
 export default class TradeItem extends React.PureComponent {
   constructor(props) {
@@ -28,7 +27,7 @@ export default class TradeItem extends React.PureComponent {
   shouldComponentUpdate = (props, state) => props.modeInfo.themeName !== this.props.modeInfo.themeName || this.state.modalVisible !== state.modalVisible
 
   _onRowPressed = (rowData) => {
-    const { navigation } = this.props;
+    const { navigation } = this.props
     // const URL = getBattleURL(rowData.id);
     navigation.navigate('TradeTopic', {
       URL: rowData.href,
@@ -39,16 +38,15 @@ export default class TradeItem extends React.PureComponent {
     })
   }
 
-
   render = () => {
     // console.log(rowData)
     const { modeInfo, rowData, modalList = [] } = this.props
-    let TouchableElement = TouchableNativeFeedback;
+    let TouchableElement = TouchableNativeFeedback
 
-    let imageArr = rowData.thumbs;
-    let type = rowData.type;
+    let imageArr = rowData.thumbs
+    let type = rowData.type
 
-    const imageItems = imageArr.map((value, index) => (<Image key={rowData.id + '' + index} source={{ uri: value }} style={styles.geneImage} />));
+    const imageItems = imageArr.map((value, index) => (<Image key={rowData.id + '' + index} source={{ uri: value }} style={styles.geneImage} />))
     const { numColumns = 1 } = modeInfo
     return (
       <View style={{
@@ -76,8 +74,8 @@ export default class TradeItem extends React.PureComponent {
               this.state.modalVisible && modalList.length && (
               <MyDialog modeInfo={modeInfo}
                 modalVisible={this.state.modalVisible}
-                onDismiss={() => { this.setState({ modalVisible: false }); }}
-                onRequestClose={() => { this.setState({ modalVisible: false }); }}
+                onDismiss={() => { this.setState({ modalVisible: false }) }}
+                onRequestClose={() => { this.setState({ modalVisible: false }) }}
                 renderContent={() => (
                   <View style={{
                     justifyContent: 'center',
@@ -99,7 +97,7 @@ export default class TradeItem extends React.PureComponent {
                             item.onPress(rowData)
                           })
                         }}>
-                        <View style={{height: 50, paddingVertical: 10, paddingLeft: 20 ,alignSelf: 'stretch', alignContent: 'stretch', justifyContent: 'center'}}>
+                        <View style={{height: 50, paddingVertical: 10, paddingLeft: 20 , alignSelf: 'stretch', alignContent: 'stretch', justifyContent: 'center'}}>
                           <Text style={{textAlignVertical: 'center', fontSize: 18, color: modeInfo.standardTextColor}}>{item.text}</Text>
                         </View>
                       </TouchableNativeFeedback>
@@ -109,13 +107,13 @@ export default class TradeItem extends React.PureComponent {
                 )} />
               )
             }
-            <View style={{ marginLeft: 10, flex: 1, flexDirection: 'column', }}>
+            <View style={{ marginLeft: 10, flex: 1, flexDirection: 'column' }}>
 
               <View style={{ flex: 1, flexDirection: 'row', padding: 2 }}>
                 <Text
                   ellipsizeMode={'tail'}
                   numberOfLines={2}
-                  style={{ flex: -1, color: modeInfo.titleTextColor, }}>
+                  style={{ flex: -1, color: modeInfo.titleTextColor }}>
                   {rowData.title}
                 </Text>
                 <Text style={{ fontSize: 12, flex: -1, color: modeInfo.standardTextColor, textAlign: 'center', textAlignVertical: 'center' }}>{rowData.price}</Text>
@@ -128,7 +126,7 @@ export default class TradeItem extends React.PureComponent {
               <View style={{ flex: -1, flexDirection: 'row', flexWrap: 'wrap', marginTop: 5, marginBottom: 5 }}>
                 {imageItems}
               </View>
-              <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between', }}>
+              <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between' }}>
                 <Text style={{ fontSize: 12, flex: -1, color: modeInfo.standardColor, textAlign: 'center', textAlignVertical: 'center' }} onPress={
                   () => {
                     this.props.navigation.navigate('Home', {
@@ -152,10 +150,9 @@ export default class TradeItem extends React.PureComponent {
   }
 }
 
-
 const styles = StyleSheet.create({
   avatar: {
     width: 50,
-    height: 50,
+    height: 50
   }
-});
+})

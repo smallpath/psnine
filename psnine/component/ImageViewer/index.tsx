@@ -1,8 +1,8 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import {
   ToastAndroid
 } from 'react-native'
-import ImageViewer from 'react-native-image-zoom-viewer';
+import ImageViewer from 'react-native-image-zoom-viewer'
 
 import fs from 'react-native-fs'
 
@@ -11,7 +11,7 @@ const psnineFolder = fs.ExternalStorageDirectoryPath + '/psnine'
 fs.stat(psnineFolder).then(data => {
   const isDirectory = data.isDirectory()
   if (!isDirectory) {
-    fs.unlink(psnineFolder).catch(() =>{}).then(() => fs.mkdir(psnineFolder))
+    fs.unlink(psnineFolder).catch(() => {}).then(() => fs.mkdir(psnineFolder))
   }
 }).catch(err => {
   fs.mkdir(psnineFolder)

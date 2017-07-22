@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import {
   StyleSheet,
   Text,
@@ -10,9 +10,9 @@ import {
   InteractionManager,
   Picker,
   ProgressBarAndroid
-} from 'react-native';
+} from 'react-native'
 
-import { getGameUrl } from '../dao';
+import { getGameUrl } from '../dao'
 
 import colorConfig, { standardColor, nodeColor, idColor,
   errorColor,
@@ -26,7 +26,7 @@ import colorConfig, { standardColor, nodeColor, idColor,
   getColorFromProgress,
   getLevelColorFromProgress,
   getContentFromTrophy
-} from '../constant/colorConfig';
+} from '../constant/colorConfig'
 
 export default class extends React.PureComponent {
 
@@ -70,13 +70,13 @@ export default class extends React.PureComponent {
               <Text
                 ellipsizeMode={'tail'}
                 numberOfLines={1}
-                style={{ flex: -1, color: modeInfo.titleTextColor, }}>
+                style={{ flex: -1, color: modeInfo.titleTextColor }}>
                 {rowData.title}
               </Text>
             </View>
             {rowData.platform && (<View><Text style={{ color: modeInfo.standardTextColor, marginLeft: 2  }}>{rowData.platform.join(' ')}</Text></View>) || undefined}
             {rowData.syncTime && (<View style={{ flex: -1, flexDirection: 'row' }}>
-                <Text style={{ color: modeInfo.standardTextColor ,fontSize: 12, marginLeft: 2 }}>{rowData.syncTime + ' '}</Text>
+                <Text style={{ color: modeInfo.standardTextColor , fontSize: 12, marginLeft: 2 }}>{rowData.syncTime + ' '}</Text>
                 <Text selectable={false} style={{
                   flex: -1,
                   color: modeInfo.standardTextColor,
@@ -85,20 +85,20 @@ export default class extends React.PureComponent {
                 <Text selectable={false} style={{
                   flex: -1,
                   fontSize: 12,
-                  color: modeInfo.standardColor,
+                  color: modeInfo.standardColor
                 }}>{rowData.allTime}</Text>
               </View>) || undefined}
           </View>
           { rowData.alert && (
               <View style={{ flex: 1, justifyContent: 'center', padding: 2 }}>
-                <Text selectable={false}             
-                  style={{ 
-                    flex: -1,             
+                <Text selectable={false}
+                  style={{
+                    flex: -1,
                     textAlign: 'center',
                     textAlignVertical: 'center',
-                    color: getLevelColorFromProgress(rowData.allPercent), }}>{rowData.alert}</Text>
+                    color: getLevelColorFromProgress(rowData.allPercent) }}>{rowData.alert}</Text>
                 <Text
-                  ellipsizeMode={'tail'} 
+                  ellipsizeMode={'tail'}
                   style={{
                     flex: -1,
                     color: modeInfo.standardTextColor,
@@ -110,19 +110,19 @@ export default class extends React.PureComponent {
               ) || <View style={{ flex: 1 }}/>
             }
           <View style={{ flex: 1.5, justifyContent: 'center', padding: 2 }}>
-            <Text selectable={false}             
-              style={{ 
-                flex: -1,             
+            <Text selectable={false}
+              style={{
+                flex: -1,
                 textAlign: 'center',
                 textAlignVertical: 'center',
-                color: modeInfo.titleTextColor, }}>{rowData.percent}</Text>
+                color: modeInfo.titleTextColor }}>{rowData.percent}</Text>
             <ProgressBarAndroid color={getColorFromProgress(rowData.percent)}
               indeterminate={false}
-              progress={parseInt(rowData.percent)/100}
+              progress={parseInt(rowData.percent) / 100}
               style={{flex: -1, height: 4}}
-              styleAttr="Horizontal" />
+              styleAttr='Horizontal' />
             <Text
-              ellipsizeMode={'tail'} 
+              ellipsizeMode={'tail'}
               style={{
                 flex: -1,
                 color: modeInfo.standardTextColor,
@@ -144,10 +144,9 @@ export default class extends React.PureComponent {
 
 }
 
-
 const styles = StyleSheet.create({
   avatar: {
     width: 50,
-    height: 50,
+    height: 50
   }
-});
+})

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import {
   StyleSheet,
   Text,
@@ -14,25 +14,25 @@ import {
   ScrollView,
   Button,
   ActivityIndicator
-} from 'react-native';
+} from 'react-native'
 
-import { connect } from 'react-redux';
-import { standardColor, nodeColor, idColor, accentColor } from '../../constant/colorConfig';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import { getDetailAPI } from '../../dao';
+import { connect } from 'react-redux'
+import { standardColor, nodeColor, idColor, accentColor } from '../../constant/colorConfig'
+import Ionicons from 'react-native-vector-icons/Ionicons'
+import { getDetailAPI } from '../../dao'
 import CircleItem from '../../component/CircleItem'
 
-const AnimatedSectionList = Animated.createAnimatedComponent(SectionList);
+const AnimatedSectionList = Animated.createAnimatedComponent(SectionList)
 
-let toolbarHeight = 56;
-let releasedMarginTop = 0;
+let toolbarHeight = 56
+let releasedMarginTop = 0
 
 let toolbarActions = []
 
 export default class Detail extends Component {
 
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       isLoading: false,
       data: {
@@ -89,22 +89,22 @@ export default class Detail extends Component {
           navigation.navigate('WebView', {
             URL: 'http://psnine.com/set/mujuan',
             title: '捐助PSNINE'
-          })  
-        }} style={{flex:1}}/>
-        <View style={{ flex:1, flexDirection: 'row' }}>
-          <View style={{flex:1, alignItems:'center'}}><Text style={{color: '#659f13', padding: 20}}>{rowData.zb}</Text></View>
-          <View style={{flex:1, alignItems:'center'}}><Text style={{color: '#b94a48', padding: 20}}>{rowData.level}</Text></View>
+          })
+        }} style={{flex: 1}}/>
+        <View style={{ flex: 1, flexDirection: 'row' }}>
+          <View style={{flex: 1, alignItems: 'center'}}><Text style={{color: '#659f13', padding: 20}}>{rowData.zb}</Text></View>
+          <View style={{flex: 1, alignItems: 'center'}}><Text style={{color: '#b94a48', padding: 20}}>{rowData.level}</Text></View>
         </View>
-        <View style={{ flex:1, padding: 20 }}>
+        <View style={{ flex: 1, padding: 20 }}>
           <Text style={{ color: modeInfo.standardTextColor }}>{rowData.ssInfo}</Text>
         </View>
-        { rowData.serverInfo && rowData.serverInfo.length && <View style={{ flex:1, padding: 10 }}>
-          {rowData.serverInfo.map((item, index) => <View key={index} style={{flexDirection:'row', paddingHorizontal: 10, paddingVertical: 2}}>
-            <Text style={{flex:1, alignItems: 'center', color: modeInfo.standardTextColor }}>{item.ip}</Text><Text 
-              style={{flex:1, alignItems: 'center', color: modeInfo.standardTextColor }}>{item.name}</Text>
+        { rowData.serverInfo && rowData.serverInfo.length && <View style={{ flex: 1, padding: 10 }}>
+          {rowData.serverInfo.map((item, index) => <View key={index} style={{flexDirection: 'row', paddingHorizontal: 10, paddingVertical: 2}}>
+            <Text style={{flex: 1, alignItems: 'center', color: modeInfo.standardTextColor }}>{item.ip}</Text><Text
+              style={{flex: 1, alignItems: 'center', color: modeInfo.standardTextColor }}>{item.name}</Text>
           </View>)}
         </View>}
-        <View style={{ flex:1, padding: 10 }}>
+        <View style={{ flex: 1, padding: 10 }}>
           <HTMLView
             value={rowData.history}
             modeInfo={modeInfo}
@@ -124,10 +124,10 @@ export default class Detail extends Component {
 
   render() {
     const { modeInfo } = this.props.screenProps
-    const { data } = this.state;
+    const { data } = this.state
 
-    let keys = Object.keys(data);
-    let NUM_SECTIONS = keys.length;
+    let keys = Object.keys(data)
+    let NUM_SECTIONS = keys.length
 
     return (
       <View
@@ -136,8 +136,8 @@ export default class Detail extends Component {
         onMoveShouldSetResponder={() => false}
       >
         <Ionicons.ToolbarAndroid
-          navIconName="md-arrow-back"
-          overflowIconName="md-more"
+          navIconName='md-arrow-back'
+          overflowIconName='md-more'
           iconColor={modeInfo.isNightMode ? '#000' : '#fff'}
           title={'明细'}
           style={{ backgroundColor: modeInfo.standardColor, height: 56, elevation: 4 }}
@@ -176,6 +176,6 @@ export default class Detail extends Component {
 const styles = StyleSheet.create({
   avatar: {
     width: 50,
-    height: 50,
+    height: 50
   }
-});
+})

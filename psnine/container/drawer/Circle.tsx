@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import {
   StyleSheet,
   Text,
@@ -11,35 +11,35 @@ import {
   SectionList,
   Animated,
   FlatList
-} from 'react-native';
+} from 'react-native'
 
-import { connect } from 'react-redux';
-import { getCircleList as getList } from '../../redux/action/circle';
-import { standardColor, nodeColor, idColor, accentColor } from '../../constant/colorConfig';
+import { connect } from 'react-redux'
+import { getCircleList as getList } from '../../redux/action/circle'
+import { standardColor, nodeColor, idColor, accentColor } from '../../constant/colorConfig'
 
-import { getBattleURL, getGamePngURL } from '../../dao';
+import { getBattleURL, getGamePngURL } from '../../dao'
 import FooterProgress from '../../component/FooterProgress'
 
-const AnimatedSectionList = Animated.createAnimatedComponent(SectionList);
+const AnimatedSectionList = Animated.createAnimatedComponent(SectionList)
 
-let toolbarHeight = 56;
-let releasedMarginTop = 0;
+let toolbarHeight = 56
+let releasedMarginTop = 0
 
 import CircleItem from '../../component/CircleItem'
 
-const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
+const AnimatedFlatList = Animated.createAnimatedComponent(FlatList)
 
 class Circle extends Component {
   static navigationOptions = {
     tabBarLabel: '圈子',
     drawerLabel: '圈子'
-  };
+  }
 
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       isRefreshing: false,
-      isLoadingMore: false,
+      isLoadingMore: false
     }
   }
 
@@ -50,13 +50,13 @@ class Circle extends Component {
     let empty = () => {}
     let cb = empty
     if (this.props.screenProps.circleType != nextProps.screenProps.circleType) {
-      cb = () => this._onRefresh(nextProps.screenProps.circleType);
+      cb = () => this._onRefresh(nextProps.screenProps.circleType)
     } else if (this.props.screenProps.modeInfo.themeName != nextProps.screenProps.modeInfo.themeName) {
       cb = () => {}
     } else if (this.props.screenProps.searchTitle !== nextProps.screenProps.searchTitle) {
       if (shouldCall) {
         cb = () => this._onRefresh(
-          this.props.screenProps.circleType, 
+          this.props.screenProps.circleType,
           nextProps.screenProps.searchTitle
         )
       } else {
@@ -67,7 +67,7 @@ class Circle extends Component {
       if (this.shouldOnRefreshForSearch === true && shouldCall) {
         this.shouldOnRefreshForSearch = false
         cb = () => this._onRefresh(
-          this.props.screenProps.circleType, 
+          this.props.screenProps.circleType,
           nextProps.screenProps.searchTitle
         )
       } else {
@@ -85,17 +85,16 @@ class Circle extends Component {
   }
 
   componentWillMount = () => {
-    const { reducer } = this.props;
+    const { reducer } = this.props
     const { circleType, searchTitle } = this.props.screenProps
 
     if (reducer.page === 0) {
       this._onRefresh(
-        circleType, 
+        circleType,
         searchTitle
       )
     }
   }
-
 
   shouldComponentUpdate = (nextProps, nextState) => {
     if (this.props.screenProps.modeInfo.themeName != nextProps.screenProps.modeInfo.themeName) {
@@ -117,7 +116,7 @@ class Circle extends Component {
   }
 
   _onRefresh = (type = '', searchTitle) => {
-    const { reducer, dispatch } = this.props;
+    const { reducer, dispatch } = this.props
     const { circleType } = this.props.screenProps
 
     this.setState({
@@ -128,19 +127,19 @@ class Circle extends Component {
         type,
         title: typeof searchTitle !== 'undefined' ? searchTitle : this.props.screenProps.searchTitle
       })
-    );
+    )
   }
 
   _loadMoreData = () => {
-    const { reducer, dispatch } = this.props;
+    const { reducer, dispatch } = this.props
     const { circleType, searchTitle } = this.props.screenProps
 
-    let page = reducer.page + 1;
+    let page = reducer.page + 1
     dispatch(getList(page, {
         type: circleType,
         title: searchTitle
       })
-    );
+    )
   }
 
   _onEndReached = () => {
@@ -149,7 +148,7 @@ class Circle extends Component {
     this.setState({
       isLoadingMore: true
     })
-    this._loadMoreData();
+    this._loadMoreData()
   }
 
   ITEM_HEIGHT = 74 + 7
@@ -167,9 +166,9 @@ class Circle extends Component {
   }
 
   render() {
-    const { reducer } = this.props;
+    const { reducer } = this.props
     const { modeInfo } = this.props.screenProps
-    log('Circle.js rendered');
+    log('Circle.js rendered')
     // console.log(reducer.page, reducer.list)
     return (
       <AnimatedFlatList style={{
@@ -216,18 +215,17 @@ class Circle extends Component {
 const styles = StyleSheet.create({
   avatar: {
     width: 50,
-    height: 50,
+    height: 50
   }
-});
-
+})
 
 function mapStateToProps(state) {
   return {
     reducer: state.circle,
     segmentedIndex: state.app.segmentedIndex
-  };
+  }
 }
 
 export default connect(
   mapStateToProps
-)(Circle);
+)(Circle)

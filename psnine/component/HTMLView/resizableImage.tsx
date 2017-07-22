@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import {
   StyleSheet,
   Image,
@@ -8,9 +8,9 @@ import {
   View,
   Text,
   TouchableNativeFeedback
-} from 'react-native';
+} from 'react-native'
 
-import { standardColor, nodeColor, idColor, accentColor } from '../../constant/colorConfig';
+import { standardColor, nodeColor, idColor, accentColor } from '../../constant/colorConfig'
 
 const { width } = Dimensions.get('window')
 
@@ -22,13 +22,13 @@ const baseStyle = {
 
 // 外联图片组件, 支持Loading动画
 export default props => {
-  const width = Number(props.attribs['width']) || Number(props.attribs['data-width']) || 0;
-  const height = Number(props.attribs['height']) || Number(props.attribs['data-height']) || 0;
+  const width = Number(props.attribs.width) || Number(props.attribs['data-width']) || 0
+  const height = Number(props.attribs.height) || Number(props.attribs['data-height']) || 0
 
   const imgStyle = {
     width,
-    height,
-  };
+    height
+  }
   let src = props.attribs.src
   if (/^(.*?):\/\//.exec(src)) {} else {
     src = 'http://psnine.com' + src
@@ -39,7 +39,7 @@ export default props => {
     width,
     height,
     imagePaddingOffset: props.imagePaddingOffset
-  };
+  }
 
   return (
     <ResizableImage
@@ -49,8 +49,8 @@ export default props => {
       alignCenter={props.alignCenter}
       modeInfo={props.modeInfo}
       linkPressHandler={props.linkPressHandler} />
-  );
-};
+  )
+}
 
 class ResizableImage extends Component {
   constructor(props) {
@@ -69,12 +69,12 @@ class ResizableImage extends Component {
   }
 
   componentWillUnmount() {
-    this.mounted = false;
+    this.mounted = false
   }
 
   componentDidMount = () => {
     this.mounted = true
-    this.loadImage() 
+    this.loadImage()
   }
 
   loadImage = () => {
@@ -107,7 +107,7 @@ class ResizableImage extends Component {
     const maxWidth = width - this.props.source.imagePaddingOffset
     if (this.state.width > maxWidth) {
       finalSize.width = maxWidth
-      var ratio = maxWidth / this.state.width
+      let ratio = maxWidth / this.state.width
       finalSize.height = this.state.height * ratio
     }
     const style = Object.assign({}, baseStyle, this.props.style, this.state, finalSize)
@@ -138,7 +138,7 @@ class ResizableImage extends Component {
 
     let onLongPress = this.props.linkPressHandler
     if (this.state.hasError || this.state.isLoading || this.state.shouldLoad === false) onLongPress = () => {}
-    
+
     return (
       <TouchableNativeFeedback onLongPress={onLongPress} onPress={onPress} style={[{ justifyContent: 'center', alignItems: 'center' }, alignSelf]}>
         {<View style={{ width: source.width, height: source.height }}>
@@ -146,7 +146,7 @@ class ResizableImage extends Component {
             <Text style={{color: modeInfo.standardTextColor, textAlign: 'center', textAlignVertical: 'center'}}>点击加载图片</Text>
           </View>) || undefined}
           {
-            this.state.isLoading && this.state.shouldLoad && 
+            this.state.isLoading && this.state.shouldLoad &&
             <ActivityIndicator
               animating={true}
               style={{

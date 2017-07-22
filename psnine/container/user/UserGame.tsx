@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import {
   StyleSheet,
   Text,
@@ -15,32 +15,29 @@ import {
   TextInput,
   FlatList,
   Button
-} from 'react-native';
+} from 'react-native'
 
-const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
+const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window')
 
+import { connect } from 'react-redux'
+import { standardColor, nodeColor, idColor } from '../../constant/colorConfig'
 
-
-
-import { connect } from 'react-redux';
-import { standardColor, nodeColor, idColor } from '../../constant/colorConfig';
-
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import { getMyGameAPI } from '../../dao';
+import Ionicons from 'react-native-vector-icons/Ionicons'
+import { getMyGameAPI } from '../../dao'
 
 import UserGameItem from '../../component/UserGameItem'
 import FooterProgress from '../../component/FooterProgress'
 
 let toolbarActions = [
-  { title: '跳页', iconName: 'md-map', show: 'always' },
-];
+  { title: '跳页', iconName: 'md-map', show: 'always' }
+]
 
 class UserGame extends Component {
   static navigationOptions = {
      tabBarLabel: '游戏'
   }
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       list: [],
       numberPerPage: 60,
@@ -74,7 +71,7 @@ class UserGame extends Component {
     }
     this.URL = params.URL.includes('?page') ? params.URL : `${params.URL}?page=1`
     this.originURL = params.URL
-    this.fetchMessages(params.URL, 'jump');
+    this.fetchMessages(params.URL, 'jump')
   }
 
   fetchMessages = (url, type = 'down') => {
@@ -103,7 +100,7 @@ class UserGame extends Component {
             this.pageArr = [thisPage]
           }
           this.pageArr = this.pageArr.sort((a, b) => a - b)
-          
+
           this.setState({
             list: thisList,
             numberPerPage: data.numberPerPage,
@@ -127,7 +124,7 @@ class UserGame extends Component {
               })
             }
             componentDidFocus()
-          });
+          })
         })
       })
     })
@@ -144,7 +141,7 @@ class UserGame extends Component {
     }
     if (this.pageArr.includes(targetPage)) type = 'jump'
     if (this.state.isLoadingMore || this.state.isRefreshing) return
-    this.fetchMessages(URL.split('=').slice(0, -1).concat(targetPage).join('='), type);
+    this.fetchMessages(URL.split('=').slice(0, -1).concat(targetPage).join('='), type)
   }
 
   _onEndReached = () => {
@@ -153,7 +150,7 @@ class UserGame extends Component {
     const targetPage = currentPage + 1
     if (targetPage > this.state.numPages) return
     if (this.state.isLoadingMore || this.state.isRefreshing) return
-    this.fetchMessages(URL.split('=').slice(0, -1).concat(targetPage).join('='), 'down');
+    this.fetchMessages(URL.split('=').slice(0, -1).concat(targetPage).join('='), 'down')
 
   }
 
@@ -166,7 +163,6 @@ class UserGame extends Component {
         return
     }
   }
-
 
   ITEM_HEIGHT = 83
 
@@ -186,7 +182,7 @@ class UserGame extends Component {
     const { modeInfo } = this.props.screenProps
     const { URL } = this
     // console.log('Message.js rendered');
-    const { width: SCREEN_WIDTH } = Dimensions.get('window');
+    const { width: SCREEN_WIDTH } = Dimensions.get('window')
 
     return (
       <View
@@ -252,14 +248,14 @@ class UserGame extends Component {
                 style: {
                   elevation: 12
                 }
-              });
+              })
             }}
             onPressOut={() => {
               this.float.setNativeProps({
                 style: {
                   elevation: 6
                 }
-              });
+              })
             }}>
             <View pointerEvents='box-only' style={{
               backgroundColor: modeInfo.accentColor,
@@ -295,7 +291,7 @@ class UserGame extends Component {
                             return (
                               <View key={inner} style={{margin: 2}}>
                                 <TouchableNativeFeedback
-                                  useForeground={true} 
+                                  useForeground={true}
                                   background={TouchableNativeFeedback.SelectableBackgroundBorderless()} onPress={() => {
                                   this.setState({
                                     [kind]: item.value,
@@ -322,8 +318,8 @@ class UserGame extends Component {
                 }
                 <View style={{ alignSelf: 'stretch', justifyContent: 'center' }}>
                   <TouchableNativeFeedback
-                    useForeground={true} 
-                    background={TouchableNativeFeedback.SelectableBackgroundBorderless()} 
+                    useForeground={true}
+                    background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
                     onPress={this.goToSearch}>
                     <View pointerEvents='box-only' style={{ flex: 0, padding: 4, paddingHorizontal: 6,
                       margin: 4,
@@ -331,12 +327,12 @@ class UserGame extends Component {
                       borderRadius: 2,
                       alignSelf: 'stretch'
                     }}>
-                      <Text style={{ color: modeInfo.backgroundColor, textAlign: 'center',textAlignVertical: 'center' }}>搜索</Text>
+                      <Text style={{ color: modeInfo.backgroundColor, textAlign: 'center', textAlignVertical: 'center' }}>搜索</Text>
                     </View>
                   </TouchableNativeFeedback>
                   { this.state.text && <TouchableNativeFeedback
-                    useForeground={true} 
-                    background={TouchableNativeFeedback.SelectableBackgroundBorderless()} 
+                    useForeground={true}
+                    background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
                     onPress={() => this.search('')}>
                     <View pointerEvents='box-only' style={{ flex: 0, padding: 4, paddingHorizontal: 6,
                       margin: 4,
@@ -344,7 +340,7 @@ class UserGame extends Component {
                       borderRadius: 2,
                       alignSelf: 'stretch'
                     }}>
-                      <Text style={{ color: modeInfo.backgroundColor, textAlign: 'center',textAlignVertical: 'center' }}>清空搜索</Text>
+                      <Text style={{ color: modeInfo.backgroundColor, textAlign: 'center', textAlignVertical: 'center' }}>清空搜索</Text>
                     </View>
                   </TouchableNativeFeedback> || undefined}
                 </View>
@@ -381,8 +377,8 @@ class UserGame extends Component {
 }
 
 const filters = {
-  pf: { 
-    text: '平台', 
+  pf: {
+    text: '平台',
     value: [{
       text: '全部',
       value: 'all'
@@ -432,12 +428,12 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: 'column',
-    backgroundColor: '#F5FCFF',
+    backgroundColor: '#F5FCFF'
   },
   toolbar: {
     backgroundColor: standardColor,
     height: 56,
-    elevation: 4,
+    elevation: 4
   },
   selectedTitle: {
     //backgroundColor: '#00ffff'
@@ -445,13 +441,12 @@ const styles = StyleSheet.create({
   },
   avatar: {
     width: 50,
-    height: 50,
+    height: 50
   },
   a: {
     fontWeight: '300',
-    color: idColor, // make links coloured pink
-  },
-});
+    color: idColor // make links coloured pink
+  }
+})
 
-
-export default UserGame;
+export default UserGame

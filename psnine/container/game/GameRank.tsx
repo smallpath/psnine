@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import {
   StyleSheet,
   Text,
@@ -14,24 +14,21 @@ import {
   Slider,
   FlatList,
   ProgressBarAndroid
-} from 'react-native';
+} from 'react-native'
 
-const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
+const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window')
 
+import { connect } from 'react-redux'
+import { standardColor, nodeColor, idColor } from '../../constant/colorConfig'
 
-
-
-import { connect } from 'react-redux';
-import { standardColor, nodeColor, idColor } from '../../constant/colorConfig';
-
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import { getGameMapperAPI } from '../../dao';
+import Ionicons from 'react-native-vector-icons/Ionicons'
+import { getGameMapperAPI } from '../../dao'
 
 import FooterProgress from '../../component/FooterProgress'
 
 let toolbarActions = [
-  { title: '跳页', iconName: 'md-map', show: 'always' },
-];
+  { title: '跳页', iconName: 'md-map', show: 'always' }
+]
 
 import colorConfig, {
   errorColor,
@@ -45,14 +42,14 @@ import colorConfig, {
   getColorFromProgress,
   getLevelColorFromProgress,
   getContentFromTrophy
-} from '../../constant/colorConfig';
+} from '../../constant/colorConfig'
 
 class TopicItem extends React.PureComponent {
 
   shouldComponentUpdate = (props, state) => props.modeInfo.themeName !== this.props.modeInfo.themeName
 
   _onRowPressed = (rowData) => {
-    const { navigation } = this.props;
+    const { navigation } = this.props
     navigation.navigate('Home', {
       title: rowData.psnid,
       id: rowData.psnid,
@@ -61,7 +58,7 @@ class TopicItem extends React.PureComponent {
   }
 
   _onGamePressed = (rowData) => {
-    const { navigation } = this.props;
+    const { navigation } = this.props
     navigation.navigate('GamePage', {
       title: '@' + rowData.psnid,
       rowData: {
@@ -70,7 +67,6 @@ class TopicItem extends React.PureComponent {
       URL: rowData.url
     })
   }
-
 
   render = () => {
     const { modeInfo, rowData, modalList = [] } = this.props
@@ -81,9 +77,9 @@ class TopicItem extends React.PureComponent {
           marginVertical: 3.5,
           marginHorizontal: 3.5,
           backgroundColor: modeInfo.backgroundColor,
-          elevation: 1,
+          elevation: 1
         }}>
-          <View style={{ flex: 1, flexDirection: 'row', flexWrap: 'nowrap',padding: 8, justifyContent: 'space-around', alignItems: 'center' }}>
+          <View style={{ flex: 1, flexDirection: 'row', flexWrap: 'nowrap', padding: 8, justifyContent: 'space-around', alignItems: 'center' }}>
             <View style={{ flex: -1, justifyContent: 'center', alignItems: 'center', paddingHorizontal: 5}}>
               <Text style={{textAlign: 'center', textAlignVertical: 'center', color: modeInfo.titleTextColor}}>
                 {rowData.rank}
@@ -111,14 +107,14 @@ class TopicItem extends React.PureComponent {
             </View>
             { rowData.cost && (
                 <View style={{ flex: 1, justifyContent: 'center', padding: 2 }}>
-                  <Text selectable={false}             
-                    style={{ 
-                      flex: -1,             
+                  <Text selectable={false}
+                    style={{
+                      flex: -1,
                       textAlign: 'center',
                       textAlignVertical: 'center',
-                      color: modeInfo.titleTextColor, }}>{rowData.cost}</Text>
+                      color: modeInfo.titleTextColor }}>{rowData.cost}</Text>
                   <Text
-                    ellipsizeMode={'tail'} 
+                    ellipsizeMode={'tail'}
                     style={{
                       flex: -1,
                       color: modeInfo.standardTextColor,
@@ -130,19 +126,19 @@ class TopicItem extends React.PureComponent {
                 ) || <View style={{ flex: 1, justifyContent: 'center', padding: 2 }}/>
               }
             <View style={{ flex: 1.5, justifyContent: 'center', padding: 2 }}>
-              <Text selectable={false}             
-                style={{ 
-                  flex: -1,             
+              <Text selectable={false}
+                style={{
+                  flex: -1,
                   textAlign: 'center',
                   textAlignVertical: 'center',
-                  color: modeInfo.titleTextColor, }}>{rowData.progress}</Text>
+                  color: modeInfo.titleTextColor }}>{rowData.progress}</Text>
               <ProgressBarAndroid color={getColorFromProgress(rowData.progress)}
                 indeterminate={false}
-                progress={parseInt(rowData.progress)/100}
+                progress={parseInt(rowData.progress) / 100}
                 style={{flex: -1, height: 4}}
-                styleAttr="Horizontal" />
+                styleAttr='Horizontal' />
               <Text
-                ellipsizeMode={'tail'} 
+                ellipsizeMode={'tail'}
                 style={{
                   flex: -1,
                   color: modeInfo.standardTextColor,
@@ -166,7 +162,7 @@ class TopicItem extends React.PureComponent {
 
 class GameTopic extends Component {
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       list: [],
       numberPerPage: 60,
@@ -181,13 +177,13 @@ class GameTopic extends Component {
   }
 
   onNavClicked = (rowData) => {
-    const { navigation } = this.props;
-    navigation.goBack();
+    const { navigation } = this.props
+    navigation.goBack()
   }
 
   componentWillMount = async () => {
     const { params } = this.props.navigation.state
-    this.fetchMessages(params.URL, 'jump');
+    this.fetchMessages(params.URL, 'jump')
   }
 
   fetchMessages = (url, type = 'down') => {
@@ -222,7 +218,7 @@ class GameTopic extends Component {
             currentPage: thisPage,
             isLoadingMore: false,
             isRefreshing: false
-          }, cb);
+          }, cb)
         })
       })
     })
@@ -230,7 +226,7 @@ class GameTopic extends Component {
 
   pageArr = [1]
   _onRefresh = () => {
-    const { URL } = this.props.navigation.state.params;
+    const { URL } = this.props.navigation.state.params
     const currentPage = this.pageArr[0] || 1
     let type = currentPage === 1 ? 'jump' : 'up'
     let targetPage = currentPage - 1
@@ -240,26 +236,26 @@ class GameTopic extends Component {
     if (this.pageArr.includes(targetPage)) type = 'jump'
     if (this.state.isLoadingMore || this.state.isRefreshing) return
     this.flatlist && this.flatlist.scrollToOffset({ offset: 0, animated: true })
-    this.fetchMessages(URL.split('=').slice(0, -1).concat(targetPage).join('='), type);
+    this.fetchMessages(URL.split('=').slice(0, -1).concat(targetPage).join('='), type)
   }
 
   _onEndReached = () => {
-    const { URL } = this.props.navigation.state.params;
+    const { URL } = this.props.navigation.state.params
     const currentPage = this.pageArr[this.pageArr.length - 1]
     const targetPage = currentPage + 1
     if (targetPage > this.state.numPages) return
     if (this.state.isLoadingMore || this.state.isRefreshing) return
-    this.fetchMessages(URL.split('=').slice(0, -1).concat(targetPage).join('='), 'down');
+    this.fetchMessages(URL.split('=').slice(0, -1).concat(targetPage).join('='), 'down')
 
   }
 
   onValueChange = (key: string, value: string) => {
-    const newState = {};
-    newState[key] = value;
+    const newState = {}
+    newState[key] = value
     this.setState(newState, () => {
       this._onRefresh()
-    });
-  };
+    })
+  }
 
   _renderHeader = () => {
     const { modeInfo } = this.props.screenProps
@@ -281,11 +277,11 @@ class GameTopic extends Component {
           prompt='选服'
           selectedValue={this.state.server}
           onValueChange={this.onValueChange.bind(this, 'server')}>
-          <Picker.Item label="全部" value="all" />
-          <Picker.Item label="港服" value="hk" />
-          <Picker.Item label="日服" value="jp" />
-          <Picker.Item label="美服" value="us" />
-          <Picker.Item label="国服" value="cn" />
+          <Picker.Item label='全部' value='all' />
+          <Picker.Item label='港服' value='hk' />
+          <Picker.Item label='日服' value='jp' />
+          <Picker.Item label='美服' value='us' />
+          <Picker.Item label='国服' value='cn' />
         </Picker>
         <Picker style={{
           flex: 1,
@@ -295,14 +291,13 @@ class GameTopic extends Component {
           prompt='排序'
           selectedValue={this.state.ob}
           onValueChange={this.onValueChange.bind(this, 'ob')}>
-          <Picker.Item label="进度最快" value="ratio" />
-          <Picker.Item label="最新" value="date" />
-          <Picker.Item label="完美耗时最短" value="timeuse" />
+          <Picker.Item label='进度最快' value='ratio' />
+          <Picker.Item label='最新' value='date' />
+          <Picker.Item label='完美耗时最短' value='timeuse' />
         </Picker>
       </View>
     )
   }
-
 
   onActionSelected = (index) => {
     switch (index) {
@@ -313,7 +308,6 @@ class GameTopic extends Component {
         return
     }
   }
-
 
   ITEM_HEIGHT = 74 + 7
 
@@ -341,8 +335,8 @@ class GameTopic extends Component {
         onMoveShouldSetResponder={() => false}
       >
         <Ionicons.ToolbarAndroid
-          navIconName="md-arrow-back"
-          overflowIconName="md-more"
+          navIconName='md-arrow-back'
+          overflowIconName='md-more'
           iconColor={modeInfo.isNightMode ? '#000' : '#fff'}
           title={'排行'}
           style={[styles.toolbar, { backgroundColor: modeInfo.standardColor }]}
@@ -436,7 +430,7 @@ class GameTopic extends Component {
                     }, () => {
                       const currentPage = this.state.currentPage
                       const targetPage = params.URL.split('=').slice(0, -1).concat(this.state.sliderValue).join('=')
-                      this.fetchMessages(targetPage, 'jump');
+                      this.fetchMessages(targetPage, 'jump')
                     })
                   }}>
                   <View style={{ alignSelf: 'flex-end', paddingHorizontal: 8, paddingVertical: 5 }}>
@@ -452,17 +446,16 @@ class GameTopic extends Component {
 
 }
 
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: 'column',
-    backgroundColor: '#F5FCFF',
+    backgroundColor: '#F5FCFF'
   },
   toolbar: {
     backgroundColor: standardColor,
     height: 56,
-    elevation: 4,
+    elevation: 4
   },
   selectedTitle: {
     //backgroundColor: '#00ffff'
@@ -470,13 +463,12 @@ const styles = StyleSheet.create({
   },
   avatar: {
     width: 50,
-    height: 50,
+    height: 50
   },
   a: {
     fontWeight: '300',
-    color: idColor, // make links coloured pink
-  },
-});
+    color: idColor // make links coloured pink
+  }
+})
 
-
-export default GameTopic;
+export default GameTopic

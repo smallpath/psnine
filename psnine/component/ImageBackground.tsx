@@ -1,13 +1,13 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import {
   StyleSheet,
   View,
   Image
-} from 'react-native';
+} from 'react-native'
 
 export default class ImageBackground extends React.Component {
   render() {
-    const {children, style, imageStyle, imageRef, blurRadis = 10, ...props} = this.props;
+    const {children, style, imageStyle, imageRef, blurRadis = 10, ...props} = this.props
 
     return (
       <View style={style}>
@@ -27,14 +27,14 @@ export default class ImageBackground extends React.Component {
               // This workaround should be removed after implementing proper support of
               // intrinsic content size of the <Image>.
               width: style.width,
-              height: style.height,
+              height: style.height
             },
-            imageStyle,
+            imageStyle
           ]}
           ref={imageRef}
         />
         {children}
       </View>
-    );
+    )
   }
 }

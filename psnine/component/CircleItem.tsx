@@ -12,7 +12,7 @@ export default class CircleItem extends React.PureComponent {
   shouldComponentUpdate = (props) => props.modeInfo.themeName !== this.props.modeInfo.themeName
 
   _onRowPressed = (rowData) => {
-    const { navigation } = this.props;
+    const { navigation } = this.props
     // const URL = getBattleURL(rowData.id);
     navigation.navigate('Circle', {
       URL: rowData.href,
@@ -52,7 +52,7 @@ export default class CircleItem extends React.PureComponent {
                 style={{
                   width: 54,
                   height: 54,
-                  alignSelf: 'center',
+                  alignSelf: 'center'
                 }}
               />
             </View>

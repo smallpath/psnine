@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import {
   StyleSheet,
   Text,
@@ -15,33 +15,30 @@ import {
   ActivityIndicator,
   FlatList,
   Button
-} from 'react-native';
+} from 'react-native'
 
-const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
+const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window')
 
+import { connect } from 'react-redux'
+import { standardColor, nodeColor, idColor } from '../../constant/colorConfig'
 
-
-
-import { connect } from 'react-redux';
-import { standardColor, nodeColor, idColor } from '../../constant/colorConfig';
-
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import { getUserDiaryAPI } from '../../dao';
+import Ionicons from 'react-native-vector-icons/Ionicons'
+import { getUserDiaryAPI } from '../../dao'
 import ComplexComment from '../../component/ComplexComment'
 import DiaryItem from '../../component/DiaryItem'
 
 const ds = new ListView.DataSource({
-  rowHasChanged: (row1, row2) => row1.href !== row2.href,
-});
+  rowHasChanged: (row1, row2) => row1.href !== row2.href
+})
 
-let toolbarActions = [];
+let toolbarActions = []
 
 class UserBoard extends Component {
   static navigationOptions = {
      tabBarLabel: '日志'
   }
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       data: false,
       diary: [],
@@ -58,7 +55,6 @@ class UserBoard extends Component {
       })
     }
   }
-
 
   handleImageOnclick = (url) => this.props.screenProps.navigation.navigate('ImageViewer', {
     images: [
@@ -77,13 +73,13 @@ class UserBoard extends Component {
       }
     })
     if (!params.URL) {
-      params = { 
+      params = {
         text: '日志',
-        URL: screenProps.toolbar[0].url + '/diary' 
+        URL: screenProps.toolbar[0].url + '/diary'
       }
     }
     this.URL = params.URL
-    this.preFetch();
+    this.preFetch()
   }
 
   preFetch = () => {
@@ -121,7 +117,7 @@ class UserBoard extends Component {
               })
             }
             componentDidFocus()
-          });
+          })
         })
       })
     })
@@ -140,7 +136,6 @@ class UserBoard extends Component {
       content
     }} />
   }
-
 
   isReplyShowing = false
 
@@ -188,24 +183,23 @@ class UserBoard extends Component {
         >
         </FlatList>
         }
-        
+
       </View>
     )
   }
 
 }
 
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: 'column',
-    backgroundColor: '#F5FCFF',
+    backgroundColor: '#F5FCFF'
   },
   toolbar: {
     backgroundColor: standardColor,
     height: 56,
-    elevation: 4,
+    elevation: 4
   },
   selectedTitle: {
     //backgroundColor: '#00ffff'
@@ -213,12 +207,11 @@ const styles = StyleSheet.create({
   },
   avatar: {
     width: 50,
-    height: 50,
+    height: 50
   },
   a: {
-    color: idColor, // make links coloured pink
-  },
-});
+    color: idColor // make links coloured pink
+  }
+})
 
-
-export default UserBoard;
+export default UserBoard

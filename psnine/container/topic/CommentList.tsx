@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import {
   StyleSheet,
   Text,
@@ -13,29 +13,27 @@ import {
   Modal,
   Slider,
   FlatList
-} from 'react-native';
+} from 'react-native'
 
-const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
+const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window')
 
+import { connect } from 'react-redux'
+import { standardColor, nodeColor, idColor } from '../../constant/colorConfig'
 
-
-import { connect } from 'react-redux';
-import { standardColor, nodeColor, idColor } from '../../constant/colorConfig';
-
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import { getTopicCommentAPI } from '../../dao';
+import Ionicons from 'react-native-vector-icons/Ionicons'
+import { getTopicCommentAPI } from '../../dao'
 
 let toolbarActions = [
   // { title: '回复', iconName: 'md-create', show: 'always' },
-  { title: '跳页', iconName: 'md-map', show: 'always' },
-];
+  { title: '跳页', iconName: 'md-map', show: 'always' }
+]
 
 import SimpleComment from '../../component/SimpleComment'
 import FooterProgress from '../../component/FooterProgress'
 
 class CommentList extends Component {
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       list: [],
       numberPerPage: 60,
@@ -50,13 +48,13 @@ class CommentList extends Component {
   }
 
   onNavClicked = (rowData) => {
-    const { navigation } = this.props;
-    navigation.goBack();
+    const { navigation } = this.props
+    navigation.goBack()
   }
 
   componentWillMount = async () => {
     const { params } = this.props.navigation.state
-    this.fetchMessages(params.URL, 'jump');
+    this.fetchMessages(params.URL, 'jump')
   }
 
   fetchMessages = (url, type = 'down') => {
@@ -90,7 +88,7 @@ class CommentList extends Component {
             currentPage: thisPage,
             isLoadingMore: false,
             isRefreshing: false
-          }, cb);
+          }, cb)
         })
       })
     })
@@ -98,7 +96,7 @@ class CommentList extends Component {
 
   pageArr = [1]
   _onRefresh = () => {
-    const { URL } = this.props.navigation.state.params;
+    const { URL } = this.props.navigation.state.params
     const currentPage = this.pageArr[0] || 1
     let type = currentPage === 1 ? 'jump' : 'up'
     let targetPage = currentPage - 1
@@ -107,16 +105,16 @@ class CommentList extends Component {
     }
     if (this.pageArr.includes(targetPage)) type = 'jump'
     if (this.state.isLoadingMore || this.state.isRefreshing) return
-    this.fetchMessages(URL.split('=').slice(0, -1).concat(targetPage).join('='), type);
+    this.fetchMessages(URL.split('=').slice(0, -1).concat(targetPage).join('='), type)
   }
 
   _onEndReached = () => {
-    const { URL } = this.props.navigation.state.params;
+    const { URL } = this.props.navigation.state.params
     const currentPage = this.pageArr[this.pageArr.length - 1]
     const targetPage = currentPage + 1
     if (targetPage > this.state.numPages) return
     if (this.state.isLoadingMore || this.state.isRefreshing) return
-    this.fetchMessages(URL.split('=').slice(0, -1).concat(targetPage).join('='), 'down');
+    this.fetchMessages(URL.split('=').slice(0, -1).concat(targetPage).join('='), 'down')
   }
 
   onActionSelected = (index) => {
@@ -152,8 +150,8 @@ class CommentList extends Component {
         onMoveShouldSetResponder={() => false}
       >
         <Ionicons.ToolbarAndroid
-          navIconName="md-arrow-back"
-          overflowIconName="md-more"
+          navIconName='md-arrow-back'
+          overflowIconName='md-more'
           iconColor={modeInfo.isNightMode ? '#000' : '#fff'}
           title={'所有评论'}
           style={[styles.toolbar, { backgroundColor: modeInfo.standardColor }]}
@@ -245,7 +243,7 @@ class CommentList extends Component {
                   }, () => {
                     const currentPage = this.state.currentPage
                     const targetPage = params.URL.split('=').slice(0, -1).concat(this.state.sliderValue).join('=')
-                    this.fetchMessages(targetPage, 'jump');
+                    this.fetchMessages(targetPage, 'jump')
                   })
                 }}>
                   <View style={{ alignSelf: 'flex-end', paddingHorizontal: 8, paddingVertical: 5 }}>
@@ -261,17 +259,16 @@ class CommentList extends Component {
 
 }
 
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: 'column',
-    backgroundColor: '#F5FCFF',
+    backgroundColor: '#F5FCFF'
   },
   toolbar: {
     backgroundColor: standardColor,
     height: 56,
-    elevation: 4,
+    elevation: 4
   },
   selectedTitle: {
     //backgroundColor: '#00ffff'
@@ -279,13 +276,12 @@ const styles = StyleSheet.create({
   },
   avatar: {
     width: 50,
-    height: 50,
+    height: 50
   },
   a: {
     fontWeight: '300',
-    color: idColor, // make links coloured pink
-  },
-});
+    color: idColor // make links coloured pink
+  }
+})
 
-
-export default CommentList;
+export default CommentList

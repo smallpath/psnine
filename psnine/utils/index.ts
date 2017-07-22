@@ -20,5 +20,5 @@ export const encodeForm = obj => {
     formBody.push(encodedKey + '=' + encodedValue)
   }
   formBody = formBody.join('&')
-  return obj
+  return formBody
 }

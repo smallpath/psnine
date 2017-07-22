@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import {
   AppRegistry,
   StyleSheet,
@@ -20,47 +20,46 @@ import {
   ScrollView,
   BackHandler,
   Button
-} from 'react-native';
+} from 'react-native'
 
 import { sync } from '../../dao/sync'
 
-
-import { connect } from 'react-redux';
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import { connect } from 'react-redux'
+import Ionicons from 'react-native-vector-icons/Ionicons'
 import {
   standardColor,
   nodeColor,
   idColor,
   accentColor,
   levelColor,
-  rankColor,
-} from '../../constant/colorConfig';
+  rankColor
+} from '../../constant/colorConfig'
 
-import { fetchStore as getAPI } from '../../dao';
+import { fetchStore as getAPI } from '../../dao'
 
 // import CreateUserTab from './UserTab'
 
-let screen = Dimensions.get('window');
-const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = screen;
+let screen = Dimensions.get('window')
+const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = screen
 
-let toolbarActions = [];
-let title = "TOPIC";
-let WEBVIEW_REF = `WEBVIEW_REF`;
+let toolbarActions = []
+let title = 'TOPIC'
+let WEBVIEW_REF = `WEBVIEW_REF`
 
-let toolbarHeight = 56;
-let releasedMarginTop = 0;
+let toolbarHeight = 56
+let releasedMarginTop = 0
 
-const ACTUAL_SCREEN_HEIGHT = SCREEN_HEIGHT - StatusBar.currentHeight + 1;
+const ACTUAL_SCREEN_HEIGHT = SCREEN_HEIGHT - StatusBar.currentHeight + 1
 
-let CIRCLE_SIZE = 56;
-let config = { tension: 30, friction: 7, ease: Easing.in(Easing.ease(1, 0, 1, 1)), duration: 200 };
+let CIRCLE_SIZE = 56
+let config = { tension: 30, friction: 7, ease: Easing.in(Easing.ease(1, 0, 1, 1)), duration: 200 }
 
 const limit = SCREEN_WIDTH - toolbarHeight
 
 export default class extends Component {
 
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       data: false,
       isLoading: true,
@@ -103,7 +102,7 @@ export default class extends Component {
           titleInfo: data.titleInfo
         })
       })
-    });
+    })
   }
 
   handleImageOnclick = (url) => this.props.navigation.navigate('ImageViewer', {
@@ -111,7 +110,6 @@ export default class extends Component {
       { url }
     ]
   })
-
 
   renderHeader = (rowData) => {
     const { modeInfo } = this.props.screenProps
@@ -152,8 +150,8 @@ export default class extends Component {
         onMoveShouldSetResponder={() => false}
       >
         <Ionicons.ToolbarAndroid
-          navIconName="md-arrow-back"
-          overflowIconName="md-more"
+          navIconName='md-arrow-back'
+          overflowIconName='md-more'
           iconColor={modeInfo.isNightMode ? '#000' : '#fff'}
           title={`${params.title}`}
           titleColor={modeInfo.isNightMode ? '#000' : '#fff'}
@@ -167,7 +165,7 @@ export default class extends Component {
             }
             this._viewStyles.style.top = 0
             this._previousTop = 0
-            Animated.timing(marginTop, { toValue: 0, ...config, duration: 200 }).start();
+            Animated.timing(marginTop, { toValue: 0, ...config, duration: 200 }).start()
           }}
           onActionSelected={this.state.onActionSelected}
         />
@@ -185,21 +183,20 @@ export default class extends Component {
         )}
         {!this.state.isLoading && <ScrollView style={{ flex: 1 }}>{this.renderHeader(this.state.data)}</ScrollView>}
       </View>
-    );
+    )
   }
 }
-
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: 'column',
-    backgroundColor: '#F5FCFF',
+    backgroundColor: '#F5FCFF'
   },
   toolbar: {
     backgroundColor: standardColor,
     height: 56,
-    elevation: 4,
+    elevation: 4
   },
   selectedTitle: {
     //backgroundColor: '#00ffff'
@@ -207,10 +204,10 @@ const styles = StyleSheet.create({
   },
   avatar: {
     width: 50,
-    height: 50,
+    height: 50
   },
   a: {
     fontWeight: '300',
-    color: idColor, // make links coloured pink
-  },
-});
+    color: idColor // make links coloured pink
+  }
+})

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import {
   StyleSheet,
   Text,
@@ -17,45 +17,45 @@ import {
   PanResponder,
   StatusBar,
   Picker
-} from 'react-native';
+} from 'react-native'
 
-import { connect } from 'react-redux';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import { standardColor, accentColor } from '../constant/colorConfig';
+import { connect } from 'react-redux'
+import Ionicons from 'react-native-vector-icons/Ionicons'
+import { standardColor, accentColor } from '../constant/colorConfig'
 
-import { pngPrefix, getDealURL, getHappyPlusOneURL, getStoreURL } from '../dao';
+import { pngPrefix, getDealURL, getHappyPlusOneURL, getStoreURL } from '../dao'
 
-import { safeLogin, registURL } from '../dao/login';
-import { postReply } from '../dao/post';
+import { safeLogin, registURL } from '../dao/login'
+import { postReply } from '../dao/post'
 
 import Emotion from '../component/Emotion'
 
-let title = '回复';
+let title = '回复'
 
 let toolbarActions = [
 
-];
+]
 
-let AnimatedKeyboardAvoidingView = Animated.createAnimatedComponent(KeyboardAvoidingView);
+let AnimatedKeyboardAvoidingView = Animated.createAnimatedComponent(KeyboardAvoidingView)
 
-let screen = Dimensions.get('window');
+let screen = Dimensions.get('window')
 
-const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = screen;
+const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = screen
 
-SCREEN_HEIGHT = SCREEN_HEIGHT - StatusBar.currentHeight + 1;
+SCREEN_HEIGHT = SCREEN_HEIGHT - StatusBar.currentHeight + 1
 
-let CIRCLE_SIZE = 56;
+let CIRCLE_SIZE = 56
 
 const emotionToolbarHeight = 190
 
-let config = { tension: 30, friction: 7, ease: Easing.in(Easing.ease(1, 0, 1, 1)), duration: 200 };
+let config = { tension: 30, friction: 7, ease: Easing.in(Easing.ease(1, 0, 1, 1)), duration: 200 }
 
 let backConfig = { tension: 30, friction: 7, duration: 200 }
 
 export default class Search extends Component {
 
   constructor(props) {
-    super(props);
+    super(props)
     const { params } = this.props.navigation.state
 
     this.state = {
@@ -69,7 +69,7 @@ export default class Search extends Component {
   }
 
   componentDidMount = () => {
-    Animated.spring(this.state.openVal, { toValue: 1, ...config }).start();
+    Animated.spring(this.state.openVal, { toValue: 1, ...config }).start()
   }
 
   _pressBack = (callback) => {
@@ -82,13 +82,13 @@ export default class Search extends Component {
         typeof callback === 'function' && callback(_lastNativeText)
         Keyboard.dismiss()
       })
-    });
+    })
   }
   isKeyboardShowing = false
 
   componentWillUnmount = () => {
-    this.keyboardDidHideListener.remove();
-    this.keyboardDidShowListener.remove();
+    this.keyboardDidHideListener.remove()
+    this.keyboardDidShowListener.remove()
     this.removeListener && this.removeListener.remove()
   }
 
@@ -106,12 +106,12 @@ export default class Search extends Component {
     })
     this.isToolbarShowing = false
     this.removeListener = BackHandler.addEventListener('hardwareBackPress', () => {
-      let config = { tension: 30, friction: 7 };
+      let config = { tension: 30, friction: 7 }
       // Keyboard.dismiss()
       Animated.spring(openVal, { toValue: 0, ...backConfig }).start(() => {
         this.props.navigation.goBack()
         Keyboard.dismiss()
-      });
+      })
       return true
     })
 
@@ -135,7 +135,7 @@ export default class Search extends Component {
   }
 
   render() {
-    let { openVal, marginTop } = this.state;
+    let { openVal, marginTop } = this.state
     const { icon, toolbarOpenVal } = this.state
     const { modeInfo } = this.props.screenProps
     const { callback } = this.props.navigation.state.params
@@ -156,16 +156,16 @@ export default class Search extends Component {
         inputRange: [0, SCREEN_HEIGHT],
         outputRange: [0, SCREEN_HEIGHT]
       })
-    };
+    }
 
     let animatedSubmitStyle = {
-      height: openVal.interpolate({ inputRange: [0, 0.9, 1], outputRange: [0, 0, searchHeight] }),
+      height: openVal.interpolate({ inputRange: [0, 0.9, 1], outputRange: [0, 0, searchHeight] })
     }
 
     let animatedToolbarStyle = {
       height: openVal.interpolate({ inputRange: [0, 0.9, 1], outputRange: [searchHeight, searchHeight, searchHeight] }),
       borderWidth: 0,
-      backgroundColor: modeInfo.backgroundColor,
+      backgroundColor: modeInfo.backgroundColor
       // borderRadius: openVal.interpolate({ inputRange: [-0.15, 0, 1], outputRange: [CIRCLE_SIZE * 1.3, CIRCLE_SIZE * 1.3, 0] }),
       // zIndex: openVal.interpolate({ inputRange: [0, 1], outputRange: [0, 3] }),
       // backgroundColor: openVal.interpolate({
@@ -184,9 +184,9 @@ export default class Search extends Component {
             backgroundColor: 'rgba(0,0,0,0.2)',
             padding: 6,
             borderBottomLeftRadius: openVal.interpolate({
-              inputRange: [0, 9/16,1],
-              outputRange: [SCREEN_HEIGHT/2,SCREEN_HEIGHT/2, 0]
-            }),
+              inputRange: [0, 9 / 16, 1],
+              outputRange: [SCREEN_HEIGHT / 2, SCREEN_HEIGHT / 2, 0]
+            })
           }
         ]}
       >
@@ -209,7 +209,7 @@ export default class Search extends Component {
         <Animated.View style={[styles.KeyboardAvoidingView, {
           //flex: openVal.interpolate({ inputRange: [0, 1], outputRange: [0, 10] }),
           height: searchHeight,
-          flexDirection: 'row',
+          flexDirection: 'row'
         }]} >
 
           <Animated.View style={[styles.toolbar, animatedToolbarStyle, {
@@ -224,14 +224,14 @@ export default class Search extends Component {
             }}>
               <TouchableNativeFeedback
                 onPress={this._pressBack}
-                
+
                 background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
-                style={{ borderRadius: searchHeight/2 }}
+                style={{ borderRadius: searchHeight / 2 }}
               >
                 <View style={{ width: searchHeight, height: searchHeight, borderRadius: 25, justifyContent: 'center', alignItems: 'center' }}>
                   {icon && <Image
                     source={icon.backIcon}
-                    style={{alignSelf: 'center',alignContent: 'center'}}
+                    style={{alignSelf: 'center', alignContent: 'center'}}
                     style={{ width: 20, height: 20}}
                   />}
                 </View>
@@ -247,7 +247,7 @@ export default class Search extends Component {
             <TextInput placeholder={this.state.placeholder}
               autoCorrect={false}
               multiline={false}
-              keyboardType="default"
+              keyboardType='default'
               returnKeyType='go'
               returnKeyLabel='go'
               blurOnSubmit={true}
@@ -282,14 +282,14 @@ export default class Search extends Component {
             }}>
               <TouchableNativeFeedback
                 onPress={() => this._pressBack(callback)}
-                
+
                 background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
-                style={{ borderRadius: searchHeight/2 }}
+                style={{ borderRadius: searchHeight / 2 }}
               >
                 <View style={{ width: searchHeight, height: searchHeight, borderRadius: 25, justifyContent: 'center', alignItems: 'center' }}>
                   {icon && <Image
                     source={icon.sendIcon}
-                    style={{alignSelf: 'center',alignContent: 'center'}}
+                    style={{alignSelf: 'center', alignContent: 'center'}}
                     style={{ width: 20, height: 20}}
                   />}
                 </View>
@@ -299,13 +299,12 @@ export default class Search extends Component {
         </Animated.View>
 
       </Animated.View>
-    );
+    )
   }
 
 }
 
-
-const width = Dimensions.get('window').width;
+const width = Dimensions.get('window').width
 
 const styles = StyleSheet.create({
   circle: {
@@ -316,7 +315,7 @@ const styles = StyleSheet.create({
     height: CIRCLE_SIZE,
     borderRadius: CIRCLE_SIZE / 2,
     borderWidth: 2,
-    borderColor: accentColor,
+    borderColor: accentColor
     // elevation: 12,
   },
   open: {
@@ -327,20 +326,20 @@ const styles = StyleSheet.create({
     bottom: 0,
     width: undefined, // unset value from styles.circle
     height: undefined, // unset value from styles.circle
-    borderRadius: CIRCLE_SIZE / 2, // unset value from styles.circle
+    borderRadius: CIRCLE_SIZE / 2 // unset value from styles.circle
   },
   toolbar: {
     backgroundColor: standardColor,
     height: 56,
     // elevation: 4,
-    flex: -1,
+    flex: -1
   },
   mainFont: {
     fontSize: 15,
     color: accentColor
   },
   textInput: {
-    fontSize: 15,
+    fontSize: 15
   },
   KeyboardAvoidingView: {
     flex: 10,
@@ -352,7 +351,7 @@ const styles = StyleSheet.create({
   titleView: {
     flex: 1,
     //marginTop: -10,
-    justifyContent: 'center',
+    justifyContent: 'center'
     // flexDirection: 'column',
     // justifyContent: 'space-between',
   },
@@ -360,14 +359,14 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     // flexDirection: 'column',
-    alignItems: 'center',
+    alignItems: 'center'
   },
   contentView: {
-    flex: 12,
-    // flexDirection: 'column', 
+    flex: 12
+    // flexDirection: 'column',
   },
   submit: {
-    // flex: -1, 
+    // flex: -1,
     // height: 20,
     // //margin: 10,
     // marginTop: 30,
@@ -383,10 +382,10 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     marginTop: 20,
-    margin: 10,
+    margin: 10
   },
   openURL: {
     color: accentColor,
-    textDecorationLine: 'underline',
-  },
+    textDecorationLine: 'underline'
+  }
 })

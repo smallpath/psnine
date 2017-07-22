@@ -14,6 +14,8 @@ const versionInfo = {
   version: packages.version
 }
 
+const format = (str = '') => (str.replace(/\#/igm, '').replace(/\-/igm, '*').split('更新记录').pop() || '').trim()
+
 export default () => fetch(versionInfo.checkVersionURL).then(res => res.json()).then(data => {
   let latestTag = (data.tag_name || versionInfo.version).replace('v', '')
   const isBigger = semver(versionInfo.version, latestTag) < 0
@@ -35,5 +37,3 @@ ${format(data.body)}`,
     return latestTag
   }
 })
-
-const format = (str = '') => (str.replace(/\#/igm, '').replace(/\-/igm, '*').split('更新记录').pop() || '').trim()

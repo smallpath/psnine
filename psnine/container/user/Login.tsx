@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import {
   StyleSheet,
   Text,
@@ -13,34 +13,33 @@ import {
   Linking,
   Animated,
   Keyboard
-} from 'react-native';
+} from 'react-native'
 
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import Ionicons from 'react-native-vector-icons/Ionicons'
 
-import { connect } from 'react-redux';
+import { connect } from 'react-redux'
 
-import { standardColor, accentColor } from '../../constant/colorConfig';
+import { standardColor, accentColor } from '../../constant/colorConfig'
 
-import { pngPrefix, getDealURL, getHappyPlusOneURL, getStoreURL } from '../../dao';
+import { pngPrefix, getDealURL, getHappyPlusOneURL, getStoreURL } from '../../dao'
 
-import { safeLogin, registURL } from '../../dao/login';
+import { safeLogin, registURL } from '../../dao/login'
 
-import { fetchUser } from '../../dao';
+import { fetchUser } from '../../dao'
 
+let screen = Dimensions.get('window')
 
-let screen = Dimensions.get('window');
-
-const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = screen;
+const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = screen
 
 let toolbarActions = [
 
-];
-let title = "登录";
+]
+let title = '登录'
 
 class Login extends Component {
 
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       psnid: '',
       password: '',
@@ -52,33 +51,33 @@ class Login extends Component {
   }
 
   _pressButton = () => {
-    this.props.navigation.goBack();
+    this.props.navigation.goBack()
   }
 
   login = async () => {
-    const { psnid, password } = this.state;
+    const { psnid, password } = this.state
 
     if (psnid == '' || password == '') {
-      global.toast && global.toast('账号或密码未输入', 2000);
-      return;
+      global.toast && global.toast('账号或密码未输入', 2000)
+      return
     }
 
-    let data = await safeLogin(psnid, password);
-    let length = data.length;
+    let data = await safeLogin(psnid, password)
+    let length = data.length
 
     if (length > 10000) {
-      await AsyncStorage.setItem('@psnid', psnid);
-      const user = await fetchUser(psnid);
-      await AsyncStorage.setItem('@userInfo', JSON.stringify(user));
+      await AsyncStorage.setItem('@psnid', psnid)
+      const user = await fetchUser(psnid)
+      await AsyncStorage.setItem('@userInfo', JSON.stringify(user))
 
-      global.toast && global.toast(`登录成功`, 2000);
-      this.props.navigation.state.params.setLogin(psnid, user);
-      this.props.navigation.goBack();
+      global.toast && global.toast(`登录成功`, 2000)
+      this.props.navigation.state.params.setLogin(psnid, user)
+      this.props.navigation.goBack()
     } else {
 
-      await AsyncStorage.removeItem('@psnid');
-      const value = await AsyncStorage.getItem('@psnid');
-      global.toast && global.toast(`登录失败,请检查账号与密码是否输入正确`, 2000);
+      await AsyncStorage.removeItem('@psnid')
+      const value = await AsyncStorage.getItem('@psnid')
+      global.toast && global.toast(`登录失败,请检查账号与密码是否输入正确`, 2000)
     }
 
   }
@@ -86,10 +85,10 @@ class Login extends Component {
   regist = () => {
     Linking.canOpenURL(registURL).then(supported => {
       if (supported)
-        Linking.openURL(registURL);
+        Linking.openURL(registURL)
       else
-        global.toast && global.toast(`未找到浏览器, 如果您使用了冰箱, 请先解冻浏览器`, 2000);
-    }).catch(err => { });
+        global.toast && global.toast(`未找到浏览器, 如果您使用了冰箱, 请先解冻浏览器`, 2000)
+    }).catch(err => { })
   }
 
   async componentWillMount() {
@@ -98,14 +97,14 @@ class Login extends Component {
         toValue: 1,
         friction: 10,
         useNativeDriver: true
-      }).start();
+      }).start()
     })
     this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', () => {
       Animated.spring(this.state.avoidKeyboardMarginTop, {
         toValue: 0,
         friction: 10,
         useNativeDriver: true
-      }).start();
+      }).start()
     })
     const source = await Ionicons.getImageSource('ios-add', 24, '#fff')
     this.setState({
@@ -114,56 +113,56 @@ class Login extends Component {
   }
 
   componentWillUnmount = () => {
-    this.keyboardDidHideListener.remove();
-    this.keyboardDidShowListener.remove();
+    this.keyboardDidHideListener.remove()
+    this.keyboardDidShowListener.remove()
   }
 
   onAccountTextFocus = () => {
 
-    let text = this.accountTextInput._lastNativeText;
+    let text = this.accountTextInput._lastNativeText
     if (typeof text != 'undefined' && text !== '')
-      return;
+      return
 
     Animated.spring(this.state.accountMarginTop, {
       toValue: 1,
-      friction: 10,
+      friction: 10
       // useNativeDriver: true
-    }).start();
+    }).start()
   }
 
   onAccountTextBlur = () => {
-    let text = this.accountTextInput._lastNativeText;
+    let text = this.accountTextInput._lastNativeText
     if (typeof text != 'undefined' && text !== '')
-      return;
+      return
     Animated.spring(this.state.accountMarginTop, {
       toValue: 0,
-      friction: 10,
+      friction: 10
       // useNativeDriver: true
-    }).start();
+    }).start()
   }
 
   onPasswordTextFocus = () => {
 
-    let text = this.passwordTextInput._lastNativeText;
+    let text = this.passwordTextInput._lastNativeText
     if (typeof text != 'undefined' && text !== '')
-      return;
+      return
 
     Animated.spring(this.state.passwordMarginTop, {
       toValue: 1,
-      friction: 10,
+      friction: 10
       // useNativeDriver: true
-    }).start();
+    }).start()
   }
 
   onPasswordTextBlur = () => {
-    let text = this.passwordTextInput._lastNativeText;
+    let text = this.passwordTextInput._lastNativeText
     if (typeof text != 'undefined' && text !== '')
-      return;
+      return
     Animated.spring(this.state.passwordMarginTop, {
       toValue: 0,
-      friction: 10,
+      friction: 10
       // useNativeDriver: true
-    }).start();
+    }).start()
   }
 
   onSubmit = () => {
@@ -171,15 +170,15 @@ class Login extends Component {
   }
 
   focusNextField = (nextField) => {
-    this[nextField].focus();
-  };
+    this[nextField].focus()
+  }
 
   render() {
     // console.log('Loggin.js rendered');
-    let marginLeft = 40;
+    let marginLeft = 40
 
     const { modeInfo } = this.props.screenProps
-    const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
+    const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window')
     let avoidKeyboardStyle = {
       bottom: marginLeft * 1.5,
       top: SCREEN_HEIGHT / 10 * 4 - marginLeft * 1.5,
@@ -209,7 +208,7 @@ class Login extends Component {
       fontSize: this.state.accountMarginTop.interpolate({
         inputRange: [0, 1],
         outputRange: [15, 12]
-      }),
+      })
     }
 
     let passwordTextStyle = {
@@ -230,7 +229,7 @@ class Login extends Component {
       fontSize: this.state.passwordMarginTop.interpolate({
         inputRange: [0, 1],
         outputRange: [15, 12]
-      }),
+      })
     }
     return (
       <View style={{ flex: 1, backgroundColor: modeInfo.standardColor }}>
@@ -256,12 +255,12 @@ class Login extends Component {
             }],
             right: 12,
             elevation: 6,
-            zIndex: 1,
+            zIndex: 1
           }}>
 
           <TouchableNativeFeedback
             onPress={this.regist}
-            
+
             background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
             style={{
               width: 56,
@@ -269,7 +268,7 @@ class Login extends Component {
               borderRadius: 30,
               flex: 1,
               zIndex: 1,
-              backgroundColor: modeInfo.accentColor,
+              backgroundColor: modeInfo.accentColor
             }}>
             <View style={{ borderRadius: 30 }}>
               {this.state.addIcon && (<Image source={this.state.addIcon}
@@ -292,7 +291,7 @@ class Login extends Component {
           marginLeft: marginLeft,
           bottom: marginLeft,
           borderRadius: 5,
-          elevation: 6,
+          elevation: 6
         }, avoidKeyboardStyle]}>
 
           <View style={[styles.loginTextView, { marginLeft: marginLeft / 2 * 1.5, marginTop: 27 }]}>
@@ -300,9 +299,9 @@ class Login extends Component {
           </View>
 
           <View style={[styles.KeyboardAvoidingView, {
-            width: SCREEN_WIDTH - marginLeft * 3,
+            width: SCREEN_WIDTH - marginLeft * 3
           }]} >
-            <View style={[styles.accountView, { marginTop: 5, }]}>
+            <View style={[styles.accountView, { marginTop: 5 }]}>
               <Animated.Text
                 style={[{ color: modeInfo.standardTextColor, marginLeft: 5 },
                   accountTextStyle
@@ -315,7 +314,7 @@ class Login extends Component {
                 onFocus={this.onAccountTextFocus}
                 onBlur={this.onAccountTextBlur}
                 blurOnSubmit={false}
-                returnKeyType="next"
+                returnKeyType='next'
                 onSubmitEditing={() => this.focusNextField('passwordTextInput')}
                 style={[styles.textInput, { color: modeInfo.standardTextColor }]}
                 placeholderTextColor={modeInfo.standardTextColor}
@@ -341,7 +340,6 @@ class Login extends Component {
               <Text style={[styles.openURL, { marginTop: 10, color: modeInfo.standardColor }]}>忘记密码</Text>
             </View>
 
-
           </View>
 
           <View style={[styles.customView, {
@@ -361,25 +359,24 @@ class Login extends Component {
         </Animated.View>
 
       </View>
-    );
+    )
   }
 }
 
-
-const width = Dimensions.get('window').width;
+const width = Dimensions.get('window').width
 
 const styles = StyleSheet.create({
   toolbar: {
     backgroundColor: standardColor,
     height: 56,
-    elevation: 4,
+    elevation: 4
   },
   mainFont: {
     fontSize: 15,
     color: accentColor
   },
   textInput: {
-    fontSize: 15,
+    fontSize: 15
   },
   customView: {
     flex: -1,
@@ -404,7 +401,7 @@ const styles = StyleSheet.create({
 
     margin: 10,
     marginTop: 20,
-    marginBottom: 0,
+    marginBottom: 0
   },
   accountView: {
 
@@ -413,7 +410,7 @@ const styles = StyleSheet.create({
 
     marginLeft: 10,
     marginRight: 10,
-    marginTop: 20,
+    marginTop: 20
   },
   passwordView: {
 
@@ -421,32 +418,31 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     marginRight: 10,
     marginTop: 20,
-    marginBottom: 20,
+    marginBottom: 20
   },
   submit: {
     flex: -1,
     height: 30,
     margin: 10,
     marginTop: 40,
-    marginBottom: 20,
+    marginBottom: 20
   },
   submitButton: {
     backgroundColor: accentColor,
     height: 40,
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'center'
   },
   regist: {
     flex: 1,
     flexDirection: 'row',
     marginTop: 20,
-    margin: 10,
+    margin: 10
   },
   openURL: {
     color: accentColor,
-    textDecorationLine: 'underline',
-  },
-});
-
+    textDecorationLine: 'underline'
+  }
+})
 
 export default Login

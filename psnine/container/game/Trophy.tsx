@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import {
   AppRegistry,
   StyleSheet,
@@ -19,13 +19,11 @@ import {
   Linking,
   TextInput,
   Button
-} from 'react-native';
+} from 'react-native'
 
-
-
-import { connect } from 'react-redux';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import { standardColor, nodeColor, idColor, accentColor } from '../../constant/colorConfig';
+import { connect } from 'react-redux'
+import Ionicons from 'react-native-vector-icons/Ionicons'
+import { standardColor, nodeColor, idColor, accentColor } from '../../constant/colorConfig'
 import ComplexComment from '../../component/ComplexComment'
 
 import {
@@ -36,28 +34,28 @@ import {
   translate
 } from '../../dao/post'
 
-let screen = Dimensions.get('window');
-const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = screen;
+let screen = Dimensions.get('window')
+const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = screen
 
 let toolbarActions = [
   { title: '回复', iconName: 'md-create', show: 'always', iconSize: 22 },
-  { title: '刷新', iconName: 'md-refresh', show: 'always' },
-];
-let title = "TOPIC";
-let WEBVIEW_REF = `WEBVIEW_REF`;
+  { title: '刷新', iconName: 'md-refresh', show: 'always' }
+]
+let title = 'TOPIC'
+let WEBVIEW_REF = `WEBVIEW_REF`
 
-let toolbarHeight = 56;
-let releasedMarginTop = 0;
+let toolbarHeight = 56
+let releasedMarginTop = 0
 
-const ACTUAL_SCREEN_HEIGHT = SCREEN_HEIGHT - StatusBar.currentHeight + 1;
+const ACTUAL_SCREEN_HEIGHT = SCREEN_HEIGHT - StatusBar.currentHeight + 1
 
-let CIRCLE_SIZE = 56;
-let config = { tension: 30, friction: 7, ease: Easing.in(Easing.ease(1, 0, 1, 1)), duration: 200 };
+let CIRCLE_SIZE = 56
+let config = { tension: 30, friction: 7, ease: Easing.in(Easing.ease(1, 0, 1, 1)), duration: 200 }
 
 class CommunityTopic extends Component {
 
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       data: false,
       isLoading: true,
@@ -115,7 +113,7 @@ class CommunityTopic extends Component {
         } else if (this.state.openVal._value === 0) {
           cb()
         }
-        return;
+        return
       case 1:
         this.preFetch()
         return
@@ -140,7 +138,7 @@ class CommunityTopic extends Component {
           isLoading: false
         })
       })
-    });
+    })
   }
 
   handleImageOnclick = (url) => this.props.navigation.navigate('ImageViewer', {
@@ -148,7 +146,6 @@ class CommunityTopic extends Component {
       { url }
     ]
   })
-
 
   shouldComponentUpdate = (nextProp, nextState) => {
     return true
@@ -170,7 +167,7 @@ class CommunityTopic extends Component {
           }
         }}
         useForeground={true}
-        
+
         background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
       >
         <View style={{ flex: -1, flexDirection: 'row', padding: 12,
@@ -185,7 +182,7 @@ class CommunityTopic extends Component {
 
           <View style={{ marginLeft: 10, flex: 1, flexDirection: 'column' }}>
             <Text
-              style={{ flex: 1, color: modeInfo.titleTextColor, }}>
+              style={{ flex: 1, color: modeInfo.titleTextColor }}>
               {rowData.title}
             </Text>
 
@@ -209,14 +206,14 @@ class CommunityTopic extends Component {
     return (
     <View style={{
         backgroundColor: modeInfo.backgroundColor,
-        elevation: 1, margin: 5, marginTop: 0,
+        elevation: 1, margin: 5, marginTop: 0
       }}>
         <TouchableNativeFeedback
           onPress={() => {
 
           }}
           useForeground={true}
-          
+
           background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
         >
           <View pointerEvents='box-only' style={{ flex: 1, flexDirection: 'row', padding: 12 }}>
@@ -229,7 +226,7 @@ class CommunityTopic extends Component {
               <Text
                 ellipsizeMode={'tail'}
                 numberOfLines={3}
-                style={{ flex: 2.5, color: modeInfo.titleTextColor, }}>
+                style={{ flex: 2.5, color: modeInfo.titleTextColor }}>
                 {rowData.title}
               </Text>
 
@@ -247,9 +244,8 @@ class CommunityTopic extends Component {
 
   hasComment = false
 
-
   isReplyShowing = false
-  
+
   renderComment = (rowData, index) => {
     const { modeInfo } = this.props.screenProps
     const { navigation } = this.props
@@ -263,14 +259,13 @@ class CommunityTopic extends Component {
     }}/>)
   }
 
-
   focusNextField = (nextField) => {
-    this[nextField] && this[nextField].focus();
+    this[nextField] && this[nextField].focus()
   }
 
   submit = () => {
     const { params } = this.props.navigation.state
-    
+
     const tid = (params.URL || '').split('/').pop()
     translate({
       title: this.state.title,
@@ -325,8 +320,8 @@ class CommunityTopic extends Component {
         onMoveShouldSetResponder={() => false}
       >
         <Ionicons.ToolbarAndroid
-          navIconName="md-arrow-back"
-          overflowIconName="md-more"
+          navIconName='md-arrow-back'
+          overflowIconName='md-more'
           iconColor={modeInfo.isNightMode ? '#000' : '#fff'}
           title={`${params.title}`}
           titleColor={modeInfo.isNightMode ? '#000' : '#fff'}
@@ -389,14 +384,14 @@ class CommunityTopic extends Component {
                 elevation: 4,
                 opacity: 1
               }} borderRadius={2}>
-                <Text style={{color: modeInfo.standardTextColor}}>为了更好的帮助他人，奖杯翻译请严格遵循 <Text 
-                  style={{color: modeInfo.accentColor}} 
+                <Text style={{color: modeInfo.standardTextColor}}>为了更好的帮助他人，奖杯翻译请严格遵循 <Text
+                  style={{color: modeInfo.accentColor}}
                     onPress={() => this.setState({ modalVisible: false}, () => Linking.openURL('p9://psnine.com/topic/1317'))}>「翻译」使用全指南</Text></Text>
                  <View style={{ flexDirection: 'row'}}>
-                  <TextInput placeholder="奖杯标题（对奖杯标题文字的翻译）"
+                  <TextInput placeholder='奖杯标题（对奖杯标题文字的翻译）'
                     autoCorrect={false}
                     multiline={false}
-                    keyboardType="default"
+                    keyboardType='default'
                     returnKeyType='go'
                     returnKeyLabel='go'
                     blurOnSubmit={true}
@@ -419,10 +414,10 @@ class CommunityTopic extends Component {
                   />
                 </View>
                 <View style={{flexDirection: 'row'}}>
-                  <TextInput placeholder="奖杯说明（不是奖杯攻略，是对奖杯说明文字的翻译）"
+                  <TextInput placeholder='奖杯说明（不是奖杯攻略，是对奖杯说明文字的翻译）'
                     autoCorrect={false}
                     multiline={true}
-                    keyboardType="default"
+                    keyboardType='default'
                     blurOnSubmit={true}
                     numberOfLines={4}
                     ref={ref => this.content = ref}
@@ -438,27 +433,26 @@ class CommunityTopic extends Component {
                     // underlineColorAndroid={accentColor}
                     underlineColorAndroid='rgba(0,0,0,0)'
                   />
-                </View> 
+                </View>
                 <Button title='提交' onPress={() => this.submit()} color={modeInfo.standardColor}/>
               </View>
             )} />
         )}
       </View>
-    );
+    )
   }
 }
-
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: 'column',
-    backgroundColor: '#F5FCFF',
+    backgroundColor: '#F5FCFF'
   },
   toolbar: {
     backgroundColor: standardColor,
     height: 56,
-    elevation: 4,
+    elevation: 4
   },
   selectedTitle: {
     //backgroundColor: '#00ffff'
@@ -466,13 +460,12 @@ const styles = StyleSheet.create({
   },
   avatar: {
     width: 50,
-    height: 50,
+    height: 50
   },
   a: {
     fontWeight: '300',
-    color: idColor, // make links coloured pink
-  },
-});
-
+    color: idColor // make links coloured pink
+  }
+})
 
 export default CommunityTopic

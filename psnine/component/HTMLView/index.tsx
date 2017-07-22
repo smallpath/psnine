@@ -8,11 +8,11 @@ import {
   ToastAndroid
 } from 'react-native'
 
-import { standardColor, nodeColor, idColor } from '../../constant/colorConfig';
+import { standardColor, nodeColor, idColor } from '../../constant/colorConfig'
 
-const boldStyle = { fontWeight: '500' };
-const italicStyle = { fontStyle: 'italic' };
-const codeStyle = { fontFamily: 'Menlo' };
+const boldStyle = { fontWeight: '500' }
+const italicStyle = { fontStyle: 'italic' }
+const codeStyle = { fontFamily: 'Menlo' }
 
 const baseStyles = StyleSheet.create({
   b: boldStyle,
@@ -22,7 +22,7 @@ const baseStyles = StyleSheet.create({
   pre: codeStyle,
   code: codeStyle,
   a: {
-    color: idColor,
+    color: idColor
   },
   u: { textDecorationLine: 'underline' },
   s: { textDecorationLine: 'line-through' },
@@ -38,7 +38,7 @@ const baseStyles = StyleSheet.create({
     paddingHorizontal: 6,
     margin: 10
   }
-});
+})
 
 const urlMapper = /(http:\/\/|https:\/\/)((\w|=|\?|\.|\/|#|\&|-|\!)+)/igm
 
@@ -82,7 +82,7 @@ class HtmlView extends Component {
         paddingHorizontal: 6,
         margin: 10
       }
-    } 
+    }
 
     const opts = {
       linkHandler: this.props.onLinkPress,
@@ -132,9 +132,9 @@ class HtmlView extends Component {
     if (this.state.element) {
       const alignSelf = this.props.alignCenter ? { justifyContent: 'center' } : {}
       Object.assign(alignSelf, { flexDirection: 'column', flexWrap: 'wrap' })
-      return <TargetView children={this.state.element} style={[this.props.style, this.props.shouldForceInline ? null : alignSelf]} />;
+      return <TargetView children={this.state.element} style={[this.props.style, this.props.shouldForceInline ? null : alignSelf]} />
     }
-    return <TargetView style={this.props.style} />;
+    return <TargetView style={this.props.style} />
   }
 }
 
@@ -163,7 +163,7 @@ HtmlView.defaultProps = {
     const request = isGettingType ? () => { return {
       type, title, errMessage}
     } : (targetURL) => Linking.openURL(targetURL).catch(err => {
-      ToastAndroid.show(errMessage || err.toString(), ToastAndroid.SHORT) 
+      ToastAndroid.show(errMessage || err.toString(), ToastAndroid.SHORT)
       errHandler(err)
     })
     const errHandler = (err) => Linking.openURL(baseURL).catch(err => toast(errMessage || err.toString()))

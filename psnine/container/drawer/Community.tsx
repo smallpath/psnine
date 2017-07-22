@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import {
   StyleSheet,
   Text,
@@ -12,49 +12,49 @@ import {
   ProgressBarAndroid,
   Animated,
   Alert
-} from 'react-native';
+} from 'react-native'
 
-import { connect } from 'react-redux';
-import { getTopicList } from '../../redux/action/community.js';
-import { standardColor, nodeColor, idColor } from '../../constant/colorConfig';
+import { connect } from 'react-redux'
+import { getTopicList } from '../../redux/action/community.js'
+import { standardColor, nodeColor, idColor } from '../../constant/colorConfig'
 
-import { getTopicURL } from '../../dao';
+import { getTopicURL } from '../../dao'
 
-import { changeScrollType } from '../../redux/action/app';
+import { changeScrollType } from '../../redux/action/app'
 
 import TopicItem from '../../component/CommunityItem'
 import NewsItem from '../../component/NewsItem'
 import FooterProgress from '../../component/FooterProgress'
 
-let toolbarHeight = 56;
-let releasedMarginTop = 0;
-let prevPosition = -1;
+let toolbarHeight = 56
+let releasedMarginTop = 0
+let prevPosition = -1
 
-const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
+const AnimatedFlatList = Animated.createAnimatedComponent(FlatList)
 
 class Community extends Component {
   static navigationOptions = {
     tabBarLabel: '社区',
     drawerLabel: '社区'
-  };
+  }
 
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       isRefreshing: false,
-      isLoadingMore: false,
+      isLoadingMore: false
     }
   }
 
   componentWillReceiveProps = (nextProps) => {
     if (this.props.communityType != nextProps.communityType) {
-      this._onRefresh(nextProps.communityType);
+      this._onRefresh(nextProps.communityType)
     } else if (this.props.screenProps.modeInfo.themeName != nextProps.screenProps.modeInfo.themeName) {
 
     } else if (this.props.screenProps.searchTitle !== nextProps.screenProps.searchTitle) {
 
     } else {
-      
+
       this.setState({
         isRefreshing: false,
         isLoadingMore: false
@@ -72,11 +72,11 @@ class Community extends Component {
   }
 
   componentWillMount = () => {
-    const { community: communityReducer, communityType } = this.props;
+    const { community: communityReducer, communityType } = this.props
     const { searchTitle, registerAfterEach } = this.props.screenProps
     if (communityReducer.topicPage == 0) {
       // this._onRefresh(
-      //   communityType, 
+      //   communityType,
       //   searchTitle
       // )
       this.setState({
@@ -90,7 +90,7 @@ class Community extends Component {
       ) => {
         const { communityType } = this.props
         this._onRefresh(
-          communityType, 
+          communityType,
           searchTitle
         )
       }
@@ -98,7 +98,7 @@ class Community extends Component {
   }
 
   _onRefresh = (type = '', searchTitle) => {
-    const { community: communityReducer, dispatch, communityType } = this.props;
+    const { community: communityReducer, dispatch, communityType } = this.props
     this.setState({
       isRefreshing: true
     })
@@ -107,19 +107,19 @@ class Community extends Component {
         type,
         title: typeof searchTitle !== 'undefined' ? searchTitle : this.props.screenProps.searchTitle
       })
-    );
+    )
   }
 
   _loadMoreData = () => {
-    const { community: communityReducer, dispatch, communityType } = this.props;
+    const { community: communityReducer, dispatch, communityType } = this.props
     const { searchTitle } = this.props.screenProps
 
-    let page = communityReducer.topicPage + 1;
+    let page = communityReducer.topicPage + 1
     dispatch(getTopicList(page, {
         type: communityType,
         title: searchTitle
       })
-    );
+    )
   }
 
   _onEndReached = () => {
@@ -128,7 +128,7 @@ class Community extends Component {
     this.setState({
       isLoadingMore: true
     })
-    this._loadMoreData();
+    this._loadMoreData()
   }
 
   ITEM_HEIGHT = 74 + 7
@@ -155,10 +155,10 @@ class Community extends Component {
   }
 
   render() {
-    const { community: reducer, communityType } = this.props;
+    const { community: reducer, communityType } = this.props
     const { modeInfo } = this.props.screenProps
     const { searchTitle } = this.props.screenProps
-    log('Community.js rendered');
+    log('Community.js rendered')
     // console.log('Community.js rendered');
     return (
       <AnimatedFlatList style={{
@@ -208,17 +208,17 @@ class Community extends Component {
 const styles = StyleSheet.create({
   avatar: {
     width: 50,
-    height: 50,
+    height: 50
   }
-});
+})
 
 function mapStateToProps(state, ownProps) {
   return {
     community: state.community,
     communityType: state.app.communityType
-  };
+  }
 }
 
 export default connect(
   mapStateToProps
-)(Community);
+)(Community)

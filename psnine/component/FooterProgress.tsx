@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import {
   StyleSheet,
   Text,
@@ -11,7 +11,7 @@ import {
   FlatList,
   ProgressBarAndroid,
   Animated
-} from 'react-native';
+} from 'react-native'
 
 import { accentColor } from '../constant/colorConfig'
 
@@ -23,8 +23,8 @@ export default class FooterProgress extends React.PureComponent {
   }
   render() {
     return this.props.isLoadingMore ? (
-      <View style={{flexDirection:'row', flex: 1, height: 4, alignItems: 'flex-end'}}>
-        <ProgressBarAndroid color={this.props.modeInfo.accentColor} style={{flex:1,
+      <View style={{flexDirection: 'row', flex: 1, height: 4, alignItems: 'flex-end'}}>
+        <ProgressBarAndroid color={this.props.modeInfo.accentColor} style={{flex: 1,
           height: 40,
           marginBottom: -18,
           transform: [
@@ -32,9 +32,9 @@ export default class FooterProgress extends React.PureComponent {
               rotateZ: '180deg'
             }
           ]
-        }}  styleAttr="Horizontal"/>
-        <ProgressBarAndroid style={{flex:1,height: 40,marginBottom: -18}} color={this.props.modeInfo.accentColor} styleAttr="Horizontal" />
+        }}  styleAttr='Horizontal'/>
+        <ProgressBarAndroid style={{flex: 1, height: 40, marginBottom: -18}} color={this.props.modeInfo.accentColor} styleAttr='Horizontal' />
       </View>
-    ) : (<View style={{flexDirection:'row', flex: 1, height: 4, alignItems: 'flex-end'}}/>)
+    ) : (<View style={{flexDirection: 'row', flex: 1, height: 4, alignItems: 'flex-end'}}/>)
   }
 }

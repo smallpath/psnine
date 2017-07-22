@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import {
   StyleSheet,
   Text,
@@ -15,34 +15,31 @@ import {
   ActivityIndicator,
   FlatList,
   Button
-} from 'react-native';
+} from 'react-native'
 
-const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
+const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window')
 
+import { connect } from 'react-redux'
+import { standardColor, nodeColor, idColor } from '../../constant/colorConfig'
 
-
-
-import { connect } from 'react-redux';
-import { standardColor, nodeColor, idColor } from '../../constant/colorConfig';
-
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import { getUserBoardCommentAPI } from '../../dao';
+import Ionicons from 'react-native-vector-icons/Ionicons'
+import { getUserBoardCommentAPI } from '../../dao'
 import ComplexComment from '../../component/ComplexComment'
 
 const ds = new ListView.DataSource({
-  rowHasChanged: (row1, row2) => row1.href !== row2.href,
-});
+  rowHasChanged: (row1, row2) => row1.href !== row2.href
+})
 
 let toolbarActions = [
-  { title: '回复', iconName: 'md-create', iconSize: 22, show: 'always' },
-];
+  { title: '回复', iconName: 'md-create', iconSize: 22, show: 'always' }
+]
 
 class UserBoard extends Component {
   static navigationOptions = {
      tabBarLabel: '留言板'
   }
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       data: false,
       commentList: [],
@@ -71,13 +68,12 @@ class UserBoard extends Component {
           })
         }
         cb()
-        return;
+        return
       case 1:
         this.preFetch()
         return
     }
   }
-
 
   handleImageOnclick = (url) => this.props.screenProps.navigation.navigate('ImageViewer', {
     images: [
@@ -99,7 +95,7 @@ class UserBoard extends Component {
       params = { ...screenProps.toolbar[3] }
     }
     this.URL = params.URL
-    this.preFetch();
+    this.preFetch()
   }
 
   preFetch = () => {
@@ -128,7 +124,7 @@ class UserBoard extends Component {
               })
             }
             componentDidFocus()
-          });
+          })
         })
       })
     })
@@ -230,14 +226,14 @@ class UserBoard extends Component {
                   style: {
                     elevation: 12
                   }
-                });
+                })
               }}
               onPressOut={() => {
                 this.float.setNativeProps({
                   style: {
                     elevation: 6
                   }
-                });
+                })
               }}>
               <View pointerEvents='box-only' style={{
                 backgroundColor: modeInfo.accentColor,
@@ -254,17 +250,16 @@ class UserBoard extends Component {
 
 }
 
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: 'column',
-    backgroundColor: '#F5FCFF',
+    backgroundColor: '#F5FCFF'
   },
   toolbar: {
     backgroundColor: standardColor,
     height: 56,
-    elevation: 4,
+    elevation: 4
   },
   selectedTitle: {
     //backgroundColor: '#00ffff'
@@ -272,13 +267,12 @@ const styles = StyleSheet.create({
   },
   avatar: {
     width: 50,
-    height: 50,
+    height: 50
   },
   a: {
     fontWeight: '300',
-    color: idColor, // make links coloured pink
-  },
-});
+    color: idColor // make links coloured pink
+  }
+})
 
-
-export default UserBoard;
+export default UserBoard

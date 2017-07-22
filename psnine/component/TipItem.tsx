@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import {
   AppRegistry,
   StyleSheet,
@@ -16,18 +16,16 @@ import {
   PanResponder,
   Modal,
   Keyboard
-} from 'react-native';
+} from 'react-native'
 
+import { connect } from 'react-redux'
+import Ionicons from 'react-native-vector-icons/Ionicons'
+import { standardColor, nodeColor, idColor, accentColor } from '../constant/colorConfig'
 
-import { connect } from 'react-redux';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import { standardColor, nodeColor, idColor, accentColor } from '../constant/colorConfig';
+import { getHomeURL } from '../dao'
 
-
-import { getHomeURL } from '../dao';
-
-let screen = Dimensions.get('window');
-const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = screen;
+let screen = Dimensions.get('window')
+const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = screen
 
 export default class PhotoItem extends React.PureComponent {
 
@@ -36,7 +34,6 @@ export default class PhotoItem extends React.PureComponent {
     return false
   }
 
-  
   onPress = () => {
     const { modeInfo, rowData, navigation } = this.props
     navigation.navigate('Trophy', {
@@ -53,12 +50,12 @@ export default class PhotoItem extends React.PureComponent {
     return (
       <TouchableNativeFeedback
         useForeground={true}
-        
+
         onPress={this.onPress}
         background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
       >
-        <View style={{ 
-          flex: -1, flexDirection: 'row', padding: 2,alignItems: 'center',
+        <View style={{
+          flex: -1, flexDirection: 'row', padding: 2, alignItems: 'center',
           alignSelf: 'flex-start',
           alignContent: 'center',
           alignItems: 'center',
@@ -91,6 +88,6 @@ export default class PhotoItem extends React.PureComponent {
 const styles = StyleSheet.create({
   avatar: {
     width: 48,
-    height: 48,
+    height: 48
   }
-});
+})

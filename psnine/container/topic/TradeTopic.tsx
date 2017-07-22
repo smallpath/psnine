@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import {
   AppRegistry,
   StyleSheet,
@@ -17,12 +17,11 @@ import {
   Modal,
   Keyboard,
   Linking
-} from 'react-native';
+} from 'react-native'
 
-
-import { connect } from 'react-redux';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import { standardColor, nodeColor, idColor, accentColor } from '../../constant/colorConfig';
+import { connect } from 'react-redux'
+import Ionicons from 'react-native-vector-icons/Ionicons'
+import { standardColor, nodeColor, idColor, accentColor } from '../../constant/colorConfig'
 import SimpleComment from '../../component/SimpleComment'
 import {
   getTradeTopicAPI as getAPI
@@ -32,8 +31,8 @@ import {
   postReply
 } from '../../dao/post'
 
-let screen = Dimensions.get('window');
-const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = screen;
+let screen = Dimensions.get('window')
+const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = screen
 
 let toolbarActions = [
   {
@@ -47,7 +46,7 @@ let toolbarActions = [
         isOldPage: true,
         shouldSeeBackground: true
       })
-      return;
+      return
     }
   },
   {
@@ -69,29 +68,28 @@ let toolbarActions = [
           url: params.URL,
           message: '[PSNINE] ' + this.state.data.titleInfo.title,
           title: 'PSNINE'
-        }).catch((err) => { err && console.log(err); })
+        }).catch((err) => { err && console.log(err) })
         url && Linking.openURL(url).catch(err => toast(err.toString())) || toast('暂无出处')
       } catch (err) { }
     }
   }
-];
+]
 
-let title = "TOPIC";
-let WEBVIEW_REF = `WEBVIEW_REF`;
+let title = 'TOPIC'
+let WEBVIEW_REF = `WEBVIEW_REF`
 
-let toolbarHeight = 56;
-let releasedMarginTop = 0;
+let toolbarHeight = 56
+let releasedMarginTop = 0
 
-const ACTUAL_SCREEN_HEIGHT = SCREEN_HEIGHT - StatusBar.currentHeight + 1;
+const ACTUAL_SCREEN_HEIGHT = SCREEN_HEIGHT - StatusBar.currentHeight + 1
 
-let CIRCLE_SIZE = 56;
-let config = { tension: 30, friction: 7, ease: Easing.in(Easing.ease(1, 0, 1, 1)), duration: 200 };
-
+let CIRCLE_SIZE = 56
+let config = { tension: 30, friction: 7, ease: Easing.in(Easing.ease(1, 0, 1, 1)), duration: 200 }
 
 export default class extends Component {
 
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       data: false,
       isLoading: true,
@@ -130,7 +128,7 @@ export default class extends Component {
           isLoading: false
         })
       })
-    });
+    })
   }
 
   handleImageOnclick = (url) => this.props.navigation.navigate('ImageViewer', {
@@ -268,7 +266,6 @@ export default class extends Component {
     )
   }
 
-
   hasComment = false
   hasReadMore = false
   renderComment = (commentList) => {
@@ -385,7 +382,7 @@ export default class extends Component {
               URL: source.titleInfo.edit
             })
           }
-        },
+        }
       )
       source.titleInfo.dalao && targetActions.push(
         {
@@ -400,10 +397,9 @@ export default class extends Component {
               return toast('已成功打捞')
             }).catch(err => toast(err.toString()))
           }
-        },
+        }
       )
     }
-
 
     this.viewBottomIndex = Math.max(data.length - 1, 0)
 
@@ -414,8 +410,8 @@ export default class extends Component {
         onMoveShouldSetResponder={() => false}
       >
         <Ionicons.ToolbarAndroid
-          navIconName="md-arrow-back"
-          overflowIconName="md-more"
+          navIconName='md-arrow-back'
+          overflowIconName='md-more'
           iconColor={modeInfo.isNightMode ? '#000' : '#fff'}
           title={params.title ? params.title : `No.${params.rowData.id}`}
           titleColor={modeInfo.isNightMode ? '#000' : '#fff'}
@@ -460,21 +456,20 @@ export default class extends Component {
         </FlatList>
         }
       </View>
-    );
+    )
   }
 }
-
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: 'column',
-    backgroundColor: '#F5FCFF',
+    backgroundColor: '#F5FCFF'
   },
   toolbar: {
     backgroundColor: standardColor,
     height: 56,
-    elevation: 4,
+    elevation: 4
   },
   selectedTitle: {
     //backgroundColor: '#00ffff'
@@ -482,11 +477,10 @@ const styles = StyleSheet.create({
   },
   avatar: {
     width: 50,
-    height: 50,
+    height: 50
   },
   a: {
     fontWeight: '300',
-    color: idColor, // make links coloured pink
-  },
-});
-
+    color: idColor // make links coloured pink
+  }
+})

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import {
   StyleSheet,
   Text,
@@ -13,17 +13,15 @@ import {
   Modal,
   Slider,
   FlatList
-} from 'react-native';
+} from 'react-native'
 
-const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
+const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window')
 
+import { connect } from 'react-redux'
+import { standardColor, nodeColor, idColor } from '../../constant/colorConfig'
 
-
-import { connect } from 'react-redux';
-import { standardColor, nodeColor, idColor } from '../../constant/colorConfig';
-
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import { getGameMapperAPI, getTopicURL } from '../../dao';
+import Ionicons from 'react-native-vector-icons/Ionicons'
+import { getGameMapperAPI, getTopicURL } from '../../dao'
 
 import TopicItem from '../../component/CommunityItem'
 import GameItem from '../../component/GameItem'
@@ -32,14 +30,14 @@ import FooterProgress from '../../component/FooterProgress'
 
 let toolbarActions = [
   // { title: '跳页', iconName: 'md-map', show: 'always' },
-];
+]
 
 class NewsItemBackup extends React.PureComponent {
 
   shouldComponentUpdate = (props, state) => props.modeInfo.themeName !== this.props.modeInfo.themeName
 
   _onRowPressed = (rowData) => {
-    const { navigation } = this.props;
+    const { navigation } = this.props
     const id = rowData.id || parseInt(rowData.url.split('/').pop())
     const URL = getTopicURL(id)
     navigation.navigate('CommunityTopic', {
@@ -72,7 +70,7 @@ class NewsItemBackup extends React.PureComponent {
               this._onRowPressed(rowData)
             }}
             useForeground={true}
-            
+
             background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
           >
             <View style={{ flex: 1 }}>
@@ -81,39 +79,39 @@ class NewsItemBackup extends React.PureComponent {
                 source={{ uri: rowData.avatar }}
                 style={{ width, height: ITEM_HEIGHT - 5 - 50 }}
               /> || undefined}
-                <View style={{ 
-                  position: 'absolute', 
-                  bottom: 0, 
+                <View style={{
+                  position: 'absolute',
+                  bottom: 0,
                   flex: -1,
                   left: 0,
                   right: 0,
-                  flexDirection: 'row', 
+                  flexDirection: 'row',
                   justifyContent: 'space-between',
                   paddingHorizontal: 4,
                   zIndex: 2  }}>
-                  <Text style={{ flex: -1, color: modeInfo.titleTextColor, }}>
+                  <Text style={{ flex: -1, color: modeInfo.titleTextColor }}>
                     {rowData.date}
                   </Text>
-                  <Text style={{ flex: -1, color: modeInfo.titleTextColor, }}>
+                  <Text style={{ flex: -1, color: modeInfo.titleTextColor }}>
                     {rowData.reply}
                   </Text>
                 </View>
-                <View style={{ 
-                  position: 'absolute', 
-                  bottom: 0, 
+                <View style={{
+                  position: 'absolute',
+                  bottom: 0,
                   flex: -1,
                   left: 0,
                   right: 0,
-                  flexDirection: 'row', 
+                  flexDirection: 'row',
                   justifyContent: 'space-between',
                   backgroundColor: modeInfo.brighterLevelOne,
                   paddingHorizontal: 4,
                   opacity: 0.5,
                   zIndex: 1}}>
-                  <Text style={{ flex: -1, color: modeInfo.titleTextColor, }}>
+                  <Text style={{ flex: -1, color: modeInfo.titleTextColor }}>
                     {rowData.date}
                   </Text>
-                  <Text style={{ flex: -1, color: modeInfo.titleTextColor, }}>
+                  <Text style={{ flex: -1, color: modeInfo.titleTextColor }}>
                     {rowData.reply}
                   </Text>
                 </View>
@@ -139,7 +137,7 @@ class NewsItemBackup extends React.PureComponent {
 
 class GameTopic extends Component {
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       list: [],
       URL: this.props.screenProps.baseUrl + '/news',
@@ -154,9 +152,8 @@ class GameTopic extends Component {
     }
   }
 
-
   componentWillMount = async () => {
-    this.fetchMessages(this.state.URL, 'jump');
+    this.fetchMessages(this.state.URL, 'jump')
   }
 
   fetchMessages = (url, type = 'down') => {
@@ -169,7 +166,7 @@ class GameTopic extends Component {
             list: data,
             isLoadingMore: false,
             isRefreshing: false
-          });
+          })
         })
       })
     })
@@ -178,7 +175,7 @@ class GameTopic extends Component {
   pageArr = [1]
   _onRefresh = () => {
     if (this.state.isLoadingMore || this.state.isRefreshing) return
-    this.fetchMessages(this.state.URL);
+    this.fetchMessages(this.state.URL)
   }
 
   onActionSelected = (index) => {
@@ -190,7 +187,6 @@ class GameTopic extends Component {
         return
     }
   }
-
 
   ITEM_HEIGHT = 200 + 10
 
@@ -263,17 +259,16 @@ class GameTopic extends Component {
 
 }
 
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: 'column',
-    backgroundColor: '#F5FCFF',
+    backgroundColor: '#F5FCFF'
   },
   toolbar: {
     backgroundColor: standardColor,
     height: 56,
-    elevation: 4,
+    elevation: 4
   },
   selectedTitle: {
     //backgroundColor: '#00ffff'
@@ -281,13 +276,12 @@ const styles = StyleSheet.create({
   },
   avatar: {
     width: 50,
-    height: 50,
+    height: 50
   },
   a: {
     fontWeight: '300',
-    color: idColor, // make links coloured pink
-  },
-});
+    color: idColor // make links coloured pink
+  }
+})
 
-
-export default GameTopic;
+export default GameTopic

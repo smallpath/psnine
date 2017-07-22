@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import {
   StyleSheet,
   Text,
@@ -9,15 +9,13 @@ import {
   RefreshControl,
   InteractionManager,
   Picker
-} from 'react-native';
+} from 'react-native'
 
+import { connect } from 'react-redux'
+import Ionicons from 'react-native-vector-icons/Ionicons'
+import { standardColor, nodeColor, idColor, accentColor } from '../constant/colorConfig'
 
-
-import { connect } from 'react-redux';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import { standardColor, nodeColor, idColor, accentColor } from '../constant/colorConfig';
-
-import { getQAUrl } from '../dao';
+import { getQAUrl } from '../dao'
 
 import {
   getGamePointAPI,
@@ -36,15 +34,15 @@ export default class extends React.PureComponent {
   shouldComponentUpdate = (props, state) => props.modeInfo.themeName !== this.props.modeInfo.themeName || this.state.modalVisible !== state.modalVisible
 
   _onRowPressed = (rowData) => {
-    const { navigation } = this.props;
-    const URL = getQAUrl(rowData.id);
+    const { navigation } = this.props
+    const URL = getQAUrl(rowData.id)
     navigation.navigate('QaTopic', {
       URL,
       title: rowData.title,
       rowData,
       type: 'qa',
       shouldBeSawBackground: true
-    });
+    })
   }
 
   render = () => {
@@ -61,10 +59,10 @@ export default class extends React.PureComponent {
           })
         }}
         useForeground={true}
-        
+
         background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
       >
-        <View style={{ 
+        <View style={{
           flex: 1, flexDirection: 'row', padding: 12,
           marginVertical: 3.5,
           marginHorizontal: numColumns === 1 ? 0 : 3.5,
@@ -81,8 +79,8 @@ export default class extends React.PureComponent {
             this.state.modalVisible && modalList.length && (
               <MyDialog modeInfo={modeInfo}
                 modalVisible={this.state.modalVisible}
-                onDismiss={() => { this.setState({ modalVisible: false }); }}
-                onRequestClose={() => { this.setState({ modalVisible: false }); }}
+                onDismiss={() => { this.setState({ modalVisible: false }) }}
+                onRequestClose={() => { this.setState({ modalVisible: false }) }}
                 renderContent={() => (
                   <View style={{
                     justifyContent: 'center',
@@ -104,7 +102,7 @@ export default class extends React.PureComponent {
                             item.onPress(rowData)
                           })
                         }}>
-                        <View style={{height: 50, paddingVertical: 10, paddingLeft: 20 ,alignSelf: 'stretch', alignContent: 'stretch', justifyContent: 'center'}}>
+                        <View style={{height: 50, paddingVertical: 10, paddingLeft: 20 , alignSelf: 'stretch', alignContent: 'stretch', justifyContent: 'center'}}>
                           <Text style={{textAlignVertical: 'center', fontSize: 18, color: modeInfo.standardTextColor}}>{item.text}</Text>
                         </View>
                       </TouchableNativeFeedback>
@@ -118,12 +116,12 @@ export default class extends React.PureComponent {
             <Text
               ellipsizeMode={'tail'}
               numberOfLines={2}
-              style={{ flex: -1, color: modeInfo.titleTextColor, }}>
+              style={{ flex: -1, color: modeInfo.titleTextColor }}>
               {rowData.title}
             </Text>
 
             <View style={{ flex: -1, flexDirection: 'row', justifyContent: 'space-between' }}>
-              <Text selectable={false} style={{ fontSize: 12,flex: -1, color: modeInfo.standardColor, textAlign: 'center', textAlignVertical: 'center' }} onPress={
+              <Text selectable={false} style={{ fontSize: 12, flex: -1, color: modeInfo.standardColor, textAlign: 'center', textAlignVertical: 'center' }} onPress={
                 () => {
                   this.props.navigation.navigate('Home', {
                     title: rowData.psnid,
@@ -132,9 +130,9 @@ export default class extends React.PureComponent {
                   })
                 }
               }>{rowData.psnid}</Text>
-              <Text selectable={false} style={{ fontSize: 12,flex: -1, color: modeInfo.standardTextColor, textAlign: 'center', textAlignVertical: 'center' }}>{rowData.price}</Text>
-              <Text selectable={false} style={{ fontSize: 12,flex: -1, color: modeInfo.standardTextColor, textAlign: 'center', textAlignVertical: 'center' }}>{rowData.date}</Text>
-              <Text selectable={false} style={{ fontSize: 12,flex: -1, color: modeInfo.standardTextColor, textAlign: 'center', textAlignVertical: 'center' }}>{rowData.count}回复</Text>
+              <Text selectable={false} style={{ fontSize: 12, flex: -1, color: modeInfo.standardTextColor, textAlign: 'center', textAlignVertical: 'center' }}>{rowData.price}</Text>
+              <Text selectable={false} style={{ fontSize: 12, flex: -1, color: modeInfo.standardTextColor, textAlign: 'center', textAlignVertical: 'center' }}>{rowData.date}</Text>
+              <Text selectable={false} style={{ fontSize: 12, flex: -1, color: modeInfo.standardTextColor, textAlign: 'center', textAlignVertical: 'center' }}>{rowData.count}回复</Text>
             </View>
 
           </View>
@@ -147,10 +145,9 @@ export default class extends React.PureComponent {
 
 }
 
-
 const styles = StyleSheet.create({
   avatar: {
     width: 50,
-    height: 50,
+    height: 50
   }
-});
+})

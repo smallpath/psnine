@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import {
   StyleSheet,
   Text,
@@ -14,18 +14,15 @@ import {
   Slider,
   FlatList,
   Button
-} from 'react-native';
+} from 'react-native'
 
-const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
+const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window')
 
+import { connect } from 'react-redux'
+import { standardColor, nodeColor, idColor } from '../../constant/colorConfig'
 
-
-
-import { connect } from 'react-redux';
-import { standardColor, nodeColor, idColor } from '../../constant/colorConfig';
-
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import { getFavoriteAPI } from '../../dao';
+import Ionicons from 'react-native-vector-icons/Ionicons'
+import { getFavoriteAPI } from '../../dao'
 
 import TopicItem from '../../component/CommunityItem'
 import GeneItem from '../../component/GeneItem'
@@ -42,12 +39,12 @@ import { fav } from '../../dao/sync'
 
 let toolbarActions = [
   { title: '类型', iconName: 'md-funnel', show: 'always' },
-  { title: '跳页', iconName: 'md-map', show: 'always' },
-];
+  { title: '跳页', iconName: 'md-map', show: 'always' }
+]
 
 class Fav extends Component {
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       list: [],
       numberPerPage: 60,
@@ -65,13 +62,13 @@ class Fav extends Component {
   }
 
   onNavClicked = (rowData) => {
-    const { navigation } = this.props;
-    navigation.goBack();
+    const { navigation } = this.props
+    navigation.goBack()
   }
 
   componentWillMount = async () => {
     const { params } = this.props.navigation.state
-    this.fetchMessages(params.URL, 'jump');
+    this.fetchMessages(params.URL, 'jump')
   }
 
   fetchMessages = (url, type = 'down') => {
@@ -105,7 +102,7 @@ class Fav extends Component {
             isLoadingMore: false,
             isRefreshing: false,
             finalType: this.state.type
-          }, cb);
+          }, cb)
         })
       })
     })
@@ -113,7 +110,7 @@ class Fav extends Component {
 
   pageArr = [1]
   _onRefresh = () => {
-    const { URL } = this.props.navigation.state.params;
+    const { URL } = this.props.navigation.state.params
     const currentPage = this.pageArr[0] || 1
     let type = currentPage === 1 ? 'jump' : 'up'
     let targetPage = currentPage - 1
@@ -122,16 +119,16 @@ class Fav extends Component {
     }
     if (this.pageArr.includes(targetPage)) type = 'jump'
     if (this.state.isLoadingMore || this.state.isRefreshing) return
-    this.fetchMessages(URL.split('=').slice(0, -1).concat(targetPage).join('='), type);
+    this.fetchMessages(URL.split('=').slice(0, -1).concat(targetPage).join('='), type)
   }
 
   _onEndReached = () => {
-    const { URL } = this.props.navigation.state.params;
+    const { URL } = this.props.navigation.state.params
     const currentPage = this.pageArr[this.pageArr.length - 1]
     const targetPage = currentPage + 1
     if (targetPage > this.state.numPages) return
     if (this.state.isLoadingMore || this.state.isRefreshing) return
-    this.fetchMessages(URL.split('=').slice(0, -1).concat(targetPage).join('='), 'down');
+    this.fetchMessages(URL.split('=').slice(0, -1).concat(targetPage).join('='), 'down')
 
   }
 
@@ -150,7 +147,6 @@ class Fav extends Component {
     }
   }
 
-
   ITEM_HEIGHT = 74 + 7
 
   _renderItem = ({ item: rowData, index }) => {
@@ -167,7 +163,7 @@ class Fav extends Component {
       modalList: [{
         text: '取消收藏',
         onPress: () => {
-          fav({ 
+          fav({
             type: this.state.finalType,
             param: rowData && rowData.id,
             unfav: ''
@@ -183,12 +179,11 @@ class Fav extends Component {
     }} />
   }
 
-
   onValueChange = (key: string, value: string) => {
-    const newState = {};
-    newState[key] = value;
-    this.setState(newState);
-  };
+    const newState = {}
+    newState[key] = value
+    this.setState(newState)
+  }
 
   sliderValue = 1
   render() {
@@ -203,15 +198,15 @@ class Fav extends Component {
         onMoveShouldSetResponder={() => false}
       >
         <Ionicons.ToolbarAndroid
-          navIconName="md-arrow-back"
-          overflowIconName="md-more"
+          navIconName='md-arrow-back'
+          overflowIconName='md-more'
           iconColor={modeInfo.isNightMode ? '#000' : '#fff'}
           title={'收藏'}
-          subtitle={({ 
+          subtitle={({
             'topic' : '社区',
             'gene' : '机因',
             'psnid' : '用户',
-            'qa' : '问答',
+            'qa' : '问答'
           })[this.state.finalType]}
           style={[styles.toolbar, { backgroundColor: modeInfo.standardColor }]}
           titleColor={modeInfo.isNightMode ? '#000' : '#fff'}
@@ -343,7 +338,7 @@ class Fav extends Component {
                   }, () => {
                     const currentPage = this.state.currentPage
                     const targetPage = params.URL.split('=').slice(0, -1).concat(this.state.sliderValue).join('=')
-                    this.fetchMessages(targetPage, 'jump');
+                    this.fetchMessages(targetPage, 'jump')
                   })
                 }}>
                   <View style={{ alignSelf: 'flex-end', paddingHorizontal: 8, paddingVertical: 5 }}>
@@ -359,23 +354,23 @@ class Fav extends Component {
 
 }
 
-const TYPES = { 
+const TYPES = {
   'topic' : '社区',
   'gene' : '机因',
   'psnid' : '用户',
-  'qa' : '问答',
+  'qa' : '问答'
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: 'column',
-    backgroundColor: '#F5FCFF',
+    backgroundColor: '#F5FCFF'
   },
   toolbar: {
     backgroundColor: standardColor,
     height: 56,
-    elevation: 4,
+    elevation: 4
   },
   selectedTitle: {
     //backgroundColor: '#00ffff'
@@ -383,13 +378,12 @@ const styles = StyleSheet.create({
   },
   avatar: {
     width: 50,
-    height: 50,
+    height: 50
   },
   a: {
     fontWeight: '300',
-    color: idColor, // make links coloured pink
-  },
-});
+    color: idColor // make links coloured pink
+  }
+})
 
-
-export default Fav;
+export default Fav

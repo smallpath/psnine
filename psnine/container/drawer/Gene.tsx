@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import {
   StyleSheet,
   Text,
@@ -10,30 +10,30 @@ import {
   InteractionManager,
   FlatList,
   Animated
-} from 'react-native';
+} from 'react-native'
 
-import { connect } from 'react-redux';
-import { standardColor, nodeColor, idColor } from '../../constant/colorConfig';
-import { getGeneList } from '../../redux/action/gene.js';
+import { connect } from 'react-redux'
+import { standardColor, nodeColor, idColor } from '../../constant/colorConfig'
+import { getGeneList } from '../../redux/action/gene.js'
 
-import { getGeneURL } from '../../dao';
+import { getGeneURL } from '../../dao'
 
-let toolbarHeight = 56;
-let releasedMarginTop = 0;
+let toolbarHeight = 56
+let releasedMarginTop = 0
 
 import TopicItem from '../../component/GeneItem'
 import FooterProgress from '../../component/FooterProgress'
 
-const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
+const AnimatedFlatList = Animated.createAnimatedComponent(FlatList)
 
 class Gene extends Component {
   static navigationOptions = {
     tabBarLabel: '机因',
     drawerLabel: '机因'
-  };
+  }
 
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       isRefreshing: false,
       isLoadingMore: false
@@ -62,7 +62,7 @@ class Gene extends Component {
   }
 
   componentWillMount = () => {
-    const { gene: geneReducer } = this.props;
+    const { gene: geneReducer } = this.props
     const { registerAfterEach, searchTitle } = this.props.screenProps
     if (geneReducer.genePage == 0) {
       this._onRefresh(
@@ -79,9 +79,8 @@ class Gene extends Component {
     })
   }
 
-
   _onRefresh = (title, type = '') => {
-    const { gene: geneReducer, dispatch } = this.props;
+    const { gene: geneReducer, dispatch } = this.props
 
     this.setState({
       isRefreshing: true
@@ -90,29 +89,29 @@ class Gene extends Component {
     dispatch(getGeneList(1, {
       type,
       title: typeof title !== 'undefined' ? title : this.props.screenProps.searchTitle
-    }));
+    }))
 
   }
 
   _loadMoreData = () => {
-    const { gene: geneReducer, dispatch } = this.props;
+    const { gene: geneReducer, dispatch } = this.props
     const { geneType } = this.props.screenProps
-    let page = geneReducer.genePage + 1;
+    let page = geneReducer.genePage + 1
     dispatch(getGeneList(page, {
       type: geneType,
       title: this.props.screenProps.searchTitle
-    }));
+    }))
   }
 
   _onEndReached = () => {
-    const { gene: geneReducer, dispatch } = this.props;
+    const { gene: geneReducer, dispatch } = this.props
     if (this.state.isRefreshing || this.state.isLoadingMore) return
 
     this.setState({
       isLoadingMore: true
     })
 
-    this._loadMoreData();
+    this._loadMoreData()
   }
 
   _renderItem = ({ item: rowData, index }) => {
@@ -125,8 +124,8 @@ class Gene extends Component {
   }
 
   render() {
-    log('Gene.js rendered');
-    const { gene: geneReducer } = this.props;
+    log('Gene.js rendered')
+    const { gene: geneReducer } = this.props
     const { modeInfo } = this.props.screenProps
 
     return (
@@ -172,21 +171,21 @@ class Gene extends Component {
 const styles = StyleSheet.create({
   avatar: {
     width: 50,
-    height: 50,
+    height: 50
   },
   geneImage: {
     margin: 3,
     width: 100,
     height: 100
   }
-});
+})
 
 function mapStateToProps(state) {
   return {
     gene: state.gene
-  };
+  }
 }
 
 export default connect(
   mapStateToProps
-)(Gene);
+)(Gene)

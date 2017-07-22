@@ -1,4 +1,4 @@
-import React, { Component, Children } from 'react';
+import React, { Component, Children } from 'react'
 import {
   ScrollView,
   Dimensions,
@@ -8,9 +8,9 @@ import {
   TouchableNativeFeedback,
   Text,
   Button
-} from 'react-native';
+} from 'react-native'
 
-let screen = Dimensions.get('screen');
+let screen = Dimensions.get('screen')
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = screen
 
@@ -23,34 +23,33 @@ import {
   standardColor
 } from '../constant/colorConfig'
 
-import { changeSegmentIndex } from '../redux/action/app';
+import { changeSegmentIndex } from '../redux/action/app'
 
-import Recommend from './drawer/Recommend';
-import Community from './drawer/Community';
-import Qa from './drawer/Qa';
-import Game from './drawer/Game';
-import Battle from './drawer/Battle';
-import Gene from './drawer/Gene';
-import Rank from './drawer/Rank';
-import Circle from './drawer/Circle';
-import Store from './drawer/Store';
-import Trade from './drawer/Trade';
+import Recommend from './drawer/Recommend'
+import Community from './drawer/Community'
+import Qa from './drawer/Qa'
+import Game from './drawer/Game'
+import Battle from './drawer/Battle'
+import Gene from './drawer/Gene'
+import Rank from './drawer/Rank'
+import Circle from './drawer/Circle'
+import Store from './drawer/Store'
+import Trade from './drawer/Trade'
 
 import {
   DrawerNavigator,
   DrawerItems,
   TabNavigator
-} from 'react-navigation';
+} from 'react-navigation'
 
-const DefaultTabBar = TabNavigator.Presets.Default.tabBarComponent;
+const DefaultTabBar = TabNavigator.Presets.Default.tabBarComponent
 
 const styles = StyleSheet.create({
   icon: {
     width: 26,
-    height: 26,
-  },
-});
-
+    height: 26
+  }
+})
 
 export default class TabContainer extends Component {
   constructor(props) {
@@ -76,22 +75,22 @@ export default class TabContainer extends Component {
 
 export const routes = {
   Recommend: {
-    screen: Recommend,
+    screen: Recommend
   },
   Community: {
-    screen: Community,
+    screen: Community
   },
   Qa: {
-    screen: Qa,
+    screen: Qa
   },
   Gene: {
-    screen: Gene,
+    screen: Gene
   },
   Game: {
-    screen: Game,
+    screen: Game
   },
   Battle: {
-    screen: Battle,
+    screen: Battle
   },
   Rank: {
     screen: Rank
@@ -100,10 +99,10 @@ export const routes = {
   //   screen: Circle
   // },
   Store: {
-    screen: Store,
+    screen: Store
   },
   Trade: {
-    screen: Trade,
+    screen: Trade
   }
 }
 
@@ -119,7 +118,7 @@ const Tabs = TabNavigator(routes, {
           activeTintColor={titleTextColor}
           inactiveTintColor={titleTextColor}
           indicatorStyle={{
-            backgroundColor: titleTextColor,
+            backgroundColor: titleTextColor
           }}
           style={{
             ...props.style,
@@ -136,7 +135,7 @@ const Tabs = TabNavigator(routes, {
     activeTintColor: '#fff',
     inactiveTintColor: '#fff',
     indicatorStyle: {
-      backgroundColor: '#fff',
+      backgroundColor: '#fff'
     },
     scrollEnabled: true,
     animationEnabled: false,
@@ -149,4 +148,4 @@ const Tabs = TabNavigator(routes, {
       height: 40
     }
   }
-});
+})

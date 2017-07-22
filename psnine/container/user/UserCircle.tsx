@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import {
   StyleSheet,
   Text,
@@ -13,33 +13,30 @@ import {
   Modal,
   Slider,
   FlatList
-} from 'react-native';
+} from 'react-native'
 
-const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
+const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window')
 
+import { connect } from 'react-redux'
+import { standardColor, nodeColor, idColor } from '../../constant/colorConfig'
 
-
-
-import { connect } from 'react-redux';
-import { standardColor, nodeColor, idColor } from '../../constant/colorConfig';
-
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import { getMyGameAPI, getUserCircleAPI } from '../../dao';
+import Ionicons from 'react-native-vector-icons/Ionicons'
+import { getMyGameAPI, getUserCircleAPI } from '../../dao'
 
 import FooterProgress from '../../component/FooterProgress'
 
 import CircleItem from '../../component/CircleItem'
 
 let toolbarActions = [
-  { title: '跳页', iconName: 'md-map', show: 'always' },
-];
+  { title: '跳页', iconName: 'md-map', show: 'always' }
+]
 
 class UserGame extends Component {
   static navigationOptions = {
      tabBarLabel: '圈子'
   }
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       list: [],
       numberPerPage: 60,
@@ -64,7 +61,7 @@ class UserGame extends Component {
       }
     })
     this.URL = params.URL.includes('?page') ? params.URL : `${params.URL}?page=1`
-    this.fetchMessages(params.URL, 'jump');
+    this.fetchMessages(params.URL, 'jump')
   }
 
   fetchMessages = (url, type = 'down') => {
@@ -112,7 +109,7 @@ class UserGame extends Component {
               })
             }
             componentDidFocus()
-          });
+          })
         })
       })
     })
@@ -129,7 +126,7 @@ class UserGame extends Component {
     }
     if (this.pageArr.includes(targetPage)) type = 'jump'
     if (this.state.isLoadingMore || this.state.isRefreshing) return
-    this.fetchMessages(URL.split('=').slice(0, -1).concat(targetPage).join('='), type);
+    this.fetchMessages(URL.split('=').slice(0, -1).concat(targetPage).join('='), type)
   }
 
   _onEndReached = () => {
@@ -138,7 +135,7 @@ class UserGame extends Component {
     const targetPage = currentPage + 1
     if (targetPage > this.state.numPages) return
     if (this.state.isLoadingMore || this.state.isRefreshing) return
-    this.fetchMessages(URL.split('=').slice(0, -1).concat(targetPage).join('='), 'down');
+    this.fetchMessages(URL.split('=').slice(0, -1).concat(targetPage).join('='), 'down')
 
   }
 
@@ -151,7 +148,6 @@ class UserGame extends Component {
         return
     }
   }
-
 
   ITEM_HEIGHT = 74 + 7
 
@@ -263,7 +259,7 @@ class UserGame extends Component {
                     }, () => {
                       const currentPage = this.state.currentPage
                       const targetPage = URL.split('=').slice(0, -1).concat(this.state.sliderValue).join('=')
-                      this.fetchMessages(targetPage, 'jump');
+                      this.fetchMessages(targetPage, 'jump')
                     })
                   }}>
                   <View style={{ alignSelf: 'flex-end', paddingHorizontal: 8, paddingVertical: 5 }}>
@@ -279,17 +275,16 @@ class UserGame extends Component {
 
 }
 
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: 'column',
-    backgroundColor: '#F5FCFF',
+    backgroundColor: '#F5FCFF'
   },
   toolbar: {
     backgroundColor: standardColor,
     height: 56,
-    elevation: 4,
+    elevation: 4
   },
   selectedTitle: {
     //backgroundColor: '#00ffff'
@@ -297,13 +292,12 @@ const styles = StyleSheet.create({
   },
   avatar: {
     width: 50,
-    height: 50,
+    height: 50
   },
   a: {
     fontWeight: '300',
-    color: idColor, // make links coloured pink
-  },
-});
+    color: idColor // make links coloured pink
+  }
+})
 
-
-export default UserGame;
+export default UserGame

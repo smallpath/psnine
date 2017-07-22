@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import {
   AppRegistry,
   StyleSheet,
@@ -21,16 +21,15 @@ import {
   BackHandler,
   Linking,
   ToolbarAndroid
-} from 'react-native';
+} from 'react-native'
 
 import { sync } from '../../dao/sync'
 
-
-import { connect } from 'react-redux';
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import { connect } from 'react-redux'
+import Ionicons from 'react-native-vector-icons/Ionicons'
 import {
-  standardColor, 
-  nodeColor, 
+  standardColor,
+  nodeColor,
   idColor,
   accentColor,
   levelColor,
@@ -40,30 +39,30 @@ import {
   trophyColor3,
   trophyColor4,
   trophyColor5
-} from '../../constant/colorConfig';
+} from '../../constant/colorConfig'
 
-import { getGameNewTopicAPI } from '../../dao';
+import { getGameNewTopicAPI } from '../../dao'
 
 import CreateNewGameTab from './NewGameTab'
 
-let screen = Dimensions.get('window');
-const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = screen;
+let screen = Dimensions.get('window')
+const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = screen
 
 let toolbarActions = [
   {
     title: '官网', show: 'never'
   }
-];
-let title = "TOPIC";
-let WEBVIEW_REF = `WEBVIEW_REF`;
+]
+let title = 'TOPIC'
+let WEBVIEW_REF = `WEBVIEW_REF`
 
-let toolbarHeight = 56;
-let releasedMarginTop = 0;
+let toolbarHeight = 56
+let releasedMarginTop = 0
 
-let ACTUAL_SCREEN_HEIGHT = SCREEN_HEIGHT - StatusBar.currentHeight + 1;
+let ACTUAL_SCREEN_HEIGHT = SCREEN_HEIGHT - StatusBar.currentHeight + 1
 
-let CIRCLE_SIZE = 56;
-let config = { tension: 30, friction: 7, ease: Easing.in(Easing.ease(1, 0, 1, 1)), duration: 200 };
+let CIRCLE_SIZE = 56
+let config = { tension: 30, friction: 7, ease: Easing.in(Easing.ease(1, 0, 1, 1)), duration: 200 }
 
 const iconMapper = {
   '游戏同步': 'md-sync',
@@ -80,7 +79,7 @@ import {
   CollapsingToolbarLayoutAndroid,
   NestedScrollViewAndroid,
   LayoutParamsAndroid
-} from 'mao-rn-android-kit';
+} from 'mao-rn-android-kit'
 
 const limit = 160 // - toolbarHeight
 
@@ -89,7 +88,7 @@ import ImageBackground from '../../component/ImageBackground'
 export default class Home extends Component {
 
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       data: false,
       isLoading: true,
@@ -139,7 +138,6 @@ export default class Home extends Component {
     if (this.timeout) clearTimeout(this.timeout)
   }
 
-
   componentWillMount = () => {
     this.preFetch()
   }
@@ -156,7 +154,7 @@ export default class Home extends Component {
           isLoading: false
         }, () => this._coordinatorLayout.setScrollingViewBehavior(this._scrollView))
       })
-    });
+    })
   }
 
   handleImageOnclick = (url) => this.props.navigation.navigate('ImageViewer', {
@@ -164,7 +162,6 @@ export default class Home extends Component {
       { url }
     ]
   })
-
 
   renderHeader = (rowData) => {
     const { modeInfo } = this.props.screenProps
@@ -177,7 +174,7 @@ export default class Home extends Component {
     return (
       <ImageBackground
         source={{uri: rowData.backgroundImage}}
-        style={{ 
+        style={{
           height: limit + toolbarHeight + 1,
           width: SCREEN_WIDTH
         }}
@@ -191,14 +188,14 @@ export default class Home extends Component {
         padding: 10,
         marginTop: 56
       }}>
-        <View style={{ justifyContent:'center', alignItems: 'center', flex: -1, marginLeft: 20, marginBottom: 15  }}>
+        <View style={{ justifyContent: 'center', alignItems: 'center', flex: -1, marginLeft: 20, marginBottom: 15  }}>
           <Image
             source={{ uri: rowData.avatar}}
-            style={[styles.avatar, { width: 120, height: 120,overlayColor: 'rgba(0,0,0,0.0)',backgroundColor: 'transparent' }]}
+            style={[styles.avatar, { width: 120, height: 120, overlayColor: 'rgba(0,0,0,0.0)', backgroundColor: 'transparent' }]}
           />
         </View>
 
-        <View style={{ justifyContent:'center', alignItems: 'flex-start', 
+        <View style={{ justifyContent: 'center', alignItems: 'flex-start',
             marginBottom: 15,
             maxWidth: SCREEN_WIDTH - 120,
             overflow: 'scroll',
@@ -224,7 +221,6 @@ export default class Home extends Component {
     )
   }
 
-
   renderTabContainer = (list) => {
     const { modeInfo } = this.props.screenProps
     const { params } = this.props.navigation.state
@@ -238,10 +234,9 @@ export default class Home extends Component {
         list: this.state.data.list,
         gameTable: this.state.data.gameTable,
         navigation: this.props.navigation
-      }}/> 
+      }}/>
     )
   }
-
 
   render() {
     const { params } = this.props.navigation.state
@@ -250,11 +245,11 @@ export default class Home extends Component {
     const { data: source, marginTop } = this.state
     const data = []
     const renderFuncArr = []
-    const shouldPushData = !this.state.isLoading 
+    const shouldPushData = !this.state.isLoading
 
     this.viewBottomIndex = Math.max(data.length - 1, 0)
     let { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window')
-    let ACTUAL_SCREEN_HEIGHT = SCREEN_HEIGHT - StatusBar.currentHeight + 1;
+    let ACTUAL_SCREEN_HEIGHT = SCREEN_HEIGHT - StatusBar.currentHeight + 1
     const actions = toolbarActions.slice()
     if (source && source.titleInfo && source.titleInfo.content && source.titleInfo.content.length) {
       const has = source.titleInfo.content.some(item => item.includes('href'))
@@ -263,7 +258,7 @@ export default class Home extends Component {
       }
     }
     return source.titleInfo && this.state.leftIcon ? (
-      <View style={{flex:1}}>
+      <View style={{flex: 1}}>
         <CoordinatorLayoutAndroid
           fitsSystemWindows={false}
           ref={this._setCoordinatorLayout}>
@@ -299,8 +294,8 @@ export default class Home extends Component {
                 {source.titleInfo && this.renderHeader(source.titleInfo)}
               </View>
               <Ionicons.ToolbarAndroid
-                navIconName="md-arrow-back"
-                overflowIconName="md-more"
+                navIconName='md-arrow-back'
+                overflowIconName='md-more'
                 iconColor={modeInfo.isNightMode ? '#000' : '#fff'}
                 title={source.titleInfo.title}
                 onIconClicked={() => this.props.navigation.goBack()}
@@ -324,8 +319,8 @@ export default class Home extends Component {
       </View>
     ) : <View style={{ flex: 1, backgroundColor: modeInfo.backgroundColor }}>
       <Ionicons.ToolbarAndroid
-        navIconName="md-arrow-back"
-        overflowIconName="md-more"
+        navIconName='md-arrow-back'
+        overflowIconName='md-more'
         iconColor={modeInfo.isNightMode ? '#000' : '#fff'}
         title={`${source.titleInfo ? source.titleInfo.title : '加载中...' }`}
         titleColor={modeInfo.isNightMode ? '#000' : '#fff'}
@@ -353,23 +348,23 @@ export default class Home extends Component {
     ExtraDimensionsAndroid.getAppClientHeight() -
     ExtraDimensionsAndroid.getStatusBarHeight() -
     56
-  );
+  )
 
-  _coordinatorLayout = null;
-  _appBarLayout = null;
-  _scrollView = null;
+  _coordinatorLayout = null
+  _appBarLayout = null
+  _scrollView = null
 
   _setCoordinatorLayout = component => {
-    this._coordinatorLayout = component;
-  };
+    this._coordinatorLayout = component
+  }
 
   _setAppBarLayout = component => {
-    this._appBarLayout = component;
-  };
+    this._appBarLayout = component
+  }
 
   _setScrollView = component => {
-    this._scrollView = component;
-  };
+    this._scrollView = component
+  }
 
   componentDidMount() {
     Promise.all([
@@ -384,7 +379,7 @@ export default class Home extends Component {
   }
 
   _getItems(count) {
-    let items = [];
+    let items = []
 
     for (let i = 0; i < count; i++) {
       items.push(
@@ -396,10 +391,10 @@ export default class Home extends Component {
           ]}>
           <Text style={styles.itemContent}>ITEM #{i}</Text>
         </View>
-      );
+      )
     }
 
-    return items;
+    return items
   }
 
 }
@@ -409,12 +404,12 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: 'column',
-    backgroundColor: '#F5FCFF',
+    backgroundColor: '#F5FCFF'
   },
   toolbar: {
     backgroundColor: standardColor,
     height: 56,
-    elevation: 4,
+    elevation: 4
   },
   selectedTitle: {
     //backgroundColor: '#00ffff'
@@ -422,7 +417,7 @@ const styles = StyleSheet.create({
   },
   avatar: {
     width: 50,
-    height: 50,
+    height: 50
   },
   a: {
     fontWeight: '300',
@@ -430,15 +425,15 @@ const styles = StyleSheet.create({
     fontSize: 12
   },
   appbar: {
-    backgroundColor: "#2278F6",
+    backgroundColor: '#2278F6',
     height: 160 + 56
   },
 
   navbar: {
     height: 56,
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: "transparent",
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'transparent',
     position: 'relative'
   },
 
@@ -456,9 +451,9 @@ const styles = StyleSheet.create({
 
   heading: {
     height: 38,
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: "#4889F1"
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#4889F1'
   },
 
   headingText: {
@@ -466,7 +461,7 @@ const styles = StyleSheet.create({
   },
 
   scrollView: {
-    backgroundColor: "#f2f2f2"
+    backgroundColor: '#f2f2f2'
   },
 
   item: {
@@ -484,4 +479,4 @@ const styles = StyleSheet.create({
     fontSize: 30,
     color: '#FFF'
   }
-});
+})

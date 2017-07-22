@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import {
   StyleSheet,
   Text,
@@ -14,18 +14,15 @@ import {
   Slider,
   FlatList,
   Button
-} from 'react-native';
+} from 'react-native'
 
-const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
+const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window')
 
+import { connect } from 'react-redux'
+import { standardColor, nodeColor, idColor } from '../../constant/colorConfig'
 
-
-
-import { connect } from 'react-redux';
-import { standardColor, nodeColor, idColor } from '../../constant/colorConfig';
-
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import { getIssueAPI, getTopicURL } from '../../dao';
+import Ionicons from 'react-native-vector-icons/Ionicons'
+import { getIssueAPI, getTopicURL } from '../../dao'
 
 import TopicItem from '../../component/CommunityItem'
 import GeneItem from '../../component/GeneItem'
@@ -43,12 +40,12 @@ import FooterProgress from '../../component/FooterProgress'
 
 let toolbarActions = [
   { title: '类型', iconName: 'md-funnel', show: 'always' },
-  { title: '跳页', iconName: 'md-map', show: 'always' },
-];
+  { title: '跳页', iconName: 'md-map', show: 'always' }
+]
 
 export default class Issue extends Component {
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       list: [],
       numberPerPage: 60,
@@ -66,13 +63,13 @@ export default class Issue extends Component {
   }
 
   onNavClicked = (rowData) => {
-    const { navigation } = this.props;
-    navigation.goBack();
+    const { navigation } = this.props
+    navigation.goBack()
   }
 
   componentWillMount = async () => {
     const { params } = this.props.navigation.state
-    this.fetchMessages(params.URL, 'jump');
+    this.fetchMessages(params.URL, 'jump')
   }
 
   fetchMessages = (url, type = 'down') => {
@@ -106,7 +103,7 @@ export default class Issue extends Component {
             isLoadingMore: false,
             isRefreshing: false,
             finalType: this.state.type
-          }, cb);
+          }, cb)
         })
       })
     })
@@ -114,7 +111,7 @@ export default class Issue extends Component {
 
   pageArr = [1]
   _onRefresh = () => {
-    const { URL } = this.props.navigation.state.params;
+    const { URL } = this.props.navigation.state.params
     const currentPage = this.pageArr[0] || 1
     let type = currentPage === 1 ? 'jump' : 'up'
     let targetPage = currentPage - 1
@@ -123,16 +120,16 @@ export default class Issue extends Component {
     }
     if (this.pageArr.includes(targetPage)) type = 'jump'
     if (this.state.isLoadingMore || this.state.isRefreshing) return
-    this.fetchMessages(URL.split('=').slice(0, -1).concat(targetPage).join('='), type);
+    this.fetchMessages(URL.split('=').slice(0, -1).concat(targetPage).join('='), type)
   }
 
   _onEndReached = () => {
-    const { URL } = this.props.navigation.state.params;
+    const { URL } = this.props.navigation.state.params
     const currentPage = this.pageArr[this.pageArr.length - 1]
     const targetPage = currentPage + 1
     if (targetPage > this.state.numPages) return
     if (this.state.isLoadingMore || this.state.isRefreshing) return
-    this.fetchMessages(URL.split('=').slice(0, -1).concat(targetPage).join('='), 'down');
+    this.fetchMessages(URL.split('=').slice(0, -1).concat(targetPage).join('='), 'down')
 
   }
 
@@ -150,7 +147,6 @@ export default class Issue extends Component {
       return
     }
   }
-
 
   ITEM_HEIGHT = 74 + 7
 
@@ -170,12 +166,12 @@ export default class Issue extends Component {
         onPress: (rowData) => {
           const URL = rowData.edit
           requestAnimationFrame(() => {
-            const target = ({ 
+            const target = ({
               'topic' : 'NewTopic',
               'gene' : 'NewGene',
               'battle' : 'NewBattle',
               'qa' : 'NewQa',
-              'trade' : 'NewTrade',
+              'trade' : 'NewTrade'
             })[this.state.finalType]
             navigation.navigate(target, {
               URL
@@ -186,12 +182,11 @@ export default class Issue extends Component {
     }} />
   }
 
-
   onValueChange = (key: string, value: string) => {
-    const newState = {};
-    newState[key] = value;
-    this.setState(newState);
-  };
+    const newState = {}
+    newState[key] = value
+    this.setState(newState)
+  }
 
   sliderValue = 1
   render() {
@@ -206,8 +201,8 @@ export default class Issue extends Component {
         onMoveShouldSetResponder={() => false}
       >
         <Ionicons.ToolbarAndroid
-          navIconName="md-arrow-back"
-          overflowIconName="md-more"
+          navIconName='md-arrow-back'
+          overflowIconName='md-more'
           iconColor={modeInfo.isNightMode ? '#000' : '#fff'}
           title={'发布'}
           subtitle={TYPES[this.state.finalType]}
@@ -341,7 +336,7 @@ export default class Issue extends Component {
                     }, () => {
                       const currentPage = this.state.currentPage
                       const targetPage = params.URL.split('=').slice(0, -1).concat(this.state.sliderValue).join('=')
-                      this.fetchMessages(targetPage, 'jump');
+                      this.fetchMessages(targetPage, 'jump')
                     })
                   }}>
                   <View style={{ alignSelf: 'flex-end', paddingHorizontal: 8, paddingVertical: 5 }}>
@@ -357,24 +352,24 @@ export default class Issue extends Component {
 
 }
 
-const TYPES = { 
+const TYPES = {
   'topic' : '社区',
   'gene' : '机因',
   'battle' : '约战',
   'qa' : '问答',
-  'trade' : '闲游',
+  'trade' : '闲游'
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: 'column',
-    backgroundColor: '#F5FCFF',
+    backgroundColor: '#F5FCFF'
   },
   toolbar: {
     backgroundColor: standardColor,
     height: 56,
-    elevation: 4,
+    elevation: 4
   },
   selectedTitle: {
     //backgroundColor: '#00ffff'
@@ -382,11 +377,10 @@ const styles = StyleSheet.create({
   },
   avatar: {
     width: 50,
-    height: 50,
+    height: 50
   },
   a: {
     fontWeight: '300',
-    color: idColor, // make links coloured pink
-  },
-});
-
+    color: idColor // make links coloured pink
+  }
+})

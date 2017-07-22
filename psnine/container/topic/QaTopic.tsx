@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import {
   AppRegistry,
   StyleSheet,
@@ -17,13 +17,13 @@ import {
   Modal,
   Keyboard,
   Linking
-} from 'react-native';
+} from 'react-native'
 
 import { sync, updown, fav } from '../../dao/sync'
 
-import { connect } from 'react-redux';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import { standardColor, nodeColor, idColor, accentColor } from '../../constant/colorConfig';
+import { connect } from 'react-redux'
+import Ionicons from 'react-native-vector-icons/Ionicons'
+import { standardColor, nodeColor, idColor, accentColor } from '../../constant/colorConfig'
 
 import {
   getQaTopicAPI,
@@ -32,19 +32,19 @@ import {
 import ImageViewer from '../../component/ImageViewer'
 import ComplexComment from '../../component/ComplexComment'
 
-let screen = Dimensions.get('window');
-const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = screen;
+let screen = Dimensions.get('window')
+const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = screen
 
-let title = "TOPIC";
-let WEBVIEW_REF = `WEBVIEW_REF`;
+let title = 'TOPIC'
+let WEBVIEW_REF = `WEBVIEW_REF`
 
-let toolbarHeight = 56;
-let releasedMarginTop = 0;
+let toolbarHeight = 56
+let releasedMarginTop = 0
 
-const ACTUAL_SCREEN_HEIGHT = SCREEN_HEIGHT - StatusBar.currentHeight + 1;
+const ACTUAL_SCREEN_HEIGHT = SCREEN_HEIGHT - StatusBar.currentHeight + 1
 
-let CIRCLE_SIZE = 56;
-let config = { tension: 30, friction: 7, ease: Easing.in(Easing.ease(1, 0, 1, 1)), duration: 200 };
+let CIRCLE_SIZE = 56
+let config = { tension: 30, friction: 7, ease: Easing.in(Easing.ease(1, 0, 1, 1)), duration: 200 }
 
 let toolbarActions = [
   {
@@ -83,7 +83,7 @@ let toolbarActions = [
       // console.log(params)
       fav({
         type: 'qa',
-        param: params.rowData && params.rowData.id,
+        param: params.rowData && params.rowData.id
       }).then(res => res.text()).then(text => {
         if (text) return toast(text)
         toast('操作成功')
@@ -117,7 +117,7 @@ let toolbarActions = [
           url: params.URL,
           message: '[PSNINE] ' + this.state.data.titleInfo.title,
           title: 'PSNINE'
-        }).catch((err) => { err && console.log(err); })
+        }).catch((err) => { err && console.log(err) })
         url && Linking.openURL(url).catch(err => toast(err.toString())) || toast('暂无出处')
       } catch (err) { }
     }
@@ -129,13 +129,13 @@ let toolbarActions = [
         url && Linking.openURL(url).catch(err => toast(err.toString())) || toast('暂无出处')
       } catch (err) { }
     }
-  },
-];
+  }
+]
 
 class QaTopic extends Component {
 
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       data: false,
       isLoading: true,
@@ -149,7 +149,6 @@ class QaTopic extends Component {
       topicMarginTop: new Animated.Value(0)
     }
   }
-
 
   _onActionSelected = (index) => {
     const { params } = this.props.navigation.state
@@ -169,7 +168,7 @@ class QaTopic extends Component {
         } else if (this.state.openVal._value === 0) {
           cb()
         }
-        return;
+        return
     }
   }
 
@@ -196,7 +195,7 @@ class QaTopic extends Component {
           isLoading: false
         })
       })
-    });
+    })
   }
 
   handleImageOnclick = (url) => this.props.navigation.navigate('ImageViewer', {
@@ -204,7 +203,6 @@ class QaTopic extends Component {
       { url }
     ]
   })
-
 
   shouldComponentUpdate = (nextProp, nextState) => {
     return true
@@ -294,11 +292,11 @@ class QaTopic extends Component {
     return (
       <View style={{
         backgroundColor: modeInfo.backgroundColor,
-        elevation: 1, margin: 5, marginTop: 0,
+        elevation: 1, margin: 5, marginTop: 0
       }}>
         <TouchableNativeFeedback
           onPress={() => {
-            const { navigation } = this.props;
+            const { navigation } = this.props
             navigation.navigate('GamePage', {
               // URL: 'http://psnine.com/psngame/5424?psnid=Smallpath',
               URL: rowData.url,
@@ -321,7 +319,7 @@ class QaTopic extends Component {
               <Text
                 ellipsizeMode={'tail'}
                 numberOfLines={3}
-                style={{ flex: 2.5, color: modeInfo.titleTextColor, }}>
+                style={{ flex: 2.5, color: modeInfo.titleTextColor }}>
                 {rowData.title}
               </Text>
 
@@ -422,7 +420,7 @@ class QaTopic extends Component {
               URL: this.state.data.titleInfo.shareInfo.edit
             })
           }
-        },
+        }
       )
     }
 
@@ -433,8 +431,8 @@ class QaTopic extends Component {
         onMoveShouldSetResponder={() => false}
       >
         <Ionicons.ToolbarAndroid
-          navIconName="md-arrow-back"
-          overflowIconName="md-more"
+          navIconName='md-arrow-back'
+          overflowIconName='md-more'
           iconColor={modeInfo.isNightMode ? '#000' : '#fff'}
           title={params.title ? params.title : `No.${params.rowData.id}`}
           titleColor={modeInfo.isNightMode ? '#000' : '#fff'}
@@ -482,7 +480,7 @@ class QaTopic extends Component {
         </FlatList>
         }
       </View>
-    );
+    )
   }
 
   renderToolbarItem = (props, index, maxLength) => {
@@ -510,16 +508,16 @@ class QaTopic extends Component {
           onPressIn={() => {
             this.float1.setNativeProps({
               style: {
-                elevation: 12,
+                elevation: 12
               }
-            });
+            })
           }}
           onPressOut={() => {
             this.float1.setNativeProps({
               style: {
-                elevation: 6,
+                elevation: 6
               }
-            });
+            })
           }}
           style={{
             width: 40,
@@ -527,9 +525,9 @@ class QaTopic extends Component {
             borderRadius: 20,
             flex: 1,
             zIndex: 1,
-            backgroundColor: accentColor,
+            backgroundColor: accentColor
           }}>
-          <View style={{ borderRadius: 20, width: 40, height: 40, justifyContent: 'center', alignItems: 'center', }}>
+          <View style={{ borderRadius: 20, width: 40, height: 40, justifyContent: 'center', alignItems: 'center' }}>
             <Ionicons name={props.iconName} size={20} color='#fff' />
           </View>
         </TouchableNativeFeedback>
@@ -542,7 +540,7 @@ class QaTopic extends Component {
     const { openVal } = this.state
     const tipHeight = toolbarHeight * 0.8
     const list = []
-    const iconNameArr = ["md-arrow-down", "md-arrow-up"]
+    const iconNameArr = ['md-arrow-down', 'md-arrow-up']
     for (let i = 0; i < iconNameArr.length; i++) {
       list.push(
         this.renderToolbarItem({
@@ -572,7 +570,7 @@ class QaTopic extends Component {
               rotateZ: this.state.rotation.interpolate({
                 inputRange: [0, 1],
                 outputRange: ['0deg', '360deg']
-              }),
+              })
             }]
           }}>
           <TouchableNativeFeedback
@@ -581,16 +579,16 @@ class QaTopic extends Component {
             onPressIn={() => {
               this.float.setNativeProps({
                 style: {
-                  elevation: 12,
+                  elevation: 12
                 }
-              });
+              })
             }}
             onPressOut={() => {
               this.float.setNativeProps({
                 style: {
-                  elevation: 6,
+                  elevation: 6
                 }
-              });
+              })
             }}
             style={{
               width: 56,
@@ -598,10 +596,10 @@ class QaTopic extends Component {
               borderRadius: 30,
               flex: 1,
               zIndex: 1,
-              backgroundColor: accentColor,
+              backgroundColor: accentColor
             }}>
-            <View style={{ borderRadius: 30, width: 56, height: 56, flex: -1, justifyContent: 'center', alignItems: 'center', }}>
-              <Ionicons name="ios-add" size={40} color='#fff' />
+            <View style={{ borderRadius: 30, width: 56, height: 56, flex: -1, justifyContent: 'center', alignItems: 'center' }}>
+              <Ionicons name='ios-add' size={40} color='#fff' />
             </View>
           </TouchableNativeFeedback>
         </Animated.View>
@@ -643,17 +641,16 @@ class QaTopic extends Component {
   }
 }
 
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: 'column',
-    backgroundColor: '#F5FCFF',
+    backgroundColor: '#F5FCFF'
   },
   toolbar: {
     backgroundColor: standardColor,
     height: 56,
-    elevation: 4,
+    elevation: 4
   },
   selectedTitle: {
     //backgroundColor: '#00ffff'
@@ -661,13 +658,12 @@ const styles = StyleSheet.create({
   },
   avatar: {
     width: 50,
-    height: 50,
+    height: 50
   },
   a: {
     fontWeight: '300',
-    color: idColor, // make links coloured pink
-  },
-});
-
+    color: idColor // make links coloured pink
+  }
+})
 
 export default QaTopic

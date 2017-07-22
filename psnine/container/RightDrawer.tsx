@@ -1,4 +1,4 @@
-import React, { Component, Children } from 'react';
+import React, { Component, Children } from 'react'
 import {
   ScrollView,
   Dimensions,
@@ -7,48 +7,46 @@ import {
   StyleSheet,
   TouchableNativeFeedback,
   Text
-} from 'react-native';
+} from 'react-native'
 
-import { changeSegmentIndex } from '../redux/action/app';
+import { changeSegmentIndex } from '../redux/action/app'
 
-import Recommend from './drawer/Recommend';
-import Community from './drawer/Community';
-import Qa from './drawer/Qa';
-import Game from './drawer/Game';
-import Battle from './drawer/Battle';
-import Gene from './drawer/Gene';
-import Rank from './drawer/Rank';
-import Circle from './drawer/Circle';
-import Store from './drawer/Store';
-import Trade from './drawer/Trade';
+import Recommend from './drawer/Recommend'
+import Community from './drawer/Community'
+import Qa from './drawer/Qa'
+import Game from './drawer/Game'
+import Battle from './drawer/Battle'
+import Gene from './drawer/Gene'
+import Rank from './drawer/Rank'
+import Circle from './drawer/Circle'
+import Store from './drawer/Store'
+import Trade from './drawer/Trade'
 
 import {
   DrawerNavigator,
   DrawerItems
-} from 'react-navigation';
+} from 'react-navigation'
 
-const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
-
-
+const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window')
 
 const RightDrawer = DrawerNavigator({
   Recommend: {
-    screen: Recommend,
+    screen: Recommend
   },
   Community: {
-    screen: Community,
+    screen: Community
   },
   Qa: {
-    screen: Qa,
+    screen: Qa
   },
   Gene: {
-    screen: Gene,
+    screen: Gene
   },
   Game: {
-    screen: Game,
+    screen: Game
   },
   Battle: {
-    screen: Battle,
+    screen: Battle
   },
   Rank: {
     screen: Rank
@@ -57,10 +55,10 @@ const RightDrawer = DrawerNavigator({
   //   screen: Circle
   // },
   Store: {
-    screen: Store,
+    screen: Store
   },
   Trade: {
-    screen: Trade,
+    screen: Trade
   }
 }, {
   initialRouteName: 'Community',
@@ -79,30 +77,28 @@ const RightDrawer = DrawerNavigator({
       labelStyle,
       screenProps
     } = props
-    
+
     return (
       <ScrollView style={{ backgroundColor: screenProps.modeInfo.backgroundColor }}>
         <View style={[styles.container, style]}>
-          {navigation.state.routes.map((route: *, index: number) => {
-            const focused = navigation.state.index === index;
-            const color = focused ? screenProps.modeInfo.standardColor : screenProps.modeInfo.standardTextColor;
+          {navigation.state.routes.map((route: any, index: number) => {
+            const focused = navigation.state.index === index
+            const color = focused ? screenProps.modeInfo.standardColor : screenProps.modeInfo.standardTextColor
             const backgroundColor = focused
               ? screenProps.modeInfo.brighterLevelOne
-              : screenProps.modeInfo.backgroundColor;
-            const scene = { route, index, focused, tintColor: color };
-            const icon = renderIcon(scene);
-            const label = getLabel(scene);
+              : screenProps.modeInfo.backgroundColor
+            const scene = { route, index, focused, tintColor: color }
+            const icon = renderIcon(scene)
+            const label = getLabel(scene)
             return (
               <TouchableItem
                 key={route.key}
                 onPress={() => {
-                  navigation.navigate('DrawerClose');
+                  navigation.navigate('DrawerClose')
                   screenProps.toolbarDispatch(changeSegmentIndex(index))
-                  navigation.navigate(route.routeName);
+                  navigation.navigate(route.routeName)
                   screenProps.onTabPress && screenProps.onTabPress(route)
-
                 }}
-                
               >
                 <View style={[styles.item, { backgroundColor }]}>
                   {icon
@@ -119,14 +115,14 @@ const RightDrawer = DrawerNavigator({
                     : label}
                 </View>
               </TouchableItem>
-            );
+            )
           })}
         </View>
       </ScrollView>
     )
   },
   backBehavior: 'none'
-});
+})
 
 export default class RightDrawerContainer extends Component {
   constructor(props) {
@@ -150,11 +146,11 @@ export default class RightDrawerContainer extends Component {
   }
 }
 
-const ANDROID_VERSION_LOLLIPOP = 21;
+const ANDROID_VERSION_LOLLIPOP = 21
 class TouchableItem extends Component {
   static defaultProps = {
-    pressColor: 'rgba(0, 0, 0, .32)',
-  };
+    pressColor: 'rgba(0, 0, 0, .32)'
+  }
 
   render() {
     /*
@@ -168,7 +164,7 @@ class TouchableItem extends Component {
     if (
       Platform.OS === 'android' && Platform.Version >= ANDROID_VERSION_LOLLIPOP
     ) {
-      const { style, ...rest } = this.props; // eslint-disable-line no-unused-vars
+      const { style, ...rest } = this.props // eslint-disable-line no-unused-vars
 
       return (
         <TouchableNativeFeedback
@@ -176,47 +172,47 @@ class TouchableItem extends Component {
           style={null}
           background={TouchableNativeFeedback.Ripple(
             this.props.pressColor,
-            this.props.borderless,
+            this.props.borderless
           )}
         >
           <View style={this.props.style}>
             {Children.only(this.props.children)}
           </View>
         </TouchableNativeFeedback>
-      );
+      )
     }
 
     return (
       <TouchableOpacity {...this.props}>
         {this.props.children}
       </TouchableOpacity>
-    );
+    )
   }
 }
 
 const styles = StyleSheet.create({
   container: {
     marginTop: Platform.OS === 'ios' ? 20 : 0,
-    paddingVertical: 4,
+    paddingVertical: 4
   },
   item: {
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'center'
   },
   icon: {
     marginHorizontal: 16,
     width: 24,
-    alignItems: 'center',
+    alignItems: 'center'
   },
   inactiveIcon: {
     /*
      * Icons have 0.54 opacity according to guidelines
      * 100/87 * 54 ~= 62
      */
-    opacity: 0.62,
+    opacity: 0.62
   },
   label: {
     margin: 16,
-    fontWeight: 'bold',
-  },
-});
+    fontWeight: 'bold'
+  }
+})

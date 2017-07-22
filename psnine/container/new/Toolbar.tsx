@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import {
   StyleSheet,
   Text,
@@ -10,23 +10,23 @@ import {
   ScrollView,
   Picker,
   TextInput
-} from 'react-native';
+} from 'react-native'
 
-import { connect } from 'react-redux';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import { standardColor, accentColor } from '../../constant/colorConfig';
+import { connect } from 'react-redux'
+import Ionicons from 'react-native-vector-icons/Ionicons'
+import { standardColor, accentColor } from '../../constant/colorConfig'
 
-import { pngPrefix, getDealURL, getHappyPlusOneURL, getStoreURL } from '../../dao';
+import { pngPrefix, getDealURL, getHappyPlusOneURL, getStoreURL } from '../../dao'
 
-import { safeLogin, registURL } from '../../dao/login';
+import { safeLogin, registURL } from '../../dao/login'
 
 import packages from '../../../package.json'
 
 import checkVersion from '../../bootstrap/checkVersion'
 
 let dataSource = new ListView.DataSource({
-  rowHasChanged: (row1, row2) => row1 !== row2,
-});
+  rowHasChanged: (row1, row2) => row1 !== row2
+})
 
 const items = [
   {
@@ -40,7 +40,7 @@ const items = [
           modalIndex: index,
           completeCallback: (text) => {
             this.props.navigation.goBack()
-            callback({ 
+            callback({
               text: `[b]${text}[/b]`
             })
           }
@@ -74,19 +74,19 @@ const items = [
                 modalIndex: index,
                 completeCallback: (text) => {
                   this.props.navigation.goBack()
-                  callback({ 
+                  callback({
                     text: `[color=${value}]${text}[/color]`
                   })
                 }
               })
             }
           }}>
-          <Picker.Item label="选择颜色" value="select" />
-          <Picker.Item label="红色" color="red" value="red" />
-          <Picker.Item label="橘黄" color="orange"  value="orange" />
-          <Picker.Item label="棕色" color="brown"  value="brown" />
-          <Picker.Item label="蓝色" color="blue"  value="blue" />
-          <Picker.Item label="深紫" color="deeppink"  value="deeppink" />
+          <Picker.Item label='选择颜色' value='select' />
+          <Picker.Item label='红色' color='red' value='red' />
+          <Picker.Item label='橘黄' color='orange'  value='orange' />
+          <Picker.Item label='棕色' color='brown'  value='brown' />
+          <Picker.Item label='蓝色' color='blue'  value='blue' />
+          <Picker.Item label='深紫' color='deeppink'  value='deeppink' />
         </Picker>
       )
     }
@@ -102,7 +102,7 @@ const items = [
           modalIndex: index,
           completeCallback: (text) => {
             this.props.navigation.goBack()
-            callback({ 
+            callback({
               text: `[align=center]${text}[/align]`
             })
           }
@@ -121,7 +121,7 @@ const items = [
           modalIndex: index,
           completeCallback: (text) => {
             this.props.navigation.goBack()
-            callback({ 
+            callback({
               text: `[url]${text}[/url]`
             })
           }
@@ -140,7 +140,7 @@ const items = [
           modalIndex: index,
           completeCallback: (text) => {
             this.props.navigation.goBack()
-            callback({ 
+            callback({
               text: `[flash]${text}[/flash]`
             })
           }
@@ -159,7 +159,7 @@ const items = [
           modalIndex: index,
           completeCallback: (text) => {
             this.props.navigation.goBack()
-            callback({ 
+            callback({
               text: `[quote]${text}[/quote]`
             })
           }
@@ -178,7 +178,7 @@ const items = [
           modalIndex: index,
           completeCallback: (text) => {
             this.props.navigation.goBack()
-            callback({ 
+            callback({
               text: `[img]${text}[/img]`
             })
           }
@@ -197,7 +197,7 @@ const items = [
           modalIndex: index,
           completeCallback: (text) => {
             this.props.navigation.goBack()
-            callback({ 
+            callback({
               text: `[mark]${text}[/mark]`
             })
           }
@@ -216,7 +216,7 @@ const items = [
           modalIndex: index,
           completeCallback: (text) => {
             this.props.navigation.goBack()
-            callback({ 
+            callback({
               text: `[s]${text}[/s]`
             })
           }
@@ -235,7 +235,7 @@ const items = [
           modalIndex: index,
           completeCallback: (text) => {
             this.props.navigation.goBack()
-            callback({ 
+            callback({
               text: `[title]${text}[/title]`
             })
           }
@@ -254,7 +254,7 @@ const getMapper = index => {
 class About extends Component {
 
   constructor(props) {
-    super(props);
+    super(props)
 
     this.state = {
       color: 'select',
@@ -266,7 +266,7 @@ class About extends Component {
 
   cb = () => {
     this.setState({
-      modalIndex: -1,
+      modalIndex: -1
     }, () => {
       this.state.completeCallback && this.state.completeCallback(this.state.text)
     })
@@ -278,8 +278,8 @@ class About extends Component {
     return (
       <View style={{ flex: 1, backgroundColor: modeInfo.backgroundColor }}>
         <Ionicons.ToolbarAndroid
-          navIconName="md-arrow-back"
-          overflowIconName="md-more"
+          navIconName='md-arrow-back'
+          overflowIconName='md-more'
           iconColor={modeInfo.isNightMode ? '#000' : '#fff'}
           title={`花式回复`}
           titleColor={modeInfo.isNightMode ? '#000' : '#fff'}
@@ -310,7 +310,7 @@ class About extends Component {
                 }} borderRadius={2}>
                   <Text style={{ alignSelf: 'flex-start', fontSize: 15, color: modeInfo.titleTextColor }}>{'请输入' + getMapper(this.state.modalIndex)}</Text>
                   <View style={{flex: 1, flexDirection: 'row'}}>
-                    <TextInput placeholder=""
+                    <TextInput placeholder=''
                       autoCorrect={false}
                       multiline={false}
                       autoFocus={true}
@@ -344,7 +344,7 @@ class About extends Component {
         <ScrollView style={{ flex: 2, backgroundColor: modeInfo.backgroundColor }}>
           {items.map((item, index) => {
             const inner = (
-              <View pointerEvents={item.renderComponent ? 'auto' : 'box-only'} style={{ height: 60, backgroundColor: modeInfo.backgroundColor, 
+              <View pointerEvents={item.renderComponent ? 'auto' : 'box-only'} style={{ height: 60, backgroundColor: modeInfo.backgroundColor,
                 padding: 6,
                 flexDirection: 'row',
                 alignItems: 'center',
@@ -352,11 +352,11 @@ class About extends Component {
                 <Text style={[styles.themeName, { flex: 1, color: modeInfo.titleTextColor }]}>
                   {item.text}
                 </Text>
-                {item.renderComponent && item.renderComponent.bind(this)(index)||undefined}
+                {item.renderComponent && item.renderComponent.bind(this)(index) || undefined}
               </View>
             )
             return item.renderComponent ? (
-              <View key={index} style={{flex:1}}>
+              <View key={index} style={{flex: 1}}>
                 {inner}
               </View>
             ) : (
@@ -367,7 +367,7 @@ class About extends Component {
           })}
         </ScrollView>
       </View>
-    );
+    )
   }
 }
 
@@ -376,29 +376,28 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    padding: 6,
+    padding: 6
   },
   themeName: {
     flex: 1,
     fontSize: 16,
-    marginLeft: 16,
-  },  
+    marginLeft: 16
+  },
   toolbar: {
     backgroundColor: standardColor,
     height: 56,
-    elevation: 4,
+    elevation: 4
   },
   regist: {
     flex: 1,
     flexDirection: 'row',
     marginTop: 20,
-    margin: 10,
+    margin: 10
   },
   openURL: {
     color: accentColor,
-    textDecorationLine: 'underline',
-  },
-});
-
+    textDecorationLine: 'underline'
+  }
+})
 
 export default About

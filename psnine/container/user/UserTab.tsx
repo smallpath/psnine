@@ -1,4 +1,4 @@
-import React, { Component, Children } from 'react';
+import React, { Component, Children } from 'react'
 import {
   ScrollView,
   Dimensions,
@@ -8,7 +8,7 @@ import {
   TouchableNativeFeedback,
   Text,
   Button
-} from 'react-native';
+} from 'react-native'
 
 import {
   accentColor,
@@ -20,9 +20,9 @@ import {
   DrawerNavigator,
   DrawerItems,
   TabNavigator
-} from 'react-navigation';
+} from 'react-navigation'
 
-let screen = Dimensions.get('screen');
+let screen = Dimensions.get('screen')
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = screen
 const minWidth = Math.min(SCREEN_HEIGHT, SCREEN_WIDTH)
@@ -40,9 +40,9 @@ const DefaultTabBar = TabNavigator.Presets.Default.tabBarComponent
 const styles = StyleSheet.create({
   icon: {
     width: 26,
-    height: 26,
-  },
-});
+    height: 26
+  }
+})
 
 const container = {
   Home: {
@@ -75,7 +75,7 @@ const Tab = TabNavigator(container, {
         activeTintColor={modeInfo.accentColor}
         inactiveTintColor={modeInfo.titleTextColor}
         indicatorStyle={{
-          backgroundColor: modeInfo.accentColor,
+          backgroundColor: modeInfo.accentColor
         }}
         style={{
           ...props.style,

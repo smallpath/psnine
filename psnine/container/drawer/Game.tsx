@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import {
   StyleSheet,
   Text,
@@ -11,25 +11,25 @@ import {
   Picker,
   FlatList,
   Animated
-} from 'react-native';
+} from 'react-native'
 
-import { connect } from 'react-redux';
-import { getGameList } from '../../redux/action/game.js';
-import { standardColor, nodeColor, idColor } from '../../constant/colorConfig';
-import Icon from 'react-native-vector-icons/Ionicons';
+import { connect } from 'react-redux'
+import { getGameList } from '../../redux/action/game.js'
+import { standardColor, nodeColor, idColor } from '../../constant/colorConfig'
+import Icon from 'react-native-vector-icons/Ionicons'
 
-import { getGameUrl } from '../../dao';
+import { getGameUrl } from '../../dao'
 
-import { changeScrollType } from '../../redux/action/app';
+import { changeScrollType } from '../../redux/action/app'
 
 import TopicItem from '../../component/GameItem'
 import FooterProgress from '../../component/FooterProgress'
 
-const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
+const AnimatedFlatList = Animated.createAnimatedComponent(FlatList)
 
-let toolbarHeight = 56;
-let releasedMarginTop = 0;
-let prevPosition = -1;
+let toolbarHeight = 56
+let releasedMarginTop = 0
+let prevPosition = -1
 
 class Game extends Component {
   static navigationOptions = {
@@ -38,7 +38,7 @@ class Game extends Component {
   }
 
   constructor(props) {
-    super(props);
+    super(props)
 
     this.state = {
       pf: 'all',
@@ -70,10 +70,10 @@ class Game extends Component {
           prompt='选择平台'
           selectedValue={this.state.pf}
           onValueChange={this.onValueChange.bind(this, 'pf')}>
-          <Picker.Item label="全部" value="all" />
-          <Picker.Item label="PSV" value="psvita" />
-          <Picker.Item label="PS3" value="ps3" />
-          <Picker.Item label="PS4" value="ps4" />
+          <Picker.Item label='全部' value='all' />
+          <Picker.Item label='PSV' value='psvita' />
+          <Picker.Item label='PS3' value='ps3' />
+          <Picker.Item label='PS4' value='ps4' />
         </Picker>
         <Picker style={{
           flex: 1,
@@ -83,9 +83,9 @@ class Game extends Component {
           prompt='选择DLC'
           selectedValue={this.state.dlc}
           onValueChange={this.onValueChange.bind(this, 'dlc')}>
-          <Picker.Item label="全部" value="all" />
-          <Picker.Item label="有DLC" value="dlc" />
-          <Picker.Item label="无DLC" value="nodlc" />
+          <Picker.Item label='全部' value='all' />
+          <Picker.Item label='有DLC' value='dlc' />
+          <Picker.Item label='无DLC' value='nodlc' />
         </Picker>
         <Picker style={{
           flex: 1.5,
@@ -94,21 +94,21 @@ class Game extends Component {
           prompt='排序'
           selectedValue={this.state.sort}
           onValueChange={this.onValueChange.bind(this, 'sort')}>
-          <Picker.Item label="最新排序" value="newest" />
-          <Picker.Item label="玩的最多" value="owner" />
-          <Picker.Item label="完美难度" value="difficulty" />
+          <Picker.Item label='最新排序' value='newest' />
+          <Picker.Item label='玩的最多' value='owner' />
+          <Picker.Item label='完美难度' value='difficulty' />
         </Picker>
       </View>
     )
   }
 
   onValueChange = (key: string, value: string) => {
-    const newState = {};
-    newState[key] = value;
+    const newState = {}
+    newState[key] = value
     this.setState(newState, () => {
       this._onRefresh()
-    });
-  };
+    })
+  }
 
   componentWillReceiveProps = (nextProps) => {
     if (this.props.screenProps.modeInfo.themeName != nextProps.screenProps.modeInfo.themeName) {
@@ -132,12 +132,12 @@ class Game extends Component {
   }
 
   componentWillMount = () => {
-    const { game: gameReducer } = this.props;
+    const { game: gameReducer } = this.props
     const { registerAfterEach, searchTitle } = this.props.screenProps
     if (gameReducer.page === 0) {
       this._onRefresh(
         searchTitle
-      );
+      )
     }
     registerAfterEach({
       index: 4,
@@ -150,7 +150,7 @@ class Game extends Component {
   }
 
   _onRefresh = (title) => {
-    const { game: gameReducer, dispatch } = this.props;
+    const { game: gameReducer, dispatch } = this.props
 
     this.setState({
       isRefreshing: true
@@ -159,26 +159,26 @@ class Game extends Component {
     const { pf, sort, dlc } = this.state
     dispatch(
       getGameList(1, {
-        sort, 
-        pf, 
+        sort,
+        pf,
         dlc,
         title: typeof title !== 'undefined' ? title : this.props.screenProps.searchTitle
       })
-    );
+    )
   }
 
   _loadMoreData = () => {
-    const { game: gameReducer, dispatch } = this.props;
+    const { game: gameReducer, dispatch } = this.props
     const { pf, sort, dlc } = this.state
-    let page = gameReducer.page + 1;
+    let page = gameReducer.page + 1
     dispatch(getGameList(page, {
       sort, pf, dlc,
       title: this.props.screenProps.searchTitle
-    }));
+    }))
   }
 
   _onEndReached = () => {
-    const { game: gameReducer } = this.props;
+    const { game: gameReducer } = this.props
 
     if (this.state.isRefreshing || this.state.isLoadingMore) return
 
@@ -186,9 +186,8 @@ class Game extends Component {
       isLoadingMore: true
     })
 
-    this._loadMoreData();
+    this._loadMoreData()
   }
-
 
   ITEM_HEIGHT = 74 + 7
 
@@ -204,9 +203,9 @@ class Game extends Component {
   }
 
   render() {
-    const { game: gameReducer } = this.props;
+    const { game: gameReducer } = this.props
     const { modeInfo } = this.props.screenProps
-    log('Game.js rendered');
+    log('Game.js rendered')
     return (
       <View style={{ backgroundColor: modeInfo.background, flex: 1 }}>
         {this._renderHeader()}
@@ -258,17 +257,16 @@ class Game extends Component {
 const styles = StyleSheet.create({
   avatar: {
     width: 50,
-    height: 50,
+    height: 50
   }
-});
-
+})
 
 function mapStateToProps(state) {
   return {
     game: state.game
-  };
+  }
 }
 
 export default connect(
   mapStateToProps
-)(Game);
+)(Game)

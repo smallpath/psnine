@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import {
   StyleSheet,
   Text,
@@ -12,26 +12,26 @@ import {
   Animated,
   FlatList,
   Picker
-} from 'react-native';
+} from 'react-native'
 
-import { connect } from 'react-redux';
-import { getList } from '../../redux/action/store.js';
-import { standardColor, nodeColor, idColor, accentColor } from '../../constant/colorConfig';
+import { connect } from 'react-redux'
+import { getList } from '../../redux/action/store.js'
+import { standardColor, nodeColor, idColor, accentColor } from '../../constant/colorConfig'
 
-import { getBattleURL, getGamePngURL } from '../../dao';
+import { getBattleURL, getGamePngURL } from '../../dao'
 import FooterProgress from '../../component/FooterProgress'
-const AnimatedSectionList = Animated.createAnimatedComponent(SectionList);
+const AnimatedSectionList = Animated.createAnimatedComponent(SectionList)
 
-let toolbarHeight = 56;
-let releasedMarginTop = 0;
+let toolbarHeight = 56
+let releasedMarginTop = 0
 
-const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
+const AnimatedFlatList = Animated.createAnimatedComponent(FlatList)
 
 class StoreItem extends React.PureComponent {
   shouldComponentUpdate = (props) => props.modeInfo.themeName !== this.props.modeInfo.themeName
-  
+
   _onRowPressed = (rowData) => {
-    const { navigation } = this.props;
+    const { navigation } = this.props
     navigation.navigate('StoreTopic', {
       id: rowData.id,
       server: rowData.server,
@@ -39,7 +39,6 @@ class StoreItem extends React.PureComponent {
       rowData
     })
   }
-
 
   render = () => {
     // console.log(rowData)
@@ -51,7 +50,7 @@ class StoreItem extends React.PureComponent {
         useForeground={true}
         background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
       >
-        <View pointerEvents={'box-only'} style={{ 
+        <View pointerEvents={'box-only'} style={{
           flex: -1, flexDirection: 'row', padding: 5, justifyContent: 'center', alignItems: 'center',
           marginVertical: 3.5,
           backgroundColor: modeInfo.backgroundColor,
@@ -72,7 +71,7 @@ class StoreItem extends React.PureComponent {
               style={{
                 width: 100,
                 height: 100,
-                alignSelf: 'center',
+                alignSelf: 'center'
               }}
             />
           </View>
@@ -114,10 +113,10 @@ class Store extends Component {
   static navigationOptions = {
     tabBarLabel: '商店',
     drawerLabel: '商店'
-  };
+  }
 
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       isRefreshing: false,
       isLoadingMore: false,
@@ -149,12 +148,12 @@ class Store extends Component {
   }
 
   onValueChange = (key: string, value: string) => {
-    const newState = {};
-    newState[key] = value;
+    const newState = {}
+    newState[key] = value
     this.setState(newState, () => {
       this._onRefresh()
-    });
-  };
+    })
+  }
 
   _renderHeader = () => {
     const { modeInfo } = this.props.screenProps
@@ -177,10 +176,10 @@ class Store extends Component {
           prompt='选择服务器'
           selectedValue={this.state.server}
           onValueChange={this.onValueChange.bind(this, 'server')}>
-          <Picker.Item label="港服" value="hk" />
-          <Picker.Item label="国服" value="cn" />
-          <Picker.Item label="日服" value="jp" />
-          <Picker.Item label="美服" value="us" />
+          <Picker.Item label='港服' value='hk' />
+          <Picker.Item label='国服' value='cn' />
+          <Picker.Item label='日服' value='jp' />
+          <Picker.Item label='美服' value='us' />
         </Picker>
         <Picker style={{
           flex: 1,
@@ -189,11 +188,11 @@ class Store extends Component {
           prompt='选择平台'
           selectedValue={this.state.pf}
           onValueChange={this.onValueChange.bind(this, 'pf')}>
-          <Picker.Item label="全部" value="all" />
-          <Picker.Item label="PSV" value="psvita" />
-          <Picker.Item label="PS3" value="ps3" />
-          <Picker.Item label="PS4" value="ps4" />
-          <Picker.Item label="PSP" value="psp" />
+          <Picker.Item label='全部' value='all' />
+          <Picker.Item label='PSV' value='psvita' />
+          <Picker.Item label='PS3' value='ps3' />
+          <Picker.Item label='PS4' value='ps4' />
+          <Picker.Item label='PSP' value='psp' />
         </Picker>
         <Picker style={{
           flex: 1,
@@ -202,16 +201,16 @@ class Store extends Component {
           prompt='排序'
           selectedValue={this.state.ob}
           onValueChange={this.onValueChange.bind(this, 'ob')}>
-          <Picker.Item label="最近发售" value="reledate" />
-          <Picker.Item label="价格升序" value="priceup" />
-          <Picker.Item label="价格降序" value="pricedown" />
+          <Picker.Item label='最近发售' value='reledate' />
+          <Picker.Item label='价格升序' value='priceup' />
+          <Picker.Item label='价格降序' value='pricedown' />
         </Picker>
       </View>
     )
   }
 
   componentWillMount = () => {
-    const { reducer } = this.props;
+    const { reducer } = this.props
     const { searchTitle, registerAfterEach } = this.props.screenProps
 
     if (reducer.page === 0) {
@@ -230,7 +229,7 @@ class Store extends Component {
   }
 
   _onRefresh = (searchTitle) => {
-    const { reducer, dispatch } = this.props;
+    const { reducer, dispatch } = this.props
     // const { circleType } = this.props.screenProps
     const { server, ob,  pf } = this.state
     this.setState({
@@ -243,21 +242,21 @@ class Store extends Component {
         ob,
         pf
       })
-    );
+    )
   }
 
   _loadMoreData = () => {
-    const { reducer, dispatch } = this.props;
+    const { reducer, dispatch } = this.props
     const { searchTitle } = this.props.screenProps
     const { server, ob,  pf } = this.state
-    let page = reducer.page + 1;
+    let page = reducer.page + 1
     dispatch(getList(page, {
         title: searchTitle,
         server,
         ob,
         pf
       })
-    );
+    )
   }
 
   _onEndReached = () => {
@@ -266,7 +265,7 @@ class Store extends Component {
     this.setState({
       isLoadingMore: true
     })
-    this._loadMoreData();
+    this._loadMoreData()
   }
 
   ITEM_HEIGHT = 130 + 7
@@ -284,9 +283,9 @@ class Store extends Component {
   }
 
   render() {
-    const { reducer } = this.props;
+    const { reducer } = this.props
     const { modeInfo } = this.props.screenProps
-    log('Store.js rendered');
+    log('Store.js rendered')
     // console.log(reducer.page, reducer.list)
     return (
       <View style={{ backgroundColor: modeInfo.background, flex: 1 }}>
@@ -339,17 +338,16 @@ class Store extends Component {
 const styles = StyleSheet.create({
   avatar: {
     width: 50,
-    height: 50,
+    height: 50
   }
-});
-
+})
 
 function mapStateToProps(state) {
   return {
     reducer: state.store
-  };
+  }
 }
 
 export default connect(
   mapStateToProps
-)(Store);
+)(Store)

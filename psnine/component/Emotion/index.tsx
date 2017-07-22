@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import {
   StyleSheet,
   Text,
@@ -9,13 +9,13 @@ import {
   Modal,
   Image,
   Button
-} from 'react-native';
+} from 'react-native'
 
-const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
+const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window')
 
-import { standardColor, nodeColor, idColor } from '../constant/colorConfig';
+import { standardColor, nodeColor, idColor } from '../constant/colorConfig'
 
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import Ionicons from 'react-native-vector-icons/Ionicons'
 
 import EmotionItem from './emotionItem'
 
@@ -33,14 +33,14 @@ const viewPagerHeight = 190
 
 class Emotion extends Component {
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       index: 0
     }
   }
 
   _onPageSelected = (event) => {
-    let index = event.nativeEvent.position;
+    let index = event.nativeEvent.position
     this.setState({
       index
     })
@@ -64,7 +64,7 @@ class Emotion extends Component {
           size={item.size || { width: 32, height: 32}}
           emotionList={item.emotions}
           onPress={this.props.onPress}
-          modeInfo={modeInfo}  
+          modeInfo={modeInfo}
         />
       </View>
     ))
@@ -102,8 +102,8 @@ class Emotion extends Component {
           paddingHorizontal: 2,
           paddingVertical: 8
         }}
-          ref={viewPager => { this.viewPage = viewPager; }}
-          keyboardDismissMode={"on-drag"}
+          ref={viewPager => { this.viewPage = viewPager }}
+          keyboardDismissMode={'on-drag'}
           onPageSelected={this._onPageSelected}
           onPageScrollStateChanged={this.onPageScrollStateChanged}
           onPageScroll={this.onPageScroll}
@@ -133,6 +133,6 @@ class Emotion extends Component {
 
 }
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({})
 
-export default Emotion;
+export default Emotion

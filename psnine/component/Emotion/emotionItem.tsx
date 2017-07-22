@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import {
   StyleSheet,
   Text,
@@ -8,19 +8,19 @@ import {
   ViewPagerAndroid,
   Modal,
   Image
-} from 'react-native';
+} from 'react-native'
 
-const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
+const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window')
 
-import { standardColor, nodeColor, idColor } from '../constant/colorConfig';
+import { standardColor, nodeColor, idColor } from '../constant/colorConfig'
 
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import Ionicons from 'react-native-vector-icons/Ionicons'
 
 const viewPagerHeight = 180
 
 class EmotionItem extends Component {
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       index: 0
     }
@@ -36,9 +36,9 @@ class EmotionItem extends Component {
     for (let i = 0; i < maxLen; i++) {
 
       const ImageList = []
-      for (let j=0; j<perPage;j++) {
+      for (let j = 0; j < perPage; j++) {
         const thisIndex = i * perPage + j
-        if (thisIndex > emotionList.length - 1) break;
+        if (thisIndex > emotionList.length - 1) break
         const { text, url, width = 32, height = 32 } = emotionList[thisIndex]
         ImageList.push(
           <TouchableNativeFeedback key={`${i}:${j}`} onPress={() => {
@@ -47,7 +47,7 @@ class EmotionItem extends Component {
             <View style={{
                 width: width || itemWidth || 32,
                 height: height || itemHeight || 32,
-                margin: 1 
+                margin: 1
               }}>
               <Image
                 resizeMethod={'scale'}
@@ -55,7 +55,7 @@ class EmotionItem extends Component {
                 style={{
                   width: width || itemWidth || 32,
                   height: height || itemHeight || 32,
-                  margin: 1 
+                  margin: 1
                 }}
                 source={{ uri: url }} />
             </View>
@@ -86,6 +86,6 @@ class EmotionItem extends Component {
 
 }
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({})
 
-export default EmotionItem;
+export default EmotionItem

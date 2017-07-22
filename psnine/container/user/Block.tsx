@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import {
   StyleSheet,
   Text,
@@ -13,29 +13,26 @@ import {
   Modal,
   Slider,
   FlatList
-} from 'react-native';
+} from 'react-native'
 
-const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
+const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window')
 
+import { connect } from 'react-redux'
+import { standardColor, nodeColor, idColor } from '../../constant/colorConfig'
 
-
-
-import { connect } from 'react-redux';
-import { standardColor, nodeColor, idColor } from '../../constant/colorConfig';
-
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import { getBlockAPI as getAPI } from '../../dao';
+import Ionicons from 'react-native-vector-icons/Ionicons'
+import { getBlockAPI as getAPI } from '../../dao'
 
 import RankItem from '../../component/RankItem'
 
 import FooterProgress from '../../component/FooterProgress'
 import { block } from '../../dao/sync'
 
-let toolbarActions = [];
+let toolbarActions = []
 
 class Fav extends Component {
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       list: [],
       numberPerPage: 60,
@@ -51,13 +48,13 @@ class Fav extends Component {
   }
 
   onNavClicked = (rowData) => {
-    const { navigation } = this.props;
-    navigation.goBack();
+    const { navigation } = this.props
+    navigation.goBack()
   }
 
   componentWillMount = async () => {
     const { params } = this.props.navigation.state
-    this.fetchMessages(params.URL, 'jump');
+    this.fetchMessages(params.URL, 'jump')
   }
 
   fetchMessages = (url, type = 'down') => {
@@ -85,8 +82,8 @@ class Fav extends Component {
           this.setState({
             list: thisList,
             isLoadingMore: false,
-            isRefreshing: false,
-          }, cb);
+            isRefreshing: false
+          }, cb)
         })
       })
     })
@@ -95,7 +92,7 @@ class Fav extends Component {
   pageArr = [1]
   _onRefresh = () => {
     const { params } = this.props.navigation.state
-    this.fetchMessages(params.URL, 'jump');
+    this.fetchMessages(params.URL, 'jump')
   }
 
   ITEM_HEIGHT = 100
@@ -113,7 +110,7 @@ class Fav extends Component {
       modalList: [{
         text: '取消屏蔽',
         onPress: () => {
-          block({ 
+          block({
             type: 'psnid',
             param: rowData && rowData.psnid,
             unblock: ''
@@ -129,12 +126,11 @@ class Fav extends Component {
     }} />
   }
 
-
   onValueChange = (key: string, value: string) => {
-    const newState = {};
-    newState[key] = value;
-    this.setState(newState);
-  };
+    const newState = {}
+    newState[key] = value
+    this.setState(newState)
+  }
 
   sliderValue = 1
   render() {
@@ -149,8 +145,8 @@ class Fav extends Component {
         onMoveShouldSetResponder={() => false}
       >
         <Ionicons.ToolbarAndroid
-          navIconName="md-arrow-back"
-          overflowIconName="md-more"
+          navIconName='md-arrow-back'
+          overflowIconName='md-more'
           iconColor={modeInfo.isNightMode ? '#000' : '#fff'}
           title={params.title || '屏蔽'}
           style={[styles.toolbar, { backgroundColor: modeInfo.standardColor }]}
@@ -199,17 +195,16 @@ class Fav extends Component {
 
 }
 
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: 'column',
-    backgroundColor: '#F5FCFF',
+    backgroundColor: '#F5FCFF'
   },
   toolbar: {
     backgroundColor: standardColor,
     height: 56,
-    elevation: 4,
+    elevation: 4
   },
   selectedTitle: {
     //backgroundColor: '#00ffff'
@@ -217,13 +212,12 @@ const styles = StyleSheet.create({
   },
   avatar: {
     width: 50,
-    height: 50,
+    height: 50
   },
   a: {
     fontWeight: '300',
-    color: idColor, // make links coloured pink
-  },
-});
+    color: idColor // make links coloured pink
+  }
+})
 
-
-export default Fav;
+export default Fav

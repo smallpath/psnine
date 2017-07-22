@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import {
   StyleSheet,
   Text,
@@ -13,17 +13,15 @@ import {
   Modal,
   Slider,
   FlatList
-} from 'react-native';
+} from 'react-native'
 
-const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
+const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window')
 
+import { connect } from 'react-redux'
+import { standardColor, nodeColor, idColor } from '../../constant/colorConfig'
 
-
-import { connect } from 'react-redux';
-import { standardColor, nodeColor, idColor } from '../../constant/colorConfig';
-
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import { getGameMapperAPI, getTopicURL } from '../../dao';
+import Ionicons from 'react-native-vector-icons/Ionicons'
+import { getGameMapperAPI, getTopicURL } from '../../dao'
 
 import TopicItem from '../../component/CommunityItem'
 import GameItem from '../../component/GameItem'
@@ -31,11 +29,11 @@ import FooterProgress from '../../component/FooterProgress'
 
 let toolbarActions = [
   // { title: '跳页', iconName: 'md-map', show: 'always' },
-];
+]
 
 export default class NewGameGuide extends Component {
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       list: [],
       URL: this.props.screenProps.baseUrl + '/guide',
@@ -50,9 +48,8 @@ export default class NewGameGuide extends Component {
     }
   }
 
-
   componentWillMount = async () => {
-    this.fetchMessages(this.state.URL, 'jump');
+    this.fetchMessages(this.state.URL, 'jump')
   }
 
   fetchMessages = (url, type = 'down') => {
@@ -65,7 +62,7 @@ export default class NewGameGuide extends Component {
             list: data,
             isLoadingMore: false,
             isRefreshing: false
-          });
+          })
         })
       })
     })
@@ -74,7 +71,7 @@ export default class NewGameGuide extends Component {
   pageArr = [1]
   _onRefresh = () => {
     if (this.state.isLoadingMore || this.state.isRefreshing) return
-    this.fetchMessages(this.state.URL);
+    this.fetchMessages(this.state.URL)
   }
 
   onActionSelected = (index) => {
@@ -86,7 +83,6 @@ export default class NewGameGuide extends Component {
         return
     }
   }
-
 
   ITEM_HEIGHT = 85
 
@@ -160,17 +156,16 @@ export default class NewGameGuide extends Component {
 
 }
 
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: 'column',
-    backgroundColor: '#F5FCFF',
+    backgroundColor: '#F5FCFF'
   },
   toolbar: {
     backgroundColor: standardColor,
     height: 56,
-    elevation: 4,
+    elevation: 4
   },
   selectedTitle: {
     //backgroundColor: '#00ffff'
@@ -178,11 +173,10 @@ const styles = StyleSheet.create({
   },
   avatar: {
     width: 50,
-    height: 50,
+    height: 50
   },
   a: {
     fontWeight: '300',
-    color: idColor, // make links coloured pink
-  },
-});
-
+    color: idColor // make links coloured pink
+  }
+})

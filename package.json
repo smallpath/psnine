@@ -7,12 +7,12 @@
     "install": "react-native run-android",
     "log": "react-native log-android",
     "test": "jest",
-    "lint": "tslint -c tslint.json -p tsconfig.json psnine/**/*.ts",
+    "lint": "tslint -c tslint.json -p tsconfig.json",
     "tsc": "tsc",
     "clean": "rimraf build",
     "build": "npm run clean && npm run tsc --",
     "watch": "npm run clean && tsc -w",
-    "fix": "tslint -c tslint.json -p tsconfig.json --fix psnine/**/*.ts"
+    "fix": "tslint -c tslint.json -p tsconfig.json --fix"
   },
   "dependencies": {
     "babel-plugin-transform-remove-console": "^6.8.4",

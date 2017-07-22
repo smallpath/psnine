@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import {
   AppRegistry,
   StyleSheet,
@@ -16,24 +16,22 @@ import {
   PanResponder,
   Modal,
   Keyboard
-} from 'react-native';
+} from 'react-native'
 
+import { connect } from 'react-redux'
+import Ionicons from 'react-native-vector-icons/Ionicons'
+import { standardColor, nodeColor, idColor, accentColor } from '../constant/colorConfig'
 
-
-import { connect } from 'react-redux';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import { standardColor, nodeColor, idColor, accentColor } from '../constant/colorConfig';
-
-import { getHomeURL } from '../dao';
+import { getHomeURL } from '../dao'
 
 import {
   getGamePointAPI,
   getTopicURL
 } from '../dao'
-import { getGeneURL } from '../dao';
+import { getGeneURL } from '../dao'
 
-let screen = Dimensions.get('window');
-const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = screen;
+let screen = Dimensions.get('window')
+const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = screen
 
 export default class extends React.PureComponent {
 
@@ -48,8 +46,8 @@ export default class extends React.PureComponent {
   shouldComponentUpdate = (props, state) => props.modeInfo.themeName !== this.props.modeInfo.themeName || this.state.modalVisible !== state.modalVisible
 
   _onRowPressed = (rowData) => {
-    const { navigation } = this.props;
-    const URL = getGeneURL(rowData.id);
+    const { navigation } = this.props
+    const URL = getGeneURL(rowData.id)
     // console.log(rowData)
     navigation.navigate('CommunityTopic', {
       URL,
@@ -62,12 +60,12 @@ export default class extends React.PureComponent {
 
   render = () => {
     const { modeInfo, rowData, modalList = [] } = this.props
-    let TouchableElement = TouchableNativeFeedback;
+    let TouchableElement = TouchableNativeFeedback
 
-    let imageArr = rowData.thumbs;
-    let type = rowData.type;
+    let imageArr = rowData.thumbs
+    let type = rowData.type
 
-    const imageItems = imageArr.map((value, index) => (<Image key={rowData.id + '' + index} source={{ uri: value }} style={styles.geneImage} />));
+    const imageItems = imageArr.map((value, index) => (<Image key={rowData.id + '' + index} source={{ uri: value }} style={styles.geneImage} />))
     const { numColumns = 1 } = modeInfo
 
     return (
@@ -81,7 +79,7 @@ export default class extends React.PureComponent {
       }}>
         <TouchableNativeFeedback
           onPress={() => { this._onRowPressed(rowData) }}
-          
+
           onLongPress={() => {
              modalList.length && this.setState({
               modalVisible: true
@@ -98,8 +96,8 @@ export default class extends React.PureComponent {
               this.state.modalVisible && modalList.length && (
                 <MyDialog modeInfo={modeInfo}
                   modalVisible={this.state.modalVisible}
-                  onDismiss={() => { this.setState({ modalVisible: false }); }}
-                  onRequestClose={() => { this.setState({ modalVisible: false }); }}
+                  onDismiss={() => { this.setState({ modalVisible: false }) }}
+                  onRequestClose={() => { this.setState({ modalVisible: false }) }}
                   renderContent={() => (
                     <View style={{
                       justifyContent: 'center',
@@ -121,7 +119,7 @@ export default class extends React.PureComponent {
                               item.onPress(rowData)
                             })
                           }}>
-                          <View style={{height: 50, paddingVertical: 10, paddingLeft: 20 ,alignSelf: 'stretch', alignContent: 'stretch', justifyContent: 'center'}}>
+                          <View style={{height: 50, paddingVertical: 10, paddingLeft: 20 , alignSelf: 'stretch', alignContent: 'stretch', justifyContent: 'center'}}>
                             <Text style={{textAlignVertical: 'center', fontSize: 18, color: modeInfo.standardTextColor}}>{item.text}</Text>
                           </View>
                         </TouchableNativeFeedback>
@@ -131,15 +129,15 @@ export default class extends React.PureComponent {
                   )} />
                 )
               }
-            <View style={{ marginLeft: 10, flex: 1, flexDirection: 'column', }}>
+            <View style={{ marginLeft: 10, flex: 1, flexDirection: 'column' }}>
               <Text
-                style={{ flex: -1, color: modeInfo.titleTextColor, }}>
+                style={{ flex: -1, color: modeInfo.titleTextColor }}>
                 {rowData.content}
               </Text>
               <View style={{ flex: -1, flexDirection: 'row', flexWrap: 'wrap', marginTop: 5, marginBottom: 5 }}>
                 {imageItems}
               </View>
-              <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between', }}>
+              <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between' }}>
                 <Text style={{ fontSize: 12, flex: -1, color: modeInfo.standardColor, textAlign: 'center', textAlignVertical: 'center' }} onPress={
                   () => {
                     this.props.navigation.navigate('Home', {
@@ -175,11 +173,11 @@ export default class extends React.PureComponent {
 const styles = StyleSheet.create({
   avatar: {
     width: 50,
-    height: 50,
+    height: 50
   },
   geneImage: {
     margin: 3,
     width: 100,
     height: 100
   }
-});
+})

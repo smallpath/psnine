@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import {
   StyleSheet,
   Text,
@@ -12,38 +12,35 @@ import {
   Easing,
   Picker,
   Alert
-} from 'react-native';
+} from 'react-native'
 
-import { pngPrefix, getDealURL, getHappyPlusOneURL, getStoreURL } from '../../dao';
+import { pngPrefix, getDealURL, getHappyPlusOneURL, getStoreURL } from '../../dao'
 
-import { safeLogin, registURL } from '../../dao/login';
+import { safeLogin, registURL } from '../../dao/login'
 
+import { connect } from 'react-redux'
+import Ionicons from 'react-native-vector-icons/Ionicons'
+import ColorConfig, { standardColor, nodeColor, idColor, accentColor } from '../../constant/colorConfig'
 
+let screen = Dimensions.get('window')
+const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = screen
 
+let toolbarActions = []
+let title = 'TOPIC'
+let WEBVIEW_REF = `WEBVIEW_REF`
 
-import { connect } from 'react-redux';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import ColorConfig, { standardColor, nodeColor, idColor, accentColor } from '../../constant/colorConfig';
+let toolbarHeight = 56
+let releasedMarginTop = 0
 
-let screen = Dimensions.get('window');
-const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = screen;
+const ACTUAL_SCREEN_HEIGHT = SCREEN_HEIGHT - StatusBar.currentHeight + 1
 
-let toolbarActions = [];
-let title = "TOPIC";
-let WEBVIEW_REF = `WEBVIEW_REF`;
-
-let toolbarHeight = 56;
-let releasedMarginTop = 0;
-
-const ACTUAL_SCREEN_HEIGHT = SCREEN_HEIGHT - StatusBar.currentHeight + 1;
-
-let CIRCLE_SIZE = 56;
-let config = { tension: 30, friction: 7, ease: Easing.in(Easing.ease(1, 0, 1, 1)), duration: 200 };
+let CIRCLE_SIZE = 56
+let config = { tension: 30, friction: 7, ease: Easing.in(Easing.ease(1, 0, 1, 1)), duration: 200 }
 
 class Theme extends Component {
 
   constructor(props) {
-    super(props);
+    super(props)
     // console.log(typeof global.shouldSendGA === 'boolean', global.shouldSendGA, typeof global.shouldSendGA)
     this.state = {
       loadImageWithoutWifi: global.loadImageWithoutWifi || false,
@@ -55,7 +52,7 @@ class Theme extends Component {
     const { modeInfo } = this.props.screenProps
     return (
       <TouchableNativeFeedback onPress={() => {
-        const value = !this.state.loadImageWithoutWifi 
+        const value = !this.state.loadImageWithoutWifi
         this.setState({ loadImageWithoutWifi: value }, () => {
           global.loadImageWithoutWifi = value
           AsyncStorage.setItem('@Theme:loadImageWithoutWifi', value.toString())
@@ -67,7 +64,7 @@ class Theme extends Component {
             flexDirection: 'row',
             padding: 10,
             borderBottomWidth: StyleSheet.hairlineWidth,
-            borderBottomColor: modeInfo.brighterLevelOne,
+            borderBottomColor: modeInfo.brighterLevelOne
         }]}>
           <View style={{flex: 4, justifyContent: 'center', alignItems: 'flex-start'}}>
             <Text style={[styles.themeName, { marginTop: 12, flex: 1, color: modeInfo.titleTextColor }]}>
@@ -95,7 +92,7 @@ class Theme extends Component {
     const { modeInfo } = this.props.screenProps
     return (
       <TouchableNativeFeedback onPress={() => {
-        const value = !this.state.shouldSendGA 
+        const value = !this.state.shouldSendGA
         this.setState({ shouldSendGA: value }, () => {
           global.shouldSendGA = value
           AsyncStorage.setItem('@Theme:shouldSendGA', value.toString())
@@ -107,7 +104,7 @@ class Theme extends Component {
             flexDirection: 'row',
             padding: 10,
             borderBottomWidth: StyleSheet.hairlineWidth,
-            borderBottomColor: modeInfo.brighterLevelOne,
+            borderBottomColor: modeInfo.brighterLevelOne
         }]}>
           <View style={{flex: 4, justifyContent: 'center', alignItems: 'flex-start'}}>
             <Text style={[styles.themeName, { marginTop: 12, flex: 1, color: modeInfo.titleTextColor }]}>
@@ -139,8 +136,8 @@ class Theme extends Component {
         onStartShouldSetResponder={() => false}
         onMoveShouldSetResponder={() => false}>
         <Ionicons.ToolbarAndroid
-          navIconName="md-arrow-back"
-          overflowIconName="md-more"
+          navIconName='md-arrow-back'
+          overflowIconName='md-more'
           iconColor={modeInfo.isNightMode ? '#000' : '#fff'}
           title={`高级`}
           titleColor={modeInfo.isNightMode ? '#000' : '#fff'}
@@ -149,12 +146,12 @@ class Theme extends Component {
             this.props.navigation.goBack()
           }}
         />
-        <View style={{flex:1}}>
+        <View style={{flex: 1}}>
           {this.loadImageWithoutWIFI()}
           {this.sendGA()}
         </View>
       </View>
-    );
+    )
   }
 }
 
@@ -163,31 +160,31 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    padding: 6,
+    padding: 6
   },
   themeName: {
     flex: 1,
-    fontSize: 16,
+    fontSize: 16
   },
   regist: {
     flex: 1,
     flexDirection: 'row',
     marginTop: 20,
-    margin: 10,
+    margin: 10
   },
   openURL: {
     color: accentColor,
-    textDecorationLine: 'underline',
+    textDecorationLine: 'underline'
   },
   container: {
     flex: 1,
     flexDirection: 'column',
-    backgroundColor: '#F5FCFF',
+    backgroundColor: '#F5FCFF'
   },
   toolbar: {
     backgroundColor: standardColor,
     height: 56,
-    elevation: 4,
+    elevation: 4
   },
   selectedTitle: {
     //backgroundColor: '#00ffff'
@@ -195,13 +192,12 @@ const styles = StyleSheet.create({
   },
   avatar: {
     width: 50,
-    height: 50,
+    height: 50
   },
   a: {
     fontWeight: '300',
-    color: idColor, // make links coloured pink
-  },
-});
-
+    color: idColor // make links coloured pink
+  }
+})
 
 export default Theme

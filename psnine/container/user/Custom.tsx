@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import {
   StyleSheet,
   Text,
@@ -13,20 +13,19 @@ import {
   Alert,
   Button,
   Dimensions
-} from 'react-native';
+} from 'react-native'
 
-import { connect } from 'react-redux';
-import { standardColor, nodeColor, idColor, accentColor } from '../../constant/colorConfig';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import { getCustomAPI } from '../../dao';
-import { postSetting } from '../../dao/post';
+import { connect } from 'react-redux'
+import { standardColor, nodeColor, idColor, accentColor } from '../../constant/colorConfig'
+import Ionicons from 'react-native-vector-icons/Ionicons'
+import { getCustomAPI } from '../../dao'
+import { postSetting } from '../../dao/post'
 import CircleItem from '../../component/CircleItem'
 
+const AnimatedSectionList = Animated.createAnimatedComponent(SectionList)
 
-const AnimatedSectionList = Animated.createAnimatedComponent(SectionList);
-
-let toolbarHeight = 56;
-let releasedMarginTop = 0;
+let toolbarHeight = 56
+let releasedMarginTop = 0
 
 let toolbarActions = []
 
@@ -39,19 +38,19 @@ const renderSectionHeader = ({ section }) => {
       backgroundColor: section.modeInfo.backgroundColor,
       flex: -1,
       padding: 7,
-      elevation: 2,
+      elevation: 2
     }}>
       <Text numberOfLines={1}
         style={{ fontSize: 20, color: idColor, textAlign: 'left', lineHeight: 25, marginLeft: 2, marginTop: 2 }}
       >{section.key}</Text>
     </View>
-  );
+  )
 }
 
 export default class Custom extends Component {
 
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       isLoading: false,
       data: {
@@ -88,14 +87,13 @@ export default class Custom extends Component {
 
   ITEM_HEIGHT = 74 + 7
 
-
   renderVIP = ({ item: rowData, index}) => {
     const { modeInfo } = this.props.screenProps
     const { ITEM_HEIGHT } = this
     const { navigation } = this.props
     // console.log(index, rowData)
-    const bgvip = this.state.data.form.bgvip 
-    const avavip = this.state.data.form.avavip 
+    const bgvip = this.state.data.form.bgvip
+    const avavip = this.state.data.form.avavip
     return (
       <View style={{ flex: 1, padding: 10 }}>
         <Button title={'自定义背景图'} color={bgvip !== 0 ? modeInfo.standardColor : modeInfo.standardTextColor}
@@ -147,7 +145,7 @@ export default class Custom extends Component {
     const { ITEM_HEIGHT } = this
     const { navigation } = this.props
     // console.log(index, rowData)
-    const home = this.state.data.form.home 
+    const home = this.state.data.form.home
     return (
       <View style={{ flex: 1, padding: 10 }}>
         <Button title={'游戏'} color={home === 'psngame' ? modeInfo.standardColor : modeInfo.standardTextColor}
@@ -240,7 +238,7 @@ export default class Custom extends Component {
     const { modeInfo } = this.props.screenProps
     const { ITEM_HEIGHT } = this
     const { navigation } = this.props
-    const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
+    const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window')
     const items = rowData.items.map((rowData, index) => <PhotoItem key={index} {...{
       modeInfo,
       navigation,
@@ -282,9 +280,9 @@ export default class Custom extends Component {
 
   render() {
     const { modeInfo } = this.props.screenProps
-    const { data } = this.state;
+    const { data } = this.state
 
-    let keys = Object.keys(data);
+    let keys = Object.keys(data)
 
     let sections = data.sections ? data.sections.map((item, index) => ({
       key: item,
@@ -350,8 +348,8 @@ export default class Custom extends Component {
         onMoveShouldSetResponder={() => false}
       >
         <Ionicons.ToolbarAndroid
-          navIconName="md-arrow-back"
-          overflowIconName="md-more"
+          navIconName='md-arrow-back'
+          overflowIconName='md-more'
           iconColor={modeInfo.isNightMode ? '#000' : '#fff'}
           title={'个性设定'}
           style={{ backgroundColor: modeInfo.standardColor, height: 56, elevation: 4 }}
@@ -388,6 +386,6 @@ export default class Custom extends Component {
 const styles = StyleSheet.create({
   avatar: {
     width: 50,
-    height: 50,
+    height: 50
   }
-});
+})

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import {
   AppRegistry,
   StyleSheet,
@@ -16,23 +16,21 @@ import {
   PanResponder,
   Modal,
   Keyboard
-} from 'react-native';
+} from 'react-native'
 
+import { connect } from 'react-redux'
+import Ionicons from 'react-native-vector-icons/Ionicons'
+import { standardColor, nodeColor, idColor, accentColor } from '../constant/colorConfig'
 
-import { connect } from 'react-redux';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import { standardColor, nodeColor, idColor, accentColor } from '../constant/colorConfig';
-
-
-import { getHomeURL } from '../dao';
+import { getHomeURL } from '../dao'
 
 import {
   getGamePointAPI,
   getTopicURL
 } from '../dao'
 
-let screen = Dimensions.get('window');
-const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = screen;
+let screen = Dimensions.get('window')
+const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = screen
 
 export default class PhotoItem extends React.PureComponent {
 
@@ -61,7 +59,7 @@ export default class PhotoItem extends React.PureComponent {
         alignContent: 'flex-end',
         backgroundColor: modeInfo.backgroundColor,
         width: SCREEN_WIDTH / 2,
-        height: SCREEN_WIDTH / 2,
+        height: SCREEN_WIDTH / 2
       }}>
         <TouchableNativeFeedback
           onPress={
@@ -75,17 +73,17 @@ export default class PhotoItem extends React.PureComponent {
             })
           }}
           useForeground={true}
-          
+
           background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
         >
-          <View style={{ flex: 1, flexDirection: 'row', padding: 5, 
+          <View style={{ flex: 1, flexDirection: 'row', padding: 5,
           backgroundColor: isChecked ? modeInfo.standardColor : modeInfo.backgroundColor }}>
             {
               this.state.modalVisible && onLongPress && (
                 <MyDialog modeInfo={modeInfo}
                   modalVisible={this.state.modalVisible}
-                  onDismiss={() => { this.setState({ modalVisible: false }); }}
-                  onRequestClose={() => { this.setState({ modalVisible: false }); }}
+                  onDismiss={() => { this.setState({ modalVisible: false }) }}
+                  onRequestClose={() => { this.setState({ modalVisible: false }) }}
                   renderContent={() => (
                     <View style={{
                       justifyContent: 'center',
@@ -106,18 +104,18 @@ export default class PhotoItem extends React.PureComponent {
                             requestAnimationFrame(() => {
                               this.props.navigation.navigate('ImageViewer', {
                                 images: [
-                                  { 
+                                  {
                                     url: rowData.node.image.uri,
                                     uri: rowData.node.image.uri,
                                     width: rowData.node.image.width,
-                                    height: rowData.node.image.height,
+                                    height: rowData.node.image.height
                                   }
                                 ]
                               })
                             })
                           })
                         }}>
-                        <View style={{height: 50, paddingVertical: 10, paddingLeft: 20 ,alignSelf: 'stretch', alignContent: 'stretch', justifyContent: 'center'}}>
+                        <View style={{height: 50, paddingVertical: 10, paddingLeft: 20 , alignSelf: 'stretch', alignContent: 'stretch', justifyContent: 'center'}}>
                           <Text style={{textAlignVertical: 'center', fontSize: 18, color: modeInfo.standardTextColor}}>查看图片</Text>
                         </View>
                       </TouchableNativeFeedback>
@@ -141,6 +139,6 @@ export default class PhotoItem extends React.PureComponent {
 const styles = StyleSheet.create({
   avatar: {
     width: 50,
-    height: 50,
+    height: 50
   }
-});
+})

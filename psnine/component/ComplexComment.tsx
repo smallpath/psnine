@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import {
   AppRegistry,
   StyleSheet,
@@ -18,7 +18,7 @@ import {
   Keyboard,
   Alert,
   Clipboard
-} from 'react-native';
+} from 'react-native'
 
 import { connect } from 'react-redux'
 import Ionicons from 'react-native-vector-icons/Ionicons'
@@ -33,8 +33,8 @@ import {
   postReply
 } from '../dao/post'
 
-let screen = Dimensions.get('window');
-const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = screen;
+let screen = Dimensions.get('window')
+const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = screen
 
 export default class ComplexComment extends React.PureComponent {
 
@@ -65,14 +65,14 @@ export default class ComplexComment extends React.PureComponent {
             borderTopWidth: StyleSheet.hairlineWidth,
             borderBottomColor: modeInfo.backgroundColor,
             borderTopColor: modeInfo.backgroundColor,
-            padding: 5,
+            padding: 5
         }}>
           {
             this.state.modalIndex !== -1 && onLongPress && (
               <MyDialog modeInfo={modeInfo}
                 modalVisible={this.state.modalIndex === index}
-                onDismiss={() => { this.setState({ modalIndex: -1 }); }}
-                onRequestClose={() => { this.setState({ modalIndex: -1 }); }}
+                onDismiss={() => { this.setState({ modalIndex: -1 }) }}
+                onRequestClose={() => { this.setState({ modalIndex: -1 }) }}
                 renderContent={() => (
                   <View style={{
                     justifyContent: 'center',
@@ -94,7 +94,7 @@ export default class ComplexComment extends React.PureComponent {
                           })
                         })
                       }}>
-                      <View style={{height: 50, paddingVertical: 10, paddingLeft: 20 ,alignSelf: 'stretch', alignContent: 'stretch', justifyContent: 'center'}}>
+                      <View style={{height: 50, paddingVertical: 10, paddingLeft: 20 , alignSelf: 'stretch', alignContent: 'stretch', justifyContent: 'center'}}>
                         <Text style={{textAlignVertical: 'center', fontSize: 18, color: modeInfo.standardTextColor}}>回复</Text>
                       </View>
                     </TouchableNativeFeedback>
@@ -108,7 +108,7 @@ export default class ComplexComment extends React.PureComponent {
                           })
                         })
                       }}>
-                      <View style={{height: 50, paddingVertical: 10, paddingLeft: 20 ,alignSelf: 'stretch', alignContent: 'stretch', justifyContent: 'center'}}>
+                      <View style={{height: 50, paddingVertical: 10, paddingLeft: 20 , alignSelf: 'stretch', alignContent: 'stretch', justifyContent: 'center'}}>
                         <Text style={{textAlignVertical: 'center', fontSize: 18, color: modeInfo.standardTextColor}}>复制评论</Text>
                       </View>
                     </TouchableNativeFeedback>
@@ -140,7 +140,6 @@ export default class ComplexComment extends React.PureComponent {
     })
     return result
   }
-
 
   onCommentLongPress = (rowData, name = '') => {
     // if (this.isReplyShowing === true) return
@@ -179,7 +178,7 @@ export default class ComplexComment extends React.PureComponent {
             })
           }}
           useForeground={true}
-          
+
           background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
         >
           <View style={{ flex: 1, flexDirection: 'row', padding: 12 }}>
@@ -187,8 +186,8 @@ export default class ComplexComment extends React.PureComponent {
               this.state.modalVisible && onLongPress && (
                 <MyDialog modeInfo={modeInfo}
                   modalVisible={this.state.modalVisible}
-                  onDismiss={() => { this.setState({ modalVisible: false }); }}
-                  onRequestClose={() => { this.setState({ modalVisible: false }); }}
+                  onDismiss={() => { this.setState({ modalVisible: false }) }}
+                  onRequestClose={() => { this.setState({ modalVisible: false }) }}
                   renderContent={() => (
                     <View style={{
                       justifyContent: 'center',
@@ -210,7 +209,7 @@ export default class ComplexComment extends React.PureComponent {
                             })
                           })
                         }}>
-                        <View style={{height: 50, paddingVertical: 10, paddingLeft: 20 ,alignSelf: 'stretch', alignContent: 'stretch', justifyContent: 'center'}}>
+                        <View style={{height: 50, paddingVertical: 10, paddingLeft: 20 , alignSelf: 'stretch', alignContent: 'stretch', justifyContent: 'center'}}>
                           <Text style={{textAlignVertical: 'center', fontSize: 18, color: modeInfo.standardTextColor}}>回复</Text>
                         </View>
                       </TouchableNativeFeedback>
@@ -224,7 +223,7 @@ export default class ComplexComment extends React.PureComponent {
                             })
                           })
                         }}>
-                        <View style={{height: 50, paddingVertical: 10, paddingLeft: 20 ,alignSelf: 'stretch', alignContent: 'stretch', justifyContent: 'center'}}>
+                        <View style={{height: 50, paddingVertical: 10, paddingLeft: 20 , alignSelf: 'stretch', alignContent: 'stretch', justifyContent: 'center'}}>
                           <Text style={{textAlignVertical: 'center', fontSize: 18, color: modeInfo.standardTextColor}}>复制评论</Text>
                         </View>
                       </TouchableNativeFeedback>
@@ -236,7 +235,7 @@ export default class ComplexComment extends React.PureComponent {
                             }, () => {
                               requestAnimationFrame(() => {
                                 const { params } = this.props.navigation.state
-                               
+
                                 postReply({
                                   qid: rowData.qid,
                                   psnid: rowData.psnid
@@ -246,7 +245,7 @@ export default class ComplexComment extends React.PureComponent {
                               })
                             })
                           }}>
-                          <View style={{height: 50, paddingVertical: 10, paddingLeft: 20 ,alignSelf: 'stretch', alignContent: 'stretch', justifyContent: 'center'}}>
+                          <View style={{height: 50, paddingVertical: 10, paddingLeft: 20 , alignSelf: 'stretch', alignContent: 'stretch', justifyContent: 'center'}}>
                             <Text style={{textAlignVertical: 'center', fontSize: 18, color: modeInfo.standardTextColor}}>采纳</Text>
                           </View>
                         </TouchableNativeFeedback>
@@ -270,7 +269,7 @@ export default class ComplexComment extends React.PureComponent {
                               })
                             })
                           }}>
-                          <View style={{height: 50, paddingVertical: 10, paddingLeft: 20 ,alignSelf: 'stretch', alignContent: 'stretch', justifyContent: 'center'}}>
+                          <View style={{height: 50, paddingVertical: 10, paddingLeft: 20 , alignSelf: 'stretch', alignContent: 'stretch', justifyContent: 'center'}}>
                             <Text style={{textAlignVertical: 'center', fontSize: 18, color: modeInfo.standardTextColor}}>编辑</Text>
                           </View>
                         </TouchableNativeFeedback>
@@ -325,12 +324,12 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: 'column',
-    backgroundColor: '#F5FCFF',
+    backgroundColor: '#F5FCFF'
   },
   toolbar: {
     backgroundColor: standardColor,
     height: 56,
-    elevation: 4,
+    elevation: 4
   },
   selectedTitle: {
     //backgroundColor: '#00ffff'
@@ -338,10 +337,10 @@ const styles = StyleSheet.create({
   },
   avatar: {
     width: 50,
-    height: 50,
+    height: 50
   },
   a: {
     fontWeight: '300',
-    color: idColor, // make links coloured pink
-  },
-});
+    color: idColor // make links coloured pink
+  }
+})

@@ -21,17 +21,16 @@ export default class BattleItem extends React.PureComponent {
   shouldComponentUpdate = (props, state) => props.modeInfo.themeName !== this.props.modeInfo.themeName || this.state.modalVisible !== state.modalVisible
 
   _onRowPressed = (rowData) => {
-    const { navigation } = this.props;
-    const URL = getBattleURL(rowData.id);
+    const { navigation } = this.props
+    const URL = getBattleURL(rowData.id)
     navigation.navigate('BattleTopic', {
       URL,
       title: rowData.title,
       rowData,
-      type: 'battle',
+      type: 'battle'
       // shouldBeSawBackground: true
     })
   }
-
 
   render = () => {
     // console.log(rowData)
@@ -42,7 +41,7 @@ export default class BattleItem extends React.PureComponent {
         marginLeft: 7,
         marginRight: 7,
         backgroundColor: modeInfo.backgroundColor,
-        elevation: 2,
+        elevation: 2
       }}>
         <TouchableNativeFeedback
           onPress={() => { this._onRowPressed(rowData) }}
@@ -65,7 +64,7 @@ export default class BattleItem extends React.PureComponent {
                 style={{
                   width: 91,
                   height: 50,
-                  alignSelf: 'center',
+                  alignSelf: 'center'
                 }}
               />
               <Text style={{ flex: -1, color: modeInfo.standardColor, textAlign: 'center', textAlignVertical: 'center' }}>{rowData.game}</Text>
@@ -74,8 +73,8 @@ export default class BattleItem extends React.PureComponent {
               this.state.modalVisible && modalList.length && (
               <MyDialog modeInfo={modeInfo}
                 modalVisible={this.state.modalVisible}
-                onDismiss={() => { this.setState({ modalVisible: false }); }}
-                onRequestClose={() => { this.setState({ modalVisible: false }); }}
+                onDismiss={() => { this.setState({ modalVisible: false }) }}
+                onRequestClose={() => { this.setState({ modalVisible: false }) }}
                 renderContent={() => (
                   <View style={{
                     justifyContent: 'center',
@@ -97,7 +96,7 @@ export default class BattleItem extends React.PureComponent {
                             item.onPress(rowData)
                           })
                         }}>
-                        <View style={{height: 50, paddingVertical: 10, paddingLeft: 20 ,alignSelf: 'stretch', alignContent: 'stretch', justifyContent: 'center'}}>
+                        <View style={{height: 50, paddingVertical: 10, paddingLeft: 20 , alignSelf: 'stretch', alignContent: 'stretch', justifyContent: 'center'}}>
                           <Text style={{textAlignVertical: 'center', fontSize: 18, color: modeInfo.standardTextColor}}>{item.text}</Text>
                         </View>
                       </TouchableNativeFeedback>
@@ -149,6 +148,6 @@ export default class BattleItem extends React.PureComponent {
 const styles = StyleSheet.create({
   avatar: {
     width: 50,
-    height: 50,
+    height: 50
   }
-});
+})

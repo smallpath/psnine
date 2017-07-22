@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import {
   StyleSheet,
   Text,
@@ -11,34 +11,33 @@ import {
   SectionList,
   Animated,
   FlatList
-} from 'react-native';
+} from 'react-native'
 
-import { connect } from 'react-redux';
-import { getList } from '../../redux/action/trade';
-import { standardColor, nodeColor, idColor, accentColor } from '../../constant/colorConfig';
+import { connect } from 'react-redux'
+import { getList } from '../../redux/action/trade'
+import { standardColor, nodeColor, idColor, accentColor } from '../../constant/colorConfig'
 
-import { getBattleURL, getGamePngURL } from '../../dao';
+import { getBattleURL, getGamePngURL } from '../../dao'
 import FooterProgress from '../../component/FooterProgress'
-const AnimatedSectionList = Animated.createAnimatedComponent(SectionList);
+const AnimatedSectionList = Animated.createAnimatedComponent(SectionList)
 
-let toolbarHeight = 56;
-let releasedMarginTop = 0;
+let toolbarHeight = 56
+let releasedMarginTop = 0
 
 import TradeItem from '../../component/TradeItem'
-const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
-
+const AnimatedFlatList = Animated.createAnimatedComponent(FlatList)
 
 class Trade extends Component {
   static navigationOptions = {
     tabBarLabel: '闲游',
     drawerLabel: '闲游'
-  };
+  }
 
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       isRefreshing: false,
-      isLoadingMore: false,
+      isLoadingMore: false
     }
   }
 
@@ -64,7 +63,7 @@ class Trade extends Component {
   }
 
   componentWillMount = () => {
-    const { reducer } = this.props;
+    const { reducer } = this.props
     const { searchTitle, registerAfterEach } = this.props.screenProps
 
     if (reducer.page === 0) {
@@ -83,7 +82,7 @@ class Trade extends Component {
   }
 
   _onRefresh = (searchTitle) => {
-    const { reducer, dispatch } = this.props;
+    const { reducer, dispatch } = this.props
     // const { circleType } = this.props.screenProps
 
     this.setState({
@@ -93,18 +92,18 @@ class Trade extends Component {
     dispatch(getList(1, {
         title: typeof searchTitle !== 'undefined' ? searchTitle : this.props.screenProps.searchTitle
       })
-    );
+    )
   }
 
   _loadMoreData = () => {
-    const { reducer, dispatch } = this.props;
+    const { reducer, dispatch } = this.props
     const { searchTitle } = this.props.screenProps
 
-    let page = reducer.page + 1;
+    let page = reducer.page + 1
     dispatch(getList(page, {
         title: searchTitle
       })
-    );
+    )
   }
 
   _onEndReached = () => {
@@ -113,7 +112,7 @@ class Trade extends Component {
     this.setState({
       isLoadingMore: true
     })
-    this._loadMoreData();
+    this._loadMoreData()
   }
 
   _renderItem = ({ item: rowData, index }) => {
@@ -126,9 +125,9 @@ class Trade extends Component {
   }
 
   render() {
-    const { reducer } = this.props;
+    const { reducer } = this.props
     const { modeInfo } = this.props.screenProps
-    log('Trade.js rendered');
+    log('Trade.js rendered')
     // console.log(reducer.page, reducer.list)
     return (
       <AnimatedFlatList style={{
@@ -173,17 +172,16 @@ class Trade extends Component {
 const styles = StyleSheet.create({
   avatar: {
     width: 50,
-    height: 50,
+    height: 50
   }
-});
-
+})
 
 function mapStateToProps(state) {
   return {
     reducer: state.trade
-  };
+  }
 }
 
 export default connect(
   mapStateToProps
-)(Trade);
+)(Trade)

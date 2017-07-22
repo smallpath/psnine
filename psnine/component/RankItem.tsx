@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import {
   AppRegistry,
   StyleSheet,
@@ -16,27 +16,25 @@ import {
   PanResponder,
   Modal,
   Keyboard
-} from 'react-native';
+} from 'react-native'
 
-
-
-import { connect } from 'react-redux';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import colorConfig, { standardColor, nodeColor, idColor, 
+import { connect } from 'react-redux'
+import Ionicons from 'react-native-vector-icons/Ionicons'
+import colorConfig, { standardColor, nodeColor, idColor,
   accentColor,
   levelColor,
   rankColor
-} from '../constant/colorConfig';
+} from '../constant/colorConfig'
 
-import { getHomeURL } from '../dao';
+import { getHomeURL } from '../dao'
 
 import {
   getGamePointAPI,
   getTopicURL
 } from '../dao'
 
-let screen = Dimensions.get('window');
-const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = screen;
+let screen = Dimensions.get('window')
+const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = screen
 
 export default class extends React.PureComponent {
   constructor(props) {
@@ -50,8 +48,8 @@ export default class extends React.PureComponent {
   shouldComponentUpdate = (props, state) => props.modeInfo.themeName !== this.props.modeInfo.themeName || this.state.modalVisible !== state.modalVisible
 
   _onRowPressed = (rowData) => {
-    const { navigation } = this.props;
-    const URL = getHomeURL(rowData.psnid);
+    const { navigation } = this.props
+    const URL = getHomeURL(rowData.psnid)
     navigation.navigate('Home', {
       // URL: 'http://psnine.com/psngame/5424?psnid=Smallpath',
       URL,
@@ -59,7 +57,6 @@ export default class extends React.PureComponent {
       rowData
     })
   }
-
 
   handleImageOnclick = () => {}
 
@@ -77,12 +74,12 @@ export default class extends React.PureComponent {
           })
         }}
         useForeground={true}
-        
+
         background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
       >
-        <View pointerEvents={'box-only'} style={{ 
-          flex: 1, flexDirection: 'row', 
-          flexWrap: 'nowrap',padding: 8, justifyContent: 'space-around', alignItems: 'center',
+        <View pointerEvents={'box-only'} style={{
+          flex: 1, flexDirection: 'row',
+          flexWrap: 'nowrap', padding: 8, justifyContent: 'space-around', alignItems: 'center',
           marginVertical: 3.5,
           marginHorizontal: numColumns === 1 ? 0 : 3.5,
           backgroundColor: modeInfo.backgroundColor,
@@ -98,8 +95,8 @@ export default class extends React.PureComponent {
             this.state.modalVisible && modalList.length && (
             <MyDialog modeInfo={modeInfo}
               modalVisible={this.state.modalVisible}
-              onDismiss={() => { this.setState({ modalVisible: false }); }}
-              onRequestClose={() => { this.setState({ modalVisible: false }); }}
+              onDismiss={() => { this.setState({ modalVisible: false }) }}
+              onRequestClose={() => { this.setState({ modalVisible: false }) }}
               renderContent={() => (
                 <View style={{
                   justifyContent: 'center',
@@ -121,7 +118,7 @@ export default class extends React.PureComponent {
                           item.onPress(rowData)
                         })
                       }}>
-                      <View style={{height: 50, paddingVertical: 10, paddingLeft: 20 ,alignSelf: 'stretch', alignContent: 'stretch', justifyContent: 'center'}}>
+                      <View style={{height: 50, paddingVertical: 10, paddingLeft: 20 , alignSelf: 'stretch', alignContent: 'stretch', justifyContent: 'center'}}>
                         <Text style={{textAlignVertical: 'center', fontSize: 18, color: modeInfo.standardTextColor}}>{item.text}</Text>
                       </View>
                     </TouchableNativeFeedback>
@@ -152,7 +149,7 @@ export default class extends React.PureComponent {
 
     const { modeInfo, ITEM_HEIGHT } = this.props
     return (
-      <View style={{flex: 4, flexDirection: 'row', height: ITEM_HEIGHT - 7- 7 }}>
+      <View style={{flex: 4, flexDirection: 'row', height: ITEM_HEIGHT - 7 - 7 }}>
         <View style={{flex: 2, flexDirection: 'column'}}>
           { rowData.rank && <View style={{ flex: 1, flexDirection: 'column' }}>
             <Text style={{color: modeInfo.titleTextColor}}>{rowData.rank ? 'No.' + rowData.rank : ''}</Text>
@@ -213,6 +210,6 @@ export default class extends React.PureComponent {
 const styles = StyleSheet.create({
   avatar: {
     width: 50,
-    height: 50,
+    height: 50
   }
-});
+})

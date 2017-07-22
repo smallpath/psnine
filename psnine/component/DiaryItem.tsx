@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import {
   AppRegistry,
   StyleSheet,
@@ -16,25 +16,25 @@ import {
   PanResponder,
   Modal,
   Keyboard
-} from 'react-native';
+} from 'react-native'
 
-import { connect } from 'react-redux';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import colorConfig, { standardColor, nodeColor, idColor, 
+import { connect } from 'react-redux'
+import Ionicons from 'react-native-vector-icons/Ionicons'
+import colorConfig, { standardColor, nodeColor, idColor,
   accentColor,
   levelColor,
   rankColor
-} from '../constant/colorConfig';
+} from '../constant/colorConfig'
 
-import { getHomeURL } from '../dao';
+import { getHomeURL } from '../dao'
 
 import {
   getGamePointAPI,
   getTopicURL
 } from '../dao'
 
-let screen = Dimensions.get('window');
-const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = screen;
+let screen = Dimensions.get('window')
+const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = screen
 
 export default class extends React.PureComponent {
   constructor(props) {
@@ -46,7 +46,6 @@ export default class extends React.PureComponent {
   }
 
   shouldComponentUpdate = (props, state) => props.modeInfo.themeName !== this.props.modeInfo.themeName || this.state.modalVisible !== state.modalVisible
-
 
   handleImageOnclick = () => {}
 
@@ -63,7 +62,7 @@ export default class extends React.PureComponent {
                 rowData: {
                   id: res.url.split('/').pop()
                 },
-                type: res.url.includes('gene') ? 'gene' : 'community', // todo
+                type: res.url.includes('gene') ? 'gene' : 'community' // todo
               })
             }
           }).catch(err => global.toast(err.toString()))
@@ -83,8 +82,8 @@ export default class extends React.PureComponent {
           this.state.modalVisible && modalList.length && (
           <MyDialog modeInfo={modeInfo}
             modalVisible={this.state.modalVisible}
-            onDismiss={() => { this.setState({ modalVisible: false }); }}
-            onRequestClose={() => { this.setState({ modalVisible: false }); }}
+            onDismiss={() => { this.setState({ modalVisible: false }) }}
+            onRequestClose={() => { this.setState({ modalVisible: false }) }}
             renderContent={() => (
               <View style={{
                 justifyContent: 'center',
@@ -106,7 +105,7 @@ export default class extends React.PureComponent {
                         item.onPress(rowData)
                       })
                     }}>
-                    <View style={{height: 50, paddingVertical: 10, paddingLeft: 20 ,alignSelf: 'stretch', alignContent: 'stretch', justifyContent: 'center'}}>
+                    <View style={{height: 50, paddingVertical: 10, paddingLeft: 20 , alignSelf: 'stretch', alignContent: 'stretch', justifyContent: 'center'}}>
                       <Text style={{textAlignVertical: 'center', fontSize: 18, color: modeInfo.standardTextColor}}>{item.text}</Text>
                     </View>
                   </TouchableNativeFeedback>
@@ -128,32 +127,32 @@ export default class extends React.PureComponent {
               shouldForceInline={true}
             />
           </View>
-          <View style={{ 
-            flex: 1, 
-            justifyContent: 'space-around', 
+          <View style={{
+            flex: 1,
+            justifyContent: 'space-around',
             flexDirection: 'row',
             alignItems: 'flex-start',
             padding: 2,
             paddingLeft: 12
           }}>
-            <Text        
-              style={{ 
-                flex: 2,             
+            <Text
+              style={{
+                flex: 2,
                 textAlign: 'left',
                 textAlignVertical: 'center',
-                color: modeInfo.standardTextColor, }}>{rowData.psnid}</Text>
-            <Text             
-              style={{ 
-                flex: 1,             
+                color: modeInfo.standardTextColor }}>{rowData.psnid}</Text>
+            <Text
+              style={{
+                flex: 1,
                 textAlign: 'left',
                 textAlignVertical: 'center',
-                color: modeInfo.standardTextColor, }}>{rowData.date}</Text>
-            <Text             
-              style={{ 
-                flex: 1,             
+                color: modeInfo.standardTextColor }}>{rowData.date}</Text>
+            <Text
+              style={{
+                flex: 1,
                 textAlign: 'left',
                 textAlignVertical: 'center',
-                color: modeInfo.standardTextColor, }}>{rowData.count}</Text>
+                color: modeInfo.standardTextColor }}>{rowData.count}</Text>
           </View>
         </View>
       </TouchableNativeFeedback>
@@ -165,6 +164,6 @@ export default class extends React.PureComponent {
 const styles = StyleSheet.create({
   avatar: {
     width: 50,
-    height: 50,
+    height: 50
   }
-});
+})

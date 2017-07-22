@@ -38,9 +38,9 @@ const shouldChangeBackground = Platform.OS !== 'android' || (Platform.OS === 'an
 
 export default class Root extends React.Component {
   constructor(props) {
-    super(props);
+    super(props)
     const { height, width } = Dimensions.get('window')
-    this.store = configureStore();
+    this.store = configureStore()
     this.state = {
       text: '',
       width,
@@ -63,32 +63,32 @@ export default class Root extends React.Component {
           exp: ''
         },
         isNightMode: false,
-        colorTheme: 'lightBlue',
+        colorTheme: 'lightBlue'
       },
       colorTheme: 'lightBlue',
       secondaryColor: 'pink',
       loadingText: 'P9 · 酷玩趣友'
-    };
+    }
   }
 
   switchModeOnRoot = (theme) => {
     if (!theme) {
-      let targetState = !this.state.isNightMode;
+      let targetState = !this.state.isNightMode
       this.setState({
-        isNightMode: targetState,
-      });
+        isNightMode: targetState
+      })
       return AsyncStorage.setItem('@Theme:isNightMode', targetState.toString())
     } else {
       const { colorTheme, secondaryColor } = theme
       if (colorTheme) {
         this.setState({
-          colorTheme: colorTheme.toString(),
+          colorTheme: colorTheme.toString()
         })
         return AsyncStorage.setItem('@Theme:colorTheme', colorTheme.toString())
       } else if (secondaryColor) {
         this.setState({
-          secondaryColor: secondaryColor.toString(),
-        });
+          secondaryColor: secondaryColor.toString()
+        })
         return AsyncStorage.setItem('@Theme:secondaryColor', secondaryColor.toString())
       }
     }
@@ -97,13 +97,13 @@ export default class Root extends React.Component {
   componentWillMount = () => {
     global.toast = this.toast
     const listeners = BackHandler.addEventListener('hardwareBackPress', () => {
-      let timestamp = new Date();
+      let timestamp = new Date()
       if (timestamp - backPressClickTimeStamp > 2000) {
-        backPressClickTimeStamp = timestamp;
-        global.toast && global.toast('再按一次退出程序');
-        return true;
+        backPressClickTimeStamp = timestamp
+        global.toast && global.toast('再按一次退出程序')
+        return true
       } else {
-        return false;
+        return false
       }
     })
   }
@@ -118,7 +118,7 @@ export default class Root extends React.Component {
       AsyncStorage.getItem('@Theme:loadImageWithoutWifi'),
       AsyncStorage.getItem('@Theme:colorTheme'),
       AsyncStorage.getItem('@Theme:shouldSendGA'),
-      AsyncStorage.getItem('@Theme:secondaryColor'),
+      AsyncStorage.getItem('@Theme:secondaryColor')
     ]).then(result => {
       // console.log('getting psnid: ' + result[1])
       Object.assign(settingInfo, {
@@ -164,7 +164,7 @@ export default class Root extends React.Component {
       AsyncStorage.getItem('@Theme:loadImageWithoutWifi'),
       AsyncStorage.getItem('@Theme:colorTheme'),
       AsyncStorage.getItem('@Theme:shouldSendGA'),
-      AsyncStorage.getItem('@Theme:secondaryColor'),
+      AsyncStorage.getItem('@Theme:secondaryColor')
     ]).then(result => {
       Object.assign(settingInfo, {
         tabMode: result[0] || this.state.settingInfo.tabMode,
@@ -207,8 +207,8 @@ export default class Root extends React.Component {
       if (url) {
         // console.log('Initial url is: ' + url);
       }
-    }).catch(err => console.error('An error occurred linking', err));
-    Linking.addEventListener('url', this._handleOpenURL);
+    }).catch(err => console.error('An error occurred linking', err))
+    Linking.addEventListener('url', this._handleOpenURL)
 
     NetInfo.fetch().then((reach) => {
       global.netInfo = reach
@@ -220,7 +220,7 @@ export default class Root extends React.Component {
     this._orientationSubscription = DeviceEventEmitter.addListener('namedOrientationDidChange', this._handleOrientation)
   }
   componentWillUnmount() {
-    Linking.removeEventListener('url', this._handleOpenURL);
+    Linking.removeEventListener('url', this._handleOpenURL)
     NetInfo.removeEventListener('change', netInfoHandler)
     this._orientationSubscription && this._orientationSubscription.remove()
   }
@@ -268,9 +268,8 @@ export default class Root extends React.Component {
         duration: 200,
         easing: Easing.ease,
         useNativeDriver: true
-      }).start();
-    });
-
+      }).start()
+    })
 
     setTimeout(() => {
       InteractionManager.runAfterInteractions(() => {
@@ -287,8 +286,8 @@ export default class Root extends React.Component {
           this.setState({
             text: ''
           })
-        });
-      });
+        })
+      })
     }, 2000)
   }
 
@@ -322,8 +321,8 @@ export default class Root extends React.Component {
     })
 
     const onNavigationStateChange = global.shouldSendGA ? (prevState, currentState) => {
-      const currentScreen = getCurrentRoute(currentState);
-      const prevScreen = getCurrentRoute(prevState);
+      const currentScreen = getCurrentRoute(currentState)
+      const prevScreen = getCurrentRoute(prevState)
       if (prevScreen && currentScreen && prevScreen.routeName !== currentScreen.routeName) {
         // if (currentScreen.routeName === 'Home') {
         //   StatusBar.setHidden(true)
@@ -339,7 +338,7 @@ export default class Root extends React.Component {
 
     const child = isLoadingAsyncStorage ? (
       <View style={{ flex: 1, backgroundColor: 'rgb(0,208,192)' }}>
-        <StatusBar translucent={false} backgroundColor={'rgb(0,208,192)'} barStyle={"light-content"} />
+        <StatusBar translucent={false} backgroundColor={'rgb(0,208,192)'} barStyle={'light-content'} />
         {/* <Animation
           ref={animation => { this.animation = animation; }}
           style={{

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import {
   StyleSheet,
   Text,
@@ -11,17 +11,17 @@ import {
   SectionList,
   Animated,
   Button
-} from 'react-native';
+} from 'react-native'
 
-import { connect } from 'react-redux';
-import { standardColor, nodeColor, idColor, accentColor } from '../../constant/colorConfig';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import { getGroupAPI } from '../../dao';
+import { connect } from 'react-redux'
+import { standardColor, nodeColor, idColor, accentColor } from '../../constant/colorConfig'
+import Ionicons from 'react-native-vector-icons/Ionicons'
+import { getGroupAPI } from '../../dao'
 import CircleItem from '../../component/CircleItem'
-const AnimatedSectionList = Animated.createAnimatedComponent(SectionList);
+const AnimatedSectionList = Animated.createAnimatedComponent(SectionList)
 
-let toolbarHeight = 56;
-let releasedMarginTop = 0;
+let toolbarHeight = 56
+let releasedMarginTop = 0
 
 let toolbarActions = []
 
@@ -57,19 +57,19 @@ const renderSectionHeader = ({ section }) => {
       backgroundColor: section.modeInfo.backgroundColor,
       flex: -1,
       padding: 7,
-      elevation: 2,
+      elevation: 2
     }}>
       <Text numberOfLines={1}
         style={{ fontSize: 20, color: idColor, textAlign: 'left', lineHeight: 25, marginLeft: 2, marginTop: 2 }}
       >{section.key}</Text>
     </View>
-  );
+  )
 }
 
 export default class Element extends Component {
 
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       isLoading: false,
       data: []
@@ -128,10 +128,10 @@ export default class Element extends Component {
 
   render() {
     const { modeInfo } = this.props.screenProps
-    const { data } = this.state;
+    const { data } = this.state
 
-    let keys = Object.keys(data);
-    let NUM_SECTIONS = keys.length;
+    let keys = Object.keys(data)
+    let NUM_SECTIONS = keys.length
 
     const sections = [{
       key: '曾使用过的所有元素',
@@ -146,8 +146,8 @@ export default class Element extends Component {
         onMoveShouldSetResponder={() => false}
       >
         <Ionicons.ToolbarAndroid
-          navIconName="md-arrow-back"
-          overflowIconName="md-more"
+          navIconName='md-arrow-back'
+          overflowIconName='md-more'
           iconColor={modeInfo.isNightMode ? '#000' : '#fff'}
           title={'圈子'}
           style={{ backgroundColor: modeInfo.standardColor, height: 56, elevation: 4 }}
@@ -185,6 +185,6 @@ export default class Element extends Component {
 const styles = StyleSheet.create({
   avatar: {
     width: 50,
-    height: 50,
+    height: 50
   }
-});
+})

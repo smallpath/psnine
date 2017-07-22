@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import {
   StyleSheet,
   Text,
@@ -11,26 +11,25 @@ import {
   Picker,
   FlatList,
   Animated
-} from 'react-native';
+} from 'react-native'
 
+import { connect } from 'react-redux'
+import { getRankList } from '../../redux/action/rank.js'
+import { standardColor, nodeColor, idColor } from '../../constant/colorConfig'
+import Icon from 'react-native-vector-icons/Ionicons'
 
-import { connect } from 'react-redux';
-import { getRankList } from '../../redux/action/rank.js';
-import { standardColor, nodeColor, idColor } from '../../constant/colorConfig';
-import Icon from 'react-native-vector-icons/Ionicons';
+import { getHomeURL } from '../../dao'
 
-import { getHomeURL } from '../../dao';
-
-import { changeScrollType } from '../../redux/action/app';
+import { changeScrollType } from '../../redux/action/app'
 
 import TopicItem from '../../component/RankItem'
 import FooterProgress from '../../component/FooterProgress'
 
-const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
+const AnimatedFlatList = Animated.createAnimatedComponent(FlatList)
 
-let toolbarHeight = 56;
-let releasedMarginTop = 0;
-let prevPosition = -1;
+let toolbarHeight = 56
+let releasedMarginTop = 0
+let prevPosition = -1
 
 class Rank extends Component {
   static navigationOptions = {
@@ -39,7 +38,7 @@ class Rank extends Component {
   }
 
   constructor(props) {
-    super(props);
+    super(props)
 
     this.state = {
       server: 'hk',
@@ -74,13 +73,13 @@ class Rank extends Component {
           prompt='选择排序'
           selectedValue={this.state.sort}
           onValueChange={this.onValueChange.bind(this, 'sort')}>
-          <Picker.Item label="最后更新" value="datadate" />
-          <Picker.Item label="等级排行" value="point" />
-          <Picker.Item label="游戏最多" value="totalgame" />
-          <Picker.Item label="完美率" value="rarity" />
-          <Picker.Item label="签到最多" value="qidao" />
-          <Picker.Item label="N币最多" value="nb" />
-          <Picker.Item label="Z币最多" value="zb" />
+          <Picker.Item label='最后更新' value='datadate' />
+          <Picker.Item label='等级排行' value='point' />
+          <Picker.Item label='游戏最多' value='totalgame' />
+          <Picker.Item label='完美率' value='rarity' />
+          <Picker.Item label='签到最多' value='qidao' />
+          <Picker.Item label='N币最多' value='nb' />
+          <Picker.Item label='Z币最多' value='zb' />
         </Picker>
         <Picker style={{
           flex: 2.5,
@@ -90,14 +89,14 @@ class Rank extends Component {
           prompt='选服'
           selectedValue={this.state.server}
           onValueChange={this.onValueChange.bind(this, 'server')}>
-          <Picker.Item label="所有" value="all" />
-          <Picker.Item label="国服" value="cn" />
-          <Picker.Item label="港服" value="hk" />
-          <Picker.Item label="日服" value="jp" />
-          <Picker.Item label="台服" value="tw" />
-          <Picker.Item label="美服" value="us" />
-          <Picker.Item label="英服" value="gb" />
-          <Picker.Item label="加服" value="ca" />
+          <Picker.Item label='所有' value='all' />
+          <Picker.Item label='国服' value='cn' />
+          <Picker.Item label='港服' value='hk' />
+          <Picker.Item label='日服' value='jp' />
+          <Picker.Item label='台服' value='tw' />
+          <Picker.Item label='美服' value='us' />
+          <Picker.Item label='英服' value='gb' />
+          <Picker.Item label='加服' value='ca' />
         </Picker>
         <Picker style={{
           flex: 3,
@@ -106,21 +105,21 @@ class Rank extends Component {
           prompt='排序'
           selectedValue={this.state.cheat}
           onValueChange={this.onValueChange.bind(this, 'cheat')}>
-          <Picker.Item label="身家清白" value="0" />
-          <Picker.Item label="浪子回头" value="1" />
-          <Picker.Item label="无可救药" value="2" />
+          <Picker.Item label='身家清白' value='0' />
+          <Picker.Item label='浪子回头' value='1' />
+          <Picker.Item label='无可救药' value='2' />
         </Picker>
       </View>
     )
   }
 
   onValueChange = (key: string, value: string) => {
-    const newState = {};
-    newState[key] = value;
+    const newState = {}
+    newState[key] = value
     this.setState(newState, () => {
       this._onRefresh()
-    });
-  };
+    })
+  }
 
   componentWillReceiveProps = (nextProps) => {
     if (this.props.screenProps.modeInfo.themeName != nextProps.screenProps.modeInfo.themeName) {
@@ -144,12 +143,12 @@ class Rank extends Component {
   }
 
   componentWillMount = () => {
-    const { rank: reducer } = this.props;
+    const { rank: reducer } = this.props
     const { registerAfterEach, searchTitle } = this.props.screenProps
     if (reducer.page === 0) {
       this._onRefresh(
         searchTitle
-      );
+      )
     }
     registerAfterEach({
       index: 6,
@@ -162,7 +161,7 @@ class Rank extends Component {
   }
 
   _onRefresh = (title) => {
-    const { rank: reducer, dispatch } = this.props;
+    const { rank: reducer, dispatch } = this.props
 
     this.setState({
       isRefreshing: true
@@ -172,21 +171,21 @@ class Rank extends Component {
     dispatch(getRankList(1, {
       sort, server, cheat,
       title: typeof title !== 'undefined' ? title : this.props.screenProps.searchTitle
-    }));
+    }))
   }
 
   _loadMoreData = () => {
-    const { rank: reducer, dispatch } = this.props;
+    const { rank: reducer, dispatch } = this.props
     const { server, sort, cheat } = this.state
-    let page = reducer.page + 1;
+    let page = reducer.page + 1
     dispatch(getRankList(page, {
       sort, server, cheat,
       title: this.props.screenProps.searchTitle
-    }));
+    }))
   }
 
   _onEndReached = () => {
-    const { rank: reducer } = this.props;
+    const { rank: reducer } = this.props
 
     if (reducer.page === reducer.totalPage) return
     if (this.state.isRefreshing || this.state.isLoadingMore) return
@@ -194,7 +193,7 @@ class Rank extends Component {
     this.setState({
       isLoadingMore: true
     })
-    this._loadMoreData();
+    this._loadMoreData()
   }
 
   ITEM_HEIGHT = 93 + 7
@@ -211,7 +210,7 @@ class Rank extends Component {
   }
 
   render() {
-    const { rank: reducer } = this.props;
+    const { rank: reducer } = this.props
     const { modeInfo } = this.props.screenProps
     log('Rank.js rerendered')
     return (
@@ -265,17 +264,16 @@ class Rank extends Component {
 const styles = StyleSheet.create({
   avatar: {
     width: 50,
-    height: 50,
+    height: 50
   }
-});
-
+})
 
 function mapStateToProps(state) {
   return {
     rank: state.rank
-  };
+  }
 }
 
 export default connect(
   mapStateToProps
-)(Rank);
+)(Rank)

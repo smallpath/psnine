@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import {
   StyleSheet,
   Text,
@@ -9,20 +9,19 @@ import {
   RefreshControl,
   InteractionManager,
   Picker
-} from 'react-native';
+} from 'react-native'
 
-import { getGameUrl } from '../dao';
+import { getGameUrl } from '../dao'
 
-import colorConfig, { standardColor, nodeColor, idColor, getContentFromTrophy } from '../constant/colorConfig';
-
+import colorConfig, { standardColor, nodeColor, idColor, getContentFromTrophy } from '../constant/colorConfig'
 
 export default class extends React.PureComponent {
 
   shouldComponentUpdate = (props) => props.modeInfo.themeName !== this.props.modeInfo.themeName
 
   _onRowPressed = (rowData) => {
-    const { navigation } = this.props;
-    const URL = getGameUrl(rowData.id);
+    const { navigation } = this.props
+    const URL = getGameUrl(rowData.id)
     navigation.navigate('GamePage', {
       // URL: 'http://psnine.com/psngame/5424?psnid=Smallpath',
       URL,
@@ -43,7 +42,7 @@ export default class extends React.PureComponent {
         useForeground={true}
         background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
       >
-        <View pointerEvents={'box-only'} style={{ 
+        <View pointerEvents={'box-only'} style={{
           flex: 1, flexDirection: 'row', padding: 12,
           marginVertical: 3.5,
           marginHorizontal: numColumns === 1 ? 0 : 3.5,
@@ -61,7 +60,7 @@ export default class extends React.PureComponent {
             <Text
               ellipsizeMode={'tail'}
               numberOfLines={3}
-              style={{ color: modeInfo.titleTextColor, }}>
+              style={{ color: modeInfo.titleTextColor }}>
               {rowData.title}
             </Text>
 
@@ -88,10 +87,9 @@ export default class extends React.PureComponent {
 
 }
 
-
 const styles = StyleSheet.create({
   avatar: {
     width: 50,
-    height: 50,
+    height: 50
   }
-});
+})

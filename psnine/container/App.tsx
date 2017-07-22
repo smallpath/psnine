@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import {
   AppRegistry,
   StyleSheet,
@@ -13,16 +13,16 @@ import {
   TouchableOpacity,
   Dimensions,
   TouchableNativeFeedback,
-  RefreshControl,
-} from 'react-native';
+  RefreshControl
+} from 'react-native'
 
-import LeftDrawer from './LeftDrawer';
-import Toolbar from './Toolbar';
+import LeftDrawer from './LeftDrawer'
+import Toolbar from './Toolbar'
 
-import { standardColor } from '../constant/colorConfig';
+import { standardColor } from '../constant/colorConfig'
 
-let DRAWER_REF = 'drawer';
-let DRAWER_WIDTH_LEFT = 80;
+let DRAWER_REF = 'drawer'
+let DRAWER_WIDTH_LEFT = 80
 
 let drawerWidth = Dimensions.get('window').width - DRAWER_WIDTH_LEFT
 if (drawerWidth > 720) {
@@ -32,7 +32,7 @@ if (drawerWidth > 720) {
 
 class Psnine extends Component {
   constructor(props) {
-    super(props);
+    super(props)
   }
 
   callDrawer = () => {
@@ -51,9 +51,9 @@ class Psnine extends Component {
   }
 
   render() {
-    const { reducer } = this.props;
+    const { reducer } = this.props
     // console.log('App.js rendered');
-    const { navigation: { state }, screenProps } = this.props;
+    const { navigation: { state }, screenProps } = this.props
     const {modeInfo} = screenProps
      log(modeInfo.themeName, modeInfo.isNightMode, '===> Outter')
     return (
@@ -79,21 +79,20 @@ class Psnine extends Component {
           _callDrawer={() => this.callDrawer.bind(this)}
         />
       </DrawerLayoutAndroid>
-    );
+    )
   }
 
 }
-
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: 'column',
-    backgroundColor: '#F5FCFF',
+    backgroundColor: '#F5FCFF'
   },
   toolbar: {
     backgroundColor: standardColor,
-    height: 56,
+    height: 56
   },
   selectedTitle: {
     //backgroundColor: '#00ffff'
@@ -101,8 +100,8 @@ const styles = StyleSheet.create({
   },
   avatar: {
     width: 50,
-    height: 50,
+    height: 50
   }
-});
+})
 
-export default Psnine;
+export default Psnine

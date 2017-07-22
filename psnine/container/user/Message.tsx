@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import {
   StyleSheet,
   Text,
@@ -11,24 +11,23 @@ import {
   InteractionManager,
   FlatList,
   Alert
-} from 'react-native';
+} from 'react-native'
 
+import { connect } from 'react-redux'
+import { getTopicList } from '../../redux/action/community.js'
+import { standardColor, nodeColor, idColor, accentColor } from '../../constant/colorConfig'
 
-import { connect } from 'react-redux';
-import { getTopicList } from '../../redux/action/community.js';
-import { standardColor, nodeColor, idColor, accentColor } from '../../constant/colorConfig';
-
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import { getTopicURL, fetchMessages, } from '../../dao';
+import Ionicons from 'react-native-vector-icons/Ionicons'
+import { getTopicURL, fetchMessages } from '../../dao'
 
 import MessageItem from '../../component/MessageItem'
 import FooterProgress from '../../component/FooterProgress'
 
-let toolbarActions = [];
+let toolbarActions = []
 
 class Message extends Component {
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       messages: [],
       isRefreshing: true,
@@ -37,13 +36,13 @@ class Message extends Component {
   }
 
   onNavClicked = (rowData) => {
-    const { navigation } = this.props;
+    const { navigation } = this.props
     navigation.goBack()
   }
 
   _pressRow = (rowData, getParams = false) => {
-    const { navigation } = this.props;
-    let URL = rowData.url;
+    const { navigation } = this.props
+    let URL = rowData.url
     let type = 'CommunityTopic'
     let replyType = 'community'
     if (URL.includes('/gene/')) {
@@ -68,7 +67,7 @@ class Message extends Component {
       navigation.navigate(type, {
         URL: URL.replace(/\/comment(.*?)$/, ''),
         title: rowData.psnid
-      });
+      })
       return
     }
     if (getParams) return [type, {
@@ -82,7 +81,7 @@ class Message extends Component {
       title: '@' + rowData.psnid ,
       type: replyType,
       rowData
-    });
+    })
   }
 
   handleImageOnclick = (url) => this.props.navigation.navigate('ImageViewer', {
@@ -92,15 +91,15 @@ class Message extends Component {
   })
 
   componentWillMount = async () => {
-    this.fetchMessages();
+    this.fetchMessages()
   }
 
   fetchMessages = async () => {
-    const data = await fetchMessages(this.props.navigation.state.params.psnid);
+    const data = await fetchMessages(this.props.navigation.state.params.psnid)
     this.setState({
       messages: data,
       isRefreshing: false
-    });
+    })
   }
 
   _renderItem = ({ item: rowData, index }) => {
@@ -113,7 +112,7 @@ class Message extends Component {
       rowData,
       modeInfo,
       onPress,
-      isChecked: nums >= index + 1, 
+      isChecked: nums >= index + 1,
       modalList: [{
         text: '回复',
         onPress: (rowData) => {
@@ -140,8 +139,8 @@ class Message extends Component {
         onMoveShouldSetResponder={() => false}
       >
         <Ionicons.ToolbarAndroid
-          navIconName="md-arrow-back"
-          overflowIconName="md-more"
+          navIconName='md-arrow-back'
+          overflowIconName='md-more'
           titleColor={modeInfo.isNightMode ? '#000' : '#fff'}
           iconColor={modeInfo.isNightMode ? '#000' : '#fff'}
           title={'我的消息'}
@@ -190,17 +189,17 @@ class Message extends Component {
 const styles = StyleSheet.create({
   avatar: {
     width: 50,
-    height: 50,
+    height: 50
   },
   toolbar: {
     backgroundColor: standardColor,
     height: 56,
-    elevation: 4,
+    elevation: 4
   },
   a: {
     color: accentColor,
     fontWeight: '300'
   }
-});
+})
 
-export default Message;
+export default Message

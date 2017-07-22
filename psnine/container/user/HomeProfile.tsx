@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import {
   AppRegistry,
   StyleSheet,
@@ -17,39 +17,38 @@ import {
   PanResponder,
   Modal,
   Keyboard
-} from 'react-native';
+} from 'react-native'
 
 import { sync, updown, fav, upBase, block } from '../../dao/sync'
 
-
-import { connect } from 'react-redux';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import UserGameItem from '../../component/UserGameItem';
+import { connect } from 'react-redux'
+import Ionicons from 'react-native-vector-icons/Ionicons'
+import UserGameItem from '../../component/UserGameItem'
 import {
-  standardColor, 
-  nodeColor, 
+  standardColor,
+  nodeColor,
   idColor,
   accentColor,
   levelColor,
-  rankColor,
-} from '../../constant/colorConfig';
+  rankColor
+} from '../../constant/colorConfig'
 
-import { getHomeAPI } from '../../dao';
+import { getHomeAPI } from '../../dao'
 
-let screen = Dimensions.get('window');
-const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = screen;
+let screen = Dimensions.get('window')
+const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = screen
 
-let toolbarActions = [];
-let title = "TOPIC";
-let WEBVIEW_REF = `WEBVIEW_REF`;
+let toolbarActions = []
+let title = 'TOPIC'
+let WEBVIEW_REF = `WEBVIEW_REF`
 
-let toolbarHeight = 56;
-let releasedMarginTop = 0;
+let toolbarHeight = 56
+let releasedMarginTop = 0
 
-const ACTUAL_SCREEN_HEIGHT = SCREEN_HEIGHT - StatusBar.currentHeight + 1;
+const ACTUAL_SCREEN_HEIGHT = SCREEN_HEIGHT - StatusBar.currentHeight + 1
 
-let CIRCLE_SIZE = 56;
-let config = { tension: 30, friction: 7, ease: Easing.in(Easing.ease(1, 0, 1, 1)), duration: 200 };
+let CIRCLE_SIZE = 56
+let config = { tension: 30, friction: 7, ease: Easing.in(Easing.ease(1, 0, 1, 1)), duration: 200 }
 
 const iconMapper = {
   '游戏同步': 'md-sync',
@@ -63,7 +62,7 @@ export default class Home extends Component {
      tabBarLabel: '主页'
   }
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       isLoading: false,
       rotation: new Animated.Value(1),
@@ -82,7 +81,6 @@ export default class Home extends Component {
     ]
   })
 
-
   ITEM_HEIGHT = 83
 
   renderGameItem = (rowData, index) => {
@@ -95,7 +93,6 @@ export default class Home extends Component {
       ITEM_HEIGHT
     }} />
   }
-
 
   hasGameTable = false
 
@@ -115,11 +112,11 @@ export default class Home extends Component {
               rowData: {
                 id: res.url.split('/').pop()
               },
-              type: res.url.includes('gene') ? 'gene' : 'community', // todo
+              type: res.url.includes('gene') ? 'gene' : 'community' // todo
             })
           }
         }).catch(err => global.toast(err.toString()))
-          
+
         }}>
         <View pointerEvents={'box-only'} style={{
           backgroundColor: modeInfo.backgroundColor,
@@ -141,32 +138,32 @@ export default class Home extends Component {
               shouldForceInline={true}
             />
           </View>
-          <View style={{ 
-            flex: 1, 
-            justifyContent: 'space-around', 
+          <View style={{
+            flex: 1,
+            justifyContent: 'space-around',
             flexDirection: 'row',
             alignItems: 'flex-start',
             padding: 2,
             paddingLeft: 12
           }}>
-            <Text        
-              style={{ 
-                flex: 2,             
+            <Text
+              style={{
+                flex: 2,
                 textAlign: 'left',
                 textAlignVertical: 'center',
-                color: modeInfo.standardTextColor, }}>{rowData.psnid}</Text>
-            <Text             
-              style={{ 
-                flex: 1,             
+                color: modeInfo.standardTextColor }}>{rowData.psnid}</Text>
+            <Text
+              style={{
+                flex: 1,
                 textAlign: 'left',
                 textAlignVertical: 'center',
-                color: modeInfo.standardTextColor, }}>{rowData.date}</Text>
-            <Text             
-              style={{ 
-                flex: 1,             
+                color: modeInfo.standardTextColor }}>{rowData.date}</Text>
+            <Text
+              style={{
+                flex: 1,
                 textAlign: 'left',
                 textAlignVertical: 'center',
-                color: modeInfo.standardTextColor, }}>{rowData.count}</Text>
+                color: modeInfo.standardTextColor }}>{rowData.count}</Text>
           </View>
         </View>
       </TouchableNativeFeedback>
@@ -182,12 +179,11 @@ export default class Home extends Component {
     if (gameTable.length !== 0) {
       data = gameTable
       renderFunc = this.renderGameItem
-    } 
+    }
     if (diaryTable.length !== 0) {
-      data = diaryTable 
+      data = diaryTable
       renderFunc = this.renderDiary
     }
-
 
     this.viewBottomIndex = Math.max(data.length - 1, 0)
     // console.log(modeInfo.themeName)
@@ -234,21 +230,20 @@ export default class Home extends Component {
         </FlatList>
         }
       </View>
-    );
+    )
   }
 }
-
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: 'column',
-    backgroundColor: '#F5FCFF',
+    backgroundColor: '#F5FCFF'
   },
   toolbar: {
     backgroundColor: standardColor,
     height: 56,
-    elevation: 4,
+    elevation: 4
   },
   selectedTitle: {
     //backgroundColor: '#00ffff'
@@ -256,10 +251,10 @@ const styles = StyleSheet.create({
   },
   avatar: {
     width: 50,
-    height: 50,
+    height: 50
   },
   a: {
     fontWeight: '300',
-    color: idColor, // make links coloured pink
-  },
-});
+    color: idColor // make links coloured pink
+  }
+})

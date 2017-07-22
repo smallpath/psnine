@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import {
   StyleSheet,
   Text,
@@ -17,44 +17,43 @@ import {
   PanResponder,
   StatusBar,
   Picker
-} from 'react-native';
+} from 'react-native'
 
-import { connect } from 'react-redux';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import { standardColor, accentColor } from '../../constant/colorConfig';
+import { connect } from 'react-redux'
+import Ionicons from 'react-native-vector-icons/Ionicons'
+import { standardColor, accentColor } from '../../constant/colorConfig'
 
-import { pngPrefix, getDealURL, getHappyPlusOneURL, getStoreURL, getNewQaAPI, getQaEditAPI } from '../../dao';
+import { pngPrefix, getDealURL, getHappyPlusOneURL, getStoreURL, getNewQaAPI, getQaEditAPI } from '../../dao'
 
-import { safeLogin, registURL } from '../../dao/login';
-import { postCreateTopic } from '../../dao/post';
-
+import { safeLogin, registURL } from '../../dao/login'
+import { postCreateTopic } from '../../dao/post'
 
 import Emotion from '../../component/Emotion'
 
-let title = '创建问题';
+let title = '创建问题'
 
 let toolbarActions = [
 
-];
+]
 
-let AnimatedKeyboardAvoidingView = Animated.createAnimatedComponent(KeyboardAvoidingView);
+let AnimatedKeyboardAvoidingView = Animated.createAnimatedComponent(KeyboardAvoidingView)
 
-let screen = Dimensions.get('window');
+let screen = Dimensions.get('window')
 
-const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = screen;
+const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = screen
 
-SCREEN_HEIGHT = SCREEN_HEIGHT - StatusBar.currentHeight + 1;
+SCREEN_HEIGHT = SCREEN_HEIGHT - StatusBar.currentHeight + 1
 
-let CIRCLE_SIZE = 56;
+let CIRCLE_SIZE = 56
 
 const emotionToolbarHeight = 190
 
-let config = { tension: 30, friction: 7, ease: Easing.in(Easing.ease(1, 0, 1, 1)), duration: 200 };
+let config = { tension: 30, friction: 7, ease: Easing.in(Easing.ease(1, 0, 1, 1)), duration: 200 }
 
 export default class NewTopic extends Component {
 
   constructor(props) {
-    super(props);
+    super(props)
     const { params = {} } = this.props.navigation.state
     const { at = '', shouldShowPoint = false, isOldPage = false } = params
     // console.log(params)
@@ -84,7 +83,7 @@ export default class NewTopic extends Component {
 
   componentDidMount = () => {
     const { modeInfo } = this.props.screenProps
-    let config = { tension: 30, friction: 7 };
+    let config = { tension: 30, friction: 7 }
     // Animated.spring(this.state.openVal, { toValue: 1, ...config }).start(() => {
       if (modeInfo.settingInfo.psnid === '') {
         toast('请首先登录')
@@ -96,12 +95,12 @@ export default class NewTopic extends Component {
 
   _pressButton = (callback) => {
     const { marginTop, openVal } = this.state
-    let value = marginTop._value;
+    let value = marginTop._value
     if (Math.abs(value) >= 50) {
-      Animated.spring(marginTop, { toValue: 0, ...config }).start();
-      return true;
-    } 
-    this.content.clear();
+      Animated.spring(marginTop, { toValue: 0, ...config }).start()
+      return true
+    }
+    this.content.clear()
     Keyboard.dismiss()
     // Animated.spring(openVal, { toValue: 0, ...config }).start(() => {
       typeof callback === 'function' && callback()
@@ -112,25 +111,25 @@ export default class NewTopic extends Component {
 
   isKeyboardShowing = false
   _pressEmotion = () => {
-    let config = { tension: 30, friction: 7 };
+    let config = { tension: 30, friction: 7 }
     const target = this.state.toolbarOpenVal._value === 1 ? 0 : 1
     if (target === 1 && this.isKeyboardShowing === true) {
       this.shouldShowEmotion = true
       Keyboard.dismiss()
       return
     }
-    Animated.spring(this.state.toolbarOpenVal, { toValue: target, ...config }).start();
+    Animated.spring(this.state.toolbarOpenVal, { toValue: target, ...config }).start()
   }
 
   componentWillUnmount = () => {
-    this.keyboardDidHideListener.remove();
-    this.keyboardDidShowListener.remove();
+    this.keyboardDidHideListener.remove()
+    this.keyboardDidShowListener.remove()
     this.removeListener && this.removeListener.remove()
   }
 
   componentWillMount = async () => {
     // console.log('??', typeof getNewQaAPI)
-    let config = { tension: 30, friction: 7 };
+    let config = { tension: 30, friction: 7 }
     const { openVal, marginTop } = this.state
     const { callback } = this.props.navigation.state.params
     const { params } = this.props.navigation.state
@@ -172,7 +171,7 @@ export default class NewTopic extends Component {
         friction: 10
       }).start(() => {
         this.shouldShowEmotion = false
-      });
+      })
     })
     this.isToolbarShowing = false
 
@@ -181,7 +180,7 @@ export default class NewTopic extends Component {
       Ionicons.getImageSource('md-happy', 50, '#fff'),
       Ionicons.getImageSource('md-photos', 50, '#fff'),
       Ionicons.getImageSource('md-send', 50, '#fff'),
-      Ionicons.getImageSource('md-color-wand', 50, '#fff'),
+      Ionicons.getImageSource('md-color-wand', 50, '#fff')
     ])
     this.setState({
       icon: {
@@ -196,7 +195,7 @@ export default class NewTopic extends Component {
   }
 
   sendReply = () => {
-    const { title, hb, psngameid, node, content } = this.state 
+    const { title, hb, psngameid, node, content } = this.state
     const result = {
       title, hb, psngameid, node, content
     }
@@ -228,15 +227,15 @@ export default class NewTopic extends Component {
   }
 
   onValueChange = (key: string, value: string) => {
-    const newState = {};
-    newState[key] = value;
+    const newState = {}
+    newState[key] = value
     this.setState(newState, () => {
       // this._onRefresh()
-    });
-  };
+    })
+  }
 
   render() {
-    let { openVal, marginTop } = this.state;
+    let { openVal, marginTop } = this.state
     const { icon, toolbarOpenVal } = this.state
     const { modeInfo } = this.props.screenProps
     let outerStyle = {
@@ -244,7 +243,7 @@ export default class NewTopic extends Component {
         inputRange: [0, SCREEN_HEIGHT],
         outputRange: [0, SCREEN_HEIGHT]
       })
-    };
+    }
 
     let animatedStyle = {
       left: openVal.interpolate({ inputRange: [0, 1], outputRange: [SCREEN_WIDTH - 56 - 16, 0] }),
@@ -258,17 +257,17 @@ export default class NewTopic extends Component {
       backgroundColor: openVal.interpolate({
         inputRange: [0, 1],
         outputRange: [accentColor, modeInfo.backgroundColor]
-      }),
+      })
       //elevation : openVal.interpolate({inputRange: [0 ,1], outputRange: [0, 8]})
-    };
+    }
 
     let animatedSubmitStyle = {
-      height: openVal.interpolate({ inputRange: [0, 0.9, 1], outputRange: [0, 0, 40] }),
+      height: openVal.interpolate({ inputRange: [0, 0.9, 1], outputRange: [0, 0, 40] })
     }
 
     let animatedToolbarStyle = {
       height: openVal.interpolate({ inputRange: [0, 0.9, 1], outputRange: [0, 0, 56] }),
-      backgroundColor: modeInfo.standardColor,
+      backgroundColor: modeInfo.standardColor
     }
 
     const { params } = this.props.navigation.state
@@ -282,8 +281,8 @@ export default class NewTopic extends Component {
       >
         <Animated.View style={[styles.toolbar, animatedToolbarStyle]}>
           <Ionicons.ToolbarAndroid
-            navIconName="md-arrow-back"
-            overflowIconName="md-more"
+            navIconName='md-arrow-back'
+            overflowIconName='md-more'
             iconColor={modeInfo.isNightMode ? '#000' : '#fff'}
             title={params.URL ? '编辑问答' : '创建问答'}
             style={[styles.toolbar, { backgroundColor: modeInfo.standardColor }]}
@@ -297,13 +296,13 @@ export default class NewTopic extends Component {
         </Animated.View >
 
         <Animated.View style={[styles.KeyboardAvoidingView, {
-          flex: openVal.interpolate({ inputRange: [0, 1], outputRange: [0, 10] }),
+          flex: openVal.interpolate({ inputRange: [0, 1], outputRange: [0, 10] })
         }]} >
-          <TextInput placeholder="标题"
+          <TextInput placeholder='标题'
             autoCorrect={false}
             multiline={false}
-            keyboardType="default"
-            returnKeyType="next"
+            keyboardType='default'
+            returnKeyType='next'
             returnKeyLabel='next'
             blurOnSubmit={false}
             numberOfLines={100}
@@ -342,7 +341,7 @@ export default class NewTopic extends Component {
           }}>
             <Picker style={{
               flex: 1,
-              color: modeInfo.standardTextColor,
+              color: modeInfo.standardTextColor
             }}
               prompt='类型'
               selectedValue={this.state.type}
@@ -354,7 +353,7 @@ export default class NewTopic extends Component {
               this.state.type === 'game' && (
                 <Picker style={{
                   flex: 2,
-                  color: modeInfo.standardTextColor,
+                  color: modeInfo.standardTextColor
                 }}
                   prompt='选择游戏'
                   selectedValue={this.state.psngameid}
@@ -366,7 +365,7 @@ export default class NewTopic extends Component {
               ) || (
                 <Picker style={{
                   flex: 2,
-                  color: modeInfo.standardTextColor,
+                  color: modeInfo.standardTextColor
                 }}
                   prompt='选择节点'
                   selectedValue={this.state.node}
@@ -379,12 +378,12 @@ export default class NewTopic extends Component {
             }
           </View>
           <AnimatedKeyboardAvoidingView behavior={'padding'} style={[styles.contentView, {
-            flex: openVal.interpolate({ inputRange: [0, 1], outputRange: [0, 12] }),
+            flex: openVal.interpolate({ inputRange: [0, 1], outputRange: [0, 12] })
           }]}>
-            <TextInput placeholder="内容"
+            <TextInput placeholder='内容'
               autoCorrect={false}
               multiline={true}
-              keyboardType="default"
+              keyboardType='default'
               returnKeyType='go'
               returnKeyLabel='go'
               onSelectionChange={this.onSelectionChange}
@@ -397,7 +396,7 @@ export default class NewTopic extends Component {
                 color: modeInfo.titleTextColor,
                 textAlign: 'left',
                 textAlignVertical: 'top',
-                flex: 1,
+                flex: 1
               }]}
               placeholderTextColor={modeInfo.standardTextColor}
               // underlineColorAndroid={accentColor}
@@ -411,12 +410,12 @@ export default class NewTopic extends Component {
                 flex: 1,
                 flexDirection: 'row',
                 alignItems: 'center',
-                justifyContent: 'space-between',
+                justifyContent: 'space-between'
               }}>
-                <View style={{ flexDirection: 'row', }}>
+                <View style={{ flexDirection: 'row' }}>
                   <TouchableNativeFeedback
                     onPress={this._pressEmotion}
-                    
+
                     background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
                     style={{ borderRadius: 25 }}
                   >
@@ -429,7 +428,7 @@ export default class NewTopic extends Component {
                   </TouchableNativeFeedback>
                   <TouchableNativeFeedback
                     onPress={this._pressImageButton}
-                    
+
                     background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
                     style={{ borderRadius: 25 }}
                   >
@@ -443,7 +442,7 @@ export default class NewTopic extends Component {
                 </View>
                 <TouchableNativeFeedback
                   onPress={this.toolbar}
-                  
+
                   background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
                   style={{ borderRadius: 25 }}
                 >
@@ -456,7 +455,7 @@ export default class NewTopic extends Component {
                 </TouchableNativeFeedback>
                 <TouchableNativeFeedback
                   onPress={this.sendReply}
-                  
+
                   background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
                   style={{ borderRadius: 25 }}
                 >
@@ -475,7 +474,7 @@ export default class NewTopic extends Component {
               bottom: 0, //toolbarOpenVal.interpolate({ inputRange: [0, 1], outputRange: [0, 100] }),
               backgroundColor: modeInfo.standardColor,
               height: toolbarOpenVal.interpolate({ inputRange: [-1, 0, 1], outputRange: [0, 0, emotionToolbarHeight] }),
-              opacity: openVal.interpolate({ inputRange: [0, 0.9, 1], outputRange: [0, 0, 1] }),
+              opacity: openVal.interpolate({ inputRange: [0, 0.9, 1], outputRange: [0, 0, 1] })
             }} >
               <Emotion
                 modeInfo={modeInfo}
@@ -483,18 +482,18 @@ export default class NewTopic extends Component {
               />
             </Animated.View>
             <Animated.View style={{
-              elevation: 4, 
-              bottom: 0, 
+              elevation: 4,
+              bottom: 0,
               backgroundColor: modeInfo.standardColor,
               height: 100,
-              opacity: openVal.interpolate({ inputRange: [0, 0.9, 1], outputRange: [0, 0, 1] }),
+              opacity: openVal.interpolate({ inputRange: [0, 0.9, 1], outputRange: [0, 0, 1] })
             }} />
           </AnimatedKeyboardAvoidingView>
 
         </Animated.View>
 
       </Animated.View>
-    );
+    )
   }
 
   onPressEmotion = ({ text, url }) => {
@@ -537,7 +536,6 @@ export default class NewTopic extends Component {
     })
   }
 
-
   _pressImageButton = (callback) => {
     const { params } = this.props.navigation.state
     Keyboard.dismiss()
@@ -550,8 +548,7 @@ export default class NewTopic extends Component {
   }
 }
 
-
-const width = Dimensions.get('window').width;
+const width = Dimensions.get('window').width
 
 const styles = StyleSheet.create({
   circle: {
@@ -563,7 +560,7 @@ const styles = StyleSheet.create({
     borderRadius: CIRCLE_SIZE / 2,
     borderWidth: 2,
     borderColor: accentColor,
-    elevation: 12,
+    elevation: 12
   },
   open: {
     position: 'absolute',
@@ -573,20 +570,20 @@ const styles = StyleSheet.create({
     bottom: 0,
     width: undefined, // unset value from styles.circle
     height: undefined, // unset value from styles.circle
-    borderRadius: CIRCLE_SIZE / 2, // unset value from styles.circle
+    borderRadius: CIRCLE_SIZE / 2 // unset value from styles.circle
   },
   toolbar: {
     backgroundColor: standardColor,
     height: 56,
     elevation: 4,
-    flex: -1,
+    flex: -1
   },
   mainFont: {
     fontSize: 15,
     color: accentColor
   },
   textInput: {
-    fontSize: 15,
+    fontSize: 15
   },
   KeyboardAvoidingView: {
     flex: 10,
@@ -598,7 +595,7 @@ const styles = StyleSheet.create({
   titleView: {
     flex: 1,
     //marginTop: -10,
-    justifyContent: 'center',
+    justifyContent: 'center'
     // flexDirection: 'column',
     // justifyContent: 'space-between',
   },
@@ -606,14 +603,14 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     // flexDirection: 'column',
-    alignItems: 'center',
+    alignItems: 'center'
   },
   contentView: {
-    flex: 12,
-    // flexDirection: 'column', 
+    flex: 12
+    // flexDirection: 'column',
   },
   submit: {
-    // flex: -1, 
+    // flex: -1,
     // height: 20,
     // //margin: 10,
     // marginTop: 30,
@@ -629,10 +626,10 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     marginTop: 20,
-    margin: 10,
+    margin: 10
   },
   openURL: {
     color: accentColor,
-    textDecorationLine: 'underline',
-  },
+    textDecorationLine: 'underline'
+  }
 })

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import {
   StyleSheet,
   Text,
@@ -10,23 +10,23 @@ import {
   InteractionManager,
   SectionList,
   Animated
-} from 'react-native';
+} from 'react-native'
 
-import { connect } from 'react-redux';
-import { getRecommend } from '../../redux/action/recommend.js';
-import { getTopicList } from '../../redux/action/community.js';
-import { standardColor, nodeColor, idColor, accentColor } from '../../constant/colorConfig';
-import { changeSegmentIndex, changeCommunityType, changeGeneType, changeCircleType } from '../../redux/action/app';
+import { connect } from 'react-redux'
+import { getRecommend } from '../../redux/action/recommend.js'
+import { getTopicList } from '../../redux/action/community.js'
+import { standardColor, nodeColor, idColor, accentColor } from '../../constant/colorConfig'
+import { changeSegmentIndex, changeCommunityType, changeGeneType, changeCircleType } from '../../redux/action/app'
 
-import { getBattleURL, getGamePngURL } from '../../dao';
+import { getBattleURL, getGamePngURL } from '../../dao'
 import HotGameItem from '../../component/HotGameItem'
 import NodeItem from '../../component/NodeItem'
 import TipItem from '../../component/TipItem'
 import CommentItem from '../../component/LatestCommentItem'
-const AnimatedSectionList = Animated.createAnimatedComponent(SectionList);
+const AnimatedSectionList = Animated.createAnimatedComponent(SectionList)
 
-let toolbarHeight = 56;
-let releasedMarginTop = 0;
+let toolbarHeight = 56
+let releasedMarginTop = 0
 
 const renderSectionHeader = ({ section }) => {
   // console.log(Object.keys(section), section.data[0].length)
@@ -39,23 +39,23 @@ const renderSectionHeader = ({ section }) => {
       padding: 7,
       marginLeft: 7,
       marginRight: 7,
-      elevation: 2,
+      elevation: 2
     }}>
       <Text numberOfLines={1}
         style={{ fontSize: 20, color: section.modeInfo.standardColor, textAlign: 'left', lineHeight: 25, marginLeft: 2, marginTop: 2 }}
       >{section.key}</Text>
     </View>
-  );
+  )
 }
 
 class Recommend extends Component {
   static navigationOptions = {
     tabBarLabel: '推荐',
     drawerLabel: '推荐'
-  };
+  }
 
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       isLoading: true,
       data: {
@@ -71,7 +71,7 @@ class Recommend extends Component {
   componentWillReceiveProps(nextProps) {
     // console.log('received', nextProps.data.hotGames.length)
     if (this.props.screenProps.modeInfo.themeName != nextProps.screenProps.modeInfo.themeName) {
-      this.props.screenProps.modeInfo = nextProps.screenProps.modeInfo;
+      this.props.screenProps.modeInfo = nextProps.screenProps.modeInfo
     } else if (this.props.data.hotGames.length < nextProps.data.hotGames.length) {
       // this.setState({
       //   isLoading: false
@@ -87,7 +87,7 @@ class Recommend extends Component {
 
   componentWillMount = () => {
     if (this.props.data.hotGames.length === 0) {
-      this._onRefresh();
+      this._onRefresh()
     }
   }
   componentWillUnmount = () => {
@@ -107,7 +107,7 @@ class Recommend extends Component {
     this.setState({
       isLoading: true
     })
-    this.props.dispatch(getRecommend());
+    this.props.dispatch(getRecommend())
   }
 
   _renderItemComponent = ({ item: rowData, index }, type) => {
@@ -120,7 +120,7 @@ class Recommend extends Component {
           navigation,
           rowData: item
         }}/>))
-        break;
+        break
       case 1:
         outter = rowData.map((item, index) => (<NodeItem key={index} {...{
           modeInfo,
@@ -131,21 +131,21 @@ class Recommend extends Component {
             setTimeout(() => this.props.dispatch(changeCommunityType(item.id)), 0)
           }
         }}/>))
-        break;
+        break
       case 2:
         outter = rowData.map((item, index) => (<TipItem key={index} {...{
           modeInfo,
           navigation,
           rowData: item
         }}/>))
-        break;
+        break
       case 3:
         outter = rowData.map((item, index) => (<CommentItem key={index} {...{
           modeInfo,
           navigation,
           rowData: item
         }}/>))
-        break;
+        break
     }
     return (
       <View style={{ flexDirection: 'row', flexWrap: 'wrap', marginHorizontal: 7, elevation: 2, backgroundColor: modeInfo.backgroundColor}}>
@@ -155,12 +155,12 @@ class Recommend extends Component {
   }
 
   render() {
-    const { battle: battleReducer } = this.props;
+    const { battle: battleReducer } = this.props
     const { modeInfo } = this.props.screenProps
     let { data } = this.state
 
-    let keys = Object.keys(data);
-    let NUM_SECTIONS = keys.length;
+    let keys = Object.keys(data)
+    let NUM_SECTIONS = keys.length
     // console.log(data)
     const sections = Object.keys(data).filter(item => item !== 'warning').map((sectionName, index) => {
       return {
@@ -169,7 +169,7 @@ class Recommend extends Component {
         data: [data[sectionName]],
         renderItem: (...args) => this._renderItemComponent(...args, index)
       }
-    });
+    })
     log('recommend re-rendered')
     return (
       <AnimatedSectionList
@@ -205,23 +205,22 @@ const nameMapper = {
   'hotGames' : '热门游戏',
   'nodes': '常用节点',
   'tips': '奖杯TIPS',
-  'comment': '游戏评论',
+  'comment': '游戏评论'
 }
 
 const styles = StyleSheet.create({
   avatar: {
     width: 50,
-    height: 50,
+    height: 50
   }
-});
-
+})
 
 function mapStateToProps(state) {
   return {
     data: state.recommend
-  };
+  }
 }
 
 export default connect(
   mapStateToProps
-)(Recommend);
+)(Recommend)

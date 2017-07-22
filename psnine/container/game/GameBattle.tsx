@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import {
   StyleSheet,
   Text,
@@ -13,28 +13,26 @@ import {
   Modal,
   Slider,
   FlatList
-} from 'react-native';
+} from 'react-native'
 
-const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
+const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window')
 
+import { connect } from 'react-redux'
+import { standardColor, nodeColor, idColor } from '../../constant/colorConfig'
 
-
-import { connect } from 'react-redux';
-import { standardColor, nodeColor, idColor } from '../../constant/colorConfig';
-
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import { getGameMapperAPI } from '../../dao';
+import Ionicons from 'react-native-vector-icons/Ionicons'
+import { getGameMapperAPI } from '../../dao'
 
 import TopicItem from '../../component/BattleItem'
 import FooterProgress from '../../component/FooterProgress'
 
 let toolbarActions = [
-  { title: '创建', iconName: 'md-create', show: 'always', iconSize: 22},
-];
+  { title: '创建', iconName: 'md-create', show: 'always', iconSize: 22}
+]
 
 class GameTopic extends Component {
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       list: [],
       numberPerPage: 60,
@@ -49,13 +47,13 @@ class GameTopic extends Component {
   }
 
   onNavClicked = (rowData) => {
-    const { navigation } = this.props;
-    navigation.goBack();
+    const { navigation } = this.props
+    navigation.goBack()
   }
 
   componentWillMount = async () => {
     const { params } = this.props.navigation.state
-    this.fetchMessages(params.URL, 'jump');
+    this.fetchMessages(params.URL, 'jump')
   }
 
   fetchMessages = (url, type = 'down') => {
@@ -68,18 +66,17 @@ class GameTopic extends Component {
             list: data,
             isLoadingMore: false,
             isRefreshing: false
-          });
+          })
         })
       })
     })
   }
 
   _onRefresh = () => {
-    const { URL } = this.props.navigation.state.params;
+    const { URL } = this.props.navigation.state.params
     if (this.state.isLoadingMore || this.state.isRefreshing) return
-    this.fetchMessages(URL);
+    this.fetchMessages(URL)
   }
-
 
   onActionSelected = (index) => {
     switch (index) {
@@ -106,7 +103,7 @@ class GameTopic extends Component {
     return <TopicItem {...{
       navigation,
       rowData,
-      modeInfo,
+      modeInfo
     }} />
   }
 
@@ -122,8 +119,8 @@ class GameTopic extends Component {
         onMoveShouldSetResponder={() => false}
       >
         <Ionicons.ToolbarAndroid
-          navIconName="md-arrow-back"
-          overflowIconName="md-more"
+          navIconName='md-arrow-back'
+          overflowIconName='md-more'
           iconColor={modeInfo.isNightMode ? '#000' : '#fff'}
           title={'约战'}
           style={[styles.toolbar, { backgroundColor: modeInfo.standardColor }]}
@@ -214,7 +211,7 @@ class GameTopic extends Component {
                     }, () => {
                       const currentPage = this.state.currentPage
                       const targetPage = params.URL.split('=').slice(0, -1).concat(this.state.sliderValue).join('=')
-                      this.fetchMessages(targetPage, 'jump');
+                      this.fetchMessages(targetPage, 'jump')
                     })
                   }}>
                   <View style={{ alignSelf: 'flex-end', paddingHorizontal: 8, paddingVertical: 5 }}>
@@ -230,17 +227,16 @@ class GameTopic extends Component {
 
 }
 
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: 'column',
-    backgroundColor: '#F5FCFF',
+    backgroundColor: '#F5FCFF'
   },
   toolbar: {
     backgroundColor: standardColor,
     height: 56,
-    elevation: 4,
+    elevation: 4
   },
   selectedTitle: {
     //backgroundColor: '#00ffff'
@@ -248,13 +244,12 @@ const styles = StyleSheet.create({
   },
   avatar: {
     width: 50,
-    height: 50,
+    height: 50
   },
   a: {
     fontWeight: '300',
-    color: idColor, // make links coloured pink
-  },
-});
+    color: idColor // make links coloured pink
+  }
+})
 
-
-export default GameTopic;
+export default GameTopic
