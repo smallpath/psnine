@@ -1,4 +1,4 @@
-import * as ActionTypes from '../constants/actionTypes';
+import * as ActionTypes from '../constants/actionTypes'
 
 const initialState = {
   page: 0,
@@ -6,29 +6,29 @@ const initialState = {
 }
 
 function reducer(state = initialState, action) {
-  let newState = state;
+  let newState = state
   switch (action.type) {
     case ActionTypes.GET_QAS_SUCCESS:
       if (action.page === 1) {
         newState = Object.assign({}, state, {
           qas: action.value,
-          page: 1,
-        });
+          page: 1
+        })
       } else {
         newState = Object.assign({}, state, {
           qas: state.qas.concat(action.value),
-          page: state.page + 1,
-        });
+          page: state.page + 1
+        })
       }
-      return newState;
+      return newState
     case ActionTypes.GET_QAS_ERROR:
       newState = Object.assign({}, state, {
         page: 0,
-        qas: [],
-      });
+        qas: []
+      })
     default:
-      return state;
+      return state
   }
 }
 
-export default reducer;
+export default reducer

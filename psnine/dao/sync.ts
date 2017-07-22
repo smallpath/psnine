@@ -19,11 +19,11 @@ export const upBase = (psnid) => {
 export const updown = (form) => {
   let formBody = []
   for (let property in form) {
-    const encodedKey = encodeURIComponent(property);
-    const encodedValue = encodeURIComponent(form[property]);
-    formBody.push(encodedKey + "=" + encodedValue);
+    const encodedKey = encodeURIComponent(property)
+    const encodedValue = encodeURIComponent(form[property])
+    formBody.push(encodedKey + '=' + encodedValue)
   }
-  formBody = formBody.join("&");
+  formBody = formBody.join('&')
   return fetch('http://psnine.com/set/updown/ajax', {
     method: 'POST',
     headers: {
@@ -38,11 +38,11 @@ export const fav = (form) => {
   // console.log(form)
   let formBody = []
   for (let property in form) {
-    const encodedKey = encodeURIComponent(property);
-    const encodedValue = encodeURIComponent(form[property]);
-    formBody.push(encodedKey + "=" + encodedValue);
+    const encodedKey = encodeURIComponent(property)
+    const encodedValue = encodeURIComponent(form[property])
+    formBody.push(encodedKey + '=' + encodedValue)
   }
-  formBody = formBody.join("&");
+  formBody = formBody.join('&')
   const target = typeof form.unfav !== 'undefined' ? 'http://psnine.com/my/fav' : 'http://psnine.com/set/fav/ajax'
   return fetch(target, {
     method: 'POST',
@@ -57,11 +57,11 @@ export const block = (form) => {
   // console.log(form)
   let formBody = []
   for (let property in form) {
-    const encodedKey = encodeURIComponent(property);
-    const encodedValue = encodeURIComponent(form[property]);
-    formBody.push(encodedKey + "=" + encodedValue);
+    const encodedKey = encodeURIComponent(property)
+    const encodedValue = encodeURIComponent(form[property])
+    formBody.push(encodedKey + '=' + encodedValue)
   }
-  formBody = formBody.join("&");
+  formBody = formBody.join('&')
   const target = typeof form.unblock !== 'undefined' ? 'http://psnine.com/my/block' : 'http://psnine.com/set/blocked/ajax'
   return fetch(target, {
     method: 'POST',

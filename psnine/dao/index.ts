@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 import topicParser from '../parser/community'
 import geneParser from '../parser/gene'
 import battleParser from '../parser/battle'
@@ -62,38 +62,38 @@ import userBlockParser from '../parser/user/block'
 
 const safeFetch = function(reqUrl, type = 'text') {
   return new Promise((resolve, reject) => {
-    let timeout = setTimeout(() => reject('请求超时::dao.js::line#31'), 20000);
+    let timeout = setTimeout(() => reject('请求超时::dao.js::line#31'), 20000)
     console.log(reqUrl)
     fetch(reqUrl).then((response) => {
-      clearTimeout(timeout);
+      clearTimeout(timeout)
       const text = response[type]()
-      return resolve(text);
+      return resolve(text)
     }).catch((error) => {
       console.warn(error)
-      clearTimeout(timeout);
-      resolve([]);
-    });
-  });
-};
+      clearTimeout(timeout)
+      resolve([])
+    })
+  })
+}
 
-const host = `http://120.55.124.66`;
+const host = `http://120.55.124.66`
 
-const webHost = `http://psnine.com`;
+const webHost = `http://psnine.com`
 
 const getTopicsAPI = ({ page, type, title }) => {
-  if (!type) { 
-    return `${webHost}/topic?page=${page}&node=${type}${title ? `&title=${title}` : '' }` 
+  if (!type) {
+    return `${webHost}/topic?page=${page}&node=${type}${title ? `&title=${title}` : '' }`
   } else {
     const target = type === 'news' ? '/news/' : '/node/' + type
     return `${webHost}${target}?page=${page}${title ? `&title=${title}` : '' }`
   }
 }
 
-const getGenesAPI = ({ page, type, title }) => `${webHost}/gene?page=${page}&type=${type}${title ? `&title=${title}` : '' }`;
+const getGenesAPI = ({ page, type, title }) => `${webHost}/gene?page=${page}&type=${type}${title ? `&title=${title}` : '' }`
 
-export const fetchTopics = (...args) => safeFetch(getTopicsAPI(...args)).then(res => topicParser(res));
+export const fetchTopics = (...args) => safeFetch(getTopicsAPI(...args)).then(res => topicParser(res))
 
-export const fetchGenes = (...args) => safeFetch(getGenesAPI(...args)).then(res => geneParser(res));
+export const fetchGenes = (...args) => safeFetch(getGenesAPI(...args)).then(res => geneParser(res))
 
 export const getTopicAPI = uri => safeFetch(uri).then(res => topicApiParser(res, uri.includes('/gene/') ? 'gene' : 'topic'))
 
@@ -126,7 +126,7 @@ export const getTradeTopicAPI = uri => safeFetch(uri).then(res => tradeTopicPars
 export const getGameTopicAPI = uri => safeFetch(uri).then(res => gameTopicParser(res, uri.split('/').pop()))
 
 export const getGameMapperAPI = uri => safeFetch(uri).then(res => {
-  
+
   const id = uri.replace(/\?(.*?)$/, '').split('/').pop()
   switch (id) {
     case 'news':
@@ -160,47 +160,47 @@ export const getTopicCommentAPI = uri => safeFetch(uri).then(res => topicComment
 
 export const getTopicCommentSnapshotAPI = uri => safeFetch(uri).then(res => topicCommentSnapshotApiParser(res))
 
-export const getTopicURL = id => webHost + '/topic/' + id; 
+export const getTopicURL = id => webHost + '/topic/' + id
 
-export const getGeneURL = id => webHost + '/gene/' + id;
+export const getGeneURL = id => webHost + '/gene/' + id
 
-export const getHappyPlusOneURL = id => webHost + '/youhui';
+export const getHappyPlusOneURL = id => webHost + '/youhui'
 
-export const getDealURL = id => webHost + '/trade';
+export const getDealURL = id => webHost + '/trade'
 
-export const getStoreURL = id => webHost + '/store';
+export const getStoreURL = id => webHost + '/store'
 
 export const pngPrefix = 'http://photo.d7vg.com/'
 
-export const getMessagesAPI = id => webHost + '/my/notice';
+export const getMessagesAPI = id => webHost + '/my/notice'
 
-export const fetchMessages = id => safeFetch(getMessagesAPI(id)).then(res => messageParser(res));
+export const fetchMessages = id => safeFetch(getMessagesAPI(id)).then(res => messageParser(res))
 
-export const getBattlesAPI = id => webHost + '/battle';
+export const getBattlesAPI = id => webHost + '/battle'
 
-export const fetchBattles = () => safeFetch(getBattlesAPI()).then(res => battleParser(res));
+export const fetchBattles = () => safeFetch(getBattlesAPI()).then(res => battleParser(res))
 
-export const getBattleURL = id => webHost + '/battle/' + id;
+export const getBattleURL = id => webHost + '/battle/' + id
 
 export const getGamePngURL = id => `${pngPrefix}/psngame/${id}.png@91w.png`
 
-export const getHomeURL = id => `${webHost}/psnid/${id}`;
+export const getHomeURL = id => `${webHost}/psnid/${id}`
 
-export const getRankURL = () => `${webHost}/psnid`;
+export const getRankURL = () => `${webHost}/psnid`
 
-export const getMyGameURL = id => `${webHost}/psnid/${id}/psngame?page=1`;
+export const getMyGameURL = id => `${webHost}/psnid/${id}/psngame?page=1`
 
 export const fetchUser = id => safeFetch(getHomeURL(id)).then(res => userParser(res, id))
 
 export const getQasAPI = ({ page = 1, type = 'all', sort = 'obdate', title }) => webHost + `/qa?page=${page}&type=${type}&ob=${sort}${title ? `&title=${title}` : '' }`
 
-export const fetchQuestion = (...args) => safeFetch(getQasAPI(...args)).then(res => qaParser(res));
+export const fetchQuestion = (...args) => safeFetch(getQasAPI(...args)).then(res => qaParser(res))
 
 export const getQAUrl = id => `${webHost}/qa/${id}`
 
-export const fetchGames = (...args) => safeFetch(getGamesAPI(...args)).then(res => gamesParser(res));
+export const fetchGames = (...args) => safeFetch(getGamesAPI(...args)).then(res => gamesParser(res))
 
-export const fetchRanks = (...args) => safeFetch(getRanksAPI(...args)).then(res => ranksParser(res));
+export const fetchRanks = (...args) => safeFetch(getRanksAPI(...args)).then(res => ranksParser(res))
 
 export const getUserUrl = id => `${webHost}/psnid/${id}`
 
@@ -210,54 +210,54 @@ export const getGamesAPI = ({ page = 1, sort = 'newest', pf = 'all', dlc = 'all'
 
 export const getStoresAPI = ({ page, server, ob, pf, plus, title }) => `${webHost}/store?page=${page}&server=${server}&ob=${ob}&pf=${pf}&plus=${plus}${title ? `&title=${title}` : '' }`
 
-export const fetchStores = (...args) => safeFetch(getStoresAPI(...args)).then(res => storeParser(res));
+export const fetchStores = (...args) => safeFetch(getStoresAPI(...args)).then(res => storeParser(res))
 
-export const getCustomAPI = url => safeFetch(url).then(res => customParser(res));
+export const getCustomAPI = url => safeFetch(url).then(res => customParser(res))
 
-export const getNewBattleAPI = () => safeFetch('http://psnine.com/set/battle').then(res => newBattleParser(res));
+export const getNewBattleAPI = () => safeFetch('http://psnine.com/set/battle').then(res => newBattleParser(res))
 
-export const getNewQaAPI = () => safeFetch('http://psnine.com/set/qa').then(res => newQaParser(res));
+export const getNewQaAPI = () => safeFetch('http://psnine.com/set/qa').then(res => newQaParser(res))
 
 export const getStoreAPI = ({ id, server}) => {
   let url
   let param
-  if (server=='cn') {
-    param = 'CN/zh';
+  if (server == 'cn') {
+    param = 'CN/zh'
     // uparam = 'zh-hans-cn';
-  } else if (server=='hk') {
-    param = 'HK/zh';
+  } else if (server == 'hk') {
+    param = 'HK/zh'
     // uparam = 'zh-hans-hk';
-  } else if(server=='jp') {
-    param = 'JP/ja';
+  } else if (server == 'jp') {
+    param = 'JP/ja'
     // uparam = 'ja-jp';
-  } else if(server=='us') {
-    param = 'US/en';
+  } else if (server == 'us') {
+    param = 'US/en'
     // uparam = 'en-us';
   }
-  return 'https://store.playstation.com/store/api/chihiro/00_09_000/container/'+ param +'/999/' + id;
+  return 'https://store.playstation.com/store/api/chihiro/00_09_000/container/' + param + '/999/' + id
 }
 
-export const fetchStore = ({ id, server}) => safeFetch(getStoreAPI({ id, server}), 'json').then(res => storeTopicParser(res, server));
+export const fetchStore = ({ id, server}) => safeFetch(getStoreAPI({ id, server}), 'json').then(res => storeTopicParser(res, server))
 
 export const getTradeAPI = ({ page, category, type, pf, lang, province, ob, title }) => `${webHost}/trade?page=${page}&category=${category}&type=${type}&pf=${pf}&lang=${lang}&province=${province}&ob=${ob}${title ? `&title=${title}` : '' }`
 
-export const fetchTrades = (...args) => safeFetch(getTradeAPI(...args)).then(res => tradeParser(res));
+export const fetchTrades = (...args) => safeFetch(getTradeAPI(...args)).then(res => tradeParser(res))
 
-export const fetchCircles = (...args) => safeFetch(getCirlclesAPI(...args)).then(res => circlesParser(res));
+export const fetchCircles = (...args) => safeFetch(getCirlclesAPI(...args)).then(res => circlesParser(res))
 
-export const fetchCircle = url => safeFetch(url).then(res => circleParser(res));
+export const fetchCircle = url => safeFetch(url).then(res => circleParser(res))
 
 export const parseNewGeneElement = url => url.includes('psnine.com/gene') ? url : `${webHost}/gene?ele=${url}&page=1`
 
-export const fetchNewGeneElement = url => safeFetch(parseNewGeneElement(url)).then(res => newGeneElementParser(res));
+export const fetchNewGeneElement = url => safeFetch(parseNewGeneElement(url)).then(res => newGeneElementParser(res))
 
-export const getGroupAPI = url => safeFetch(url).then(res => userGroupParser(res));
+export const getGroupAPI = url => safeFetch(url).then(res => userGroupParser(res))
 
-export const getBlockAPI = url => safeFetch(url).then(res => userBlockParser(res));
+export const getBlockAPI = url => safeFetch(url).then(res => userBlockParser(res))
 
-export const fetchCircleLeader = url => safeFetch(url).then(res => circleLeaderParser(res));
+export const fetchCircleLeader = url => safeFetch(url).then(res => circleLeaderParser(res))
 
-export const getDetailAPI = url => safeFetch(url).then(res => detailParser(res));
+export const getDetailAPI = url => safeFetch(url).then(res => detailParser(res))
 
 export const getCirlclesAPI = ({ page, title, type }) => `${webHost}/group?page=${page}&type=${type}${title ? `&title=${title}` : '' }`
 
@@ -267,20 +267,20 @@ export const getCirlcleLeaderAPI = ({ id, page }) => `${webHost}/group/${id}/ran
 
 export const getGamePointURL = id => `${webHost}/psngame/${id}/comment`
 
-export const getGamePointAPI= url => safeFetch(url).then(res => gamePointParser(res));
+export const getGamePointAPI = url => safeFetch(url).then(res => gamePointParser(res))
 
-export const getPhotoAPI= url => safeFetch(url).then(res => photoParser(res));
+export const getPhotoAPI = url => safeFetch(url).then(res => photoParser(res))
 
-export const getUserCircleAPI= url => safeFetch(url).then(res => userCircleParser(res));
+export const getUserCircleAPI = url => safeFetch(url).then(res => userCircleParser(res))
 
 export const getGameUrl = id => `${webHost}/psngame/${id}`
 
-export const getTopicEditAPI = url => safeFetch(url).then(res => topicEditParser(res));
+export const getTopicEditAPI = url => safeFetch(url).then(res => topicEditParser(res))
 
-export const getQaEditAPI = url => safeFetch(url).then(res => qaEditParser(res));
+export const getQaEditAPI = url => safeFetch(url).then(res => qaEditParser(res))
 
-export const getGeneEditAPI = url => safeFetch(url).then(res => geneEditParser(res));
+export const getGeneEditAPI = url => safeFetch(url).then(res => geneEditParser(res))
 
-export const getBattleEditAPI = url => safeFetch(url).then(res => battleEditParser(res));
+export const getBattleEditAPI = url => safeFetch(url).then(res => battleEditParser(res))
 
-export const getTradeEditAPI = url => safeFetch(url).then(res => tradeEditParser(res));
+export const getTradeEditAPI = url => safeFetch(url).then(res => tradeEditParser(res))

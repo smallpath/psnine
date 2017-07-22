@@ -1,15 +1,15 @@
-import { combineReducers } from 'redux';
-import app from './App';
-import battle from './Battle';
-import community from './Community';
-import gene from './Gene';
-import qa from './Qa';
-import game from './Game';
-import rank from './Rank';
-import circle from './Circle';
-import store from './Store';
-import trade from './Trade';
-import recommend from './Recommend';
+import { combineReducers } from 'redux'
+import app from './App'
+import battle from './Battle'
+import community from './Community'
+import gene from './Gene'
+import qa from './Qa'
+import game from './Game'
+import rank from './Rank'
+import circle from './Circle'
+import store from './Store'
+import trade from './Trade'
+import recommend from './Recommend'
 
 const rootReducer = combineReducers({
   app,
@@ -23,6 +23,6 @@ const rootReducer = combineReducers({
   store,
   trade,
   recommend
-});
+})
 
-export default rootReducer;
+export default rootReducer

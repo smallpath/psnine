@@ -11,7 +11,7 @@ const versionInfo = {
   checkVersionURL: 'https://api.github.com/repos/smallpath/psnine/releases/latest',
   tagURL: 'https://github.com/smallpath/psnine/releases/tag',
   backupURL: 'https://fir.im/mf24',
-  version: packages['version']
+  version: packages.version
 }
 
 export default () => fetch(versionInfo.checkVersionURL).then(res => res.json()).then(data => {
@@ -29,7 +29,7 @@ ${format(data.body)}`,
       [
         {text: '备用下载地址', onPress: () => Linking.openURL(versionInfo.backupURL).catch(err => global.toast && global.toast(err.toString()))},
         {text: '取消', style: 'cancel'},
-        {text: '下载', onPress: () => Linking.openURL(`${versionInfo.tagURL}/v${latestTag}`).catch(err => global.toast && global.toast(err.toString()))},
+        {text: '下载', onPress: () => Linking.openURL(`${versionInfo.tagURL}/v${latestTag}`).catch(err => global.toast && global.toast(err.toString()))}
       ]
     )
     return latestTag

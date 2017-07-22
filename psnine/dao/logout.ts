@@ -1,14 +1,14 @@
 import {
-  AsyncStorage,
-} from 'react-native';
+  AsyncStorage
+} from 'react-native'
 
-const logoutURL = 'http://psnine.com/sign/out';
+const logoutURL = 'http://psnine.com/sign/out'
 
 export const safeLogout = async function (psnid) {
   if (psnid == null)
-    return;
+    return
 
-  let data = await fetch(logoutURL);
+  let data = await fetch(logoutURL)
 
-  await AsyncStorage.removeItem('@psnid');
-};
+  await AsyncStorage.removeItem('@psnid')
+}

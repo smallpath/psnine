@@ -20,7 +20,39 @@ const baseStyle = {
   backgroundColor: 'transparent'
 }
 
-export default class ResizableImage extends Component {
+// 外联图片组件, 支持Loading动画
+export default props => {
+  const width = Number(props.attribs['width']) || Number(props.attribs['data-width']) || 0;
+  const height = Number(props.attribs['height']) || Number(props.attribs['data-height']) || 0;
+
+  const imgStyle = {
+    width,
+    height,
+  };
+  let src = props.attribs.src
+  if (/^(.*?):\/\//.exec(src)) {} else {
+    src = 'http://psnine.com' + src
+  }
+
+  const source = {
+    uri: src,
+    width,
+    height,
+    imagePaddingOffset: props.imagePaddingOffset
+  };
+
+  return (
+    <ResizableImage
+      source={source}
+      style={imgStyle}
+      isLoading={props.isLoading}
+      alignCenter={props.alignCenter}
+      modeInfo={props.modeInfo}
+      linkPressHandler={props.linkPressHandler} />
+  );
+};
+
+class ResizableImage extends Component {
   constructor(props) {
     super(props)
     const { width } = Dimensions.get('window')

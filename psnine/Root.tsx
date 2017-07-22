@@ -258,6 +258,7 @@ export default class Root extends React.Component {
   }
 
   setText = (text) => {
+    console.log(text, '==> toasting')
     this.setState({
       text
     })

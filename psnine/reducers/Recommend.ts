@@ -1,4 +1,4 @@
-import * as ActionTypes from '../constants/actionTypes';
+import * as ActionTypes from '../constants/actionTypes'
 import {
   AsyncStorage,
   Alert,
@@ -14,7 +14,7 @@ const initialState = {
 }
 
 function reducer(state = initialState, action) {
-  let newState = state;
+  let newState = state
   switch (action.type) {
     case ActionTypes.GET_RECOMMEND_SUCCESS:
       const { hotGames, nodes, comment, tips, warning } = action.value
@@ -23,18 +23,18 @@ function reducer(state = initialState, action) {
         nodes: nodes.slice(),
         tips: tips.slice(),
         comment: comment.slice(),
-        warning: warning.toString(),
-      });
+        warning: warning.toString()
+      })
       callWarning(warning)
-      return newState;
+      return newState
     case ActionTypes.GET_RECOMMEND_ERROR:
       return state
     default:
-      return state;
+      return state
   }
 }
 
-export default reducer;
+export default reducer
 
 function callWarning (text) {
   Promise.all([
@@ -43,7 +43,7 @@ function callWarning (text) {
   ]).then(arr => {
     const isDisabled = !!arr[0]
     const origin = arr[1] || ''
-    
+
     const shouldCall = text !== '' && (origin !== text || (origin === text && isDisabled === false))
     if (!shouldCall) {
       // if (isDisabled)
@@ -90,11 +90,11 @@ const onP9LinkPress = url => {
   const errHandler = (err) => Linking.openURL(url).catch(err => console.error('Web linking occurred', err))
   if (reg.exec(url)) {
     const target = url.replace(reg, 'p9://')
-    return Linking.openURL(target).catch(errHandler);
+    return Linking.openURL(target).catch(errHandler)
   } else if (/^(.*?):\/\//.exec(url)) {
-    return Linking.openURL(url).catch(err => console.error('Web linking occurred', err));
+    return Linking.openURL(url).catch(err => console.error('Web linking occurred', err))
   } else {
     const target = 'p9://psnine.com' + url
-    return Linking.openURL(target).catch(errHandler);
+    return Linking.openURL(target).catch(errHandler)
   }
 }

@@ -15,7 +15,7 @@ const nightColor = {
   backgroundColor: '#212121',
   brighterLevelOne: '#424242',
   standardTextColor: '#e0e0e0',
-  titleTextColor: '#fff',
+  titleTextColor: '#fff'
 }
 
 const prevGetColor = palette.get.bind(palette)
@@ -42,7 +42,7 @@ for (const name of colorNameArr) {
     deepColor: getColor(name, 700),
     standardColor: getColor(name, 500),
     tintColor: getColor(name, 100),
-    secondaryColorBackup: getColor(name, 'A200'),
+    secondaryColorBackup: getColor(name, 'A200')
   }
 
   exports[`${finalName}Night`] = {
@@ -51,7 +51,7 @@ for (const name of colorNameArr) {
     deepColor: getColor(name, 900),
     standardColor: getColor(name, 700),
     tintColor: getColor(name, 300),
-    secondaryColorBackup: getColor(name, 'A400'),
+    secondaryColorBackup: getColor(name, 'A400')
   }
   // console.log(getColor(getAccentColorName(name), 'A200'), getColor(getAccentColorName(name), 'A400'))
 }

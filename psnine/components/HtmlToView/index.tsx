@@ -4,7 +4,8 @@ import {
   Linking,
   StyleSheet,
   Text,
-  View
+  View,
+  ToastAndroid
 } from 'react-native'
 
 import { standardColor, nodeColor, idColor } from '../../constants/colorConfig';
@@ -39,7 +40,7 @@ const baseStyles = StyleSheet.create({
   }
 });
 
-const urlMapper = /(http:\/\/|https:\/\/)((\w|=|\?|\.|\/|#|\&|-)+)/igm;
+const urlMapper = /(http:\/\/|https:\/\/)((\w|=|\?|\.|\/|#|\&|-|\!)+)/igm
 
 class HtmlView extends Component {
   constructor() {
@@ -152,18 +153,51 @@ HtmlView.propTypes = {
 }
 
 HtmlView.defaultProps = {
-  onLinkPress: url => {
-    const targetURL = url.includes('d7vg.com') ? url.replace('d7vg.com', 'psnine.com') : url
+  onLinkPress: (url, isGettingType) => {
+    let targetURL = url.includes('d7vg.com') ? url.replace('d7vg.com', 'psnine.com') : url
+    let baseURL = targetURL
     const reg = /^(https|http)\:\/\//
-    const errHandler = (err) => Linking.openURL(targetURL).catch(err => console.error('Web linking occurred', err))
+    let errMessage = ''
+    let title = '打开网页'
+    let type = 'general'
+    const request = isGettingType ? () => { return {
+      type, title, errMessage}
+    } : (targetURL) => Linking.openURL(targetURL).catch(err => {
+      ToastAndroid.show(errMessage || err.toString(), ToastAndroid.SHORT) 
+      errHandler(err)
+    })
+    const errHandler = (err) => Linking.openURL(baseURL).catch(err => toast(errMessage || err.toString()))
+
+    // 深度链接
+    if (targetURL.includes('music.163.com')) {
+      const matched = targetURL.match(/id\=(\d+)/)
+      if (matched) {
+        targetURL = `orpheus://song/${matched[1]}`
+        errMessage = `打开网易云音乐失败 (id:${matched[1]})`
+        type = 'music163'
+        title = `网易云音乐: ${matched[1]}`
+        return request(targetURL)
+      }
+    } else if (targetURL.includes('bilibili.com')) {
+      let matched = targetURL.match(/aid\=(\d+)/)
+      if (!matched) matched = targetURL.match(/\/video\/av(\d+)/)
+      if (matched) {
+        targetURL = `bilibili://video/${matched[1]}`
+        errMessage = `打开B站视频失败 (av${matched[1]})`
+        type = 'bilibili'
+        title = `B站视频: av${matched[1]}`
+        return request(targetURL)
+      }
+    }
+
     if (reg.exec(targetURL)) {
       const target = targetURL.replace(reg, 'p9://')
-      return Linking.openURL(target).catch(errHandler);
+      return request(target)
     } else if (/^(.*?):\/\//.exec(targetURL)) {
-      return Linking.openURL(targetURL).catch(err => console.error('Web linking occurred', err));
+      return request(targetURL)
     } else {
       const target = 'p9://psnine.com' + targetURL
-      return Linking.openURL(target).catch(errHandler);
+      return request(target)
     }
   },
   onImageLongPress: url => Linking.openURL(url),

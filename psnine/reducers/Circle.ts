@@ -1,4 +1,4 @@
-import * as ActionTypes from '../constants/actionTypes';
+import * as ActionTypes from '../constants/actionTypes'
 
 const initialState = {
   page: 0,
@@ -7,7 +7,7 @@ const initialState = {
 }
 
 function reducer(state = initialState, action) {
-  let newState = state;
+  let newState = state
   switch (action.type) {
     case ActionTypes.GET_CIRCLE_SUCCESS:
       if (action.page === 1) {
@@ -15,24 +15,24 @@ function reducer(state = initialState, action) {
           list: action.value.list,
           page: 1,
           numPages: action.value.numPages
-        });
+        })
       } else {
         newState = Object.assign({}, state, {
           list: state.list.concat(action.value.list),
           page: state.page + 1,
           numPages: action.value.numPages
-        });
+        })
       }
-      return newState;
+      return newState
     case ActionTypes.GET_CIRCLE_ERROR:
       newState = Object.assign({}, state, {
         page: 0,
         list: [],
-        numPages: 10,
-      });
+        numPages: 10
+      })
     default:
-      return state;
+      return state
   }
 }
 
-export default reducer;
+export default reducer

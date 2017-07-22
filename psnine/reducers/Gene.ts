@@ -1,34 +1,34 @@
-import * as ActionTypes from '../constants/actionTypes';
+import * as ActionTypes from '../constants/actionTypes'
 
 const initialState = {
   genePage: 0,
-  genes: [],
+  genes: []
 }
 
 function reducer(state = initialState, action) {
-  let newState = state;
+  let newState = state
   switch (action.type) {
     case ActionTypes.GET_GENES_SUCCESS:
       if (action.page === 1) {
         newState = Object.assign({}, state, {
           genes: action.value,
-          genePage: 1,
-        });
+          genePage: 1
+        })
       } else {
         newState = Object.assign({}, state, {
           genes: state.genes.concat(action.value),
-          genePage: state.genePage + 1,
-        });
+          genePage: state.genePage + 1
+        })
       }
-      return newState;
+      return newState
     case ActionTypes.GET_GENES_ERROR:
       newState = Object.assign({}, state, {
         genePage: 0,
-        genes: [],
-      });
+        genes: []
+      })
     default:
-      return state;
+      return state
   }
 }
 
-export default reducer;
+export default reducer

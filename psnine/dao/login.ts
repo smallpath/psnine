@@ -1,18 +1,18 @@
 
-const loginURL = 'http://psnine.com/sign/in';
+const loginURL = 'http://psnine.com/sign/in'
 
-export const registURL = `http://psnine.com/psnauth`;
+export const registURL = `http://psnine.com/psnauth`
 
 export const safeLogin = function (psnid, pass) {
-  let signin = '';
-  let formBody = [];
-  let details = { psnid, pass, signin };
-  for (var property in details) {
-    var encodedKey = encodeURIComponent(property);
-    var encodedValue = encodeURIComponent(details[property]);
-    formBody.push(encodedKey + "=" + encodedValue);
+  let signin = ''
+  let formBody = []
+  let details = { psnid, pass, signin }
+  for (let property in details) {
+    let encodedKey = encodeURIComponent(property)
+    let encodedValue = encodeURIComponent(details[property])
+    formBody.push(encodedKey + '=' + encodedValue)
   }
-  formBody = formBody.join("&");
+  formBody = formBody.join('&')
 
   return new Promise((resolve, reject) => {
     fetch(loginURL, {
@@ -21,10 +21,10 @@ export const safeLogin = function (psnid, pass) {
         'Accept': 'text/html,application/xhtml+xml,application/xml',
         'Content-Type': 'application/x-www-form-urlencoded'
       },
-      body: formBody,
+      body: formBody
     })
       .then((responseData) => {
-        return resolve(responseData.text());
+        return resolve(responseData.text())
       })
-  });
-};
+  })
+}

@@ -1,7 +1,7 @@
-import React, { ToastAndroid } from 'react-native';
-import * as ActionTypes from '../constants/actionTypes';
+import React, { ToastAndroid } from 'react-native'
+import * as ActionTypes from '../constants/actionTypes'
 
-import { fetchCircles } from '../dao';
+import { fetchCircles } from '../dao'
 
 export function getCircleList(page = 1, {
   type = '',
@@ -10,12 +10,12 @@ export function getCircleList(page = 1, {
   return dispatch => {
     return fetchCircles({ page, type, title })
       .then(response => {
-        dispatch(gotList(response, page, type));
+        dispatch(gotList(response, page, type))
       }).catch(err => {
         console.error('circleActionError', err)
-        dispatch(gotListError());
-        global.toast && global.toast('网络错误', 2000);
-      });
+        dispatch(gotListError())
+        global.toast && global.toast('网络错误', 2000)
+      })
   }
 }
 
@@ -23,12 +23,12 @@ function gotList(argument, page, type) {
   return {
     type: ActionTypes.GET_CIRCLE_SUCCESS,
     value: argument,
-    page: page,
-  };
+    page: page
+  }
 }
 
 function gotListError() {
   return {
-    type: ActionTypes.GET_CIRCLE_ERROR,
-  };
+    type: ActionTypes.GET_CIRCLE_ERROR
+  }
 }

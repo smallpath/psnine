@@ -21,7 +21,32 @@ let toolbarActions = [
 ];
 let title = "TOPIC";
 
-export default class HtmlView extends Component {
+
+// 显示embed和iframe内容的Modal组件
+export default props => {
+  const width = Number(props.attribs['width']) || Number(props.attribs['data-width']) || 0;
+  const height = Number(props.attribs['height']) || Number(props.attribs['data-height']) || 0;
+
+  const imgStyle = {
+    width,
+    height,
+  };
+
+  const value = `<html><head></head><body><${props.name} ` + Object.keys(props.attribs).map(name => `${name}="${props.attribs[name]}"`).join(' ') + '/></body></html>'
+
+  return (
+    <HtmlView
+      value={value}
+      style={imgStyle}
+      linkPressHandler={props.linkPressHandler}
+      imagePaddingOffset={props.imagePaddingOffset}
+      url={props.attribs.src}
+      modeInfo={props.modeInfo}
+    />
+  );
+};
+
+class HtmlView extends Component {
   constructor(props) {
     super(props)
     let height = this.props.style.height || '100%'
@@ -58,7 +83,7 @@ export default class HtmlView extends Component {
     const { width, height: SCEEN_HEIGHT } = Dimensions.get('window')
     const cb = () => {
       if (this.state.canGoBack === true) {
-        this.webview.goBack();
+        this.webview.goBack()
         return
       }
       this.setState({
@@ -70,36 +95,15 @@ export default class HtmlView extends Component {
     const { url } = this.props
     let target = url
     let type = 'general'
-    // console.log(url)
-    if (url.includes('music.163.com')) {
-      const matched = url.match(/id\=(\d+)/)
-      if (matched) {
-        target = `orpheus://song/${matched[1]}`
-        type = 'music163'
-        title = `网易云音乐: ${matched[1]}`
-      }
-    } else if (url.includes('html5player.html?aid=')) {
-      const matched = url.match(/aid\=(\d+)/)
-      // console.log(matched, '====> ')
-      if (matched) {
-        target = `bilibili://video/${matched[1]}`
-        type = 'bilibili'
-        title = `B站视频: av${matched[1]}`
-      }
-    }
 
-
+    const resolved = this.props.linkPressHandler(url, true)
 
     return (
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', padding: 5, alignSelf: 'center', alignContent: 'center'  }}>
         <Button color={this.props.modeInfo.accentColor} style={{
 
-        }} title={title} onPress={() => { 
-          return Linking.openURL(target).catch(err => {
-            if (type === 'music163') ToastAndroid.show('未找到网易云音乐客户端', ToastAndroid.SHORT)
-            else if (type === 'bilibili') ToastAndroid.show('未找到B站客户端', ToastAndroid.SHORT)
-            Linking.openURL(url).catch(err => {})
-          })
+        }} title={resolved.title} onPress={() => { 
+          return this.props.linkPressHandler(url)
         }}></Button>
         {this.state.modalVisible && (
           <MyDialog modeInfo={this.props.modeInfo}

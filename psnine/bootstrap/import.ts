@@ -10,21 +10,21 @@ import ReactNative, {
   Platform,
   TouchableNativeFeedback,
   TouchableOpacity,
-  View,
+  View
 } from 'react-native'
 
-let TouchableComponent;
+let TouchableComponent
 
 if (Platform.OS === 'android') {
-  TouchableComponent = Platform.Version <= 20 ? TouchableOpacity : TouchableNativeFeedback;
+  TouchableComponent = Platform.Version <= 20 ? TouchableOpacity : TouchableNativeFeedback
 } else {
-  TouchableComponent = TouchableOpacity;
+  TouchableComponent = TouchableOpacity
 }
 
 if (TouchableComponent !== TouchableNativeFeedback) {
-  TouchableComponent.SelectableBackground = () => ({});
-  TouchableComponent.SelectableBackgroundBorderless = () => ({});
-  TouchableComponent.Ripple = (color, borderless) => ({});
+  TouchableComponent.SelectableBackground = () => ({})
+  TouchableComponent.SelectableBackgroundBorderless = () => ({})
+  TouchableComponent.Ripple = (color, borderless) => ({})
 }
 
 ReactNative.TouchableNativeFeedback = TouchableOpacity

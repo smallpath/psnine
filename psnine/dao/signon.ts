@@ -1,11 +1,11 @@
 import {
-  AsyncStorage,
-} from 'react-native';
+  AsyncStorage
+} from 'react-native'
 
-let numStr = '<b style="color:red;">';
-let dayStr = '<b style="color:green;">';
+let numStr = '<b style="color:red;">'
+let dayStr = '<b style="color:green;">'
 
-const signonURL = 'http://psnine.com/set/qidao/ajax';
+const signonURL = 'http://psnine.com/set/qidao/ajax'
 
 export const fetchSignOn = function (psnid) {
 
@@ -16,52 +16,51 @@ export const fetchSignOn = function (psnid) {
         'Accept': '*/*'
       }
     }).then((response) => {
-      setTimeout(() => null, 0);
-      return response.text();
+      setTimeout(() => null, 0)
+      return response.text()
     })
     .then(html => {
       if (html === '今天已经签过了') {
         return resolve('今天已经签过了')
       }
-      let num = parseSignOn(html, numStr);
-      let day = parseDays(html, dayStr);
-      resolve(num + '\r\n' + day);
+      let num = parseSignOn(html, numStr)
+      let day = parseDays(html, dayStr)
+      resolve(num + '\r\n' + day)
     })
-  });
-};
+  })
+}
 
 const parseSignOn = (source, pattern) => {
-  let index = source.indexOf(pattern);
-  let str = '';
+  let index = source.indexOf(pattern)
+  let str = ''
   if (index != -1) {
-    index += pattern.length;
+    index += pattern.length
     while (source[index] != '<') {
-      str += source[index];
-      index++;
+      str += source[index]
+      index++
     }
   }
-  return '本次祈祷得到 ' + str + ' 铜币';
+  return '本次祈祷得到 ' + str + ' 铜币'
 }
 
 const parseDays = (source, pattern) => {
-  let index = source.indexOf(pattern);
-  let str = '';
+  let index = source.indexOf(pattern)
+  let str = ''
   if (index != -1) {
-    index += pattern.length;
+    index += pattern.length
     while (source[index] != '<') {
-      str += source[index];
-      index++;
+      str += source[index]
+      index++
     }
   }
-  return '恭喜你已签到 ' + str + ' 天了';
+  return '恭喜你已签到 ' + str + ' 天了'
 }
-
 
 export const safeSignOn = async function (psnid) {
   if (psnid == null)
-    return;
+    return
 
-  let data = await fetchSignOn(psnid);
+  let data = await fetchSignOn(psnid)
 
-  return data;
-};
+  return data
+}

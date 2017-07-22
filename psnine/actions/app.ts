@@ -1,5 +1,5 @@
-import React, { NativeModules } from 'react-native';
-import * as ActionTypes from '../constants/actionTypes';
+import React, { NativeModules } from 'react-native'
+import * as ActionTypes from '../constants/actionTypes'
 
 export function changeSegmentIndex(argument) {
   return {
@@ -35,4 +35,4 @@ export function changeScrollType(argument) {
     value: argument
   }
 }
-
+

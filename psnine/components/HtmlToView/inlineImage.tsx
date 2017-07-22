@@ -6,7 +6,8 @@ import {
   ActivityIndicator,
   PixelRatio,
   View,
-  TouchableNativeFeedback
+  TouchableNativeFeedback,
+  Text
 } from 'react-native';
 
 import { standardColor, nodeColor, idColor, accentColor } from '../../constants/colorConfig';
@@ -19,7 +20,39 @@ const baseStyle = {
   backgroundColor: 'transparent'
 }
 
-export default class InlineImage extends Component {
+export default props => {
+  const width = Number(props.attribs['width']) || Number(props.attribs['data-width']) || 0;
+  const height = Number(props.attribs['height']) || Number(props.attribs['data-height']) || 0;
+
+  const imgStyle = {
+    width,
+    height,
+  };
+  let src = props.attribs.src
+  if (/^(.*?):\/\//.exec(src)) {} else {
+    src = 'http://psnine.com' + src
+  }
+  const source = {
+    uri: src,
+    width,
+    height,
+    imagePaddingOffset: props.imagePaddingOffset
+  };
+
+  return (
+    <Text onLongPress={props.linkPressHandler}>
+      <InlineImage
+        source={source}
+        style={imgStyle}
+        isLoading={props.isLoading}
+        alignCenter={props.alignCenter}
+        modeInfo={props.modeInfo}
+        linkPressHandler={props.linkPressHandler} />
+    </Text>
+  );
+};
+
+class InlineImage extends Component {
   constructor(props) {
     super(props)
     const maxWidth = width - this.props.source.imagePaddingOffset

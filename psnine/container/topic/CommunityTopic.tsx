@@ -534,7 +534,7 @@ class CommunityTopic extends Component {
     const list = []
     for (const item of page) {
       const thisJSX = (
-        <TouchableNativeFeedback key={item.url} onPress={() => {
+        <TouchableNativeFeedback key={item.url} background={TouchableNativeFeedback.SelectableBackgroundBorderless()} onPress={() => {
           if (this.state.isLoading === true) {
             return
           }
@@ -548,8 +548,8 @@ class CommunityTopic extends Component {
             })
           })
         }}>
-          <View style={{ flex: -1, padding: 2 }}>
-            <Text style={{ color: modeInfo.standardColor }}>{item.text}</Text>
+          <View style={{ flex: -1, padding: 4, paddingHorizontal: 6, backgroundColor: modeInfo.standardColor, margin: 2, borderRadius: 2 }}>
+            <Text style={{ color: modeInfo.backgroundColor }}>{item.text}</Text>
           </View>
         </TouchableNativeFeedback>
       )
@@ -561,7 +561,9 @@ class CommunityTopic extends Component {
           elevation: 0,
           margin: 5,
           backgroundColor: modeInfo.backgroundColor,
-          padding: 5
+          padding: 5,
+          flexDirection: 'row',
+          flexWrap: 'wrap'
         }}>
           {list}
         </View>

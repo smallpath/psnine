@@ -12,11 +12,11 @@ export const postReply = (form, type = 'post') => {
   if (type === 'dalao') url = dalao
   let formBody = []
   for (let property in form) {
-    const encodedKey = encodeURIComponent(property);
-    const encodedValue = encodeURIComponent(form[property]);
-    formBody.push(encodedKey + "=" + encodedValue);
+    const encodedKey = encodeURIComponent(property)
+    const encodedValue = encodeURIComponent(form[property])
+    formBody.push(encodedKey + '=' + encodedValue)
   }
-  formBody = formBody.join("&");
+  formBody = formBody.join('&')
   return fetch(url, {
     method: 'POST',
     headers: {
@@ -32,17 +32,17 @@ const createMapper = {
   'qa' : 'http://psnine.com/set/qa/post',
   'gene' : 'http://psnine.com/set/gene/post',
   'battle' : 'http://psnine.com/set/battle/post',
-  'trade' : 'http://psnine.com/set/trade/post',
+  'trade' : 'http://psnine.com/set/trade/post'
 }
 
 export const postCreateTopic = (form, type = 'topic') => {
   let formBody = []
   for (let property in form) {
-    const encodedKey = encodeURIComponent(property);
-    const encodedValue = encodeURIComponent(form[property]);
-    formBody.push(encodedKey + "=" + encodedValue);
+    const encodedKey = encodeURIComponent(property)
+    const encodedValue = encodeURIComponent(form[property])
+    formBody.push(encodedKey + '=' + encodedValue)
   }
-  formBody = formBody.join("&");
+  formBody = formBody.join('&')
   const url = createMapper[type]
   if (!url) throw new Error('create Mappler not found: ' + type)
   return fetch(url, {
@@ -59,11 +59,11 @@ const circleURL = 'http://psnine.com/set/group/ajax'
 export const postCircle = form => {
   let formBody = []
   for (let property in form) {
-    const encodedKey = encodeURIComponent(property);
-    const encodedValue = encodeURIComponent(form[property]);
-    formBody.push(encodedKey + "=" + encodedValue);
+    const encodedKey = encodeURIComponent(property)
+    const encodedValue = encodeURIComponent(form[property])
+    formBody.push(encodedKey + '=' + encodedValue)
   }
-  formBody = formBody.join("&");
+  formBody = formBody.join('&')
   return fetch(circleURL, {
     method: 'POST',
     headers: {
@@ -78,11 +78,11 @@ const passURL = 'http://psnine.com/my/pass'
 export const postPass = form => {
   let formBody = []
   for (let property in form) {
-    const encodedKey = encodeURIComponent(property);
-    const encodedValue = encodeURIComponent(form[property]);
-    formBody.push(encodedKey + "=" + encodedValue);
+    const encodedKey = encodeURIComponent(property)
+    const encodedValue = encodeURIComponent(form[property])
+    formBody.push(encodedKey + '=' + encodedValue)
   }
-  formBody = formBody.join("&");
+  formBody = formBody.join('&')
   return fetch(passURL, {
     method: 'POST',
     headers: {
@@ -97,11 +97,11 @@ const settingURL = 'http://psnine.com/my/setting'
 export const postSetting = form => {
   let formBody = []
   for (let property in form) {
-    const encodedKey = encodeURIComponent(property);
-    const encodedValue = encodeURIComponent(form[property]);
-    formBody.push(encodedKey + "=" + encodedValue);
+    const encodedKey = encodeURIComponent(property)
+    const encodedValue = encodeURIComponent(form[property])
+    formBody.push(encodedKey + '=' + encodedValue)
   }
-  formBody = formBody.join("&");
+  formBody = formBody.join('&')
   return fetch(settingURL, {
     method: 'POST',
     headers: {
@@ -131,11 +131,11 @@ export const postImage = image => {
 export const postDeleteImage = form => {
   let formBody = []
   for (let property in form) {
-    const encodedKey = encodeURIComponent(property);
-    const encodedValue = encodeURIComponent(form[property]);
-    formBody.push(encodedKey + "=" + encodedValue);
+    const encodedKey = encodeURIComponent(property)
+    const encodedValue = encodeURIComponent(form[property])
+    formBody.push(encodedKey + '=' + encodedValue)
   }
-  formBody = formBody.join("&");
+  formBody = formBody.join('&')
   return fetch(imageURL, {
     method: 'POST',
     headers: {
@@ -149,11 +149,11 @@ export const postDeleteImage = form => {
 export const translate = form => {
   let formBody = []
   for (let property in form) {
-    const encodedKey = encodeURIComponent(property);
-    const encodedValue = encodeURIComponent(form[property]);
-    formBody.push(encodedKey + "=" + encodedValue);
+    const encodedKey = encodeURIComponent(property)
+    const encodedValue = encodeURIComponent(form[property])
+    formBody.push(encodedKey + '=' + encodedValue)
   }
-  formBody = formBody.join("&");
+  formBody = formBody.join('&')
   // return new Promise();
   return fetch('http://psnine.com/set/cn/post', {
     method: 'POST',

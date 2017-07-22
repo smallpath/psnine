@@ -9,9 +9,9 @@ import {
 import htmlparser from 'htmlparser2-without-node-native';
 import entities from 'entities';
 
-import AutoSizedImage from './resizableImage';
-import InlineImage from './inlineImage';
-import AutoSizedWebview from './webview';
+import ResizableImgComponent from './resizableImage';
+import InlineImgComponent from './inlineImage';
+import Web from './webview';
 import MarkText from './markText'
 
 const LINE_BREAK = '\n';
@@ -21,102 +21,9 @@ const inlineElements = ['a', 'span', 'em', 'font', 'label', 'b', 'strong', 'i', 
 const blockLevelElements = ['pre', 'p', 'br', 'h1', 'h2', 'h3', 'h4', 'h5', 'blockquote']
 const { width: SCEEN_WIDTH } = Dimensions.get('window')
 
-// 安卓不允许Text中嵌套View, 只允许嵌套Text和Image, 因此将图片分为第一层的外联图片和其他层的内联图片
-
-// 外联图片组件, 支持Loading动画
-const ResizableImgComponent = props => {
-  const width = Number(props.attribs['width']) || Number(props.attribs['data-width']) || 0;
-  const height = Number(props.attribs['height']) || Number(props.attribs['data-height']) || 0;
-
-  const imgStyle = {
-    width,
-    height,
-  };
-  let src = props.attribs.src
-  if (/^(.*?):\/\//.exec(src)) {} else {
-    src = 'http://psnine.com' + src
-  }
-
-  // props.imageArr.push(src)
-  // console.log(props.imageArr)
-
-  const source = {
-    uri: src,
-    width,
-    height,
-    imagePaddingOffset: props.imagePaddingOffset
-  };
-
-  return (
-    <AutoSizedImage
-      source={source}
-      style={imgStyle}
-      isLoading={props.isLoading}
-      alignCenter={props.alignCenter}
-      modeInfo={props.modeInfo}
-      linkPressHandler={props.linkPressHandler} />
-  );
-};
-
-// 内联图片组件
-const InlineImgComponent = props => {
-  const width = Number(props.attribs['width']) || Number(props.attribs['data-width']) || 0;
-  const height = Number(props.attribs['height']) || Number(props.attribs['data-height']) || 0;
-
-  const imgStyle = {
-    width,
-    height,
-  };
-  let src = props.attribs.src
-  if (/^(.*?):\/\//.exec(src)) {} else {
-    src = 'http://psnine.com' + src
-  }
-  const source = {
-    uri: src,
-    width,
-    height,
-    imagePaddingOffset: props.imagePaddingOffset
-  };
-
-  return (
-    <Text onLongPress={props.linkPressHandler}>
-       <InlineImage
-         source={source}
-         style={imgStyle}
-         isLoading={props.isLoading}
-         alignCenter={props.alignCenter}
-         modeInfo={props.modeInfo}
-         linkPressHandler={props.linkPressHandler} />
-    </Text>
-  );
-};
-
-// 显示embed和iframe内容的Modal组件
-const Web = props => {
-  const width = Number(props.attribs['width']) || Number(props.attribs['data-width']) || 0;
-  const height = Number(props.attribs['height']) || Number(props.attribs['data-height']) || 0;
-
-  const imgStyle = {
-    width,
-    height,
-  };
-
-  const value = `<html><head></head><body><${props.name} ` + Object.keys(props.attribs).map(name => `${name}="${props.attribs[name]}"`).join(' ') + '/></body></html>'
-
-  return (
-    <AutoSizedWebview
-      value={value}
-      style={imgStyle}
-      imagePaddingOffset={props.imagePaddingOffset}
-      url={props.attribs.src}
-      modeInfo={props.modeInfo}
-    />
-  );
-};
-
 export default function htmlToElement(rawHtml, opts, done) {
   function domToElement(dom, parent, inInsideView = true, depth = 0, parentIframe = 0) {
-    
+
     // debug开关函数
     const log = () =>{}
     // const log = (text, ...args) => console.log(`第${depth}层 ${Array(depth).fill('      ').join('')}${text} ${args.join(' ')}`)
@@ -318,18 +225,21 @@ export default function htmlToElement(rawHtml, opts, done) {
           // console.log(parentIframe)
           return (
             <ImageComponent key={index} attribs={node.attribs}
-                isLoading={opts.shouldShowLoadingIndicator}
-                linkPressHandler={linkPressHandler}
-                alignCenter={opts.alignCenter}
-                modeInfo={opts.modeInfo}
-                imageArr={opts.imageArr}
-                imagePaddingOffset={opts.imagePaddingOffset + parentIframe} />
-            );
+              isLoading={opts.shouldShowLoadingIndicator}
+              linkPressHandler={linkPressHandler}
+              alignCenter={opts.alignCenter}
+              modeInfo={opts.modeInfo}
+              imageArr={opts.imageArr}
+              imagePaddingOffset={opts.imagePaddingOffset + parentIframe}
+            />
+          );
         } else if (node.name === 'embed' || node.name === 'iframe') {
           if (inInsideView) {
             const target = Object.assign({}, node.attribs)
             return (
-              <Web key={index} attribs={target} imagePaddingOffset={opts.imagePaddingOffset} modeInfo={opts.modeInfo} name={node.name} />
+              <Web key={index} attribs={target}
+                linkPressHandler={opts.linkHandler}
+                imagePaddingOffset={opts.imagePaddingOffset} modeInfo={opts.modeInfo} name={node.name} />
             )
           } else {
             return (
