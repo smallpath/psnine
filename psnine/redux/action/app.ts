@@ -1,4 +1,3 @@
-import React, { NativeModules } from 'react-native'
 import * as ActionTypes from '../../constant/actionTypes'
 
 export function changeSegmentIndex(argument) {

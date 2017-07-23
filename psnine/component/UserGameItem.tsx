@@ -1,28 +1,14 @@
-import React, { Component } from 'react'
+import React from 'react'
 import {
   StyleSheet,
   Text,
   View,
-  ListView,
   Image,
   TouchableNativeFeedback,
-  RefreshControl,
-  InteractionManager,
-  Picker,
   ProgressBarAndroid
 } from 'react-native'
 
-import { getGameUrl } from '../dao'
-
-import colorConfig, { standardColor, nodeColor, idColor,
-  errorColor,
-  warningColor,
-  successColor,
-  perfectColor,
-  textWarningColor,
-  textSuccessColor,
-  textErrorColor,
-  textPerfectColor,
+import colorConfig, {
   getColorFromProgress,
   getLevelColorFromProgress,
   getContentFromTrophy

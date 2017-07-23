@@ -3,22 +3,15 @@ import {
   StyleSheet,
   Text,
   View,
-  ListView,
-  Image,
-  TouchableNativeFeedback,
   RefreshControl,
-  InteractionManager,
   SectionList,
   Animated
 } from 'react-native'
 
 import { connect } from 'react-redux'
 import { getRecommend } from '../../redux/action/recommend.js'
-import { getTopicList } from '../../redux/action/community.js'
-import { standardColor, nodeColor, idColor, accentColor } from '../../constant/colorConfig'
-import { changeSegmentIndex, changeCommunityType, changeGeneType, changeCircleType } from '../../redux/action/app'
+import { changeCommunityType } from '../../redux/action/app'
 
-import { getBattleURL, getGamePngURL } from '../../dao'
 import HotGameItem from '../../component/HotGameItem'
 import NodeItem from '../../component/NodeItem'
 import TipItem from '../../component/TipItem'

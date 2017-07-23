@@ -1,37 +1,18 @@
-import React, { Component } from 'react'
+import React from 'react'
 import {
-  AppRegistry,
   StyleSheet,
   Text,
   View,
   Image,
   Dimensions,
-  TouchableNativeFeedback,
-  InteractionManager,
-  ActivityIndicator,
-  StatusBar,
-  Animated,
-  Easing,
-  FlatList,
-  PanResponder,
-  Modal,
-  Keyboard
+  TouchableNativeFeedback
 } from 'react-native'
 
-import { connect } from 'react-redux'
-import Ionicons from 'react-native-vector-icons/Ionicons'
-import colorConfig, { standardColor, nodeColor, idColor,
-  accentColor,
-  levelColor,
-  rankColor
+import colorConfig, {
+  levelColor
 } from '../constant/colorConfig'
 
 import { getHomeURL } from '../dao'
-
-import {
-  getGamePointAPI,
-  getTopicURL
-} from '../dao'
 
 let screen = Dimensions.get('window')
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = screen

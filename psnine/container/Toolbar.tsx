@@ -4,44 +4,23 @@ import {
   Text,
   View,
   ListView,
-  Image,
-  DrawerLayoutAndroid,
-  ToolbarAndroid,
-  ToastAndroid,
-  BackHandler,
-  TouchableOpacity,
   Dimensions,
-  TouchableNativeFeedback,
-  RefreshControl,
-  InteractionManager,
   Animated,
   Easing,
-  PanResponder,
-  TouchableHighlight,
   TouchableWithoutFeedback,
   StatusBar,
-  Modal,
-  Keyboard,
-  AsyncStorage,
-  ViewPagerAndroid,
-  Platform,
-  PixelRatio
+  ViewPagerAndroid
 } from 'react-native'
 import Icon from 'react-native-vector-icons/Ionicons'
-import MyDialog from '../component/Dialog'
-import nativeImageSource from 'nativeImageSource'
 
 import { connect } from 'react-redux'
 
-import NewTopic from './new/NewTopic'
-
-import { changeSegmentIndex, changeCommunityType, changeGeneType, changeCircleType } from '../redux/action/app'
+import { changeSegmentIndex, changeCommunityType, changeGeneType } from '../redux/action/app'
 import { getRecommend } from '../redux/action/recommend'
 
-import { standardColor, accentColor } from '../constant/colorConfig'
+import { standardColor } from '../constant/colorConfig'
 
-import RightDrawer from './RightDrawer'
-import TabContainer, { routes } from './Tab'
+import { routes } from './Tab'
 
 let screen = Dimensions.get('window')
 
@@ -145,15 +124,11 @@ const timeout = 190
 const delay = 50
 
 import {
-  ExtraDimensionsAndroid,
   AppBarLayoutAndroid,
   CoordinatorLayoutAndroid,
-  NestedScrollViewAndroid,
   TabLayoutAndroid,
   PopupWindowAndroid
 } from 'mao-rn-android-kit'
-
-import NestedScrollView from 'react-native-nested-scrollview'
 
 class Toolbar extends Component {
 

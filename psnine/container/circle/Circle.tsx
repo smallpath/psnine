@@ -1,40 +1,24 @@
 import React, { Component } from 'react'
 import {
-  AppRegistry,
   StyleSheet,
-  ToastAndroid,
   Text,
   View,
-  Image,
   Dimensions,
   TouchableNativeFeedback,
   InteractionManager,
-  ActivityIndicator,
   StatusBar,
   Animated,
   Easing,
   FlatList,
-  PanResponder,
-  Modal,
-  Keyboard,
-  ScrollView,
-  BackHandler,
   Button,
   RefreshControl,
   Slider
 } from 'react-native'
 
-import { sync } from '../../dao/sync'
-
-import { connect } from 'react-redux'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import {
   standardColor,
-  nodeColor,
-  idColor,
-  accentColor,
-  levelColor,
-  rankColor
+  idColor
 } from '../../constant/colorConfig'
 
 import { fetchNewGeneElement as getAPI } from '../../dao'

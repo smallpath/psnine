@@ -1,13 +1,8 @@
 import React, { Component } from 'react'
 import {
   StyleSheet,
-  Text,
   View,
-  Image,
-  ToastAndroid,
-  BackHandler,
   Dimensions,
-  TouchableNativeFeedback,
   KeyboardAvoidingView,
   InteractionManager,
   Keyboard,
@@ -21,16 +16,12 @@ import {
   Button
 } from 'react-native'
 
-import { connect } from 'react-redux'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import { standardColor, accentColor } from '../../constant/colorConfig'
 
-import { pngPrefix, getDealURL, getHappyPlusOneURL, getStoreURL, getTradeEditAPI } from '../../dao'
+import { getTradeEditAPI } from '../../dao'
 
-import { safeLogin, registURL } from '../../dao/login'
 import { postCreateTopic } from '../../dao/post'
-
-import Emotion from '../../component/Emotion'
 
 let title = '发布交易'
 

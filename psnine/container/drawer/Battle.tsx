@@ -3,20 +3,14 @@ import {
   StyleSheet,
   Text,
   View,
-  ListView,
-  Image,
-  TouchableNativeFeedback,
   RefreshControl,
-  InteractionManager,
   SectionList,
   Animated
 } from 'react-native'
 
 import { connect } from 'react-redux'
 import { getBattleList } from '../../redux/action/battle.js'
-import { standardColor, nodeColor, idColor, accentColor } from '../../constant/colorConfig'
 
-import { getBattleURL, getGamePngURL } from '../../dao'
 import BattleItem from '../../component/BattleItem'
 const AnimatedSectionList = Animated.createAnimatedComponent(SectionList)
 

@@ -3,21 +3,14 @@ import {
   StyleSheet,
   Text,
   View,
-  ListView,
-  Image,
-  TouchableNativeFeedback,
-  RefreshControl,
   InteractionManager,
   SectionList,
   Animated,
-  FlatList,
   ScrollView,
   Button,
   ActivityIndicator
 } from 'react-native'
 
-import { connect } from 'react-redux'
-import { standardColor, nodeColor, idColor, accentColor } from '../../constant/colorConfig'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import { getDetailAPI, getNBAPI } from '../../dao'
 import CircleItem from '../../component/CircleItem'
@@ -62,7 +55,7 @@ export default class Detail extends Component {
         this.setState({
           data: arr[1],
           nb: arr[0],
-          isLoading: false,
+          isLoading: false
         })
       })
     })

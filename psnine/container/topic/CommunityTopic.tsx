@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import {
-  AppRegistry,
   StyleSheet,
   Text,
   View,
@@ -13,20 +12,15 @@ import {
   Animated,
   Easing,
   FlatList,
-  PanResponder,
-  Modal,
-  Keyboard,
   Linking
 } from 'react-native'
 
-import { sync, updown, fav } from '../../dao/sync'
+import { updown, fav } from '../../dao/sync'
 
-import { connect } from 'react-redux'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import colorConfig, {
-  standardColor, nodeColor, idColor, accentColor,
-  getLevelColorFromProgress,
-  getContentFromTrophy
+  standardColor, idColor, accentColor,
+  getLevelColorFromProgress
 } from '../../constant/colorConfig'
 
 import {
@@ -35,7 +29,6 @@ import {
   getTopicCommentSnapshotAPI,
   getBattleAPI
 } from '../../dao'
-import ImageViewer from '../../component/ImageViewer'
 import SimpleComment from '../../component/SimpleComment'
 import { getGameUrl } from '../../dao'
 

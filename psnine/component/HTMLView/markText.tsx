@@ -1,16 +1,7 @@
 import React, { Component } from 'react'
 import {
-  StyleSheet,
-  Image,
-  Dimensions,
-  Text,
-  ActivityIndicator,
-  PixelRatio,
-  View,
-  TouchableNativeFeedback
+  Text
 } from 'react-native'
-
-import { standardColor, nodeColor, idColor, accentColor } from '../../constant/colorConfig'
 
 export default class InlineImage extends Component {
   constructor(props) {

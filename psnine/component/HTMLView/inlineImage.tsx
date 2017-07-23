@@ -1,16 +1,10 @@
 import React, { Component } from 'react'
 import {
-  StyleSheet,
   Image,
   Dimensions,
-  ActivityIndicator,
   PixelRatio,
-  View,
-  TouchableNativeFeedback,
   Text
 } from 'react-native'
-
-import { standardColor, nodeColor, idColor, accentColor } from '../../constant/colorConfig'
 
 const { width } = Dimensions.get('window')
 

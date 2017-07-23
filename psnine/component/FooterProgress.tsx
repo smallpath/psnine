@@ -1,19 +1,8 @@
-import React, { Component } from 'react'
+import React from 'react'
 import {
-  StyleSheet,
-  Text,
   View,
-  ListView,
-  Image,
-  TouchableNativeFeedback,
-  RefreshControl,
-  InteractionManager,
-  FlatList,
-  ProgressBarAndroid,
-  Animated
+  ProgressBarAndroid
 } from 'react-native'
-
-import { accentColor } from '../constant/colorConfig'
 
 export default class FooterProgress extends React.PureComponent {
   shouldComponentUpdate = (nextProps) => {

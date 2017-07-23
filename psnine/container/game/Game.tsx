@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import {
-  AppRegistry,
   StyleSheet,
   Text,
   View,
@@ -12,17 +11,12 @@ import {
   StatusBar,
   Animated,
   Easing,
-  FlatList,
-  PanResponder,
-  Modal,
-  Keyboard
+  FlatList
 } from 'react-native'
 
-import { connect } from 'react-redux'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import colorConfig, {
-  standardColor, nodeColor, idColor, accentColor,
-  getColorFromProgress,
+  standardColor, idColor,
   getLevelColorFromProgress,
   getContentFromTrophy
 } from '../../constant/colorConfig'

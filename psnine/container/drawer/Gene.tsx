@@ -1,22 +1,13 @@
 import React, { Component } from 'react'
 import {
   StyleSheet,
-  Text,
-  View,
-  ListView,
-  Image,
-  TouchableNativeFeedback,
   RefreshControl,
-  InteractionManager,
   FlatList,
   Animated
 } from 'react-native'
 
 import { connect } from 'react-redux'
-import { standardColor, nodeColor, idColor } from '../../constant/colorConfig'
 import { getGeneList } from '../../redux/action/gene.js'
-
-import { getGeneURL } from '../../dao'
 
 let toolbarHeight = 56
 let releasedMarginTop = 0

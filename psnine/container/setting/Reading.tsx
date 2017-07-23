@@ -4,23 +4,15 @@ import {
   Text,
   View,
   TouchableNativeFeedback,
-  Linking,
   Switch,
   AsyncStorage,
   StatusBar,
   Dimensions,
-  Easing,
-  Picker,
-  Alert
+  Easing
 } from 'react-native'
 
-import { pngPrefix, getDealURL, getHappyPlusOneURL, getStoreURL } from '../../dao'
-
-import { safeLogin, registURL } from '../../dao/login'
-
-import { connect } from 'react-redux'
 import Ionicons from 'react-native-vector-icons/Ionicons'
-import ColorConfig, { standardColor, nodeColor, idColor, accentColor } from '../../constant/colorConfig'
+import { standardColor, idColor, accentColor } from '../../constant/colorConfig'
 
 let screen = Dimensions.get('window')
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = screen

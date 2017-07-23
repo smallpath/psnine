@@ -1,24 +1,10 @@
-import React, { Component, Children } from 'react'
+import React from 'react'
 import {
-  ScrollView,
   Dimensions,
-  Platform,
-  View,
-  StyleSheet,
-  TouchableNativeFeedback,
-  Text,
-  Button
+  StyleSheet
 } from 'react-native'
 
 import {
-  accentColor,
-  titleTextColor,
-  standardTextColor,
-  standardColor
-} from '../../constant/colorConfig'
-import {
-  DrawerNavigator,
-  DrawerItems,
   TabNavigator
 } from 'react-navigation'
 
@@ -30,7 +16,6 @@ const minWidth = Math.min(SCREEN_HEIGHT, SCREEN_WIDTH)
 import HomeProfile from './HomeProfile'
 import UserGame from './UserGame'
 import UserBoard from './UserBoard'
-import UserCircle from './UserCircle'
 import UserDiary from './UserDiary'
 import UserTopic from './UserTopic'
 import UserGene from './UserGene'

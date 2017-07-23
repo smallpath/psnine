@@ -1,13 +1,8 @@
 import React, { Component } from 'react'
 import {
   StyleSheet,
-  Text,
   View,
-  ListView,
-  Image,
-  TouchableNativeFeedback,
   RefreshControl,
-  InteractionManager,
   Picker,
   FlatList,
   Animated
@@ -15,12 +10,6 @@ import {
 
 import { connect } from 'react-redux'
 import { getQAList } from '../../redux/action/qa.js'
-import { standardColor, nodeColor, idColor } from '../../constant/colorConfig'
-import Icon from 'react-native-vector-icons/Ionicons'
-
-import { getQAUrl } from '../../dao'
-
-import { changeScrollType } from '../../redux/action/app'
 
 import TopicItem from '../../component/QaItem'
 import FooterProgress from '../../component/FooterProgress'

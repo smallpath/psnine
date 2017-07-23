@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import {
-  AppRegistry,
   StyleSheet,
   Text,
   View,
@@ -13,23 +12,17 @@ import {
   Animated,
   Easing,
   FlatList,
-  PanResponder,
-  Modal,
-  Keyboard,
   Linking
 } from 'react-native'
 
-import { sync, updown, fav } from '../../dao/sync'
+import { updown, fav } from '../../dao/sync'
 
-import { connect } from 'react-redux'
 import Ionicons from 'react-native-vector-icons/Ionicons'
-import { standardColor, nodeColor, idColor, accentColor } from '../../constant/colorConfig'
+import { standardColor, idColor, accentColor } from '../../constant/colorConfig'
 
 import {
-  getQaTopicAPI,
-  getGameUrl
+  getQaTopicAPI
 } from '../../dao'
-import ImageViewer from '../../component/ImageViewer'
 import ComplexComment from '../../component/ComplexComment'
 
 let screen = Dimensions.get('window')

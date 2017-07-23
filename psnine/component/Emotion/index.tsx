@@ -5,17 +5,10 @@ import {
   View,
   Dimensions,
   TouchableNativeFeedback,
-  ViewPagerAndroid,
-  Modal,
-  Image,
-  Button
+  ViewPagerAndroid
 } from 'react-native'
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window')
-
-import { standardColor, nodeColor, idColor } from '../constant/colorConfig'
-
-import Ionicons from 'react-native-vector-icons/Ionicons'
 
 import EmotionItem from './emotionItem'
 

@@ -1,31 +1,20 @@
 import React, { Component } from 'react'
 import {
   StyleSheet,
-  Text,
   View,
-  ListView,
-  Image,
-  Picker,
   Dimensions,
-  TouchableNativeFeedback,
   RefreshControl,
   InteractionManager,
-  Modal,
-  Slider,
   FlatList
 } from 'react-native'
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window')
 
-import { connect } from 'react-redux'
-import { standardColor, nodeColor, idColor } from '../../constant/colorConfig'
+import { standardColor, idColor } from '../../constant/colorConfig'
 
-import Ionicons from 'react-native-vector-icons/Ionicons'
-import { getGameMapperAPI, getTopicURL } from '../../dao'
+import { getGameMapperAPI } from '../../dao'
 
 import TopicItem from '../../component/QaItem'
-import GameItem from '../../component/GameItem'
-import FooterProgress from '../../component/FooterProgress'
 
 let toolbarActions = [
   // { title: '跳页', iconName: 'md-map', show: 'always' },

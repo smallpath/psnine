@@ -1,27 +1,18 @@
 import React, { Component } from 'react'
 import {
   StyleSheet,
-  Text,
   View,
-  ListView,
-  Image,
-  Dimensions,
-  TouchableNativeFeedback,
   RefreshControl,
-  InteractionManager,
   FlatList,
   Alert
 } from 'react-native'
 
-import { connect } from 'react-redux'
-import { getTopicList } from '../../redux/action/community.js'
-import { standardColor, nodeColor, idColor, accentColor } from '../../constant/colorConfig'
+import { standardColor, accentColor } from '../../constant/colorConfig'
 
 import Ionicons from 'react-native-vector-icons/Ionicons'
-import { getTopicURL, fetchMessages } from '../../dao'
+import { fetchMessages } from '../../dao'
 
 import MessageItem from '../../component/MessageItem'
-import FooterProgress from '../../component/FooterProgress'
 
 let toolbarActions = []
 

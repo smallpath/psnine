@@ -4,25 +4,14 @@ import {
   Text,
   View,
   TouchableNativeFeedback,
-  Linking,
-  Alert,
   ListView,
   ScrollView,
   Picker,
   TextInput
 } from 'react-native'
 
-import { connect } from 'react-redux'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import { standardColor, accentColor } from '../../constant/colorConfig'
-
-import { pngPrefix, getDealURL, getHappyPlusOneURL, getStoreURL } from '../../dao'
-
-import { safeLogin, registURL } from '../../dao/login'
-
-import packages from '../../../package.json'
-
-import checkVersion from '../../bootstrap/checkVersion'
 
 let dataSource = new ListView.DataSource({
   rowHasChanged: (row1, row2) => row1 !== row2

@@ -1,19 +1,8 @@
 import React, { Component } from 'react'
 import {
-  AppRegistry,
   StyleSheet,
-  Text,
-  View,
-  ListView,
-  Image,
   DrawerLayoutAndroid,
-  ToolbarAndroid,
-  ToastAndroid,
-  BackHandler,
-  TouchableOpacity,
-  Dimensions,
-  TouchableNativeFeedback,
-  RefreshControl
+  Dimensions
 } from 'react-native'
 
 import LeftDrawer from './LeftDrawer'

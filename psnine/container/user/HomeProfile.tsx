@@ -1,39 +1,22 @@
 import React, { Component } from 'react'
 import {
-  AppRegistry,
   StyleSheet,
-  ToastAndroid,
   Text,
   View,
-  Image,
   Dimensions,
   TouchableNativeFeedback,
-  InteractionManager,
   ActivityIndicator,
   StatusBar,
   Animated,
   Easing,
-  FlatList,
-  PanResponder,
-  Modal,
-  Keyboard
+  FlatList
 } from 'react-native'
 
-import { sync, updown, fav, upBase, block } from '../../dao/sync'
-
-import { connect } from 'react-redux'
-import Ionicons from 'react-native-vector-icons/Ionicons'
 import UserGameItem from '../../component/UserGameItem'
 import {
   standardColor,
-  nodeColor,
-  idColor,
-  accentColor,
-  levelColor,
-  rankColor
+  idColor
 } from '../../constant/colorConfig'
-
-import { getHomeAPI } from '../../dao'
 
 let screen = Dimensions.get('window')
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = screen

@@ -1,33 +1,16 @@
-import React, { Component } from 'react'
+import React from 'react'
 import {
-  AppRegistry,
   StyleSheet,
   Text,
   View,
   Image,
   Dimensions,
   TouchableNativeFeedback,
-  InteractionManager,
-  ActivityIndicator,
-  StatusBar,
-  Animated,
-  Easing,
-  FlatList,
-  PanResponder,
-  Modal,
-  Keyboard,
-  Alert,
   Clipboard
 } from 'react-native'
 
-import { connect } from 'react-redux'
-import Ionicons from 'react-native-vector-icons/Ionicons'
-import { standardColor, nodeColor, idColor, accentColor } from '../constant/colorConfig'
+import { standardColor, idColor } from '../constant/colorConfig'
 import entities from 'entities'
-
-import {
-  getGamePointAPI
-} from '../dao'
 
 import {
   postReply

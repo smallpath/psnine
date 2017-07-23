@@ -4,10 +4,8 @@ import {
   Text,
   View,
   Image,
-  ToastAndroid,
   Dimensions,
   TouchableNativeFeedback,
-  KeyboardAvoidingView,
   TextInput,
   AsyncStorage,
   Linking,
@@ -17,11 +15,7 @@ import {
 
 import Ionicons from 'react-native-vector-icons/Ionicons'
 
-import { connect } from 'react-redux'
-
 import { standardColor, accentColor } from '../../constant/colorConfig'
-
-import { pngPrefix, getDealURL, getHappyPlusOneURL, getStoreURL } from '../../dao'
 
 import { safeLogin, registURL } from '../../dao/login'
 

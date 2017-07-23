@@ -1,24 +1,15 @@
 import React, { Component } from 'react'
 import {
   StyleSheet,
-  Text,
   View,
-  ListView,
-  Image,
-  Picker,
-  Dimensions,
   TouchableNativeFeedback,
   RefreshControl,
   InteractionManager,
-  Modal,
-  Slider,
-  ActivityIndicator,
   FlatList,
-  Button,
   Alert
 } from 'react-native'
 
-import { standardColor, nodeColor, idColor } from '../../constant/colorConfig'
+import { standardColor, idColor } from '../../constant/colorConfig'
 
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import { getUserDiaryAPI } from '../../dao'

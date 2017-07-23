@@ -1,44 +1,22 @@
 import React, { Component } from 'react'
 import {
-  AppRegistry,
   StyleSheet,
-  ToastAndroid,
   Text,
   View,
   Image,
   Dimensions,
-  TouchableNativeFeedback,
   InteractionManager,
   ActivityIndicator,
   StatusBar,
   Animated,
   Easing,
-  FlatList,
-  PanResponder,
-  Modal,
-  Keyboard,
-  ScrollView,
-  BackHandler,
-  Linking,
-  ToolbarAndroid
+  Linking
 } from 'react-native'
 
-import { sync } from '../../dao/sync'
-
-import { connect } from 'react-redux'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import {
   standardColor,
-  nodeColor,
-  idColor,
-  accentColor,
-  levelColor,
-  rankColor,
-  trophyColor1,
-  trophyColor2,
-  trophyColor3,
-  trophyColor4,
-  trophyColor5
+  idColor
 } from '../../constant/colorConfig'
 
 import { getGameNewTopicAPI } from '../../dao'
@@ -76,9 +54,7 @@ import {
   ExtraDimensionsAndroid,
   AppBarLayoutAndroid,
   CoordinatorLayoutAndroid,
-  CollapsingToolbarLayoutAndroid,
-  NestedScrollViewAndroid,
-  LayoutParamsAndroid
+  CollapsingToolbarLayoutAndroid
 } from 'mao-rn-android-kit'
 
 const limit = 160 // - toolbarHeight

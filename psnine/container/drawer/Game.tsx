@@ -1,13 +1,8 @@
 import React, { Component } from 'react'
 import {
   StyleSheet,
-  Text,
   View,
-  ListView,
-  Image,
-  TouchableNativeFeedback,
   RefreshControl,
-  InteractionManager,
   Picker,
   FlatList,
   Animated
@@ -15,12 +10,6 @@ import {
 
 import { connect } from 'react-redux'
 import { getGameList } from '../../redux/action/game.js'
-import { standardColor, nodeColor, idColor } from '../../constant/colorConfig'
-import Icon from 'react-native-vector-icons/Ionicons'
-
-import { getGameUrl } from '../../dao'
-
-import { changeScrollType } from '../../redux/action/app'
 
 import TopicItem from '../../component/GameItem'
 import FooterProgress from '../../component/FooterProgress'

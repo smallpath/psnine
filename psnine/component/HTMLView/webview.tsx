@@ -1,14 +1,11 @@
 import React, { Component, PropTypes } from 'react'
-import htmlToElement from './htmlToElement'
 import {
   Linking,
   StyleSheet,
-  Text,
   WebView,
   View,
   Dimensions,
-  Button,
-  ToastAndroid
+  Button
 } from 'react-native'
 
 import Ionicons from 'react-native-vector-icons/Ionicons'

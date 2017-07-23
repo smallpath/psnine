@@ -3,27 +3,20 @@ import {
   StyleSheet,
   Text,
   View,
-  ListView,
-  Image,
-  Picker,
   Dimensions,
   TouchableNativeFeedback,
   RefreshControl,
   InteractionManager,
-  Modal,
   Slider,
   FlatList
 } from 'react-native'
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window')
 
-import { connect } from 'react-redux'
-import { standardColor, nodeColor, idColor } from '../../constant/colorConfig'
+import { standardColor, idColor } from '../../constant/colorConfig'
 
-import Ionicons from 'react-native-vector-icons/Ionicons'
 import { getGameNewTopicAPI } from '../../dao'
 
-import TopicItem from '../../component/CommunityItem'
 import GameItem from '../../component/GameItem'
 import NewsItem from '../../component/NewsItem'
 import FooterProgress from '../../component/FooterProgress'

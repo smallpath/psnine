@@ -8,7 +8,7 @@ import {
   ToastAndroid
 } from 'react-native'
 
-import { standardColor, nodeColor, idColor } from '../../constant/colorConfig'
+import { idColor } from '../../constant/colorConfig'
 
 const boldStyle = { fontWeight: '500' }
 const italicStyle = { fontStyle: 'italic' }

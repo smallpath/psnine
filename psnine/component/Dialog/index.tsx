@@ -1,16 +1,10 @@
 import React, { Component } from 'react'
 import {
-  StyleSheet,
-  Text,
   View,
   Dimensions,
   TouchableNativeFeedback,
   Modal
 } from 'react-native'
-
-import { standardColor, nodeColor, idColor } from '../../constant/colorConfig'
-
-import Ionicons from 'react-native-vector-icons/Ionicons'
 
 class Dialog extends Component {
   constructor(props) {
@@ -53,7 +47,5 @@ class Dialog extends Component {
   }
 
 }
-
-const styles = StyleSheet.create({})
 
 export default Dialog

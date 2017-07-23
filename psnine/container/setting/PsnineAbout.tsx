@@ -9,13 +9,8 @@ import {
   ListView
 } from 'react-native'
 
-import { connect } from 'react-redux'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import { standardColor, accentColor } from '../../constant/colorConfig'
-
-import { pngPrefix, getDealURL, getHappyPlusOneURL, getStoreURL } from '../../dao'
-
-import { safeLogin, registURL } from '../../dao/login'
 
 import packages from '../../../package.json'
 

@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import {
-  StyleSheet,
   Image,
   Dimensions,
   ActivityIndicator,
@@ -9,8 +8,6 @@ import {
   Text,
   TouchableNativeFeedback
 } from 'react-native'
-
-import { standardColor, nodeColor, idColor, accentColor } from '../../constant/colorConfig'
 
 const { width } = Dimensions.get('window')
 

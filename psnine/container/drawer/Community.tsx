@@ -1,26 +1,13 @@
 import React, { Component } from 'react'
 import {
   StyleSheet,
-  Text,
-  View,
-  ListView,
-  Image,
-  TouchableNativeFeedback,
   RefreshControl,
-  InteractionManager,
   FlatList,
-  ProgressBarAndroid,
-  Animated,
-  Alert
+  Animated
 } from 'react-native'
 
 import { connect } from 'react-redux'
 import { getTopicList } from '../../redux/action/community.js'
-import { standardColor, nodeColor, idColor } from '../../constant/colorConfig'
-
-import { getTopicURL } from '../../dao'
-
-import { changeScrollType } from '../../redux/action/app'
 
 import TopicItem from '../../component/CommunityItem'
 import NewsItem from '../../component/NewsItem'

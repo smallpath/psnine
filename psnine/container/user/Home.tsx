@@ -1,43 +1,32 @@
 import React, { Component } from 'react'
 import {
-  AppRegistry,
   StyleSheet,
   ToastAndroid,
   Text,
   View,
   Image,
   Dimensions,
-  TouchableNativeFeedback,
   InteractionManager,
   ActivityIndicator,
   StatusBar,
   Animated,
   Easing,
-  FlatList,
-  PanResponder,
-  Modal,
   Keyboard,
-  ScrollView,
-  BackHandler,
   ToolbarAndroid
 } from 'react-native'
 
 import { sync, updown, fav, upBase, block } from '../../dao/sync'
 
-import { connect } from 'react-redux'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import {
   standardColor,
-  nodeColor,
   idColor,
-  accentColor,
   levelColor,
   rankColor,
   trophyColor1,
   trophyColor2,
   trophyColor3,
-  trophyColor4,
-  trophyColor5
+  trophyColor4
 } from '../../constant/colorConfig'
 
 import { getHomeAPI } from '../../dao'
@@ -70,12 +59,9 @@ const iconMapper = {
 const limit = 360 // - toolbarHeight
 
 import {
-  ExtraDimensionsAndroid,
   AppBarLayoutAndroid,
   CoordinatorLayoutAndroid,
-  CollapsingToolbarLayoutAndroid,
-  NestedScrollViewAndroid,
-  LayoutParamsAndroid
+  CollapsingToolbarLayoutAndroid
 } from 'mao-rn-android-kit'
 
 import ImageBackground from '../../component/ImageBackground'

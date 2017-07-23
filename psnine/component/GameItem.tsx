@@ -1,19 +1,15 @@
-import React, { Component } from 'react'
+import React from 'react'
 import {
   StyleSheet,
   Text,
   View,
-  ListView,
   Image,
-  TouchableNativeFeedback,
-  RefreshControl,
-  InteractionManager,
-  Picker
+  TouchableNativeFeedback
 } from 'react-native'
 
 import { getGameUrl } from '../dao'
 
-import colorConfig, { standardColor, nodeColor, idColor, getContentFromTrophy } from '../constant/colorConfig'
+import colorConfig, { getContentFromTrophy } from '../constant/colorConfig'
 
 export default class extends React.PureComponent {
 

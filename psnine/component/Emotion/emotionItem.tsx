@@ -1,20 +1,10 @@
 import React, { Component } from 'react'
 import {
   StyleSheet,
-  Text,
   View,
-  Dimensions,
   TouchableNativeFeedback,
-  ViewPagerAndroid,
-  Modal,
   Image
 } from 'react-native'
-
-const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window')
-
-import { standardColor, nodeColor, idColor } from '../constant/colorConfig'
-
-import Ionicons from 'react-native-vector-icons/Ionicons'
 
 const viewPagerHeight = 180
 

@@ -1,19 +1,11 @@
-import React, { Component } from 'react'
+import React from 'react'
 import {
   StyleSheet,
   Text,
   View,
-  ListView,
   Image,
-  TouchableNativeFeedback,
-  RefreshControl,
-  InteractionManager,
-  Picker
+  TouchableNativeFeedback
 } from 'react-native'
-
-import { getGameUrl } from '../dao'
-
-import { standardColor, nodeColor, idColor } from '../constant/colorConfig'
 
 export default class TradeItem extends React.PureComponent {
   constructor(props) {

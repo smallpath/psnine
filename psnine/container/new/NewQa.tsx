@@ -1,11 +1,8 @@
 import React, { Component } from 'react'
 import {
   StyleSheet,
-  Text,
   View,
   Image,
-  ToastAndroid,
-  BackHandler,
   Dimensions,
   TouchableNativeFeedback,
   KeyboardAvoidingView,
@@ -14,18 +11,15 @@ import {
   TextInput,
   Animated,
   Easing,
-  PanResponder,
   StatusBar,
   Picker
 } from 'react-native'
 
-import { connect } from 'react-redux'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import { standardColor, accentColor } from '../../constant/colorConfig'
 
-import { pngPrefix, getDealURL, getHappyPlusOneURL, getStoreURL, getNewQaAPI, getQaEditAPI } from '../../dao'
+import { getNewQaAPI, getQaEditAPI } from '../../dao'
 
-import { safeLogin, registURL } from '../../dao/login'
 import { postCreateTopic } from '../../dao/post'
 
 import Emotion from '../../component/Emotion'

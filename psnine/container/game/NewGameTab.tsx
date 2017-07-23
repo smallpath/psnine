@@ -1,24 +1,10 @@
-import React, { Component, Children } from 'react'
+import React from 'react'
 import {
-  ScrollView,
   Dimensions,
-  Platform,
-  View,
-  StyleSheet,
-  TouchableNativeFeedback,
-  Text,
-  Button
+  StyleSheet
 } from 'react-native'
 
 import {
-  accentColor,
-  titleTextColor,
-  standardTextColor,
-  standardColor
-} from '../../constant/colorConfig'
-import {
-  DrawerNavigator,
-  DrawerItems,
   TabNavigator
 } from 'react-navigation'
 

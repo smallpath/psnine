@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import {
   AsyncStorage,
-  Platform,
   ListView,
   Image,
   StyleSheet,
@@ -9,29 +8,15 @@ import {
   View,
   TouchableNativeFeedback,
   TouchableWithoutFeedback,
-  TouchableHighlight,
-  ToastAndroid,
-  Alert,
-  StatusBar
+  Alert
 } from 'react-native'
 
 import {
-  getHomeURL,
-  pngPrefix,
-  getDealURL,
-  getHappyPlusOneURL,
-  getStoreURL,
-  getRankURL,
-  getMyGameURL
+  getHomeURL
 } from '../dao'
 
-import colorConfig, {
-  standardColor,
-  nodeColor,
-  idColor,
-  accentColor,
-  levelColor,
-  rankColor
+import {
+  standardColor
 } from '../constant/colorConfig'
 
 import Icon from 'react-native-vector-icons/Ionicons'

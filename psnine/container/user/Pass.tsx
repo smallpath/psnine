@@ -4,12 +4,9 @@ import {
   Text,
   View,
   Image,
-  ToastAndroid,
   Dimensions,
   TouchableNativeFeedback,
-  KeyboardAvoidingView,
   TextInput,
-  AsyncStorage,
   Linking,
   Animated,
   Keyboard
@@ -17,16 +14,10 @@ import {
 
 import Ionicons from 'react-native-vector-icons/Ionicons'
 
-import { connect } from 'react-redux'
-
 import { standardColor, accentColor } from '../../constant/colorConfig'
 
-import { pngPrefix, getDealURL, getHappyPlusOneURL, getStoreURL } from '../../dao'
-
-import { safeLogin, registURL } from '../../dao/login'
+import { registURL } from '../../dao/login'
 import { postPass } from '../../dao/post'
-
-import { fetchUser } from '../../dao'
 
 let screen = Dimensions.get('window')
 

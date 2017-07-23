@@ -1,13 +1,7 @@
 import React, { Component } from 'react'
 import {
   StyleSheet,
-  Text,
-  View,
-  ListView,
-  Image,
-  TouchableNativeFeedback,
   RefreshControl,
-  InteractionManager,
   SectionList,
   Animated,
   FlatList
@@ -15,9 +9,7 @@ import {
 
 import { connect } from 'react-redux'
 import { getCircleList as getList } from '../../redux/action/circle'
-import { standardColor, nodeColor, idColor, accentColor } from '../../constant/colorConfig'
 
-import { getBattleURL, getGamePngURL } from '../../dao'
 import FooterProgress from '../../component/FooterProgress'
 
 const AnimatedSectionList = Animated.createAnimatedComponent(SectionList)

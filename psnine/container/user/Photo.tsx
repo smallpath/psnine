@@ -3,14 +3,10 @@ import {
   StyleSheet,
   Text,
   View,
-  ListView,
-  Image,
-  Picker,
   Dimensions,
   TouchableNativeFeedback,
   RefreshControl,
   InteractionManager,
-  Modal,
   Slider,
   FlatList,
   Alert
@@ -18,8 +14,7 @@ import {
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window')
 
-import { connect } from 'react-redux'
-import { standardColor, nodeColor, idColor } from '../../constant/colorConfig'
+import { standardColor, idColor } from '../../constant/colorConfig'
 
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import { getPhotoAPI } from '../../dao'

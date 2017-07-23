@@ -1,13 +1,7 @@
-import React, { Component, Children } from 'react'
+import React, { Component } from 'react'
 import {
-  ScrollView,
   Dimensions,
-  Platform,
-  View,
-  StyleSheet,
-  TouchableNativeFeedback,
-  Text,
-  Button
+  StyleSheet
 } from 'react-native'
 
 let screen = Dimensions.get('screen')
@@ -16,15 +10,6 @@ const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = screen
 
 const minWidth = Math.min(SCREEN_HEIGHT, SCREEN_WIDTH)
 
-import {
-  accentColor,
-  titleTextColor,
-  standardTextColor,
-  standardColor
-} from '../constant/colorConfig'
-
-import { changeSegmentIndex } from '../redux/action/app'
-
 import Recommend from './drawer/Recommend'
 import Community from './drawer/Community'
 import Qa from './drawer/Qa'
@@ -32,13 +17,10 @@ import Game from './drawer/Game'
 import Battle from './drawer/Battle'
 import Gene from './drawer/Gene'
 import Rank from './drawer/Rank'
-import Circle from './drawer/Circle'
 import Store from './drawer/Store'
 import Trade from './drawer/Trade'
 
 import {
-  DrawerNavigator,
-  DrawerItems,
   TabNavigator
 } from 'react-navigation'
 

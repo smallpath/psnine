@@ -3,8 +3,7 @@ import {
   Text,
   View,
   Dimensions,
-  StyleSheet,
-  Image
+  StyleSheet
 } from 'react-native'
 import htmlparser from 'htmlparser2-without-node-native'
 import entities from 'entities'

@@ -3,9 +3,6 @@ import {
   StyleSheet,
   Text,
   View,
-  ListView,
-  Image,
-  TouchableNativeFeedback,
   RefreshControl,
   InteractionManager,
   SectionList,
@@ -13,11 +10,9 @@ import {
   Button
 } from 'react-native'
 
-import { connect } from 'react-redux'
-import { standardColor, nodeColor, idColor, accentColor } from '../../constant/colorConfig'
+import { idColor } from '../../constant/colorConfig'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import { getGroupAPI } from '../../dao'
-import CircleItem from '../../component/CircleItem'
 const AnimatedSectionList = Animated.createAnimatedComponent(SectionList)
 
 let toolbarHeight = 56

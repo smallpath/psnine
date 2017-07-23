@@ -1,3 +1,23 @@
+declare const window: Window
+declare const console: Console
+declare const global: Global
+
+interface Window {
+  requestIdleCallback: any
+  cancelIdleCallback: any
+}
+
+interface Console {
+  ignoredYellowBox: string[]
+}
+
+interface Global {
+  log: () => void
+  netInfo: string
+  loadImageWithoutWifi: boolean
+  shouldSendGA: boolean
+}
+
 if (__DEV__) {
   window.requestIdleCallback = null
   window.cancelIdleCallback = null

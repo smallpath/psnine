@@ -2,11 +2,9 @@ import React, { Component } from 'react'
 import {
   StyleSheet,
   View,
-  WebView,
-  KeyboardAvoidingView
+  WebView
 } from 'react-native'
 
-import { connect } from 'react-redux'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import { standardColor } from '../../constant/colorConfig'
 

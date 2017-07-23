@@ -1,26 +1,13 @@
-import React, { Component } from 'react'
+import React from 'react'
 import {
   StyleSheet,
   Text,
   View,
-  ListView,
   Image,
-  TouchableNativeFeedback,
-  RefreshControl,
-  InteractionManager,
-  Picker
+  TouchableNativeFeedback
 } from 'react-native'
 
-import { connect } from 'react-redux'
-import Ionicons from 'react-native-vector-icons/Ionicons'
-import { standardColor, nodeColor, idColor, accentColor } from '../constant/colorConfig'
-
 import { getQAUrl } from '../dao'
-
-import {
-  getGamePointAPI,
-  getTopicURL
-} from '../dao'
 
 export default class extends React.PureComponent {
   constructor(props) {
