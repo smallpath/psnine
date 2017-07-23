@@ -117,9 +117,19 @@ export default class Home extends Component {
   componentWillUnmount = () => {
     this.removeListener && this.removeListener.remove()
     if (this.timeout) clearTimeout(this.timeout)
+    // this.keyboardDidShowListener && this.keyboardDidShowListener.remove()
+    this.keyboardDidHideListener && this.keyboardDidHideListener.remove()
   }
 
   componentWillMount = () => {
+    // this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', (event) => {
+    //   // console.log(event.nativeEvent, this._coordinatorLayout.resetBehavior)
+    //   this._coordinatorLayout.resetBehavior(this._appBarLayout, false, true)
+    // })
+    this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', (event) => {
+      // this._coordinatorLayout.setScrollingViewBehavior(this._scrollView)
+      this._coordinatorLayout.resetBehavior(this._appBarLayout, false)
+    })
     this.preFetch()
   }
 
@@ -545,10 +555,6 @@ export default class Home extends Component {
 
   _setScrollView = component => {
     this._scrollView = component
-  }
-
-  componentDidMount() {
-
   }
 
   _getItems(count) {
