@@ -97,14 +97,15 @@ class Community extends Component {
     })
   }
 
-  _onRefresh = (type = '', searchTitle) => {
+  _onRefresh = (type, searchTitle) => {
     const { community: communityReducer, dispatch, communityType } = this.props
     this.setState({
       isRefreshing: true
     })
     this.flatlist && this.flatlist.getNode().scrollToOffset({ offset: 0, animated: true })
+    // console.log(type === '' ? communityType : type, communityType, type, '====>')
     dispatch(getTopicList(1, {
-        type,
+        type: typeof type === 'undefined' ? communityType : type,
         title: typeof searchTitle !== 'undefined' ? searchTitle : this.props.screenProps.searchTitle
       })
     )
@@ -213,6 +214,7 @@ const styles = StyleSheet.create({
 })
 
 function mapStateToProps(state, ownProps) {
+  // console.log(state.app.communityType, 'mapStateToProps')
   return {
     community: state.community,
     communityType: state.app.communityType

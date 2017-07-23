@@ -163,7 +163,7 @@ HtmlView.defaultProps = {
     const request = isGettingType ? () => { return {
       type, title, errMessage}
     } : (targetURL) => Linking.openURL(targetURL).catch(err => {
-      ToastAndroid.show(errMessage || err.toString(), ToastAndroid.SHORT)
+      errMessage && ToastAndroid.show(errMessage || err.toString(), ToastAndroid.SHORT)
       errHandler(err)
     })
     const errHandler = (err) => Linking.openURL(baseURL).catch(err => toast(errMessage || err.toString()))
@@ -173,7 +173,7 @@ HtmlView.defaultProps = {
       const matched = targetURL.match(/id\=(\d+)/)
       if (matched) {
         targetURL = `orpheus://song/${matched[1]}`
-        errMessage = `打开网易云音乐失败 (id:${matched[1]})`
+        errMessage = `打开网易云音乐客户端失败 (id:${matched[1]})`
         type = 'music163'
         title = `网易云音乐: ${matched[1]}`
         return request(targetURL)
@@ -183,7 +183,7 @@ HtmlView.defaultProps = {
       if (!matched) matched = targetURL.match(/\/video\/av(\d+)/)
       if (matched) {
         targetURL = `bilibili://video/${matched[1]}`
-        errMessage = `打开B站视频失败 (av${matched[1]})`
+        errMessage = `打开B站客户端失败 (av${matched[1]})`
         type = 'bilibili'
         title = `B站视频: av${matched[1]}`
         return request(targetURL)

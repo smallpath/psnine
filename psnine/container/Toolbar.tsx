@@ -458,6 +458,7 @@ class Toolbar extends Component {
 
   _getPages({ height, initialPage = 1 }) {
     const { modeInfo } = this.props
+    // console.log(this.props.app.communityType, '===========outter')
     return this._tabTexts.map((tab, index) => {
       return (
         <View
