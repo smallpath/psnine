@@ -89,8 +89,8 @@ export default class Detail extends Component {
             title: '捐助PSNINE'
           })
         }}/>
+        <View style={{flex: 1, alignItems: 'center'}}><Text style={{color: modeInfo.standardColor, padding: 20}}>{this.state.nb}</Text></View>
         <View style={{ flex: 1, flexDirection: 'row' }}>
-          <View style={{flex: 1, alignItems: 'center'}}><Text style={{color: modeInfo.standardColor, padding: 20}}>{this.state.nb}</Text></View>
           <View style={{flex: 1, alignItems: 'center'}}><Text style={{color: '#659f13', padding: 20}}>{rowData.zb}</Text></View>
           <View style={{flex: 1, alignItems: 'center'}}><Text style={{color: '#b94a48', padding: 20}}>{rowData.level}</Text></View>
         </View>

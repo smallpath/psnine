@@ -265,7 +265,7 @@ class navigationDrawer extends Component {
     const backupInfo = {
       psnid: '',
       userInfo: {
-        avatar: require('../../art/comment_avatar.png'),
+        avatar: require('../../art/avatar.jpg'),
         platinum: '白',
         gold: '金',
         silver: '银',

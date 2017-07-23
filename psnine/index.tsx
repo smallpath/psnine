@@ -54,7 +54,7 @@ export default class Root extends React.Component {
         tabMode: 'tab',
         psnid: '',
         userInfo: {
-          avatar: require('./../art/comment_avatar.png'),
+          avatar: require('./../art/avatar.jpg'),
           platinum: '白',
           gold: '金',
           silver: '银',
@@ -125,7 +125,7 @@ export default class Root extends React.Component {
         tabMode: result[0] || 'tab',
         psnid: result[1] || '',
         userInfo: JSON.parse(result[2]) || {
-          avatar: require('./../art/comment_avatar.png'),
+          avatar: require('./../art/avatar.jpg'),
           platinum: '白',
           gold: '金',
           silver: '银',
