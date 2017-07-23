@@ -10,6 +10,7 @@ const translateURL = 'http://psnine.com/set/cn/post'
 const imageURL = 'http://psnine.com/my/photo'
 const settingURL = 'http://psnine.com/my/setting'
 const circleURL = 'http://psnine.com/set/group/ajax'
+const diaryURL = 'http://psnine.com/set/diary/post'
 
 const createMapper = {
   'topic': 'http://psnine.com/set/topic/post',
@@ -81,4 +82,9 @@ export const postDeleteImage = form => {
 export const translate = form => {
   const formBody = encodeForm(form)
   return fetch(translateURL, Object.assign({ body: formBody }, config))
+}
+
+export const createDiary = form => {
+  const formBody = encodeForm(form)
+  return fetch(diaryURL, Object.assign({ body: formBody }, config))
 }

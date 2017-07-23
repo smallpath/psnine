@@ -13,6 +13,7 @@ import UserGame from '../container/user/UserGame'
 import UserBoard from '../container/user/UserBoard'
 import Favorite from '../container/user/Favorite'
 import Issue from '../container/user/Issue'
+import UserCreateDiary from '../container/user/NewDiary'
 
 import Trophy from '../container/game/Trophy'
 import GameTopic from '../container/game/GameTopic'
@@ -107,6 +108,9 @@ const Navigator = StackNavigator({
   },
   PsnineAbout: {
     screen: PsnineAbout
+  },
+  UserCreateDiary: {
+    screen: UserCreateDiary
   },
   NewGame: {
     screen: NewGame

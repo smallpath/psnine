@@ -56,16 +56,20 @@ export default class ComplexComment extends React.PureComponent {
   }
 
   render = () => {
-    const { modeInfo, rowData, navigation, ITEM_HEIGHT, modalList = [], toolbarDispatch } = this.props
+    const { modeInfo, rowData, onPress, navigation, ITEM_HEIGHT, modalList = [], toolbarDispatch } = this.props
     // console.log(modalList)
     const { numColumns = 1 } = modeInfo
     return (
       <TouchableNativeFeedback
         onPress={() => {
-          this._onRowPressed(rowData)
+          if (onPress) {
+            onPress(rowData)
+          } else {
+            this._onRowPressed(rowData)
+          }
         }}
         onLongPress={() => {
-            modalList.length && this.setState({
+          modalList.length && this.setState({
             modalVisible: true
           })
         }}

@@ -78,9 +78,9 @@ class UserGame extends Component {
     this.setState({
       [type === 'down' ? 'isLoadingMore' : 'isRefreshing'] : true
     }, () => {
-      // if (type !== 'down') {
-      //   this.flatlist && this.flatlist.scrollToOffset({ offset: 0, animated: true });
-      // }
+      if (type !== 'down') {
+        this.flatlist && this.flatlist.scrollToOffset({ offset: 0, animated: true });
+      }
       InteractionManager.runAfterInteractions(() => {
         // alert(url)
         getMyGameAPI(url).then(data => {

@@ -59,7 +59,7 @@ export default class extends React.PureComponent {
   }
 
   render = () => {
-    const { modeInfo, rowData, modalList = [] } = this.props
+    const { modeInfo, rowData, modalList = [], onPress } = this.props
     let TouchableElement = TouchableNativeFeedback
 
     let imageArr = rowData.thumbs
@@ -78,7 +78,13 @@ export default class extends React.PureComponent {
         elevation: 2
       }}>
         <TouchableNativeFeedback
-          onPress={() => { this._onRowPressed(rowData) }}
+          onPress={() => {
+            if (onPress) {
+              onPress(rowData)
+            } else {
+              this._onRowPressed(rowData)
+            }
+          }}
 
           onLongPress={() => {
              modalList.length && this.setState({

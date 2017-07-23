@@ -14,22 +14,16 @@ import {
   Slider,
   ActivityIndicator,
   FlatList,
-  Button
+  Button,
+  Alert
 } from 'react-native'
 
-const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window')
-
-import { connect } from 'react-redux'
 import { standardColor, nodeColor, idColor } from '../../constant/colorConfig'
 
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import { getUserDiaryAPI } from '../../dao'
-import ComplexComment from '../../component/ComplexComment'
+import { createDiary } from '../../dao/post'
 import DiaryItem from '../../component/DiaryItem'
-
-const ds = new ListView.DataSource({
-  rowHasChanged: (row1, row2) => row1.href !== row2.href
-})
 
 let toolbarActions = []
 
@@ -142,6 +136,7 @@ class UserBoard extends Component {
   render() {
     const { modeInfo, psnid } = this.props.screenProps
     const { URL } = this
+    const isUser = URL.split('/').slice(0, -1).pop().toLowerCase() === modeInfo.settingInfo.psnid.toLowerCase()
     // console.log('Message.js rendered');
     return (
       <View
@@ -149,22 +144,19 @@ class UserBoard extends Component {
         onStartShouldSetResponder={() => false}
         onMoveShouldSetResponder={() => false}
       >
-        {this.state.isLoading && (
-          <ActivityIndicator
-            animating={this.state.isLoading}
-            style={{
-              flex: 999,
-              justifyContent: 'center',
-              alignItems: 'center'
-            }}
-            color={modeInfo.accentColor}
-            size={50}
-          />
-        )}
-        {!this.state.isLoading && <FlatList style={{
+        <FlatList style={{
           flex: -1,
           backgroundColor: modeInfo.backgroundColor
         }}
+          refreshControl={
+            <RefreshControl
+              refreshing={this.state.isLoading}
+              onRefresh={this.preFetch}
+              colors={[modeInfo.accentColor]}
+              progressBackgroundColor={modeInfo.backgroundColor}
+              ref={ref => this.refreshControl = ref}
+            />
+          }
           ref={flatlist => this.flatlist = flatlist}
           data={this.state.diary}
           keyExtractor={(item, index) => item.id || index}
@@ -182,9 +174,89 @@ class UserBoard extends Component {
           }}
         >
         </FlatList>
+        {
+          isUser && <View style={{
+              position: 'absolute',
+              right: 16,
+              bottom: 16,
+              width: 56,
+              height: 56,
+              borderRadius: 28,
+              justifyContent: 'center',
+              alignItems: 'center'
+            }} ref={float => this.float = float}>
+            <TouchableNativeFeedback
+              background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
+              useForeground={false}
+              onPress={this.addDiary}
+              onPressIn={() => {
+                this.float.setNativeProps({
+                  style: {
+                    elevation: 12
+                  }
+                })
+              }}
+              onPressOut={() => {
+                this.float.setNativeProps({
+                  style: {
+                    elevation: 6
+                  }
+                })
+              }}>
+              <View pointerEvents='box-only' style={{
+                backgroundColor: modeInfo.accentColor,
+                borderRadius: 28, width: 56, height: 56, flex: -1, justifyContent: 'center', alignItems: 'center'
+              }}>
+                <Ionicons name='md-create' size={22} color={modeInfo.backgroundColor}/>
+              </View>
+            </TouchableNativeFeedback>
+          </View>
         }
-
       </View>
+    )
+  }
+
+  addDiary = () => {
+    const { navigation } = this.props.screenProps
+    const callback = ({ isTopic, id }) => {
+      createDiary({
+        tbl: isTopic ? 'topic' : 'gene',
+        param: id,
+        adddiary: ''
+      }).then(res => res.text()).then(html => {
+        if (html.includes('玩脱了')) {
+          const arr = html.match(/\<title\>(.*?)\<\/title\>/)
+          if (arr && arr[1]) {
+            const msg = `创建日志失败: ${arr[1]}`
+            global.toast(msg)
+            return
+          }
+        }
+        toast('创建日志成功, 请稍后刷新')
+      })
+    }
+    Alert.alert(
+      '请选择种类',
+      '如果列表中无任何主题或机因, 请先确定已在个性设定中将主题和机因设置为显示',
+      [
+        {
+          text: '机因', onPress: () => {
+            navigation.navigate('UserCreateDiary', {
+              isTopic: false,
+              URL: this.URL.split('/').slice(0, -1).concat('gene').join('/') + '?page=1',
+              callback
+            })
+          }
+        }, {
+          text: '主题', onPress: () => {
+            navigation.navigate('UserCreateDiary', {
+              isTopic: true,
+              URL: this.URL.split('/').slice(0, -1).concat('topic').join('/') + '?page=1',
+              callback
+            })
+          }
+        }
+      ]
     )
   }
 
