@@ -456,6 +456,7 @@ class CommunityTopic extends Component {
             onLongPress: () => {
               this.onCommentLongPress(rowData)
             },
+            callback: this._refreshComment,
             index: list.length
           }} />
         )

@@ -15,7 +15,14 @@
     "noImplicitThis": true,
     "sourceMap": true,
     "allowJs": true,
-    "baseUrl": "."
+    "baseUrl": ".",
+    "types": [
+      "interface"
+    ],
+    "typeRoots":[
+      "psnine",
+      "node_modules/@types"
+    ]
   },
   "filesGlob": [
     "psnine/**/*.ts",

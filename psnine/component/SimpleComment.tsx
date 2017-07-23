@@ -47,7 +47,7 @@ export default class extends React.PureComponent {
   }
 
   render() {
-    const { modeInfo, rowData, index, onLongPress } = this.props
+    const { modeInfo, rowData, index, onLongPress, callback = () => {} } = this.props
     return (
       <View key={rowData.id || index} style={{
         borderBottomWidth: StyleSheet.hairlineWidth,
@@ -123,7 +123,8 @@ export default class extends React.PureComponent {
                                     type: 'comment',
                                     id: (rowData.id.match(/\d+/) || [0])[0],
                                     content: rowData.editcomment,
-                                    shouldSeeBackground: true
+                                    shouldSeeBackground: true,
+                                    callback
                                   })
                               })
                             })

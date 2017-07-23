@@ -156,21 +156,21 @@ HtmlView.defaultProps = {
   onLinkPress: (url, isGettingType) => {
     let targetURL = url.includes('d7vg.com') ? url.replace('d7vg.com', 'psnine.com') : url
     let baseURL = targetURL
-    const reg = /^(https|http)\:\/\//
     let errMessage = ''
     let title = '打开网页'
     let type = 'general'
     const request = isGettingType ? () => { return {
       type, title, errMessage}
-    } : (targetURL) => Linking.openURL(targetURL).catch(err => {
+    } : (thisURL) => Linking.openURL(thisURL).catch(err => {
       errMessage && ToastAndroid.show(errMessage || err.toString(), ToastAndroid.SHORT)
-      errHandler(err)
+      errHandler()
     })
-    const errHandler = (err) => Linking.openURL(baseURL).catch(err => toast(errMessage || err.toString()))
+    const errHandler = () => Linking.openURL(baseURL).catch(err => toast(errMessage || err.toString()))
 
     // 深度链接
     if (targetURL.includes('music.163.com')) {
-      const matched = targetURL.match(/id\=(\d+)/)
+      let matched = targetURL.match(/\?id\=(\d+)/)
+      if (!matched) matched = targetURL.match(/\/song\/(\d+)/)
       if (matched) {
         targetURL = `orpheus://song/${matched[1]}`
         errMessage = `打开网易云音乐客户端失败 (id:${matched[1]})`
@@ -188,8 +188,26 @@ HtmlView.defaultProps = {
         title = `B站视频: av${matched[1]}`
         return request(targetURL)
       }
+      if (!matched) matched = targetURL.match(/anime\/(\d+)/)
+      if (matched) {
+        targetURL = `bilibili://bangumi/season/${matched[1]}?url_from_h5=1`
+        errMessage = `打开B站客户端失败 (av${matched[1]})`
+        type = 'bilibili'
+        title = `B站番剧: av${matched[1]}`
+        return request(targetURL)
+      }
+      if (!matched) matched = targetURL.match(/live\.bilibili\.com\/(h5\/|)(\d+)/)
+      if (matched) {
+        targetURL = `bilibili://live/${matched[2]}`
+        errMessage = `打开B站客户端失败 (av${matched[2]})`
+        type = 'bilibili'
+        title = `B站直播: av${matched[1]}`
+        return request(targetURL)
+      }
+
     }
 
+    const reg = /^(https|http)\:\/\//
     if (reg.exec(targetURL)) {
       const target = targetURL.replace(reg, 'p9://')
       return request(target)
