@@ -59,6 +59,7 @@ import mainParser from '../parser/main'
 import gameNewTopicParser from '../parser/game/gameNewTopic'
 import newGeneElementParser from '../parser/circle/element'
 import userBlockParser from '../parser/user/block'
+import nbParser from '../parser/user/nb'
 
 const safeFetch = function(reqUrl, type = 'text') {
   return new Promise((resolve, reject) => {
@@ -100,6 +101,8 @@ export const fetchCreateDiary = (uri, isTopic) => safeFetch(uri).then(res => isT
 export const getTopicAPI = uri => safeFetch(uri).then(res => topicApiParser(res, uri.includes('/gene/') ? 'gene' : 'topic'))
 
 export const getBattleAPI = uri => safeFetch(uri).then(res => battleTopicParser(res))
+
+export const getNBAPI = uri => safeFetch(uri).then(res => nbParser(res))
 
 export const getGameAPI = uri => safeFetch(uri).then(res => gameParser(res))
 

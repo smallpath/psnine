@@ -237,7 +237,8 @@ class UserGame extends Component {
             height: 56,
             borderRadius: 28,
             justifyContent: 'center',
-            alignItems: 'center'
+            alignItems: 'center',
+            elevation: 6
           }} ref={float => this.float = float}>
           <TouchableNativeFeedback
             background={TouchableNativeFeedback.SelectableBackgroundBorderless()}

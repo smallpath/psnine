@@ -296,7 +296,7 @@ class Toolbar extends Component {
                 >
                   <TouchableWithoutFeedback>
                     <View style={{ height: 56, flex: 1, flexDirection: 'column', justifyContent: 'center' }}>
-                      <Text style={{ fontSize: 20, fontWeight: '300', color: modeInfo.isNightMode ? '#000' : '#fff' }} onPress={() => {
+                      <Text style={{ fontSize: 20, fontWeight: '500', color: modeInfo.isNightMode ? '#000' : '#fff' }} onPress={() => {
                         const index = this._currentViewPagerPageIndex
                         const callback = this.afterEachHooks[index]
                         {/*log(callback, this.state.afterEachHooks, index)*/ }

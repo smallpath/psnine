@@ -147,14 +147,14 @@ export default class GameTopic extends Component {
         `是否从所选${this.isTopic ? '讨论' : '机因'}中创建日志?`,
         [
           {
+            text: '取消'
+          }, {
             text: '确定', onPress: () => {
               callback({
                 isTopic: this.isTopic,
                 id: rowData.id
               })
             }
-          }, {
-            text: '取消'
           }
         ]
       )

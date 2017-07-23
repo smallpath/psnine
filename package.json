@@ -9,7 +9,7 @@
     "test": "jest",
     "lint": "tslint -c tslint.json -p tsconfig.json",
     "tsc": "tsc",
-    "clean": "rimraf build",
+    "clean": "rimraf dist",
     "build": "npm run clean && npm run tsc --",
     "watch": "npm run clean && tsc -w",
     "fix": "tslint -c tslint.json -p tsconfig.json --fix"

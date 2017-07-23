@@ -19,7 +19,7 @@ import {
 import { connect } from 'react-redux'
 import { standardColor, nodeColor, idColor, accentColor } from '../../constant/colorConfig'
 import Ionicons from 'react-native-vector-icons/Ionicons'
-import { getDetailAPI } from '../../dao'
+import { getDetailAPI, getNBAPI } from '../../dao'
 import CircleItem from '../../component/CircleItem'
 
 const AnimatedSectionList = Animated.createAnimatedComponent(SectionList)
@@ -38,7 +38,8 @@ export default class Detail extends Component {
       data: {
         joinedList : [],
         ownedList : []
-      }
+      },
+      nb: ''
     }
   }
 
@@ -54,10 +55,14 @@ export default class Detail extends Component {
       isLoading: true
     })
     InteractionManager.runAfterInteractions(() => {
-      getDetailAPI('http://psnine.com/my/account').then(data => {
+      Promise.all([
+        getNBAPI('http://psnine.com/my'),
+        getDetailAPI('http://psnine.com/my/account')
+      ]).then(arr => {
         this.setState({
-          data,
-          isLoading: false
+          data: arr[1],
+          nb: arr[0],
+          isLoading: false,
         })
       })
     })
@@ -90,8 +95,9 @@ export default class Detail extends Component {
             URL: 'http://psnine.com/set/mujuan',
             title: '捐助PSNINE'
           })
-        }} style={{flex: 1}}/>
+        }}/>
         <View style={{ flex: 1, flexDirection: 'row' }}>
+          <View style={{flex: 1, alignItems: 'center'}}><Text style={{color: modeInfo.standardColor, padding: 20}}>{this.state.nb}</Text></View>
           <View style={{flex: 1, alignItems: 'center'}}><Text style={{color: '#659f13', padding: 20}}>{rowData.zb}</Text></View>
           <View style={{flex: 1, alignItems: 'center'}}><Text style={{color: '#b94a48', padding: 20}}>{rowData.level}</Text></View>
         </View>
