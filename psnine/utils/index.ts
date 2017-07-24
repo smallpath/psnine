@@ -46,13 +46,13 @@ export const onDeepLinkPress = (url, isGettingType) => {
 
   // 深度链接
   if (targetURL.includes('music.163.com')) {
-    let matched = targetURL.match(/\?id\=(\d+)/)
-    if (!matched) matched = targetURL.match(/\/song\/(\d+)/)
+    let matched = targetURL.match(/(\?|\&)id\=(\d+)/)
+    if (!matched) matched = targetURL.match(/\/(song)\/(\d+)/)
     if (matched) {
-      targetURL = `orpheus://song/${matched[1]}`
-      errMessage = `打开网易云音乐客户端失败 (id:${matched[1]})`
+      targetURL = `orpheus://song/${matched[2]}`
+      errMessage = `打开网易云音乐客户端失败 (id:${matched[2]})`
       type = 'music163'
-      title = `网易云音乐: ${matched[1]}`
+      title = `网易云音乐: ${matched[2]}`
       return request(targetURL)
     }
   } else if (targetURL.includes('bilibili.com')) {
@@ -81,7 +81,15 @@ export const onDeepLinkPress = (url, isGettingType) => {
       title = `B站直播: av${matched[1]}`
       return request(targetURL)
     }
-
+  } else if (targetURL.includes('hdslb.com/miniloader.swf')) {
+    let matched = targetURL.match(/aid\=(\d+)/)
+    if (matched) {
+      targetURL = `bilibili://video/${matched[1]}`
+      errMessage = `打开B站客户端失败 (av${matched[1]})`
+      type = 'bilibili'
+      title = `B站视频: av${matched[1]}`
+      return request(targetURL)
+    }
   }
 
   const reg = /^(https|http)\:\/\//
