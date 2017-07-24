@@ -36,8 +36,14 @@ export const fav = (form) => {
   const target = typeof form.unfav !== 'undefined' ? 'http://psnine.com/my/fav' : 'http://psnine.com/set/fav/ajax'
   return fetch(target, Object.assign({ body: formBody }, config))
 }
+
 export const block = (form) => {
   const formBody = encodeForm(form)
   const target = typeof form.unblock !== 'undefined' ? 'http://psnine.com/my/block' : 'http://psnine.com/set/blocked/ajax'
+  return fetch(target, Object.assign({ body: formBody }, config))
+}
+export const close = (form) => {
+  const formBody = encodeForm(form)
+  const target = 'http://psnine.com/set/close/ajax'
   return fetch(target, Object.assign({ body: formBody }, config))
 }

@@ -77,7 +77,7 @@ const Tab = TabNavigator(container, {
           backgroundColor: modeInfo.backgroundColor
         }}
       />
-      </NestedScrollView>
+      </global.NestedScrollView>
     )
   },
   lazy: true,

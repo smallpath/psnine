@@ -11,6 +11,7 @@ import {
 import { standardColor, idColor } from '../constant/colorConfig'
 import entities from 'entities'
 import { FlatlistItemProp, FlatlistItemState } from '../interface'
+import { updown } from '../dao/sync'
 
 interface ExtendedProp extends FlatlistItemProp {
   index: any
@@ -50,7 +51,6 @@ export default class extends React.PureComponent<ExtendedProp, FlatlistItemState
             })
           }}
           useForeground={true}
-
           background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
         >
           <View style={{ flex: 1, flexDirection: 'row', padding: 12 }}>
@@ -86,6 +86,30 @@ export default class extends React.PureComponent<ExtendedProp, FlatlistItemState
                           height: 50, paddingVertical: 10, paddingLeft: 20 , alignSelf: 'stretch', alignContent: 'stretch', justifyContent: 'center'
                         }}>
                           <Text style={{textAlignVertical: 'center', fontSize: 18, color: modeInfo.standardTextColor}}>回复</Text>
+                        </View>
+                      </TouchableNativeFeedback>
+                      <TouchableNativeFeedback onPress={() => {
+                          this.setState({
+                            modalVisible: false
+                          }, () => {
+                            requestAnimationFrame(() => {
+                              updown({
+                                type: 'comment',
+                                param: rowData.id,
+                                updown: 'up'
+                              }).then(res => res.text()).then(html => {
+                                if (html) {
+                                  return global.toast(`点赞失败: ${html}`)
+                                }
+                                global.toast('点赞成功')
+                              })
+                            })
+                          })
+                        }}>
+                        <View style={{
+                          height: 50, paddingVertical: 10, paddingLeft: 20 , alignSelf: 'stretch', alignContent: 'stretch', justifyContent: 'center'
+                        }}>
+                          <Text style={{textAlignVertical: 'center', fontSize: 18, color: modeInfo.standardTextColor}}>点赞</Text>
                         </View>
                       </TouchableNativeFeedback>
                       <TouchableNativeFeedback onPress={() => {
@@ -165,7 +189,10 @@ export default class extends React.PureComponent<ExtendedProp, FlatlistItemState
                 }>{rowData.psnid}</Text>
                 <Text selectable={false} style={{
                   flex: -1, color: modeInfo.standardTextColor, textAlign: 'center', textAlignVertical: 'center'
-                }}>{rowData.date}</Text>
+                }}>
+                {!!rowData.count && isNaN(rowData.count) === false && <Text style={{ flex: -1, color: modeInfo.accentColor }}>+{rowData.count}   </Text>}
+                  {rowData.date}
+                </Text>
               </View>
 
             </View>

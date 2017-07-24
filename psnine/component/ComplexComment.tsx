@@ -14,6 +14,9 @@ import entities from 'entities'
 import {
   postReply
 } from '../dao/post'
+import {
+  updown
+} from '../dao/sync'
 
 import { FlatlistItemProp, FlatlistItemState, ModalList } from '../interface'
 
@@ -215,6 +218,30 @@ export default class ComplexComment extends React.PureComponent<ExtendedProp, Ex
                             modalVisible: false
                           }, () => {
                             requestAnimationFrame(() => {
+                              updown({
+                                type: 'comment',
+                                param: rowData.id,
+                                updown: 'up'
+                              }).then(res => res.text()).then(html => {
+                                if (html) {
+                                  return global.toast(`点赞失败: ${html}`)
+                                }
+                                global.toast('点赞成功')
+                              })
+                            })
+                          })
+                        }}>
+                        <View style={{
+                          height: 50, paddingVertical: 10, paddingLeft: 20 , alignSelf: 'stretch', alignContent: 'stretch', justifyContent: 'center'
+                        }}>
+                          <Text style={{textAlignVertical: 'center', fontSize: 18, color: modeInfo.standardTextColor}}>点赞</Text>
+                        </View>
+                      </TouchableNativeFeedback>
+                      <TouchableNativeFeedback onPress={() => {
+                          this.setState({
+                            modalVisible: false
+                          }, () => {
+                            requestAnimationFrame(() => {
                               Clipboard.setString(entities.decodeHTML(rowData.text).replace(/<.*?>/igm, ''))
                               global.toast('评论文字已复制到剪贴板')
                             })
@@ -306,7 +333,10 @@ export default class ComplexComment extends React.PureComponent<ExtendedProp, Ex
                     })
                   }
                 }>{rowData.psnid}</Text>
-                <Text style={{ flex: -1, color: modeInfo.standardTextColor, textAlign: 'center', textAlignVertical: 'center' }}>{rowData.date}</Text>
+                <Text style={{ flex: -1, color: modeInfo.standardTextColor, textAlign: 'center', textAlignVertical: 'center' }}>
+                  {!!rowData.count && isNaN(rowData.count) === false && <Text style={{ flex: -1, color: modeInfo.accentColor }}>+{rowData.count}   </Text>}
+                  {rowData.date}
+                </Text>
               </View>
 
               { rowData.commentList.length !== 0 && (<View style={{ backgroundColor: modeInfo.brighterLevelOne}}>
