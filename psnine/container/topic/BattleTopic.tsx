@@ -18,6 +18,9 @@ import SimpleComment from '../../component/SimpleComment'
 import {
   getBattleAPI
 } from '../../dao'
+import {
+  close
+} from '../../dao/sync'
 
 declare var global
 
@@ -389,6 +392,15 @@ class CommunityTopic extends Component {
           }
         }
       )
+      targetActions.push({
+        title: '关闭', iconName: 'md-create', iconSize: 22, show: 'never',
+        onPress: function () {
+          close({
+            type: 'battle',
+            id: params.URL.split('/').pop()
+          }).then(res => res.text()).then(html => html ? global.toast('关闭失败: ' + html) : global.toast('关闭成功'))
+        }
+      })
     }
 
     this.viewBottomIndex = Math.max(data.length - 1, 0)

@@ -8,14 +8,13 @@ import {
   TouchableNativeFeedback,
   InteractionManager,
   ActivityIndicator,
-  StatusBar,
   Animated,
   Easing,
   FlatList,
   Linking
 } from 'react-native'
 
-import { updown, fav } from '../../dao/sync'
+import { updown, fav, close } from '../../dao/sync'
 
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import colorConfig, {
@@ -135,7 +134,7 @@ const ApiMapper = {
   'battle': getBattleAPI
 }
 
-class CommunityTopic extends Component {
+class CommunityTopic extends Component<any, any> {
 
   constructor(props) {
     super(props)
@@ -345,7 +344,7 @@ class CommunityTopic extends Component {
   hasGameTable = false
   renderGameTable = (gameTable) => {
     const { modeInfo } = this.props.screenProps
-    const list = []
+    const list: any = []
     for (const rowData of gameTable) {
       list.push(
         <View key={rowData.id} style={{
@@ -432,8 +431,8 @@ class CommunityTopic extends Component {
   renderComment = (commentList) => {
     const { modeInfo } = this.props.screenProps
     const { navigation } = this.props
-    const list = []
-    let readMore = null
+    const list: JSX.Element[] = []
+    let readMore: any = null
     for (const rowData of commentList) {
       if (rowData.isGettingMoreComment === false) {
         list.push(
@@ -519,7 +518,7 @@ class CommunityTopic extends Component {
     const { modeInfo } = this.props.screenProps
     const list = []
     for (const item of page) {
-      const thisJSX = (
+      const thisJSX: JSX.Element = (
         <View style={{margin: 2}} key={item.url}>
           <TouchableNativeFeedback key={item.url}
             useForeground={true}
@@ -567,8 +566,8 @@ class CommunityTopic extends Component {
     // console.log('CommunityTopic.js rendered');
     const { modeInfo } = this.props.screenProps
     const { data: source } = this.state
-    const data = []
-    const renderFuncArr = []
+    const data: any = []
+    const renderFuncArr: any = []
     const shouldPushData = !this.state.isLoading
     if (shouldPushData) {
       data.push(source.titleInfo)
@@ -631,7 +630,17 @@ class CommunityTopic extends Component {
             })
           }
         })
+        params.type === 'gene' && targetActions.push({
+          title: '关闭', iconName: 'md-create', iconSize: 22, show: 'never',
+          onPress: function () {
+            close({
+              type: 'gene',
+              id: params.URL.split('/').pop()
+            }).then(res => res.text()).then(html => html ? global.toast('关闭失败: ' + html) : global.toast('关闭成功'))
+          }
+        })
       }
+
     }
 
     return (

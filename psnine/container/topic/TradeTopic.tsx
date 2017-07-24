@@ -25,6 +25,10 @@ import {
   postReply
 } from '../../dao/post'
 
+import {
+  close
+} from '../../dao/sync'
+
 declare var global
 
 let screen = Dimensions.get('window')
@@ -384,6 +388,15 @@ export default class extends Component {
           }
         }
       )
+      source.titleInfo.edit && targetActions.push({
+        title: '关闭', iconName: 'md-create', iconSize: 22, show: 'never',
+        onPress: function () {
+          close({
+            type: 'trade',
+            id: params.URL.split('/').pop()
+          }).then(res => res.text()).then(html => html ? global.toast('关闭失败: ' + html) : global.toast('关闭成功'))
+        }
+      })
     }
 
     this.viewBottomIndex = Math.max(data.length - 1, 0)
