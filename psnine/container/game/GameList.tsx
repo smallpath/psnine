@@ -55,7 +55,7 @@ class TopicItem extends React.PureComponent {
           <View pointerEvents={'box-only'} style={{ flex: -1, flexDirection: 'column', padding: 12 }}>
             <Text style={{ flex: -1, color: modeInfo.standardColor, textAlign: 'left', textAlignVertical: 'center' }}>{rowData.title}</Text>
             {rowData.content && <View style={{backgroundColor: modeInfo.brighterLevelOne, padding: 5}}>
-              <HTMLView
+              <global.HTMLView
                 value={`<div>${rowData.content}</div>`}
                 modeInfo={modeInfo}
                 stylesheet={styles}
@@ -207,7 +207,7 @@ class GameTopic extends Component {
           }}
         />
         {this.state.modalVisible && (
-          <MyDialog modeInfo={modeInfo}
+          <global.MyDialog modeInfo={modeInfo}
             modalVisible={this.state.modalVisible}
             onDismiss={() => { this.setState({ modalVisible: false }); this.isValueChanged = false }}
             onRequestClose={() => { this.setState({ modalVisible: false }); this.isValueChanged = false }}

@@ -35,6 +35,8 @@ import { getGameUrl } from '../../dao'
 let screen = Dimensions.get('window')
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = screen
 
+declare var global
+
 let toolbarActions = [
   {
     title: '回复', iconName: 'md-create', iconSize: 22, show: 'always', onPress: function () {
@@ -63,7 +65,7 @@ let toolbarActions = [
   {
     title: '在浏览器中打开', iconName: 'md-refresh', show: 'never', onPress: function () {
       const { params = {} } = this.props.navigation.state
-      Linking.openURL(params.URL).catch(err => toast(err.toString()))
+      Linking.openURL(params.URL).catch(err => global.toast(err.toString()))
     }
   },
   {
@@ -74,11 +76,11 @@ let toolbarActions = [
         type: params.type === 'community' ? 'topic' : params.type,
         param: params.rowData && params.rowData.id
       }).then(res => res.text()).then(text => {
-        if (text) return toast(text)
-        toast('操作成功')
+        if (text) return global.toast(text)
+        global.toast('操作成功')
       }).catch(err => {
         const msg = `操作失败: ${err.toString()}`
-        toast(msg)
+        global.toast(msg)
       })
     }
   },
@@ -90,11 +92,11 @@ let toolbarActions = [
         param: params.rowData && params.rowData.id,
         updown: 'up'
       }).then(res => res.text()).then(text => {
-        if (text) return toast(text)
-        toast('操作成功')
+        if (text) return global.toast(text)
+        global.toast('操作成功')
       }).catch(err => {
         const msg = `操作失败: ${err.toString()}`
-        toast(msg)
+        global.toast(msg)
       })
     }
   },
@@ -106,7 +108,7 @@ let toolbarActions = [
         if (title.length > 50) {
           title = title.slice(0, 50) + '... '
         }
-        Share.open({
+        global.Share.open({
           url: params.URL,
           message: '[PSNINE] ' + title.replace(/<.*?>/igm, ''),
           title: 'PSNINE'
@@ -118,20 +120,13 @@ let toolbarActions = [
     title: '出处', iconName: 'md-share-alt', show: 'never', onPress: function () {
       try {
         const url = this.state.data.titleInfo.shareInfo.source
-        url && Linking.openURL(url).catch(err => toast(err.toString())) || toast('暂无出处')
+        url && Linking.openURL(url).catch(err => global.toast(err.toString())) || global.toast('暂无出处')
       } catch (err) { }
     }
   }
 ]
-let title = 'TOPIC'
-let WEBVIEW_REF = `WEBVIEW_REF`
 
 let toolbarHeight = 56
-let releasedMarginTop = 0
-
-const ACTUAL_SCREEN_HEIGHT = SCREEN_HEIGHT - StatusBar.currentHeight + 1
-
-let CIRCLE_SIZE = 56
 let config = { tension: 30, friction: 7, ease: Easing.in(Easing.ease(1, 0, 1, 1)), duration: 200 }
 
 const ApiMapper = {
@@ -285,7 +280,7 @@ class CommunityTopic extends Component {
             }
 
             <View style={{ flex: 1, flexDirection: 'column', padding: 5 }}>
-              <HTMLView
+              <global.HTMLView
                 value={titleInfo.title}
                 modeInfo={modeInfo}
                 stylesheet={styles}
@@ -334,7 +329,7 @@ class CommunityTopic extends Component {
         backgroundColor: modeInfo.backgroundColor,
         padding: 10
       }}>
-        <HTMLView
+        <global.HTMLView
           value={html}
           modeInfo={modeInfo}
           shouldShowLoadingIndicator={true}
@@ -407,7 +402,7 @@ class CommunityTopic extends Component {
                 </View>
 
                 {rowData.blockquote && <View style={{ flex: -1 }}>
-                  <HTMLView
+                  <global.HTMLView
                     value={rowData.blockquote}
                     modeInfo={modeInfo}
                     shouldShowLoadingIndicator={true}

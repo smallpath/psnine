@@ -4,29 +4,13 @@ import {
   Text,
   View,
   AsyncStorage,
-  StatusBar,
-  Dimensions,
-  Easing,
   Picker
 } from 'react-native'
 
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import ColorConfig, { standardColor, idColor, accentColor } from '../../constant/colorConfig'
 
-let screen = Dimensions.get('window')
-const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = screen
-
-let toolbarActions = []
-let title = 'TOPIC'
-let WEBVIEW_REF = `WEBVIEW_REF`
-
-let toolbarHeight = 56
-let releasedMarginTop = 0
-
-const ACTUAL_SCREEN_HEIGHT = SCREEN_HEIGHT - StatusBar.currentHeight + 1
-
-let CIRCLE_SIZE = 56
-let config = { tension: 30, friction: 7, ease: Easing.in(Easing.ease(1, 0, 1, 1)), duration: 200 }
+declare var global
 
 const mapper = {
   'red': '红色',
@@ -171,7 +155,7 @@ class Theme extends Component {
     newState[key] = value
     this.setState(newState, () => {
       if (key === 'tabMode') {
-        AsyncStorage.setItem('@Theme:tabMode', value).catch(err => toast(err.toString())).then(() => {
+        AsyncStorage.setItem('@Theme:tabMode', value).catch(err => global.toast(err.toString())).then(() => {
           return modeInfo.reloadSetting && modeInfo.reloadSetting()
         })
       } else {

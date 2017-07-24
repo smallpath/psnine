@@ -64,7 +64,7 @@ const Tab = TabNavigator(container, {
   tabBarComponent: props => {
     const { modeInfo } = props.screenProps
     return (
-      <NestedScrollView style={{elevation: 0, height: 40, minHeight: 40, maxHeight: 40}}>
+      <global.NestedScrollView style={{elevation: 0, height: 40, minHeight: 40, maxHeight: 40}}>
       <DefaultTabBar
         {...props}
         activeTintColor={modeInfo.accentColor}

@@ -3,22 +3,20 @@ import {
   StyleSheet,
   Text,
   View,
-  Dimensions,
   TouchableNativeFeedback
 } from 'react-native'
 
-let screen = Dimensions.get('window')
-const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = screen
+import { FlatlistItemProp } from '../interface'
 
-export default class PhotoItem extends React.PureComponent {
+export default class PhotoItem extends React.PureComponent<FlatlistItemProp> {
 
-  shouldComponentUpdate = (props, state) => {
+  shouldComponentUpdate(props: FlatlistItemProp) {
     if (props.modeInfo.themeName !== this.props.modeInfo.themeName) return true
     return false
   }
 
   render() {
-    const { modeInfo, onPress, rowData, navigation } = this.props
+    const { modeInfo, onPress, rowData } = this.props
 
     return (
       <TouchableNativeFeedback
@@ -27,7 +25,7 @@ export default class PhotoItem extends React.PureComponent {
         background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
       >
         <View style={{
-          flex: -1, flexDirection: 'row', padding: 5, backgroundColor: modeInfo.backgroundColor,
+          flexDirection: 'row',
           alignSelf: 'flex-start',
           alignContent: 'flex-end',
           backgroundColor: modeInfo.backgroundColor,

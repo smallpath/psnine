@@ -209,7 +209,7 @@ class UserGame extends Component {
           maxToRenderPerBatch={8}
           disableVirtualization={false}
           key={modeInfo.themeName}
-          renderScrollComponent={props => <NestedScrollView {...props}/>}
+          renderScrollComponent={props => <global.NestedScrollView {...props}/>}
           numColumns={modeInfo.numColumns}
           contentContainerStyle={styles.list}
           getItemLayout={(data, index) => (
@@ -259,7 +259,7 @@ class UserGame extends Component {
           </TouchableNativeFeedback>
         </View>
         {this.state.modalVisible && (
-          <MyDialog modeInfo={modeInfo}
+          <global.MyDialog modeInfo={modeInfo}
             modalVisible={this.state.modalVisible}
             onDismiss={() => { this.setState({ modalVisible: false }); this.isValueChanged = false }}
             onRequestClose={() => { this.setState({ modalVisible: false }); this.isValueChanged = false }}

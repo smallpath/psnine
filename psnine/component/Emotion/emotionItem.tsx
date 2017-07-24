@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import {
-  StyleSheet,
   View,
   TouchableNativeFeedback,
   Image
@@ -8,7 +7,21 @@ import {
 
 const viewPagerHeight = 180
 
-class EmotionItem extends Component {
+interface Props {
+  modeInfo: any
+  size: {
+    width: number
+    height: number
+  }
+  emotionList: any
+  onPress: ({ text, url }) => any
+}
+
+export interface State {
+  index: number
+}
+
+class EmotionItem extends Component<Props, State> {
   constructor(props) {
     super(props)
     this.state = {
@@ -18,14 +31,13 @@ class EmotionItem extends Component {
 
   render() {
     const { modeInfo, size, emotionList } = this.props
-    const { index } = this.state
-    const list = []
+    const list: any[] = []
     const perPage = 60
     const maxLen = Math.ceil(emotionList.length / perPage)
     const { width: itemWidth, height: itemHeight } = size
     for (let i = 0; i < maxLen; i++) {
 
-      const ImageList = []
+      const ImageList: any[] = []
       for (let j = 0; j < perPage; j++) {
         const thisIndex = i * perPage + j
         if (thisIndex > emotionList.length - 1) break
@@ -75,7 +87,5 @@ class EmotionItem extends Component {
   }
 
 }
-
-const styles = StyleSheet.create({})
 
 export default EmotionItem

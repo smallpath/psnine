@@ -1,7 +1,6 @@
 import * as ActionTypes from '../../constant/actionTypes'
-
 import { fetchGames } from '../../dao'
-
+declare var global
 export function getGameList(page, {
   sort, pf, dlc,
   title = ''

@@ -25,6 +25,8 @@ import { safeLogout } from '../dao/logout'
 import { safeSignOn } from '../dao/signon'
 import { fetchUser } from '../dao'
 
+declare var global
+
 const ListItems = [
   {
     text: '个人主页',
@@ -281,7 +283,7 @@ class navigationDrawer extends Component {
     ]).then(() => {
       const { modeInfo } = this.props
       modeInfo.reloadSetting && modeInfo.reloadSetting()
-    }).catch(err => toast(err.toString())).then(() => {
+    }).catch(err => global.toast(err.toString())).then(() => {
       global.toast && global.toast('登出成功', 2000)
     })
 

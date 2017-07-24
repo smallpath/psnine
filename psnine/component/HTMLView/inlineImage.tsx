@@ -46,7 +46,24 @@ export default props => {
   )
 }
 
-class InlineImage extends Component {
+export interface IProps {
+  source: any
+  style: any
+  isLoading: any
+  alignCenter: any
+  modeInfo: any
+  linkPressHandler: any
+}
+
+export interface State {
+  width: number,
+  height: number,
+  alignCenter: boolean
+}
+
+class InlineImage extends Component<IProps, State> {
+  maxWidth: number = width
+  mounted: boolean = false
   constructor(props) {
     super(props)
     const maxWidth = width - this.props.source.imagePaddingOffset
@@ -62,7 +79,7 @@ class InlineImage extends Component {
     this.mounted = false
   }
 
-  componentDidMount = () => {
+  componentDidMount() {
     this.mounted = true
     if (this.props.style.width !== 0 && this.props.style.height !== 0) {
       return
@@ -78,15 +95,14 @@ class InlineImage extends Component {
   }
 
   render() {
-    const finalSize = {}
+    const finalSize: any = {}
     // console.log(this.state.width, this.maxWidth)
     if (this.state.width > this.maxWidth) {
       finalSize.width = this.maxWidth
       let ratio = this.maxWidth / this.state.width
       finalSize.height = this.state.height * ratio
     }
-    const style = Object.assign({}, baseStyle, finalSize)
-    let source = {}
+    let source: any = {}
     if (!finalSize.width || !finalSize.height) {
       source = Object.assign(source, this.props.source, this.state)
     } else {
@@ -96,7 +112,7 @@ class InlineImage extends Component {
       <Image
         resizeMode={'contain'}
         resizeMethod={'scale'}
-        onError={(e) => { }}
+        onError={() => {}}
         key={`${source.width}:${source.height}`}
         source={source}
         style={{

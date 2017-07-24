@@ -3,9 +3,9 @@ let dayStr = '<b style="color:green;">'
 
 const signonURL = 'http://psnine.com/set/qidao/ajax'
 
-export const fetchSignOn = function (psnid) {
+export const fetchSignOn = function () {
 
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     fetch(signonURL, {
       method: 'POST',
       headers: {

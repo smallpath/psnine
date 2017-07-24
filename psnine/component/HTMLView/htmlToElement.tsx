@@ -2,7 +2,6 @@ import React from 'react'
 import {
   Text,
   View,
-  Dimensions,
   StyleSheet
 } from 'react-native'
 import htmlparser from 'htmlparser2-without-node-native'
@@ -18,13 +17,12 @@ const PARAGRAPH_BREAK = '\n\n'
 const BULLET = '\u2022 '
 const inlineElements = ['a', 'span', 'em', 'font', 'label', 'b', 'strong', 'i', 'small', 'img', 'u']
 const blockLevelElements = ['pre', 'p', 'br', 'h1', 'h2', 'h3', 'h4', 'h5', 'blockquote']
-const { width: SCEEN_WIDTH } = Dimensions.get('window')
 
 export default function htmlToElement(rawHtml, opts, done) {
   function domToElement(dom, parent, inInsideView = true, depth = 0, parentIframe = 0) {
 
     // debug开关函数
-    const log = () => {}
+    const log: (...args) => any = () => {}
     // const log = (text, ...args) => console.log(`第${depth}层 ${Array(depth).fill('      ').join('')}${text} ${args.join(' ')}`)
     log('是否在View内', inInsideView)
     // inInsideView为是否为第一层, 是第一层则图片外联并且支持返回View组件, 否则只支持返回Text和内联图片组件
@@ -49,10 +47,10 @@ export default function htmlToElement(rawHtml, opts, done) {
     }
 
     // 向parent递归查找class和style, 最终得到文字应有的样式
-    let renderInlineStyle = function (parent, styleObj) {
+    let renderInlineStyle = function (innerParent, styleObj) {
       // p9目前只有span的嵌套, 因此暂时只处理span
-      if (parent && inlineElements.includes(parent.name)) {
-        const classNameArr = (parent.attribs.class || '').split(' ')
+      if (innerParent && inlineElements.includes(innerParent.name)) {
+        const classNameArr = (innerParent.attribs.class || '').split(' ')
         for (const name of classNameArr) {
           switch (name) {
             case 'font12':
@@ -62,27 +60,30 @@ export default function htmlToElement(rawHtml, opts, done) {
               styleObj.backgroundColor = opts.modeInfo.backgroundColor
               styleObj.color = opts.modeInfo.reverseModeInfo.backgroundColor
               styleObj.isMark = true
+              break
+            default:
+              break
           }
         }
-        const styles = (parent.attribs.style || '').split(';')
+        const styles = (innerParent.attribs.style || '').split(';')
         for (const style of styles) {
           if (!style) continue
           const splited = style.split(':')
           if (splited.length !== 2) continue
           splited[0] = splited[0].replace(/\-([a-z])/, (matched) => matched[1].toUpperCase())
           if (splited[1].includes('px')) {
-            splited[1] = parseInt(splited[1])
+            splited[1] = parseInt(splited[1], 10)
           } else {
             splited[1] = splited[1].toLowerCase()
           }
           styleObj[splited[0]] = splited[1]
         }
-        renderInlineStyle(parent.parent, styleObj)
+        renderInlineStyle(innerParent.parent, styleObj)
       }
     }
 
     // 渲染可以被内联的组件
-    let renderInlineNode = function (index, result = [], inInsideView = false) {
+    let renderInlineNode = function (index, result: any[] = [], isInsideView = false) {
       let thisIndex = index + 1
       if (thisIndex < domLen) {
         let nextNode = dom[thisIndex]
@@ -98,7 +99,7 @@ export default function htmlToElement(rawHtml, opts, done) {
           //   nextNode.children && nextNode.children.length === 1 && nextNode.children[0].name
           //  ,'isNestedImage')
           if (isNestedImage) {
-            log('渲染内联组件', inInsideView)
+            log('渲染内联组件', isInsideView)
             domTemp[thisIndex] = false
             return result
           }
@@ -125,17 +126,17 @@ export default function htmlToElement(rawHtml, opts, done) {
       return result
     }
 
-    let renderText = (node, index, parent, shouldRenderInline = false) => {
-      if (node.type == 'text' && node.data.trim() !== '') {
-        let linkPressHandler = null
+    let renderText = (node, index, innerParent) => {
+      if (node.type === 'text' && node.data.trim() !== '') {
+        let linkPressHandler: any = null
         // console.log(parent && parent.name === 'a' && parent.attribs && parent.attribs.href, '==>')
-        if (parent && parent.name === 'a' && parent.attribs && parent.attribs.href) {
+        if (innerParent && innerParent.name === 'a' && innerParent.attribs && innerParent.attribs.href) {
           // console.log('???', parent.attribs.href)
-          linkPressHandler = () => opts.linkHandler(entities.decodeHTML(parent.attribs.href))
+          linkPressHandler = () => opts.linkHandler(entities.decodeHTML(innerParent.attribs.href))
         }
 
-        const classStyle = {}
-        renderInlineStyle(parent, classStyle)
+        const classStyle: any = {}
+        renderInlineStyle(innerParent, classStyle)
 
         let inlineArr = renderInlineNode(index)
         const content = entities.decodeHTML(node.data)
@@ -152,14 +153,14 @@ export default function htmlToElement(rawHtml, opts, done) {
         return (
           <Text key={index} onPress={linkPressHandler} style={[
             { color: opts.modeInfo.standardTextColor },
-            parent ? opts.styles[parent.name] : null,
+            innerParent ? opts.styles[innerParent.name] : null,
             classStyle
-          ]}>{parent && parent.name === 'pre' ? LINE_BREAK : null}
-            {parent && parent.name === 'li' ? BULLET : null}
-            {parent && parent.name === 'br' ? LINE_BREAK : null}
-            {parent && parent.name === 'p' && index < parent.length - 1 ? PARAGRAPH_BREAK : null}
-            {parent && parent.name === 'h1' || parent && parent.name === 'h2' || parent && parent.name === 'h3'
-              || parent && parent.name === 'h4' || parent && parent.name === 'h5' ? PARAGRAPH_BREAK : null}
+          ]}>{innerParent && innerParent.name === 'pre' ? LINE_BREAK : null}
+            {innerParent && innerParent.name === 'li' ? BULLET : null}
+            {innerParent && innerParent.name === 'br' ? LINE_BREAK : null}
+            {innerParent && innerParent.name === 'p' && index < innerParent.length - 1 ? PARAGRAPH_BREAK : null}
+            {innerParent && innerParent.name === 'h1' || innerParent && innerParent.name === 'h2' || innerParent && innerParent.name === 'h3'
+              || innerParent && innerParent.name === 'h4' || innerParent && innerParent.name === 'h5' ? PARAGRAPH_BREAK : null}
 
             {text}
 
@@ -182,12 +183,12 @@ export default function htmlToElement(rawHtml, opts, done) {
         if (rendered || rendered === null) return rendered
       }
       log('尝试渲染renderText', node.type, node.name, inInsideView)
-      const textComponent = renderText(node, index, parent, !inInsideView)
+      const textComponent = renderText(node, index, parent)
       if (textComponent) return textComponent
 
       if (node.type === 'tag') {
         if (node.name === 'img') {
-          let linkPressHandler = null
+          let linkPressHandler: any = null
           let shouldForceInlineEmotion = false
           if (parent && parent.name === 'a' && parent.attribs.href) {
             const parentHref = parent.attribs.href
@@ -251,13 +252,13 @@ export default function htmlToElement(rawHtml, opts, done) {
           }
         }
 
-        let linkPressHandler = null
+        let linkPressHandler: any = null
         if (node.name === 'a' && node.attribs && node.attribs.href) {
           linkPressHandler = () => opts.linkHandler(entities.decodeHTML(node.attribs.href))
         }
 
-        let linebreakBefore = null
-        let linebreakAfter = null
+        let linebreakBefore: null | string = null
+        let linebreakAfter: null | string = null
         if (blockLevelElements.includes(node.name)) {
           switch (node.name) {
             case 'blockquote':
@@ -277,21 +278,23 @@ export default function htmlToElement(rawHtml, opts, done) {
             case 'h5':
               linebreakAfter = LINE_BREAK
               break
+            default:
+              break
           }
         }
 
-        let listItemPrefix = null
-        if (node.name == 'li') {
-          if (parent.name == 'ol') {
+        let listItemPrefix: null | string = null
+        if (node.name === 'li') {
+          if (parent.name === 'ol') {
             listItemPrefix = `${index + 1}. `
-          } else if (parent.name == 'ul') {
+          } else if (parent.name === 'ul') {
             listItemPrefix = BULLET
           }
         }
 
         let shouldSetLineAfter = false
 
-        const classStyle = {}
+        const classStyle: any = {}
         let isIframe = parentIframe || 0
         if (node.name === 'div') {
           if (node.attribs.align === 'center') {
@@ -307,6 +310,7 @@ export default function htmlToElement(rawHtml, opts, done) {
                   classStyle.paddingLeft = 10
                   classStyle.flex = 5
                   classStyle.flexWrap = 'wrap'
+                  break
                 case 'pd10':
                   classStyle.padding = 8
                   break
@@ -323,6 +327,8 @@ export default function htmlToElement(rawHtml, opts, done) {
                   classStyle.marginBottom = 2
                   classStyle.backgroundColor = opts.modeInfo.backgroundColor
                   isIframe = 104
+                  break
+                default:
                   break
               }
             }
@@ -357,12 +363,13 @@ export default function htmlToElement(rawHtml, opts, done) {
           }
         }
 
-        const flattenStyles = StyleSheet.flatten([
+        const flattenStyles: any = StyleSheet.flatten([
           parent ? opts.styles[parent.name] : null,
           classStyle
         ])
 
-        const isNestedImage = inInsideView && node.name === 'a' && node.children && node.children.length !== 0 && node.children.some(item => item.name === 'img')
+        const isNestedImage = inInsideView && node.name === 'a' && node.children
+          && node.children.length !== 0 && node.children.some(item => item.name === 'img')
         // log('判断是渲染View还是渲染Text',inInsideView, node.name === 'a' && node.children && node.children.length === 1 && node.children[0].name === 'img',
         //   node.name === 'a' && node.children && node.children.length !==0 && node.children.some(item => item.name === 'img')
         // , 'wow', depth)
@@ -389,7 +396,11 @@ export default function htmlToElement(rawHtml, opts, done) {
           return (
             <View key={index} style={flattenStyles}>
               {domToElement(node.children, node, inInsideView, depth + 1, isIframe)}
-              {shouldSetLineAfter && linebreakAfter && <Text key={index} onPress={linkPressHandler} style={parent ? opts.styles[parent.name] : null}>{linebreakAfter}</Text>}
+              {
+                shouldSetLineAfter && linebreakAfter && (
+                  <Text key={index} onPress={linkPressHandler} style={parent ? opts.styles[parent.name] : null}>{linebreakAfter}</Text>
+                )
+              }
             </View>
           )
         } else {

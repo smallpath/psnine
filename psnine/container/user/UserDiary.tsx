@@ -18,6 +18,8 @@ import DiaryItem from '../../component/DiaryItem'
 
 let toolbarActions = []
 
+declare var global
+
 class UserBoard extends Component {
   static navigationOptions = {
      tabBarLabel: '日志'
@@ -156,7 +158,7 @@ class UserBoard extends Component {
           }}
           extraData={this.state}
           windowSize={999}
-          renderScrollComponent={props => <NestedScrollView {...props}/>}
+          renderScrollComponent={props => <global.NestedScrollView {...props}/>}
           disableVirtualization={true}
           viewabilityConfig={{
             minimumViewTime: 3000,
@@ -224,7 +226,7 @@ class UserBoard extends Component {
             return
           }
         }
-        toast('创建日志成功, 请稍后刷新')
+        global.toast('创建日志成功, 请稍后刷新')
       })
     }
     Alert.alert(

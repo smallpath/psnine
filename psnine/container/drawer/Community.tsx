@@ -176,7 +176,7 @@ class Community extends Component {
         maxToRenderPerBatch={8}
         disableVirtualization={false}
         key={modeInfo.themeName + communityType}
-        renderScrollComponent={props => <NestedScrollView {...props} showsVerticalScrollIndicator={true}/>}
+        renderScrollComponent={props => <global.NestedScrollView {...props} showsVerticalScrollIndicator={true}/>}
         numColumns={modeInfo.numColumns}
         contentContainerStyle={styles.list}
         getItemLayout={communityType !== 'news' ? (data, index) => (

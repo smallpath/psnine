@@ -245,7 +245,7 @@ export default class Issue extends Component {
           }}
         />
         {this.state.typeModalVisible && (
-          <MyDialog modeInfo={modeInfo}
+          <global.MyDialog modeInfo={modeInfo}
             modalVisible={this.state.typeModalVisible}
             onDismiss={() => { this.setState({ typeModalVisible: false }); this.isValueChanged = false }}
             onRequestClose={() => { this.setState({ typeModalVisible: false }); this.isValueChanged = false }}
@@ -285,7 +285,7 @@ export default class Issue extends Component {
             )} />
         )}
         {this.state.modalVisible && (
-          <MyDialog modeInfo={modeInfo}
+          <global.MyDialog modeInfo={modeInfo}
             modalVisible={this.state.modalVisible}
             onDismiss={() => { this.setState({ modalVisible: false }); this.isValueChanged = false }}
             onRequestClose={() => { this.setState({ modalVisible: false }); this.isValueChanged = false }}

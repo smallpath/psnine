@@ -7,8 +7,17 @@ import {
   TouchableNativeFeedback
 } from 'react-native'
 
-export default class CircleItem extends React.PureComponent {
-  shouldComponentUpdate = (props) => props.modeInfo.themeName !== this.props.modeInfo.themeName
+import { FlatlistItemProp } from '../interface'
+
+interface ExtendedProp extends FlatlistItemProp {
+  ITEM_HEIGHT: number,
+  shouldMargin: boolean
+}
+
+export default class CircleItem extends React.PureComponent<ExtendedProp, {}> {
+  shouldComponentUpdate(props) {
+    return props.modeInfo.themeName !== this.props.modeInfo.themeName
+  }
 
   _onRowPressed = (rowData) => {
     const { navigation } = this.props
@@ -20,7 +29,7 @@ export default class CircleItem extends React.PureComponent {
     })
   }
 
-  render = () => {
+  render() {
     // console.log(rowData)
     const { modeInfo, rowData, ITEM_HEIGHT, shouldMargin = true } = this.props
     // console.log(rowData)
@@ -44,10 +53,9 @@ export default class CircleItem extends React.PureComponent {
               width: 54,
               flexDirection: 'column',
               alignSelf: 'center'
-            }} borderRadius={27}>
+            }}>
               <Image
                 source={{ uri: rowData.avatar }}
-                borderRadius={27}
                 style={{
                   width: 54,
                   height: 54,

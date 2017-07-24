@@ -8,7 +8,7 @@ export const safeLogin = function (psnid, pass) {
   let signin = ''
   let details = { psnid, pass, signin }
   const formBody = encodeForm(details)
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     fetch(loginURL, {
       method: 'POST',
       headers: {

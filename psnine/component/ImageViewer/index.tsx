@@ -13,7 +13,7 @@ fs.stat(psnineFolder).then(data => {
   if (!isDirectory) {
     fs.unlink(psnineFolder).catch(() => {}).then(() => fs.mkdir(psnineFolder))
   }
-}).catch(err => {
+}).catch(() => {
   fs.mkdir(psnineFolder)
 })
 
@@ -22,9 +22,9 @@ const onSave = (image) => {
     fromUrl: image,
     toFile: psnineFolder + '/' + image.split('/').pop()
   })
-  result.promise.then(data => {
+  result.promise.then(() => {
     ToastAndroid.show('保存成功', ToastAndroid.SHORT)
-  }).catch(err => ToastAndroid.show('保存失败: ' + err.toString()), ToastAndroid.SHORT)
+  }).catch(err => ToastAndroid.show('保存失败: ' + err.toString(), ToastAndroid.SHORT))
 }
 
 export default class extends React.Component {

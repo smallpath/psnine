@@ -21,14 +21,7 @@ import { safeLogin, registURL } from '../../dao/login'
 
 import { fetchUser } from '../../dao'
 
-let screen = Dimensions.get('window')
-
-const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = screen
-
-let toolbarActions = [
-
-]
-let title = '登录'
+declare var global
 
 class Login extends Component {
 

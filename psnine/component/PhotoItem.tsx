@@ -4,14 +4,18 @@ import {
   Text,
   View,
   Image,
-  Dimensions,
   TouchableNativeFeedback
 } from 'react-native'
 
-let screen = Dimensions.get('window')
-const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = screen
+import { FlatlistItemProp, FlatlistItemState, ModalList } from '../interface'
 
-export default class PhotoItem extends React.PureComponent {
+interface ExtendedProp extends FlatlistItemProp {
+  isChecked: boolean
+  onLongPress: (...args) => any
+  width: number
+  ITEM_HEIGHT: number
+}
+export default class PhotoItem extends React.PureComponent<ExtendedProp, FlatlistItemState> {
 
   constructor(props) {
     super(props)
@@ -21,7 +25,7 @@ export default class PhotoItem extends React.PureComponent {
     }
   }
 
-  shouldComponentUpdate = (props, state) => {
+  shouldComponentUpdate(props: ExtendedProp, state: FlatlistItemState) {
     if (props.modeInfo.themeName !== this.props.modeInfo.themeName) return true
     if (this.state.modalVisible !== state.modalVisible) return true
     if (props.isChecked !== this.props.isChecked) return true
@@ -29,7 +33,7 @@ export default class PhotoItem extends React.PureComponent {
   }
 
   render() {
-    const { modeInfo, rowData, index, onLongPress, navigation,
+    const { modeInfo, rowData, onLongPress,
       isChecked = false, onPress, width = 150, ITEM_HEIGHT } = this.props
 
     return (
@@ -58,7 +62,7 @@ export default class PhotoItem extends React.PureComponent {
         }}>
           {
             this.state.modalVisible && (
-              <MyDialog modeInfo={modeInfo}
+              <global.MyDialog modeInfo={modeInfo}
                 modalVisible={this.state.modalVisible}
                 onDismiss={() => { this.setState({ modalVisible: false }) }}
                 onRequestClose={() => { this.setState({ modalVisible: false }) }}
@@ -72,8 +76,9 @@ export default class PhotoItem extends React.PureComponent {
                     right: 30,
                     paddingVertical: 15,
                     elevation: 4,
-                    opacity: 1
-                  }} borderRadius={2}>
+                    opacity: 1,
+                    borderRadius: 2
+                  }}>
                     <TouchableNativeFeedback onPress={() => {
                         this.setState({
                           modalVisible: false
@@ -87,7 +92,9 @@ export default class PhotoItem extends React.PureComponent {
                           })
                         })
                       }}>
-                      <View style={{height: 50, paddingVertical: 10, paddingLeft: 20 , alignSelf: 'stretch', alignContent: 'stretch', justifyContent: 'center'}}>
+                      <View style={{
+                        height: 50, paddingVertical: 10, paddingLeft: 20 , alignSelf: 'stretch', alignContent: 'stretch', justifyContent: 'center'
+                      }}>
                         <Text style={{textAlignVertical: 'center', fontSize: 18, color: modeInfo.standardTextColor}}>查看图片</Text>
                       </View>
                     </TouchableNativeFeedback>
@@ -98,7 +105,9 @@ export default class PhotoItem extends React.PureComponent {
                           onLongPress && onLongPress()
                         })
                       }}>
-                      <View style={{height: 50, paddingVertical: 10, paddingLeft: 20 , alignSelf: 'stretch', alignContent: 'stretch', justifyContent: 'center'}}>
+                      <View style={{
+                        height: 50, paddingVertical: 10, paddingLeft: 20 , alignSelf: 'stretch', alignContent: 'stretch', justifyContent: 'center'
+                      }}>
                         <Text style={{textAlignVertical: 'center', fontSize: 18, color: modeInfo.standardTextColor}}>删除图片</Text>
                       </View>
                     </TouchableNativeFeedback>}

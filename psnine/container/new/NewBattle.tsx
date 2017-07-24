@@ -35,9 +35,11 @@ let AnimatedKeyboardAvoidingView = Animated.createAnimatedComponent(KeyboardAvoi
 
 let screen = Dimensions.get('window')
 
-const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = screen
+let { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = screen
 
-SCREEN_HEIGHT = SCREEN_HEIGHT - StatusBar.currentHeight + 1
+SCREEN_HEIGHT = SCREEN_HEIGHT - (StatusBar.currentHeight || 0) + 1
+
+declare var global
 
 let CIRCLE_SIZE = 56
 
@@ -84,7 +86,7 @@ export default class NewTopic extends Component {
     let config = { tension: 30, friction: 7 }
     // Animated.spring(this.state.openVal, { toValue: 1, ...config }).start(() => {
       if (modeInfo.settingInfo.psnid === '') {
-        toast('请首先登录')
+        global.toast('请首先登录')
         this.props.navigation.goBack()
         return
       }
@@ -310,7 +312,7 @@ export default class NewTopic extends Component {
           }}>
             <View style={{ justifyContent: 'center', alignItems: 'center', padding: 10}}>
             <Button title='选择联机奖杯' color={modeInfo.standardColor} onPress={() => {
-              if (this.state.psngameid === '') return toast('请先选择游戏')
+              if (this.state.psngameid === '') return global.toast('请先选择游戏')
               this.props.navigation.navigate('GamePage', {
                 URL: 'http://psnine.com/psngame/' + this.state.psngameid,
                 title: this.state.data.game.reduce((prev, curr) => {
@@ -322,7 +324,7 @@ export default class NewTopic extends Component {
                 type: 'game',
                 callbackAfterAll: (arr) => {
                   this.setState({ trophies: arr.join(',') }, () => {
-                    toast('已选择对应奖杯' + this.state.trophies)
+                    global.toast('已选择对应奖杯' + this.state.trophies)
                   })
                 }
               })

@@ -1,6 +1,6 @@
 import * as ActionTypes from '../../constant/actionTypes'
-
 import { fetchQuestion } from '../../dao'
+declare var global
 
 export function getQAList(page, {
   type,
@@ -10,7 +10,7 @@ export function getQAList(page, {
   return dispatch => {
     return fetchQuestion({ page, type, sort, title })
       .then(response => {
-        dispatch(gotQAList(response, page, type))
+        dispatch(gotQAList(response, page))
       }).catch(err => {
         console.error('qa.js line12', err)
         dispatch(gotQAListError())
@@ -19,7 +19,7 @@ export function getQAList(page, {
   }
 }
 
-function gotQAList(argument, page, type) {
+function gotQAList(argument, page) {
   return {
     type: ActionTypes.GET_QAS_SUCCESS,
     value: argument,

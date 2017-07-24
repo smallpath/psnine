@@ -308,7 +308,7 @@ class Store extends Component {
           onEndReachedThreshold={0.5}
           extraData={modeInfo}
           windowSize={21}
-          renderScrollComponent={props => <NestedScrollView {...props}/>}
+          renderScrollComponent={props => <global.NestedScrollView {...props}/>}
           numColumns={modeInfo.numColumns}
           key={modeInfo.themeName}
           updateCellsBatchingPeriod={1}

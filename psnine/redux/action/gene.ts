@@ -1,6 +1,6 @@
 import * as ActionTypes from '../../constant/actionTypes'
-
 import { fetchGenes } from '../../dao'
+declare var global
 
 export function getGeneList(page = 1, {
   type = '',
@@ -10,7 +10,7 @@ export function getGeneList(page = 1, {
     // console.log(page, type, title)
     return fetchGenes({ page, type, title })
       .then(response => {
-        dispatch(gotGeneList(response, page, type))
+        dispatch(gotGeneList(response, page))
       }).catch(err => {
         dispatch(gotGeneListError())
         console.log(err)
@@ -19,7 +19,7 @@ export function getGeneList(page = 1, {
   }
 }
 
-function gotGeneList(argument, page, type) {
+function gotGeneList(argument, page) {
   return {
     type: ActionTypes.GET_GENES_SUCCESS,
     value: argument,
@@ -27,7 +27,7 @@ function gotGeneList(argument, page, type) {
   }
 }
 
-function gotGeneListError(argument, page, type) {
+function gotGeneListError() {
   return {
     type: ActionTypes.GET_GENES_ERROR
   }

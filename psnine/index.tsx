@@ -23,6 +23,7 @@ import ColorConfig, {
 
 import configureStore from './redux/store'
 import checkVersion from './bootstrap/checkVersion'
+import { ColorInfo, ModeInfo } from './interface'
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window')
 
@@ -30,17 +31,19 @@ const toolbarHeight = 56
 const tipHeight = toolbarHeight * 0.8
 let backPressClickTimeStamp = 0
 
+declare var global
+
 const netInfoHandler = (reach) => {
   global.netInfo = reach
 }
 
 const shouldChangeBackground = Platform.OS !== 'android' || (Platform.OS === 'android' && Platform.Version <= 20)
 
-export default class Root extends React.Component {
+export default class Root extends React.Component<any, any> {
+  store = configureStore()
   constructor(props) {
     super(props)
     const { height, width } = Dimensions.get('window')
-    this.store = configureStore()
     this.state = {
       text: '',
       width,
@@ -94,10 +97,10 @@ export default class Root extends React.Component {
     }
   }
 
-  componentWillMount = () => {
+  componentWillMount() {
     global.toast = this.toast
-    const listeners = BackHandler.addEventListener('hardwareBackPress', () => {
-      let timestamp = new Date()
+    BackHandler.addEventListener('hardwareBackPress', () => {
+      let timestamp: any = new Date()
       if (timestamp - backPressClickTimeStamp > 2000) {
         backPressClickTimeStamp = timestamp
         global.toast && global.toast('再按一次退出程序')
@@ -109,7 +112,7 @@ export default class Root extends React.Component {
   }
 
   reloadSetting = () => {
-    const settingInfo = {}
+    const settingInfo: any = {}
     return Promise.all([
       AsyncStorage.getItem('@Theme:tabMode'),
       AsyncStorage.getItem('@psnid'),
@@ -147,7 +150,7 @@ export default class Root extends React.Component {
       global.loadImageWithoutWifi = JSON.parse(result[4]) || false
     }).catch(err => {
       // console.log(err)
-      toast && toast(err.toString())
+      global.toast && global.toast(err.toString())
     })
   }
 
@@ -155,7 +158,7 @@ export default class Root extends React.Component {
     this.setState({
       isLoadingAsyncStorage: true
     })
-    const settingInfo = {}
+    const settingInfo: any = {}
     Promise.all([
       AsyncStorage.getItem('@Theme:tabMode'),
       AsyncStorage.getItem('@psnid'),
@@ -194,13 +197,11 @@ export default class Root extends React.Component {
         colorTheme: settingInfo.colorTheme,
         isNightMode: settingInfo.isNightMode,
         secondaryColor: settingInfo.secondaryColor
-      }, () => checkVersion().catch(err => { }))
+      }, () => checkVersion().catch(() => {}))
     }, 1400)
   }
 
   componentDidMount() {
-
-    this.animation && this.animation.play()
     this.loadSetting()
 
     Linking.getInitialURL().then((url) => {
@@ -224,12 +225,15 @@ export default class Root extends React.Component {
     NetInfo.removeEventListener('change', netInfoHandler)
     this._orientationSubscription && this._orientationSubscription.remove()
   }
-  _handleOpenURL(event) {
+  _handleOpenURL() {
     // console.log(event.url);
   }
 
+  _orientationSubscription: any = false
+
+
   _handleOrientation = orientation => {
-    let screen = {}
+    let screen: any = {}
     const { height, width } = Dimensions.get('window')
     const min = Math.min(height, width)
     const max = Math.max(height, width)
@@ -247,7 +251,6 @@ export default class Root extends React.Component {
   }
 
   toast = (text) => {
-    const value = this.state.tipBarMarginBottom._value
     if (this.state.text === '') {
       this.setText(text)
     } else {
@@ -278,7 +281,7 @@ export default class Root extends React.Component {
           duration: 200,
           easing: Easing.ease,
           useNativeDriver: true
-        }).start(({ finished }) => {
+        }).start(() => {
           // console.log(this.state.tipBarMarginBottom._value,
           //   this.state.tipBarMarginBottom._offset,
           //   finished)
@@ -292,15 +295,15 @@ export default class Root extends React.Component {
   }
 
   render() {
-    const dayModeInfo = ColorConfig[this.state.colorTheme]
-    const nightModeInfo = ColorConfig[this.state.colorTheme + 'Night']
-    const targetModeInfo = this.state.isNightMode ? nightModeInfo : dayModeInfo
+    const dayModeInfo: ColorInfo = ColorConfig[this.state.colorTheme]
+    const nightModeInfo: ColorInfo = ColorConfig[this.state.colorTheme + 'Night']
+    const targetModeInfo: ColorInfo = this.state.isNightMode ? nightModeInfo : dayModeInfo
     const { isLoadingAsyncStorage, progress } = this.state
     const { colorTheme, secondaryColor, isNightMode, width, height, minWidth } = this.state
     /* get value to avoid remote debugger bug */
     secondaryColor
     isNightMode
-    const modeInfo = Object.assign({}, targetModeInfo, {
+    const modeInfo: ModeInfo = Object.assign({}, targetModeInfo, {
       loadSetting: this.loadSetting,
       reloadSetting: this.reloadSetting,
       settingInfo: this.state.settingInfo,
@@ -334,7 +337,7 @@ export default class Root extends React.Component {
           tracker.trackScreenView(routeName)
         }
       }
-    } : null
+    } : undefined
 
     const child = isLoadingAsyncStorage ? (
       <View style={{ flex: 1, backgroundColor: 'rgb(0,208,192)' }}>
@@ -349,11 +352,11 @@ export default class Root extends React.Component {
         <Image
           source={{
             uri: 'http://ww4.sinaimg.cn/large/bfae17b6gy1fhpjvt6jukg21hc0u0ds5.jpg', width: SCREEN_WIDTH,
-            height: SCREEN_HEIGHT - StatusBar.currentHeight * 4
+            height: SCREEN_HEIGHT - (StatusBar.currentHeight || 0) * 4
           }}
           style={{
             width: SCREEN_WIDTH,
-            height: SCREEN_HEIGHT - StatusBar.currentHeight * 4
+            height: SCREEN_HEIGHT - (StatusBar.currentHeight || 0) * 4
           }}
           resizeMode='contain'
           resizeMethod={'resize'}

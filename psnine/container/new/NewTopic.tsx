@@ -10,7 +10,6 @@ import {
   Keyboard,
   TextInput,
   Animated,
-  Easing,
   StatusBar,
   Picker
 } from 'react-native'
@@ -21,28 +20,23 @@ import { standardColor, accentColor } from '../../constant/colorConfig'
 import { getTopicEditAPI } from '../../dao'
 
 import { postCreateTopic } from '../../dao/post'
-
 import Emotion from '../../component/Emotion'
-
-let title = '创建讨论'
 
 let toolbarActions = [
 
 ]
 
-let AnimatedKeyboardAvoidingView = Animated.createAnimatedComponent(KeyboardAvoidingView)
+declare var global
 
 let screen = Dimensions.get('window')
 
-const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = screen
+let { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = screen
 
-SCREEN_HEIGHT = SCREEN_HEIGHT - StatusBar.currentHeight + 1
+SCREEN_HEIGHT = SCREEN_HEIGHT - (StatusBar.currentHeight || 0) + 1
 
 let CIRCLE_SIZE = 56
 
 const emotionToolbarHeight = 190
-
-let config = { tension: 30, friction: 7, ease: Easing.in(Easing.ease(1, 0, 1, 1)), duration: 200 }
 
 export default class NewTopic extends Component {
 
@@ -72,7 +66,7 @@ export default class NewTopic extends Component {
     let config = { tension: 30, friction: 7 }
     // Animated.spring(this.state.openVal, { toValue: 1, ...config }).start(() => {
       if (modeInfo.settingInfo.psnid === '') {
-        toast('请首先登录')
+        global.toast('请首先登录')
         this.props.navigation.goBack()
         return
       }
@@ -115,12 +109,12 @@ export default class NewTopic extends Component {
         getTopicEditAPI(params.URL).then(data => {
           const match = params.URL.match(/node\/(.*?)\//)
           if (data.node === 'talk' && (match && match[1] !== 'talk')) {
-            toast('本板块无法发布新帖')
+            global.toast('本板块无法发布新帖')
             return this.props.navigation.goBack()
           }
 
           if (match && match[1]) {
-            toast('已设置为对应板块' + match[1])
+            global.toast('已设置为对应板块' + match[1])
           }
           this.setState(data)
         })
@@ -390,7 +384,7 @@ export default class NewTopic extends Component {
             </View>
             {
               this.state.modalVisible && (
-                <MyDialog modeInfo={modeInfo}
+                <global.MyDialog modeInfo={modeInfo}
                   modalVisible={this.state.modalVisible}
                   onDismiss={() => { this.setState({ modalVisible: false }); this.isValueChanged = false }}
                   onRequestClose={() => { this.setState({ modalVisible: false }); this.isValueChanged = false }}
@@ -407,7 +401,7 @@ export default class NewTopic extends Component {
                       right: 20,
                       opacity: 1
                     }} borderRadius={2}>
-                      <HTMLView
+                      <global.HTMLView
                         value={this.state.content || '暂无内容'}
                         modeInfo={modeInfo}
                         stylesheet={styles}

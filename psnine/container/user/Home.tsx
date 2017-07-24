@@ -10,7 +10,6 @@ import {
   ActivityIndicator,
   StatusBar,
   Animated,
-  Easing,
   Keyboard,
   ToolbarAndroid
 } from 'react-native'
@@ -33,20 +32,9 @@ import { getHomeAPI } from '../../dao'
 
 import CreateUserTab from './UserTab'
 
-let screen = Dimensions.get('window')
-const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = screen
-
-let toolbarActions = []
-let title = 'TOPIC'
-let WEBVIEW_REF = `WEBVIEW_REF`
+declare var global
 
 let toolbarHeight = 56
-let releasedMarginTop = 0
-
-let ACTUAL_SCREEN_HEIGHT = SCREEN_HEIGHT - StatusBar.currentHeight + 1
-
-let CIRCLE_SIZE = 56
-let config = { tension: 30, friction: 7, ease: Easing.in(Easing.ease(1, 0, 1, 1)), duration: 200 }
 
 const iconMapper = {
   '游戏同步': 'md-sync',
@@ -166,7 +154,7 @@ export default class Home extends Component {
     const infoColor = 'rgba(255,255,255,0.8)'
     const { width: SCREEN_WIDTH } = Dimensions.get('window')
     const onPressPoint = () => {
-      toast(rowData.point)
+      global.toast(rowData.point)
     }
     return (
       <ImageBackground
@@ -318,15 +306,15 @@ export default class Home extends Component {
     // alert(index)
     switch (index) {
       case 4:
-        // if (psnid === modeInfo.settingInfo.psnid) return toast('不可以屏蔽自己')
+        // if (psnid === modeInfo.settingInfo.psnid) return global.toast('不可以屏蔽自己')
         block({
           type: 'psnid',
           param: psnid
         }).then(res => res.text()).then(text => {
           // console.log(text)
           // ToastAndroid.show('同步成功', ToastAndroid.SHORT);
-          if (text) return toast(text)
-          toast('屏蔽成功')
+          if (text) return global.toast(text)
+          global.toast('屏蔽成功')
           preFetch && preFetch()
         }).catch(err => {
           const msg = `屏蔽失败: ${err.toString()}`
@@ -341,8 +329,8 @@ export default class Home extends Component {
         }).then(res => res.text()).then(text => {
           // console.log(text)
           // ToastAndroid.show('同步成功', ToastAndroid.SHORT);
-          if (text) return toast(text)
-          toast('关注成功')
+          if (text) return global.toast(text)
+          global.toast('关注成功')
           preFetch && preFetch()
         }).catch(err => {
           const msg = `操作失败: ${err.toString()}`
@@ -357,8 +345,8 @@ export default class Home extends Component {
           updown: 'up'
         }).then(res => res.text()).then(text => {
           // ToastAndroid.show('同步成功', ToastAndroid.SHORT);
-          if (text) return toast(text)
-          toast('感谢成功')
+          if (text) return global.toast(text)
+          global.toast('感谢成功')
           preFetch && preFetch()
         }).catch(err => {
           const msg = `操作失败: ${err.toString()}`

@@ -5,25 +5,26 @@ import {
   StyleSheet,
   Text,
   View,
-  ToastAndroid
+  TextStyle
 } from 'react-native'
 
 import { idColor } from '../../constant/colorConfig'
+import { onDeepLinkPress, urlExtractor } from '../../utils'
 
 const boldStyle = { fontWeight: '500' }
 const italicStyle = { fontStyle: 'italic' }
 const codeStyle = { fontFamily: 'Menlo' }
 
 const baseStyles = StyleSheet.create({
-  b: boldStyle,
-  strong: boldStyle,
-  i: italicStyle,
-  em: italicStyle,
-  pre: codeStyle,
-  code: codeStyle,
+  b: boldStyle as TextStyle,
+  strong: boldStyle as TextStyle,
+  i: italicStyle as TextStyle,
+  em: italicStyle as TextStyle,
+  pre: codeStyle as TextStyle,
+  code: codeStyle as TextStyle,
   a: {
     color: idColor
-  },
+  } as TextStyle,
   u: { textDecorationLine: 'underline' },
   s: { textDecorationLine: 'line-through' },
   h1: { fontWeight: '500', fontSize: 36 },
@@ -42,7 +43,57 @@ const baseStyles = StyleSheet.create({
 
 const urlMapper = /(http:\/\/|https:\/\/)((\w|=|\?|\.|\/|#|\&|-|\!)+)/igm
 
-class HtmlView extends Component {
+interface IProp {
+  value: string
+  stylesheet: any
+  onLinkPress: any
+  onImageLongPress: any
+  onError: any
+  renderNode: any
+  modeInfo: any
+  shouldShowLoadingIndicator: boolean
+  alignCenter: boolean
+  shouldForceInline: boolean
+  forceMark: boolean
+  imagePaddingOffset: number
+  style: any
+}
+
+class HtmlView extends Component<IProp, {
+  element: JSX.Element | null
+  height: number | null
+}> {
+  public static propTypes = {
+    value: PropTypes.string,
+    stylesheet: PropTypes.object,
+    onLinkPress: PropTypes.func,
+    onImageLongPress: PropTypes.func,
+    onError: PropTypes.func,
+    renderNode: PropTypes.func,
+    modeInfo: PropTypes.object,
+    shouldShowLoadingIndicator: PropTypes.bool,
+    alignCenter: PropTypes.bool,
+    shouldForceInline: PropTypes.bool,
+    forceMark: PropTypes.bool,
+    imagePaddingOffset: PropTypes.number,
+    style: PropTypes.object
+  }
+
+  public static defaultProps = {
+    onLinkPress: onDeepLinkPress,
+    onImageLongPress: url => Linking.openURL(url),
+    onError: console.error.bind(console),
+    modeInfo: {},
+    shouldShowLoadingIndicator: false,
+    alignCenter: false,
+    shouldForceInline: false,
+    forceMark: false,
+    imagePaddingOffset: 0,
+    style: {}
+  }
+
+  mounted: boolean = false
+
   constructor() {
     super()
     this.state = {
@@ -50,7 +101,6 @@ class HtmlView extends Component {
       height: null
     }
   }
-
   componentDidMount() {
     this.mounted = true
     this.startHtmlRender(this.props.value)
@@ -68,7 +118,7 @@ class HtmlView extends Component {
     this.mounted = false
   }
 
-  startHtmlRender(value, forceMark) {
+  startHtmlRender(value, forceMark?: boolean) {
     if (!value) {
       this.setState({ element: null })
     }
@@ -98,18 +148,7 @@ class HtmlView extends Component {
       imageArr: []
     }
     // 加一个空文字来将最开头的表情内联
-    let target = (value || '').replace(urlMapper, (...args) => {
-      const preText = args.length >= 6 ? args[5][args[4] - 1] : 'ignore'
-      const nextText = args.length >= 6 ? args[5].substring(args[4] + 0 + args[0].length, args[4] + 3 + args[0].length) : 'ignore'
-      const shouldNotReplace = [`"`, `'`].includes(preText) || (nextText === '</a')
-      if (shouldNotReplace) {
-        // console.log('shouldNotReplace', args[0], nextText === '</a')
-        return args[0]
-      } else {
-        // console.log('shouldReplace', args[0])
-        return `<a href="${args[0]}">${args[0]}</a>`
-      }
-    })
+    let target = (value || '').replace(urlMapper, urlExtractor)
 
     if (target.indexOf('<img src="http://photo.psnine.com/face/') === 0) {
       target = '<span/>' + target
@@ -136,95 +175,7 @@ class HtmlView extends Component {
     }
     return <TargetView style={this.props.style} />
   }
-}
 
-HtmlView.propTypes = {
-  value: PropTypes.string,
-  stylesheet: PropTypes.object,
-  onLinkPress: PropTypes.func,
-  onImageLongPress: PropTypes.func,
-  onError: PropTypes.func,
-  renderNode: PropTypes.func,
-  modeInfo: PropTypes.object,
-  shouldShowLoadingIndicator: PropTypes.bool,
-  alignCenter: PropTypes.bool,
-  shouldForceInline: PropTypes.bool,
-  forceMark: PropTypes.bool
-}
-
-HtmlView.defaultProps = {
-  onLinkPress: (url, isGettingType) => {
-    let targetURL = url.includes('d7vg.com') ? url.replace('d7vg.com', 'psnine.com') : url
-    let baseURL = targetURL
-    let errMessage = ''
-    let title = '打开网页'
-    let type = 'general'
-    const request = isGettingType ? () => { return {
-      type, title, errMessage}
-    } : (thisURL) => Linking.openURL(thisURL).catch(err => {
-      errMessage && ToastAndroid.show(errMessage || err.toString(), ToastAndroid.SHORT)
-      errHandler()
-    })
-    const errHandler = () => Linking.openURL(baseURL).catch(err => toast(errMessage || err.toString()))
-
-    // 深度链接
-    if (targetURL.includes('music.163.com')) {
-      let matched = targetURL.match(/\?id\=(\d+)/)
-      if (!matched) matched = targetURL.match(/\/song\/(\d+)/)
-      if (matched) {
-        targetURL = `orpheus://song/${matched[1]}`
-        errMessage = `打开网易云音乐客户端失败 (id:${matched[1]})`
-        type = 'music163'
-        title = `网易云音乐: ${matched[1]}`
-        return request(targetURL)
-      }
-    } else if (targetURL.includes('bilibili.com')) {
-      let matched = targetURL.match(/aid\=(\d+)/)
-      if (!matched) matched = targetURL.match(/\/video\/av(\d+)/)
-      if (matched) {
-        targetURL = `bilibili://video/${matched[1]}`
-        errMessage = `打开B站客户端失败 (av${matched[1]})`
-        type = 'bilibili'
-        title = `B站视频: av${matched[1]}`
-        return request(targetURL)
-      }
-      if (!matched) matched = targetURL.match(/anime\/(\d+)/)
-      if (matched) {
-        targetURL = `bilibili://bangumi/season/${matched[1]}?url_from_h5=1`
-        errMessage = `打开B站客户端失败 (av${matched[1]})`
-        type = 'bilibili'
-        title = `B站番剧: av${matched[1]}`
-        return request(targetURL)
-      }
-      if (!matched) matched = targetURL.match(/live\.bilibili\.com\/(h5\/|)(\d+)/)
-      if (matched) {
-        targetURL = `bilibili://live/${matched[2]}`
-        errMessage = `打开B站客户端失败 (av${matched[2]})`
-        type = 'bilibili'
-        title = `B站直播: av${matched[1]}`
-        return request(targetURL)
-      }
-
-    }
-
-    const reg = /^(https|http)\:\/\//
-    if (reg.exec(targetURL)) {
-      const target = targetURL.replace(reg, 'p9://')
-      return request(target)
-    } else if (/^(.*?):\/\//.exec(targetURL)) {
-      return request(targetURL)
-    } else {
-      const target = 'p9://psnine.com' + targetURL
-      return request(target)
-    }
-  },
-  onImageLongPress: url => Linking.openURL(url),
-  onError: console.error.bind(console),
-  modeInfo: {},
-  shouldShowLoadingIndicator: false,
-  alignCenter: false,
-  shouldForceInline: false,
-  forceMark: false
 }
 
 export default HtmlView

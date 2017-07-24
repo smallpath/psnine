@@ -52,7 +52,7 @@ function callWarning (text) {
       AsyncStorage.setItem('@psnine:warning', text)
       const targetText = text.replace(/<a\s.*?>.*?<\/a>/igm, '').trim().replace('：', '')
       const matched = text.match(/<a\shref=\"(.*?)\">/)
-      let button = undefined
+      let button: any = undefined
       if (matched) {
         let url = matched[1]
         if (url.startsWith('/')) {
@@ -87,7 +87,7 @@ function callWarning (text) {
 
 const onP9LinkPress = url => {
   const reg = /^(https|http)\:\/\//
-  const errHandler = (err) => Linking.openURL(url).catch(err => console.error('Web linking occurred', err))
+  const errHandler = () => Linking.openURL(url).catch(err => console.error('Web linking occurred', err))
   if (reg.exec(url)) {
     const target = url.replace(reg, 'p9://')
     return Linking.openURL(target).catch(errHandler)

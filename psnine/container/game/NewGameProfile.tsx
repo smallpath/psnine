@@ -182,7 +182,7 @@ class GameTopic extends Component {
           maxToRenderPerBatch={8}
           disableVirtualization={false}
           contentContainerStyle={styles.list}
-          renderScrollComponent={props => <NestedScrollView {...props}/>}
+          renderScrollComponent={props => <global.NestedScrollView {...props}/>}
           viewabilityConfig={{
             minimumViewTime: 1,
             viewAreaCoveragePercentThreshold: 0,
@@ -190,7 +190,7 @@ class GameTopic extends Component {
           }}
         />
         {this.state.modalVisible && (
-          <MyDialog modeInfo={modeInfo}
+          <global.MyDialog modeInfo={modeInfo}
             modalVisible={this.state.modalVisible}
             onDismiss={() => { this.setState({ modalVisible: false }); this.isValueChanged = false }}
             onRequestClose={() => { this.setState({ modalVisible: false }); this.isValueChanged = false }}

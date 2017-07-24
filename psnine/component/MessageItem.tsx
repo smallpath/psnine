@@ -4,15 +4,20 @@ import {
   Text,
   View,
   Image,
-  Dimensions,
   TouchableNativeFeedback
 } from 'react-native'
 
 import { standardColor, accentColor } from '../constant/colorConfig'
 
-let screen = Dimensions.get('window')
-const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = screen
-export default class ComplexComment extends React.PureComponent {
+import { FlatlistItemProp, FlatlistItemState, ModalList } from '../interface'
+
+interface ExtendedProp extends FlatlistItemProp {
+  modalList?: ModalList[]
+  isChecked: boolean
+  onPress: any
+}
+
+export default class ComplexComment extends React.PureComponent<ExtendedProp, FlatlistItemState> {
   constructor(props) {
     super(props)
 
@@ -21,7 +26,7 @@ export default class ComplexComment extends React.PureComponent {
     }
   }
 
-  shouldComponentUpdate = (props, state) => {
+  shouldComponentUpdate(props, state) {
     if (props.modeInfo.themeName !== this.props.modeInfo.themeName) return true
     if (this.state.modalVisible !== state.modalVisible) return true
     return false
@@ -29,7 +34,6 @@ export default class ComplexComment extends React.PureComponent {
 
   render() {
     const { modeInfo, rowData, onPress, modalList = [], isChecked = false } = this.props
-    const shouldShowMark = (rowData.content || '').includes('<span class="mark">')
     return (
       <View key={rowData.id} style={{
         marginVertical: 3.5,
@@ -54,7 +58,7 @@ export default class ComplexComment extends React.PureComponent {
             /> || undefined }
             {
               this.state.modalVisible && modalList.length && (
-                <MyDialog modeInfo={modeInfo}
+                <global.MyDialog modeInfo={modeInfo}
                   modalVisible={this.state.modalVisible}
                   onDismiss={() => { this.setState({ modalVisible: false }) }}
                   onRequestClose={() => { this.setState({ modalVisible: false }) }}
@@ -68,8 +72,9 @@ export default class ComplexComment extends React.PureComponent {
                       right: 30,
                       paddingVertical: 15,
                       elevation: 4,
-                      opacity: 1
-                    }} borderRadius={2}>
+                      opacity: 1,
+                      borderRadius: 2
+                    }}>
                       {
                         modalList.map((item, index) => (
                           <TouchableNativeFeedback key={index + item.text} onPress={() => {
@@ -79,7 +84,10 @@ export default class ComplexComment extends React.PureComponent {
                                 item.onPress(rowData)
                               })
                             }}>
-                            <View style={{height: 50, paddingVertical: 10, paddingLeft: 20 , alignSelf: 'stretch', alignContent: 'stretch', justifyContent: 'center'}}>
+                            <View style={{
+                              height: 50,
+                              paddingVertical: 10, paddingLeft: 20 , alignSelf: 'stretch', alignContent: 'stretch', justifyContent: 'center'
+                            }}>
                               <Text style={{textAlignVertical: 'center', fontSize: 18, color: modeInfo.standardTextColor}}>{item.text}</Text>
                             </View>
                           </TouchableNativeFeedback>
@@ -90,7 +98,7 @@ export default class ComplexComment extends React.PureComponent {
               )
             }
             <View style={{ marginLeft: 10, flex: 1, flexDirection: 'column' }}>
-              <HTMLView
+              <global.HTMLView
                 value={rowData.content}
                 modeInfo={modeInfo}
                 stylesheet={styles}
@@ -103,7 +111,9 @@ export default class ComplexComment extends React.PureComponent {
               />
 
               <View style={{ flex: 1.1, flexDirection: 'row', justifyContent: 'space-between' }}>
-                <Text selectable={false} style={{ flex: -1, color: modeInfo.standardColor, textAlign: 'center', textAlignVertical: 'center' }} onPress={
+                <Text selectable={false} style={{
+                  flex: -1, color: modeInfo.standardColor, textAlign: 'center', textAlignVertical: 'center'
+                }} onPress={
                   () => {
                     this.props.navigation.navigate('Home', {
                       title: rowData.psnid,
@@ -112,7 +122,9 @@ export default class ComplexComment extends React.PureComponent {
                     })
                   }
                 }>{rowData.psnid}</Text>
-                <Text selectable={false} style={{ flex: -1, color: modeInfo.standardTextColor, textAlign: 'center', textAlignVertical: 'center' }}>{rowData.date}</Text>
+                <Text selectable={false} style={{
+                  flex: -1, color: modeInfo.standardTextColor, textAlign: 'center', textAlignVertical: 'center'
+                }}>{rowData.date}</Text>
               </View>
 
             </View>
@@ -136,10 +148,7 @@ const styles = StyleSheet.create({
     height: 56,
     elevation: 4
   },
-  selectedTitle: {
-    //backgroundColor: '#00ffff'
-    //fontSize: 20
-  },
+  selectedTitle: {},
   avatar: {
     width: 50,
     height: 50

@@ -16,6 +16,7 @@ function reducer(state = initialState, action) {
       newState = Object.assign({}, state, {
         battles: {}
       })
+      return newState
     default:
       return state
   }

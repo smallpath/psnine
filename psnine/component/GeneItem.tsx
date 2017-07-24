@@ -4,16 +4,18 @@ import {
   Text,
   View,
   Image,
-  Dimensions,
   TouchableNativeFeedback
 } from 'react-native'
 
 import { getGeneURL } from '../dao'
 
-let screen = Dimensions.get('window')
-const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = screen
+import { FlatlistItemProp, FlatlistItemState, ModalList } from '../interface'
 
-export default class extends React.PureComponent {
+interface ExtendedProp extends FlatlistItemProp {
+  modalList?: ModalList[]
+}
+
+export default class extends React.PureComponent<ExtendedProp, FlatlistItemState> {
 
   constructor(props) {
     super(props)
@@ -23,7 +25,9 @@ export default class extends React.PureComponent {
     }
   }
 
-  shouldComponentUpdate = (props, state) => props.modeInfo.themeName !== this.props.modeInfo.themeName || this.state.modalVisible !== state.modalVisible
+  shouldComponentUpdate(props, state) {
+    return props.modeInfo.themeName !== this.props.modeInfo.themeName || this.state.modalVisible !== state.modalVisible
+  }
 
   _onRowPressed = (rowData) => {
     const { navigation } = this.props
@@ -40,11 +44,8 @@ export default class extends React.PureComponent {
 
   render = () => {
     const { modeInfo, rowData, modalList = [], onPress } = this.props
-    let TouchableElement = TouchableNativeFeedback
 
-    let imageArr = rowData.thumbs
-    let type = rowData.type
-
+    const imageArr = rowData.thumbs
     const imageItems = imageArr.map((value, index) => (<Image key={rowData.id + '' + index} source={{ uri: value }} style={styles.geneImage} />))
     const { numColumns = 1 } = modeInfo
 
@@ -80,7 +81,7 @@ export default class extends React.PureComponent {
             />
             {
               this.state.modalVisible && modalList.length && (
-                <MyDialog modeInfo={modeInfo}
+                <global.MyDialog modeInfo={modeInfo}
                   modalVisible={this.state.modalVisible}
                   onDismiss={() => { this.setState({ modalVisible: false }) }}
                   onRequestClose={() => { this.setState({ modalVisible: false }) }}
@@ -94,8 +95,9 @@ export default class extends React.PureComponent {
                       right: 30,
                       paddingVertical: 15,
                       elevation: 4,
-                      opacity: 1
-                    }} borderRadius={2}>
+                      opacity: 1,
+                      borderRadius: 2
+                    }}>
                     {
                       modalList.map((item, index) => (
                         <TouchableNativeFeedback key={index + item.text} onPress={() => {
@@ -105,7 +107,9 @@ export default class extends React.PureComponent {
                               item.onPress(rowData)
                             })
                           }}>
-                          <View style={{height: 50, paddingVertical: 10, paddingLeft: 20 , alignSelf: 'stretch', alignContent: 'stretch', justifyContent: 'center'}}>
+                          <View style={{
+                            height: 50, paddingVertical: 10, paddingLeft: 20 , alignSelf: 'stretch', alignContent: 'stretch', justifyContent: 'center'
+                          }}>
                             <Text style={{textAlignVertical: 'center', fontSize: 18, color: modeInfo.standardTextColor}}>{item.text}</Text>
                           </View>
                         </TouchableNativeFeedback>
@@ -133,9 +137,15 @@ export default class extends React.PureComponent {
                     })
                   }
                 }>{rowData.psnid}</Text>
-                <Text style={{ fontSize: 12, flex: -1, color: modeInfo.standardTextColor, textAlign: 'center', textAlignVertical: 'center' }}>{rowData.date}</Text>
-                <Text style={{ fontSize: 12, flex: -1, color: modeInfo.standardTextColor, textAlign: 'center', textAlignVertical: 'center' }}>{rowData.count}</Text>
-                <Text style={{ fontSize: 12, flex: -1, color: modeInfo.standardColor, textAlign: 'center', textAlignVertical: 'center' }} onPress={
+                <Text style={{
+                  fontSize: 12, flex: -1, color: modeInfo.standardTextColor, textAlign: 'center', textAlignVertical: 'center'
+                }}>{rowData.date}</Text>
+                <Text style={{
+                  fontSize: 12, flex: -1, color: modeInfo.standardTextColor, textAlign: 'center', textAlignVertical: 'center'
+                }}>{rowData.count}</Text>
+                <Text style={{
+                  fontSize: 12, flex: -1, color: modeInfo.standardColor, textAlign: 'center', textAlignVertical: 'center'
+                }} onPress={
                   () => {
                     this.props.navigation.navigate('Circle', {
                       URL: rowData.circleHref,

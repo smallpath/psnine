@@ -4,7 +4,6 @@ import {
   Text,
   View,
   Image,
-  Dimensions,
   TouchableNativeFeedback,
   Clipboard
 } from 'react-native'
@@ -16,10 +15,23 @@ import {
   postReply
 } from '../dao/post'
 
-let screen = Dimensions.get('window')
-const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = screen
+import { FlatlistItemProp, FlatlistItemState, ModalList } from '../interface'
 
-export default class ComplexComment extends React.PureComponent {
+declare var global
+
+interface ExtendedProp extends FlatlistItemProp {
+  modalList?: ModalList[]
+  ITEM_HEIGHT: number
+  onLongPress: (...args) => any
+  preFetch: (...args) => any
+  index: number
+}
+
+interface ExtendedState extends FlatlistItemState {
+  modalIndex: number
+}
+
+export default class ComplexComment extends React.PureComponent<ExtendedProp, ExtendedState> {
 
   constructor(props) {
     super(props)
@@ -30,7 +42,7 @@ export default class ComplexComment extends React.PureComponent {
     }
   }
 
-  shouldComponentUpdate = (props, state) => {
+  shouldComponentUpdate(props, state) {
     if (props.modeInfo.themeName !== this.props.modeInfo.themeName) return true
     if (props.rowData.isAccepted !== this.props.rowData.isAccepted) return true
     if (this.state.modalVisible !== state.modalVisible) return true
@@ -52,7 +64,7 @@ export default class ComplexComment extends React.PureComponent {
         }}>
           {
             this.state.modalIndex !== -1 && onLongPress && (
-              <MyDialog modeInfo={modeInfo}
+              <global.MyDialog modeInfo={modeInfo}
                 modalVisible={this.state.modalIndex === index}
                 onDismiss={() => { this.setState({ modalIndex: -1 }) }}
                 onRequestClose={() => { this.setState({ modalIndex: -1 }) }}
@@ -66,8 +78,9 @@ export default class ComplexComment extends React.PureComponent {
                     right: 30,
                     paddingVertical: 15,
                     elevation: 4,
-                    opacity: 1
-                  }} borderRadius={2}>
+                    opacity: 1,
+                    borderRadius: 2
+                  }}>
                     <TouchableNativeFeedback onPress={() => {
                         this.setState({
                           modalIndex: -1
@@ -77,7 +90,8 @@ export default class ComplexComment extends React.PureComponent {
                           })
                         })
                       }}>
-                      <View style={{height: 50, paddingVertical: 10, paddingLeft: 20 , alignSelf: 'stretch', alignContent: 'stretch', justifyContent: 'center'}}>
+                      <View style={{height: 50,
+                        paddingVertical: 10, paddingLeft: 20 , alignSelf: 'stretch', alignContent: 'stretch', justifyContent: 'center'}}>
                         <Text style={{textAlignVertical: 'center', fontSize: 18, color: modeInfo.standardTextColor}}>回复</Text>
                       </View>
                     </TouchableNativeFeedback>
@@ -87,11 +101,12 @@ export default class ComplexComment extends React.PureComponent {
                         }, () => {
                           requestAnimationFrame(() => {
                             Clipboard.setString(entities.decodeHTML(rowData.text).replace(/<.*?>/igm, ''))
-                            toast('评论文字已复制到剪贴板')
+                            global.toast('评论文字已复制到剪贴板')
                           })
                         })
                       }}>
-                      <View style={{height: 50, paddingVertical: 10, paddingLeft: 20 , alignSelf: 'stretch', alignContent: 'stretch', justifyContent: 'center'}}>
+                      <View style={{height: 50,
+                          paddingVertical: 10, paddingLeft: 20 , alignSelf: 'stretch', alignContent: 'stretch', justifyContent: 'center'}}>
                         <Text style={{textAlignVertical: 'center', fontSize: 18, color: modeInfo.standardTextColor}}>复制评论</Text>
                       </View>
                     </TouchableNativeFeedback>
@@ -100,23 +115,19 @@ export default class ComplexComment extends React.PureComponent {
             )
           }
           <Text
-            useForeground={true}
             onLongPress={() => {
               this.setState({
                 modalIndex: index
               })
             }}
-            background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
           >
-            <HTMLView
+            <global.HTMLView
               value={rowData.text}
               modeInfo={modeInfo}
               stylesheet={styles}
-              onImageLongPress={this.handleImageOnclick}
               imagePaddingOffset={30 + 50 + 10}
               shouldForceInline={true}
             />
-
           </Text>
         </View>
       )
@@ -126,7 +137,6 @@ export default class ComplexComment extends React.PureComponent {
 
   onCommentLongPress = (rowData, name = '') => {
     // if (this.isReplyShowing === true) return
-    const { params } = this.props.navigation.state
     const { preFetch } = this.props
 
     const cb = () => {
@@ -161,13 +171,12 @@ export default class ComplexComment extends React.PureComponent {
             })
           }}
           useForeground={true}
-
           background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
         >
           <View style={{ flex: 1, flexDirection: 'row', padding: 12 }}>
             {
               this.state.modalVisible && onLongPress && (
-                <MyDialog modeInfo={modeInfo}
+                <global.MyDialog modeInfo={modeInfo}
                   modalVisible={this.state.modalVisible}
                   onDismiss={() => { this.setState({ modalVisible: false }) }}
                   onRequestClose={() => { this.setState({ modalVisible: false }) }}
@@ -181,8 +190,9 @@ export default class ComplexComment extends React.PureComponent {
                       right: 30,
                       paddingVertical: 15,
                       elevation: 4,
-                      opacity: 1
-                    }} borderRadius={2}>
+                      opacity: 1,
+                      borderRadius: 2
+                    }}>
                       <TouchableNativeFeedback onPress={() => {
                           this.setState({
                             modalVisible: false
@@ -192,7 +202,11 @@ export default class ComplexComment extends React.PureComponent {
                             })
                           })
                         }}>
-                        <View style={{height: 50, paddingVertical: 10, paddingLeft: 20 , alignSelf: 'stretch', alignContent: 'stretch', justifyContent: 'center'}}>
+                        <View style={{
+                          height: 50,
+                          paddingVertical: 10, paddingLeft: 20 , alignSelf: 'stretch', alignContent: 'stretch', 
+                          justifyContent: 'center'
+                        }}>
                           <Text style={{textAlignVertical: 'center', fontSize: 18, color: modeInfo.standardTextColor}}>回复</Text>
                         </View>
                       </TouchableNativeFeedback>
@@ -202,11 +216,14 @@ export default class ComplexComment extends React.PureComponent {
                           }, () => {
                             requestAnimationFrame(() => {
                               Clipboard.setString(entities.decodeHTML(rowData.text).replace(/<.*?>/igm, ''))
-                              toast('评论文字已复制到剪贴板')
+                              global.toast('评论文字已复制到剪贴板')
                             })
                           })
                         }}>
-                        <View style={{height: 50, paddingVertical: 10, paddingLeft: 20 , alignSelf: 'stretch', alignContent: 'stretch', justifyContent: 'center'}}>
+                        <View style={{
+                          height: 50, paddingVertical: 10, paddingLeft: 20 , alignSelf: 'stretch', alignContent: 'stretch', 
+                          justifyContent: 'center'
+                        }}>
                           <Text style={{textAlignVertical: 'center', fontSize: 18, color: modeInfo.standardTextColor}}>复制评论</Text>
                         </View>
                       </TouchableNativeFeedback>
@@ -224,11 +241,13 @@ export default class ComplexComment extends React.PureComponent {
                                   psnid: rowData.psnid
                                 }, 'caina').then(res => { return res.text() }).then(html => {
                                   return global.toast('采纳成功')
-                                }).catch(err => toast(err.toString()))
+                                }).catch(err => global.toast(err.toString()))
                               })
                             })
                           }}>
-                          <View style={{height: 50, paddingVertical: 10, paddingLeft: 20 , alignSelf: 'stretch', alignContent: 'stretch', justifyContent: 'center'}}>
+                          <View style={{
+                            height: 50, paddingVertical: 10, paddingLeft: 20 , alignSelf: 'stretch', alignContent: 'stretch', justifyContent: 'center'
+                          }}>
                             <Text style={{textAlignVertical: 'center', fontSize: 18, color: modeInfo.standardTextColor}}>采纳</Text>
                           </View>
                         </TouchableNativeFeedback>
@@ -241,7 +260,6 @@ export default class ComplexComment extends React.PureComponent {
                               modalVisible: false
                             }, () => {
                               requestAnimationFrame(() => {
-                                const { params } = this.props.navigation.state
                                 /*console.log((rowData.id.match(/\d+/) || [0])[0])*/
                                   this.props.navigation.navigate('Reply', {
                                     type: 'comment',
@@ -252,7 +270,9 @@ export default class ComplexComment extends React.PureComponent {
                               })
                             })
                           }}>
-                          <View style={{height: 50, paddingVertical: 10, paddingLeft: 20 , alignSelf: 'stretch', alignContent: 'stretch', justifyContent: 'center'}}>
+                          <View style={{
+                            height: 50, paddingVertical: 10, paddingLeft: 20 , alignSelf: 'stretch', alignContent: 'stretch', justifyContent: 'center'
+                          }}>
                             <Text style={{textAlignVertical: 'center', fontSize: 18, color: modeInfo.standardTextColor}}>编辑</Text>
                           </View>
                         </TouchableNativeFeedback>
@@ -268,17 +288,16 @@ export default class ComplexComment extends React.PureComponent {
             />
 
             <View style={{ marginLeft: 10, flex: 1, flexDirection: 'column' }}>
-              <HTMLView
+              <global.HTMLView
                 value={rowData.text}
                 modeInfo={modeInfo}
                 stylesheet={styles}
-                onImageLongPress={this.handleImageOnclick}
                 imagePaddingOffset={30 + 50 + 10}
                 shouldForceInline={true}
               />
 
               <View style={{ flex: 1.1, flexDirection: 'row', justifyContent: 'space-between' }}>
-                <Text selectable={false} style={{ flex: -1, color: modeInfo.standardColor, textAlign: 'center', textAlignVertical: 'center' }} onPress={
+                <Text style={{ flex: -1, color: modeInfo.standardColor, textAlign: 'center', textAlignVertical: 'center' }} onPress={
                   () => {
                     this.props.navigation.navigate('Home', {
                       title: rowData.psnid,
@@ -287,7 +306,7 @@ export default class ComplexComment extends React.PureComponent {
                     })
                   }
                 }>{rowData.psnid}</Text>
-                <Text selectable={false} style={{ flex: -1, color: modeInfo.standardTextColor, textAlign: 'center', textAlignVertical: 'center' }}>{rowData.date}</Text>
+                <Text style={{ flex: -1, color: modeInfo.standardTextColor, textAlign: 'center', textAlignVertical: 'center' }}>{rowData.date}</Text>
               </View>
 
               { rowData.commentList.length !== 0 && (<View style={{ backgroundColor: modeInfo.brighterLevelOne}}>
@@ -314,10 +333,7 @@ const styles = StyleSheet.create({
     height: 56,
     elevation: 4
   },
-  selectedTitle: {
-    //backgroundColor: '#00ffff'
-    //fontSize: 20
-  },
+  selectedTitle: {},
   avatar: {
     width: 50,
     height: 50

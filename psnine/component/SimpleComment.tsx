@@ -4,17 +4,22 @@ import {
   Text,
   View,
   Image,
-  Dimensions,
   TouchableNativeFeedback,
   Clipboard
 } from 'react-native'
 
 import { standardColor, idColor } from '../constant/colorConfig'
 import entities from 'entities'
+import { FlatlistItemProp, FlatlistItemState } from '../interface'
 
-let screen = Dimensions.get('window')
-const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = screen
-export default class extends React.PureComponent {
+interface ExtendedProp extends FlatlistItemProp {
+  index: any
+  onLongPress: (...args) => any
+  callback: (...arsg) => any
+}
+declare var global
+
+export default class extends React.PureComponent<ExtendedProp, FlatlistItemState> {
 
   constructor(props) {
     super(props)
@@ -24,7 +29,7 @@ export default class extends React.PureComponent {
     }
   }
 
-  shouldComponentUpdate = (props, state) => {
+  shouldComponentUpdate(props, state) {
     if (props.modeInfo.themeName !== this.props.modeInfo.themeName) return true
     if (this.state.modalVisible !== state.modalVisible) return true
     return false
@@ -51,7 +56,7 @@ export default class extends React.PureComponent {
           <View style={{ flex: 1, flexDirection: 'row', padding: 12 }}>
             {
               this.state.modalVisible && onLongPress && (
-                <MyDialog modeInfo={modeInfo}
+                <global.MyDialog modeInfo={modeInfo}
                   modalVisible={this.state.modalVisible}
                   onDismiss={() => { this.setState({ modalVisible: false }) }}
                   onRequestClose={() => { this.setState({ modalVisible: false }) }}
@@ -65,8 +70,9 @@ export default class extends React.PureComponent {
                       right: 30,
                       paddingVertical: 15,
                       elevation: 4,
-                      opacity: 1
-                    }} borderRadius={2}>
+                      opacity: 1,
+                      borderRadius: 2
+                    }}>
                       <TouchableNativeFeedback onPress={() => {
                           this.setState({
                             modalVisible: false
@@ -76,7 +82,9 @@ export default class extends React.PureComponent {
                             })
                           })
                         }}>
-                        <View style={{height: 50, paddingVertical: 10, paddingLeft: 20 , alignSelf: 'stretch', alignContent: 'stretch', justifyContent: 'center'}}>
+                        <View style={{
+                          height: 50, paddingVertical: 10, paddingLeft: 20 , alignSelf: 'stretch', alignContent: 'stretch', justifyContent: 'center'
+                        }}>
                           <Text style={{textAlignVertical: 'center', fontSize: 18, color: modeInfo.standardTextColor}}>回复</Text>
                         </View>
                       </TouchableNativeFeedback>
@@ -86,11 +94,13 @@ export default class extends React.PureComponent {
                           }, () => {
                             requestAnimationFrame(() => {
                               Clipboard.setString(entities.decodeHTML(rowData.content).replace(/<.*?>/igm, ''))
-                              toast('评论文字已复制到剪贴板')
+                              global.toast('评论文字已复制到剪贴板')
                             })
                           })
                         }}>
-                        <View style={{height: 50, paddingVertical: 10, paddingLeft: 20 , alignSelf: 'stretch', alignContent: 'stretch', justifyContent: 'center'}}>
+                        <View style={{
+                          height: 50, paddingVertical: 10, paddingLeft: 20 , alignSelf: 'stretch', alignContent: 'stretch', justifyContent: 'center'
+                        }}>
                           <Text style={{textAlignVertical: 'center', fontSize: 18, color: modeInfo.standardTextColor}}>复制评论文字</Text>
                         </View>
                       </TouchableNativeFeedback>
@@ -101,19 +111,19 @@ export default class extends React.PureComponent {
                               modalVisible: false
                             }, () => {
                               requestAnimationFrame(() => {
-                                const { params } = this.props.navigation.state
-                                /*console.log((rowData.id.match(/\d+/) || [0])[0])*/
-                                  this.props.navigation.navigate('Reply', {
-                                    type: 'comment',
-                                    id: (rowData.id.match(/\d+/) || [0])[0],
-                                    content: rowData.editcomment,
-                                    shouldSeeBackground: true,
-                                    callback
-                                  })
+                                this.props.navigation.navigate('Reply', {
+                                  type: 'comment',
+                                  id: (rowData.id.match(/\d+/) || [0])[0],
+                                  content: rowData.editcomment,
+                                  shouldSeeBackground: true,
+                                  callback
+                                })
                               })
                             })
                           }}>
-                          <View style={{height: 50, paddingVertical: 10, paddingLeft: 20 , alignSelf: 'stretch', alignContent: 'stretch', justifyContent: 'center'}}>
+                          <View style={{
+                            height: 50, paddingVertical: 10, paddingLeft: 20 , alignSelf: 'stretch', alignContent: 'stretch', justifyContent: 'center'
+                          }}>
                             <Text style={{textAlignVertical: 'center', fontSize: 18, color: modeInfo.standardTextColor}}>编辑</Text>
                           </View>
                         </TouchableNativeFeedback>
@@ -129,7 +139,7 @@ export default class extends React.PureComponent {
             />
 
             <View style={{ marginLeft: 10, flex: 1, flexDirection: 'column' }}>
-              <HTMLView
+              <global.HTMLView
                 value={rowData.content}
                 modeInfo={modeInfo}
                 stylesheet={styles}
@@ -142,7 +152,9 @@ export default class extends React.PureComponent {
               />
 
               <View style={{ flex: 1.1, flexDirection: 'row', justifyContent: 'space-between' }}>
-                <Text selectable={false} style={{ flex: -1, color: modeInfo.standardColor, textAlign: 'center', textAlignVertical: 'center' }} onPress={
+                <Text selectable={false} style={{
+                  flex: -1, color: modeInfo.standardColor, textAlign: 'center', textAlignVertical: 'center'
+                }} onPress={
                   () => {
                     this.props.navigation.navigate('Home', {
                       title: rowData.psnid,
@@ -151,7 +163,9 @@ export default class extends React.PureComponent {
                     })
                   }
                 }>{rowData.psnid}</Text>
-                <Text selectable={false} style={{ flex: -1, color: modeInfo.standardTextColor, textAlign: 'center', textAlignVertical: 'center' }}>{rowData.date}</Text>
+                <Text selectable={false} style={{
+                  flex: -1, color: modeInfo.standardTextColor, textAlign: 'center', textAlignVertical: 'center'
+                }}>{rowData.date}</Text>
               </View>
 
             </View>
@@ -175,10 +189,7 @@ const styles = StyleSheet.create({
     height: 56,
     elevation: 4
   },
-  selectedTitle: {
-    //backgroundColor: '#00ffff'
-    //fontSize: 20
-  },
+  selectedTitle: {},
   avatar: {
     width: 50,
     height: 50

@@ -35,6 +35,7 @@ function reducer(state = initialState, action) {
         topicPage: 0,
         topics: []
       })
+      return newState
     default:
       return state
   }

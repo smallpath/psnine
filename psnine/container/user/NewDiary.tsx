@@ -226,7 +226,7 @@ export default class GameTopic extends Component {
           }}
         />
         {this.state.modalVisible && (
-          <MyDialog modeInfo={modeInfo}
+          <global.MyDialog modeInfo={modeInfo}
             modalVisible={this.state.modalVisible}
             onDismiss={() => { this.setState({ modalVisible: false }); this.isValueChanged = false }}
             onRequestClose={() => { this.setState({ modalVisible: false }); this.isValueChanged = false }}

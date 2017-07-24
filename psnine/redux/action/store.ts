@@ -1,6 +1,6 @@
 import * as ActionTypes from '../../constant/actionTypes'
-
 import { fetchStores } from '../../dao'
+declare var global
 
 export function getList(page = 1, {
   server = 'hk',

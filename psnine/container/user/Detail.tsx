@@ -104,7 +104,7 @@ export default class Detail extends Component {
           </View>)}
         </View>}
         <View style={{ flex: 1, padding: 10 }}>
-          <HTMLView
+          <global.HTMLView
             value={rowData.history}
             modeInfo={modeInfo}
             stylesheet={styles}

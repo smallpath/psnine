@@ -225,7 +225,7 @@ class Game extends Component {
           maxToRenderPerBatch={8}
           key={modeInfo.themeName}
           numColumns={modeInfo.numColumns}
-          renderScrollComponent={props => <NestedScrollView {...props}/>}
+          renderScrollComponent={props => <global.NestedScrollView {...props}/>}
           disableVirtualization={false}
           contentContainerStyle={styles.list}
           getItemLayout={(data, index) => (

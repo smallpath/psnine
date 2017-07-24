@@ -9,7 +9,13 @@ import {
 
 import { getBattleURL } from '../dao'
 
-export default class BattleItem extends React.PureComponent {
+import { FlatlistItemProp, FlatlistItemState, ModalList } from '../interface'
+
+interface ExtendedProp extends FlatlistItemProp {
+  modalList?: ModalList[]
+}
+
+export default class BattleItem extends React.PureComponent<ExtendedProp, FlatlistItemState> {
   constructor(props) {
     super(props)
 
@@ -18,7 +24,9 @@ export default class BattleItem extends React.PureComponent {
     }
   }
 
-  shouldComponentUpdate = (props, state) => props.modeInfo.themeName !== this.props.modeInfo.themeName || this.state.modalVisible !== state.modalVisible
+  shouldComponentUpdate(props, state) {
+    return props.modeInfo.themeName !== this.props.modeInfo.themeName || this.state.modalVisible !== state.modalVisible
+  }
 
   _onRowPressed = (rowData) => {
     const { navigation } = this.props
@@ -32,7 +40,7 @@ export default class BattleItem extends React.PureComponent {
     })
   }
 
-  render = () => {
+  render() {
     // console.log(rowData)
     const { modeInfo, rowData, modalList = [] } = this.props
 
@@ -71,7 +79,7 @@ export default class BattleItem extends React.PureComponent {
             </View>
             {
               this.state.modalVisible && modalList.length && (
-              <MyDialog modeInfo={modeInfo}
+              <global.MyDialog modeInfo={modeInfo}
                 modalVisible={this.state.modalVisible}
                 onDismiss={() => { this.setState({ modalVisible: false }) }}
                 onRequestClose={() => { this.setState({ modalVisible: false }) }}
@@ -86,7 +94,7 @@ export default class BattleItem extends React.PureComponent {
                     paddingVertical: 15,
                     elevation: 4,
                     opacity: 1
-                  }} borderRadius={2}>
+                  }}>
                   {
                     modalList.map((item, index) => (
                       <TouchableNativeFeedback key={index + item.text} onPress={() => {
@@ -96,7 +104,8 @@ export default class BattleItem extends React.PureComponent {
                             item.onPress(rowData)
                           })
                         }}>
-                        <View style={{height: 50, paddingVertical: 10, paddingLeft: 20 , alignSelf: 'stretch', alignContent: 'stretch', justifyContent: 'center'}}>
+                        <View style={{height: 50,
+                          paddingVertical: 10, paddingLeft: 20 , alignSelf: 'stretch', alignContent: 'stretch', justifyContent: 'center'}}>
                           <Text style={{textAlignVertical: 'center', fontSize: 18, color: modeInfo.standardTextColor}}>{item.text}</Text>
                         </View>
                       </TouchableNativeFeedback>
@@ -122,7 +131,8 @@ export default class BattleItem extends React.PureComponent {
                 <Text style={{ flex: -1, color: modeInfo.standardTextColor }} numberOfLines={1}> 人招募</Text>
               </Text>
               <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between' }}>
-                <Text style={{ flex: -1, color: modeInfo.standardTextColor, textAlign: 'center', textAlignVertical: 'center' }}>{rowData.platform.join(' ')}</Text>
+                <Text style={{ flex: -1, color: modeInfo.standardTextColor,
+                  textAlign: 'center', textAlignVertical: 'center' }}>{rowData.platform.join(' ')}</Text>
                 <Text style={{ flex: -1, color: modeInfo.standardColor, marginRight: -60, textAlignVertical: 'center' }} onPress={
                 () => {
                   this.props.navigation.navigate('Home', {

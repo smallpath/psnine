@@ -1,6 +1,6 @@
 import * as ActionTypes from '../../constant/actionTypes'
-
 import { getMainAPI } from '../../dao'
+declare var global
 
 export function getRecommend() {
   return dispatch => {
@@ -15,7 +15,7 @@ export function getRecommend() {
       }).catch(err => {
         console.error(err)
         dispatch(gotError())
-        toast('网络错误', 2000)
+        global.toast('网络错误', 2000)
         dispatch(got([]))
       })
   }
@@ -28,7 +28,7 @@ function got(argument) {
   }
 }
 
-function gotError(argument, page, type) {
+function gotError() {
   return {
     type: ActionTypes.GET_RECOMMEND_ERROR
   }

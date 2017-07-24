@@ -3,7 +3,19 @@ import {
   Text
 } from 'react-native'
 
-export default class InlineImage extends Component {
+interface IProps {
+  forceMark: boolean
+  text: string
+  backgroundColor: string
+  color: string
+}
+
+interface State {
+  show: boolean
+}
+
+export default class InlineImage extends Component<IProps, State> {
+  mounted = false
   constructor(props) {
     super(props)
     let show = false
@@ -25,12 +37,12 @@ export default class InlineImage extends Component {
     this.mounted = false
   }
 
-  componentDidMount = () => {
+  componentDidMount() {
     this.mounted = true
   }
 
   render() {
-    const finalSize = {}
+    const finalSize: any = {}
     const isShow = this.state.show
     const { text = '', backgroundColor, color } = this.props
     return (
@@ -38,7 +50,7 @@ export default class InlineImage extends Component {
         color: isShow ? backgroundColor : color,
         backgroundColor: color
       }}>
-        {this.props.text}
+        {text}
       </Text>
     )
   }

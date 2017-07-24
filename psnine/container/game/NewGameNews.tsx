@@ -231,7 +231,7 @@ class GameTopic extends Component {
           onEndReached={this._onEndReached}
           onEndReachedThreshold={0.5}
           extraData={modeInfo}
-          renderScrollComponent={props => <NestedScrollView {...props}/>}
+          renderScrollComponent={props => <global.NestedScrollView {...props}/>}
           windowSize={21}
           updateCellsBatchingPeriod={1}
           initialNumToRender={42}

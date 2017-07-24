@@ -58,7 +58,6 @@ import UserPhoto from '../container/user/Photo'
 import UserDetail from '../container/user/Detail'
 import UserCustom from '../container/user/Custom'
 import UserBlock from '../container/user/Block'
-import ImageUpload from '../container/user/ImageUpload'
 
 import { transitionConfig, onTransitionStart } from './transitionConfig'
 
@@ -98,9 +97,6 @@ const Navigator = StackNavigator({
   },
   UserPhoto: {
     screen: UserPhoto
-  },
-  ImageUpload: {
-    screen: ImageUpload
   },
   Message: {
     screen: Message,
@@ -254,21 +250,15 @@ const Navigator = StackNavigator({
     screen: ImageViewer
   }
 }, {
-    initialRouteName: 'Main',
-    headerMode: 'none',
-    mode: 'card',
-    navigationOptions: {
-      cardStack: {
-        gesturesEnabled: true
-      }
-    },
-    cardStyle: {
-      backgroundColor: 'transparent'
-      // opacity: 0.99
-    },
-    transitionConfig,
-    onTransitionStart
-  })
+  initialRouteName: 'Main',
+  headerMode: 'none',
+  mode: 'card',
+  cardStyle: {
+    backgroundColor: 'transparent'
+  },
+  transitionConfig,
+  onTransitionStart
+})
 
 const previousGetActionForPathAndParams = Navigator.router.getActionForPathAndParams
 

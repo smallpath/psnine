@@ -30,6 +30,7 @@ function reducer(state = initialState, action) {
         list: [],
         numPages: 10
       })
+      return newState
     default:
       return state
   }

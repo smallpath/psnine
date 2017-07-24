@@ -6,13 +6,22 @@ import {
   Modal
 } from 'react-native'
 
-class Dialog extends Component {
+interface Props {
+  renderContent: () => any
+  onRequestClose: () => any,
+  onDismiss: () => any,
+  backgroundOpacity: number,
+  transparent: boolean,
+  modalVisible: boolean
+}
+
+class Dialog extends Component<Props> {
   constructor(props) {
     super(props)
   }
 
   render() {
-    const { modeInfo, renderContent, onRequestClose, onDismiss } = this.props
+    const { renderContent, onRequestClose, onDismiss } = this.props
     const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window')
     return (
       <Modal

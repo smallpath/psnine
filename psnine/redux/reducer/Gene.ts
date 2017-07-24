@@ -26,6 +26,7 @@ function reducer(state = initialState, action) {
         genePage: 0,
         genes: []
       })
+      return newState
     default:
       return state
   }

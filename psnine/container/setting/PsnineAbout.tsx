@@ -20,6 +20,8 @@ let dataSource = new ListView.DataSource({
   rowHasChanged: (row1, row2) => row1 !== row2
 })
 
+declare var global
+
 export default class PsnineAbout extends Component {
 
   constructor(props) {
@@ -106,7 +108,7 @@ export default class PsnineAbout extends Component {
       {
         title: 'PSNINE',
         desc: 'P9 · 酷玩趣友',
-        onPress: () => Linking.openURL('http://psnine.com').catch(err => toast(err.toString()))
+        onPress: () => Linking.openURL('http://psnine.com').catch(err => global.toast(err.toString()))
       },
       {
         title: '关于',
@@ -151,7 +153,7 @@ export default class PsnineAbout extends Component {
       {
         title: '合作洽谈',
         desc: 'psnine@qq.com',
-        onPress: () => Linking.openURL('mailto:psnine@qq.com').catch(err => toast(err.toString()))
+        onPress: () => Linking.openURL('mailto:psnine@qq.com').catch(err => global.toast(err.toString()))
       }
     ]
     if (modeInfo.settingInfo.psnid === '') items.pop()

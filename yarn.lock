@@ -14,11 +14,24 @@
   version "4.14.70"
   resolved "https://registry.npm.taobao.org/@types/lodash/download/@types/lodash-4.14.70.tgz#37bda4acfb3bb79143009cc9d00abd559f7dca30"
 
+"@types/react-native@*":
+  version "0.46.6"
+  resolved "https://registry.yarnpkg.com/@types/react-native/-/react-native-0.46.6.tgz#667f02a8a8a6747376f7dd7b311f97df665ba24f"
+  dependencies:
+    "@types/react" "*"
+
 "@types/react-native@^0.46.5":
   version "0.46.5"
   resolved "https://registry.npm.taobao.org/@types/react-native/download/@types/react-native-0.46.5.tgz#3b5ad2003072c4c59a565e15301b6437cb1c1399"
   dependencies:
     "@types/react" "*"
+
+"@types/react-navigation@^1.0.15":
+  version "1.0.15"
+  resolved "https://registry.yarnpkg.com/@types/react-navigation/-/react-navigation-1.0.15.tgz#1228e481c60c24b66d603069fe845a2b1af16e86"
+  dependencies:
+    "@types/react" "*"
+    "@types/react-native" "*"
 
 "@types/react-redux@^4.4.46":
   version "4.4.46"

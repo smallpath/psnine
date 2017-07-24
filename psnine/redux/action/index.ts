@@ -9,7 +9,7 @@ import circle from './circle'
 import store from './store'
 import trade from './trade'
 
-let actions = {}
+const actions = {}
 
 Object.assign(actions, app)
 Object.assign(actions, community)
@@ -22,4 +22,4 @@ Object.assign(actions, circle)
 Object.assign(actions, store)
 Object.assign(actions, trade)
 
-module.exports = actions
+export default actions

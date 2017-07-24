@@ -6,6 +6,8 @@ import {
 import packages from '../../package.json'
 import { semver } from '../utils/index'
 
+declare var global
+
 const versionInfo = {
   sourceCodeURL: 'https://github.com/smallpath/psnine',
   checkVersionURL: 'https://api.github.com/repos/smallpath/psnine/releases/latest',

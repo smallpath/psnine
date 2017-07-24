@@ -26,6 +26,7 @@ function reducer(state = initialState, action) {
         page: 0,
         qas: []
       })
+      return newState
     default:
       return state
   }

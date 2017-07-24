@@ -4,7 +4,7 @@ import {
   Dimensions
 } from 'react-native'
 
-const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window')
+const { width: SCREEN_WIDTH } = Dimensions.get('window')
 
 function forInitial(props) {
   const {
@@ -22,25 +22,21 @@ function forInitial(props) {
   }
 }
 
-const hack = {
+const hack: any = {
   prevTransitionProps: {}
 }
 
-const hackIndex = 0
-
-export function onTransitionStart(transitionProps, prevTransitionProps) {
+export function onTransitionStart(transitionProps?: any): any {
   hack.prevTransitionProps = transitionProps
 }
 
-export function transitionConfig(
-  transitionProps,
-  prevTransitionProps,
-  isModal
-) {
+export function transitionConfig() {
   return {
     transitionSpec: {
       duration: 350,
+      /* tslint:disable */
       easing: Easing.out(Easing.poly(5)), // decelerate
+      /* tslint:enable */
       timing: Animated.timing
     },
     screenInterpolator: function (props) {
@@ -85,7 +81,6 @@ export function transitionConfig(
         outputRange: ([0, 1, 1, 0])
       })
 
-      const translateX = 0
       const translateY = position.interpolate({
         inputRange,
         outputRange: ([SCREEN_WIDTH / 2, 0, 0, 0])

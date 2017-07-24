@@ -30,6 +30,8 @@ let toolbarActions = [
 
 ]
 
+declare var global
+
 let AnimatedKeyboardAvoidingView = Animated.createAnimatedComponent(KeyboardAvoidingView)
 
 let screen = Dimensions.get('window')
@@ -75,12 +77,12 @@ export default class NewTopic extends Component {
     }
   }
 
-  componentDidMount = () => {
+  componentDidMount() {
     const { modeInfo } = this.props.screenProps
     let config = { tension: 30, friction: 7 }
     // Animated.spring(this.state.openVal, { toValue: 1, ...config }).start(() => {
       if (modeInfo.settingInfo.psnid === '') {
-        toast('请首先登录')
+        global.toast('请首先登录')
         this.props.navigation.goBack()
         return
       }
@@ -145,7 +147,7 @@ export default class NewTopic extends Component {
           if (params.URL) {
             getQaEditAPI(params.URL).then(data => {
               if (params.URL.includes('?psngameid=')) {
-                toast('已设置对应游戏ID' + data.psngameid)
+                global.toast('已设置对应游戏ID' + data.psngameid)
               }
               this.setState(data)
             })

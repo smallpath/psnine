@@ -3,12 +3,9 @@ import {
   StyleSheet,
   Text,
   View,
-  Dimensions,
   TouchableNativeFeedback,
   ActivityIndicator,
-  StatusBar,
   Animated,
-  Easing,
   FlatList
 } from 'react-native'
 
@@ -18,27 +15,7 @@ import {
   idColor
 } from '../../constant/colorConfig'
 
-let screen = Dimensions.get('window')
-const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = screen
-
-let toolbarActions = []
-let title = 'TOPIC'
-let WEBVIEW_REF = `WEBVIEW_REF`
-
-let toolbarHeight = 56
-let releasedMarginTop = 0
-
-const ACTUAL_SCREEN_HEIGHT = SCREEN_HEIGHT - StatusBar.currentHeight + 1
-
-let CIRCLE_SIZE = 56
-let config = { tension: 30, friction: 7, ease: Easing.in(Easing.ease(1, 0, 1, 1)), duration: 200 }
-
-const iconMapper = {
-  '游戏同步': 'md-sync',
-  '关注': 'md-star-half',
-  '感谢': 'md-thumbs-up',
-  '等级同步': 'md-sync'
-}
+declare var global
 
 export default class Home extends Component {
   static navigationOptions = {
@@ -110,7 +87,7 @@ export default class Home extends Component {
         }}>
 
           <View style={{ flex: -1, flexDirection: 'row', padding: 5 }}>
-            <HTMLView
+            <global.HTMLView
               value={content}
               modeInfo={Object.assign({}, modeInfo, {
                 standardTextColor: modeInfo.titleTextColor
@@ -200,7 +177,7 @@ export default class Home extends Component {
           }}
           extraData={this.state}
           windowSize={999}
-          renderScrollComponent={props => <NestedScrollView {...props}/>}
+          renderScrollComponent={props => <global.NestedScrollView {...props}/>}
           key={modeInfo.themeName}
           numColumns={diaryTable.length ? 1 : modeInfo.numColumns}
           disableVirtualization={true}

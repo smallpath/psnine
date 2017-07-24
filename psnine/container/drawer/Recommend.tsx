@@ -178,7 +178,7 @@ class Recommend extends Component {
           />
         }
         disableVirtualization={true}
-        renderScrollComponent={props => <NestedScrollView {...props}/>}
+        renderScrollComponent={props => <global.NestedScrollView {...props}/>}
         keyExtractor={(item, index) => `${item.id}`}
         renderItem={this._renderItemComponent}
         renderSectionHeader={renderSectionHeader}

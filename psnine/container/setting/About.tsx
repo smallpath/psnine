@@ -20,6 +20,8 @@ let dataSource = new ListView.DataSource({
   rowHasChanged: (row1, row2) => row1 !== row2
 })
 
+declare var global
+
 class About extends Component {
 
   constructor(props) {

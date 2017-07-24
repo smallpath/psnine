@@ -3,14 +3,22 @@ import {
   StyleSheet,
   Text,
   View,
-  Dimensions,
   TouchableNativeFeedback
 } from 'react-native'
 
-let screen = Dimensions.get('window')
-const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = screen
+import { FlatlistItemProp, FlatlistItemState, ModalList } from '../interface'
 
-export default class extends React.PureComponent {
+interface ExtendedProp extends FlatlistItemProp {
+  modalList?: ModalList[]
+  content: string
+  onLongPress: (...args) => any
+  preFetch: (...args) => any
+  index: number
+}
+
+declare var global
+
+export default class extends React.PureComponent<ExtendedProp, FlatlistItemState> {
   constructor(props) {
     super(props)
 
@@ -19,15 +27,17 @@ export default class extends React.PureComponent {
     }
   }
 
-  shouldComponentUpdate = (props, state) => props.modeInfo.themeName !== this.props.modeInfo.themeName || this.state.modalVisible !== state.modalVisible
+  shouldComponentUpdate(props, state) {
+    return props.modeInfo.themeName !== this.props.modeInfo.themeName || this.state.modalVisible !== state.modalVisible
+  }
 
   handleImageOnclick = () => {}
 
-  render = () => {
+  render() {
     const { modeInfo, rowData, content, modalList = [], navigation } = this.props
 
     return (
-      <TouchableNativeFeedback key={rowData.id || index}   onPress={() => {
+      <TouchableNativeFeedback key={rowData.id}   onPress={() => {
           fetch(rowData.href).then(res => {
             if (res.url && typeof res.url === 'string') {
               navigation.navigate('CommunityTopic', {
@@ -54,7 +64,7 @@ export default class extends React.PureComponent {
         }}>
         {
           this.state.modalVisible && modalList.length && (
-          <MyDialog modeInfo={modeInfo}
+          <global.MyDialog modeInfo={modeInfo}
             modalVisible={this.state.modalVisible}
             onDismiss={() => { this.setState({ modalVisible: false }) }}
             onRequestClose={() => { this.setState({ modalVisible: false }) }}
@@ -68,8 +78,9 @@ export default class extends React.PureComponent {
                 right: 30,
                 paddingVertical: 15,
                 elevation: 4,
-                opacity: 1
-              }} borderRadius={2}>
+                opacity: 1,
+                borderRadius: 2
+              }}>
               {
                 modalList.map((item, index) => (
                   <TouchableNativeFeedback key={index + item.text} onPress={() => {
@@ -79,7 +90,9 @@ export default class extends React.PureComponent {
                         item.onPress(rowData)
                       })
                     }}>
-                    <View style={{height: 50, paddingVertical: 10, paddingLeft: 20 , alignSelf: 'stretch', alignContent: 'stretch', justifyContent: 'center'}}>
+                    <View style={{
+                      height: 50, paddingVertical: 10, paddingLeft: 20 , alignSelf: 'stretch', alignContent: 'stretch', justifyContent: 'center'
+                    }}>
                       <Text style={{textAlignVertical: 'center', fontSize: 18, color: modeInfo.standardTextColor}}>{item.text}</Text>
                     </View>
                   </TouchableNativeFeedback>
@@ -90,7 +103,7 @@ export default class extends React.PureComponent {
           )
         }
           <View style={{ flex: -1, flexDirection: 'row', padding: 5 }}>
-            <HTMLView
+            <global.HTMLView
               value={content}
               modeInfo={Object.assign({}, modeInfo, {
                 standardTextColor: modeInfo.titleTextColor

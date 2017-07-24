@@ -11,9 +11,17 @@ import { getGameUrl } from '../dao'
 
 import colorConfig, { getContentFromTrophy } from '../constant/colorConfig'
 
-export default class extends React.PureComponent {
+import { FlatlistItemProp } from '../interface'
 
-  shouldComponentUpdate = (props) => props.modeInfo.themeName !== this.props.modeInfo.themeName
+interface ExtendedProp extends FlatlistItemProp {
+  ITEM_HEIGHT: number
+}
+
+export default class extends React.PureComponent<ExtendedProp, {}> {
+
+  shouldComponentUpdate(props) {
+    return props.modeInfo.themeName !== this.props.modeInfo.themeName
+  }
 
   _onRowPressed = (rowData) => {
     const { navigation } = this.props
@@ -27,7 +35,7 @@ export default class extends React.PureComponent {
     })
   }
 
-  render = () => {
+  render() {
     const { modeInfo, rowData, ITEM_HEIGHT } = this.props
     const { numColumns = 1 } = modeInfo
     return (
@@ -39,7 +47,7 @@ export default class extends React.PureComponent {
         background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
       >
         <View pointerEvents={'box-only'} style={{
-          flex: 1, flexDirection: 'row', padding: 12,
+          flexDirection: 'row', padding: 12,
           marginVertical: 3.5,
           marginHorizontal: numColumns === 1 ? 0 : 3.5,
           backgroundColor: modeInfo.backgroundColor,
@@ -61,9 +69,17 @@ export default class extends React.PureComponent {
             </Text>
 
             <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-              <Text selectable={false} style={{ flex: -1, color: modeInfo.standardColor, textAlign: 'center', textAlignVertical: 'center' }}>{rowData.platform}</Text>
-              { rowData.region && <Text selectable={false} style={{ flex: -1, color: modeInfo.standardTextColor, textAlign: 'center', textAlignVertical: 'center' }}>{rowData.region}</Text> || undefined}
-              { rowData.platium && <Text selectable={false} style={{ flex: -1, color: modeInfo.standardTextColor, textAlign: 'center', textAlignVertical: 'center' }}>{
+              <Text selectable={false} style={{
+                flex: -1, color: modeInfo.standardColor, textAlign: 'center', textAlignVertical: 'center'
+              }}>{rowData.platform}</Text>
+              { rowData.region && (
+                  <Text selectable={false}
+                    style={{ flex: -1, color: modeInfo.standardTextColor, textAlign: 'center', textAlignVertical: 'center'
+                  }}>{rowData.region}</Text>
+                ) || undefined}
+              { rowData.platium && <Text selectable={false} style={{
+                  flex: -1, color: modeInfo.standardTextColor, textAlign: 'center', textAlignVertical: 'center'
+                }}>{
                 getContentFromTrophy((rowData.platium + rowData.gold + rowData.selver + rowData.bronze)).map((item, index) => {
                   return (
                     <Text key={index} style={{color: colorConfig['trophyColor' + (index + 1)]}}>

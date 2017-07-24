@@ -4,8 +4,15 @@ import {
   ProgressBarAndroid
 } from 'react-native'
 
-export default class FooterProgress extends React.PureComponent {
-  shouldComponentUpdate = (nextProps) => {
+import { ModeInfo } from '../interface'
+
+interface ExtendedProp {
+  isLoadingMore: boolean
+  modeInfo: ModeInfo
+}
+
+export default class FooterProgress extends React.PureComponent<ExtendedProp, {}> {
+  shouldComponentUpdate(nextProps) {
     if (nextProps.isLoadingMore !== this.props.isLoadingMore) return true
     if (nextProps.modeInfo.themeName !== this.props.modeInfo.themeName) return true
     return false

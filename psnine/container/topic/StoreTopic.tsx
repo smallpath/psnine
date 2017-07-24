@@ -102,7 +102,7 @@ export default class extends Component {
     // console.log(rowData.content)
     return (
       <View style={{ padding: 12, margin: 7, backgroundColor: modeInfo.backgroundColor, elevation: 1, flex: 1 }}>
-        <HTMLView
+        <global.HTMLView
           value={rowData.content}
           modeInfo={modeInfo}
           stylesheet={styles}

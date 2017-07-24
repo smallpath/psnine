@@ -279,7 +279,7 @@ class About extends Component {
         />
         {
           this.state.modalIndex !== -1 && (
-            <MyDialog modeInfo={modeInfo}
+            <global.MyDialog modeInfo={modeInfo}
               modalVisible={this.state.modalIndex !== -1}
               onDismiss={() => { this.setState({ modalIndex: -1 }); this.isValueChanged = false }}
               onRequestClose={() => { this.setState({ modalIndex: -1 }); this.isValueChanged = false }}
@@ -327,7 +327,7 @@ class About extends Component {
                   </TouchableNativeFeedback>
                 </View>
               )}>
-            </MyDialog>
+            </global.MyDialog>
           )
         }
         <ScrollView style={{ flex: 2, backgroundColor: modeInfo.backgroundColor }}>

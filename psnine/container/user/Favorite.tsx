@@ -3,7 +3,6 @@ import {
   StyleSheet,
   Text,
   View,
-  Dimensions,
   TouchableNativeFeedback,
   RefreshControl,
   InteractionManager,
@@ -11,8 +10,6 @@ import {
   FlatList,
   Button
 } from 'react-native'
-
-const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window')
 
 import { standardColor, idColor } from '../../constant/colorConfig'
 
@@ -36,6 +33,8 @@ let toolbarActions = [
   { title: '类型', iconName: 'md-funnel', show: 'always' },
   { title: '跳页', iconName: 'md-map', show: 'always' }
 ]
+
+declare var global
 
 class Fav extends Component {
   constructor(props) {
@@ -162,12 +161,12 @@ class Fav extends Component {
             type: this.state.finalType,
             param: rowData && rowData.id,
             unfav: ''
-          }).then(res => res.text()).then(text => {
-            toast('已取消收藏')
+          }).then(res => res.text()).then(() => {
+            global.toast('已取消收藏')
             this._onRefresh()
           }).catch(err => {
             const msg = `取消失败: ${err.toString()}`
-            toast(msg)
+            global.toast(msg)
           })
         }
       }]
@@ -247,7 +246,7 @@ class Fav extends Component {
           }}
         />
         {this.state.typeModalVisible && (
-          <MyDialog modeInfo={modeInfo}
+          <global.MyDialog modeInfo={modeInfo}
             modalVisible={this.state.typeModalVisible}
             onDismiss={() => { this.setState({ typeModalVisible: false }); this.isValueChanged = false }}
             onRequestClose={() => { this.setState({ typeModalVisible: false }); this.isValueChanged = false }}
@@ -287,7 +286,7 @@ class Fav extends Component {
             )} />
         )}
         {this.state.modalVisible && (
-          <MyDialog modeInfo={modeInfo}
+          <global.MyDialog modeInfo={modeInfo}
             modalVisible={this.state.modalVisible}
             onDismiss={() => { this.setState({ modalVisible: false }); this.isValueChanged = false }}
             onRequestClose={() => { this.setState({ modalVisible: false }); this.isValueChanged = false }}

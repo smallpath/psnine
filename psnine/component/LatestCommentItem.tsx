@@ -9,17 +9,19 @@ import {
 } from 'react-native'
 
 let screen = Dimensions.get('window')
-const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = screen
+const { width: SCREEN_WIDTH } = screen
 
-export default class PhotoItem extends React.PureComponent {
+import { FlatlistItemProp } from '../interface'
 
-  shouldComponentUpdate = (props, state) => {
+export default class PhotoItem extends React.PureComponent<FlatlistItemProp> {
+
+  shouldComponentUpdate(props) {
     if (props.modeInfo.themeName !== this.props.modeInfo.themeName) return true
     return false
   }
 
   onPress = () => {
-    const { modeInfo, rowData, navigation } = this.props
+    const { rowData, navigation } = this.props
     navigation.navigate('GamePoint', {
       URL: `${rowData.href}`,
       rowData: {
@@ -50,7 +52,9 @@ export default class PhotoItem extends React.PureComponent {
             style={[styles.avatar, { marginHorizontal: 2 }]}
           />
           <View style={{flex: 2}}>
-            <Text numberOfLines={1} ellipsizeMode='tail' selectable={false} style={{ flex: -1, color: modeInfo.standardColor, textAlign: 'center', textAlignVertical: 'center' }} onPress={() => {
+            <Text numberOfLines={1} ellipsizeMode='tail' selectable={false} style={{
+              flex: -1, color: modeInfo.standardColor, textAlign: 'center', textAlignVertical: 'center'
+            }} onPress={() => {
                 // this.flatlist.getNode().recordInteraction()
                 navigation.navigate('Home', {
                   title: rowData.psnid,
@@ -58,7 +62,9 @@ export default class PhotoItem extends React.PureComponent {
                   URL: `http://psnine.com/psnid/${rowData.psnid}`
                 })
               }}>{rowData.psnid}</Text>
-            <Text numberOfLines={1} ellipsizeMode='tail' selectable={false} style={{ flex: -1, color: modeInfo.standardTextColor, textAlign: 'center', textAlignVertical: 'center', fontSize: 12 }}>{rowData.date}</Text>
+            <Text numberOfLines={1} ellipsizeMode='tail' selectable={false} style={{
+              flex: -1, color: modeInfo.standardTextColor, textAlign: 'center', textAlignVertical: 'center', fontSize: 12
+            }}>{rowData.date}</Text>
           </View>
         </View>
       </TouchableNativeFeedback>

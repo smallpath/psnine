@@ -4,7 +4,6 @@ import {
   Text,
   View,
   Image,
-  Dimensions,
   TouchableNativeFeedback
 } from 'react-native'
 
@@ -14,10 +13,14 @@ import colorConfig, {
 
 import { getHomeURL } from '../dao'
 
-let screen = Dimensions.get('window')
-const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = screen
+import { FlatlistItemProp, FlatlistItemState, ModalList } from '../interface'
 
-export default class extends React.PureComponent {
+interface ExtendedProp extends FlatlistItemProp {
+  modalList?: ModalList[]
+  ITEM_HEIGHT: number
+}
+
+export default class extends React.PureComponent<ExtendedProp, FlatlistItemState> {
   constructor(props) {
     super(props)
 
@@ -26,7 +29,9 @@ export default class extends React.PureComponent {
     }
   }
 
-  shouldComponentUpdate = (props, state) => props.modeInfo.themeName !== this.props.modeInfo.themeName || this.state.modalVisible !== state.modalVisible
+  shouldComponentUpdate(props, state) {
+    return props.modeInfo.themeName !== this.props.modeInfo.themeName || this.state.modalVisible !== state.modalVisible
+  }
 
   _onRowPressed = (rowData) => {
     const { navigation } = this.props
@@ -41,7 +46,7 @@ export default class extends React.PureComponent {
 
   handleImageOnclick = () => {}
 
-  render = () => {
+  render() {
     const { modeInfo, rowData, ITEM_HEIGHT, modalList = [] } = this.props
     const { numColumns = 1 } = modeInfo
     return (
@@ -59,7 +64,7 @@ export default class extends React.PureComponent {
         background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
       >
         <View pointerEvents={'box-only'} style={{
-          flex: 1, flexDirection: 'row',
+          flexDirection: 'row',
           flexWrap: 'nowrap', padding: 8, justifyContent: 'space-around', alignItems: 'center',
           marginVertical: 3.5,
           marginHorizontal: numColumns === 1 ? 0 : 3.5,
@@ -74,7 +79,7 @@ export default class extends React.PureComponent {
           />
           {
             this.state.modalVisible && modalList.length && (
-            <MyDialog modeInfo={modeInfo}
+            <global.MyDialog modeInfo={modeInfo}
               modalVisible={this.state.modalVisible}
               onDismiss={() => { this.setState({ modalVisible: false }) }}
               onRequestClose={() => { this.setState({ modalVisible: false }) }}
@@ -88,8 +93,9 @@ export default class extends React.PureComponent {
                   right: 30,
                   paddingVertical: 15,
                   elevation: 4,
-                  opacity: 1
-                }} borderRadius={2}>
+                  opacity: 1,
+                  borderRadius: 2
+                }}>
                 {
                   modalList.map((item, index) => (
                     <TouchableNativeFeedback key={index + item.text} onPress={() => {
@@ -99,7 +105,9 @@ export default class extends React.PureComponent {
                           item.onPress(rowData)
                         })
                       }}>
-                      <View style={{height: 50, paddingVertical: 10, paddingLeft: 20 , alignSelf: 'stretch', alignContent: 'stretch', justifyContent: 'center'}}>
+                      <View style={{
+                        height: 50, paddingVertical: 10, paddingLeft: 20 , alignSelf: 'stretch', alignContent: 'stretch', justifyContent: 'center'
+                      }}>
                         <Text style={{textAlignVertical: 'center', fontSize: 18, color: modeInfo.standardTextColor}}>{item.text}</Text>
                       </View>
                     </TouchableNativeFeedback>
@@ -111,7 +119,7 @@ export default class extends React.PureComponent {
           }
           <View style={{ flex: 3, padding: 5}}>
             <Text style={{color: modeInfo.accentColor}}>{rowData.psnid}</Text>
-            <HTMLView
+            <global.HTMLView
               value={rowData.content}
               modeInfo={modeInfo}
               stylesheet={styles}
@@ -169,7 +177,7 @@ export default class extends React.PureComponent {
     return (
       <View style={{flex: 4, flexDirection: 'row'}}>
         <View style={{ flex: 1, flexDirection: 'column' }}>
-          <HTMLView
+          <global.HTMLView
             value={rowData.level}
             modeInfo={modeInfo}
             stylesheet={styles}

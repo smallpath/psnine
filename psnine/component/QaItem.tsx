@@ -8,8 +8,14 @@ import {
 } from 'react-native'
 
 import { getQAUrl } from '../dao'
+import { FlatlistItemProp, FlatlistItemState, ModalList } from '../interface'
 
-export default class extends React.PureComponent {
+interface ExtendedProp extends FlatlistItemProp {
+  modalList?: ModalList[]
+  ITEM_HEIGHT: number
+}
+
+export default class extends React.PureComponent<ExtendedProp, FlatlistItemState> {
   constructor(props) {
     super(props)
 
@@ -18,7 +24,9 @@ export default class extends React.PureComponent {
     }
   }
 
-  shouldComponentUpdate = (props, state) => props.modeInfo.themeName !== this.props.modeInfo.themeName || this.state.modalVisible !== state.modalVisible
+  shouldComponentUpdate(props, state) {
+    return props.modeInfo.themeName !== this.props.modeInfo.themeName || this.state.modalVisible !== state.modalVisible
+  }
 
   _onRowPressed = (rowData) => {
     const { navigation } = this.props
@@ -32,7 +40,7 @@ export default class extends React.PureComponent {
     })
   }
 
-  render = () => {
+  render() {
     const { modeInfo, rowData, ITEM_HEIGHT, modalList = [] } = this.props
     const { numColumns = 1 } = modeInfo
     return (
@@ -50,7 +58,7 @@ export default class extends React.PureComponent {
         background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
       >
         <View style={{
-          flex: 1, flexDirection: 'row', padding: 12,
+          flexDirection: 'row', padding: 12,
           marginVertical: 3.5,
           marginHorizontal: numColumns === 1 ? 0 : 3.5,
           backgroundColor: modeInfo.backgroundColor,
@@ -64,7 +72,7 @@ export default class extends React.PureComponent {
           />
           {
             this.state.modalVisible && modalList.length && (
-              <MyDialog modeInfo={modeInfo}
+              <global.MyDialog modeInfo={modeInfo}
                 modalVisible={this.state.modalVisible}
                 onDismiss={() => { this.setState({ modalVisible: false }) }}
                 onRequestClose={() => { this.setState({ modalVisible: false }) }}
@@ -78,8 +86,9 @@ export default class extends React.PureComponent {
                     right: 30,
                     paddingVertical: 15,
                     elevation: 4,
-                    opacity: 1
-                  }} borderRadius={2}>
+                    opacity: 1,
+                    borderRadius: 2
+                  }}>
                   {
                     modalList.map((item, index) => (
                       <TouchableNativeFeedback key={index + item.text} onPress={() => {
@@ -89,7 +98,9 @@ export default class extends React.PureComponent {
                             item.onPress(rowData)
                           })
                         }}>
-                        <View style={{height: 50, paddingVertical: 10, paddingLeft: 20 , alignSelf: 'stretch', alignContent: 'stretch', justifyContent: 'center'}}>
+                        <View style={{
+                          height: 50, paddingVertical: 10, paddingLeft: 20 , alignSelf: 'stretch', alignContent: 'stretch', justifyContent: 'center'
+                        }}>
                           <Text style={{textAlignVertical: 'center', fontSize: 18, color: modeInfo.standardTextColor}}>{item.text}</Text>
                         </View>
                       </TouchableNativeFeedback>
@@ -108,7 +119,9 @@ export default class extends React.PureComponent {
             </Text>
 
             <View style={{ flex: -1, flexDirection: 'row', justifyContent: 'space-between' }}>
-              <Text selectable={false} style={{ fontSize: 12, flex: -1, color: modeInfo.standardColor, textAlign: 'center', textAlignVertical: 'center' }} onPress={
+              <Text selectable={false} style={{
+                fontSize: 12, flex: -1, color: modeInfo.standardColor, textAlign: 'center', textAlignVertical: 'center'
+              }} onPress={
                 () => {
                   this.props.navigation.navigate('Home', {
                     title: rowData.psnid,
@@ -117,9 +130,15 @@ export default class extends React.PureComponent {
                   })
                 }
               }>{rowData.psnid}</Text>
-              <Text selectable={false} style={{ fontSize: 12, flex: -1, color: modeInfo.standardTextColor, textAlign: 'center', textAlignVertical: 'center' }}>{rowData.price}</Text>
-              <Text selectable={false} style={{ fontSize: 12, flex: -1, color: modeInfo.standardTextColor, textAlign: 'center', textAlignVertical: 'center' }}>{rowData.date}</Text>
-              <Text selectable={false} style={{ fontSize: 12, flex: -1, color: modeInfo.standardTextColor, textAlign: 'center', textAlignVertical: 'center' }}>{rowData.count}回复</Text>
+              <Text style={{
+                fontSize: 12, flex: -1, color: modeInfo.standardTextColor, textAlign: 'center', textAlignVertical: 'center'
+              }}>{rowData.price}</Text>
+              <Text style={{
+                fontSize: 12, flex: -1, color: modeInfo.standardTextColor, textAlign: 'center', textAlignVertical: 'center'
+              }}>{rowData.date}</Text>
+              <Text style={{
+                fontSize: 12, flex: -1, color: modeInfo.standardTextColor, textAlign: 'center', textAlignVertical: 'center'
+              }}>{rowData.count}回复</Text>
             </View>
 
           </View>

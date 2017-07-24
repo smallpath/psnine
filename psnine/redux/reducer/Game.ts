@@ -26,6 +26,7 @@ function reducer(state = initialState, action) {
         page: 0,
         games: []
       })
+      return newState
     default:
       return state
   }

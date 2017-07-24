@@ -11,7 +11,7 @@ import {
   Animated,
   Keyboard
 } from 'react-native'
-
+declare var global
 import Ionicons from 'react-native-vector-icons/Ionicons'
 
 import { standardColor, accentColor } from '../../constant/colorConfig'
@@ -193,12 +193,12 @@ class Login extends Component {
       // console.log(res.clone().text())
       const matched = html.match(/<div class=\"alert-error pd10\"\>(.*?)<\/div>/)
       if (matched && matched[1]) {
-        toast(matched[1])
+        global.toast(matched[1])
         return
       }
-      toast('修改密码成功，请重新登录')
+      global.toast('修改密码成功，请重新登录')
     }).catch((err) => {
-      toast(err.toString())
+      global.toast(err.toString())
     })
   }
 

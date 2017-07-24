@@ -8,7 +8,8 @@ interface Window {
 }
 
 interface Console {
-  ignoredYellowBox: string[]
+  ignoredYellowBox: string[],
+  log: () => void
 }
 
 interface Global {

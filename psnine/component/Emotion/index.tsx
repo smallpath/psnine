@@ -1,22 +1,24 @@
 import React, { Component } from 'react'
 import {
-  StyleSheet,
   Text,
   View,
-  Dimensions,
-  TouchableNativeFeedback,
   ViewPagerAndroid
 } from 'react-native'
 
-const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window')
-
-import EmotionItem from './emotionItem'
+import EmotionItem, { State } from './emotionItem'
 
 import alu from './alu'
 import majiang from './majiang'
 import shoubing from './shoubing'
 
-const Emotions = [
+const Emotions: {
+  text: string
+  size?: {
+    height: number
+    width: number
+  }
+  emotions: any[]
+}[] = [
   alu,
   majiang,
   shoubing
@@ -24,7 +26,13 @@ const Emotions = [
 
 const viewPagerHeight = 190
 
-class Emotion extends Component {
+interface Prop {
+  modeInfo: any
+  onPress: () => any
+
+}
+
+class Emotion extends Component<Prop, State> {
   constructor(props) {
     super(props)
     this.state = {
@@ -39,7 +47,7 @@ class Emotion extends Component {
     })
   }
 
-  shouldComponentUpdate = (nextProp, nextState) => {
+  shouldComponentUpdate(_, nextState) {
     if (nextState.index !== this.state.index) return true
     return false
   }
@@ -47,12 +55,9 @@ class Emotion extends Component {
   render() {
     const { modeInfo } = this.props
     const { index } = this.state
-    const list = []
-    const length = Emotions.length
 
-    const targetEmotions = Emotions[index]
-    const targetItem =  Emotions.map((item, index) => (
-      <View key={index}>
+    const targetItem =  Emotions.map((item, innerIndex) => (
+      <View key={innerIndex}>
         <EmotionItem
           size={item.size || { width: 32, height: 32}}
           emotionList={item.emotions}
@@ -62,27 +67,6 @@ class Emotion extends Component {
       </View>
     ))
 
-    const buttonList = Emotions.map((item, index) => {
-      return (
-        <View key={index} style={{flex: 1, backgroundColor: modeInfo.standardColor, marginLeft: 0, alignItems: 'center', justifyContent: 'center'}}>
-          <TouchableNativeFeedback key={index} onPress={() => {
-            this.setState({
-              index
-            })
-          }}>
-            <View style={{flex: 1, alignSelf: 'stretch'}}>
-              <Text style={{
-                flex: 1,
-                color: modeInfo.titleTextColor,
-                fontSize: 15,
-                textAlign: 'center',
-                textAlignVertical: 'center'
-              }}>{item.text}</Text>
-            </View>
-          </TouchableNativeFeedback>
-        </View>
-      )
-    })
     return (
       <View style={{
         height: viewPagerHeight
@@ -95,11 +79,8 @@ class Emotion extends Component {
           paddingHorizontal: 2,
           paddingVertical: 8
         }}
-          ref={viewPager => { this.viewPage = viewPager }}
           keyboardDismissMode={'on-drag'}
           onPageSelected={this._onPageSelected}
-          onPageScrollStateChanged={this.onPageScrollStateChanged}
-          onPageScroll={this.onPageScroll}
         >
           {targetItem}
         </ViewPagerAndroid>
@@ -112,20 +93,10 @@ class Emotion extends Component {
             color: modeInfo.titleTextColor
           }}>{index + 1}/{Emotions.length}</Text>
         </View>
-        {/*<View style={{
-          flexDirection: 'row',
-          alignItems: 'center',
-          justifyContent: 'center',
-          flex: 1
-        }}>
-          {buttonList}
-        </View>*/}
       </View>
     )
   }
 
 }
-
-const styles = StyleSheet.create({})
 
 export default Emotion

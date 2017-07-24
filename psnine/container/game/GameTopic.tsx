@@ -3,15 +3,12 @@ import {
   StyleSheet,
   Text,
   View,
-  Dimensions,
   TouchableNativeFeedback,
   RefreshControl,
   InteractionManager,
   Slider,
   FlatList
 } from 'react-native'
-
-const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window')
 
 import { standardColor, idColor } from '../../constant/colorConfig'
 
@@ -25,6 +22,8 @@ let toolbarActions = [
   { title: '创建', iconName: 'md-create', show: 'always', iconSize: 22 },
   { title: '跳页', iconName: 'md-map', show: 'always' }
 ]
+
+declare var global
 
 class GameTopic extends Component {
   constructor(props) {
@@ -119,7 +118,7 @@ class GameTopic extends Component {
   onActionSelected = (index) => {
     switch (index) {
       case 0:
-        if (!this.state.canCreate) return toast('本游戏暂时无法发布相关讨论')
+        if (!this.state.canCreate) return global.toast('本游戏暂时无法发布相关讨论')
         const { params } = this.props.navigation.state
         const id = (params.URL.match(/\d+/) || [0])[0]
         this.props.navigation.navigate('NewTopic', {
@@ -131,6 +130,8 @@ class GameTopic extends Component {
         this.setState({
           modalVisible: true
         })
+        return
+      default:
         return
     }
   }
@@ -208,7 +209,7 @@ class GameTopic extends Component {
           }}
         />
         {this.state.modalVisible && (
-          <MyDialog modeInfo={modeInfo}
+          <global.MyDialog modeInfo={modeInfo}
             modalVisible={this.state.modalVisible}
             onDismiss={() => { this.setState({ modalVisible: false }); this.isValueChanged = false }}
             onRequestClose={() => { this.setState({ modalVisible: false }); this.isValueChanged = false }}

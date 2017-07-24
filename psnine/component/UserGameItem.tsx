@@ -14,9 +14,17 @@ import colorConfig, {
   getContentFromTrophy
 } from '../constant/colorConfig'
 
-export default class extends React.PureComponent {
+import { FlatlistItemProp } from '../interface'
 
-  shouldComponentUpdate = (props) => props.modeInfo.themeName !== this.props.modeInfo.themeName
+interface ExtendedProp extends FlatlistItemProp {
+  ITEM_HEIGHT: number
+}
+
+export default class extends React.PureComponent<ExtendedProp> {
+
+  shouldComponentUpdate(props) {
+    return props.modeInfo.themeName !== this.props.modeInfo.themeName
+  }
 
   _onRowPressed = (rowData) => {
     const { navigation } = this.props
@@ -28,11 +36,11 @@ export default class extends React.PureComponent {
     })
   }
 
-  render = () => {
-    const { modeInfo, navigation, rowData, ITEM_HEIGHT } = this.props
+  render() {
+    const { modeInfo, rowData, ITEM_HEIGHT } = this.props
     const { numColumns = 1 } = modeInfo
     return (
-      <TouchableNativeFeedback key={rowData.href || rowID}   onPress={() => this._onRowPressed(rowData)}>
+      <TouchableNativeFeedback key={rowData.href}   onPress={() => this._onRowPressed(rowData)}>
         <View pointerEvents={'box-only'} style={{
           backgroundColor: modeInfo.backgroundColor,
           flexDirection: 'row',
@@ -60,7 +68,9 @@ export default class extends React.PureComponent {
                 {rowData.title}
               </Text>
             </View>
-            {rowData.platform && (<View><Text style={{ color: modeInfo.standardTextColor, marginLeft: 2  }}>{rowData.platform.join(' ')}</Text></View>) || undefined}
+            {rowData.platform && (
+              <View><Text style={{ color: modeInfo.standardTextColor, marginLeft: 2  }}>{rowData.platform.join(' ')}</Text></View>
+            ) || undefined}
             {rowData.syncTime && (<View style={{ flex: -1, flexDirection: 'row' }}>
                 <Text style={{ color: modeInfo.standardTextColor , fontSize: 12, marginLeft: 2 }}>{rowData.syncTime + ' '}</Text>
                 <Text selectable={false} style={{
@@ -104,7 +114,7 @@ export default class extends React.PureComponent {
                 color: modeInfo.titleTextColor }}>{rowData.percent}</Text>
             <ProgressBarAndroid color={getColorFromProgress(rowData.percent)}
               indeterminate={false}
-              progress={parseInt(rowData.percent) / 100}
+              progress={parseInt(rowData.percent, 10) / 100}
               style={{flex: -1, height: 4}}
               styleAttr='Horizontal' />
             <Text

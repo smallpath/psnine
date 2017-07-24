@@ -3,15 +3,13 @@ import {
   Image,
   Dimensions,
   ActivityIndicator,
-  PixelRatio,
   View,
   Text,
   TouchableNativeFeedback
 } from 'react-native'
+import { IProps, State } from './inlineImage'
 
 const { width } = Dimensions.get('window')
-
-const pixelRate = PixelRatio.get()
 
 const baseStyle = {
   backgroundColor: 'transparent'
@@ -49,11 +47,19 @@ export default props => {
   )
 }
 
-class ResizableImage extends Component {
+interface IState extends State {
+  isLoading: boolean
+  hasError: boolean
+  shouldLoad: boolean
+}
+
+class ResizableImage extends Component<IProps, IState> {
+  maxWidth: number = width
+  mounted: boolean = false
   constructor(props) {
     super(props)
-    const { width } = Dimensions.get('window')
-    const maxWidth = width - this.props.source.imagePaddingOffset
+    const { width: SCREEN_WIDTH } = Dimensions.get('window')
+    const maxWidth = SCREEN_WIDTH - this.props.source.imagePaddingOffset
     this.maxWidth = maxWidth
     this.state = {
       width: this.props.style.width || maxWidth,
@@ -69,7 +75,7 @@ class ResizableImage extends Component {
     this.mounted = false
   }
 
-  componentDidMount = () => {
+  componentDidMount() {
     this.mounted = true
     this.loadImage()
   }
@@ -99,7 +105,7 @@ class ResizableImage extends Component {
   }
 
   render() {
-    const finalSize = {}
+    const finalSize: any = {}
     const { width } = Dimensions.get('window')
     const maxWidth = width - this.props.source.imagePaddingOffset
     if (this.state.width > maxWidth) {
@@ -107,8 +113,7 @@ class ResizableImage extends Component {
       let ratio = maxWidth / this.state.width
       finalSize.height = this.state.height * ratio
     }
-    const style = Object.assign({}, baseStyle, this.props.style, this.state, finalSize)
-    let source = {
+    let source: any = {
       alignSelf: 'center'
     }
     if (!finalSize.width || !finalSize.height) {
@@ -139,9 +144,11 @@ class ResizableImage extends Component {
     return (
       <TouchableNativeFeedback onLongPress={onLongPress} onPress={onPress} style={[{ justifyContent: 'center', alignItems: 'center' }, alignSelf]}>
         {<View style={{ width: source.width, height: source.height }}>
-          {this.state.shouldLoad === false && (<View style={{flex: 1, backgroundColor: modeInfo.brighterLevelOne, alignItems: 'center', justifyContent: 'center' }}>
-            <Text style={{color: modeInfo.standardTextColor, textAlign: 'center', textAlignVertical: 'center'}}>点击加载图片</Text>
-          </View>) || undefined}
+          {this.state.shouldLoad === false && (
+              <View style={{flex: 1, backgroundColor: modeInfo.brighterLevelOne, alignItems: 'center', justifyContent: 'center' }}>
+                <Text style={{color: modeInfo.standardTextColor, textAlign: 'center', textAlignVertical: 'center'}}>点击加载图片</Text>
+              </View>
+            ) || undefined}
           {
             this.state.isLoading && this.state.shouldLoad &&
             <ActivityIndicator
@@ -156,15 +163,18 @@ class ResizableImage extends Component {
               color={modeInfo.accentColor} /> || undefined
           }
           {
-            !this.state.isLoading && this.state.shouldLoad && this.state.hasError && <View style={{flex: 1, backgroundColor: modeInfo.brighterLevelOne, alignItems: 'center', justifyContent: 'center' }}>
-              <Text style={{color: modeInfo.standardTextColor, textAlign: 'center', textAlignVertical: 'center'}}>{'加载失败: ' + this.state.hasError}</Text>
-            </View> || undefined
+            !this.state.isLoading && this.state.shouldLoad && this.state.hasError && (
+              <View style={{flex: 1, backgroundColor: modeInfo.brighterLevelOne, alignItems: 'center', justifyContent: 'center' }}>
+                <Text style={{color: modeInfo.standardTextColor, textAlign: 'center', textAlignVertical: 'center'}}>
+                  {'加载失败: ' + this.state.hasError}
+                </Text>
+              </View>) || undefined
           }
           {!this.state.isLoading && this.state.shouldLoad && !this.state.hasError &&
             <Image
               resizeMode={'contain'}
               resizeMethod={'resize'}
-              onError={(e) => { }}
+              onError={() => {}}
               key={`${source.width}:${source.height}`}
               source={source} /> || undefined
           }

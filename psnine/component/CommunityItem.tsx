@@ -4,9 +4,11 @@ import {
   Text,
   View,
   Image,
-  Dimensions,
   TouchableNativeFeedback
 } from 'react-native'
+import {
+  NavigationDispatch
+} from 'react-navigation'
 
 import { standardColor, idColor } from '../constant/colorConfig'
 import { changeCommunityType } from '../redux/action/app'
@@ -15,9 +17,15 @@ import {
   getTopicURL
 } from '../dao'
 
-let screen = Dimensions.get('window')
-const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = screen
-export default class ComplexComment extends React.PureComponent {
+import { FlatlistItemProp, FlatlistItemState, ModalList } from '../interface'
+
+interface ExtendedProp extends FlatlistItemProp {
+  modalList?: ModalList[]
+  ITEM_HEIGHT: number
+  toolbarDispatch?: NavigationDispatch<any>
+}
+
+export default class ComplexComment extends React.PureComponent<ExtendedProp, FlatlistItemState> {
 
   constructor(props) {
     super(props)
@@ -27,11 +35,13 @@ export default class ComplexComment extends React.PureComponent {
     }
   }
 
-  shouldComponentUpdate = (props, state) => props.modeInfo.themeName !== this.props.modeInfo.themeName || this.state.modalVisible !== state.modalVisible
+  shouldComponentUpdate(props, state) {
+    return props.modeInfo.themeName !== this.props.modeInfo.themeName || this.state.modalVisible !== state.modalVisible
+  }
 
   _onRowPressed = (rowData) => {
     const { navigation } = this.props
-    const id = rowData.id || parseInt(rowData.url.split('/').pop())
+    const id = rowData.id || parseInt(rowData.url.split('/').pop(), 10)
     const URL = getTopicURL(id)
     navigation.navigate('CommunityTopic', {
       URL,
@@ -42,7 +52,7 @@ export default class ComplexComment extends React.PureComponent {
     })
   }
 
-  render = () => {
+  render() {
     const { modeInfo, rowData, onPress, navigation, ITEM_HEIGHT, modalList = [], toolbarDispatch } = this.props
     // console.log(modalList)
     const { numColumns = 1 } = modeInfo
@@ -61,11 +71,10 @@ export default class ComplexComment extends React.PureComponent {
           })
         }}
         useForeground={true}
-
         background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
       >
       <View style={{
-        flex: 1, flexDirection: 'row', padding: 12,
+        flexDirection: 'row', padding: 12,
         marginVertical: 3.5,
         marginHorizontal: numColumns === 1 ? 0 : 3.5,
         backgroundColor: modeInfo.backgroundColor,
@@ -79,7 +88,7 @@ export default class ComplexComment extends React.PureComponent {
           />
           {
           this.state.modalVisible && modalList.length && (
-            <MyDialog modeInfo={modeInfo}
+            <global.MyDialog modeInfo={modeInfo}
               modalVisible={this.state.modalVisible}
               onDismiss={() => { this.setState({ modalVisible: false }) }}
               onRequestClose={() => { this.setState({ modalVisible: false }) }}
@@ -93,8 +102,9 @@ export default class ComplexComment extends React.PureComponent {
                   right: 30,
                   paddingVertical: 15,
                   elevation: 4,
-                  opacity: 1
-                }} borderRadius={2}>
+                  opacity: 1,
+                  borderRadius: 2
+                }}>
                 {
                   modalList.map((item, index) => (
                     <TouchableNativeFeedback key={index + item.text} onPress={() => {
@@ -104,7 +114,8 @@ export default class ComplexComment extends React.PureComponent {
                           item.onPress(rowData)
                         })
                       }}>
-                      <View style={{height: 50, paddingVertical: 10, paddingLeft: 20 , alignSelf: 'stretch', alignContent: 'stretch', justifyContent: 'center'}}>
+                      <View style={{height: 50, paddingVertical: 10,
+                        paddingLeft: 20 , alignSelf: 'stretch', alignContent: 'stretch', justifyContent: 'center'}}>
                         <Text style={{textAlignVertical: 'center', fontSize: 18, color: modeInfo.standardTextColor}}>{item.text}</Text>
                       </View>
                     </TouchableNativeFeedback>
@@ -123,7 +134,8 @@ export default class ComplexComment extends React.PureComponent {
             </Text>
 
             <View style={{ flex: -1, flexDirection: 'row', justifyContent: 'space-between' }}>
-              <Text selectable={false} style={{ fontSize: 12, flex: -1, color: modeInfo.standardColor, textAlign: 'center', textAlignVertical: 'center' }} onPress={() => {
+              <Text selectable={false} style={{
+                  fontSize: 12, flex: -1, color: modeInfo.standardColor, textAlign: 'center', textAlignVertical: 'center' }} onPress={() => {
                   // this.flatlist.getNode().recordInteraction()
                   navigation.navigate('Home', {
                     title: rowData.psnid,
@@ -131,12 +143,22 @@ export default class ComplexComment extends React.PureComponent {
                     URL: `http://psnine.com/psnid/${rowData.psnid}`
                   })
                 }}>{rowData.psnid}</Text>
-              <Text selectable={false} style={{ fontSize: 12, flex: -1, color: modeInfo.standardTextColor, textAlign: 'center', textAlignVertical: 'center' }}>{rowData.date}</Text>
-              <Text selectable={false} style={{ fontSize: 12, flex: -1, color: modeInfo.standardTextColor, textAlign: 'center', textAlignVertical: 'center' }}>{rowData.count}回复</Text>
-              <Text selectable={false} style={{ fontSize: 12, flex: -1, color: rowData.type && toolbarDispatch ? modeInfo.standardColor : modeInfo.standardTextColor, textAlign: 'center', textAlignVertical: 'center' }} onPress={
+              <Text selectable={false}
+                style={{
+                  fontSize: 12, flex: -1,
+                  color: modeInfo.standardTextColor, textAlign: 'center', textAlignVertical: 'center' }}>{rowData.date}</Text>
+              <Text selectable={false}
+                style={{
+                  fontSize: 12, flex: -1,
+                  color: modeInfo.standardTextColor, textAlign: 'center', textAlignVertical: 'center' }}>{rowData.count}回复</Text>
+              <Text selectable={false}
+                style={{ fontSize: 12, flex: -1,
+                color: (rowData.type && toolbarDispatch) ? modeInfo.standardColor : modeInfo.standardTextColor,
+                textAlign: 'center', textAlignVertical: 'center'
+                }} onPress={
                 rowData.type && toolbarDispatch ? () => {
                   toolbarDispatch(changeCommunityType(rowData.type))
-                } : null
+                } : undefined
               }>{rowData.type}</Text>
             </View>
 

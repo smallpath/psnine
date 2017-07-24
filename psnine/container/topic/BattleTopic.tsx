@@ -4,13 +4,10 @@ import {
   Text,
   View,
   Image,
-  Dimensions,
   TouchableNativeFeedback,
   InteractionManager,
   ActivityIndicator,
-  StatusBar,
   Animated,
-  Easing,
   FlatList,
   Linking
 } from 'react-native'
@@ -22,8 +19,7 @@ import {
   getBattleAPI
 } from '../../dao'
 
-let screen = Dimensions.get('window')
-const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = screen
+declare var global
 
 let toolbarActions = [
   {
@@ -47,33 +43,23 @@ let toolbarActions = [
   {
     title: '在浏览器中打开', iconName: 'md-refresh', show: 'never', onPress: function () {
       const { params = {} } = this.props.navigation.state
-      Linking.openURL(params.URL).catch(err => toast(err.toString()))
+      Linking.openURL(params.URL).catch(err => global.toast(err.toString()))
     }
   },
   {
     title: '分享', iconName: 'md-share-alt', show: 'never', onPress: function () {
       try {
         const { params } = this.props.navigation.state
-        Share.open({
+        global.Share.open({
           url: params.URL,
           message: '[PSNINE] ' + this.state.data.titleInfo.title,
           title: 'PSNINE'
         }).catch((err) => { err && console.log(err) })
-        url && Linking.openURL(url).catch(err => toast(err.toString())) || toast('暂无出处')
+        url && Linking.openURL(url).catch(err => global.toast(err.toString())) || global.toast('暂无出处')
       } catch (err) { }
     }
   }
 ]
-let title = 'TOPIC'
-let WEBVIEW_REF = `WEBVIEW_REF`
-
-let toolbarHeight = 56
-let releasedMarginTop = 0
-
-const ACTUAL_SCREEN_HEIGHT = SCREEN_HEIGHT - StatusBar.currentHeight + 1
-
-let CIRCLE_SIZE = 56
-let config = { tension: 30, friction: 7, ease: Easing.in(Easing.ease(1, 0, 1, 1)), duration: 200 }
 
 class CommunityTopic extends Component {
 
@@ -93,7 +79,7 @@ class CommunityTopic extends Component {
     }
   }
 
-  componentWillMount = () => {
+  componentWillMount() {
     this.preFetch()
   }
 
@@ -103,7 +89,7 @@ class CommunityTopic extends Component {
       isLoading: true
     })
     InteractionManager.runAfterInteractions(() => {
-      const data = getBattleAPI(params.URL).then(data => {
+      getBattleAPI(params.URL).then(data => {
 
         const html = data.contentInfo.html
         const emptyHTML = '<div></div>'
@@ -138,7 +124,7 @@ class CommunityTopic extends Component {
         backgroundColor: modeInfo.backgroundColor,
         padding: 10
       }}>
-        <HTMLView
+        <global.HTMLView
           value={html}
           modeInfo={modeInfo}
           shouldShowLoadingIndicator={true}

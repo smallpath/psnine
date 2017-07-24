@@ -2,13 +2,10 @@ import React, { Component } from 'react'
 import {
   StyleSheet,
   View,
-  Dimensions,
   RefreshControl,
   InteractionManager,
   FlatList
 } from 'react-native'
-
-const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window')
 
 import { standardColor, idColor } from '../../constant/colorConfig'
 
@@ -21,6 +18,8 @@ import FooterProgress from '../../component/FooterProgress'
 import { block } from '../../dao/sync'
 
 let toolbarActions = []
+
+declare var global
 
 class Fav extends Component {
   constructor(props) {
@@ -44,7 +43,7 @@ class Fav extends Component {
     navigation.goBack()
   }
 
-  componentWillMount = async () => {
+  componentWillMount() {
     const { params } = this.props.navigation.state
     this.fetchMessages(params.URL, 'jump')
   }
@@ -106,12 +105,12 @@ class Fav extends Component {
             type: 'psnid',
             param: rowData && rowData.psnid,
             unblock: ''
-          }).then(res => res.text()).then(text => {
-            toast('已取消屏蔽')
+          }).then(res => res.text()).then(() => {
+            global.toast('已取消屏蔽')
             this._onRefresh()
           }).catch(err => {
             const msg = `取消屏蔽失败: ${err.toString()}`
-            toast(msg)
+            global.toast(msg)
           })
         }
       }]

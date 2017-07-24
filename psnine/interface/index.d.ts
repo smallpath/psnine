@@ -1,7 +1,7 @@
-declare global {
-  namespace NodeJS {
-    export interface GlobalStatic {
-      toast(msg: string): void
-    }
-  }
-}
+// declare global {
+//   namespace NodeJS {
+//     export interface GlobalStatic {
+//       toast(msg: string): void
+//     }
+//   }
+// }

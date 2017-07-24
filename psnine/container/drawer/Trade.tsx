@@ -147,7 +147,7 @@ class Trade extends Component {
         updateCellsBatchingPeriod={1}
         initialNumToRender={42}
         maxToRenderPerBatch={8}
-        renderScrollComponent={props => <NestedScrollView {...props}/>}
+        renderScrollComponent={props => <global.NestedScrollView {...props}/>}
         disableVirtualization={false}
         contentContainerStyle={styles.list}
         viewabilityConfig={{

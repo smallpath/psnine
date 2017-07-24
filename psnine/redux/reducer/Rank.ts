@@ -30,6 +30,7 @@ function reducer(state = initialState, action) {
         ranks: [],
         totalPage: 0
       })
+      return newState
     default:
       return state
   }

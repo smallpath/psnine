@@ -23,30 +23,23 @@ import { getTradeEditAPI } from '../../dao'
 
 import { postCreateTopic } from '../../dao/post'
 
-let title = '发布交易'
-
 let toolbarActions = [
 
 ]
 
-let AnimatedKeyboardAvoidingView = Animated.createAnimatedComponent(KeyboardAvoidingView)
-
-let AnimatedScrollView = Animated.createAnimatedComponent(ScrollView)
-
 let screen = Dimensions.get('window')
 
-const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = screen
+let { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = screen
 
-SCREEN_HEIGHT = SCREEN_HEIGHT - StatusBar.currentHeight + 1
+SCREEN_HEIGHT = SCREEN_HEIGHT - (StatusBar.currentHeight || 0) + 1
 
 let CIRCLE_SIZE = 56
 
-const emotionToolbarHeight = 190
-
+declare var global
+/* tslint:disable */
 let config = { tension: 30, friction: 7, ease: Easing.in(Easing.ease(1, 0, 1, 1)), duration: 200 }
-
 const areasInfo = [{'text': '北京', 'value': 'beijing'}, {'text': '上海', 'value': 'shanghai'}, {'text': '天津', 'value': 'tianjin'}, {'text': '重庆', 'value': 'chongqing'}, {'text': '广东', 'value': 'guangdong'}, {'text': '福建', 'value': 'fujian'}, {'text': '广西', 'value': 'guangxi'}, {'text': '海南', 'value': 'hainan'}, {'text': '河北', 'value': 'hebei'}, {'text': '山西', 'value': 'shanxi'}, {'text': '内蒙古', 'value': 'neimenggu'}, {'text': '山东', 'value': 'shandong'}, {'text': '江苏', 'value': 'jiangsu'}, {'text': '浙江', 'value': 'zhejiang'}, {'text': '安徽', 'value': 'anhui'}, {'text': '河南', 'value': 'henan'}, {'text': '湖北', 'value': 'hubei'}, {'text': '湖南', 'value': 'hunan'}, {'text': '江西', 'value': 'jiangxi'}, {'text': '辽宁', 'value': 'liaoning'}, {'text': '黑龙江', 'value': 'heilongjiang'}, {'text': '吉林', 'value': 'jilin'}, {'text': '四川', 'value': 'sichuan'}, {'text': '云南', 'value': 'yunnan'}, {'text': '贵州', 'value': 'guizhou'}, {'text': '西藏', 'value': 'xizang'}, {'text': '陕西', 'value': 'shanxi2'}, {'text': '新疆', 'value': 'xinjiang'}, {'text': '甘肃', 'value': 'gansu'}, {'text': '宁夏', 'value': 'ningxia'}, {'text': '青海', 'value': 'qinghai'}]
-
+/* tslint:enable */
 export default class NewTopic extends Component {
 
   constructor(props) {
@@ -84,7 +77,7 @@ export default class NewTopic extends Component {
     let config = { tension: 30, friction: 7 }
     // Animated.spring(this.state.openVal, { toValue: 1, ...config }).start(() => {
       if (modeInfo.settingInfo.psnid === '') {
-        toast('请首先登录')
+        global.toast('请首先登录')
         this.props.navigation.goBack()
         return
       }
@@ -413,7 +406,7 @@ export default class NewTopic extends Component {
           }]}>
           {
             this.state.modalVisible && (
-              <MyDialog modeInfo={modeInfo}
+              <global.MyDialog modeInfo={modeInfo}
                 modalVisible={this.state.modalVisible}
                 onDismiss={() => { this.setState({ modalVisible: false }); this.isValueChanged = false }}
                 onRequestClose={() => { this.setState({ modalVisible: false }); this.isValueChanged = false }}

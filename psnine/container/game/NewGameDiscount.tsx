@@ -106,7 +106,7 @@ class TopicItem extends React.PureComponent {
               overflow: 'scroll',
               flexWrap: 'nowrap'
              }}>
-              <HTMLView
+              <global.HTMLView
                 value={content}
                 modeInfo={modeInfo}
                 stylesheet={styles}
@@ -227,7 +227,7 @@ export default class NewGameGuide extends Component {
           onEndReachedThreshold={0.5}
           extraData={modeInfo}
           windowSize={21}
-          renderScrollComponent={props => <NestedScrollView {...props}/>}
+          renderScrollComponent={props => <global.NestedScrollView {...props}/>}
           updateCellsBatchingPeriod={1}
           initialNumToRender={42}
           maxToRenderPerBatch={8}

@@ -10,13 +10,12 @@ import {
 
 import Ionicons from 'react-native-vector-icons/Ionicons'
 
-let WEBVIEW_REF = `WEBVIEW_REF`
+declare var global
+
 let toolbarActions = [
   { title: '刷新', iconName: 'md-refresh', show: 'always' },
   { title: '在浏览器中打开', show: 'never' }
 ]
-let title = 'TOPIC'
-
 // 显示embed和iframe内容的Modal组件
 export default props => {
   const width = Number(props.attribs.width) || Number(props.attribs['data-width']) || 0
@@ -27,7 +26,9 @@ export default props => {
     height
   }
 
-  const value = `<html><head></head><body><${props.name} ` + Object.keys(props.attribs).map(name => `${name}="${props.attribs[name]}"`).join(' ') + '/></body></html>'
+  const value = `<html><head></head><body><${props.name} ` +
+      Object.keys(props.attribs).map(name => `${name}="${props.attribs[name]}"`).join(' ') +
+      '/></body></html>'
 
   return (
     <HtmlView
@@ -41,11 +42,44 @@ export default props => {
   )
 }
 
-class HtmlView extends Component {
+interface IProps {
+  style: any
+  modeInfo: any
+  imagePaddingOffset: number
+  url: string
+  linkPressHandler: any
+  value: string
+}
+
+interface State {
+  width: number,
+  height: number,
+  modalVisible: boolean,
+  canGoBack: boolean,
+  title: string
+}
+
+class HtmlView extends Component<IProps, State> {
+
+  public static propTypes = {
+    value: PropTypes.string,
+    stylesheet: PropTypes.object,
+    onLinkPress: PropTypes.func,
+    onError: PropTypes.func,
+    renderNode: PropTypes.func,
+    defaultTextColor: PropTypes.string
+  }
+
+  public static defaultProps = {
+    onLinkPress: url => Linking.openURL(url),
+    onError: console.error.bind(console),
+    defaultTextColor: '#000'
+  }
+  webview: any = null
   constructor(props) {
     super(props)
     let height = this.props.style.height || '100%'
-    const { width, height: SCEEN_HEIGHT } = Dimensions.get('window')
+    const { height: SCEEN_HEIGHT } = Dimensions.get('window')
     if (height === '100%') {
       height = SCEEN_HEIGHT - 100
     }
@@ -61,9 +95,11 @@ class HtmlView extends Component {
   _onActionSelected = (index) => {
     switch (index) {
       case 0:
-        return this.webview.reload()
+        return this.webview && this.webview.reload()
       case 1: Linking
-        return Linking.openURL(this.props.url).catch(err => global.toast && global.toast())
+        return Linking.openURL(this.props.url).catch(err => global.toast && global.toast(err.toString()))
+      default:
+        break
     }
   }
 
@@ -75,7 +111,7 @@ class HtmlView extends Component {
   }
 
   render() {
-    const { width, height: SCEEN_HEIGHT } = Dimensions.get('window')
+    const { width } = Dimensions.get('window')
     const cb = () => {
       if (this.state.canGoBack === true) {
         this.webview.goBack()
@@ -86,22 +122,17 @@ class HtmlView extends Component {
         canGoBack: false
       })
     }
-    let title = '打开网页'
     const { url } = this.props
-    let target = url
-    let type = 'general'
 
     const resolved = this.props.linkPressHandler(url, true)
 
     return (
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', padding: 5, alignSelf: 'center', alignContent: 'center'  }}>
-        <Button color={this.props.modeInfo.accentColor} style={{
-
-        }} title={resolved.title} onPress={() => {
+        <Button color={this.props.modeInfo.accentColor} title={resolved.title} onPress={() => {
           return this.props.linkPressHandler(url)
         }}></Button>
         {this.state.modalVisible && (
-          <MyDialog modeInfo={this.props.modeInfo}
+          <global.MyDialog modeInfo={this.props.modeInfo}
             modalVisible={this.state.modalVisible}
             onDismiss={cb}
             onRequestClose={cb}
@@ -110,8 +141,9 @@ class HtmlView extends Component {
                 justifyContent: 'center',
                 alignItems: 'center',
                 backgroundColor: this.props.modeInfo.backgroundColor,
-                opacity: 1
-              }} borderRadius={2}>
+                opacity: 1,
+                borderRadius: 2
+              }}>
                 <Ionicons.ToolbarAndroid
                   navIconName='md-close'
                   overflowIconName='md-more'
@@ -135,13 +167,12 @@ class HtmlView extends Component {
                   style={{ flex: 1, padding: 0, width: width, height: this.state.height }}
                   injectedJavaScript={'<script>window.location.hash = 1;document.title = document.height;console.log("fuckyou")</script>'}
                   javaScriptEnabled={true}
-                  onNavigationStateChange={(navState) => {
+                  onNavigationStateChange={(navState: any) => {
                     this.setState({
                       canGoBack: navState.canGoBack,
                       title: navState.title
                     })
                   }}
-                  scrollEnable={true}
                   source={{ uri: this.props.url }} />
               </View>
             )} />
@@ -161,27 +192,9 @@ const styles = StyleSheet.create({
     height: 56,
     elevation: 4
   },
-  selectedTitle: {
-    //backgroundColor: '#00ffff'
-    //fontSize: 20
-  },
+  selectedTitle: {},
   avatar: {
     width: 50,
     height: 50
   }
 })
-
-HtmlView.propTypes = {
-  value: PropTypes.string,
-  stylesheet: PropTypes.object,
-  onLinkPress: PropTypes.func,
-  onError: PropTypes.func,
-  renderNode: PropTypes.func,
-  defaultTextColor: PropTypes.string
-}
-
-HtmlView.defaultProps = {
-  onLinkPress: url => Linking.openURL(url),
-  onError: console.error.bind(console),
-  defaultTextColor: '#000'
-}

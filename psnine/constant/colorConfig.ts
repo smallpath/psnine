@@ -1,6 +1,12 @@
 import palette from 'google-material-color'
-
 import * as common from './commonColor'
+
+interface Exports {
+  trophyColor1?: string
+  trophyColor2?: string
+  trophyColor3?: string
+  trophyColor4?: string
+}
 
 export const colorNameArr = Object.keys(palette.palette).filter(name => ['Black', 'White'].includes(name) === false)
 
@@ -25,14 +31,7 @@ const getColor = (...args) => {
   const safe = prevGetColor(args[0], '500')
   return safe
 }
-const exports = {}
-
-const getAccentColorName = name => {
-  const index = colorNameArr.indexOf(name)
-  let targetIndex = index - 5
-  if (targetIndex < 0) targetIndex += colorNameArr.length
-  return colorNameArr[targetIndex]
-}
+const exports: Exports = {}
 
 for (const name of colorNameArr) {
   const finalName = name[0].toLowerCase() + name.replace(' ', '').slice(1)
@@ -59,6 +58,5 @@ Object.assign(exports, common)
 export default exports
 export * from './commonColor'
 export const getAccentColorFromName = (name, isNight) => {
-  console.log(name, isNight)
   return exports[`${name}${isNight ? 'Night' : ''}`].secondaryColorBackup
 }

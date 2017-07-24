@@ -25,7 +25,7 @@ import { postCreateTopic } from '../../dao/post'
 
 import Emotion from '../../component/Emotion'
 
-let title = '创建机因'
+declare var global
 
 let toolbarActions = [
 
@@ -79,7 +79,7 @@ export default class NewTopic extends Component {
     let config = { tension: 30, friction: 7 }
     // Animated.spring(this.state.openVal, { toValue: 1, ...config }).start(() => {
       if (modeInfo.settingInfo.psnid === '') {
-        toast('请首先登录')
+        global.toast('请首先登录')
         this.props.navigation.goBack()
         return
       }
@@ -401,7 +401,7 @@ export default class NewTopic extends Component {
             </Animated.View>
             {
               this.state.modalVisible && (
-                <MyDialog modeInfo={modeInfo}
+                <global.MyDialog modeInfo={modeInfo}
                   modalVisible={this.state.modalVisible}
                   onDismiss={() => { this.setState({ modalVisible: false }); this.isValueChanged = false }}
                   onRequestClose={() => { this.setState({ modalVisible: false }); this.isValueChanged = false }}

@@ -3,15 +3,12 @@ import {
   StyleSheet,
   Text,
   View,
-  Dimensions,
   TouchableNativeFeedback,
   RefreshControl,
   InteractionManager,
   Slider,
   FlatList
 } from 'react-native'
-
-const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window')
 
 import { standardColor, idColor } from '../../constant/colorConfig'
 
@@ -24,7 +21,9 @@ let toolbarActions = [
   { title: '跳页', iconName: 'md-map', show: 'always' }
 ]
 
-class UserGame extends Component {
+declare var global
+
+class UserGame extends Component<any, any> {
   static navigationOptions = {
      tabBarLabel: '主题'
   }
@@ -43,10 +42,10 @@ class UserGame extends Component {
     }
   }
 
-  componentWillMount = async () => {
+  async componentWillMount() {
     const { screenProps } = this.props
     const name = '主题'
-    let params = {}
+    let params: any = {}
     screenProps.toolbar.forEach(({ text, url}) => {
       // console.log(text, name, text.includes(name))
       if (text.includes(name)) {
@@ -69,13 +68,15 @@ class UserGame extends Component {
     this.fetchMessages(params.URL, 'jump')
   }
 
+  URL = ''
+
   fetchMessages = (url, type = 'down') => {
     this.setState({
       [type === 'down' ? 'isLoadingMore' : 'isRefreshing'] : true
     }, () => {
       InteractionManager.runAfterInteractions(() => {
         getUserTopicAPI(url).then(data => {
-          let thisList = []
+          let thisList: any = []
           const thisPage = parseInt((url.match(/\?page=(\d+)/) || [0, 1])[1])
           let cb = () => { }
           if (type === 'down') {
@@ -116,7 +117,7 @@ class UserGame extends Component {
             }
             componentDidFocus()
           })
-        }).catch(err => {
+        }).catch(() => {
           this.setState({
             isRefreshing: false
           })
@@ -136,7 +137,7 @@ class UserGame extends Component {
     }
     if (this.pageArr.includes(targetPage)) type = 'jump'
     if (this.state.isLoadingMore || this.state.isRefreshing) return
-    this.fetchMessages(URL.split('=').slice(0, -1).concat(targetPage).join('='), type)
+    this.fetchMessages(URL.split('=').slice(0, -1).concat(targetPage.toString()).join('='), type)
   }
 
   _onEndReached = () => {
@@ -145,7 +146,7 @@ class UserGame extends Component {
     const targetPage = currentPage + 1
     if (targetPage > this.state.numPages) return
     if (this.state.isLoadingMore || this.state.isRefreshing) return
-    this.fetchMessages(URL.split('=').slice(0, -1).concat(targetPage).join('='), 'down')
+    this.fetchMessages(URL.split('=').slice(0, -1).concat(targetPage.toString()).join('='), 'down')
 
   }
 
@@ -161,7 +162,7 @@ class UserGame extends Component {
 
   ITEM_HEIGHT = 83
 
-  _renderItem = ({ item: rowData, index }) => {
+  _renderItem = ({ item: rowData }) => {
     const { modeInfo, navigation } = this.props.screenProps
     const { ITEM_HEIGHT } = this
     return <TopicItem {...{
@@ -173,6 +174,7 @@ class UserGame extends Component {
   }
 
   sliderValue = 1
+  isValueChanged = false
   render() {
     const { modeInfo } = this.props.screenProps
     const { URL } = this
@@ -188,19 +190,17 @@ class UserGame extends Component {
           flex: 1,
           backgroundColor: modeInfo.background
         }}
-          ref={flatlist => this.flatlist = flatlist}
           refreshControl={
             <RefreshControl
               refreshing={this.state.isRefreshing}
               onRefresh={this._onRefresh}
               colors={[modeInfo.accentColor]}
               progressBackgroundColor={modeInfo.backgroundColor}
-              ref={ref => this.refreshControl = ref}
             />
           }
           ListFooterComponent={() => <FooterProgress isLoadingMore={this.state.isLoadingMore} modeInfo={modeInfo}/>}
           data={this.state.list}
-          keyExtractor={(item, index) => item.id}
+          keyExtractor={(item) => item.id}
           renderItem={this._renderItem}
           onEndReached={this._onEndReached}
           onEndReachedThreshold={0.5}
@@ -210,11 +210,10 @@ class UserGame extends Component {
           initialNumToRender={42}
           maxToRenderPerBatch={8}
           disableVirtualization={false}
-          contentContainerStyle={styles.list}
           key={modeInfo.themeName}
           numColumns={modeInfo.numColumns}
-          renderScrollComponent={props => <NestedScrollView {...props}/>}
-          getItemLayout={(data, index) => (
+          renderScrollComponent={props => <global.NestedScrollView {...props}/>}
+          getItemLayout={(_, index) => (
             {length: this.ITEM_HEIGHT, offset: this.ITEM_HEIGHT * index, index}
           )}
           viewabilityConfig={{
@@ -224,7 +223,7 @@ class UserGame extends Component {
           }}
         />
         {this.state.modalVisible && (
-          <MyDialog modeInfo={modeInfo}
+          <global.MyDialog modeInfo={modeInfo}
             modalVisible={this.state.modalVisible}
             onDismiss={() => { this.setState({ modalVisible: false }); this.isValueChanged = false }}
             onRequestClose={() => { this.setState({ modalVisible: false }); this.isValueChanged = false }}
@@ -236,8 +235,9 @@ class UserGame extends Component {
                 paddingVertical: 20,
                 paddingHorizontal: 40,
                 elevation: 4,
-                opacity: 1
-              }} borderRadius={2}>
+                opacity: 1,
+                borderRadius: 2
+              }}>
                 <Text style={{ alignSelf: 'flex-start', fontSize: 18, color: modeInfo.titleTextColor }}>选择页数: {
                   this.isValueChanged ? this.state.sliderValue : this.state.currentPage
                 }</Text>

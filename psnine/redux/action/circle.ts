@@ -1,6 +1,6 @@
 import * as ActionTypes from '../../constant/actionTypes'
-
 import { fetchCircles } from '../../dao'
+declare var global
 
 export function getCircleList(page = 1, {
   type = '',
@@ -9,7 +9,7 @@ export function getCircleList(page = 1, {
   return dispatch => {
     return fetchCircles({ page, type, title })
       .then(response => {
-        dispatch(gotList(response, page, type))
+        dispatch(gotList(response, page))
       }).catch(err => {
         console.error('circleActionError', err)
         dispatch(gotListError())
@@ -18,7 +18,7 @@ export function getCircleList(page = 1, {
   }
 }
 
-function gotList(argument, page, type) {
+function gotList(argument, page) {
   return {
     type: ActionTypes.GET_CIRCLE_SUCCESS,
     value: argument,

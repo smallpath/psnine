@@ -2,6 +2,8 @@ import * as ActionTypes from '../../constant/actionTypes'
 
 import { fetchBattles } from '../../dao'
 
+declare var global
+
 export function getBattleList() {
   return dispatch => {
     return fetchBattles()
@@ -23,7 +25,7 @@ function gotBattleList(argument) {
   }
 }
 
-function gotBattleListError(argument, page, type) {
+function gotBattleListError() {
   return {
     type: ActionTypes.GET_BATTLES_ERROR
   }

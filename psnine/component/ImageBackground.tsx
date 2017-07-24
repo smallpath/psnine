@@ -5,9 +5,19 @@ import {
   Image
 } from 'react-native'
 
-export default class ImageBackground extends React.Component {
+import { FlatlistItemProp } from '../interface'
+
+interface ExtendedProp extends FlatlistItemProp {
+  style: any
+  imageStyle: any
+  imageRef: any
+  blurRadis: number
+  source: any
+}
+
+export default class ImageBackground extends React.Component<ExtendedProp> {
   render() {
-    const {children, style, imageStyle, imageRef, blurRadis = 10, ...props} = this.props
+    const { children, style, imageStyle, imageRef, blurRadis = 10, ...props } = this.props
 
     return (
       <View style={style}>

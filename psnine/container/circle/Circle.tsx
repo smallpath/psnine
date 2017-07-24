@@ -3,10 +3,8 @@ import {
   StyleSheet,
   Text,
   View,
-  Dimensions,
   TouchableNativeFeedback,
   InteractionManager,
-  StatusBar,
   Animated,
   Easing,
   FlatList,
@@ -24,28 +22,15 @@ import {
 import { fetchNewGeneElement as getAPI } from '../../dao'
 import Item from '../../component/GeneItem'
 import FooterProgress from '../../component/FooterProgress'
-// import CreateUserTab from './UserTab'
 
-let screen = Dimensions.get('window')
-const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = screen
-
-// let toolbarActions = [];
-let title = 'TOPIC'
-let WEBVIEW_REF = `WEBVIEW_REF`
-
-let toolbarHeight = 56
-let releasedMarginTop = 0
-
-const ACTUAL_SCREEN_HEIGHT = SCREEN_HEIGHT - StatusBar.currentHeight + 1
-
-let CIRCLE_SIZE = 56
+/* tslint:disable */
 let config = { tension: 30, friction: 7, ease: Easing.in(Easing.ease(1, 0, 1, 1)), duration: 200 }
-
-const limit = SCREEN_WIDTH - toolbarHeight
-
+/* tslint:enable */
 let toolbarActions = [
   { title: '跳页', iconName: 'md-map', show: 'always' }
 ]
+
+declare var global
 
 import { postCircle } from '../../dao/post'
 
@@ -121,10 +106,12 @@ export default class extends Component {
           global.toast && global.toast(err.toString())
         }).then(() => this.preFetch())
         break
+      default:
+        break
     }
   }
 
-  componentWillMount = () => {
+  componentWillMount() {
     const { params } = this.props.navigation.state
     this.URL = params.URL.includes('&page=') ? params.URL : `${params.URL}&page=1`
     // alert(this.URL)
@@ -139,7 +126,7 @@ export default class extends Component {
         getAPI(url).then(data => {
           // console.log(url, type)
           let thisList = []
-          const thisPage = parseInt((url.match(/\?page=(\d+)/) || [0, 1])[1])
+          const thisPage = parseInt((url.match(/\?page=(\d+)/) || [0, 1])[1], 10)
           let cb = () => { }
           if (type === 'down') {
             thisList = this.state.list.concat(data.list)
@@ -242,7 +229,7 @@ export default class extends Component {
         </View>
 
         <View style={{padding: 7}}>
-          <HTMLView
+          <global.HTMLView
             value={rowData.content}
             modeInfo={modeInfo}
             stylesheet={styles}
@@ -372,7 +359,7 @@ export default class extends Component {
             }}
           />}
           {this.state.modalVisible && (
-            <MyDialog modeInfo={modeInfo}
+            <global.MyDialog modeInfo={modeInfo}
               modalVisible={this.state.modalVisible}
               onDismiss={() => { this.setState({ modalVisible: false }); this.isValueChanged = false }}
               onRequestClose={() => { this.setState({ modalVisible: false }); this.isValueChanged = false }}

@@ -23,33 +23,18 @@ import { getGameNewTopicAPI } from '../../dao'
 
 import CreateNewGameTab from './NewGameTab'
 
+declare var global
+
 let screen = Dimensions.get('window')
-const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = screen
+const { height: SCREEN_HEIGHT } = screen
 
 let toolbarActions = [
   {
     title: '官网', show: 'never'
   }
 ]
-let title = 'TOPIC'
-let WEBVIEW_REF = `WEBVIEW_REF`
 
 let toolbarHeight = 56
-let releasedMarginTop = 0
-
-let ACTUAL_SCREEN_HEIGHT = SCREEN_HEIGHT - StatusBar.currentHeight + 1
-
-let CIRCLE_SIZE = 56
-let config = { tension: 30, friction: 7, ease: Easing.in(Easing.ease(1, 0, 1, 1)), duration: 200 }
-
-const iconMapper = {
-  '游戏同步': 'md-sync',
-  '关注': 'md-star-half',
-  '感谢': 'md-thumbs-up',
-  '等级同步': 'md-sync',
-  '屏蔽': 'md-sync'
-}
-
 import {
   ExtraDimensionsAndroid,
   AppBarLayoutAndroid,
@@ -100,12 +85,12 @@ export default class Home extends Component {
       if (item) {
         let match = item.match(/\'(.*?)\'/)
         if (!match) match = item.match(/\"(.*?)\"/)
-        if (match && match[1]) Linking.openURL(match[1]).catch(err => toast(err.toString()))
+        if (match && match[1]) Linking.openURL(match[1]).catch(err => global.toast(err.toString()))
       } else {
-        toast('官方网站尚未收录')
+        global.toast('官方网站尚未收录')
       }
     } else {
-      toast('官方网站尚未收录')
+      global.toast('官方网站尚未收录')
     }
   }
 
@@ -179,7 +164,7 @@ export default class Home extends Component {
           {rowData.content.map((item, index) => {
             return item.includes('href') ? (
               undefined
-              /*<HTMLView
+              /*<global.HTMLView
                 value={item}
                 key={index}
                 modeInfo={modeInfo}

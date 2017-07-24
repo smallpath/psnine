@@ -42,6 +42,8 @@ let CIRCLE_SIZE = 56
 
 const emotionToolbarHeight = 190
 
+declare var global
+
 let config = { tension: 30, friction: 7, ease: Easing.in(Easing.ease(1, 0, 1, 1)), duration: 200 }
 
 export default class Reply extends Component {
@@ -74,7 +76,7 @@ export default class Reply extends Component {
     let config = { tension: 30, friction: 7 }
     Animated.spring(this.state.openVal, { toValue: 1, ...config }).start(() => {
       if (modeInfo.settingInfo.psnid === '') {
-        toast('请首先登录')
+        global.toast('请首先登录')
         this.props.navigation.goBack()
         return
       }
@@ -278,7 +280,7 @@ export default class Reply extends Component {
     }).then(res => res.text()).then(text => {
 
       if (text === '请认真评论') {
-        toast('请认真评论')
+        global.toast('请认真评论')
         return
       }
       if (text.includes('玩脱了')) {
@@ -499,7 +501,7 @@ export default class Reply extends Component {
             </Animated.View>
             {
               this.state.modalVisible && (
-                <MyDialog modeInfo={modeInfo}
+                <global.MyDialog modeInfo={modeInfo}
                   modalVisible={this.state.modalVisible}
                   onDismiss={() => { this.setState({ modalVisible: false }); this.isValueChanged = false }}
                   onRequestClose={() => { this.setState({ modalVisible: false }); this.isValueChanged = false }}
@@ -516,7 +518,7 @@ export default class Reply extends Component {
                       right: 20,
                       opacity: 1
                     }} borderRadius={2}>
-                      <HTMLView
+                      <global.HTMLView
                         value={this.state.content || '暂无内容'}
                         modeInfo={modeInfo}
                         stylesheet={styles}

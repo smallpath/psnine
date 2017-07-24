@@ -1,6 +1,6 @@
 import * as ActionTypes from '../../constant/actionTypes'
-
 import { fetchTopics } from '../../dao'
+declare var global
 
 export function getTopicList(page = 1, {
   type = '',
@@ -9,7 +9,7 @@ export function getTopicList(page = 1, {
   return dispatch => {
     return fetchTopics({ page, type, title })
       .then(response => {
-        dispatch(gotTopicList(response, page, type))
+        dispatch(gotTopicList(response, page))
       }).catch(err => {
         console.error('communityError', err)
         dispatch(gotTopicListError())
@@ -18,7 +18,7 @@ export function getTopicList(page = 1, {
   }
 }
 
-function gotTopicList(argument, page, type) {
+function gotTopicList(argument, page) {
   return {
     type: ActionTypes.GET_TOPICS_SUCCESS,
     value: argument,

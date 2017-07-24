@@ -4,13 +4,10 @@ import {
   Text,
   View,
   Image,
-  Dimensions,
   TouchableNativeFeedback,
   InteractionManager,
   ActivityIndicator,
-  StatusBar,
   Animated,
-  Easing,
   FlatList,
   Linking,
   TextInput,
@@ -29,23 +26,12 @@ import {
   translate
 } from '../../dao/post'
 
-let screen = Dimensions.get('window')
-const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = screen
-
 let toolbarActions = [
   { title: '回复', iconName: 'md-create', show: 'always', iconSize: 22 },
   { title: '刷新', iconName: 'md-refresh', show: 'always' }
 ]
-let title = 'TOPIC'
-let WEBVIEW_REF = `WEBVIEW_REF`
 
-let toolbarHeight = 56
-let releasedMarginTop = 0
-
-const ACTUAL_SCREEN_HEIGHT = SCREEN_HEIGHT - StatusBar.currentHeight + 1
-
-let CIRCLE_SIZE = 56
-let config = { tension: 30, friction: 7, ease: Easing.in(Easing.ease(1, 0, 1, 1)), duration: 200 }
+declare var global
 
 class CommunityTopic extends Component {
 
@@ -276,12 +262,12 @@ class CommunityTopic extends Component {
           return
         }
       }
-      toast('翻译成功')
+      global.toast('翻译成功')
       this.setState({
         modalVisible: false
       })
       this.preFetch()
-    }).catch(err => toast('翻译失败: ' + err.toString()))
+    }).catch(err => global.toast('翻译失败: ' + err.toString()))
   }
 
   viewTopIndex = 0
@@ -362,7 +348,7 @@ class CommunityTopic extends Component {
         </FlatList>
         }
         { this.state.modalVisible && (
-          <MyDialog modeInfo={this.props.modeInfo}
+          <global.MyDialog modeInfo={this.props.modeInfo}
             modalVisible={this.state.modalVisible}
             onDismiss={() => this.setState({modalVisible: false})}
             onRequestClose={() => this.setState({modalVisible: false})}

@@ -12,24 +12,15 @@ import {
   Alert
 } from 'react-native'
 
-const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window')
+const { width: SCREEN_WIDTH } = Dimensions.get('window')
 
 import { standardColor, idColor } from '../../constant/colorConfig'
 
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import { getPhotoAPI } from '../../dao'
 import { postDeleteImage, postImage } from '../../dao/post'
+declare var global
 
-import TopicItem from '../../component/CommunityItem'
-import GeneItem from '../../component/GeneItem'
-import RankItem from '../../component/RankItem'
-import QaItem from '../../component/QaItem'
-const Mapper = {
-  'topic': TopicItem,
-  'gene' : GeneItem,
-  'psnid': RankItem,
-  'qa': QaItem
-}
 import FooterProgress from '../../component/FooterProgress'
 
 let toolbarActions = [
@@ -177,27 +168,29 @@ export default class Photo extends Component {
             }).then(res => {
               return res.text()
             }).then(html => {
-              toast('图片上传成功')
+              global.toast('图片上传成功')
               const { navigation } = this.props
               const { params } = navigation.state
               this.fetchMessages(params.URL, 'jump')
             }).catch(err => {
-              toast(err.toString())
+              global.toast(err.toString())
             })
           }
         })
-      return
+        return
       case 1:
         this.setState({
           modalVisible: true
         })
-      return
+        return
       case 2:
         const { navigation } = this.props
         const { params } = navigation.state
         params.callbackAfterAll && params.callbackAfterAll(this.state.selections)
         navigation.goBack()
-      return
+        return
+      default:
+        return
     }
   }
 
@@ -257,7 +250,7 @@ export default class Photo extends Component {
             {
               text: '确定', onPress: () => {
                 postDeleteImage({ delimg: rowData.delimg }).then(res => res.text()).then(html => {
-                  toast('删除成功')
+                  global.toast('删除成功')
                   this.fetchMessages(params.URL, 'jump')
                 })
               }
@@ -333,7 +326,7 @@ export default class Photo extends Component {
           }}
         />
         {this.state.modalVisible && (
-          <MyDialog modeInfo={modeInfo}
+          <global.MyDialog modeInfo={modeInfo}
             modalVisible={this.state.modalVisible}
             onDismiss={() => { this.setState({ modalVisible: false }); this.isValueChanged = false }}
             onRequestClose={() => { this.setState({ modalVisible: false }); this.isValueChanged = false }}
