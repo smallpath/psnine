@@ -125,7 +125,7 @@ export default class extends React.PureComponent<ExtendedProp, FlatlistItemState
                         <View style={{
                           height: 50, paddingVertical: 10, paddingLeft: 20 , alignSelf: 'stretch', alignContent: 'stretch', justifyContent: 'center'
                         }}>
-                          <Text style={{textAlignVertical: 'center', fontSize: 18, color: modeInfo.standardTextColor}}>复制评论文字</Text>
+                          <Text style={{textAlignVertical: 'center', fontSize: 18, color: modeInfo.standardTextColor}}>复制</Text>
                         </View>
                       </TouchableNativeFeedback>
                       {

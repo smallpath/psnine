@@ -110,7 +110,7 @@ export default class ComplexComment extends React.PureComponent<ExtendedProp, Ex
                       }}>
                       <View style={{height: 50,
                           paddingVertical: 10, paddingLeft: 20 , alignSelf: 'stretch', alignContent: 'stretch', justifyContent: 'center'}}>
-                        <Text style={{textAlignVertical: 'center', fontSize: 18, color: modeInfo.standardTextColor}}>复制评论</Text>
+                        <Text style={{textAlignVertical: 'center', fontSize: 18, color: modeInfo.standardTextColor}}>复制</Text>
                       </View>
                     </TouchableNativeFeedback>
                   </View>
@@ -251,7 +251,7 @@ export default class ComplexComment extends React.PureComponent<ExtendedProp, Ex
                           height: 50, paddingVertical: 10, paddingLeft: 20 , alignSelf: 'stretch', alignContent: 'stretch', 
                           justifyContent: 'center'
                         }}>
-                          <Text style={{textAlignVertical: 'center', fontSize: 18, color: modeInfo.standardTextColor}}>复制评论</Text>
+                          <Text style={{textAlignVertical: 'center', fontSize: 18, color: modeInfo.standardTextColor}}>复制</Text>
                         </View>
                       </TouchableNativeFeedback>
                       {
