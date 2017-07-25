@@ -9,7 +9,8 @@ import {
   ActivityIndicator,
   Animated,
   FlatList,
-  Linking
+  Linking,
+  Alert
 } from 'react-native'
 
 import Ionicons from 'react-native-vector-icons/Ionicons'
@@ -395,10 +396,19 @@ class CommunityTopic extends Component {
       targetActions.push({
         title: '关闭', iconName: 'md-create', iconSize: 22, show: 'never',
         onPress: function () {
-          close({
+          const onPress = () => close({
             type: 'battle',
             id: params.URL.split('/').pop()
           }).then(res => res.text()).then(html => html ? global.toast('关闭失败: ' + html) : global.toast('关闭成功'))
+          Alert.alert('提示', '关闭后，只有管理员和发布者可以看到本帖', [
+            {
+              text: '取消'
+            },
+            {
+              text: '继续关闭',
+              onPress: () => onPress()
+            }
+          ])
         }
       })
     }
