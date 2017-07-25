@@ -25,10 +25,6 @@ export default class extends React.PureComponent<ExtendedProp, FlatlistItemState
     }
   }
 
-  shouldComponentUpdate(props, state) {
-    return props.modeInfo.themeName !== this.props.modeInfo.themeName || this.state.modalVisible !== state.modalVisible
-  }
-
   _onRowPressed = (rowData) => {
     const { navigation } = this.props
     const URL = getGeneURL(rowData.id)
@@ -42,7 +38,7 @@ export default class extends React.PureComponent<ExtendedProp, FlatlistItemState
     })
   }
 
-  render = () => {
+  render() {
     const { modeInfo, rowData, modalList = [], onPress } = this.props
 
     const imageArr = rowData.thumbs

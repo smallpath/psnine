@@ -26,10 +26,6 @@ export default class NewsItem extends React.PureComponent<FlatlistItemProp, Flat
     }
   }
 
-  shouldComponentUpdate(props, state) {
-    return props.modeInfo.themeName !== this.props.modeInfo.themeName || this.state.modalVisible !== state.modalVisible
-  }
-
   _onRowPressed = (rowData) => {
     const { navigation } = this.props
     const id = rowData.id || parseInt(rowData.url.split('/').pop(), 10)

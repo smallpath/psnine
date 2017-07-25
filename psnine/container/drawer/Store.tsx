@@ -24,7 +24,6 @@ let releasedMarginTop = 0
 const AnimatedFlatList = Animated.createAnimatedComponent(FlatList)
 
 class StoreItem extends React.PureComponent {
-  shouldComponentUpdate = (props) => props.modeInfo.themeName !== this.props.modeInfo.themeName
 
   _onRowPressed = (rowData) => {
     const { navigation } = this.props

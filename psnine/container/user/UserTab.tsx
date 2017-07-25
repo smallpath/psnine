@@ -92,11 +92,6 @@ export default class TabContainer extends React.PureComponent {
   constructor(props){
     super(props)
   }
-  shouldComponentUpdate(nextProps, nextState) {
-    // console.log('shouldComponent called')
-    if (nextProps.screenProps.modeInfo.themeName !== this.props.screenProps.modeInfo.themeName) return true
-    return false
-  }
   render() {
     return (
       <Tab {...this.props} />

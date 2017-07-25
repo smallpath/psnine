@@ -21,10 +21,6 @@ export default class TradeItem extends React.PureComponent<ExtendedProp, Flatlis
     }
   }
 
-  shouldComponentUpdate(props, state) {
-    return props.modeInfo.themeName !== this.props.modeInfo.themeName || this.state.modalVisible !== state.modalVisible
-  }
-
   _onRowPressed = (rowData) => {
     const { navigation } = this.props
     // const URL = getBattleURL(rowData.id);

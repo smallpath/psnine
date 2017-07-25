@@ -25,13 +25,6 @@ export default class PhotoItem extends React.PureComponent<ExtendedProp, Flatlis
     }
   }
 
-  shouldComponentUpdate(props: ExtendedProp, state: FlatlistItemState) {
-    if (props.modeInfo.themeName !== this.props.modeInfo.themeName) return true
-    if (this.state.modalVisible !== state.modalVisible) return true
-    if (props.isChecked !== this.props.isChecked) return true
-    return false
-  }
-
   render() {
     const { modeInfo, rowData, onLongPress,
       isChecked = false, onPress, width = 150, ITEM_HEIGHT } = this.props

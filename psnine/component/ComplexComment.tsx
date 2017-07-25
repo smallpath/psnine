@@ -45,14 +45,6 @@ export default class ComplexComment extends React.PureComponent<ExtendedProp, Ex
     }
   }
 
-  shouldComponentUpdate(props, state) {
-    if (props.modeInfo.themeName !== this.props.modeInfo.themeName) return true
-    if (props.rowData.isAccepted !== this.props.rowData.isAccepted) return true
-    if (this.state.modalVisible !== state.modalVisible) return true
-    if (this.state.modalIndex !== state.modalIndex) return true
-    return false
-  }
-
   renderSonComment = (list, parentRowData) => {
     const { modeInfo, onLongPress } = this.props
     const result = list.map((rowData, index) => {

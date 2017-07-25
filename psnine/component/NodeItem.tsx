@@ -10,11 +10,6 @@ import { FlatlistItemProp } from '../interface'
 
 export default class PhotoItem extends React.PureComponent<FlatlistItemProp> {
 
-  shouldComponentUpdate(props: FlatlistItemProp) {
-    if (props.modeInfo.themeName !== this.props.modeInfo.themeName) return true
-    return false
-  }
-
   render() {
     const { modeInfo, onPress, rowData } = this.props
 

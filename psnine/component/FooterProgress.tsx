@@ -12,11 +12,6 @@ interface ExtendedProp {
 }
 
 export default class FooterProgress extends React.PureComponent<ExtendedProp, {}> {
-  shouldComponentUpdate(nextProps) {
-    if (nextProps.isLoadingMore !== this.props.isLoadingMore) return true
-    if (nextProps.modeInfo.themeName !== this.props.modeInfo.themeName) return true
-    return false
-  }
   render() {
     return this.props.isLoadingMore ? (
       <View style={{flexDirection: 'row', flex: 1, height: 4, alignItems: 'flex-end'}}>

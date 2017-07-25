@@ -15,11 +15,6 @@ interface ExtendedProp extends FlatlistItemProp {
 }
 export default class PhotoItem extends React.PureComponent<ExtendedProp> {
 
-  shouldComponentUpdate(props) {
-    if (props.modeInfo.themeName !== this.props.modeInfo.themeName) return true
-    return false
-  }
-
   onPress = () => {
     const { rowData, navigation } = this.props
     navigation.navigate('NewGame', {

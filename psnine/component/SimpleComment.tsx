@@ -30,12 +30,6 @@ export default class extends React.PureComponent<ExtendedProp, FlatlistItemState
     }
   }
 
-  shouldComponentUpdate(props, state) {
-    if (props.modeInfo.themeName !== this.props.modeInfo.themeName) return true
-    if (this.state.modalVisible !== state.modalVisible) return true
-    return false
-  }
-
   render() {
     const { modeInfo, rowData, index, onLongPress, callback = () => {} } = this.props
     return (

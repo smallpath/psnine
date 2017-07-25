@@ -19,10 +19,6 @@ interface ExtendedProp extends FlatlistItemProp {
 
 export default class extends React.PureComponent<ExtendedProp, {}> {
 
-  shouldComponentUpdate(props) {
-    return props.modeInfo.themeName !== this.props.modeInfo.themeName
-  }
-
   _onRowPressed = (rowData) => {
     const { navigation } = this.props
     const URL = getGameUrl(rowData.id)

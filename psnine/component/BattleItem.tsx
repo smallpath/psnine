@@ -24,10 +24,6 @@ export default class BattleItem extends React.PureComponent<ExtendedProp, Flatli
     }
   }
 
-  shouldComponentUpdate(props, state) {
-    return props.modeInfo.themeName !== this.props.modeInfo.themeName || this.state.modalVisible !== state.modalVisible
-  }
-
   _onRowPressed = (rowData) => {
     const { navigation } = this.props
     const URL = getBattleURL(rowData.id)

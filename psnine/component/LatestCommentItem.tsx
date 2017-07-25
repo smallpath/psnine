@@ -15,11 +15,6 @@ import { FlatlistItemProp } from '../interface'
 
 export default class PhotoItem extends React.PureComponent<FlatlistItemProp> {
 
-  shouldComponentUpdate(props) {
-    if (props.modeInfo.themeName !== this.props.modeInfo.themeName) return true
-    return false
-  }
-
   onPress = () => {
     const { rowData, navigation } = this.props
     navigation.navigate('GamePoint', {

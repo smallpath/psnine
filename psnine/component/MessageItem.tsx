@@ -26,12 +26,6 @@ export default class ComplexComment extends React.PureComponent<ExtendedProp, Fl
     }
   }
 
-  shouldComponentUpdate(props, state) {
-    if (props.modeInfo.themeName !== this.props.modeInfo.themeName) return true
-    if (this.state.modalVisible !== state.modalVisible) return true
-    return false
-  }
-
   render() {
     const { modeInfo, rowData, onPress, modalList = [], isChecked = false } = this.props
     return (
