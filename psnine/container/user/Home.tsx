@@ -166,8 +166,8 @@ export default class Home extends Component {
         blurRadis={0}
         >
         <LinearGradient
-          colors={['rgba(0,0,0,0.3)', 'rgba(0,0,0,0)', 'rgba(0,0,0,0)', 'rgba(0,0,0,0.3)']}
-          locations={[0, 0.2, 0.8, 1]}
+          colors={['rgba(0,0,0,0.5)', 'rgba(0,0,0,0)', 'rgba(0,0,0,0)', 'rgba(0,0,0,0.5)']}
+          locations={[0, 0.3, 0.7, 1]}
           start={{x: 0.5, y: 0}} end={{x: 0.5, y: 1}}>
           <View key={rowData.id} style={{
             backgroundColor: 'transparent',

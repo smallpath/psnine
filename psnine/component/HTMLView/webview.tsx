@@ -129,7 +129,7 @@ class HtmlView extends Component<IProps, State> {
     return (
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', padding: 5, alignSelf: 'center', alignContent: 'center'  }}>
         <Button color={this.props.modeInfo.accentColor} title={resolved.title} onPress={() => {
-          return this.props.linkPressHandler(url)
+          return url.includes('psnine.com/huodong') ? this.setState({ modalVisible: true }) : this.props.linkPressHandler(url)
         }}></Button>
         {this.state.modalVisible && (
           <global.MyDialog modeInfo={this.props.modeInfo}
