@@ -20,7 +20,7 @@ let toolbarActions = []
 
 declare var global
 
-class UserBoard extends Component {
+class UserBoard extends Component<any, any> {
   static navigationOptions = {
      tabBarLabel: '日志'
   }

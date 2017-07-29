@@ -38,7 +38,7 @@ let config = { tension: 30, friction: 7, ease: Easing.in(Easing.ease(1, 0, 1, 1)
 
 const limit = SCREEN_WIDTH - toolbarHeight
 
-export default class extends Component {
+export default class extends Component<any, any> {
 
   constructor(props) {
     super(props)

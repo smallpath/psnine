@@ -38,7 +38,7 @@ let toolbarActions = [
   { title: '跳页', iconName: 'md-map', show: 'always' }
 ]
 
-export default class Issue extends Component {
+export default class Issue extends Component<any, any> {
   constructor(props) {
     super(props)
     this.state = {

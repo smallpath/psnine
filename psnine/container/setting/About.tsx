@@ -22,7 +22,7 @@ let dataSource = new ListView.DataSource({
 
 declare var global
 
-class About extends Component {
+class About extends Component<any, any> {
 
   constructor(props) {
     super(props)

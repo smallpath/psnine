@@ -184,7 +184,7 @@ const ListItems = [
   // }
 ]
 
-class navigationDrawer extends Component {
+class navigationDrawer extends Component<any, any> {
   constructor(props) {
     super(props)
     let dataSource = new ListView.DataSource({

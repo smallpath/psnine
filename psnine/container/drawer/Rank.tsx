@@ -20,7 +20,7 @@ let toolbarHeight = 56
 let releasedMarginTop = 0
 let prevPosition = -1
 
-class Rank extends Component {
+class Rank extends Component<any, any> {
   static navigationOptions = {
     tabBarLabel: '排行',
     drawerLabel: '排行'

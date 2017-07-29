@@ -19,7 +19,7 @@ let prevPosition = -1
 
 const AnimatedFlatList = Animated.createAnimatedComponent(FlatList)
 
-class Community extends Component {
+class Community extends Component<any, any> {
   static navigationOptions = {
     tabBarLabel: '社区',
     drawerLabel: '社区'

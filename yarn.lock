@@ -3845,6 +3845,10 @@ react-native-share@^1.0.20:
   version "1.0.20"
   resolved "https://registry.npm.taobao.org/react-native-share/download/react-native-share-1.0.20.tgz#38ba820a4ddfc5afe1dec0e1456ced11f14352bc"
 
+react-native-snackbar@^0.4.0:
+  version "0.4.0"
+  resolved "https://registry.yarnpkg.com/react-native-snackbar/-/react-native-snackbar-0.4.0.tgz#d7c19a5e929dd19d780d74dd215a4b0a04751d5b"
+
 react-native-tab-view@^0.0.61:
   version "0.0.61"
   resolved "https://registry.npm.taobao.org/react-native-tab-view/download/react-native-tab-view-0.0.61.tgz#9f5446c9ad33158b87f0bccf5004fbff79ca1f92"
@@ -3858,7 +3862,7 @@ react-native-vector-icons@^4.0.1:
     lodash "^4.0.0"
     yargs "^6.3.0"
 
-react-native@0.46:
+react-native@0.46.4:
   version "0.46.4"
   resolved "https://registry.yarnpkg.com/react-native/-/react-native-0.46.4.tgz#281bbcc165e5c36b4c8eaa868e6768543e811bcb"
   dependencies:

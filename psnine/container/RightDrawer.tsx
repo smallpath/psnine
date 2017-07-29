@@ -122,7 +122,7 @@ const RightDrawer = DrawerNavigator({
   backBehavior: 'none'
 })
 
-export default class RightDrawerContainer extends Component {
+export default class RightDrawerContainer extends Component<any, any> {
   constructor(props) {
     super(props)
   }
@@ -145,7 +145,7 @@ export default class RightDrawerContainer extends Component {
 }
 
 const ANDROID_VERSION_LOLLIPOP = 21
-class TouchableItem extends Component {
+class TouchableItem extends Component<any, any> {
   static defaultProps = {
     pressColor: 'rgba(0, 0, 0, .32)'
   }

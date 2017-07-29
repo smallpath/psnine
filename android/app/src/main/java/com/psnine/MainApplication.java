@@ -4,6 +4,7 @@ import android.app.Application;
 
 import com.oblador.vectoricons.VectorIconsPackage;
 import com.facebook.react.ReactApplication;
+import com.azendoo.reactnativesnackbar.SnackbarPackage;
 import com.BV.LinearGradient.LinearGradientPackage;
 import cl.json.RNSharePackage;
 import com.mohtada.nestedscrollview.ReactNestedScrollViewPackage;
@@ -32,6 +33,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new SnackbarPackage(),
             new LinearGradientPackage(),
             new RNSharePackage(),
             new ReactNestedScrollViewPackage(),

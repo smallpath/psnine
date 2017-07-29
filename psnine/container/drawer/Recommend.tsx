@@ -41,7 +41,7 @@ const renderSectionHeader = ({ section }) => {
   )
 }
 
-class Recommend extends Component {
+class Recommend extends Component<any, any> {
   static navigationOptions = {
     tabBarLabel: '推荐',
     drawerLabel: '推荐'

@@ -14,7 +14,7 @@ let toolbarActions = [
 let title = 'TOPIC'
 let WEBVIEW_REF = `WEBVIEW_REF`
 
-class Deal extends Component {
+class Deal extends Component<any, any> {
 
   constructor(props) {
     super(props)

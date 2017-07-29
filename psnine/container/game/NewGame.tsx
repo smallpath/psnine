@@ -46,7 +46,7 @@ const limit = 160 // - toolbarHeight
 
 import ImageBackground from '../../component/ImageBackground'
 
-export default class Home extends Component {
+export default class Home extends Component<any, any> {
 
   constructor(props) {
     super(props)

@@ -29,7 +29,7 @@ const ACTUAL_SCREEN_HEIGHT = SCREEN_HEIGHT - StatusBar.currentHeight + 1
 let CIRCLE_SIZE = 56
 let config = { tension: 30, friction: 7, ease: Easing.in(Easing.ease(1, 0, 1, 1)), duration: 200 }
 
-class Theme extends Component {
+class Theme extends Component<any, any> {
 
   constructor(props) {
     super(props)

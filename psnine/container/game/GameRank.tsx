@@ -148,7 +148,7 @@ class TopicItem extends React.PureComponent {
   }
 }
 
-class GameTopic extends Component {
+class GameTopic extends Component<any, any> {
   constructor(props) {
     super(props)
     this.state = {

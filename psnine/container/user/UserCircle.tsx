@@ -25,7 +25,7 @@ let toolbarActions = [
   { title: '跳页', iconName: 'md-map', show: 'always' }
 ]
 
-class UserGame extends Component {
+class UserGame extends Component<any, any> {
   static navigationOptions = {
      tabBarLabel: '圈子'
   }

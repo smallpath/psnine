@@ -104,7 +104,7 @@ class StoreItem extends React.PureComponent {
   }
 }
 
-class Store extends Component {
+class Store extends Component<any, any> {
   static navigationOptions = {
     tabBarLabel: '商店',
     drawerLabel: '商店'

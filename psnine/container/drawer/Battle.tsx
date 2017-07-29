@@ -35,7 +35,7 @@ const renderSectionHeader = ({ section }) => {
   )
 }
 
-class Battle extends Component {
+class Battle extends Component<any, any> {
   static navigationOptions = {
     tabBarLabel: '约战',
     drawerLabel: '约战'

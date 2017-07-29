@@ -4,13 +4,8 @@
 Psnine第三方安卓客户端, 基于React Native、Redux, 支持安卓4.1及以上系统 
 
 # Features
-- 支持社区、问答、游戏、排行、约战、机因、商店、闲游八大类别的显示、主题查看、主题回复
-- 支持社区、问答、机因、约战和交易的发帖和编辑
-- 支持攻略讨论中的分页、游戏列表、新旧版评论和楼中楼的显示与回复
-- 支持社区、问答、游戏、约战、机因、圈子、商店和闲游八大类别的搜索
-- 支持登录、签到、用户中心、用户游戏、留言板和用户圈子
-- 支持奖杯列表、奖杯TIP和奖杯评分
-- 支持用户收藏、发布、圈子、图床、图片上传、明细、个性化和修改密码
+- 支持PSNINE网站的所有功能
+- 支持自动签到、消息快捷回复、回复中插入图片、拍摄图片后直接上传、移动网络中不加载图片等功能
 - 支持主题的切换, 可以切换首页布局和19种主题颜色, 以及对应的强调色和夜间主题
 
 # Screenshots
@@ -35,6 +30,7 @@ Psnine第三方安卓客户端, 基于React Native、Redux, 支持安卓4.1及�
   - [x] coordinator-layout (Android)
   - [x] nested-scroll-view (Android)
   - [x] react-native-fs
+  - [x] react-native-snackbar
   - [x] react-native-image-picker
   - [x] react-native-linear-share
   - [x] react-native-vector-icons

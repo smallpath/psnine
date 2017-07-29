@@ -122,7 +122,7 @@ class TopicItem extends React.PureComponent {
   }
 }
 
-export default class NewGameGuide extends Component {
+export default class NewGameGuide extends Component<any, any> {
   constructor(props) {
     super(props)
     this.state = {

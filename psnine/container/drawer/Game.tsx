@@ -20,7 +20,7 @@ let toolbarHeight = 56
 let releasedMarginTop = 0
 let prevPosition = -1
 
-class Game extends Component {
+class Game extends Component<any, any> {
   static navigationOptions = {
     tabBarLabel: '游戏',
     drawerLabel: '游戏'

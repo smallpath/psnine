@@ -65,7 +65,7 @@ let toolbarActions = [
   }
 ]
 
-class CommunityTopic extends Component {
+class CommunityTopic extends Component<any, any> {
 
   constructor(props) {
     super(props)

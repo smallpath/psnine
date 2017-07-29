@@ -21,7 +21,7 @@ import CircleItem from '../../component/CircleItem'
 
 const AnimatedFlatList = Animated.createAnimatedComponent(FlatList)
 
-class Circle extends Component {
+class Circle extends Component<any, any> {
   static navigationOptions = {
     tabBarLabel: '圈子',
     drawerLabel: '圈子'

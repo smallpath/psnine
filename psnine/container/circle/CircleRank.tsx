@@ -25,7 +25,7 @@ let toolbarActions = [
   { title: '跳页', iconName: 'md-map', show: 'always' }
 ]
 
-export default class GameTopic extends Component {
+export default class GameTopic extends Component<any, any> {
   constructor(props) {
     super(props)
     this.state = {

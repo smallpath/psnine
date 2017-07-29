@@ -130,7 +130,7 @@ import {
   PopupWindowAndroid
 } from 'mao-rn-android-kit'
 
-class Toolbar extends Component {
+class Toolbar extends Component<any, any> {
 
   constructor(props) {
     super(props)
@@ -498,7 +498,7 @@ class Toolbar extends Component {
 
 }
 
-class Page extends Component {
+class Page extends Component<any, any> {
   constructor(props) {
     super(props)
     this.state = {

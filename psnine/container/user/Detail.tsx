@@ -22,7 +22,7 @@ let releasedMarginTop = 0
 
 let toolbarActions = []
 
-export default class Detail extends Component {
+export default class Detail extends Component<any, any> {
 
   constructor(props) {
     super(props)

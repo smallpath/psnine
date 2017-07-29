@@ -36,7 +36,7 @@ let toolbarActions = [
 
 declare var global
 
-class Fav extends Component {
+class Fav extends Component<any, any> {
   constructor(props) {
     super(props)
     this.state = {

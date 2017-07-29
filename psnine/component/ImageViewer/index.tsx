@@ -27,7 +27,7 @@ const onSave = (image) => {
   }).catch(err => ToastAndroid.show('保存失败: ' + err.toString(), ToastAndroid.SHORT))
 }
 
-export default class extends React.Component {
+export default class extends React.Component<any, any> {
   constructor(props) {
     super(props)
   }

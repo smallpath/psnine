@@ -34,7 +34,7 @@ declare var global
 
 import { postCircle } from '../../dao/post'
 
-export default class extends Component {
+export default class extends Component<any, any> {
 
   constructor(props) {
     super(props)

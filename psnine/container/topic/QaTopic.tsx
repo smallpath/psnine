@@ -119,7 +119,7 @@ let toolbarActions = [
   }
 ]
 
-class QaTopic extends Component {
+class QaTopic extends Component<any, any> {
 
   constructor(props) {
     super(props)

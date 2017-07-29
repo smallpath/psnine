@@ -17,7 +17,7 @@ import {
 
 declare var global
 
-export default class Home extends Component {
+export default class Home extends Component<any, any> {
   static navigationOptions = {
      tabBarLabel: '主页'
   }

@@ -17,7 +17,7 @@ import FooterProgress from '../../component/FooterProgress'
 
 const AnimatedFlatList = Animated.createAnimatedComponent(FlatList)
 
-class Gene extends Component {
+class Gene extends Component<any, any> {
   static navigationOptions = {
     tabBarLabel: '机因',
     drawerLabel: '机因'

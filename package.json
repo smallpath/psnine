@@ -35,6 +35,7 @@
     "react-native-linear-gradient": "^2.1.0",
     "react-native-nested-scrollview": "0.0.3",
     "react-native-share": "^1.0.20",
+    "react-native-snackbar": "^0.4.0",
     "react-native-vector-icons": "^4.0.1",
     "react-navigation": "^1.0.0-beta.9",
     "react-redux": "^4.4.5",

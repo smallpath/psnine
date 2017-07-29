@@ -26,7 +26,7 @@ let toolbarActions = [
   { title: '回复', iconName: 'md-create', iconSize: 22, show: 'always' }
 ]
 
-class UserBoard extends Component {
+class UserBoard extends Component<any, any> {
   static navigationOptions = {
      tabBarLabel: '留言板'
   }

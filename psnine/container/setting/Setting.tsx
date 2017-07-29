@@ -51,7 +51,7 @@ const items = [
   }
 ]
 
-class Setting extends Component {
+class Setting extends Component<any, any> {
 
   constructor(props) {
     super(props)

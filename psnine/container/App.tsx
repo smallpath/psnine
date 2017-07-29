@@ -19,7 +19,7 @@ if (drawerWidth > 720) {
 }
 // console.log(Dimensions.get('window').width)
 
-class Psnine extends Component {
+class Psnine extends Component<any, any> {
   constructor(props) {
     super(props)
   }

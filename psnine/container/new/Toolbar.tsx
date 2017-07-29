@@ -240,7 +240,7 @@ const getMapper = index => {
   return items[0].tip
 }
 
-class About extends Component {
+class About extends Component<any, any> {
 
   constructor(props) {
     super(props)

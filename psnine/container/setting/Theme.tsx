@@ -34,7 +34,7 @@ const mapper = {
   'blueGrey': '蓝灰色'
 }
 
-class Theme extends Component {
+class Theme extends Component<any, any> {
 
   constructor(props) {
     super(props)

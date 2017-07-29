@@ -46,7 +46,7 @@ const uploadOptions = {
   }
 }
 
-export default class Photo extends Component {
+export default class Photo extends Component<any, any> {
   constructor(props) {
     super(props)
     const { navigation } = this.props

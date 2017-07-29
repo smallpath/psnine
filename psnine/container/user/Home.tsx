@@ -54,7 +54,7 @@ import {
 
 import ImageBackground from '../../component/ImageBackground'
 
-export default class Home extends Component {
+export default class Home extends Component<any, any> {
 
   constructor(props) {
     super(props)

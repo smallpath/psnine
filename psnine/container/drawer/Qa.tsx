@@ -20,7 +20,7 @@ let toolbarHeight = 56
 let releasedMarginTop = 0
 let prevPosition = -1
 
-class Qa extends Component {
+class Qa extends Component<any, any> {
   static navigationOptions = {
     tabBarLabel: '问答',
     drawerLabel: '问答'

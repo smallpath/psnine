@@ -38,7 +38,7 @@ let CIRCLE_SIZE = 56
 
 const emotionToolbarHeight = 190
 
-export default class NewTopic extends Component {
+export default class NewTopic extends Component<any, any> {
 
   constructor(props) {
     super(props)

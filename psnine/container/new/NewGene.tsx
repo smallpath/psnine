@@ -45,7 +45,7 @@ const emotionToolbarHeight = 190
 
 let config = { tension: 30, friction: 7, ease: Easing.in(Easing.ease(1, 0, 1, 1)), duration: 200 }
 
-export default class NewTopic extends Component {
+export default class NewTopic extends Component<any, any> {
 
   constructor(props) {
     super(props)

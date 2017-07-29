@@ -42,7 +42,7 @@ const renderSectionHeader = ({ section }) => {
   )
 }
 
-export default class Custom extends Component {
+export default class Custom extends Component<any, any> {
 
   constructor(props) {
     super(props)

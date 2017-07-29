@@ -28,7 +28,7 @@ let toolbarActions = [
 ]
 let title = '登录'
 
-class Login extends Component {
+class Login extends Component<any, any> {
 
   constructor(props) {
     super(props)

@@ -25,7 +25,7 @@ let toolbarActions = [
   { title: '创建', iconName: 'md-create', show: 'always', iconSize: 22}
 ]
 
-class GameTopic extends Component {
+class GameTopic extends Component<any, any> {
   constructor(props) {
     super(props)
     this.state = {

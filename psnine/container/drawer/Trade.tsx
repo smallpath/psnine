@@ -19,7 +19,7 @@ let releasedMarginTop = 0
 import TradeItem from '../../component/TradeItem'
 const AnimatedFlatList = Animated.createAnimatedComponent(FlatList)
 
-class Trade extends Component {
+class Trade extends Component<any, any> {
   static navigationOptions = {
     tabBarLabel: '闲游',
     drawerLabel: '闲游'

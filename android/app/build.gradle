@@ -157,10 +157,9 @@ android {
 dependencies {
     compile fileTree(dir: "libs", include: ["*.jar"])
     compile "com.android.support:appcompat-v7:23.0.1"
-    // 从源码构建以解决手势bug
     compile project(':ReactAndroid')
-    // 矢量图片
     compile project(':react-native-vector-icons')
+    compile project(':react-native-snackbar')
     compile project(':lottie-react-native')
     compile project(':react-native-google-analytics-bridge')
     compile project(':react-native-image-picker')

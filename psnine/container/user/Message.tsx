@@ -16,7 +16,7 @@ import MessageItem from '../../component/MessageItem'
 
 let toolbarActions = []
 
-class Message extends Component {
+class Message extends Component<any, any> {
   constructor(props) {
     super(props)
     this.state = {

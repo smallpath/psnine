@@ -16,6 +16,7 @@ import {
   Platform
 } from 'react-native'
 import { Provider } from 'react-redux'
+import Snackbar from 'react-native-snackbar'
 import StackNavigator, { getCurrentRoute, tracker } from './router'
 import ColorConfig, {
   getAccentColorFromName
@@ -231,7 +232,6 @@ export default class Root extends React.Component<any, any> {
 
   _orientationSubscription: any = false
 
-
   _handleOrientation = orientation => {
     let screen: any = {}
     const { height, width } = Dimensions.get('window')
@@ -250,48 +250,12 @@ export default class Root extends React.Component<any, any> {
     })
   }
 
-  toast = (text) => {
-    if (this.state.text === '') {
-      this.setText(text)
-    } else {
-      setTimeout(() => {
-        this.toast(text)
-      }, 1000)
-    }
-  }
-
-  setText = (text) => {
-    console.log(text, '==> toasting')
-    this.setState({
-      text
+  toast = (text: any, action?: any) => {
+    Snackbar.show({
+      title: text.toString(),
+      duration: Snackbar.LENGTH_SHORT,
+      action
     })
-    InteractionManager.runAfterInteractions(() => {
-      Animated.timing(this.state.tipBarMarginBottom, {
-        toValue: 1,
-        duration: 200,
-        easing: Easing.ease,
-        useNativeDriver: true
-      }).start()
-    })
-
-    setTimeout(() => {
-      InteractionManager.runAfterInteractions(() => {
-        Animated.timing(this.state.tipBarMarginBottom, {
-          toValue: 0,
-          duration: 200,
-          easing: Easing.ease,
-          useNativeDriver: true
-        }).start(() => {
-          // console.log(this.state.tipBarMarginBottom._value,
-          //   this.state.tipBarMarginBottom._offset,
-          //   finished)
-          this.state.tipBarMarginBottom.setValue(0)
-          this.setState({
-            text: ''
-          })
-        })
-      })
-    }, 2000)
   }
 
   render() {
@@ -385,34 +349,6 @@ export default class Root extends React.Component<any, any> {
               switchModeOnRoot: this.switchModeOnRoot,
               bottomText: this.state.text
             }} />
-          <Animated.View style={{
-            height: tipHeight,
-            position: 'absolute',
-            bottom: 0,
-            elevation: 6,
-            left: 0,
-            right: 0,
-            backgroundColor: modeInfo.reverseModeInfo.backgroundColor,
-            transform: [
-              {
-                translateY: this.state.tipBarMarginBottom.interpolate({
-                  inputRange: [-1, 0, 1, 2],
-                  outputRange: [tipHeight * 2, tipHeight, 0, -tipHeight]
-                })
-              }
-            ]
-          }}>
-            <View style={{
-              flex: 1,
-              justifyContent: 'center',
-              padding: 20
-            }}>
-              <Text style={{
-                fontSize: 15,
-                color: modeInfo.reverseModeInfo.titleTextColor
-              }}>{this.state.text}</Text>
-            </View>
-          </Animated.View>
         </View>
       )
     return (

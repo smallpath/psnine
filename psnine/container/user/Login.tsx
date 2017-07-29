@@ -23,7 +23,7 @@ import { fetchUser } from '../../dao'
 
 declare var global
 
-class Login extends Component {
+class Login extends Component<any, any> {
 
   constructor(props) {
     super(props)

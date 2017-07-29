@@ -33,7 +33,7 @@ const styles = StyleSheet.create({
   }
 })
 
-export default class TabContainer extends Component {
+export default class TabContainer extends Component<any, any> {
   constructor(props) {
     super(props)
   }

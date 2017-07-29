@@ -22,7 +22,7 @@ let dataSource = new ListView.DataSource({
 
 declare var global
 
-export default class PsnineAbout extends Component {
+export default class PsnineAbout extends Component<any, any> {
 
   constructor(props) {
     super(props)
