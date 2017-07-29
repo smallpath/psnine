@@ -238,11 +238,15 @@ export default class Root extends React.Component<any, any> {
     })
   }
 
-  toast = (text: any, action?: any) => {
+  toast = (text: any, options?: any) => {
+    const action: any = {}
+    if (typeof options === 'object') {
+      Object.assign(action, options)
+    }
     Snackbar.show({
       title: text.toString(),
       duration: Snackbar.LENGTH_SHORT,
-      action
+      action: Object.keys(action).length ? action : undefined
     })
   }
 
