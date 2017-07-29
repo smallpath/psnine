@@ -277,7 +277,7 @@ export default class Issue extends Component<any, any> {
                           }, () => {
                             this.fetchMessages(params.URL, 'jump')
                           })
-                        }} title={item.name} color={modeInfo.accentColor}/></View>
+                        }} title={item.name} color={this.state.type === item.value ? modeInfo.accentColor : modeInfo.standardColor}/></View>
                     })
                   }
                 </View>

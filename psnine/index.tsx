@@ -5,18 +5,15 @@ import {
   StatusBar,
   View,
   Animated,
-  Text,
-  Easing,
   Linking,
-  InteractionManager,
   AsyncStorage,
   NetInfo,
   DeviceEventEmitter,
-  Image,
   Platform
 } from 'react-native'
 import { Provider } from 'react-redux'
 import Snackbar from 'react-native-snackbar'
+import SplashScreen from 'react-native-splash-screen'
 import StackNavigator, { getCurrentRoute, tracker } from './router'
 import ColorConfig, {
   getAccentColorFromName
@@ -26,13 +23,11 @@ import configureStore from './redux/store'
 import checkVersion from './bootstrap/checkVersion'
 import { ColorInfo, ModeInfo } from './interface'
 
-const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window')
-
-const toolbarHeight = 56
-const tipHeight = toolbarHeight * 0.8
 let backPressClickTimeStamp = 0
 
 declare var global
+
+global.toast = () => {}
 
 const netInfoHandler = (reach) => {
   global.netInfo = reach
@@ -182,24 +177,17 @@ export default class Root extends React.Component<any, any> {
       global.loadImageWithoutWifi = JSON.parse(result[4]) || false
       // console.log('==> GA', JSON.parse(result[6]), JSON.parse(result[6] || 'true'), result[6], typeof result[6])
       global.shouldSendGA = JSON.parse(result[6] || 'true')
-    })
-    // setTimeout(() => {
-    Animated.timing(this.state.progress, {
-      toValue: 1,
-      // ease: Easing.in(Easing.ease(1, 0, 1, 1)),
-      duration: 800
-    }).start()
-    // }, 400)
-
-    setTimeout(() => {
       this.setState({
         isLoadingAsyncStorage: false,
         settingInfo,
         colorTheme: settingInfo.colorTheme,
         isNightMode: settingInfo.isNightMode,
         secondaryColor: settingInfo.secondaryColor
-      }, () => checkVersion().catch(() => {}))
-    }, 1400)
+      }, () => {
+        SplashScreen.hide()
+        checkVersion().catch(() => {})
+      })
+    })
   }
 
   componentDidMount() {
@@ -262,7 +250,7 @@ export default class Root extends React.Component<any, any> {
     const dayModeInfo: ColorInfo = ColorConfig[this.state.colorTheme]
     const nightModeInfo: ColorInfo = ColorConfig[this.state.colorTheme + 'Night']
     const targetModeInfo: ColorInfo = this.state.isNightMode ? nightModeInfo : dayModeInfo
-    const { isLoadingAsyncStorage, progress } = this.state
+    const { isLoadingAsyncStorage } = this.state
     const { colorTheme, secondaryColor, isNightMode, width, height, minWidth } = this.state
     /* get value to avoid remote debugger bug */
     secondaryColor
@@ -291,11 +279,6 @@ export default class Root extends React.Component<any, any> {
       const currentScreen = getCurrentRoute(currentState)
       const prevScreen = getCurrentRoute(prevState)
       if (prevScreen && currentScreen && prevScreen.routeName !== currentScreen.routeName) {
-        // if (currentScreen.routeName === 'Home') {
-        //   StatusBar.setHidden(true)
-        // } else if (prevScreen.routeName === 'Home') {
-        //   StatusBar.setHidden(false)
-        // }
         if (global.shouldSendGA) {
           const { routeName = 'Unknow' } = currentScreen
           tracker.trackScreenView(routeName)
@@ -304,40 +287,8 @@ export default class Root extends React.Component<any, any> {
     } : undefined
 
     const child = isLoadingAsyncStorage ? (
-      <View style={{ flex: 1, backgroundColor: 'rgb(0,208,192)' }}>
-        <StatusBar translucent={false} backgroundColor={'rgb(0,208,192)'} barStyle={'light-content'} />
-        {/* <Animation
-          ref={animation => { this.animation = animation; }}
-          style={{
-
-          }}
-          source={lottie}
-        /> */}
-        <Image
-          source={{
-            uri: 'http://ww4.sinaimg.cn/large/bfae17b6gy1fhpjvt6jukg21hc0u0ds5.jpg', width: SCREEN_WIDTH,
-            height: SCREEN_HEIGHT - (StatusBar.currentHeight || 0) * 4
-          }}
-          style={{
-            width: SCREEN_WIDTH,
-            height: SCREEN_HEIGHT - (StatusBar.currentHeight || 0) * 4
-          }}
-          resizeMode='contain'
-          resizeMethod={'resize'}
-        />
-        <Animated.View style={{
-          position: 'absolute',
-          left: 0,
-          top: SCREEN_HEIGHT / 10 * 5,
-          right: 0,
-          bottom: 0,
-          opacity: progress
-        }}>
-          <Text numberOfLines={1} style={{
-            textAlign: 'center',
-            textAlignVertical: 'center'
-          }}>{this.state.loadingText}</Text>
-        </Animated.View>
+      <View style={{ flex: 1 }}>
+        <StatusBar hidden={true}/>
       </View>
     ) : (
         <View style={{ flex: 1 }}>
