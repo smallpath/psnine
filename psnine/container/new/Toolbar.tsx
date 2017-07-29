@@ -295,8 +295,9 @@ class About extends Component<any, any> {
                   left: 20,
                   right: 20,
                   opacity: 1,
-                  flex: 0
-                }} borderRadius={2}>
+                  flex: 0,
+                  borderRadius: 2
+                }} >
                   <Text style={{ alignSelf: 'flex-start', fontSize: 15, color: modeInfo.titleTextColor }}>{'请输入' + getMapper(this.state.modalIndex)}</Text>
                   <View style={{flex: 1, flexDirection: 'row'}}>
                     <TextInput placeholder=''

@@ -261,8 +261,9 @@ class Fav extends Component<any, any> {
                 right: 30,
                 paddingHorizontal: 20,
                 elevation: 4,
-                opacity: 1
-              }} borderRadius={2}>
+                opacity: 1,
+                borderRadius: 2
+              }} >
                 <Text style={{ alignSelf: 'flex-start', fontSize: 18, color: modeInfo.titleTextColor }}>选择类型: </Text>
                 <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginTop: 5 }}>
                   {
@@ -298,8 +299,9 @@ class Fav extends Component<any, any> {
                 paddingVertical: 20,
                 paddingHorizontal: 40,
                 elevation: 4,
-                opacity: 1
-              }} borderRadius={2}>
+                opacity: 1,
+                borderRadius: 2
+              }} >
                 <Text style={{ alignSelf: 'flex-start', fontSize: 18, color: modeInfo.titleTextColor }}>选择页数: {
                   this.isValueChanged ? this.state.sliderValue : this.state.currentPage
                 }</Text>

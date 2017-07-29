@@ -272,8 +272,9 @@ class UserGame extends Component<any, any> {
                 paddingHorizontal: 20,
                 elevation: 4,
                 opacity: 1,
+                borderRadius: 2,
                 borderRadius: 2
-              }} borderRadius={2}>
+              }} >
                 {
                   Object.keys(filters).map((kind, index) => {
                     return (

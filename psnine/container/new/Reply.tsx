@@ -516,8 +516,9 @@ export default class Reply extends Component<any, any> {
                       position: 'absolute',
                       left: 20,
                       right: 20,
-                      opacity: 1
-                    }} borderRadius={2}>
+                      opacity: 1,
+                      borderRadius: 2
+                    }} >
                       <global.HTMLView
                         value={this.state.content || '暂无内容'}
                         modeInfo={modeInfo}

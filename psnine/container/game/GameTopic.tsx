@@ -221,8 +221,9 @@ class GameTopic extends Component<any, any> {
                 paddingVertical: 20,
                 paddingHorizontal: 40,
                 elevation: 4,
-                opacity: 1
-              }} borderRadius={2}>
+                opacity: 1,
+                borderRadius: 2
+              }} >
                 <Text style={{ alignSelf: 'flex-start', fontSize: 18, color: modeInfo.titleTextColor }}>选择页数: {
                   this.isValueChanged ? this.state.sliderValue : this.state.currentPage
                 }</Text>

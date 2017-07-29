@@ -363,8 +363,9 @@ class CommunityTopic extends Component<any, any> {
                 left: 30,
                 right: 30,
                 elevation: 4,
-                opacity: 1
-              }} borderRadius={2}>
+                opacity: 1,
+                borderRadius: 2
+              }} >
                 <Text style={{color: modeInfo.standardTextColor}}>为了更好的帮助他人，奖杯翻译请严格遵循 <Text
                   style={{color: modeInfo.accentColor}}
                     onPress={() => this.setState({ modalVisible: false}, () => Linking.openURL('p9://psnine.com/topic/1317'))}>「翻译」使用全指南</Text></Text>

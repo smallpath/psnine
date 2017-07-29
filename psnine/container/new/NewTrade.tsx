@@ -422,8 +422,9 @@ export default class NewTopic extends Component<any, any> {
                       left: 20,
                       right: 20,
                       opacity: 1,
-                      flex: 0
-                    }} borderRadius={2}>
+                      flex: 0,
+                      borderRadius: 2
+                    }} >
                     <View style={{flex: 1, flexDirection: 'row'}}>
                       <Picker style={{
                         flex: 1,

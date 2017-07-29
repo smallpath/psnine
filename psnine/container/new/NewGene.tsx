@@ -417,8 +417,9 @@ export default class NewTopic extends Component<any, any> {
                       left: 20,
                       right: 20,
                       opacity: 1,
-                      flex: 0
-                    }} borderRadius={2}>
+                      flex: 0,
+                      borderRadius: 2
+                    }} >
                       <View style={{flex: 1, flexDirection: 'row'}}>
                       <TextInput placeholder='元素，只能由2~15个中文字母数字组成'
                         autoCorrect={false}
