@@ -291,9 +291,7 @@ export default class Root extends React.Component<any, any> {
     } : undefined
 
     const child = isLoadingAsyncStorage ? (
-      <View style={{ flex: 1 }}>
-        <StatusBar hidden={true}/>
-      </View>
+      <View style={{ flex: 1 }}/>
     ) : (
         <View style={{ flex: 1 }}>
           <StatusBar translucent={false} backgroundColor={modeInfo.deepColor} barStyle={'light-content'} />

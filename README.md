@@ -31,9 +31,9 @@ Psnine第三方安卓客户端, 基于React Native、Redux, 支持安卓4.1及�
   - [x] coordinator-layout (Android)
   - [x] nested-scroll-view (Android)
   - [x] react-native-fs
+  - [x] react-native-share
   - [x] react-native-snackbar
   - [x] react-native-image-picker
-  - [x] react-native-linear-share
   - [x] react-native-vector-icons
   - [x] react-native-linear-gradient
   - [x] react-native-google-analytics-bridge

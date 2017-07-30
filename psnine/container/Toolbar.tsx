@@ -392,9 +392,11 @@ class Toolbar extends Component<any, any> {
 
   _handleViewPagerPageScroll = event => {
     let nativeEvent = event.nativeEvent
-    let offset = nativeEvent.offset
+    const { position, offset } = nativeEvent
 
-    if (offset >= 0.60) {
+    const targetLimit = position === this._currentViewPagerPageIndex ? 0.60 : 0.40
+
+    if (offset >= targetLimit) {
       this._currentViewPagerPageIndex = nativeEvent.position + 1
     } else {
       this._currentViewPagerPageIndex = nativeEvent.position
