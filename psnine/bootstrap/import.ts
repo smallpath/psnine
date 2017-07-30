@@ -2,6 +2,7 @@ import NestedScrollView from 'react-native-nested-scrollview'
 import Share from 'react-native-share'
 import LinearGradient from 'react-native-linear-gradient'
 import Icons from 'react-native-vector-icons/Ionicons'
+import Snackbar from 'react-native-snackbar'
 
 import HTMLView from '../component/HTMLView'
 import MyDialog from '../component/Dialog'
@@ -12,7 +13,8 @@ Object.assign(global, {
   LinearGradient,
   HTMLView,
   MyDialog,
-  Icons
+  Icons,
+  Snackbar
 })
 
 import ReactNative, {

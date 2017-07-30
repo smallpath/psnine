@@ -185,6 +185,7 @@ export default class Root extends React.Component<any, any> {
         secondaryColor: settingInfo.secondaryColor
       }, () => {
         SplashScreen.hide()
+        StatusBar.setHidden(false, 'none')
         checkVersion().catch(() => {})
       })
     })
@@ -291,10 +292,12 @@ export default class Root extends React.Component<any, any> {
     } : undefined
 
     const child = isLoadingAsyncStorage ? (
-      <View style={{ flex: 1 }}/>
+      <View style={{ flex: 1 }}>
+         <StatusBar hidden={false}/>
+      </View>
     ) : (
         <View style={{ flex: 1 }}>
-          <StatusBar translucent={false} backgroundColor={modeInfo.deepColor} barStyle={'light-content'} />
+          <StatusBar translucent={false} hidden={false} backgroundColor={modeInfo.deepColor} barStyle={'light-content'} />
           <StackNavigator
             uriPrefix={'p9://psnine.com/'}
             onNavigationStateChange={onNavigationStateChange} screenProps={{
