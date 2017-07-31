@@ -38,7 +38,7 @@ class Fav extends Component<any, any> {
     }
   }
 
-  onNavClicked = (rowData) => {
+  onNavClicked = () => {
     const { navigation } = this.props
     navigation.goBack()
   }
@@ -53,10 +53,10 @@ class Fav extends Component<any, any> {
       [type === 'down' ? 'isLoadingMore' : 'isRefreshing'] : true
     }, () => {
       InteractionManager.runAfterInteractions(() => {
-        getAPI(url, this.state.type).then(data => {
+        getAPI(url).then(data => {
           // console.log(data)
-          let thisList = []
-          const thisPage = parseInt((url.match(/\?page=(\d+)/) || [0, 1])[1])
+          let thisList: any = []
+          const thisPage = parseInt((url.match(/\?page=(\d+)/) || [0, 1])[1], 10)
           let cb = () => { }
           if (type === 'down') {
             thisList = this.state.list.concat(data)
@@ -88,7 +88,7 @@ class Fav extends Component<any, any> {
 
   ITEM_HEIGHT = 100
 
-  _renderItem = ({ item: rowData, index }) => {
+  _renderItem = ({ item: rowData }) => {
     const { modeInfo } = this.props.screenProps
     const { ITEM_HEIGHT } = this
     const { navigation } = this.props
@@ -144,25 +144,22 @@ class Fav extends Component<any, any> {
           titleColor={modeInfo.isNightMode ? '#000' : '#fff'}
           actions={toolbarActions}
           onIconClicked={this.onNavClicked}
-          onActionSelected={this.onActionSelected}
         />
         <FlatList style={{
           flex: 1,
           backgroundColor: modeInfo.background
         }}
-          ref={flatlist => this.flatlist = flatlist}
           refreshControl={
             <RefreshControl
               refreshing={this.state.isRefreshing}
               onRefresh={this._onRefresh}
               colors={[modeInfo.accentColor]}
               progressBackgroundColor={modeInfo.backgroundColor}
-              ref={ref => this.refreshControl = ref}
             />
           }
           ListFooterComponent={() => <FooterProgress isLoadingMore={this.state.isLoadingMore} modeInfo={modeInfo} />}
           data={this.state.list}
-          keyExtractor={(item, index) => item.psnid}
+          keyExtractor={(item) => item.psnid}
           renderItem={this._renderItem}
           extraData={modeInfo}
           windowSize={21}
@@ -170,8 +167,7 @@ class Fav extends Component<any, any> {
           initialNumToRender={42}
           maxToRenderPerBatch={8}
           disableVirtualization={false}
-          contentContainerStyle={styles.list}
-          getItemLayout={(data, index) => (
+          getItemLayout={(_, index) => (
             {length: this.ITEM_HEIGHT, offset: this.ITEM_HEIGHT * index, index}
           )}
           viewabilityConfig={{
@@ -198,8 +194,8 @@ const styles = StyleSheet.create({
     elevation: 4
   },
   selectedTitle: {
-    //backgroundColor: '#00ffff'
-    //fontSize: 20
+    // backgroundColor: '#00ffff'
+    // fontSize: 20
   },
   avatar: {
     width: 50,

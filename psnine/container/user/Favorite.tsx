@@ -55,12 +55,12 @@ class Fav extends Component<any, any> {
     }
   }
 
-  onNavClicked = (rowData) => {
+  onNavClicked = () => {
     const { navigation } = this.props
     navigation.goBack()
   }
 
-  componentWillMount = async () => {
+  async componentWillMount() {
     const { params } = this.props.navigation.state
     this.fetchMessages(params.URL, 'jump')
   }
@@ -71,8 +71,8 @@ class Fav extends Component<any, any> {
     }, () => {
       InteractionManager.runAfterInteractions(() => {
         getFavoriteAPI(url, this.state.type).then(data => {
-          let thisList = []
-          const thisPage = parseInt((url.match(/\?page=(\d+)/) || [0, 1])[1])
+          let thisList: any[] = []
+          const thisPage = parseInt((url.match(/\?page=(\d+)/) || [0, 1])[1], 10)
           let cb = () => { }
           if (type === 'down') {
             thisList = this.state.list.concat(data.list)
@@ -143,7 +143,7 @@ class Fav extends Component<any, any> {
 
   ITEM_HEIGHT = 74 + 7
 
-  _renderItem = ({ item: rowData, index }) => {
+  _renderItem = ({ item: rowData }) => {
     const { modeInfo } = this.props.screenProps
     const { ITEM_HEIGHT } = this
     const { navigation } = this.props
@@ -213,19 +213,17 @@ class Fav extends Component<any, any> {
           flex: 1,
           backgroundColor: modeInfo.background
         }}
-          ref={flatlist => this.flatlist = flatlist}
           refreshControl={
             <RefreshControl
               refreshing={this.state.isRefreshing}
               onRefresh={this._onRefresh}
               colors={[modeInfo.accentColor]}
               progressBackgroundColor={modeInfo.backgroundColor}
-              ref={ref => this.refreshControl = ref}
             />
           }
           ListFooterComponent={() => <FooterProgress isLoadingMore={this.state.isLoadingMore} modeInfo={modeInfo} />}
           data={this.state.list}
-          keyExtractor={(item, index) => item.url + item.title}
+          keyExtractor={(item) => item.url + item.title}
           renderItem={this._renderItem}
           onEndReached={this._onEndReached}
           onEndReachedThreshold={0.5}
@@ -235,8 +233,7 @@ class Fav extends Component<any, any> {
           initialNumToRender={42}
           maxToRenderPerBatch={8}
           disableVirtualization={false}
-          contentContainerStyle={styles.list}
-          getItemLayout={(data, index) => (
+          getItemLayout={(_, index) => (
             {length: this.ITEM_HEIGHT, offset: this.ITEM_HEIGHT * index, index}
           )}
           viewabilityConfig={{
@@ -332,7 +329,6 @@ class Fav extends Component<any, any> {
                     modalVisible: false,
                     isLoading: true
                   }, () => {
-                    const currentPage = this.state.currentPage
                     const targetPage = params.URL.split('=').slice(0, -1).concat(this.state.sliderValue).join('=')
                     this.fetchMessages(targetPage, 'jump')
                   })
@@ -347,6 +343,8 @@ class Fav extends Component<any, any> {
       </View>
     )
   }
+
+  isValueChanged = false
 
 }
 
@@ -369,8 +367,8 @@ const styles = StyleSheet.create({
     elevation: 4
   },
   selectedTitle: {
-    //backgroundColor: '#00ffff'
-    //fontSize: 20
+    // backgroundColor: '#00ffff'
+    // fontSize: 20
   },
   avatar: {
     width: 50,

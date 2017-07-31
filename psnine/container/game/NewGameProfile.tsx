@@ -3,15 +3,12 @@ import {
   StyleSheet,
   Text,
   View,
-  Dimensions,
   TouchableNativeFeedback,
   RefreshControl,
   InteractionManager,
   Slider,
   FlatList
 } from 'react-native'
-
-const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window')
 
 import { standardColor, idColor } from '../../constant/colorConfig'
 
@@ -21,9 +18,7 @@ import GameItem from '../../component/GameItem'
 import NewsItem from '../../component/NewsItem'
 import FooterProgress from '../../component/FooterProgress'
 
-let toolbarActions = [
-  // { title: '跳页', iconName: 'md-map', show: 'always' },
-]
+declare var global
 
 class GameTopic extends Component<any, any> {
   constructor(props) {
@@ -42,13 +37,12 @@ class GameTopic extends Component<any, any> {
     }
   }
 
-  onNavClicked = (rowData) => {
+  onNavClicked = () => {
     const { navigation } = this.props.screenProps
     navigation.goBack()
   }
 
-  componentWillMount = async () => {
-    const { params } = this.props.screenProps.navigation.state
+  async componentWillMount() {
     // this.fetchMessages(params.URL, 'jump');
   }
 
@@ -58,8 +52,8 @@ class GameTopic extends Component<any, any> {
     }, () => {
       InteractionManager.runAfterInteractions(() => {
         getGameNewTopicAPI(url).then(data => {
-          let thisList = []
-          const thisPage = parseInt((url.match(/\?page=(\d+)/) || [0, 1])[1])
+          let thisList: any = []
+          const thisPage = parseInt((url.match(/\?page=(\d+)/) || [0, 1])[1], 10)
           let cb = () => { }
           if (type === 'down') {
             thisList = this.state.list.concat(data.list)
@@ -127,7 +121,7 @@ class GameTopic extends Component<any, any> {
 
   ITEM_HEIGHT = 74 + 7
 
-  _renderItem = ({ item: rowData, index }) => {
+  _renderItem = ({ item: rowData }) => {
     const { modeInfo } = this.props.screenProps
     const { ITEM_HEIGHT } = this
     const { navigation } = this.props.screenProps
@@ -171,7 +165,7 @@ class GameTopic extends Component<any, any> {
           }
           ListFooterComponent={() => <FooterProgress isLoadingMore={this.state.isLoadingMore} modeInfo={modeInfo} />}
           data={data}
-          keyExtractor={(item, index) => item.id}
+          keyExtractor={(item) => item.id}
           renderItem={this._renderItem}
           onEndReached={this._onEndReached}
           onEndReachedThreshold={0.5}
@@ -234,7 +228,6 @@ class GameTopic extends Component<any, any> {
                     this.setState({
                       modalVisible: false
                     }, () => {
-                      const currentPage = this.state.currentPage
                       const targetPage = params.URL.split('=').slice(0, -1).concat(this.state.sliderValue).join('=')
                       this.fetchMessages(targetPage, 'jump')
                     })
@@ -250,6 +243,10 @@ class GameTopic extends Component<any, any> {
     )
   }
 
+  isValueChanged = false
+  flatlist: any = false
+  refreshControl: any = false
+
 }
 
 const styles = StyleSheet.create({
@@ -264,8 +261,8 @@ const styles = StyleSheet.create({
     elevation: 4
   },
   selectedTitle: {
-    //backgroundColor: '#00ffff'
-    //fontSize: 20
+    // backgroundColor: '#00ffff'
+    // fontSize: 20
   },
   avatar: {
     width: 50,

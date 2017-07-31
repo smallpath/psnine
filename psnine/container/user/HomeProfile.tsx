@@ -43,7 +43,7 @@ export default class Home extends Component<any, any> {
 
   ITEM_HEIGHT = 83
 
-  renderGameItem = (rowData, index) => {
+  renderGameItem = (rowData) => {
     const { modeInfo, navigation } = this.props.screenProps
     const { ITEM_HEIGHT } = this
     return <UserGameItem {...{
@@ -131,11 +131,10 @@ export default class Home extends Component<any, any> {
   }
 
   render() {
-    const { params = {} } = this.props.navigation.state
     // console.log('GamePage.js rendered');
     const { modeInfo, gameTable, diaryTable } = this.props.screenProps
     let data = []
-    let renderFunc = () => null
+    let renderFunc: any = () => null
     if (gameTable.length !== 0) {
       data = gameTable
       renderFunc = this.renderGameItem
@@ -145,7 +144,6 @@ export default class Home extends Component<any, any> {
       renderFunc = this.renderDiary
     }
 
-    this.viewBottomIndex = Math.max(data.length - 1, 0)
     // console.log(modeInfo.themeName)
     return (
       <View
@@ -169,7 +167,6 @@ export default class Home extends Component<any, any> {
           flex: -1,
           backgroundColor: modeInfo.backgroundColor
         }}
-          ref={flatlist => this.flatlist = flatlist}
           data={data}
           keyExtractor={(item, index) => item.href || index}
           renderItem={({ item, index }) => {
@@ -206,8 +203,8 @@ const styles = StyleSheet.create({
     elevation: 4
   },
   selectedTitle: {
-    //backgroundColor: '#00ffff'
-    //fontSize: 20
+    // backgroundColor: '#00ffff'
+    // fontSize: 20
   },
   avatar: {
     width: 50,

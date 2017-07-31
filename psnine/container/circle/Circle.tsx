@@ -52,7 +52,6 @@ export default class extends Component<any, any> {
       modalVisible: false,
       modalOpenVal: new Animated.Value(0),
       marginTop: new Animated.Value(0),
-      onActionSelected: this._onActionSelected,
       sliderValue: 1,
       list: [],
       numberPerPage: 60,
@@ -64,8 +63,6 @@ export default class extends Component<any, any> {
   }
 
   handlePress = (index) => {
-    const { modeInfo } = this.props.screenProps
-    const { nightModeInfo } = modeInfo
     const { navigation } = this.props
     const { params } = navigation.state
     let URL
@@ -97,20 +94,13 @@ export default class extends Component<any, any> {
         // 退圈
       case 4:
         // 申请加入
-        postCircle({
-          type: index === 3 ? 'unjoin' : 'join',
-          groupid: id
-        }).then(() => {
-          global.toast && global.toast(index === 3 ? '退圈成功' : '申请成功')
-        }).catch((err) => {
-          global.toast && global.toast(err.toString())
-        }).then(() => this.preFetch())
         break
       default:
         break
     }
   }
 
+  URL = ''
   componentWillMount() {
     const { params } = this.props.navigation.state
     this.URL = params.URL.includes('&page=') ? params.URL : `${params.URL}&page=1`
@@ -125,7 +115,7 @@ export default class extends Component<any, any> {
       InteractionManager.runAfterInteractions(() => {
         getAPI(url).then(data => {
           // console.log(url, type)
-          let thisList = []
+          let thisList: any = []
           const thisPage = parseInt((url.match(/\?page=(\d+)/) || [0, 1])[1], 10)
           let cb = () => { }
           if (type === 'down') {
@@ -166,7 +156,7 @@ export default class extends Component<any, any> {
     const { URL } = this
     const currentPage = this.pageArr[0] || 1
     let type = currentPage === 1 ? 'jump' : 'up'
-    let targetPage = currentPage - 1
+    let targetPage: any = currentPage - 1
     if (type === 'jump') {
       targetPage = 1
     }
@@ -179,7 +169,7 @@ export default class extends Component<any, any> {
   _onEndReached = () => {
     const { URL } = this
     const currentPage = this.pageArr[this.pageArr.length - 1]
-    const targetPage = currentPage + 1
+    const targetPage: any = currentPage + 1
     if (targetPage > this.state.numPages) return
     if (this.state.isLoadingMore || this.state.isRefreshing) return
     this.fetchMessages(URL.split('=').slice(0, -1).concat(targetPage).join('='), 'down')
@@ -188,10 +178,6 @@ export default class extends Component<any, any> {
 
   renderHeader = (rowData) => {
     const { modeInfo } = this.props.screenProps
-    const { nightModeInfo } = modeInfo
-    const { titleInfo } = this.state
-    const color = 'rgba(255,255,255,1)'
-    const infoColor = 'rgba(255,255,255,0.8)'
 
     return (
       <View style={{
@@ -221,10 +207,7 @@ export default class extends Component<any, any> {
             </View>
           </View>
           <View style={{ alignItems: 'center', flexDirection: 'row', padding: 7}}>
-            <Button style={{flex: 1}} title={'发机因'} color={modeInfo.standardColor} onPress={() => this.handlePress(-1)}></Button>
-            {/*<Button style={{flex:1}} title={'机因列表'} color={modeInfo.standardColor} onPress={() => this.handlePress(1)}></Button>*/}
-            {/*<Button style={{flex:1}} title={'玩家排行榜'} color={modeInfo.standardColor} onPress={() => this.handlePress(2)}></Button>
-            <Button style={{flex:1}} title={'贵圈真乱'} color={modeInfo.accentColor} onPress={() => this.handlePress(3)}></Button>*/}
+            <Button title={'发机因'} color={modeInfo.standardColor} onPress={() => this.handlePress(-1)}></Button>
           </View>
         </View>
 
@@ -242,7 +225,7 @@ export default class extends Component<any, any> {
     )
   }
 
-  _renderItem = ({ item: rowData, index }) => {
+  _renderItem = ({ item: rowData }) => {
     const { modeInfo } = this.props.screenProps
     const { navigation } = this.props
     // console.log(index)
@@ -259,19 +242,17 @@ export default class extends Component<any, any> {
         this.setState({
           modalVisible: true
         })
-      return
+        return
+      default:
+        return
     }
   }
 
   render() {
-    // return (<View/>)
-    // console.log('fuckyou1')
     const { params } = this.props.navigation.state
-    // console.log('GamePage.js rendered');
     const { modeInfo } = this.props.screenProps
-    const { data: source, marginTop } = this.state
-    const data = []
-    const renderFuncArr = []
+    const { marginTop } = this.state
+    const data: any = []
     const shouldPushData = !this.state.isRefreshing
 
     if (shouldPushData) {
@@ -279,10 +260,6 @@ export default class extends Component<any, any> {
       data.unshift(this.state.titleInfo)
       data[0].id = 'default'
     }
-
-    // console.log(data.length, '==>')
-
-    this.viewBottomIndex = Math.max(data.length - 1, 0)
 
     return (
       <View
@@ -305,9 +282,6 @@ export default class extends Component<any, any> {
               this.props.navigation.goBack()
               return
             }
-            this._viewStyles.style.top = 0
-            this._previousTop = 0
-            Animated.timing(marginTop, { toValue: 0, ...config, duration: 200 }).start()
           }}
         />
         {/*{this.state.isRefreshing && (
@@ -337,7 +311,7 @@ export default class extends Component<any, any> {
               />
             }
             data={data}
-            keyExtractor={(item, index) => item.id}
+            keyExtractor={(item) => item.id}
             ListFooterComponent={() => <FooterProgress isLoadingMore={this.state.isLoadingMore} modeInfo={modeInfo} />}
             renderItem={({ item: rowData, index }) => index === 0 ? this.renderHeader(rowData) : this._renderItem({item: rowData, index})}
             extraData={modeInfo}
@@ -348,10 +322,6 @@ export default class extends Component<any, any> {
             initialNumToRender={8}
             maxToRenderPerBatch={8}
             disableVirtualization={false}
-            contentContainerStyle={styles.list}
-            getItemLayout={(data, index) => (
-              {length: this.ITEM_HEIGHT, offset: this.ITEM_HEIGHT * index, index}
-            )}
             viewabilityConfig={{
               minimumViewTime: 1,
               viewAreaCoveragePercentThreshold: 0,
@@ -404,7 +374,6 @@ export default class extends Component<any, any> {
                         modalVisible: false
                         /*isLoadingMore: true*/
                       }, () => {
-                        const currentPage = this.state.currentPage
                         const targetPage = this.URL.split('=').slice(0, -1).concat(this.state.sliderValue).join('=')
                         this.fetchMessages(targetPage, 'jump')
                       })
@@ -419,6 +388,8 @@ export default class extends Component<any, any> {
       </View>
     )
   }
+
+  isValueChanged = false
 }
 
 const styles = StyleSheet.create({
@@ -433,8 +404,8 @@ const styles = StyleSheet.create({
     elevation: 4
   },
   selectedTitle: {
-    //backgroundColor: '#00ffff'
-    //fontSize: 20
+    // backgroundColor: '#00ffff'
+    // fontSize: 20
   },
   avatar: {
     width: 50,

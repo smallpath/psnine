@@ -1,9 +1,7 @@
 import React, { Component } from 'react'
 import {
-  StyleSheet,
   Text,
   View,
-  Dimensions,
   TouchableNativeFeedback,
   RefreshControl,
   InteractionManager,
@@ -11,19 +9,13 @@ import {
   FlatList
 } from 'react-native'
 
-const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window')
-
-import { standardColor, idColor } from '../../constant/colorConfig'
-
 import { getUserCircleAPI } from '../../dao'
 
 import FooterProgress from '../../component/FooterProgress'
 
 import CircleItem from '../../component/CircleItem'
 
-let toolbarActions = [
-  { title: '跳页', iconName: 'md-map', show: 'always' }
-]
+declare var global
 
 class UserGame extends Component<any, any> {
   static navigationOptions = {
@@ -44,10 +36,10 @@ class UserGame extends Component<any, any> {
     }
   }
 
-  componentWillMount = async () => {
+  async componentWillMount() {
     const { screenProps } = this.props
     const name = '圈子'
-    const params = {}
+    const params: any = {}
     screenProps.toolbar.forEach(({ text, url}) => {
       if (text === name) {
         params.text = text
@@ -58,14 +50,15 @@ class UserGame extends Component<any, any> {
     this.fetchMessages(params.URL, 'jump')
   }
 
+  URL = ''
   fetchMessages = (url, type = 'down') => {
     this.setState({
       [type === 'down' ? 'isLoadingMore' : 'isRefreshing'] : true
     }, () => {
       InteractionManager.runAfterInteractions(() => {
         getUserCircleAPI(url).then(data => {
-          let thisList = []
-          const thisPage = parseInt((url.match(/\?page=(\d+)/) || [0, 1])[1])
+          let thisList: any = []
+          const thisPage = parseInt((url.match(/\?page=(\d+)/) || [0, 1])[1], 10)
           let cb = () => { }
           if (type === 'down') {
             thisList = this.state.list.concat(data.list)
@@ -114,7 +107,7 @@ class UserGame extends Component<any, any> {
     const { URL } = this
     const currentPage = this.pageArr[0] || 1
     let type = currentPage === 1 ? 'jump' : 'up'
-    let targetPage = currentPage - 1
+    let targetPage: any = currentPage - 1
     if (type === 'jump') {
       targetPage = 1
     }
@@ -126,7 +119,7 @@ class UserGame extends Component<any, any> {
   _onEndReached = () => {
     const { URL } = this
     const currentPage = this.pageArr[this.pageArr.length - 1]
-    const targetPage = currentPage + 1
+    const targetPage: any = currentPage + 1
     if (targetPage > this.state.numPages) return
     if (this.state.isLoadingMore || this.state.isRefreshing) return
     this.fetchMessages(URL.split('=').slice(0, -1).concat(targetPage).join('='), 'down')
@@ -145,7 +138,7 @@ class UserGame extends Component<any, any> {
 
   ITEM_HEIGHT = 74 + 7
 
-  _renderItem = ({ item: rowData, index }) => {
+  _renderItem = ({ item: rowData }) => {
     const { modeInfo, navigation } = this.props.screenProps
     const { ITEM_HEIGHT } = this
     return <CircleItem {...{
@@ -173,19 +166,17 @@ class UserGame extends Component<any, any> {
           flex: 1,
           backgroundColor: modeInfo.backgroundColor
         }}
-          ref={flatlist => this.flatlist = flatlist}
           refreshControl={
             <RefreshControl
               refreshing={this.state.isRefreshing}
               onRefresh={this._onRefresh}
               colors={[modeInfo.accentColor]}
               progressBackgroundColor={modeInfo.backgroundColor}
-              ref={ref => this.refreshControl = ref}
             />
           }
           ListFooterComponent={() => <FooterProgress isLoadingMore={this.state.isLoadingMore} modeInfo={modeInfo}/>}
           data={this.state.list}
-          keyExtractor={(item, index) => item.href}
+          keyExtractor={(item) => item.href}
           renderItem={this._renderItem}
           onEndReached={this._onEndReached}
           onEndReachedThreshold={0.5}
@@ -196,8 +187,7 @@ class UserGame extends Component<any, any> {
           initialNumToRender={42}
           maxToRenderPerBatch={8}
           disableVirtualization={false}
-          contentContainerStyle={styles.list}
-          getItemLayout={(data, index) => (
+          getItemLayout={(_, index) => (
             {length: this.ITEM_HEIGHT, offset: this.ITEM_HEIGHT * index, index}
           )}
           viewabilityConfig={{
@@ -252,7 +242,6 @@ class UserGame extends Component<any, any> {
                       modalVisible: false,
                       isLoading: true
                     }, () => {
-                      const currentPage = this.state.currentPage
                       const targetPage = URL.split('=').slice(0, -1).concat(this.state.sliderValue).join('=')
                       this.fetchMessages(targetPage, 'jump')
                     })
@@ -268,31 +257,7 @@ class UserGame extends Component<any, any> {
     )
   }
 
+  isValueChanged = false
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    flexDirection: 'column',
-    backgroundColor: '#F5FCFF'
-  },
-  toolbar: {
-    backgroundColor: standardColor,
-    height: 56,
-    elevation: 4
-  },
-  selectedTitle: {
-    //backgroundColor: '#00ffff'
-    //fontSize: 20
-  },
-  avatar: {
-    width: 50,
-    height: 50
-  },
-  a: {
-    fontWeight: '300',
-    color: idColor // make links coloured pink
-  }
-})
 
 export default UserGame

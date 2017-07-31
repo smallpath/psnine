@@ -25,6 +25,7 @@ import {
 
 declare var global
 
+/* tslint:disable */
 let toolbarActions = [
   {
     title: '回复', iconName: 'md-create', show: 'always', iconSize: 22, onPress: function () {
@@ -59,11 +60,11 @@ let toolbarActions = [
           message: '[PSNINE] ' + this.state.data.titleInfo.title,
           title: 'PSNINE'
         }).catch((err) => { err && console.log(err) })
-        url && Linking.openURL(url).catch(err => global.toast(err.toString())) || global.toast('暂无出处')
       } catch (err) { }
     }
   }
 ]
+/* tslint:enable */
 
 class CommunityTopic extends Component<any, any> {
 
@@ -158,7 +159,6 @@ class CommunityTopic extends Component<any, any> {
               })
             }}
             useForeground={true}
-
             background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
           >
             <View style={{ flex: 1, flexDirection: 'row', padding: 12 }}>
@@ -176,7 +176,8 @@ class CommunityTopic extends Component<any, any> {
                 </Text>
 
                 <View style={{ flex: 1.1, flexDirection: 'row', justifyContent: 'space-between' }}>
-                  <Text selectable={false} style={{ flex: -1, color: modeInfo.standardColor, textAlign: 'center', textAlignVertical: 'center' }} onPress={
+                  <Text selectable={false} style={{ flex: -1,
+                    color: modeInfo.standardColor, textAlign: 'center', textAlignVertical: 'center' }} onPress={
                     () => {
                       this.props.navigation.navigate('Home', {
                         title: rowData.psnid,
@@ -185,7 +186,8 @@ class CommunityTopic extends Component<any, any> {
                       })
                     }
                   }>{rowData.psnid}</Text>
-                  <Text selectable={false} style={{ flex: -1, color: modeInfo.standardTextColor, textAlign: 'center', textAlignVertical: 'center' }}>{rowData.date}</Text>
+                  <Text selectable={false} style={{ flex: -1,
+                    color: modeInfo.standardTextColor, textAlign: 'center', textAlignVertical: 'center' }}>{rowData.date}</Text>
                 </View>
 
               </View>
@@ -200,7 +202,7 @@ class CommunityTopic extends Component<any, any> {
   hasTrophyTable = false
   renderTrophyTable = (trophyTable) => {
     const { modeInfo } = this.props.screenProps
-    const list = []
+    const list: any[] = []
     for (const rowData of trophyTable) {
       list.push(
         <View key={rowData.id || (list.length - 1)} style={{
@@ -242,7 +244,6 @@ class CommunityTopic extends Component<any, any> {
                 </View>
 
                 <View style={{ flex: 1.1, flexDirection: 'row', justifyContent: 'space-between' }}>
-                  {/*<Text selectable={false} style={{ flex: -1, color: idColor, textAlign: 'center', textAlignVertical: 'center' }}>{rowData.text}</Text>*/}
                   <Text selectable={false} style={{
                     flex: -1,
                     color: modeInfo.standardTextColor,
@@ -278,8 +279,8 @@ class CommunityTopic extends Component<any, any> {
   renderComment = (commentList) => {
     const { modeInfo } = this.props.screenProps
     const { navigation } = this.props
-    const list = []
-    let readMore = null
+    const list: any[] = []
+    let readMore: any = null
     for (const rowData of commentList) {
       if (rowData.isGettingMoreComment === false) {
         list.push(
@@ -304,7 +305,6 @@ class CommunityTopic extends Component<any, any> {
                 this._readMore(`${this.props.navigation.state.params.URL}/comment?page=1`)
               }}
               useForeground={true}
-
               background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
             >
               <View pointerEvents='box-only' style={{ flex: 1, flexDirection: 'row', padding: 12 }}>
@@ -323,11 +323,13 @@ class CommunityTopic extends Component<any, any> {
     const shouldMarginTop = !this.hasContent && !this.hasTrophyTable
     return (
       <View style={{ marginTop: shouldMarginTop ? 5 : 0 }}>
-        {readMore && <View style={{ elevation: 1, margin: 5, marginTop: 0, marginBottom: 5, backgroundColor: modeInfo.backgroundColor }}>{readMore}</View>}
+        {readMore && <View style={{ elevation: 1,
+          margin: 5, marginTop: 0, marginBottom: 5, backgroundColor: modeInfo.backgroundColor }}>{readMore}</View>}
         <View style={{ elevation: 1, margin: 5, marginTop: 0, backgroundColor: modeInfo.backgroundColor }}>
           {list}
         </View>
-        {readMore && <View style={{ elevation: 1, margin: 5, marginTop: 0, marginBottom: 5, backgroundColor: modeInfo.backgroundColor }}>{readMore}</View>}
+        {readMore && <View style={{ elevation: 1,
+          margin: 5, marginTop: 0, marginBottom: 5, backgroundColor: modeInfo.backgroundColor }}>{readMore}</View>}
       </View>
     )
   }
@@ -336,19 +338,12 @@ class CommunityTopic extends Component<any, any> {
   onCommentLongPress = (rowData) => {
     if (this.isReplyShowing === true) return
     const { params } = this.props.navigation.state
-    const cb = () => {
-      this.props.navigation.navigate('Reply', {
-        type: params.type,
-        id: params.rowData.id,
-        at: rowData.psnid,
-        shouldSeeBackground: true
-      })
-    }
-    if (this.state.openVal._value === 1) {
-      this._animateToolbar(0, cb)
-    } else if (this.state.openVal._value === 0) {
-      cb()
-    }
+    this.props.navigation.navigate('Reply', {
+      type: params.type,
+      id: params.rowData.id,
+      at: rowData.psnid,
+      shouldSeeBackground: true
+    })
   }
 
   _readMore = (URL) => {
@@ -362,8 +357,8 @@ class CommunityTopic extends Component<any, any> {
     // console.log('CommunityTopic.js rendered');
     const { modeInfo } = this.props.screenProps
     const { data: source } = this.state
-    const data = []
-    const renderFuncArr = []
+    const data: any[] = []
+    const renderFuncArr: any[] = []
     const shouldPushData = !this.state.isLoading
     if (shouldPushData) {
       data.push(source.contentInfo.game)
@@ -381,7 +376,7 @@ class CommunityTopic extends Component<any, any> {
       data.push(this.state.commentList)
       renderFuncArr.push(this.renderComment)
     }
-    const targetActions = toolbarActions.slice()
+    const targetActions: any = toolbarActions.slice()
     if (shouldPushData && source.contentInfo.game && source.contentInfo.game.edit) {
       targetActions.push(
         {
@@ -412,8 +407,6 @@ class CommunityTopic extends Component<any, any> {
         }
       })
     }
-
-    this.viewBottomIndex = Math.max(data.length - 1, 0)
 
     return (
       <View
@@ -470,6 +463,8 @@ class CommunityTopic extends Component<any, any> {
       </View>
     )
   }
+
+  flatlist: any = false
 }
 
 const styles = StyleSheet.create({
@@ -484,8 +479,8 @@ const styles = StyleSheet.create({
     elevation: 4
   },
   selectedTitle: {
-    //backgroundColor: '#00ffff'
-    //fontSize: 20
+    // backgroundColor: '#00ffff'
+    // fontSize: 20
   },
   avatar: {
     width: 50,

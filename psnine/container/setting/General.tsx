@@ -4,30 +4,12 @@ import {
   Text,
   View,
   AsyncStorage,
-  StatusBar,
-  Dimensions,
-  Easing,
   Picker,
   Alert
 } from 'react-native'
 
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import { standardColor, idColor, accentColor } from '../../constant/colorConfig'
-
-let screen = Dimensions.get('window')
-const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = screen
-
-let toolbarActions = []
-let title = 'TOPIC'
-let WEBVIEW_REF = `WEBVIEW_REF`
-
-let toolbarHeight = 56
-let releasedMarginTop = 0
-
-const ACTUAL_SCREEN_HEIGHT = SCREEN_HEIGHT - StatusBar.currentHeight + 1
-
-let CIRCLE_SIZE = 56
-let config = { tension: 30, friction: 7, ease: Easing.in(Easing.ease(1, 0, 1, 1)), duration: 200 }
 
 class General extends Component<any, any> {
 
@@ -39,11 +21,11 @@ class General extends Component<any, any> {
     }
   }
 
-  componentDidMount = () => {
+  componentDidMount() {
 
   }
 
-  componentWillMount = async () => {
+  async componentWillMount() {
     const value = await AsyncStorage.getItem('@Theme:tabMode')
     const tabMode = value === 'drawer' ? 'drawer' : 'tab'
     this.setState({
@@ -51,7 +33,7 @@ class General extends Component<any, any> {
     })
   }
 
-  renderSwitchType = (item, index) => {
+  renderSwitchType = (_?, index?) => {
     const { modeInfo } = this.props.screenProps
     return (
     <View key={index} style={[styles.themeItem, {
@@ -71,8 +53,7 @@ class General extends Component<any, any> {
         </Text>
       </View>
       <Picker style={{
-        flex: 3,
-        color: modeInfo.standardTextColor
+        flex: 3
       }}
         prompt='选择首页模式'
         selectedValue={this.state.tabMode}
@@ -156,8 +137,8 @@ const styles = StyleSheet.create({
     elevation: 4
   },
   selectedTitle: {
-    //backgroundColor: '#00ffff'
-    //fontSize: 20
+    // backgroundColor: '#00ffff'
+    // fontSize: 20
   },
   avatar: {
     width: 50,

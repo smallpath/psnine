@@ -10,8 +10,7 @@ import {
 import { FlatlistItemProp } from '../interface'
 
 interface ExtendedProp extends FlatlistItemProp {
-  width: number
-
+  width?: number
 }
 export default class PhotoItem extends React.PureComponent<ExtendedProp> {
 

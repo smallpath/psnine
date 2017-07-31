@@ -3,16 +3,12 @@ import {
   StyleSheet,
   View,
   Dimensions,
-  KeyboardAvoidingView,
   InteractionManager,
   Keyboard,
   TextInput,
   Animated,
-  Easing,
-  PanResponder,
   StatusBar,
   Picker,
-  ScrollView,
   Button
 } from 'react-native'
 
@@ -37,15 +33,13 @@ let CIRCLE_SIZE = 56
 
 declare var global
 /* tslint:disable */
-let config = { tension: 30, friction: 7, ease: Easing.in(Easing.ease(1, 0, 1, 1)), duration: 200 }
+let config = { tension: 30, friction: 7 }
 const areasInfo = [{'text': '北京', 'value': 'beijing'}, {'text': '上海', 'value': 'shanghai'}, {'text': '天津', 'value': 'tianjin'}, {'text': '重庆', 'value': 'chongqing'}, {'text': '广东', 'value': 'guangdong'}, {'text': '福建', 'value': 'fujian'}, {'text': '广西', 'value': 'guangxi'}, {'text': '海南', 'value': 'hainan'}, {'text': '河北', 'value': 'hebei'}, {'text': '山西', 'value': 'shanxi'}, {'text': '内蒙古', 'value': 'neimenggu'}, {'text': '山东', 'value': 'shandong'}, {'text': '江苏', 'value': 'jiangsu'}, {'text': '浙江', 'value': 'zhejiang'}, {'text': '安徽', 'value': 'anhui'}, {'text': '河南', 'value': 'henan'}, {'text': '湖北', 'value': 'hubei'}, {'text': '湖南', 'value': 'hunan'}, {'text': '江西', 'value': 'jiangxi'}, {'text': '辽宁', 'value': 'liaoning'}, {'text': '黑龙江', 'value': 'heilongjiang'}, {'text': '吉林', 'value': 'jilin'}, {'text': '四川', 'value': 'sichuan'}, {'text': '云南', 'value': 'yunnan'}, {'text': '贵州', 'value': 'guizhou'}, {'text': '西藏', 'value': 'xizang'}, {'text': '陕西', 'value': 'shanxi2'}, {'text': '新疆', 'value': 'xinjiang'}, {'text': '甘肃', 'value': 'gansu'}, {'text': '宁夏', 'value': 'ningxia'}, {'text': '青海', 'value': 'qinghai'}]
 /* tslint:enable */
 export default class NewTopic extends Component<any, any> {
 
   constructor(props) {
     super(props)
-    const { params } = this.props.navigation.state
-    const { at = '', shouldShowPoint = false, isOldPage = false } = params
     // console.log(params)
     this.state = {
       icon: false,
@@ -72,9 +66,8 @@ export default class NewTopic extends Component<any, any> {
     }
   }
 
-  componentDidMount = () => {
+  componentDidMount() {
     const { modeInfo } = this.props.screenProps
-    let config = { tension: 30, friction: 7 }
     // Animated.spring(this.state.openVal, { toValue: 1, ...config }).start(() => {
       if (modeInfo.settingInfo.psnid === '') {
         global.toast('请首先登录')
@@ -85,7 +78,7 @@ export default class NewTopic extends Component<any, any> {
   }
 
   _pressButton = (callback) => {
-    const { marginTop, openVal } = this.state
+    const { marginTop } = this.state
     let value = marginTop._value
     if (Math.abs(value) >= 50) {
       Animated.spring(marginTop, { toValue: 0, ...config }).start()
@@ -101,6 +94,12 @@ export default class NewTopic extends Component<any, any> {
   }
 
   isKeyboardShowing = false
+  shouldShowEmotion = false
+  keyboardDidHideListener: any = false
+  keyboardDidShowListener: any = false
+  removeListener: any = false
+  isToolbarShowing: any = false
+  ref: any = false
   _pressEmotion = () => {
     let config = { tension: 30, friction: 7 }
     const target = this.state.toolbarOpenVal._value === 1 ? 0 : 1
@@ -112,18 +111,14 @@ export default class NewTopic extends Component<any, any> {
     Animated.spring(this.state.toolbarOpenVal, { toValue: target, ...config }).start()
   }
 
-  componentWillUnmount = () => {
+  componentWillUnmount() {
     this.keyboardDidHideListener.remove()
     this.keyboardDidShowListener.remove()
     this.removeListener && this.removeListener.remove()
   }
 
-  componentWillMount = async () => {
-    let config = { tension: 30, friction: 7 }
-    const { openVal, marginTop } = this.state
-    const { callback } = this.props.navigation.state.params
+  async componentWillMount() {
     const { params } = this.props.navigation.state
-    const { modeInfo } = this.props.screenProps
 
     if (params.URL) {
       InteractionManager.runAfterInteractions(() => {
@@ -133,91 +128,6 @@ export default class NewTopic extends Component<any, any> {
       })
     }
 
-    this.PanResponder = PanResponder.create({
-
-      onStartShouldSetPanResponderCapture: (e, gesture) => {
-        const pageX = e.nativeEvent.pageX
-        return pageX <= 56 ? false : true
-      },
-      onPanResponderGrant: (e, gesture) => {
-        Keyboard.dismiss()
-        const target = gesture.y0 <= 56 ? 0 : SCREEN_HEIGHT - 56
-        marginTop.setOffset(target)
-      },
-      onPanResponderMove: Animated.event([
-        null,
-        {
-          dy: marginTop
-        }
-      ]),
-
-      onPanResponderRelease: (e, gesture) => {
-
-      },
-      onPanResponderTerminationRequest: (evt, gesture) => {
-        return false
-      },
-      onPanResponderTerminate: (evt, gesture) => {
-
-      },
-      onShouldBlockNativeResponder: (evt, gesture) => {
-        return true
-      },
-      onPanResponderReject: (evt, gesture) => {
-        return false
-      },
-      onPanResponderEnd: (evt, gesture) => {
-        let dy = gesture.dy
-        let vy = gesture.vy
-
-        marginTop.flattenOffset()
-
-        let duration = 50
-
-        if (vy < 0) {
-
-          if (Math.abs(dy) <= CIRCLE_SIZE) {
-
-            Animated.spring(marginTop, {
-              toValue: SCREEN_HEIGHT - CIRCLE_SIZE,
-              duration,
-              easing: Easing.linear
-            }).start()
-
-          } else {
-
-            Animated.spring(marginTop, {
-              toValue: 0,
-              duration,
-              easing: Easing.linear
-            }).start()
-
-          }
-
-        } else {
-
-          if (Math.abs(dy) <= CIRCLE_SIZE) {
-
-            Animated.spring(marginTop, {
-              toValue: 0,
-              duration,
-              easing: Easing.linear
-            }).start()
-
-          } else {
-
-            Animated.spring(marginTop, {
-              toValue: SCREEN_HEIGHT - CIRCLE_SIZE,
-              duration,
-              easing: Easing.linear
-            }).start()
-          }
-
-        }
-
-      }
-
-    })
     this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () => {
       this.isKeyboardShowing = true
       this.state.toolbarOpenVal.setValue(0)
@@ -256,7 +166,7 @@ export default class NewTopic extends Component<any, any> {
     // return
     const { title, photo, price, qq, tb, content, category, type, pf,
       id, key, way, version, lang, province } = this.state
-    const result = {
+    const result: any = {
       title,
       photo: photo.join(',') || '',
       price,
@@ -300,7 +210,7 @@ export default class NewTopic extends Component<any, any> {
       })
     }).catch(err => {
       // console.log(err.toString())
-      const msg = `发布失败: ${arr[1]}`
+      const msg = `发布失败: ${err}`
       global.toast(msg)
       // ToastAndroid.show(msg, ToastAndroid.SHORT);
     })
@@ -318,7 +228,6 @@ export default class NewTopic extends Component<any, any> {
     const areas = areasInfo.map((item, index) => <Picker.Item key={index} value={item.value} label={'地区: ' + item.text}></Picker.Item>)
 
     let { openVal, marginTop } = this.state
-    const { icon, toolbarOpenVal } = this.state
     const { modeInfo } = this.props.screenProps
     let outerStyle = {
       marginTop: marginTop.interpolate({
@@ -340,11 +249,7 @@ export default class NewTopic extends Component<any, any> {
         inputRange: [0, 1],
         outputRange: [accentColor, modeInfo.backgroundColor]
       })
-      //elevation : openVal.interpolate({inputRange: [0 ,1], outputRange: [0, 8]})
-    }
-
-    let animatedSubmitStyle = {
-      height: openVal.interpolate({ inputRange: [0, 0.9, 1], outputRange: [0, 0, 40] })
+      // elevation : openVal.interpolate({inputRange: [0 ,1], outputRange: [0, 8]})
     }
 
     let animatedToolbarStyle = {
@@ -370,7 +275,6 @@ export default class NewTopic extends Component<any, any> {
             subtitleColor={modeInfo.isNightMode ? '#000' : '#fff'}
             actions={toolbarActions}
             onIconClicked={this._pressButton}
-            onActionSelected={this.onActionSelected}
           />
 
         </Animated.View >
@@ -429,7 +333,6 @@ export default class NewTopic extends Component<any, any> {
                       <Picker style={{
                         flex: 1,
                         borderWidth: 1,
-                        color: modeInfo.standardTextColor,
                         borderBottomColor: modeInfo.standardTextColor
                       }}
                         prompt='分类'
@@ -442,7 +345,6 @@ export default class NewTopic extends Component<any, any> {
                       <Picker style={{
                         flex: 1,
                         borderWidth: 1,
-                        color: modeInfo.standardTextColor,
                         borderBottomColor: modeInfo.standardTextColor
                       }}
                         prompt='类型'
@@ -456,7 +358,6 @@ export default class NewTopic extends Component<any, any> {
                       <Picker style={{
                         flex: 1,
                         borderWidth: 1,
-                        color: modeInfo.standardTextColor,
                         borderBottomColor: modeInfo.standardTextColor
                       }}
                         prompt='平台'
@@ -473,7 +374,6 @@ export default class NewTopic extends Component<any, any> {
                       <Picker style={{
                         flex: 1,
                         borderWidth: 1,
-                        color: modeInfo.standardTextColor,
                         borderBottomColor: modeInfo.standardTextColor
                       }}
                         prompt='方式'
@@ -488,7 +388,6 @@ export default class NewTopic extends Component<any, any> {
                       <Picker style={{
                         flex: 1,
                         borderWidth: 1,
-                        color: modeInfo.standardTextColor,
                         borderBottomColor: modeInfo.standardTextColor
                       }}
                         prompt='版本'
@@ -505,7 +404,6 @@ export default class NewTopic extends Component<any, any> {
                       <Picker style={{
                         flex: 1,
                         borderWidth: 1,
-                        color: modeInfo.standardTextColor,
                         borderBottomColor: modeInfo.standardTextColor
                       }}
                         prompt='语言'
@@ -521,7 +419,6 @@ export default class NewTopic extends Component<any, any> {
                       <Picker style={{
                         flex: 1,
                         borderWidth: 1,
-                        color: modeInfo.standardTextColor,
                         borderBottomColor: modeInfo.standardTextColor
                       }}
                         prompt='地区'
@@ -597,7 +494,7 @@ export default class NewTopic extends Component<any, any> {
               placeholderTextColor={modeInfo.standardTextColor}
               underlineColorAndroid='rgba(0,0,0,0)'
             />
-            <View style={{flex: 2}} contentContainerStyle={{flex: 2}}>
+            <View style={{flex: 2}}>
               <TextInput placeholder='简述'
                 autoCorrect={false}
                 multiline={true}
@@ -620,13 +517,13 @@ export default class NewTopic extends Component<any, any> {
               />
             </View>
             <View style={{flex: 5}}>
-              <Button style={{flex: 1, padding: 5, margin: 5}} title={'编辑选填项'} onPress={() => {
+              <Button title={'编辑选填项'} onPress={() => {
                 Keyboard.dismiss()
                 this.setState({
                   modalVisible: true
                 })
               }} color={modeInfo.standardColor}/>
-              <Button style={{flex: 1}} title={'点我选择图片(已选择' + this.state.photo.length + '张)'} onPress={() => {
+              <Button title={'点我选择图片(已选择' + this.state.photo.length + '张)'} onPress={() => {
                 Keyboard.dismiss()
                 this.props.navigation.navigate('UserPhoto', {
                   URL: 'http://psnine.com/my/photo?page=1',
@@ -639,7 +536,7 @@ export default class NewTopic extends Component<any, any> {
                   }
                 })
               }} color={modeInfo.standardColor}/>
-              <Button style={{flex: 1}} title={'提交'} onPress={this.sendReply} color={modeInfo.standardColor}/>
+              <Button title={'提交'} onPress={this.sendReply} color={modeInfo.standardColor}/>
             </View>
           </Animated.View>
 
@@ -649,7 +546,7 @@ export default class NewTopic extends Component<any, any> {
     )
   }
 
-  onPressEmotion = ({ text, url }) => {
+  onPressEmotion = ({ text }) => {
     this.addText(
       text
     )
@@ -672,6 +569,8 @@ export default class NewTopic extends Component<any, any> {
     })
   }
 
+  content: any = false
+
   onSelectionChange = ({ nativeEvent }) => {
     // console.log(nativeEvent.selection)
     this.setState({
@@ -679,8 +578,7 @@ export default class NewTopic extends Component<any, any> {
     })
   }
 
-  _pressImageButton = (callback) => {
-    const { params } = this.props.navigation.state
+  _pressImageButton = () => {
     Keyboard.dismiss()
     this.props.navigation.navigate('UserPhoto', {
       URL: 'http://psnine.com/my/photo?page=1',
@@ -690,8 +588,6 @@ export default class NewTopic extends Component<any, any> {
     })
   }
 }
-
-const width = Dimensions.get('window').width
 
 const styles = StyleSheet.create({
   circle: {
@@ -731,13 +627,13 @@ const styles = StyleSheet.create({
   KeyboardAvoidingView: {
     flex: 10,
     // width: width,
-    //alignSelf:'center',
-    //justifyContent: 'space-between',
+    // alignSelf:'center',
+    // justifyContent: 'space-between',
     flexDirection: 'column'
   },
   titleView: {
     flex: 1,
-    //marginTop: -10,
+    // marginTop: -10,
     justifyContent: 'center'
     // flexDirection: 'column',
     // justifyContent: 'space-between',

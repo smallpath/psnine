@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import {
-  StyleSheet,
   View,
   TouchableNativeFeedback,
   RefreshControl,
@@ -8,8 +7,6 @@ import {
   FlatList,
   Alert
 } from 'react-native'
-
-import { standardColor, idColor } from '../../constant/colorConfig'
 
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import { getUserDiaryAPI } from '../../dao'
@@ -49,10 +46,10 @@ class UserBoard extends Component<any, any> {
     ]
   })
 
-  componentWillMount = async () => {
+  async componentWillMount() {
     const { screenProps } = this.props
     const name = '日志'
-    let params = {}
+    let params: any = {}
     screenProps.toolbar.forEach(({ text, url}) => {
       if (text === name) {
         params.text = text
@@ -69,6 +66,8 @@ class UserBoard extends Component<any, any> {
     this.preFetch()
   }
 
+  URL: any = ''
+
   preFetch = () => {
     this.setState({
       isLoading: true
@@ -81,9 +80,8 @@ class UserBoard extends Component<any, any> {
             diary: data.diary,
             isLoading: false
           }, () => {
-            const targetToolbar = toolbarActions.slice()
+            const targetToolbar: any = toolbarActions.slice()
             const { modeInfo, psnid } = this.props.screenProps
-            const { URL } = this
             // console.log('Message.js rendered');
             const isOwner = modeInfo.settingInfo.psnid.toLowerCase() === psnid.toLowerCase()
             if (isOwner) {
@@ -110,7 +108,7 @@ class UserBoard extends Component<any, any> {
     })
   }
 
-  renderDiary = (rowData, index) => {
+  renderDiary = (rowData) => {
     const { modeInfo, navigation } = this.props.screenProps
     const shouldShowImage = rowData.thumbs.length !== 0
     const suffix = '<div>' + rowData.thumbs.map(text => `<img src="${text}">`).join('') + '</div>'
@@ -127,7 +125,7 @@ class UserBoard extends Component<any, any> {
   isReplyShowing = false
 
   render() {
-    const { modeInfo, psnid } = this.props.screenProps
+    const { modeInfo } = this.props.screenProps
     const { URL } = this
     const isUser = URL.split('/').slice(0, -1).pop().toLowerCase() === modeInfo.settingInfo.psnid.toLowerCase()
     // console.log('Message.js rendered');
@@ -147,14 +145,12 @@ class UserBoard extends Component<any, any> {
               onRefresh={this.preFetch}
               colors={[modeInfo.accentColor]}
               progressBackgroundColor={modeInfo.backgroundColor}
-              ref={ref => this.refreshControl = ref}
             />
           }
-          ref={flatlist => this.flatlist = flatlist}
           data={this.state.diary}
           keyExtractor={(item, index) => item.id || index}
-          renderItem={({ item, index }) => {
-            return this.renderDiary(item, index)
+          renderItem={({ item }) => {
+            return this.renderDiary(item)
           }}
           extraData={this.state}
           windowSize={999}
@@ -210,6 +206,8 @@ class UserBoard extends Component<any, any> {
     )
   }
 
+  float: any = false
+
   addDiary = () => {
     const { navigation } = this.props.screenProps
     const callback = ({ isTopic, id }) => {
@@ -255,29 +253,5 @@ class UserBoard extends Component<any, any> {
   }
 
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    flexDirection: 'column',
-    backgroundColor: '#F5FCFF'
-  },
-  toolbar: {
-    backgroundColor: standardColor,
-    height: 56,
-    elevation: 4
-  },
-  selectedTitle: {
-    //backgroundColor: '#00ffff'
-    //fontSize: 20
-  },
-  avatar: {
-    width: 50,
-    height: 50
-  },
-  a: {
-    color: idColor // make links coloured pink
-  }
-})
 
 export default UserBoard

@@ -3,7 +3,6 @@ import {
   StyleSheet,
   Text,
   View,
-  Dimensions,
   TouchableNativeFeedback,
   RefreshControl,
   InteractionManager,
@@ -11,8 +10,6 @@ import {
   FlatList,
   Alert
 } from 'react-native'
-
-const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window')
 
 import { standardColor, idColor } from '../../constant/colorConfig'
 
@@ -26,6 +23,8 @@ import FooterProgress from '../../component/FooterProgress'
 let toolbarActions = [
   { title: '跳页', iconName: 'md-map', show: 'always' }
 ]
+
+declare var global
 
 export default class GameTopic extends Component<any, any> {
   constructor(props) {
@@ -44,16 +43,18 @@ export default class GameTopic extends Component<any, any> {
     }
   }
 
-  onNavClicked = (rowData) => {
+  onNavClicked = () => {
     const { navigation } = this.props
     navigation.goBack()
   }
 
-  componentWillMount = async () => {
+  async componentWillMount() {
     const { params } = this.props.navigation.state
     this.isTopic = params.isTopic
     this.fetchMessages(params.URL, 'jump')
   }
+
+  isTopic = false
 
   fetchMessages = (url, type = 'down') => {
     this.setState({
@@ -62,8 +63,8 @@ export default class GameTopic extends Component<any, any> {
       InteractionManager.runAfterInteractions(() => {
         const getAPI = this.isTopic ? getUserTopicAPI : getUserGeneAPI
         getAPI(url).then(data => {
-          let thisList = []
-          const thisPage = parseInt((url.match(/\?page=(\d+)/) || [0, 1])[1])
+          let thisList: any = []
+          const thisPage = parseInt((url.match(/\?page=(\d+)/) || [0, 1])[1], 10)
           let cb = () => {}
           if (type === 'down') {
             thisList = this.state.list.concat(data.list)
@@ -131,7 +132,7 @@ export default class GameTopic extends Component<any, any> {
 
   ITEM_HEIGHT = 83
 
-  _renderItem = ({ item: rowData, index }) => {
+  _renderItem = ({ item: rowData }) => {
     const { modeInfo } = this.props.screenProps
     const { ITEM_HEIGHT } = this
     const { navigation } = this.props
@@ -193,19 +194,17 @@ export default class GameTopic extends Component<any, any> {
           flex: 1,
           backgroundColor: modeInfo.background
         }}
-          ref={flatlist => this.flatlist = flatlist}
           refreshControl={
             <RefreshControl
               refreshing={this.state.isRefreshing}
               onRefresh={this._onRefresh}
               colors={[modeInfo.accentColor]}
               progressBackgroundColor={modeInfo.backgroundColor}
-              ref={ref => this.refreshControl = ref}
             />
           }
           ListFooterComponent={() => <FooterProgress isLoadingMore={this.state.isLoadingMore} modeInfo={modeInfo} />}
           data={this.state.list}
-          keyExtractor={(item, index) => item.id}
+          keyExtractor={(item) => item.id}
           renderItem={this._renderItem}
           onEndReached={this._onEndReached}
           onEndReachedThreshold={0.5}
@@ -215,8 +214,7 @@ export default class GameTopic extends Component<any, any> {
           initialNumToRender={42}
           maxToRenderPerBatch={8}
           disableVirtualization={false}
-          contentContainerStyle={styles.list}
-          getItemLayout={(data, index) => (
+          getItemLayout={(_, index) => (
             {length: this.ITEM_HEIGHT, offset: this.ITEM_HEIGHT * index, index}
           )}
           viewabilityConfig={{
@@ -271,7 +269,7 @@ export default class GameTopic extends Component<any, any> {
                       modalVisible: false,
                       isLoading: true
                     }, () => {
-                      const currentPage = this.state.currentPage
+                      const { URL } = this.props.navigation.state.params
                       const targetPage = URL.split('=').slice(0, -1).concat(this.state.sliderValue).join('=')
                       this.fetchMessages(targetPage, 'jump')
                     })
@@ -287,6 +285,8 @@ export default class GameTopic extends Component<any, any> {
     )
   }
 
+  isValueChanged = false
+
 }
 
 const styles = StyleSheet.create({
@@ -301,8 +301,8 @@ const styles = StyleSheet.create({
     elevation: 4
   },
   selectedTitle: {
-    //backgroundColor: '#00ffff'
-    //fontSize: 20
+    // backgroundColor: '#00ffff'
+    // fontSize: 20
   },
   avatar: {
     width: 50,

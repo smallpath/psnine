@@ -4,8 +4,6 @@ import {
   Text,
   View,
   InteractionManager,
-  SectionList,
-  Animated,
   ScrollView,
   Button,
   ActivityIndicator
@@ -15,12 +13,9 @@ import Ionicons from 'react-native-vector-icons/Ionicons'
 import { getDetailAPI, getNBAPI } from '../../dao'
 import CircleItem from '../../component/CircleItem'
 
-const AnimatedSectionList = Animated.createAnimatedComponent(SectionList)
-
-let toolbarHeight = 56
-let releasedMarginTop = 0
-
 let toolbarActions = []
+
+declare var global
 
 export default class Detail extends Component<any, any> {
 
@@ -36,14 +31,11 @@ export default class Detail extends Component<any, any> {
     }
   }
 
-  componentWillMount = () => {
+  componentWillMount() {
     this.fetch()
   }
 
-  fetch = (type = '') => {
-    const { modeInfo } = this.props.screenProps
-    const { ITEM_HEIGHT } = this
-    const { navigation } = this.props
+  fetch = () => {
     this.setState({
       isLoading: true
     })
@@ -66,10 +58,9 @@ export default class Detail extends Component<any, any> {
   }
 
   ITEM_HEIGHT = 74 + 7
-  _renderItemComponent = ({ item, rowData, index }) => {
+  _renderItemComponent = ({ rowData }) => {
     // console.log(...args)
     const { modeInfo } = this.props.screenProps
-    const { ITEM_HEIGHT } = this
     const { navigation } = this.props
     return (<CircleItem {...{
       modeInfo,
@@ -123,10 +114,6 @@ export default class Detail extends Component<any, any> {
 
   render() {
     const { modeInfo } = this.props.screenProps
-    const { data } = this.state
-
-    let keys = Object.keys(data)
-    let NUM_SECTIONS = keys.length
 
     return (
       <View
@@ -143,7 +130,6 @@ export default class Detail extends Component<any, any> {
           titleColor={modeInfo.isNightMode ? '#000' : '#fff'}
           actions={toolbarActions}
           onIconClicked={this.onNavClicked}
-          onActionSelected={this.onActionSelected}
         />
         {
           this.state.isLoading && (
@@ -159,8 +145,6 @@ export default class Detail extends Component<any, any> {
             />
           ) || (
             <ScrollView
-              ref={flatlist => this.flatlist = flatlist}
-              style={styles.list}
               >
               { this.state.data.vipInfo && this.renderVIP(this.state.data.vipInfo)}
             </ScrollView>

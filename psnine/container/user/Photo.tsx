@@ -33,7 +33,7 @@ import Item from '../../component/PhotoItem'
 
 import ImagePicker from 'react-native-image-picker'
 
-const uploadOptions = {
+const uploadOptions: any = {
   title: '选择图片',
   cancelButtonTitle: '取消',
   takePhotoButtonTitle: '拍摄',
@@ -67,12 +67,12 @@ export default class Photo extends Component<any, any> {
     }
   }
 
-  onNavClicked = (rowData) => {
+  onNavClicked = () => {
     const { navigation } = this.props
     navigation.goBack()
   }
 
-  componentWillMount = async () => {
+  async componentWillMount() {
     const { params } = this.props.navigation.state
     this.fetchMessages(params.URL, 'jump')
   }
@@ -83,8 +83,8 @@ export default class Photo extends Component<any, any> {
     }, () => {
       InteractionManager.runAfterInteractions(() => {
         getPhotoAPI(url).then(data => {
-          let thisList = []
-          const thisPage = parseInt((url.match(/\?page=(\d+)/) || [0, 1])[1])
+          let thisList: any = []
+          const thisPage = parseInt((url.match(/\?page=(\d+)/) || [0, 1])[1], 10)
           let cb = () => { }
           if (type === 'down') {
             thisList = this.state.list.concat(data.list)
@@ -146,12 +146,10 @@ export default class Photo extends Component<any, any> {
 
           if (response.didCancel) {
             // console.log('User cancelled image picker');
-          }
-          else if (response.error) {
+          } else if (response.error) {
             // console.log('ImagePicker Error: ', response.error);
           } else {
-
-            let { height, width, uri = '', type = '', fileSize, fileName = '' } = response
+            let { uri = '', type = '', fileSize, fileName = '' } = response
             // console.log('??')
             if (fileSize > 1024 * 1024) {
               return global.toast('PSNINE上传的图片文件最大为1M')
@@ -167,7 +165,7 @@ export default class Photo extends Component<any, any> {
               type: type || ''
             }).then(res => {
               return res.text()
-            }).then(html => {
+            }).then(() => {
               global.toast('图片上传成功')
               const { navigation } = this.props
               const { params } = navigation.state
@@ -196,9 +194,8 @@ export default class Photo extends Component<any, any> {
 
   ITEM_HEIGHT = 150 + 10
 
-  _renderItem = ({ item: rowData, index }) => {
+  _renderItem = ({ item: rowData }) => {
     const { modeInfo } = this.props.screenProps
-    const { ITEM_HEIGHT } = this
     const { navigation } = this.props
     const { params } = navigation.state
     const { selections } = this.state
@@ -249,7 +246,7 @@ export default class Photo extends Component<any, any> {
             },
             {
               text: '确定', onPress: () => {
-                postDeleteImage({ delimg: rowData.delimg }).then(res => res.text()).then(html => {
+                postDeleteImage({ delimg: rowData.delimg }).then(res => res.text()).then(() => {
                   global.toast('删除成功')
                   this.fetchMessages(params.URL, 'jump')
                 })
@@ -288,19 +285,17 @@ export default class Photo extends Component<any, any> {
           flex: 1,
           backgroundColor: modeInfo.backgroundColor
         }}
-          ref={flatlist => this.flatlist = flatlist}
           refreshControl={
             <RefreshControl
               refreshing={this.state.isRefreshing}
               onRefresh={this._onRefresh}
               colors={[modeInfo.accentColor]}
               progressBackgroundColor={modeInfo.backgroundColor}
-              ref={ref => this.refreshControl = ref}
             />
           }
           ListFooterComponent={() => <FooterProgress isLoadingMore={this.state.isLoadingMore} modeInfo={modeInfo} />}
           data={this.state.list}
-          keyExtractor={(item, index) => item.url || item.href}
+          keyExtractor={(item) => item.url || item.href}
           renderItem={this._renderItem}
           onEndReached={this._onEndReached}
           onEndReachedThreshold={0.5}
@@ -315,8 +310,7 @@ export default class Photo extends Component<any, any> {
           initialNumToRender={42}
           maxToRenderPerBatch={8}
           disableVirtualization={false}
-          contentContainerStyle={styles.list}
-          getItemLayout={(data, index) => (
+          getItemLayout={(_, index) => (
             {length: this.ITEM_HEIGHT, offset: this.ITEM_HEIGHT * index, index}
           )}
           viewabilityConfig={{
@@ -371,7 +365,6 @@ export default class Photo extends Component<any, any> {
                       modalVisible: false,
                       isLoading: true
                     }, () => {
-                      const currentPage = this.state.currentPage
                       const targetPage = params.URL.split('=').slice(0, -1).concat(this.state.sliderValue).join('=')
                       this.fetchMessages(targetPage, 'jump')
                     })
@@ -387,6 +380,8 @@ export default class Photo extends Component<any, any> {
     )
   }
 
+  isValueChanged = false
+
 }
 
 const styles = StyleSheet.create({
@@ -401,8 +396,8 @@ const styles = StyleSheet.create({
     elevation: 4
   },
   selectedTitle: {
-    //backgroundColor: '#00ffff'
-    //fontSize: 20
+    // backgroundColor: '#00ffff'
+    // fontSize: 20
   },
   avatar: {
     width: 50,

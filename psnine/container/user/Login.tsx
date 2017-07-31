@@ -44,12 +44,12 @@ class Login extends Component<any, any> {
   login = async () => {
     const { psnid, password } = this.state
 
-    if (psnid == '' || password == '') {
+    if (psnid === '' || password === '') {
       global.toast && global.toast('账号或密码未输入', 2000)
       return
     }
 
-    let data = await safeLogin(psnid, password)
+    let data: any = await safeLogin(psnid, password)
     let length = data.length
 
     if (length > 10000) {
@@ -63,7 +63,7 @@ class Login extends Component<any, any> {
     } else {
 
       await AsyncStorage.removeItem('@psnid')
-      const value = await AsyncStorage.getItem('@psnid')
+      await AsyncStorage.getItem('@psnid')
       global.toast && global.toast(`登录失败,请检查账号与密码是否输入正确`, 2000)
     }
 
@@ -75,9 +75,11 @@ class Login extends Component<any, any> {
         Linking.openURL(registURL)
       else
         global.toast && global.toast(`未找到浏览器, 如果您使用了冰箱, 请先解冻浏览器`, 2000)
-    }).catch(err => { })
+    }).catch(() => {})
   }
 
+  keyboardDidShowListener: any = false
+  keyboardDidHideListener: any = false
   async componentWillMount() {
     this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () => {
       Animated.spring(this.state.avoidKeyboardMarginTop, {
@@ -99,15 +101,17 @@ class Login extends Component<any, any> {
     })
   }
 
-  componentWillUnmount = () => {
+  componentWillUnmount() {
     this.keyboardDidHideListener.remove()
     this.keyboardDidShowListener.remove()
   }
 
+  accountTextInput: any = false
+  passwordTextInput: any = false
   onAccountTextFocus = () => {
 
     let text = this.accountTextInput._lastNativeText
-    if (typeof text != 'undefined' && text !== '')
+    if (typeof text !== 'undefined' && text !== '')
       return
 
     Animated.spring(this.state.accountMarginTop, {
@@ -119,7 +123,7 @@ class Login extends Component<any, any> {
 
   onAccountTextBlur = () => {
     let text = this.accountTextInput._lastNativeText
-    if (typeof text != 'undefined' && text !== '')
+    if (typeof text !== 'undefined' && text !== '')
       return
     Animated.spring(this.state.accountMarginTop, {
       toValue: 0,
@@ -131,7 +135,7 @@ class Login extends Component<any, any> {
   onPasswordTextFocus = () => {
 
     let text = this.passwordTextInput._lastNativeText
-    if (typeof text != 'undefined' && text !== '')
+    if (typeof text !== 'undefined' && text !== '')
       return
 
     Animated.spring(this.state.passwordMarginTop, {
@@ -143,7 +147,7 @@ class Login extends Component<any, any> {
 
   onPasswordTextBlur = () => {
     let text = this.passwordTextInput._lastNativeText
-    if (typeof text != 'undefined' && text !== '')
+    if (typeof text !== 'undefined' && text !== '')
       return
     Animated.spring(this.state.passwordMarginTop, {
       toValue: 0,
@@ -222,7 +226,6 @@ class Login extends Component<any, any> {
       <View style={{ flex: 1, backgroundColor: modeInfo.standardColor }}>
 
         <Animated.View
-          ref={float => this.float = float}
           collapsable={true}
           style={{
             width: 56,

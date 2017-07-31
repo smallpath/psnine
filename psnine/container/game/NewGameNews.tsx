@@ -1,130 +1,15 @@
 import React, { Component } from 'react'
 import {
-  StyleSheet,
-  Text,
   View,
-  Image,
   Dimensions,
-  TouchableNativeFeedback,
   RefreshControl,
   InteractionManager,
   FlatList
 } from 'react-native'
 
-const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window')
-
-import { standardColor, idColor } from '../../constant/colorConfig'
-
-import { getGameMapperAPI, getTopicURL } from '../../dao'
+import { getGameMapperAPI } from '../../dao'
 
 import NewsItem from '../../component/NewsItem'
-
-let toolbarActions = [
-  // { title: '跳页', iconName: 'md-map', show: 'always' },
-]
-
-class NewsItemBackup extends React.PureComponent {
-
-  shouldComponentUpdate = (props, state) => props.modeInfo.themeName !== this.props.modeInfo.themeName
-
-  _onRowPressed = (rowData) => {
-    const { navigation } = this.props
-    const id = rowData.id || parseInt(rowData.url.split('/').pop())
-    const URL = getTopicURL(id)
-    navigation.navigate('CommunityTopic', {
-      URL,
-      title: rowData.title,
-      rowData,
-      type: 'community',
-      shouldBeSawBackground: true
-    })
-  }
-
-  render = () => {
-    const { modeInfo, index = 0, rowData, navigation, ITEM_HEIGHT = 200, modalList = [], width = 260 } = this.props
-    // console.log(rowData)
-    return (
-      <View style={{ height: ITEM_HEIGHT - 5, justifyContent: 'center', alignItems: 'center' }}>
-        <View style={{
-          marginVertical: 2.5,
-          marginLeft: index % 2 ? 0 : 5,
-          marginRight: index % 2 ? 0 : 5,
-          marginHorizontal: 5,
-          backgroundColor: modeInfo.backgroundColor,
-          elevation: 1,
-          flex: -1,
-          height: ITEM_HEIGHT - 5,
-          width
-        }}>
-          <TouchableNativeFeedback
-            onPress={() => {
-              this._onRowPressed(rowData)
-            }}
-            useForeground={true}
-
-            background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
-          >
-            <View style={{ flex: 1 }}>
-              <View style={{ width, height: ITEM_HEIGHT - 5 - 50, backgroundColor: modeInfo.titleTextColor }}>
-              { rowData.avatar && <Image
-                source={{ uri: rowData.avatar }}
-                style={{ width, height: ITEM_HEIGHT - 5 - 50 }}
-              /> || undefined}
-                <View style={{
-                  position: 'absolute',
-                  bottom: 0,
-                  flex: -1,
-                  left: 0,
-                  right: 0,
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                  paddingHorizontal: 4,
-                  zIndex: 2  }}>
-                  <Text style={{ flex: -1, color: modeInfo.titleTextColor }}>
-                    {rowData.date}
-                  </Text>
-                  <Text style={{ flex: -1, color: modeInfo.titleTextColor }}>
-                    {rowData.reply}
-                  </Text>
-                </View>
-                <View style={{
-                  position: 'absolute',
-                  bottom: 0,
-                  flex: -1,
-                  left: 0,
-                  right: 0,
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                  backgroundColor: modeInfo.brighterLevelOne,
-                  paddingHorizontal: 4,
-                  opacity: 0.5,
-                  zIndex: 1}}>
-                  <Text style={{ flex: -1, color: modeInfo.titleTextColor }}>
-                    {rowData.date}
-                  </Text>
-                  <Text style={{ flex: -1, color: modeInfo.titleTextColor }}>
-                    {rowData.reply}
-                  </Text>
-                </View>
-              </View>
-
-              <View style={{ height: 45, padding: 5 }}>
-                <Text
-                  ellipsizeMode={'tail'}
-                  numberOfLines={2}
-                  style={{ flex: 1, color: modeInfo.titleTextColor, textAlignVertical: 'center' }}>
-                  {rowData.title}
-                </Text>
-              </View>
-
-            </View>
-          </TouchableNativeFeedback>
-        </View>
-      </View>
-    )
-  }
-
-}
 
 class GameTopic extends Component<any, any> {
   constructor(props) {
@@ -143,7 +28,7 @@ class GameTopic extends Component<any, any> {
     }
   }
 
-  componentWillMount = async () => {
+  async componentWillMount() {
     this.fetchMessages(this.state.URL, 'jump')
   }
 
@@ -183,7 +68,6 @@ class GameTopic extends Component<any, any> {
 
   _renderItem = ({ item: rowData, index }) => {
     const { modeInfo } = this.props.screenProps
-    const { ITEM_HEIGHT } = this
     const { navigation } = this.props.screenProps
     // console.log(rowData)
     return <NewsItem {...{
@@ -200,11 +84,10 @@ class GameTopic extends Component<any, any> {
   width = Dimensions.get('window').width
   render() {
     const { modeInfo } = this.props.screenProps
-    const { params } = this.props.screenProps.navigation.state
     const data = this.state.list
     // console.log('Message.js rendered');
-    const { width, height } = Dimensions.get('window')
-    this.width = width / 2 + 10 //Math.min(width, height) / 2 + 10
+    const { width } = Dimensions.get('window')
+    this.width = width / 2 + 10 // Math.min(width, height) / 2 + 10
     return (
       <View
         style={{ flex: 1, backgroundColor: modeInfo.background }}
@@ -226,9 +109,8 @@ class GameTopic extends Component<any, any> {
             />
           }
           data={data}
-          keyExtractor={(item, index) => item.id}
+          keyExtractor={(item) => item.id}
           renderItem={this._renderItem}
-          onEndReached={this._onEndReached}
           onEndReachedThreshold={0.5}
           extraData={modeInfo}
           renderScrollComponent={props => <global.NestedScrollView {...props}/>}
@@ -237,7 +119,6 @@ class GameTopic extends Component<any, any> {
           initialNumToRender={42}
           maxToRenderPerBatch={8}
           disableVirtualization={false}
-          contentContainerStyle={styles.list}
           viewabilityConfig={{
             minimumViewTime: 1,
             viewAreaCoveragePercentThreshold: 0,
@@ -248,31 +129,10 @@ class GameTopic extends Component<any, any> {
     )
   }
 
-}
+  isValueChanged = false
+  flatlist: any = false
+  refreshControl: any = false
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    flexDirection: 'column',
-    backgroundColor: '#F5FCFF'
-  },
-  toolbar: {
-    backgroundColor: standardColor,
-    height: 56,
-    elevation: 4
-  },
-  selectedTitle: {
-    //backgroundColor: '#00ffff'
-    //fontSize: 20
-  },
-  avatar: {
-    width: 50,
-    height: 50
-  },
-  a: {
-    fontWeight: '300',
-    color: idColor // make links coloured pink
-  }
-})
+}
 
 export default GameTopic

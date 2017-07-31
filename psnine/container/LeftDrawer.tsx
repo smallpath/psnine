@@ -27,6 +27,7 @@ import { fetchUser } from '../dao'
 
 declare var global
 
+/* tslint:disable */
 const ListItems = [
   {
     text: '个人主页',
@@ -183,8 +184,9 @@ const ListItems = [
   //   }
   // }
 ]
+/* tslint:enable */
 
-class navigationDrawer extends Component<any, any> {
+export default class NavigationDrawer extends Component<any, any> {
   constructor(props) {
     super(props)
     let dataSource = new ListView.DataSource({
@@ -210,7 +212,7 @@ class navigationDrawer extends Component<any, any> {
     })
   }
 
-  componentWillReceiveProps = (nextProps) => {
+  componentWillReceiveProps(nextProps) {
     if (this.state.psnid !== nextProps.modeInfo.settingInfo.psnid && nextProps.modeInfo.settingInfo.psnid !== '') {
       // console.log(this.state.psnid, nextProps.modeInfo.settingInfo.psnid)
       this.setState({
@@ -234,8 +236,8 @@ class navigationDrawer extends Component<any, any> {
       userInfo,
       hasMessage: userInfo.hasMessage
     }, () => {
-      if (this.state.psnid != '') {
-        if (this.state.userInfo.isSigned == false) {
+      if (this.state.psnid !== '') {
+        if (this.state.userInfo.isSigned === false) {
           this.pressSign()
         }
       }
@@ -289,7 +291,7 @@ class navigationDrawer extends Component<any, any> {
 
   }
 
-  setLogin = (psnid, userInfo) => {
+  setLogin = () => {
     const { modeInfo } = this.props
     modeInfo.reloadSetting && modeInfo.reloadSetting()
   }
@@ -308,7 +310,7 @@ class navigationDrawer extends Component<any, any> {
   onMessageClick = () => {
     const { navigation, closeDrawer } = this.props
     closeDrawer()
-    if (this.state.psnid == '') {
+    if (this.state.psnid === '') {
       global.toast && global.toast('未登录', 2000)
       return
     }
@@ -330,7 +332,6 @@ class navigationDrawer extends Component<any, any> {
 
   onUserLongPress = () => {
     if (this.state.psnid === '') return
-    const { closeDrawer, switchModeOnRoot } = this.props
     Alert.alert(
       '提示',
       '请选择操作',
@@ -356,10 +357,9 @@ class navigationDrawer extends Component<any, any> {
   }
 
   renderHeader = () => {
-    const { navigation, closeDrawer, switchModeOnRoot } = this.props
     const { modeInfo } = this.props
-    const { iconObj: icon, psnid, userInfo, hasMessage } = this.state
-    let toolActions = []
+    const { psnid, userInfo } = this.state
+    let toolActions: JSX.Element[] = []
     const iconStyle = {
       borderColor: '#fff',
       borderWidth: 0,
@@ -378,10 +378,10 @@ class navigationDrawer extends Component<any, any> {
     const borderRadius = 12
 
     if (psnid) {
-      let dot = undefined
+      let dot: any = undefined
       if (this.state.hasMessage) {
         dot = (
-          <View borderRadius={4} style={{ position: 'absolute', top: 3, right: 3, backgroundColor: modeInfo.accentColor, height: 8, width: 8}} />
+          <View style={{ borderRadius: 4, position: 'absolute', top: 3, right: 3, backgroundColor: modeInfo.accentColor, height: 8, width: 8}} />
         )
       }
       toolActions.push(
@@ -422,8 +422,6 @@ class navigationDrawer extends Component<any, any> {
       </TouchableNativeFeedback>
     )
 
-    const infoColor = 'rgba(255,255,255,0.8)'
-    // console.log(userInfo, userInfo.exp)
     return (
       <View style={[{
         flex: 1,
@@ -431,7 +429,8 @@ class navigationDrawer extends Component<any, any> {
         backgroundColor: this.props.modeInfo.standardColor
       }]}>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-          <View style={{ flexDirection: 'column', alignItems: 'flex-start', justifyContent: 'space-between', alignSelf: 'flex-start', alignContent: 'flex-start' }}>
+          <View style={{ flexDirection: 'column',
+            alignItems: 'flex-start', justifyContent: 'space-between', alignSelf: 'flex-start', alignContent: 'flex-start' }}>
             <TouchableWithoutFeedback onPress={this.pressLogin} onLongPress={this.onUserLongPress}>
               <View borderRadius={35} style={{ flexDirection: 'column', alignItems: 'center', backgroundColor: modeInfo.backgroundColor }}>
                 <Image
@@ -440,11 +439,14 @@ class navigationDrawer extends Component<any, any> {
                   style={{ width: 70, height: 70 }} />
               </View>
             </TouchableWithoutFeedback>
-            <Text style={[styles.menuText, { paddingTop: 5, textAlign: 'center', alignSelf: psnid == '' ? 'center' : 'flex-start' }]}>{psnid == '' ? '请登录' : psnid}</Text>
+            <Text style={[styles.menuText, { paddingTop: 5,
+              textAlign: 'center', alignSelf: psnid === '' ? 'center' : 'flex-start' }]}>{psnid === '' ? '请登录' : psnid}</Text>
             {psnid && (
               <View style={{flex: 1, width: 100}}>
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', flex: 1  }}>
-                    <Text style={{ color: color, fontSize: 12 }}>{userInfo.exp.split('经验')[0] + ' '}<Text style={{ flex: -1, color: color, fontSize: 12 }}>{userInfo.exp.split('经验')[1]}</Text></Text>
+                    <Text style={{ color: color, fontSize: 12 }}>
+                      {userInfo.exp.split('经验')[0] + ' '}
+                    <Text style={{ flex: -1, color: color, fontSize: 12 }}>{userInfo.exp.split('经验')[1]}</Text></Text>
                 </View>
                 <View style={{ flex: 0, width: 200 }}>
                   <Text style={{ }}>
@@ -457,7 +459,9 @@ class navigationDrawer extends Component<any, any> {
                 </View>
               </View>) || undefined}
           </View>
-          <View style={{ paddingRight: toolActions.length === 4 ? 20 : 0, flex: 1, flexDirection: 'row', alignSelf: 'flex-start', alignContent: 'flex-end', justifyContent: 'center', alignItems: 'flex-end' }}>
+          <View style={{
+            paddingRight: toolActions.length === 4 ? 20 : 0, flex: 1,
+            flexDirection: 'row', alignSelf: 'flex-start', alignContent: 'flex-end', justifyContent: 'center', alignItems: 'flex-end' }}>
             {toolActions}
           </View>
         </View>
@@ -465,10 +469,10 @@ class navigationDrawer extends Component<any, any> {
     )
   }
 
-  renderRow = (rowData, sectionID, rowID, highlightRow) => {
+  renderRow = (rowData, _, rowID) => {
     const shouldSlice = this.state.psnid === ''
     const targetListItems = shouldSlice ? ListItems.slice(-2) : ListItems
-    const item = targetListItems[rowID]
+    const item: any = targetListItems[rowID]
     let iconName = item.iconName
 
     const icon = <Icon name={iconName} size={25} style={{ marginLeft: 6 }} color={this.props.modeInfo.standardColor} />
@@ -501,7 +505,7 @@ class navigationDrawer extends Component<any, any> {
     )
   }
 
-  render = () => {
+  render() {
     // console.log('navigationDrawer.js rendered');
     return (
       <View style={styles.container} {...this.props}>
@@ -547,7 +551,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-around',
-    //marginLeft: 8,
+    // marginLeft: 8,
     paddingTop: -10
   },
   menuContainer: {
@@ -608,5 +612,3 @@ const styles = StyleSheet.create({
     color: '#fff'
   }
 })
-
-module.exports = navigationDrawer

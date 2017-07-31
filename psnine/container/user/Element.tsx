@@ -15,20 +15,12 @@ import Ionicons from 'react-native-vector-icons/Ionicons'
 import { getGroupAPI } from '../../dao'
 const AnimatedSectionList = Animated.createAnimatedComponent(SectionList)
 
-let toolbarHeight = 56
-let releasedMarginTop = 0
-
 let toolbarActions = []
 
-class NodeItem extends React.PureComponent {
-
-  shouldComponentUpdate = (props, state) => {
-    if (props.modeInfo.themeName !== this.props.modeInfo.themeName) return true
-    return false
-  }
+class NodeItem extends React.PureComponent<any, any> {
 
   render() {
-    const { modeInfo, onPress, rowData, navigation } = this.props
+    const { modeInfo, onPress, rowData } = this.props
 
     return (
       <View style={{
@@ -71,13 +63,11 @@ export default class Element extends Component<any, any> {
     }
   }
 
-  componentWillMount = () => {
+  componentWillMount() {
     this.fetch()
   }
 
-  fetch = (type = '') => {
-    const { modeInfo } = this.props.screenProps
-    const { ITEM_HEIGHT } = this
+  fetch = () => {
     const { navigation } = this.props
     this.setState({
       isLoading: true
@@ -97,9 +87,8 @@ export default class Element extends Component<any, any> {
   }
 
   ITEM_HEIGHT = 74 + 7
-  _renderItemComponent = ({ item: rowData, index: outerIndex }) => {
+  _renderItemComponent = ({ item: rowData }) => {
     const { modeInfo } = this.props.screenProps
-    const { ITEM_HEIGHT } = this
     const { navigation } = this.props
     // console.log(rowData)
     return (
@@ -125,9 +114,6 @@ export default class Element extends Component<any, any> {
     const { modeInfo } = this.props.screenProps
     const { data } = this.state
 
-    let keys = Object.keys(data)
-    let NUM_SECTIONS = keys.length
-
     const sections = [{
       key: '曾使用过的所有元素',
       modeInfo,
@@ -149,37 +135,25 @@ export default class Element extends Component<any, any> {
           titleColor={modeInfo.isNightMode ? '#000' : '#fff'}
           actions={toolbarActions}
           onIconClicked={this.onNavClicked}
-          onActionSelected={this.onActionSelected}
         />
         <AnimatedSectionList
           enableVirtualization={false}
-          ref={flatlist => this.flatlist = flatlist}
           refreshControl={
             <RefreshControl
               refreshing={this.state.isLoading}
-              onRefresh={this._onRefresh}
               colors={[modeInfo.accentColor]}
               progressBackgroundColor={modeInfo.backgroundColor}
-              ref={ref => this.refreshControl = ref}
             />
           }
           disableVirtualization={true}
-          keyExtractor={(item, index) => `${item.id || item.href}`}
+          keyExtractor={(item) => `${item.id || item.href}`}
           renderItem={this._renderItemComponent}
           renderSectionHeader={renderSectionHeader}
           stickySectionHeadersEnabled
           sections={sections}
-          style={styles.list}
         />
       </View>
     )
   }
 
 }
-
-const styles = StyleSheet.create({
-  avatar: {
-    width: 50,
-    height: 50
-  }
-})

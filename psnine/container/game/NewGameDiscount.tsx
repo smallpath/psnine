@@ -11,24 +11,16 @@ import {
   FlatList
 } from 'react-native'
 
-const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window')
-
 import { standardColor, idColor } from '../../constant/colorConfig'
 
 import { getGameMapperAPI, getTopicURL } from '../../dao'
 
-// import TopicItem from '../../component/CommunityItem'
+declare var global
 
-let toolbarActions = [
-  // { title: '跳页', iconName: 'md-map', show: 'always' },
-]
-
-class TopicItem extends React.PureComponent {
-  shouldComponentUpdate = (props) => props.modeInfo.themeName !== this.props.modeInfo.themeName
-
+class TopicItem extends React.PureComponent<any, any> {
   _onRowPressed = (rowData) => {
     const { navigation } = this.props
-    const id = rowData.id || parseInt(rowData.url.split('/').pop())
+    const id = rowData.id || parseInt(rowData.url.split('/').pop(), 10)
     const URL = getTopicURL(id)
     navigation.navigate('CommunityTopic', {
       URL,
@@ -39,7 +31,7 @@ class TopicItem extends React.PureComponent {
     })
   }
 
-  render = () => {
+  render() {
     const { modeInfo, rowData, ITEM_HEIGHT = 165, shouldMargin = true } = this.props
     const content = rowData.content
     const { width: SCREEN_WIDTH } = Dimensions.get('window')
@@ -103,7 +95,6 @@ class TopicItem extends React.PureComponent {
             <View style={{ padding: 15, flexDirection: 'column',
               justifyContent: 'center', alignItems: 'flex-start',
               maxWidth: SCREEN_WIDTH - 150,
-              overflow: 'scroll',
               flexWrap: 'nowrap'
              }}>
               <global.HTMLView
@@ -139,7 +130,7 @@ export default class NewGameGuide extends Component<any, any> {
     }
   }
 
-  componentWillMount = async () => {
+  async componentWillMount() {
     this.fetchMessages(this.state.URL, 'jump')
   }
 
@@ -178,7 +169,7 @@ export default class NewGameGuide extends Component<any, any> {
 
   ITEM_HEIGHT = 165
 
-  _renderItem = ({ item: rowData, index }) => {
+  _renderItem = ({ item: rowData }) => {
     const { modeInfo } = this.props.screenProps
     const { ITEM_HEIGHT } = this
     const { navigation } = this.props.screenProps
@@ -195,7 +186,6 @@ export default class NewGameGuide extends Component<any, any> {
   width = Dimensions.get('window').width
   render() {
     const { modeInfo } = this.props.screenProps
-    const { params } = this.props.screenProps.navigation.state
     const data = this.state.list
     // console.log('Message.js rendered');
     const { width, height } = Dimensions.get('window')
@@ -223,7 +213,6 @@ export default class NewGameGuide extends Component<any, any> {
           data={data}
           keyExtractor={(item, index) => `${item.id}::${index}`}
           renderItem={this._renderItem}
-          onEndReached={this._onEndReached}
           onEndReachedThreshold={0.5}
           extraData={modeInfo}
           windowSize={21}
@@ -232,8 +221,7 @@ export default class NewGameGuide extends Component<any, any> {
           initialNumToRender={42}
           maxToRenderPerBatch={8}
           disableVirtualization={false}
-          contentContainerStyle={styles.list}
-          getItemLayout={(data, index) => (
+          getItemLayout={(_, index) => (
             {length: this.ITEM_HEIGHT, offset: this.ITEM_HEIGHT * index, index}
           )}
           viewabilityConfig={{
@@ -245,6 +233,10 @@ export default class NewGameGuide extends Component<any, any> {
       </View>
     )
   }
+
+  isValueChanged = false
+  flatlist: any = false
+  refreshControl: any = false
 
 }
 
@@ -260,8 +252,8 @@ const styles = StyleSheet.create({
     elevation: 4
   },
   selectedTitle: {
-    //backgroundColor: '#00ffff'
-    //fontSize: 20
+    // backgroundColor: '#00ffff'
+    // fontSize: 20
   },
   avatar: {
     width: 50,

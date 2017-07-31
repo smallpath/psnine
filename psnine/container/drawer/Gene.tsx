@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import {
-  StyleSheet,
   RefreshControl,
   FlatList,
   Animated
@@ -9,8 +8,7 @@ import {
 import { connect } from 'react-redux'
 import { getGeneList } from '../../redux/action/gene.js'
 
-let toolbarHeight = 56
-let releasedMarginTop = 0
+declare var global
 
 import TopicItem from '../../component/GeneItem'
 import FooterProgress from '../../component/FooterProgress'
@@ -23,6 +21,9 @@ class Gene extends Component<any, any> {
     drawerLabel: '机因'
   }
 
+  flatlist: any = false
+  refreshControl: any = false
+
   constructor(props) {
     super(props)
     this.state = {
@@ -31,8 +32,8 @@ class Gene extends Component<any, any> {
     }
   }
 
-  componentWillReceiveProps = (nextProps) => {
-    if (this.props.screenProps.modeInfo.themeName != nextProps.screenProps.modeInfo.themeName) {
+  componentWillReceiveProps(nextProps) {
+    if (this.props.screenProps.modeInfo.themeName !== nextProps.screenProps.modeInfo.themeName) {
 
     } else if (this.props.screenProps.searchTitle !== nextProps.screenProps.searchTitle) {
 
@@ -52,10 +53,10 @@ class Gene extends Component<any, any> {
     }
   }
 
-  componentWillMount = () => {
+  componentWillMount() {
     const { gene: geneReducer } = this.props
     const { registerAfterEach, searchTitle } = this.props.screenProps
-    if (geneReducer.genePage == 0) {
+    if (geneReducer.genePage === 0) {
       this._onRefresh(
         searchTitle
       )
@@ -70,8 +71,8 @@ class Gene extends Component<any, any> {
     })
   }
 
-  _onRefresh = (title, type = '') => {
-    const { gene: geneReducer, dispatch } = this.props
+  _onRefresh: any = (title, type = '') => {
+    const { dispatch } = this.props
 
     this.setState({
       isRefreshing: true
@@ -95,7 +96,6 @@ class Gene extends Component<any, any> {
   }
 
   _onEndReached = () => {
-    const { gene: geneReducer, dispatch } = this.props
     if (this.state.isRefreshing || this.state.isLoadingMore) return
 
     this.setState({
@@ -105,7 +105,7 @@ class Gene extends Component<any, any> {
     this._loadMoreData()
   }
 
-  _renderItem = ({ item: rowData, index }) => {
+  _renderItem = ({ item: rowData }) => {
     const { modeInfo, navigation } = this.props.screenProps
     return <TopicItem {...{
       navigation,
@@ -115,7 +115,7 @@ class Gene extends Component<any, any> {
   }
 
   render() {
-    log('Gene.js rendered')
+    global.log('Gene.js rendered')
     const { gene: geneReducer } = this.props
     const { modeInfo } = this.props.screenProps
 
@@ -136,7 +136,7 @@ class Gene extends Component<any, any> {
         }
         ListFooterComponent={() => <FooterProgress isLoadingMore={this.state.isLoadingMore} modeInfo={modeInfo} />}
         data={geneReducer.genes}
-        keyExtractor={(item, index) => `${item.id}::${item.views}::${item.count}`}
+        keyExtractor={(item) => `${item.id}::${item.views}::${item.count}`}
         renderItem={this._renderItem}
         onEndReached={this._onEndReached}
         onEndReachedThreshold={0.5}
@@ -147,7 +147,6 @@ class Gene extends Component<any, any> {
         initialNumToRender={42}
         maxToRenderPerBatch={8}
         disableVirtualization={true}
-        contentContainerStyle={styles.list}
         viewabilityConfig={{
           minimumViewTime: 1,
           viewAreaCoveragePercentThreshold: 0,
@@ -158,18 +157,6 @@ class Gene extends Component<any, any> {
   }
 
 }
-
-const styles = StyleSheet.create({
-  avatar: {
-    width: 50,
-    height: 50
-  },
-  geneImage: {
-    margin: 3,
-    width: 100,
-    height: 100
-  }
-})
 
 function mapStateToProps(state) {
   return {

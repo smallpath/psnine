@@ -11,9 +11,9 @@ import { FlatlistItemProp, FlatlistItemState, ModalList } from '../interface'
 interface ExtendedProp extends FlatlistItemProp {
   modalList?: ModalList[]
   content: string
-  onLongPress: (...args) => any
-  preFetch: (...args) => any
-  index: number
+  onLongPress?: (...args) => any
+  preFetch?: (...args) => any
+  index?: number
 }
 
 declare var global

@@ -3,15 +3,12 @@ import {
   StyleSheet,
   Text,
   View,
-  Dimensions,
   TouchableNativeFeedback,
   RefreshControl,
   InteractionManager,
   Slider,
   FlatList
 } from 'react-native'
-
-const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window')
 
 import { standardColor, idColor } from '../../constant/colorConfig'
 
@@ -24,6 +21,8 @@ import FooterProgress from '../../component/FooterProgress'
 let toolbarActions = [
   { title: '创建', iconName: 'md-create', show: 'always', iconSize: 22}
 ]
+
+declare var global
 
 class GameTopic extends Component<any, any> {
   constructor(props) {
@@ -41,12 +40,12 @@ class GameTopic extends Component<any, any> {
     }
   }
 
-  onNavClicked = (rowData) => {
+  onNavClicked = () => {
     const { navigation } = this.props
     navigation.goBack()
   }
 
-  componentWillMount = async () => {
+  async componentWillMount() {
     const { params } = this.props.navigation.state
     this.fetchMessages(params.URL, 'jump')
   }
@@ -88,12 +87,13 @@ class GameTopic extends Component<any, any> {
           modalVisible: true
         })
         return
+      default:
+        return
     }
   }
 
-  _renderItem = ({ item: rowData, index }) => {
+  _renderItem = ({ item: rowData }) => {
     const { modeInfo } = this.props.screenProps
-    const { ITEM_HEIGHT } = this
     const { navigation } = this.props
     return <TopicItem {...{
       navigation,
@@ -140,9 +140,8 @@ class GameTopic extends Component<any, any> {
           }
           ListFooterComponent={() => <FooterProgress isLoadingMore={this.state.isLoadingMore} modeInfo={modeInfo} />}
           data={this.state.list}
-          keyExtractor={(item, index) => item.id}
+          keyExtractor={(item) => item.id}
           renderItem={this._renderItem}
-          onEndReached={this._onEndReached}
           onEndReachedThreshold={0.5}
           extraData={modeInfo}
           windowSize={21}
@@ -150,10 +149,6 @@ class GameTopic extends Component<any, any> {
           initialNumToRender={42}
           maxToRenderPerBatch={8}
           disableVirtualization={false}
-          contentContainerStyle={styles.list}
-          getItemLayout={(data, index) => (
-            {length: this.ITEM_HEIGHT, offset: this.ITEM_HEIGHT * index, index}
-          )}
           viewabilityConfig={{
             minimumViewTime: 1,
             viewAreaCoveragePercentThreshold: 0,
@@ -205,7 +200,6 @@ class GameTopic extends Component<any, any> {
                     this.setState({
                       modalVisible: false
                     }, () => {
-                      const currentPage = this.state.currentPage
                       const targetPage = params.URL.split('=').slice(0, -1).concat(this.state.sliderValue).join('=')
                       this.fetchMessages(targetPage, 'jump')
                     })
@@ -221,6 +215,10 @@ class GameTopic extends Component<any, any> {
     )
   }
 
+  isValueChanged = false
+  flatlist: any = false
+  refreshControl: any = false
+
 }
 
 const styles = StyleSheet.create({
@@ -235,8 +233,8 @@ const styles = StyleSheet.create({
     elevation: 4
   },
   selectedTitle: {
-    //backgroundColor: '#00ffff'
-    //fontSize: 20
+    // backgroundColor: '#00ffff'
+    // fontSize: 20
   },
   avatar: {
     width: 50,

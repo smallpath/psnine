@@ -42,12 +42,12 @@ class GameTopic extends Component<any, any> {
     }
   }
 
-  onNavClicked = (rowData) => {
+  onNavClicked = () => {
     const { navigation } = this.props
     navigation.goBack()
   }
 
-  componentWillMount = async () => {
+  async componentWillMount() {
     const { params } = this.props.navigation.state
     this.fetchMessages(params.URL, 'jump')
   }
@@ -253,7 +253,6 @@ class GameTopic extends Component<any, any> {
                     this.setState({
                       modalVisible: false
                     }, () => {
-                      const currentPage = this.state.currentPage
                       const targetPage = params.URL.split('=').slice(0, -1).concat(this.state.sliderValue).join('=')
                       this.fetchMessages(targetPage, 'jump')
                     })
@@ -269,6 +268,10 @@ class GameTopic extends Component<any, any> {
     )
   }
 
+  isValueChanged = false
+  flatlist: any = false
+  refreshControl: any = false
+
 }
 
 const styles = StyleSheet.create({
@@ -283,8 +286,8 @@ const styles = StyleSheet.create({
     elevation: 4
   },
   selectedTitle: {
-    //backgroundColor: '#00ffff'
-    //fontSize: 20
+    // backgroundColor: '#00ffff'
+    // fontSize: 20
   },
   avatar: {
     width: 50,

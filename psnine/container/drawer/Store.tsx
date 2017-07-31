@@ -1,12 +1,10 @@
 import React, { Component } from 'react'
 import {
-  StyleSheet,
   Text,
   View,
   Image,
   TouchableNativeFeedback,
   RefreshControl,
-  SectionList,
   Animated,
   FlatList,
   Picker
@@ -16,14 +14,12 @@ import { connect } from 'react-redux'
 import { getList } from '../../redux/action/store.js'
 
 import FooterProgress from '../../component/FooterProgress'
-const AnimatedSectionList = Animated.createAnimatedComponent(SectionList)
 
-let toolbarHeight = 56
-let releasedMarginTop = 0
+declare var global
 
 const AnimatedFlatList = Animated.createAnimatedComponent(FlatList)
 
-class StoreItem extends React.PureComponent {
+class StoreItem extends React.PureComponent<any, any> {
 
   _onRowPressed = (rowData) => {
     const { navigation } = this.props
@@ -35,7 +31,7 @@ class StoreItem extends React.PureComponent {
     })
   }
 
-  render = () => {
+  render() {
     // console.log(rowData)
     const { modeInfo, rowData, ITEM_HEIGHT } = this.props
     const { numColumns = 1 } = modeInfo
@@ -46,7 +42,7 @@ class StoreItem extends React.PureComponent {
         background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
       >
         <View pointerEvents={'box-only'} style={{
-          flex: -1, flexDirection: 'row', padding: 5, justifyContent: 'center', alignItems: 'center',
+          flexDirection: 'row', padding: 5,
           marginVertical: 3.5,
           backgroundColor: modeInfo.backgroundColor,
           marginHorizontal: numColumns === 1 ? 0 : 3.5,
@@ -121,8 +117,8 @@ class Store extends Component<any, any> {
     }
   }
 
-  componentWillReceiveProps = (nextProps) => {
-    if (this.props.screenProps.modeInfo.themeName != nextProps.screenProps.modeInfo.themeName) {
+  componentWillReceiveProps(nextProps) {
+    if (this.props.screenProps.modeInfo.themeName !== nextProps.screenProps.modeInfo.themeName) {
 
     } else if (this.props.screenProps.searchTitle !== nextProps.screenProps.searchTitle) {
 
@@ -141,6 +137,9 @@ class Store extends Component<any, any> {
       })
     }
   }
+
+  flatlist: any = false
+  refreshControl: any = false
 
   onValueChange = (key: string, value: string) => {
     const newState = {}
@@ -165,8 +164,7 @@ class Store extends Component<any, any> {
       }}>
         <Picker style={{
           flex: 1,
-          borderWidth: 1,
-          color: modeInfo.standardTextColor
+          borderWidth: 1
         }}
           prompt='选择服务器'
           selectedValue={this.state.server}
@@ -177,8 +175,7 @@ class Store extends Component<any, any> {
           <Picker.Item label='美服' value='us' />
         </Picker>
         <Picker style={{
-          flex: 1,
-          color: modeInfo.standardTextColor
+          flex: 1
         }}
           prompt='选择平台'
           selectedValue={this.state.pf}
@@ -190,8 +187,7 @@ class Store extends Component<any, any> {
           <Picker.Item label='PSP' value='psp' />
         </Picker>
         <Picker style={{
-          flex: 1,
-          color: modeInfo.standardTextColor
+          flex: 1
         }}
           prompt='排序'
           selectedValue={this.state.ob}
@@ -204,7 +200,7 @@ class Store extends Component<any, any> {
     )
   }
 
-  componentWillMount = () => {
+  componentWillMount() {
     const { reducer } = this.props
     const { searchTitle, registerAfterEach } = this.props.screenProps
 
@@ -223,8 +219,8 @@ class Store extends Component<any, any> {
     })
   }
 
-  _onRefresh = (searchTitle) => {
-    const { reducer, dispatch } = this.props
+  _onRefresh: any = (searchTitle?) => {
+    const { dispatch } = this.props
     // const { circleType } = this.props.screenProps
     const { server, ob,  pf } = this.state
     this.setState({
@@ -265,7 +261,7 @@ class Store extends Component<any, any> {
 
   ITEM_HEIGHT = 130 + 7
 
-  _renderItem = ({ item: rowData, index }) => {
+  _renderItem = ({ item: rowData }) => {
 
     const { modeInfo, navigation } = this.props.screenProps
     const { ITEM_HEIGHT } = this
@@ -280,7 +276,7 @@ class Store extends Component<any, any> {
   render() {
     const { reducer } = this.props
     const { modeInfo } = this.props.screenProps
-    log('Store.js rendered')
+    global.log('Store.js rendered')
     // console.log(reducer.page, reducer.list)
     return (
       <View style={{ backgroundColor: modeInfo.background, flex: 1 }}>
@@ -301,7 +297,7 @@ class Store extends Component<any, any> {
           }
           ListFooterComponent={() => <FooterProgress isLoadingMore={this.state.isLoadingMore} modeInfo={modeInfo}/>}
           data={reducer.list}
-          keyExtractor={(item, index) => item.onclick}
+          keyExtractor={(item) => item.onclick}
           renderItem={this._renderItem}
           onEndReached={this._onEndReached}
           onEndReachedThreshold={0.5}
@@ -314,8 +310,7 @@ class Store extends Component<any, any> {
           initialNumToRender={42}
           maxToRenderPerBatch={8}
           disableVirtualization={false}
-          contentContainerStyle={styles.list}
-          getItemLayout={(data, index) => (
+          getItemLayout={(_, index) => (
             {length: this.ITEM_HEIGHT, offset: this.ITEM_HEIGHT * index, index}
           )}
           viewabilityConfig={{
@@ -329,13 +324,6 @@ class Store extends Component<any, any> {
   }
 
 }
-
-const styles = StyleSheet.create({
-  avatar: {
-    width: 50,
-    height: 50
-  }
-})
 
 function mapStateToProps(state) {
   return {

@@ -94,12 +94,12 @@ export default class Home extends Component<any, any> {
     }
   }
 
-  componentWillUnmount = () => {
+  componentWillUnmount() {
     this.removeListener && this.removeListener.remove()
     if (this.timeout) clearTimeout(this.timeout)
   }
 
-  componentWillMount = () => {
+  componentWillMount() {
     this.preFetch()
   }
 
@@ -204,8 +204,8 @@ export default class Home extends Component<any, any> {
     // console.log('GamePage.js rendered');
     const { modeInfo } = this.props.screenProps
     const { data: source, marginTop } = this.state
-    const data = []
-    const renderFuncArr = []
+    const data: any[] = []
+    const renderFuncArr: any[] = []
     const shouldPushData = !this.state.isLoading
 
     this.viewBottomIndex = Math.max(data.length - 1, 0)
@@ -340,7 +340,7 @@ export default class Home extends Component<any, any> {
   }
 
   _getItems(count) {
-    let items = []
+    let items: any = []
 
     for (let i = 0; i < count; i++) {
       items.push(
@@ -373,8 +373,8 @@ const styles = StyleSheet.create({
     elevation: 4
   },
   selectedTitle: {
-    //backgroundColor: '#00ffff'
-    //fontSize: 20
+    // backgroundColor: '#00ffff'
+    // fontSize: 20
   },
   avatar: {
     width: 50,

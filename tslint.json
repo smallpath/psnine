@@ -46,11 +46,11 @@
     "no-string-literal": true,
     "no-switch-case-fall-through": true,
     "no-unused-expression": false,
-    "no-unused-variable": true,
+    "no-unused-variable": false,
     "no-use-before-declare": true,
     "no-var-keyword": true,
     "radix": true,
-    "switch-default": true,
+    "switch-default": false,
     "triple-equals": [
       true,
       "allow-undefined-check"

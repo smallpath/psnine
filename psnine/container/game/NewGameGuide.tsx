@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import {
-  StyleSheet,
   View,
   Dimensions,
   RefreshControl,
@@ -8,17 +7,9 @@ import {
   FlatList
 } from 'react-native'
 
-const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window')
-
-import { standardColor, idColor } from '../../constant/colorConfig'
-
 import { getGameMapperAPI } from '../../dao'
 
 import TopicItem from '../../component/CommunityItem'
-
-let toolbarActions = [
-  // { title: '跳页', iconName: 'md-map', show: 'always' },
-]
 
 export default class NewGameGuide extends Component<any, any> {
   constructor(props) {
@@ -37,7 +28,7 @@ export default class NewGameGuide extends Component<any, any> {
     }
   }
 
-  componentWillMount = async () => {
+  async componentWillMount() {
     this.fetchMessages(this.state.URL, 'jump')
   }
 
@@ -118,9 +109,8 @@ export default class NewGameGuide extends Component<any, any> {
             />
           }
           data={data}
-          keyExtractor={(item, index) => item.id}
+          keyExtractor={(item) => item.id}
           renderItem={this._renderItem}
-          onEndReached={this._onEndReached}
           onEndReachedThreshold={0.5}
           renderScrollComponent={props => <global.NestedScrollView {...props}/>}
           extraData={modeInfo}
@@ -129,8 +119,7 @@ export default class NewGameGuide extends Component<any, any> {
           initialNumToRender={42}
           maxToRenderPerBatch={8}
           disableVirtualization={false}
-          contentContainerStyle={styles.list}
-          getItemLayout={(data, index) => (
+          getItemLayout={(_, index) => (
             {length: this.ITEM_HEIGHT, offset: this.ITEM_HEIGHT * index, index}
           )}
           viewabilityConfig={{
@@ -143,29 +132,8 @@ export default class NewGameGuide extends Component<any, any> {
     )
   }
 
-}
+  isValueChanged = false
+  flatlist: any = false
+  refreshControl: any = false
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    flexDirection: 'column',
-    backgroundColor: '#F5FCFF'
-  },
-  toolbar: {
-    backgroundColor: standardColor,
-    height: 56,
-    elevation: 4
-  },
-  selectedTitle: {
-    //backgroundColor: '#00ffff'
-    //fontSize: 20
-  },
-  avatar: {
-    width: 50,
-    height: 50
-  },
-  a: {
-    fontWeight: '300',
-    color: idColor // make links coloured pink
-  }
-})
+}

@@ -3,10 +3,7 @@ import {
   StyleSheet,
   Text,
   View,
-  ListView,
-  Dimensions,
   Animated,
-  Easing,
   TouchableWithoutFeedback,
   StatusBar,
   ViewPagerAndroid
@@ -22,16 +19,7 @@ import { standardColor } from '../constant/colorConfig'
 
 import { routes } from './Tab'
 
-let screen = Dimensions.get('window')
-
-const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = screen
-
-const ACTUAL_SCREEN_HEIGHT = SCREEN_HEIGHT - StatusBar.currentHeight + 1
-
 let title = 'PSNINE'
-let isMounted = false
-let indexWithFloatButton = [0, 1, 3, 4]
-let indexWithoutFloatButton = [2]
 
 const searchAction = { title: '搜索', iconName: 'md-search', value: '', show: 'always' }
 
@@ -76,15 +64,6 @@ let geneActions = [
   searchAction
 ]
 
-// let circleActions = [
-//   searchAction,
-//   { title: '全部', value: 'all', show: 'never' },
-//   { title: '图文类', value: 'photo', show: 'never' },
-//   { title: '音乐类', value: 'music', show: 'never' },
-//   { title: '影视类', value: 'movie', show: 'never' },
-//   { title: '视频类', value: 'video', show: 'never' },
-// ]
-
 let storeActions = [
   searchAction
 ]
@@ -107,21 +86,7 @@ let toolbarActions = [
   tradeActions
 ]
 
-let titlesArr = ['社区', '问答', '游戏', '约战', '机因']
-
-const ds = new ListView.DataSource({
-  rowHasChanged: (row1, row2) => row1 !== row2
-})
-
-let clamp = (value, min, max) => {
-  return Math.min(Math.max(value, min), max)
-}
-
 let toolbarHeight = 56
-let releasedMarginTop = 0
-let config = { tension: 30, friction: 7, ease: Easing.in(Easing.ease(1, 0, 1, 1)), duration: 200 }
-const timeout = 190
-const delay = 50
 
 import {
   AppBarLayoutAndroid,
@@ -147,7 +112,7 @@ class Toolbar extends Component<any, any> {
       modalOpenVal: new Animated.Value(0),
       topicMarginTop: new Animated.Value(0),
       tabMode: this.props.modeInfo.settingInfo.tabMode,
-      _scrollHeight: this.props.modeInfo.height - StatusBar.currentHeight - 38 + 1
+      _scrollHeight: this.props.modeInfo.height - (StatusBar.currentHeight || 0) - 38 + 1
       // _scrollHeight:
     }
   }
@@ -155,21 +120,19 @@ class Toolbar extends Component<any, any> {
   searchMapper = Object.keys(routes).reduce((prev, curr) => (prev[curr] = '', prev), {})
   afterEachHooks = []
 
-  componentWillMount = () => {
+  componentWillMount() {
     this.props.dispatch(getRecommend())
     this._pages.length = 0
   }
 
   componentWillReceiveProps(nextProps) {
-    // this.props.app =
-    // console.log('??? receving', nextProps.app.segmentedIndex, this.props.app.segmentedIndex)
     if (this.state.tabMode !== nextProps.modeInfo.settingInfo.tabMode) {
       this.setState({
         tabMode: nextProps.modeInfo.settingInfo.tabMode
       })
     } else if (this.props.modeInfo.width !== nextProps.modeInfo.width) {
       this.setState({
-        _scrollHeight: nextProps.modeInfo.height - StatusBar.currentHeight - 38 + 1
+        _scrollHeight: nextProps.modeInfo.height - (StatusBar.currentHeight || 0) - 38 + 1
       })
     }
   }
@@ -203,7 +166,7 @@ class Toolbar extends Component<any, any> {
         dispatch(changeCommunityType(type))
       } else {
         index === 1 && this._onSearchClicked()
-        const obj = {}
+        const obj: any = {}
         if (communityType) {
           obj.URL = `http://psnine.com/node/${communityType}/add`
         }
@@ -231,11 +194,7 @@ class Toolbar extends Component<any, any> {
   }
 
   render() {
-    const { app: appReducer, switchModeOnRoot, modeInfo } = this.props
-    const { segmentedIndex } = this.props.app
-    const { openVal } = this.state
-    const tipHeight = toolbarHeight * 0.8
-    log(modeInfo.themeName, '====> Toolbar inner')
+    const { app: appReducer, modeInfo } = this.props
     // alert(appReducer.segmentedIndex)
     return (
       <View style={{ flex: 1 }}>
@@ -340,15 +299,15 @@ class Toolbar extends Component<any, any> {
 
   _tabTexts = Object.keys(routes).map(name => ({ text: routes[name].screen.navigationOptions.tabBarLabel }))
 
-  _coordinatorLayout = null
-  _appBarLayout = null
-  _scrollView = null
-  _viewPager = null
-  _menuPopup = null
-  _menuBtn = null
-  _tabLayout = null
-  _pages = []
-  _currentViewPagerPageIndex = 0
+  _coordinatorLayout: any = null
+  _appBarLayout: any = null
+  _scrollView: any = null
+  _viewPager: any = null
+  _menuPopup: any = null
+  _menuBtn: any = null
+  _tabLayout: any = null
+  _pages: JSX.Element[] = []
+  _currentViewPagerPageIndex: number = 0
 
   _handleMenuButtonPess = () => {
     this._menuPopup.showAsDropdown(this._menuBtn, 0, -10)
@@ -415,10 +374,9 @@ class Toolbar extends Component<any, any> {
   }
 
   _loadPage(index) {
-    let page = this.refs['page_' + index]
+    let page: any = this.refs['page_' + index]
     if (page && !page.isLoaded()) {
       page.load()
-
     }
     if (index !== this.props.app.segmentedIndex) {
       this.props.dispatch(changeSegmentIndex(index))
@@ -456,11 +414,9 @@ class Toolbar extends Component<any, any> {
               toolbarDispatch: this.props.dispatch,
               segmentedIndex: this.props.app.segmentedIndex,
               modeInfo: this.props.modeInfo,
-              setMarginTop: this.setMarginTop,
               modalVisible: this.state.modalVisible,
               searchTitle: this.state.search,
               registerAfterEach: componentDidFocus => {
-                const obj = {}
                 if (componentDidFocus) {
                   const { index, handler } = componentDidFocus
                   this.afterEachHooks = [...this.afterEachHooks]
@@ -508,7 +464,7 @@ class Page extends Component<any, any> {
     }
   }
 
-  shouldComponentUpdate = (nextProps, nextState) => {
+  shouldComponentUpdate(nextProps) {
     if (nextProps.screenProps.segmentedIndex !== this.props.screenProps.segmentedIndex) {
       if (nextProps.screenProps.segmentedIndex === this.props.index) return true
       return false
@@ -517,7 +473,7 @@ class Page extends Component<any, any> {
   }
 
   render() {
-    let content = null
+    let content: any = null
     if (this.state.loaded) {
       content = this._getContent()
     } else {
@@ -580,10 +536,7 @@ const styles = StyleSheet.create({
   segmentedView: {
     backgroundColor: '#F5FCFF'
   },
-  selectedTitle: {
-    //backgroundColor: '#00ffff'
-    //fontSize: 20
-  },
+  selectedTitle: {},
   appbar: {
     backgroundColor: '#2278F6'
   },

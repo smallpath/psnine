@@ -46,7 +46,7 @@ class Theme extends Component<any, any> {
     }
   }
 
-  renderSwitchType = (item, index) => {
+  renderSwitchType = (_, index) => {
     const { modeInfo } = this.props.screenProps
     return (
       <View key={index} style={[styles.themeItem, {
@@ -66,8 +66,7 @@ class Theme extends Component<any, any> {
           </Text>
         </View>
         <Picker style={{
-          flex: 3,
-          color: modeInfo.standardTextColor
+          flex: 3
         }}
           prompt='首页模式'
           selectedValue={this.state.tabMode}
@@ -79,7 +78,7 @@ class Theme extends Component<any, any> {
     )
   }
 
-  renderSwitchThemeColor = (item, index) => {
+  renderSwitchThemeColor = (_?, index?) => {
     const { modeInfo } = this.props.screenProps
     // const mapper = modeInfo.themeName
     return (
@@ -100,8 +99,7 @@ class Theme extends Component<any, any> {
           </Text>
         </View>
         <Picker style={{
-          flex: 3,
-          color: modeInfo.standardTextColor
+          flex: 3
         }}
           prompt='选择主题的默认颜色'
           selectedValue={this.state.colorTheme}
@@ -114,7 +112,7 @@ class Theme extends Component<any, any> {
     )
   }
 
-  renderSwitchSecondaryColor = (item, index) => {
+  renderSwitchSecondaryColor = (_?, index?) => {
     const { modeInfo } = this.props.screenProps
     // const mapper = modeInfo.themeName
     return (
@@ -135,8 +133,7 @@ class Theme extends Component<any, any> {
           </Text>
         </View>
         <Picker style={{
-          flex: 3,
-          color: modeInfo.standardTextColor
+          flex: 3
         }}
           prompt='选择主题的强调颜色'
           selectedValue={this.state.secondaryColor}
@@ -225,8 +222,8 @@ const styles = StyleSheet.create({
     elevation: 4
   },
   selectedTitle: {
-    //backgroundColor: '#00ffff'
-    //fontSize: 20
+    // backgroundColor: '#00ffff'
+    // fontSize: 20
   },
   avatar: {
     width: 50,

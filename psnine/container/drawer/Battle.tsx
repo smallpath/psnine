@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import {
-  StyleSheet,
   Text,
   View,
   RefreshControl,
@@ -13,9 +12,6 @@ import { getBattleList } from '../../redux/action/battle.js'
 
 import BattleItem from '../../component/BattleItem'
 const AnimatedSectionList = Animated.createAnimatedComponent(SectionList)
-
-let toolbarHeight = 56
-let releasedMarginTop = 0
 
 const renderSectionHeader = ({ section }) => {
   // console.log(section)
@@ -49,17 +45,17 @@ class Battle extends Component<any, any> {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (this.props.screenProps.modeInfo.themeName != nextProps.screenProps.modeInfo.themeName) {
+    if (this.props.screenProps.modeInfo.themeName !== nextProps.screenProps.modeInfo.themeName) {
       this.props.screenProps.modeInfo = nextProps.screenProps.modeInfo
-    } else if (Object.keys(this.props.battle.battles).length < Object.keys(nextProps.battle.battles).length){
+    } else if (Object.keys(this.props.battle.battles).length < Object.keys(nextProps.battle.battles).length) {
       this.setState({
         isLoading: false
       })
     }
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
-    if (this.props.screenProps.modeInfo.themeName != nextProps.screenProps.modeInfo.themeName) {
+  shouldComponentUpdate(nextProps) {
+    if (this.props.screenProps.modeInfo.themeName !== nextProps.screenProps.modeInfo.themeName) {
       return true
     }
     if (this.props.screenProps.searchTitle !== nextProps.screenProps.searchTitle) {
@@ -68,20 +64,20 @@ class Battle extends Component<any, any> {
     return true
   }
 
-  componentWillMount = () => {
+  componentWillMount() {
     const { battle: battleReducer } = this.props
     if (Object.keys(battleReducer.battles).length === 0) this._onRefresh()
   }
 
-  _onRefresh = (type = '') => {
-    const { battle: battleReducer, dispatch } = this.props
+  _onRefresh = () => {
+    const { dispatch } = this.props
     this.setState({
       isLoading: true
     })
     dispatch(getBattleList())
   }
 
-  _renderItemComponent = ({ item: rowData, index }) => {
+  _renderItemComponent = ({ item: rowData }) => {
     const { modeInfo, navigation } = this.props.screenProps
     return (<BattleItem {...{
       modeInfo,
@@ -94,9 +90,6 @@ class Battle extends Component<any, any> {
     const { battle: battleReducer } = this.props
     const { modeInfo } = this.props.screenProps
     let data = battleReducer.battles
-
-    let keys = Object.keys(data)
-    let NUM_SECTIONS = keys.length
 
     const sections = Object.keys(data).map(sectionName => {
       return {
@@ -120,25 +113,17 @@ class Battle extends Component<any, any> {
           />
         }
         disableVirtualization={true}
-        keyExtractor={(item, index) => `${item.id}`}
+        keyExtractor={(item) => `${item.id}`}
         renderScrollComponent={props => <global.NestedScrollView {...props}/>}
         renderItem={this._renderItemComponent}
         renderSectionHeader={renderSectionHeader}
         stickySectionHeadersEnabled
         sections={sections}
-        style={styles.list}
       />
     )
   }
 
 }
-
-const styles = StyleSheet.create({
-  avatar: {
-    width: 50,
-    height: 50
-  }
-})
 
 function mapStateToProps(state) {
   return {

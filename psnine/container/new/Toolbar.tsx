@@ -4,7 +4,6 @@ import {
   Text,
   View,
   TouchableNativeFeedback,
-  ListView,
   ScrollView,
   Picker,
   TextInput
@@ -13,10 +12,7 @@ import {
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import { standardColor, accentColor } from '../../constant/colorConfig'
 
-let dataSource = new ListView.DataSource({
-  rowHasChanged: (row1, row2) => row1 !== row2
-})
-
+/* tslint:disable */
 const items = [
   {
     text: '加粗',
@@ -42,12 +38,10 @@ const items = [
     onPress: null,
     tip: '要使用彩色字体的文字',
     renderComponent: function(index) {
-      const { modeInfo } = this.props.screenProps
       return (
         <Picker style={{
           flex: 1,
-          borderWidth: 1,
-          color: modeInfo.standardTextColor
+          borderWidth: 1
         }}
           prompt='选择颜色'
           selectedValue={this.state.color}
@@ -233,6 +227,7 @@ const items = [
     }
   }
 ]
+/* tslint:enable */
 
 const getMapper = index => {
   const mapper = items[index].tip
@@ -298,7 +293,8 @@ class About extends Component<any, any> {
                   flex: 0,
                   borderRadius: 2
                 }} >
-                  <Text style={{ alignSelf: 'flex-start', fontSize: 15, color: modeInfo.titleTextColor }}>{'请输入' + getMapper(this.state.modalIndex)}</Text>
+                  <Text style={{ alignSelf: 'flex-start',
+                    fontSize: 15, color: modeInfo.titleTextColor }}>{'请输入' + getMapper(this.state.modalIndex)}</Text>
                   <View style={{flex: 1, flexDirection: 'row'}}>
                     <TextInput placeholder=''
                       autoCorrect={false}
@@ -309,7 +305,7 @@ class About extends Component<any, any> {
                       ref={ref => this.text = ref}
                       onChange={({ nativeEvent }) => { this.setState({ text: nativeEvent.text }) }}
                       value={this.state.text}
-                      style={[styles.textInput, {
+                      style={[{
                         color: modeInfo.titleTextColor,
                         textAlign: 'left',
                         flex: 1,
@@ -359,6 +355,8 @@ class About extends Component<any, any> {
       </View>
     )
   }
+
+  isValueChanged = false
 }
 
 const styles = StyleSheet.create({

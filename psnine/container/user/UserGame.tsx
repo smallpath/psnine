@@ -1,18 +1,14 @@
 import React, { Component } from 'react'
 import {
-  StyleSheet,
   Text,
   View,
-  Dimensions,
   TouchableNativeFeedback,
   RefreshControl,
   InteractionManager,
   FlatList
 } from 'react-native'
 
-const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window')
-
-import { standardColor, idColor } from '../../constant/colorConfig'
+declare var global
 
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import { getMyGameAPI } from '../../dao'
@@ -47,10 +43,10 @@ class UserGame extends Component<any, any> {
     }
   }
 
-  componentWillMount = async () => {
+  async componentWillMount() {
     const { screenProps } = this.props
     const name = '游戏'
-    let params = {}
+    let params: any = {}
     screenProps.toolbar.forEach(({ text, url}) => {
       // console.log(text, name, text.includes(name))
       if (text.includes(name)) {
@@ -66,6 +62,10 @@ class UserGame extends Component<any, any> {
     this.fetchMessages(params.URL, 'jump')
   }
 
+  originURL: any = ''
+  URL: any = ''
+  flatlist: any = false
+
   fetchMessages = (url, type = 'down') => {
     this.setState({
       [type === 'down' ? 'isLoadingMore' : 'isRefreshing'] : true
@@ -76,8 +76,8 @@ class UserGame extends Component<any, any> {
       InteractionManager.runAfterInteractions(() => {
         // alert(url)
         getMyGameAPI(url).then(data => {
-          let thisList = []
-          const thisPage = parseInt((url.match(/\page=(\d+)/) || [0, 1])[1])
+          let thisList: any[] = []
+          const thisPage = parseInt((url.match(/\page=(\d+)/) || [0, 1])[1], 10)
           let cb = () => {}
           if (type === 'down') {
             thisList = this.state.list.concat(data.list)
@@ -158,7 +158,7 @@ class UserGame extends Component<any, any> {
 
   ITEM_HEIGHT = 83
 
-  _renderItem = ({ item: rowData, index }) => {
+  _renderItem = ({ item: rowData }) => {
     const { modeInfo, navigation } = this.props.screenProps
     const { ITEM_HEIGHT } = this
     return <UserGameItem {...{
@@ -172,9 +172,7 @@ class UserGame extends Component<any, any> {
   sliderValue = 1
   render() {
     const { modeInfo } = this.props.screenProps
-    const { URL } = this
     // console.log('Message.js rendered');
-    const { width: SCREEN_WIDTH } = Dimensions.get('window')
 
     return (
       <View
@@ -193,12 +191,11 @@ class UserGame extends Component<any, any> {
               onRefresh={this._onRefresh}
               colors={[modeInfo.accentColor]}
               progressBackgroundColor={modeInfo.backgroundColor}
-              ref={ref => this.refreshControl = ref}
             />
           }
           ListFooterComponent={() => <FooterProgress isLoadingMore={this.state.isLoadingMore} modeInfo={modeInfo}/>}
           data={this.state.list}
-          keyExtractor={(item, index) => item.href}
+          keyExtractor={(item) => item.href}
           renderItem={this._renderItem}
           onEndReached={this._onEndReached}
           onEndReachedThreshold={0.5}
@@ -211,8 +208,7 @@ class UserGame extends Component<any, any> {
           key={modeInfo.themeName}
           renderScrollComponent={props => <global.NestedScrollView {...props}/>}
           numColumns={modeInfo.numColumns}
-          contentContainerStyle={styles.list}
-          getItemLayout={(data, index) => (
+          getItemLayout={(_, index) => (
             {length: this.ITEM_HEIGHT, offset: this.ITEM_HEIGHT * index, index}
           )}
           viewabilityConfig={{
@@ -272,7 +268,6 @@ class UserGame extends Component<any, any> {
                 paddingHorizontal: 20,
                 elevation: 4,
                 opacity: 1,
-                borderRadius: 2,
                 borderRadius: 2
               }} >
                 {
@@ -344,6 +339,9 @@ class UserGame extends Component<any, any> {
       </View>
     )
   }
+
+  isValueChanged = false
+  float: any = false
 
   search = (text) => {
     this.setState({
@@ -417,30 +415,5 @@ const filters = {
     }]
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    flexDirection: 'column',
-    backgroundColor: '#F5FCFF'
-  },
-  toolbar: {
-    backgroundColor: standardColor,
-    height: 56,
-    elevation: 4
-  },
-  selectedTitle: {
-    //backgroundColor: '#00ffff'
-    //fontSize: 20
-  },
-  avatar: {
-    width: 50,
-    height: 50
-  },
-  a: {
-    fontWeight: '300',
-    color: idColor // make links coloured pink
-  }
-})
 
 export default UserGame

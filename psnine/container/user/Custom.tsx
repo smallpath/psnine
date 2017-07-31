@@ -19,9 +19,6 @@ import { postSetting } from '../../dao/post'
 
 const AnimatedSectionList = Animated.createAnimatedComponent(SectionList)
 
-let toolbarHeight = 56
-let releasedMarginTop = 0
-
 let toolbarActions = []
 
 import PhotoItem from '../../component/PhotoItem'
@@ -55,14 +52,11 @@ export default class Custom extends Component<any, any> {
     }
   }
 
-  componentWillMount = () => {
+  componentWillMount() {
     this.fetch()
   }
 
-  fetch = (type = '') => {
-    const { modeInfo } = this.props.screenProps
-    const { ITEM_HEIGHT } = this
-    const { navigation } = this.props
+  fetch = () => {
     this.setState({
       isLoading: true
     })
@@ -82,10 +76,8 @@ export default class Custom extends Component<any, any> {
 
   ITEM_HEIGHT = 74 + 7
 
-  renderVIP = ({ item: rowData, index}) => {
+  renderVIP = () => {
     const { modeInfo } = this.props.screenProps
-    const { ITEM_HEIGHT } = this
-    const { navigation } = this.props
     // console.log(index, rowData)
     const bgvip = this.state.data.form.bgvip
     const avavip = this.state.data.form.avavip
@@ -103,9 +95,8 @@ export default class Custom extends Component<any, any> {
               alertText: '是否将此图片设置为自定义背景图?'
             })
 
-          }} style={{
-            flex: 1
-          }}/>
+          }}
+          />
         <Button title={'自定义头像'} color={avavip !== 0 ? modeInfo.standardColor : modeInfo.standardTextColor}
           onPress={() => {
             Alert.alert(
@@ -128,17 +119,13 @@ export default class Custom extends Component<any, any> {
             )
 
           }}
-          style={{
-            flex: 1
-          }}/>
+          />
       </View>
     )
   }
 
-  renderShow = ({ item: rowData, index}) => {
+  renderShow = () => {
     const { modeInfo } = this.props.screenProps
-    const { ITEM_HEIGHT } = this
-    const { navigation } = this.props
     // console.log(index, rowData)
     const home = this.state.data.form.home
     return (
@@ -155,8 +142,6 @@ export default class Custom extends Component<any, any> {
                 })}
               ]
             )
-          }} style={{
-            flex: 1
           }}/>
         <Button title={'日志'} color={home === 'diary' ? modeInfo.standardColor : modeInfo.standardTextColor}
           onPress={() => {
@@ -170,16 +155,12 @@ export default class Custom extends Component<any, any> {
                 })}
               ]
             )
-          }} style={{
-            flex: 1
           }}/>
       </View>
     )
   }
-  renderTheme = ({ item: rowData, index}) => {
+  renderTheme = () => {
     const { modeInfo } = this.props.screenProps
-    const { ITEM_HEIGHT } = this
-    const { navigation } = this.props
     // console.log(index, rowData)
     const topicopen = this.state.data.form.topicopen
     return (
@@ -196,16 +177,12 @@ export default class Custom extends Component<any, any> {
                 })}
               ]
             )
-          }} style={{
-            flex: 1
           }}/>
       </View>
     )
   }
-  renderGene = ({ item: rowData, index}) => {
+  renderGene = () => {
     const { modeInfo } = this.props.screenProps
-    const { ITEM_HEIGHT } = this
-    const { navigation } = this.props
     // console.log(index, rowData)
     const geneopen = this.state.data.form.geneopen
     return (
@@ -222,18 +199,15 @@ export default class Custom extends Component<any, any> {
                 })}
               ]
             )
-          }} style={{
-            flex: 1
           }}/>
       </View>
     )
   }
 
-  renderBG = ({ item: rowData, index}) => {
+  renderBG = ({ item: rowData}) => {
     const { modeInfo } = this.props.screenProps
-    const { ITEM_HEIGHT } = this
     const { navigation } = this.props
-    const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window')
+    const { width: SCREEN_WIDTH} = Dimensions.get('window')
     const items = rowData.items.map((rowData, index) => <PhotoItem key={index} {...{
       modeInfo,
       navigation,
@@ -267,7 +241,7 @@ export default class Custom extends Component<any, any> {
     return postSetting(obj).then(res => {
       // console.log(res)
       return res.text()
-    }).then(text => {
+    }).then(() => {
       this.fetch()
       // console.log(text)
     }).catch(err => console.log(err))
@@ -276,8 +250,6 @@ export default class Custom extends Component<any, any> {
   render() {
     const { modeInfo } = this.props.screenProps
     const { data } = this.state
-
-    let keys = Object.keys(data)
 
     let sections = data.sections ? data.sections.map((item, index) => ({
       key: item,
@@ -332,8 +304,6 @@ export default class Custom extends Component<any, any> {
       ]
     }
 
-    let NUM_SECTIONS = sections.length
-
     // console.log(sections)
 
     return (
@@ -351,18 +321,14 @@ export default class Custom extends Component<any, any> {
           titleColor={modeInfo.isNightMode ? '#000' : '#fff'}
           actions={toolbarActions}
           onIconClicked={this.onNavClicked}
-          onActionSelected={this.onActionSelected}
         />
         <AnimatedSectionList
           enableVirtualization={false}
-          ref={flatlist => this.flatlist = flatlist}
           refreshControl={
             <RefreshControl
               refreshing={this.state.isLoading}
-              onRefresh={this._onRefresh}
               colors={[modeInfo.accentColor]}
               progressBackgroundColor={modeInfo.backgroundColor}
-              ref={ref => this.refreshControl = ref}
             />
           }
           disableVirtualization={true}
@@ -370,17 +336,9 @@ export default class Custom extends Component<any, any> {
           renderSectionHeader={renderSectionHeader}
           stickySectionHeadersEnabled
           sections={sections}
-          style={styles.list}
         />
       </View>
     )
   }
 
 }
-
-const styles = StyleSheet.create({
-  avatar: {
-    width: 50,
-    height: 50
-  }
-})

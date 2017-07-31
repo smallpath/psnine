@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import {
-  StyleSheet,
   Text,
   View,
   RefreshControl,
@@ -18,8 +17,7 @@ import TipItem from '../../component/TipItem'
 import CommentItem from '../../component/LatestCommentItem'
 const AnimatedSectionList = Animated.createAnimatedComponent(SectionList)
 
-let toolbarHeight = 56
-let releasedMarginTop = 0
+declare var global
 
 const renderSectionHeader = ({ section }) => {
   // console.log(Object.keys(section), section.data[0].length)
@@ -63,7 +61,7 @@ class Recommend extends Component<any, any> {
 
   componentWillReceiveProps(nextProps) {
     // console.log('received', nextProps.data.hotGames.length)
-    if (this.props.screenProps.modeInfo.themeName != nextProps.screenProps.modeInfo.themeName) {
+    if (this.props.screenProps.modeInfo.themeName !== nextProps.screenProps.modeInfo.themeName) {
       this.props.screenProps.modeInfo = nextProps.screenProps.modeInfo
     } else if (this.props.data.hotGames.length < nextProps.data.hotGames.length) {
       // this.setState({
@@ -78,16 +76,17 @@ class Recommend extends Component<any, any> {
     }
   }
 
-  componentWillMount = () => {
+  componentWillMount() {
     if (this.props.data.hotGames.length === 0) {
       this._onRefresh()
     }
   }
-  componentWillUnmount = () => {
+  componentWillUnmount() {
     this.setTimeout && clearTimeout(this.setTimeout)
   }
 
-  componentDidMount = () => {
+  setTimeout: any = false
+  componentDidMount() {
     this.setTimeout = setTimeout(() => {
       this.setState({
         data: this.props.data,
@@ -96,14 +95,15 @@ class Recommend extends Component<any, any> {
     }, 0)
   }
 
-  _onRefresh = (type = '') => {
+  _onRefresh: any = () => {
     this.setState({
       isLoading: true
     })
     this.props.dispatch(getRecommend())
   }
 
-  _renderItemComponent = ({ item: rowData, index }, type) => {
+  _renderItemComponent = (data?, type?) => {
+    const { item: rowData } = data
     const { modeInfo, navigation } = this.props.screenProps
     let outter = []
     switch (type) {
@@ -139,6 +139,8 @@ class Recommend extends Component<any, any> {
           rowData: item
         }}/>))
         break
+      default:
+        break
     }
     return (
       <View style={{ flexDirection: 'row', flexWrap: 'wrap', marginHorizontal: 7, elevation: 2, backgroundColor: modeInfo.backgroundColor}}>
@@ -147,13 +149,13 @@ class Recommend extends Component<any, any> {
     )
   }
 
+  flatlist: any = false
+  refreshControl: any = false
+
   render() {
-    const { battle: battleReducer } = this.props
     const { modeInfo } = this.props.screenProps
     let { data } = this.state
 
-    let keys = Object.keys(data)
-    let NUM_SECTIONS = keys.length
     // console.log(data)
     const sections = Object.keys(data).filter(item => item !== 'warning').map((sectionName, index) => {
       return {
@@ -163,7 +165,7 @@ class Recommend extends Component<any, any> {
         renderItem: (...args) => this._renderItemComponent(...args, index)
       }
     })
-    log('recommend re-rendered')
+    global.log('recommend re-rendered')
     return (
       <AnimatedSectionList
         enableVirtualization={false}
@@ -179,7 +181,7 @@ class Recommend extends Component<any, any> {
         }
         disableVirtualization={true}
         renderScrollComponent={props => <global.NestedScrollView {...props}/>}
-        keyExtractor={(item, index) => `${item.id}`}
+        keyExtractor={(item) => `${item.id}`}
         renderItem={this._renderItemComponent}
         renderSectionHeader={renderSectionHeader}
         key={modeInfo.themeName}
@@ -200,13 +202,6 @@ const nameMapper = {
   'tips': '奖杯TIPS',
   'comment': '游戏评论'
 }
-
-const styles = StyleSheet.create({
-  avatar: {
-    width: 50,
-    height: 50
-  }
-})
 
 function mapStateToProps(state) {
   return {

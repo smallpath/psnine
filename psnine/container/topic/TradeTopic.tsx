@@ -3,13 +3,10 @@ import {
   StyleSheet,
   Text,
   View,
-  Dimensions,
   TouchableNativeFeedback,
   InteractionManager,
   ActivityIndicator,
-  StatusBar,
   Animated,
-  Easing,
   FlatList,
   Linking,
   Alert
@@ -32,9 +29,7 @@ import {
 
 declare var global
 
-let screen = Dimensions.get('window')
-const { height: SCREEN_HEIGHT } = screen
-
+/* tslint:disable */
 let toolbarActions = [
   {
     title: '回复', iconName: 'md-create', iconSize: 22, show: 'always', onPress: function () {
@@ -75,6 +70,7 @@ let toolbarActions = [
     }
   }
 ]
+/* tslint:enable */
 
 export default class extends Component<any, any> {
 
@@ -94,7 +90,7 @@ export default class extends Component<any, any> {
     }
   }
 
-  componentWillMount = () => {
+  componentWillMount() {
     this.preFetch()
   }
 
@@ -104,8 +100,7 @@ export default class extends Component<any, any> {
       isLoading: true
     })
     InteractionManager.runAfterInteractions(() => {
-      const data = getAPI(params.URL).then(data => {
-
+      getAPI(params.URL).then(data => {
         const html = data.contentInfo.html
         const emptyHTML = '<div></div>'
         this.hasContent = html !== emptyHTML
@@ -153,11 +148,9 @@ export default class extends Component<any, any> {
   renderTitle = (titleInfo) => {
     const { modeInfo } = this.props.screenProps
 
-    const { params } = this.props.navigation.state
-    const nodeStyle = { flex: -1, color: modeInfo.standardTextColor, textAlign: 'center', textAlignVertical: 'center' }
-    const textStyle = { flex: -1, color: modeInfo.standardTextColor, textAlign: 'center', textAlignVertical: 'center' }
-    const tableStyle = [textStyle, { textAlign: 'center' }]
-    const tableDescStyle = [textStyle, { textAlign: 'center', color: modeInfo.titleTextColor }]
+    const textStyle: any = { flex: -1, color: modeInfo.standardTextColor, textAlign: 'center', textAlignVertical: 'center' }
+    const tableStyle: any = [textStyle, { textAlign: 'center' }]
+    const tableDescStyle: any = [textStyle, { textAlign: 'center', color: modeInfo.titleTextColor }]
     return (
       <View key={'header'} style={{
         flex: 1,
@@ -189,39 +182,49 @@ export default class extends Component<any, any> {
               <View style={{ flex: 1.1, flexDirection: 'column', justifyContent: 'space-between' }}>
                 <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center' }}>
                   <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-around' }}>
-                    <Text selectable={false} style={tableDescStyle}><Text selectable={false} style={tableStyle}>分类：</Text>{titleInfo.table.slice().shift() || '暂无'}</Text>
+                    <Text selectable={false} style={tableDescStyle}><Text
+                      selectable={false} style={tableStyle}>分类：</Text>
+                      {titleInfo.table.slice().shift() || '暂无'}</Text>
                   </View>
                   <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-around' }}>
-                    <Text selectable={false} style={tableDescStyle}><Text selectable={false} style={tableStyle}>类型：</Text>{titleInfo.table.slice(1).shift() || '暂无'}</Text>
-                  </View>
-                </View>
-                <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center' }}>
-                  <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-around' }}>
-                    <Text selectable={false} style={tableDescStyle}><Text selectable={false} style={tableStyle}>方式：</Text>{titleInfo.table.slice(2).shift() || '暂无'}</Text>
-                  </View>
-                  <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-around' }}>
-                    <Text selectable={false} style={tableDescStyle}><Text selectable={false} style={tableStyle}>地区：</Text>{titleInfo.table.slice(3).shift() || '暂无'}</Text>
+                    <Text selectable={false} style={tableDescStyle}>
+                      <Text selectable={false} style={tableStyle}>类型：</Text>{titleInfo.table.slice(1).shift() || '暂无'}</Text>
                   </View>
                 </View>
                 <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center' }}>
                   <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-around' }}>
-                    <Text selectable={false} style={tableDescStyle}><Text selectable={false} style={tableStyle}>平台：</Text>{titleInfo.table.slice(4).shift() || '暂无'}</Text>
+                    <Text selectable={false} style={tableDescStyle}>
+                      <Text selectable={false} style={tableStyle}>方式：</Text>{titleInfo.table.slice(2).shift() || '暂无'}</Text>
                   </View>
                   <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-around' }}>
-                    <Text selectable={false} style={tableDescStyle}><Text selectable={false} style={tableStyle}>版本：</Text>{titleInfo.table.slice(5).shift() || '暂无'}</Text>
-                  </View>
-                </View>
-                <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center' }}>
-                  <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-around' }}>
-                    <Text selectable={false} style={tableDescStyle}><Text selectable={false} style={tableStyle}>语言：</Text>{titleInfo.table.slice(6).shift() || '暂无'}</Text>
-                  </View>
-                  <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-around' }}>
-                    <Text selectable={false} style={tableDescStyle}><Text selectable={false} style={tableStyle}>QQ：</Text>{titleInfo.table.slice(7).shift() || '暂无'}</Text>
+                    <Text selectable={false} style={tableDescStyle}>
+                      <Text selectable={false} style={tableStyle}>地区：</Text>{titleInfo.table.slice(3).shift() || '暂无'}</Text>
                   </View>
                 </View>
                 <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center' }}>
                   <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-around' }}>
-                    <Text selectable={false} style={tableDescStyle}><Text selectable={false} style={tableStyle}>闲鱼：</Text>{titleInfo.table.slice(8).shift() || '暂无'}</Text>
+                    <Text selectable={false} style={tableDescStyle}>
+                      <Text selectable={false} style={tableStyle}>平台：</Text>{titleInfo.table.slice(4).shift() || '暂无'}</Text>
+                  </View>
+                  <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-around' }}>
+                    <Text selectable={false} style={tableDescStyle}>
+                      <Text selectable={false} style={tableStyle}>版本：</Text>{titleInfo.table.slice(5).shift() || '暂无'}</Text>
+                  </View>
+                </View>
+                <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center' }}>
+                  <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-around' }}>
+                    <Text selectable={false} style={tableDescStyle}>
+                      <Text selectable={false} style={tableStyle}>语言：</Text>{titleInfo.table.slice(6).shift() || '暂无'}</Text>
+                  </View>
+                  <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-around' }}>
+                    <Text selectable={false} style={tableDescStyle}>
+                      <Text selectable={false} style={tableStyle}>QQ：</Text>{titleInfo.table.slice(7).shift() || '暂无'}</Text>
+                  </View>
+                </View>
+                <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center' }}>
+                  <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-around' }}>
+                    <Text selectable={false} style={tableDescStyle}>
+                      <Text selectable={false} style={tableStyle}>闲鱼：</Text>{titleInfo.table.slice(8).shift() || '暂无'}</Text>
                   </View>
                   <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-around' }} />
                 </View>
@@ -261,8 +264,8 @@ export default class extends Component<any, any> {
   renderComment = (commentList) => {
     const { modeInfo } = this.props.screenProps
     const { navigation } = this.props
-    const list = []
-    let readMore = null
+    const list: any[] = []
+    let readMore: any = null
     for (const rowData of commentList) {
       if (rowData.isGettingMoreComment === false) {
         list.push(
@@ -306,11 +309,13 @@ export default class extends Component<any, any> {
     const shouldMarginTop = !this.hasContent
     return (
       <View style={{ marginTop: shouldMarginTop ? 5 : 0 }}>
-        {readMore && <View style={{ elevation: 1, margin: 5, marginTop: 0, marginBottom: 5, backgroundColor: modeInfo.backgroundColor }}>{readMore}</View>}
+        {readMore && <View style={{
+            elevation: 1, margin: 5, marginTop: 0, marginBottom: 5, backgroundColor: modeInfo.backgroundColor }}>{readMore}</View>}
         <View style={{ elevation: 1, margin: 5, marginTop: 0, backgroundColor: modeInfo.backgroundColor }}>
           {list}
         </View>
-        {readMore && <View style={{ elevation: 1, margin: 5, marginTop: 0, marginBottom: 5, backgroundColor: modeInfo.backgroundColor }}>{readMore}</View>}
+        {readMore && <View style={{
+            elevation: 1, margin: 5, marginTop: 0, marginBottom: 5, backgroundColor: modeInfo.backgroundColor }}>{readMore}</View>}
       </View>
     )
   }
@@ -319,20 +324,13 @@ export default class extends Component<any, any> {
   onCommentLongPress = (rowData) => {
     if (this.isReplyShowing === true) return
     const { params } = this.props.navigation.state
-    const cb = () => {
-      this.props.navigation.navigate('Reply', {
-        type: params.type,
-        id: params.rowData ? params.rowData.id : (params.URL.match(/trade\/(\d+)/) || [0, -1])[1],
-        at: rowData.psnid,
-        callback: () => this.preFetch(),
-        shouldSeeBackground: true
-      })
-    }
-    if (this.state.openVal._value === 1) {
-      this._animateToolbar(0, cb)
-    } else if (this.state.openVal._value === 0) {
-      cb()
-    }
+    this.props.navigation.navigate('Reply', {
+      type: params.type,
+      id: params.rowData ? params.rowData.id : (params.URL.match(/trade\/(\d+)/) || [0, -1])[1],
+      at: rowData.psnid,
+      callback: () => this.preFetch(),
+      shouldSeeBackground: true
+    })
   }
 
   _readMore = (URL) => {
@@ -346,8 +344,8 @@ export default class extends Component<any, any> {
     // console.log('CommunityTopic.js rendered');
     const { modeInfo } = this.props.screenProps
     const { data: source } = this.state
-    const data = []
-    const renderFuncArr = []
+    const data: any[] = []
+    const renderFuncArr: any[] = []
     const shouldPushData = !this.state.isLoading
     if (shouldPushData) {
       data.push(source.titleInfo)
@@ -409,8 +407,6 @@ export default class extends Component<any, any> {
       })
     }
 
-    this.viewBottomIndex = Math.max(data.length - 1, 0)
-
     return (
       <View
         style={{ flex: 1, backgroundColor: modeInfo.backgroundColor }}
@@ -466,6 +462,8 @@ export default class extends Component<any, any> {
       </View>
     )
   }
+
+  flatlist: any = false
 }
 
 const styles = StyleSheet.create({
@@ -480,8 +478,8 @@ const styles = StyleSheet.create({
     elevation: 4
   },
   selectedTitle: {
-    //backgroundColor: '#00ffff'
-    //fontSize: 20
+    // backgroundColor: '#00ffff'
+    // fontSize: 20
   },
   avatar: {
     width: 50,

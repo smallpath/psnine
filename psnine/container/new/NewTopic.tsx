@@ -42,8 +42,6 @@ export default class NewTopic extends Component<any, any> {
 
   constructor(props) {
     super(props)
-    const { params } = this.props.navigation.state
-    const { at = '', shouldShowPoint = false, isOldPage = false } = params
     // console.log(params)
     this.state = {
       icon: false,
@@ -61,9 +59,8 @@ export default class NewTopic extends Component<any, any> {
     }
   }
 
-  componentDidMount = () => {
+  componentDidMount() {
     const { modeInfo } = this.props.screenProps
-    let config = { tension: 30, friction: 7 }
     // Animated.spring(this.state.openVal, { toValue: 1, ...config }).start(() => {
       if (modeInfo.settingInfo.psnid === '') {
         global.toast('请首先登录')
@@ -91,18 +88,20 @@ export default class NewTopic extends Component<any, any> {
     Animated.spring(this.state.toolbarOpenVal, { toValue: target, ...config }).start()
   }
 
-  componentWillUnmount = () => {
+  componentWillUnmount() {
     this.keyboardDidHideListener.remove()
     this.keyboardDidShowListener.remove()
     this.removeListener && this.removeListener.remove()
   }
 
-  componentWillMount = async () => {
-    let config = { tension: 30, friction: 7 }
-    const { openVal, marginTop } = this.state
-    const { callback } = this.props.navigation.state.params
+  shouldShowEmotion: any = false
+  keyboardDidHideListener: any = false
+  keyboardDidShowListener: any = false
+  removeListener: any = false
+  isToolbarShowing: any = false
+
+  async componentWillMount() {
     const { params } = this.props.navigation.state
-    const { modeInfo } = this.props.screenProps
 
     if (params.URL) {
       InteractionManager.runAfterInteractions(() => {
@@ -157,7 +156,7 @@ export default class NewTopic extends Component<any, any> {
 
   afterExist = ''
   sendReply = () => {
-    const result = {
+    const result: any = {
       content: this.state.content,
       open: this.state.open,
       node: this.state.node,
@@ -187,7 +186,7 @@ export default class NewTopic extends Component<any, any> {
         global.toast('发布成功')
       })
     }).catch(err => {
-      const msg = `发布失败: ${arr[1]}`
+      const msg = `发布失败: ${err}`
       global.toast(msg)
     })
   }
@@ -201,7 +200,6 @@ export default class NewTopic extends Component<any, any> {
   }
 
   render() {
-    let { openVal, marginTop } = this.state
     const { icon, toolbarOpenVal } = this.state
     const { modeInfo } = this.props.screenProps
     let outerStyle = {
@@ -218,13 +216,8 @@ export default class NewTopic extends Component<any, any> {
       opacity: 1,
       zIndex: 3,
       backgroundColor: modeInfo.backgroundColor
-      //elevation : openVal.interpolate({inputRange: [0 ,1], outputRange: [0, 8]})
+      // elevation : openVal.interpolate({inputRange: [0 ,1], outputRange: [0, 8]})
     }
-
-    let animatedSubmitStyle = {
-      height: 40
-    }
-
     let animatedToolbarStyle = {
       height: 56,
       backgroundColor: modeInfo.standardColor
@@ -249,7 +242,6 @@ export default class NewTopic extends Component<any, any> {
             subtitleColor={modeInfo.isNightMode ? '#000' : '#fff'}
             actions={toolbarActions}
             onIconClicked={this._pressButton}
-            onActionSelected={this.onActionSelected}
           />
 
         </View >
@@ -282,7 +274,6 @@ export default class NewTopic extends Component<any, any> {
           <Picker style={{
             flex: 1,
             borderWidth: 1,
-            color: modeInfo.standardTextColor,
             borderBottomColor: modeInfo.standardTextColor
           }}
             prompt='选择'
@@ -318,7 +309,7 @@ export default class NewTopic extends Component<any, any> {
             />
             <View style={[{
               elevation: 4,
-              bottom: 0 //toolbarOpenVal.interpolate({ inputRange: [0, 1], outputRange: [0, 1] })
+              bottom: 0 // toolbarOpenVal.interpolate({ inputRange: [0, 1], outputRange: [0, 1] })
             }, animatedToolbarStyle]}>
               <View style={{
                 flex: 1,
@@ -342,7 +333,6 @@ export default class NewTopic extends Component<any, any> {
                   </TouchableNativeFeedback>
                   <TouchableNativeFeedback
                     onPress={this._pressImageButton}
-
                     background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
                     style={{ borderRadius: 25 }}
                   >
@@ -421,7 +411,7 @@ export default class NewTopic extends Component<any, any> {
             {/* 表情 */}
             <Animated.View style={{
               elevation: 4,
-              bottom: 0, //toolbarOpenVal.interpolate({ inputRange: [0, 1], outputRange: [0, 100] }),
+              bottom: 0, // toolbarOpenVal.interpolate({ inputRange: [0, 1], outputRange: [0, 100] }),
               backgroundColor: modeInfo.standardColor,
               height: toolbarOpenVal.interpolate({ inputRange: [-1, 0, 1], outputRange: [0, 0, emotionToolbarHeight] }),
               opacity: 1
@@ -446,7 +436,7 @@ export default class NewTopic extends Component<any, any> {
     )
   }
 
-  onPressEmotion = ({ text, url }) => {
+  onPressEmotion = ({ text }) => {
     this.addText(
       text
     )
@@ -469,12 +459,13 @@ export default class NewTopic extends Component<any, any> {
     })
   }
 
+  isValueChanged = false
+  content: any = false
   toolbar = () => {
-    const { params } = this.props.navigation.state
     Keyboard.dismiss()
     this.props.navigation.navigate('Toolbar', {
-      callback: ({ text, offset }) => {
-        this.addText(text, true)
+      callback: ({ text }) => {
+        this.addText(text)
       }
     })
   }
@@ -486,8 +477,7 @@ export default class NewTopic extends Component<any, any> {
     })
   }
 
-  _pressImageButton = (callback) => {
-    const { params } = this.props.navigation.state
+  _pressImageButton = () => {
     Keyboard.dismiss()
     this.props.navigation.navigate('UserPhoto', {
       URL: 'http://psnine.com/my/photo?page=1',
@@ -497,8 +487,6 @@ export default class NewTopic extends Component<any, any> {
     })
   }
 }
-
-const width = Dimensions.get('window').width
 
 const styles = StyleSheet.create({
   circle: {
@@ -538,13 +526,13 @@ const styles = StyleSheet.create({
   KeyboardAvoidingView: {
     flex: 10,
     // width: width,
-    //alignSelf:'center',
-    //justifyContent: 'space-between',
+    // alignSelf:'center',
+    // justifyContent: 'space-between',
     flexDirection: 'column'
   },
   titleView: {
     flex: 1,
-    //marginTop: -10,
+    // marginTop: -10,
     justifyContent: 'center'
     // flexDirection: 'column',
     // justifyContent: 'space-between',

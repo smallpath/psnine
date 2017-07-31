@@ -1,8 +1,6 @@
 import React, { Component } from 'react'
 import {
-  StyleSheet,
   RefreshControl,
-  SectionList,
   Animated,
   FlatList
 } from 'react-native'
@@ -12,14 +10,11 @@ import { getCircleList as getList } from '../../redux/action/circle'
 
 import FooterProgress from '../../component/FooterProgress'
 
-const AnimatedSectionList = Animated.createAnimatedComponent(SectionList)
-
-let toolbarHeight = 56
-let releasedMarginTop = 0
-
 import CircleItem from '../../component/CircleItem'
 
 const AnimatedFlatList = Animated.createAnimatedComponent(FlatList)
+
+declare var global
 
 class Circle extends Component<any, any> {
   static navigationOptions = {
@@ -37,13 +32,13 @@ class Circle extends Component<any, any> {
 
   shouldOnRefreshForSearch = false
 
-  componentWillReceiveProps = (nextProps) => {
+  componentWillReceiveProps(nextProps) {
     let shouldCall = nextProps.segmentedIndex === 7
     let empty = () => {}
     let cb = empty
-    if (this.props.screenProps.circleType != nextProps.screenProps.circleType) {
+    if (this.props.screenProps.circleType !== nextProps.screenProps.circleType) {
       cb = () => this._onRefresh(nextProps.screenProps.circleType)
-    } else if (this.props.screenProps.modeInfo.themeName != nextProps.screenProps.modeInfo.themeName) {
+    } else if (this.props.screenProps.modeInfo.themeName !== nextProps.screenProps.modeInfo.themeName) {
       cb = () => {}
     } else if (this.props.screenProps.searchTitle !== nextProps.screenProps.searchTitle) {
       if (shouldCall) {
@@ -76,7 +71,7 @@ class Circle extends Component<any, any> {
     }
   }
 
-  componentWillMount = () => {
+  componentWillMount() {
     const { reducer } = this.props
     const { circleType, searchTitle } = this.props.screenProps
 
@@ -88,8 +83,8 @@ class Circle extends Component<any, any> {
     }
   }
 
-  shouldComponentUpdate = (nextProps, nextState) => {
-    if (this.props.screenProps.modeInfo.themeName != nextProps.screenProps.modeInfo.themeName) {
+  shouldComponentUpdate(nextProps, nextState) {
+    if (this.props.screenProps.modeInfo.themeName !== nextProps.screenProps.modeInfo.themeName) {
       return true
     }
     if (nextState.isRefreshing !== this.state.isRefreshing) {
@@ -107,9 +102,8 @@ class Circle extends Component<any, any> {
     return true
   }
 
-  _onRefresh = (type = '', searchTitle) => {
-    const { reducer, dispatch } = this.props
-    const { circleType } = this.props.screenProps
+  _onRefresh = (type = '', searchTitle?) => {
+    const { dispatch } = this.props
 
     this.setState({
       isRefreshing: true
@@ -121,6 +115,8 @@ class Circle extends Component<any, any> {
       })
     )
   }
+
+  flatlist: any = false
 
   _loadMoreData = () => {
     const { reducer, dispatch } = this.props
@@ -145,7 +141,7 @@ class Circle extends Component<any, any> {
 
   ITEM_HEIGHT = 74 + 7
 
-  _renderItem = ({ item: rowData, index }) => {
+  _renderItem = ({ item: rowData }) => {
 
     const { modeInfo, navigation } = this.props.screenProps
     const { ITEM_HEIGHT } = this
@@ -157,10 +153,12 @@ class Circle extends Component<any, any> {
     }} />
   }
 
+  refreshControl: any = false
+
   render() {
     const { reducer } = this.props
     const { modeInfo } = this.props.screenProps
-    log('Circle.js rendered')
+    global.log('Circle.js rendered')
     // console.log(reducer.page, reducer.list)
     return (
       <AnimatedFlatList style={{
@@ -179,7 +177,7 @@ class Circle extends Component<any, any> {
         }
         ListFooterComponent={() => <FooterProgress isLoadingMore={this.state.isLoadingMore} modeInfo={modeInfo} modeInfo={modeInfo} />}
         data={reducer.list}
-        keyExtractor={(item, index) => item.href}
+        keyExtractor={(item) => item.href}
         renderItem={this._renderItem}
         onEndReached={this._onEndReached}
         onEndReachedThreshold={0.5}
@@ -189,8 +187,7 @@ class Circle extends Component<any, any> {
         initialNumToRender={42}
         maxToRenderPerBatch={8}
         disableVirtualization={false}
-        contentContainerStyle={styles.list}
-        getItemLayout={(data, index) => (
+        getItemLayout={(_, index) => (
           {length: this.ITEM_HEIGHT, offset: this.ITEM_HEIGHT * index, index}
         )}
         viewabilityConfig={{
@@ -201,15 +198,7 @@ class Circle extends Component<any, any> {
       />
     )
   }
-
 }
-
-const styles = StyleSheet.create({
-  avatar: {
-    width: 50,
-    height: 50
-  }
-})
 
 function mapStateToProps(state) {
   return {

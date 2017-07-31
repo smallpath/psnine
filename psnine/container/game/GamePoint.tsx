@@ -4,13 +4,10 @@ import {
   Text,
   View,
   Image,
-  Dimensions,
   TouchableNativeFeedback,
   InteractionManager,
   ActivityIndicator,
-  StatusBar,
   Animated,
-  Easing,
   FlatList
 } from 'react-native'
 
@@ -22,23 +19,10 @@ import {
   getGamePointAPI
 } from '../../dao'
 
-let screen = Dimensions.get('window')
-const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = screen
-
 let toolbarActions = [
   { title: '回复', iconName: 'md-create', show: 'always', iconSize: 22 },
   { title: '刷新', iconName: 'md-refresh', show: 'always' }
 ]
-let title = 'TOPIC'
-let WEBVIEW_REF = `WEBVIEW_REF`
-
-let toolbarHeight = 56
-let releasedMarginTop = 0
-
-const ACTUAL_SCREEN_HEIGHT = SCREEN_HEIGHT - StatusBar.currentHeight + 1
-
-let CIRCLE_SIZE = 56
-let config = { tension: 30, friction: 7, ease: Easing.in(Easing.ease(1, 0, 1, 1)), duration: 200 }
 
 class CommunityTopic extends Component<any, any> {
 
@@ -78,21 +62,14 @@ class CommunityTopic extends Component<any, any> {
     switch (index) {
       case 0:
         if (this.isReplyShowing === true) return
-        const cb = () => {
-          this.props.navigation.navigate('Reply', {
-            type: 'psngame',
-            isOldPage: this.state.isOldPage,
-            shouldShowPoint: true,
-            id: params.rowData.id,
-            callback: this.preFetch,
-            shouldSeeBackground: true
-          })
-        }
-        if (this.state.openVal._value === 1) {
-          this._animateToolbar(0, cb)
-        } else if (this.state.openVal._value === 0) {
-          cb()
-        }
+        this.props.navigation.navigate('Reply', {
+          type: 'psngame',
+          isOldPage: this.state.isOldPage,
+          shouldShowPoint: true,
+          id: params.rowData.id,
+          callback: this.preFetch,
+          shouldSeeBackground: true
+        })
         return
       case 1:
         this.preFetch()
@@ -100,7 +77,9 @@ class CommunityTopic extends Component<any, any> {
     }
   }
 
-  componentWillMount = () => {
+  isReplyShowing = false
+
+  componentWillMount() {
     this.preFetch()
   }
 
@@ -110,7 +89,7 @@ class CommunityTopic extends Component<any, any> {
     })
     const { params } = this.props.navigation.state
     InteractionManager.runAfterInteractions(() => {
-      const data = getGamePointAPI(params.URL).then(data => {
+      getGamePointAPI(params.URL).then(data => {
         this.hasComment = data.commentList.length !== 0
         this.setState({
           data,
@@ -128,10 +107,6 @@ class CommunityTopic extends Component<any, any> {
     ]
   })
 
-  shouldComponentUpdate = (nextProp, nextState) => {
-    return true
-  }
-
   renderHeader = (rowData) => {
     const { modeInfo } = this.props.screenProps
     return (
@@ -148,7 +123,6 @@ class CommunityTopic extends Component<any, any> {
           }
         }}
         useForeground={true}
-
         background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
       >
         <View pointerEvents='box-only' style={{
@@ -179,7 +153,6 @@ class CommunityTopic extends Component<any, any> {
             </View>
 
             <View style={{ flex: -1, flexDirection: 'row', justifyContent: 'space-between' }}>
-              {/*<Text selectable={false} style={{ flex: -1, color: idColor, textAlign: 'center', textAlignVertical: 'center' }}>{rowData.text}</Text>*/}
               <Text selectable={false} style={{
                 flex: -1,
                 color: modeInfo.standardTextColor,
@@ -232,9 +205,7 @@ class CommunityTopic extends Component<any, any> {
 
     const { modeInfo } = this.props.screenProps
     const { data: source } = this.state
-    const data = []
-    const renderFuncArr = []
-    const shouldPushData = !this.state.isLoading
+    const data: any[] = []
     // if (shouldPushData) {
     //   data.push(source.gameInfo)
     //   renderFuncArr.push(this.renderHeader(source.gameInfo))
@@ -304,6 +275,9 @@ class CommunityTopic extends Component<any, any> {
       </View>
     )
   }
+  isValueChanged = false
+  flatlist: any = false
+  refreshControl: any = false
 }
 
 const styles = StyleSheet.create({
@@ -318,8 +292,8 @@ const styles = StyleSheet.create({
     elevation: 4
   },
   selectedTitle: {
-    //backgroundColor: '#00ffff'
-    //fontSize: 20
+    // backgroundColor: '#00ffff'
+    // fontSize: 20
   },
   avatar: {
     width: 50,

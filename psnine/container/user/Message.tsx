@@ -26,7 +26,7 @@ class Message extends Component<any, any> {
     }
   }
 
-  onNavClicked = (rowData) => {
+  onNavClicked = () => {
     const { navigation } = this.props
     navigation.goBack()
   }
@@ -81,12 +81,12 @@ class Message extends Component<any, any> {
     ]
   })
 
-  componentWillMount = async () => {
+  async componentWillMount() {
     this.fetchMessages()
   }
 
   fetchMessages = async () => {
-    const data = await fetchMessages(this.props.navigation.state.params.psnid)
+    const data = await fetchMessages()
     this.setState({
       messages: data,
       isRefreshing: false
@@ -95,7 +95,7 @@ class Message extends Component<any, any> {
 
   _renderItem = ({ item: rowData, index }) => {
     const { modeInfo } = this.props.screenProps
-    const { ITEM_HEIGHT, _pressRow: onPress } = this
+    const { _pressRow: onPress } = this
     const { navigation } = this.props
     const { nums = 0 } = navigation.state.params
     return <MessageItem {...{
@@ -107,7 +107,7 @@ class Message extends Component<any, any> {
       modalList: [{
         text: '回复',
         onPress: (rowData) => {
-          const [type, params] = this._pressRow(rowData, true)
+          const [type, params]: any = this._pressRow(rowData, true)
           if (type === 'Home') return Alert.alert('提示', '留言板暂不支持快捷回复')
           navigation.navigate('Reply', {
             type: params.type,
@@ -143,20 +143,17 @@ class Message extends Component<any, any> {
           flex: 1,
           backgroundColor: modeInfo.background
         }}
-          ref={flatlist => this.flatlist = flatlist}
           refreshControl={
             <RefreshControl
               refreshing={this.state.isRefreshing}
               onRefresh={this.fetchMessages}
               colors={[modeInfo.accentColor]}
               progressBackgroundColor={modeInfo.backgroundColor}
-              ref={ref => this.refreshControl = ref}
             />
           }
           data={this.state.messages}
           keyExtractor={(item, index) => `${item.url}::${index}`}
           renderItem={this._renderItem}
-          onEndReached={this._onEndReached}
           onEndReachedThreshold={0.5}
           extraData={modeInfo}
           windowSize={21}
@@ -164,7 +161,6 @@ class Message extends Component<any, any> {
           initialNumToRender={42}
           maxToRenderPerBatch={8}
           disableVirtualization={false}
-          contentContainerStyle={styles.list}
           viewabilityConfig={{
             minimumViewTime: 1,
             viewAreaCoveragePercentThreshold: 0,

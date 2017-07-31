@@ -76,31 +76,35 @@ export default class Home extends Component<any, any> {
       leftIcon: false,
       rightIcon: false,
       middleIcon: false,
-      _scrollHeight: this.props.screenProps.modeInfo.height - StatusBar.currentHeight - 56 + 1
+      _scrollHeight: this.props.screenProps.modeInfo.height - (StatusBar.currentHeight || 0) - 56 + 1
     }
   }
 
   componentWillReceiveProps(nextProps) {
     if (this.props.screenProps.modeInfo.width !== nextProps.screenProps.modeInfo.width) {
-      const { params } = this.props.navigation.state
       this.props.navigation.goBack()
       // this.props.navigation.navigate('Home', params)
     }
   }
 
-  componentWillUnmount = () => {
+  removeListener: any = false
+  keyboardDidHideListener: any = false
+  timeout: any = false
+  _coordinatorLayout: any = false
+  sad: any = false
+  componentWillUnmount() {
     this.removeListener && this.removeListener.remove()
     if (this.timeout) clearTimeout(this.timeout)
     // this.keyboardDidShowListener && this.keyboardDidShowListener.remove()
     this.keyboardDidHideListener && this.keyboardDidHideListener.remove()
   }
 
-  componentWillMount = () => {
+  componentWillMount() {
     // this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', (event) => {
     //   // console.log(event.nativeEvent, this._coordinatorLayout.resetBehavior)
     //   this._coordinatorLayout.resetBehavior(this._appBarLayout, false, true)
     // })
-    this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', (event) => {
+    this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', () => {
       // this._coordinatorLayout.setScrollingViewBehavior(this._scrollView)
       this._coordinatorLayout.resetBehavior(this._appBarLayout, false)
     })
@@ -127,7 +131,7 @@ export default class Home extends Component<any, any> {
 
     InteractionManager.runAfterInteractions(() => {
 
-      const data = getHomeAPI(params.URL).then(data => {
+      getHomeAPI(params.URL).then(data => {
 
         this.hasGameTable = data.gameTable.length !== 0
         // console.log(profileToolbar)
@@ -139,6 +143,8 @@ export default class Home extends Component<any, any> {
     })
   }
 
+  hasGameTable = false
+
   handleImageOnclick = (url) => this.props.navigation.navigate('ImageViewer', {
     images: [
       { url }
@@ -146,10 +152,6 @@ export default class Home extends Component<any, any> {
   })
 
   renderHeader = (rowData) => {
-    const { modeInfo } = this.props.screenProps
-    const { psnButtonInfo } = this.state.data
-    const { marginTop } = this.state
-    const { nightModeInfo } = modeInfo
     const color = 'rgba(255,255,255,1)'
     const infoColor = 'rgba(255,255,255,0.8)'
     const { width: SCREEN_WIDTH } = Dimensions.get('window')
@@ -165,7 +167,7 @@ export default class Home extends Component<any, any> {
         }}
         blurRadis={0}
         >
-        <LinearGradient
+        <global.LinearGradient
           colors={['rgba(0,0,0,0.5)', 'rgba(0,0,0,0)', 'rgba(0,0,0,0)', 'rgba(0,0,0,0.5)']}
           locations={[0, 0.3, 0.7, 1]}
           start={{x: 0.5, y: 0}} end={{x: 0.5, y: 1}}>
@@ -178,7 +180,8 @@ export default class Home extends Component<any, any> {
               <View style={{ justifyContent: 'center', alignItems: 'center', flex: 2, marginTop: 2  }}>
                 <Text style={{ flex: -1, color: infoColor, fontSize: 15, textAlign: 'center' }}>{rowData.description}</Text>
                 {
-                    rowData.icons && rowData.icons.length && <View style={{flexDirection: 'row', marginVertical: 2}}>{rowData.icons.filter((item, index) => index <= 2).map((item, index) => {
+                    rowData.icons && rowData.icons.length && <View
+                      style={{flexDirection: 'row', marginVertical: 2}}>{rowData.icons.filter((item, index) => index <= 2).map((item, index) => {
                       return (
                         <Image
                           key={index}
@@ -217,7 +220,9 @@ export default class Home extends Component<any, any> {
             </View>
 
             <View style={{ flex: 1, padding: 5}}>
-              <View borderRadius={20} style={{ marginTop: 10, paddingHorizontal: 10, alignSelf: 'center', alignContent: 'center',  flexDirection: 'row', justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0,0,0,0.3)'  }}>
+              <View borderRadius={20} style={{ marginTop: 10,
+                paddingHorizontal: 10, alignSelf: 'center', alignContent: 'center',
+                flexDirection: 'row', justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0,0,0,0.3)'  }}>
                 <Text style={{ height: 30, textAlignVertical: 'center', textAlign: 'center' }}>
                   <Text style={{ flex: 1, color: trophyColor1, marginVertical: 2, textAlign: 'center', fontSize: 15 }}>{rowData.platinum + ' '}</Text>
                   <Text style={{ flex: 1, color: trophyColor2, marginVertical: 2, textAlign: 'center', fontSize: 15 }}>{rowData.gold + ' '}</Text>
@@ -251,7 +256,7 @@ export default class Home extends Component<any, any> {
               </View>
             </View>
           </View>
-        </LinearGradient>
+        </global.LinearGradient>
       </ImageBackground>
     )
   }
@@ -259,7 +264,6 @@ export default class Home extends Component<any, any> {
   renderTabContainer = (list) => {
     const { modeInfo } = this.props.screenProps
     const { params } = this.props.navigation.state
-    const { marginTop } = this.state
 
     return (
       <CreateUserTab screenProps={{
@@ -267,7 +271,7 @@ export default class Home extends Component<any, any> {
         toolbar: list,
         preFetch: this.preFetch,
         setToolbar: ({ toolbar, toolbarActions, componentDidFocus }) => {
-          const obj = {
+          const obj: any = {
             toolbar,
             onActionSelected: toolbarActions
           }
@@ -301,7 +305,6 @@ export default class Home extends Component<any, any> {
  _onActionSelected = (index) => {
     const { params } = this.props.navigation.state
     const { preFetch } = this
-    const { modeInfo } = this.props.screenProps
     const psnid = params.URL.split('/').filter(item => item.trim()).pop()
     // alert(index)
     switch (index) {
@@ -414,21 +417,8 @@ export default class Home extends Component<any, any> {
     const { params } = this.props.navigation.state
     console.log('Home.js rendered')
     const { modeInfo } = this.props.screenProps
-    const { data: source, marginTop } = this.state
-    const data = []
-    const renderFuncArr = []
-    const shouldPushData = !this.state.isLoading
+    const { data: source } = this.state
 
-    this.viewBottomIndex = Math.max(data.length - 1, 0)
-    let { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window')
-    let ACTUAL_SCREEN_HEIGHT = SCREEN_HEIGHT - StatusBar.currentHeight + 1
-    const profileToolbar = this.state.data.psnButtonInfo ? this.state.data.psnButtonInfo.reverse().map((item, index) => {
-      const result = { title: item.text, iconName: iconMapper[item.text], show: item.text.includes('游戏同步') ? 'always' : 'never' }
-      if (!iconMapper[item.text]) delete result.iconName
-      if (index === 0) result.icon = this.state.middleIcon
-      if (item.text.includes('冷却') || iconMapper[item.text]) return result
-      return undefined
-    }).filter(item => item) : []
     // console.log(JSON.stringify(profileToolbar))
     return source.playerInfo && this.state.leftIcon && !this.state.isLoading ? (
       <View style={{flex: 1}}>
@@ -500,7 +490,6 @@ export default class Home extends Component<any, any> {
         actions={[]}
         key={this.state.toolbar.map(item => item.text || '').join('::')}
         onIconClicked={() => this.props.navigation.goBack()}
-        onActionSelected={this.onActionSelected}
       />
       <ActivityIndicator
         animating={this.state.isLoading}
@@ -515,7 +504,6 @@ export default class Home extends Component<any, any> {
     </View>
   }
 
-  _coordinatorLayout = null
   _appBarLayout = null
   _scrollView = null
 
@@ -530,28 +518,7 @@ export default class Home extends Component<any, any> {
   _setScrollView = component => {
     this._scrollView = component
   }
-
-  _getItems(count) {
-    let items = []
-
-    for (let i = 0; i < count; i++) {
-      items.push(
-        <View
-          key={i}
-          style={[
-            styles.item,
-            { backgroundColor: ITEM_COLORS[i % ITEM_COLORS.length] }
-          ]}>
-          <Text style={styles.itemContent}>ITEM #{i}</Text>
-        </View>
-      )
-    }
-
-    return items
-  }
 }
-
-const ITEM_COLORS = ['#E91E63', '#673AB7', '#2196F3', '#00BCD4', '#4CAF50', '#CDDC39']
 
 const styles = StyleSheet.create({
   container: {
@@ -565,8 +532,8 @@ const styles = StyleSheet.create({
     elevation: 4
   },
   selectedTitle: {
-    //backgroundColor: '#00ffff'
-    //fontSize: 20
+    // backgroundColor: '#00ffff'
+    // fontSize: 20
   },
   avatar: {
     width: 50,

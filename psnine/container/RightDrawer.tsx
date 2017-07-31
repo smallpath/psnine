@@ -6,7 +6,8 @@ import {
   View,
   StyleSheet,
   TouchableNativeFeedback,
-  Text
+  Text,
+  TouchableOpacity
 } from 'react-native'
 
 import { changeSegmentIndex } from '../redux/action/app'
@@ -25,7 +26,7 @@ import {
   DrawerNavigator
 } from 'react-navigation'
 
-const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window')
+const { width: SCREEN_WIDTH } = Dimensions.get('window')
 
 const RightDrawer = DrawerNavigator({
   Recommend: {
@@ -127,8 +128,8 @@ export default class RightDrawerContainer extends Component<any, any> {
     super(props)
   }
 
-  shouldComponentUpdate(prop, state) {
-    const { communityType, geneType, modeInfo, searchTitle, circleType } = prop.screenProps
+  shouldComponentUpdate(prop) {
+    const { geneType, modeInfo, searchTitle, circleType } = prop.screenProps
     if (searchTitle !== this.props.screenProps.searchTitle) return true
     if (modeInfo.themeName !== this.props.screenProps.modeInfo.themeName) return true
     if (geneType !== this.props.screenProps.geneType) return true

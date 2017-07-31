@@ -3,7 +3,6 @@ import {
   StyleSheet,
   Text,
   View,
-  Dimensions,
   TouchableNativeFeedback,
   RefreshControl,
   InteractionManager,
@@ -11,17 +10,19 @@ import {
   FlatList
 } from 'react-native'
 
-const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window')
-
 import { standardColor, idColor } from '../../constant/colorConfig'
 
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import { getGameMapperAPI, getTopicURL } from '../../dao'
 import FooterProgress from '../../component/FooterProgress'
 
-class TopicItem extends React.PureComponent {
+declare var global
 
-  shouldComponentUpdate = (props, state) => props.modeInfo.themeName !== this.props.modeInfo.themeName
+class TopicItem extends React.PureComponent<any, any> {
+
+  shouldComponentUpdate(props) {
+    return props.modeInfo.themeName !== this.props.modeInfo.themeName
+  }
 
   _onRowPressed = (rowData) => {
     const { navigation } = this.props
@@ -34,7 +35,7 @@ class TopicItem extends React.PureComponent {
     })
   }
 
-  render = () => {
+  render() {
     const { modeInfo, rowData, modalList = [] } = this.props
     // console.log(rowData.content)
     return (
@@ -91,12 +92,12 @@ class GameTopic extends Component<any, any> {
     }
   }
 
-  onNavClicked = (rowData) => {
+  onNavClicked = () => {
     const { navigation } = this.props
     navigation.goBack()
   }
 
-  componentWillMount = async () => {
+  async componentWillMount() {
     const { params } = this.props.navigation.state
     this.fetchMessages(params.URL, 'jump')
   }
@@ -119,9 +120,9 @@ class GameTopic extends Component<any, any> {
 
   pageArr = [1]
   _onRefresh = () => {
-    const { URL } = this.props.navigation.state.params
+    // const { URL } = this.props.navigation.state.params
     if (this.state.isLoadingMore || this.state.isRefreshing) return
-    this.fetchMessages(URL.split('=').slice(0, -1).concat(targetPage).join('='), type)
+    // this.fetchMessages(URL.split('=').slice(0, -1).concat(targetPage).join('='), type)
   }
 
   onActionSelected = (index) => {
@@ -131,12 +132,14 @@ class GameTopic extends Component<any, any> {
           modalVisible: true
         })
         return
+      default:
+        return
     }
   }
 
   ITEM_HEIGHT = 74 + 7
 
-  _renderItem = ({ item: rowData, index }) => {
+  _renderItem = ({ item: rowData }) => {
     const { modeInfo } = this.props.screenProps
     const { ITEM_HEIGHT } = this
     const { navigation } = this.props
@@ -188,7 +191,6 @@ class GameTopic extends Component<any, any> {
           data={this.state.list}
           keyExtractor={(item, index) => item.id}
           renderItem={this._renderItem}
-          onEndReached={this._onEndReached}
           onEndReachedThreshold={0.5}
           extraData={modeInfo}
           windowSize={21}
@@ -196,8 +198,7 @@ class GameTopic extends Component<any, any> {
           initialNumToRender={42}
           maxToRenderPerBatch={8}
           disableVirtualization={false}
-          contentContainerStyle={styles.list}
-          getItemLayout={(data, index) => (
+          getItemLayout={(_, index) => (
             {length: this.ITEM_HEIGHT, offset: this.ITEM_HEIGHT * index, index}
           )}
           viewabilityConfig={{
@@ -251,7 +252,6 @@ class GameTopic extends Component<any, any> {
                     this.setState({
                       modalVisible: false
                     }, () => {
-                      const currentPage = this.state.currentPage
                       const targetPage = params.URL.split('=').slice(0, -1).concat(this.state.sliderValue).join('=')
                       this.fetchMessages(targetPage, 'jump')
                     })
@@ -266,7 +266,9 @@ class GameTopic extends Component<any, any> {
       </View>
     )
   }
-
+  isValueChanged = false
+  flatlist: any = false
+  refreshControl: any = false
 }
 
 const styles = StyleSheet.create({
@@ -281,8 +283,8 @@ const styles = StyleSheet.create({
     elevation: 4
   },
   selectedTitle: {
-    //backgroundColor: '#00ffff'
-    //fontSize: 20
+    // backgroundColor: '#00ffff'
+    // fontSize: 20
   },
   avatar: {
     width: 50,

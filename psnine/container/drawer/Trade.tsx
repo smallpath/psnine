@@ -1,8 +1,6 @@
 import React, { Component } from 'react'
 import {
-  StyleSheet,
   RefreshControl,
-  SectionList,
   Animated,
   FlatList
 } from 'react-native'
@@ -11,10 +9,7 @@ import { connect } from 'react-redux'
 import { getList } from '../../redux/action/trade'
 
 import FooterProgress from '../../component/FooterProgress'
-const AnimatedSectionList = Animated.createAnimatedComponent(SectionList)
-
-let toolbarHeight = 56
-let releasedMarginTop = 0
+declare var global
 
 import TradeItem from '../../component/TradeItem'
 const AnimatedFlatList = Animated.createAnimatedComponent(FlatList)
@@ -25,6 +20,9 @@ class Trade extends Component<any, any> {
     drawerLabel: '闲游'
   }
 
+  flatlist: any = false
+  refreshControl: any = false
+
   constructor(props) {
     super(props)
     this.state = {
@@ -33,8 +31,8 @@ class Trade extends Component<any, any> {
     }
   }
 
-  componentWillReceiveProps = (nextProps) => {
-    if (this.props.screenProps.modeInfo.themeName != nextProps.screenProps.modeInfo.themeName) {
+  componentWillReceiveProps(nextProps) {
+    if (this.props.screenProps.modeInfo.themeName !== nextProps.screenProps.modeInfo.themeName) {
 
     } else if (this.props.screenProps.searchTitle !== nextProps.screenProps.searchTitle) {
 
@@ -54,7 +52,7 @@ class Trade extends Component<any, any> {
     }
   }
 
-  componentWillMount = () => {
+  componentWillMount() {
     const { reducer } = this.props
     const { searchTitle, registerAfterEach } = this.props.screenProps
 
@@ -73,8 +71,8 @@ class Trade extends Component<any, any> {
     })
   }
 
-  _onRefresh = (searchTitle) => {
-    const { reducer, dispatch } = this.props
+  _onRefresh: any = (searchTitle?) => {
+    const { dispatch } = this.props
     // const { circleType } = this.props.screenProps
 
     this.setState({
@@ -107,7 +105,7 @@ class Trade extends Component<any, any> {
     this._loadMoreData()
   }
 
-  _renderItem = ({ item: rowData, index }) => {
+  _renderItem = ({ item: rowData }) => {
     const { modeInfo, navigation } = this.props.screenProps
     return <TradeItem {...{
       navigation,
@@ -119,7 +117,7 @@ class Trade extends Component<any, any> {
   render() {
     const { reducer } = this.props
     const { modeInfo } = this.props.screenProps
-    log('Trade.js rendered')
+    global.log('Trade.js rendered')
     // console.log(reducer.page, reducer.list)
     return (
       <AnimatedFlatList style={{
@@ -138,7 +136,7 @@ class Trade extends Component<any, any> {
         }
         ListFooterComponent={() => <FooterProgress isLoadingMore={this.state.isLoadingMore} modeInfo={modeInfo} />}
         data={reducer.list}
-        keyExtractor={(item, index) => item.href}
+        keyExtractor={(item) => item.href}
         renderItem={this._renderItem}
         onEndReached={this._onEndReached}
         onEndReachedThreshold={0.5}
@@ -149,7 +147,6 @@ class Trade extends Component<any, any> {
         maxToRenderPerBatch={8}
         renderScrollComponent={props => <global.NestedScrollView {...props}/>}
         disableVirtualization={false}
-        contentContainerStyle={styles.list}
         viewabilityConfig={{
           minimumViewTime: 1,
           viewAreaCoveragePercentThreshold: 0,
@@ -160,13 +157,6 @@ class Trade extends Component<any, any> {
   }
 
 }
-
-const styles = StyleSheet.create({
-  avatar: {
-    width: 50,
-    height: 50
-  }
-})
 
 function mapStateToProps(state) {
   return {

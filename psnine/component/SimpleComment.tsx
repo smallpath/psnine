@@ -14,9 +14,9 @@ import { FlatlistItemProp, FlatlistItemState } from '../interface'
 import { updown } from '../dao/sync'
 
 interface ExtendedProp extends FlatlistItemProp {
-  index: any
-  onLongPress: (...args) => any
-  callback: (...arsg) => any
+  index?: any
+  onLongPress?: (...args) => any
+  callback?: (...arsg) => any
 }
 declare var global
 

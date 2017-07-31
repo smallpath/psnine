@@ -24,10 +24,10 @@ declare var global
 
 interface ExtendedProp extends FlatlistItemProp {
   modalList?: ModalList[]
-  ITEM_HEIGHT: number
-  onLongPress: (...args) => any
-  preFetch: (...args) => any
-  index: number
+  ITEM_HEIGHT?: number
+  onLongPress?: (...args) => any
+  preFetch?: (...args) => any
+  index?: number
 }
 
 interface ExtendedState extends FlatlistItemState {

@@ -11,34 +11,23 @@ import {
   Keyboard,
   TextInput,
   Animated,
-  Easing,
   StatusBar
 } from 'react-native'
 
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import { standardColor, accentColor } from '../constant/colorConfig'
 
-let title = '回复'
-
-let toolbarActions = [
-
-]
-
 let AnimatedKeyboardAvoidingView = Animated.createAnimatedComponent(KeyboardAvoidingView)
 
 let screen = Dimensions.get('window')
 
-const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = screen
+let { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = screen
 
-SCREEN_HEIGHT = SCREEN_HEIGHT - StatusBar.currentHeight + 1
+SCREEN_HEIGHT = SCREEN_HEIGHT - (StatusBar.currentHeight || 0) + 1
 
 let CIRCLE_SIZE = 56
 
-const emotionToolbarHeight = 190
-
-let config = { tension: 30, friction: 7, ease: Easing.in(Easing.ease(1, 0, 1, 1)), duration: 200 }
-
-let backConfig = { tension: 30, friction: 7, duration: 200 }
+let backConfig = { tension: 30, friction: 7 }
 
 export default class Search extends Component<any, any> {
 
@@ -56,12 +45,12 @@ export default class Search extends Component<any, any> {
     }
   }
 
-  componentDidMount = () => {
-    Animated.spring(this.state.openVal, { toValue: 1, ...config }).start()
+  componentDidMount() {
+    Animated.spring(this.state.openVal, { toValue: 1 }).start()
   }
 
   _pressBack = (callback) => {
-    const { marginTop, openVal, content } = this.state
+    const { openVal } = this.state
     // Keyboard.dismiss()
     Animated.spring(openVal, { toValue: 0, ...backConfig }).start(() => {
       const _lastNativeText = this.content._lastNativeText
@@ -73,17 +62,18 @@ export default class Search extends Component<any, any> {
     })
   }
   isKeyboardShowing = false
-
-  componentWillUnmount = () => {
+  keyboardDidHideListener: any = false
+  keyboardDidShowListener: any = false
+  removeListener: any = false
+  isToolbarShowing: any = false
+  componentWillUnmount() {
     this.keyboardDidHideListener.remove()
     this.keyboardDidShowListener.remove()
     this.removeListener && this.removeListener.remove()
   }
 
-  componentWillMount = async () => {
-    const { openVal, marginTop } = this.state
-    const { callback } = this.props.navigation.state.params
-    const { params } = this.props.navigation.state
+  async componentWillMount() {
+    const { openVal } = this.state
     const { modeInfo } = this.props.screenProps
 
     this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () => {
@@ -94,8 +84,6 @@ export default class Search extends Component<any, any> {
     })
     this.isToolbarShowing = false
     this.removeListener = BackHandler.addEventListener('hardwareBackPress', () => {
-      let config = { tension: 30, friction: 7 }
-      // Keyboard.dismiss()
       Animated.spring(openVal, { toValue: 0, ...backConfig }).start(() => {
         this.props.navigation.goBack()
         Keyboard.dismiss()
@@ -116,15 +104,17 @@ export default class Search extends Component<any, any> {
 
   }
 
-  _onSubmitEditing = (event) => {
+  _onSubmitEditing = () => {
     const { callback } = this.props.navigation.state.params
     // console.log(event.nativeEvent, event.nativeEvent.text)
     this._pressBack(callback)
   }
 
+  ref: any = null
+
   render() {
     let { openVal, marginTop } = this.state
-    const { icon, toolbarOpenVal } = this.state
+    const { icon } = this.state
     const { modeInfo } = this.props.screenProps
     const { callback } = this.props.navigation.state.params
 
@@ -144,10 +134,6 @@ export default class Search extends Component<any, any> {
         inputRange: [0, SCREEN_HEIGHT],
         outputRange: [0, SCREEN_HEIGHT]
       })
-    }
-
-    let animatedSubmitStyle = {
-      height: openVal.interpolate({ inputRange: [0, 0.9, 1], outputRange: [0, 0, searchHeight] })
     }
 
     let animatedToolbarStyle = {
@@ -178,24 +164,7 @@ export default class Search extends Component<any, any> {
           }
         ]}
       >
-
-        {/*<Animated.View
-          style={{
-            position: 'absolute',
-            right: 0,
-            left: 0,
-            top: 0,
-            bottom: 0,
-            backgroundColor: 'rgba(0,0,0,0.2)',
-            borderRadius: openVal.interpolate({
-              inputRange: [0, 0.66,1],
-              outputRange: [SCREEN_WIDTH/2,SCREEN_WIDTH/2, 0]
-            }),
-          }}
-        />*/}
-
         <Animated.View style={[styles.KeyboardAvoidingView, {
-          //flex: openVal.interpolate({ inputRange: [0, 1], outputRange: [0, 10] }),
           height: searchHeight,
           flexDirection: 'row'
         }]} >
@@ -212,22 +181,19 @@ export default class Search extends Component<any, any> {
             }}>
               <TouchableNativeFeedback
                 onPress={this._pressBack}
-
                 background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
                 style={{ borderRadius: searchHeight / 2 }}
               >
                 <View style={{ width: searchHeight, height: searchHeight, borderRadius: 25, justifyContent: 'center', alignItems: 'center' }}>
                   {icon && <Image
                     source={icon.backIcon}
-                    style={{alignSelf: 'center', alignContent: 'center'}}
-                    style={{ width: 20, height: 20}}
+                    style={{ width: 20, height: 20, alignSelf: 'center', alignContent: 'center'}}
                   />}
                 </View>
               </TouchableNativeFeedback>
             </View>
           </Animated.View >
           <AnimatedKeyboardAvoidingView behavior={'padding'} style={[styles.contentView, {
-            //flex: openVal.interpolate({ inputRange: [0, 1], outputRange: [0, 12] }),
             height: searchHeight,
             justifyContent: 'center',
             alignContent: 'center'
@@ -277,8 +243,7 @@ export default class Search extends Component<any, any> {
                 <View style={{ width: searchHeight, height: searchHeight, borderRadius: 25, justifyContent: 'center', alignItems: 'center' }}>
                   {icon && <Image
                     source={icon.sendIcon}
-                    style={{alignSelf: 'center', alignContent: 'center'}}
-                    style={{ width: 20, height: 20}}
+                    style={{ width: 20, height: 20, alignSelf: 'center', alignContent: 'center'}}
                   />}
                 </View>
               </TouchableNativeFeedback>
@@ -291,8 +256,6 @@ export default class Search extends Component<any, any> {
   }
 
 }
-
-const width = Dimensions.get('window').width
 
 const styles = StyleSheet.create({
   circle: {
@@ -332,13 +295,10 @@ const styles = StyleSheet.create({
   KeyboardAvoidingView: {
     flex: 10,
     // width: width,
-    //alignSelf:'center',
-    //justifyContent: 'space-between',
     flexDirection: 'column'
   },
   titleView: {
     flex: 1,
-    //marginTop: -10,
     justifyContent: 'center'
     // flexDirection: 'column',
     // justifyContent: 'space-between',

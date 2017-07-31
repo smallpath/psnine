@@ -53,7 +53,7 @@ const parseDays = (source, pattern) => {
 export const safeSignOn = async function (psnid) {
   if (typeof psnid === 'undefined') return
 
-  let data = await fetchSignOn(psnid)
+  let data = await fetchSignOn()
 
   return data
 }

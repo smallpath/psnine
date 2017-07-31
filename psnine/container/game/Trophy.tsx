@@ -53,47 +53,18 @@ class CommunityTopic extends Component<any, any> {
     }
   }
 
-  _refreshComment = () => {
-    const { params } = this.props.navigation.state
-    if (['community', 'gene'].includes(params.type) === false) {
-      return
-    }
-    if (this.isReplyShowing === true) {
-      this.isReplyShowing = false
-    }
-    if (this.state.isLoading === true) {
-      return
-    }
-    this.setState({
-      isLoading: true
-    })
-    getTopicCommentSnapshotAPI(params.URL).then(data => {
-      this.setState({
-        isLoading: false,
-        commentList: data.commentList
-      })
-    })
-  }
-
   _onActionSelected = (index) => {
     const { params } = this.props.navigation.state
     switch (index) {
       case 0:
         if (this.isReplyShowing === true) return
-        const cb = () => {
-          this.props.navigation.navigate('Reply', {
-            type: params.type,
-            id: params.rowData.id,
-            callback: this.preFetch,
-            isOldPage: this.state.data.isOldPage,
-            shouldSeeBackground: true
-          })
-        }
-        if (this.state.openVal._value === 1) {
-          this._animateToolbar(0, cb)
-        } else if (this.state.openVal._value === 0) {
-          cb()
-        }
+        this.props.navigation.navigate('Reply', {
+          type: params.type,
+          id: params.rowData.id,
+          callback: this.preFetch,
+          isOldPage: this.state.data.isOldPage,
+          shouldSeeBackground: true
+        })
         return
       case 1:
         this.preFetch()
@@ -101,7 +72,7 @@ class CommunityTopic extends Component<any, any> {
     }
   }
 
-  componentWillMount = () => {
+  componentWillMount() {
     this.preFetch()
   }
 
@@ -194,7 +165,6 @@ class CommunityTopic extends Component<any, any> {
 
           }}
           useForeground={true}
-
           background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
         >
           <View pointerEvents='box-only' style={{ flex: 1, flexDirection: 'row', padding: 12 }}>
@@ -212,7 +182,8 @@ class CommunityTopic extends Component<any, any> {
               </Text>
 
               <View style={{ flex: 1.1, flexDirection: 'row', justifyContent: 'space-between' }}>
-                <Text selectable={false} style={{ flex: -1, color: modeInfo.standardTextColor, textAlign: 'center', textAlignVertical: 'center' }}>{rowData.platform.join(' ')}</Text>
+                <Text selectable={false} style={{
+                  flex: -1, color: modeInfo.standardTextColor, textAlign: 'center', textAlignVertical: 'center' }}>{rowData.platform.join(' ')}</Text>
               </View>
 
             </View>
@@ -277,8 +248,8 @@ class CommunityTopic extends Component<any, any> {
 
     const { modeInfo } = this.props.screenProps
     const { data: source } = this.state
-    const data = []
-    const renderFuncArr = []
+    const data: any[] = []
+    const renderFuncArr: any[] = []
     const shouldPushData = !this.state.isLoading
     // if (shouldPushData) {
     //   data.push(source.trophyInfo)
@@ -382,7 +353,7 @@ class CommunityTopic extends Component<any, any> {
                     onSubmitEditing={() => this.focusNextField('content')}
                     onChange={({ nativeEvent }) => { this.setState({ title: nativeEvent.text }) }}
                     value={this.state.title}
-                    style={[styles.textInput, {
+                    style={[{
                       color: modeInfo.titleTextColor,
                       textAlign: 'left',
                       textAlignVertical: 'center',
@@ -405,7 +376,7 @@ class CommunityTopic extends Component<any, any> {
                     ref={ref => this.content = ref}
                     onChange={({ nativeEvent }) => { this.setState({ content: nativeEvent.text }) }}
                     value={this.state.content}
-                    style={[styles.textInput, {
+                    style={[{
                       color: modeInfo.titleTextColor,
                       flex: 2,
                       marginBottom: 2,
@@ -423,6 +394,13 @@ class CommunityTopic extends Component<any, any> {
       </View>
     )
   }
+
+  isValueChanged = false
+  content: any = false
+  refreshControl: any = false
+  flatlist: any = false
+  ref: any = false
+  title: any = false
 }
 
 const styles = StyleSheet.create({
@@ -437,8 +415,8 @@ const styles = StyleSheet.create({
     elevation: 4
   },
   selectedTitle: {
-    //backgroundColor: '#00ffff'
-    //fontSize: 20
+    // backgroundColor: '#00ffff'
+    // fontSize: 20
   },
   avatar: {
     width: 50,

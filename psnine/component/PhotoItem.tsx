@@ -7,13 +7,13 @@ import {
   TouchableNativeFeedback
 } from 'react-native'
 
-import { FlatlistItemProp, FlatlistItemState, ModalList } from '../interface'
+import { FlatlistItemProp, FlatlistItemState } from '../interface'
 
 interface ExtendedProp extends FlatlistItemProp {
-  isChecked: boolean
-  onLongPress: (...args) => any
-  width: number
-  ITEM_HEIGHT: number
+  isChecked?: boolean
+  onLongPress?: (...args) => any
+  width?: number
+  ITEM_HEIGHT?: number
 }
 export default class PhotoItem extends React.PureComponent<ExtendedProp, FlatlistItemState> {
 

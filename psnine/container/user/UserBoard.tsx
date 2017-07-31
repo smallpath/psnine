@@ -1,30 +1,21 @@
 import React, { Component } from 'react'
 import {
-  StyleSheet,
   View,
-  ListView,
-  Dimensions,
   TouchableNativeFeedback,
   InteractionManager,
   ActivityIndicator,
   FlatList
 } from 'react-native'
 
-const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window')
-
-import { standardColor, idColor } from '../../constant/colorConfig'
-
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import { getUserBoardCommentAPI } from '../../dao'
 import ComplexComment from '../../component/ComplexComment'
 
-const ds = new ListView.DataSource({
-  rowHasChanged: (row1, row2) => row1.href !== row2.href
-})
-
 let toolbarActions = [
   { title: '回复', iconName: 'md-create', iconSize: 22, show: 'always' }
 ]
+
+declare var global
 
 class UserBoard extends Component<any, any> {
   static navigationOptions = {
@@ -73,10 +64,10 @@ class UserBoard extends Component<any, any> {
     ]
   })
 
-  componentWillMount = async () => {
+  async componentWillMount() {
     const { screenProps } = this.props
     const name = '留言板'
-    let params = {}
+    let params: any = {}
     screenProps.toolbar.forEach(({ text, url}) => {
       if (text === name) {
         params.text = text
@@ -90,6 +81,7 @@ class UserBoard extends Component<any, any> {
     this.preFetch()
   }
 
+  URL = ''
   preFetch = () => {
     this.setState({
       isLoading: true
@@ -155,7 +147,6 @@ class UserBoard extends Component<any, any> {
 
   render() {
     const { modeInfo } = this.props.screenProps
-    const { URL } = this
     // console.log('Message.js rendered');
 
     return (
@@ -180,7 +171,6 @@ class UserBoard extends Component<any, any> {
           flex: -1,
           backgroundColor: modeInfo.backgroundColor
         }}
-          ref={flatlist => this.flatlist = flatlist}
           data={this.state.commentList}
           keyExtractor={(item, index) => item.id || index}
           renderItem={({ item, index }) => {
@@ -241,31 +231,8 @@ class UserBoard extends Component<any, any> {
     )
   }
 
-}
+  float: any = false
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    flexDirection: 'column',
-    backgroundColor: '#F5FCFF'
-  },
-  toolbar: {
-    backgroundColor: standardColor,
-    height: 56,
-    elevation: 4
-  },
-  selectedTitle: {
-    //backgroundColor: '#00ffff'
-    //fontSize: 20
-  },
-  avatar: {
-    width: 50,
-    height: 50
-  },
-  a: {
-    fontWeight: '300',
-    color: idColor // make links coloured pink
-  }
-})
+}
 
 export default UserBoard

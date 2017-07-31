@@ -1,7 +1,6 @@
 import React from 'react'
 import {
-  Dimensions,
-  StyleSheet
+  Dimensions
 } from 'react-native'
 
 import {
@@ -21,13 +20,6 @@ import UserTopic from './UserTopic'
 import UserGene from './UserGene'
 
 const DefaultTabBar = TabNavigator.Presets.Default.tabBarComponent
-
-const styles = StyleSheet.create({
-  icon: {
-    width: 26,
-    height: 26
-  }
-})
 
 const container = {
   Home: {
@@ -49,6 +41,8 @@ const container = {
     screen: UserGene
   }
 }
+
+declare var global
 
 const Tab = TabNavigator(container, {
   tabBarComponent: props => {
@@ -88,8 +82,8 @@ const Tab = TabNavigator(container, {
   }
 })
 
-export default class TabContainer extends React.PureComponent {
-  constructor(props){
+export default class TabContainer extends React.PureComponent<any, any> {
+  constructor(props) {
     super(props)
   }
   render() {

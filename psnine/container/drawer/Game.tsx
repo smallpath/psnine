@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import {
-  StyleSheet,
   View,
   RefreshControl,
   Picker,
@@ -16,15 +15,16 @@ import FooterProgress from '../../component/FooterProgress'
 
 const AnimatedFlatList = Animated.createAnimatedComponent(FlatList)
 
-let toolbarHeight = 56
-let releasedMarginTop = 0
-let prevPosition = -1
+declare var global
 
 class Game extends Component<any, any> {
   static navigationOptions = {
     tabBarLabel: '游戏',
     drawerLabel: '游戏'
   }
+
+  flatlist: any = false
+  refreshControl: any = false
 
   constructor(props) {
     super(props)
@@ -99,8 +99,8 @@ class Game extends Component<any, any> {
     })
   }
 
-  componentWillReceiveProps = (nextProps) => {
-    if (this.props.screenProps.modeInfo.themeName != nextProps.screenProps.modeInfo.themeName) {
+  componentWillReceiveProps(nextProps) {
+    if (this.props.screenProps.modeInfo.themeName !== nextProps.screenProps.modeInfo.themeName) {
 
     } else if (this.props.screenProps.searchTitle !== nextProps.screenProps.searchTitle) {
 
@@ -120,7 +120,7 @@ class Game extends Component<any, any> {
     }
   }
 
-  componentWillMount = () => {
+  componentWillMount() {
     const { game: gameReducer } = this.props
     const { registerAfterEach, searchTitle } = this.props.screenProps
     if (gameReducer.page === 0) {
@@ -138,8 +138,8 @@ class Game extends Component<any, any> {
     })
   }
 
-  _onRefresh = (title) => {
-    const { game: gameReducer, dispatch } = this.props
+  _onRefresh = (title?) => {
+    const { dispatch } = this.props
 
     this.setState({
       isRefreshing: true
@@ -167,7 +167,6 @@ class Game extends Component<any, any> {
   }
 
   _onEndReached = () => {
-    const { game: gameReducer } = this.props
 
     if (this.state.isRefreshing || this.state.isLoadingMore) return
 
@@ -180,7 +179,7 @@ class Game extends Component<any, any> {
 
   ITEM_HEIGHT = 74 + 7
 
-  _renderItem = ({ item: rowData, index }) => {
+  _renderItem = ({ item: rowData }) => {
     const { modeInfo, navigation } = this.props.screenProps
     const { ITEM_HEIGHT } = this
     return <TopicItem {...{
@@ -194,7 +193,7 @@ class Game extends Component<any, any> {
   render() {
     const { game: gameReducer } = this.props
     const { modeInfo } = this.props.screenProps
-    log('Game.js rendered')
+    global.log('Game.js rendered')
     return (
       <View style={{ backgroundColor: modeInfo.background, flex: 1 }}>
         {this._renderHeader()}
@@ -214,7 +213,7 @@ class Game extends Component<any, any> {
           }
           ListFooterComponent={() => <FooterProgress isLoadingMore={this.state.isLoadingMore} modeInfo={modeInfo} />}
           data={gameReducer.games}
-          keyExtractor={(item, index) => `${item.id}::${item.views}::${item.count}`}
+          keyExtractor={(item) => `${item.id}::${item.views}::${item.count}`}
           renderItem={this._renderItem}
           onEndReached={this._onEndReached}
           onEndReachedThreshold={0.5}
@@ -227,8 +226,7 @@ class Game extends Component<any, any> {
           numColumns={modeInfo.numColumns}
           renderScrollComponent={props => <global.NestedScrollView {...props}/>}
           disableVirtualization={false}
-          contentContainerStyle={styles.list}
-          getItemLayout={(data, index) => (
+          getItemLayout={(_, index) => (
             {length: this.ITEM_HEIGHT, offset: this.ITEM_HEIGHT * index, index}
           )}
           viewabilityConfig={{
@@ -242,13 +240,6 @@ class Game extends Component<any, any> {
   }
 
 }
-
-const styles = StyleSheet.create({
-  avatar: {
-    width: 50,
-    height: 50
-  }
-})
 
 function mapStateToProps(state) {
   return {

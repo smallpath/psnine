@@ -3,15 +3,12 @@ import {
   StyleSheet,
   Text,
   View,
-  Dimensions,
   TouchableNativeFeedback,
   RefreshControl,
   InteractionManager,
   Slider,
   FlatList
 } from 'react-native'
-
-const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window')
 
 import { standardColor, idColor } from '../../constant/colorConfig'
 
@@ -23,6 +20,7 @@ import FooterProgress from '../../component/FooterProgress'
 let toolbarActions = [
   { title: '跳页', iconName: 'md-map', show: 'always' }
 ]
+declare var global
 
 class UserGame extends Component<any, any> {
   static navigationOptions = {
@@ -43,10 +41,10 @@ class UserGame extends Component<any, any> {
     }
   }
 
-  componentWillMount = async () => {
+  async componentWillMount() {
     const { screenProps } = this.props
     const name = '机因'
-    let params = {}
+    let params: any = {}
     screenProps.toolbar.forEach(({ text, url}) => {
       // console.log(text, name, text.includes(name))
       if (text.includes(name)) {
@@ -66,14 +64,16 @@ class UserGame extends Component<any, any> {
     this.fetchMessages(params.URL, 'jump')
   }
 
+  URL: any = ''
+
   fetchMessages = (url, type = 'down') => {
     this.setState({
       [type === 'down' ? 'isLoadingMore' : 'isRefreshing'] : true
     }, () => {
       InteractionManager.runAfterInteractions(() => {
         getUserGeneAPI(url).then(data => {
-          let thisList = []
-          const thisPage = parseInt((url.match(/\?page=(\d+)/) || [0, 1])[1])
+          let thisList: any = []
+          const thisPage = parseInt((url.match(/\?page=(\d+)/) || [0, 1])[1], 10)
           let cb = () => { }
           if (type === 'down') {
             thisList = this.state.list.concat(data.list)
@@ -112,7 +112,7 @@ class UserGame extends Component<any, any> {
             }
             componentDidFocus()
           })
-        }).catch(err => {
+        }).catch(() => {
           this.setState({
             isRefreshing: false
           })
@@ -157,9 +157,8 @@ class UserGame extends Component<any, any> {
 
   ITEM_HEIGHT = 83
 
-  _renderItem = ({ item: rowData, index }) => {
+  _renderItem = ({ item: rowData }) => {
     const { modeInfo, navigation } = this.props.screenProps
-    const { ITEM_HEIGHT } = this
     return <TopicItem {...{
       navigation,
       rowData,
@@ -183,19 +182,17 @@ class UserGame extends Component<any, any> {
           flex: 1,
           backgroundColor: modeInfo.background
         }}
-          ref={flatlist => this.flatlist = flatlist}
           refreshControl={
             <RefreshControl
               refreshing={this.state.isRefreshing}
               onRefresh={this._onRefresh}
               colors={[modeInfo.accentColor]}
               progressBackgroundColor={modeInfo.backgroundColor}
-              ref={ref => this.refreshControl = ref}
             />
           }
           ListFooterComponent={() => <FooterProgress isLoadingMore={this.state.isLoadingMore} modeInfo={modeInfo}/>}
           data={this.state.list}
-          keyExtractor={(item, index) => item.id}
+          keyExtractor={(item) => item.id}
           renderItem={this._renderItem}
           onEndReached={this._onEndReached}
           onEndReachedThreshold={0.5}
@@ -205,9 +202,8 @@ class UserGame extends Component<any, any> {
           initialNumToRender={42}
           maxToRenderPerBatch={8}
           disableVirtualization={false}
-          contentContainerStyle={styles.list}
           renderScrollComponent={props => <global.NestedScrollView {...props}/>}
-          getItemLayout={(data, index) => (
+          getItemLayout={(_, index) => (
             {length: this.ITEM_HEIGHT, offset: this.ITEM_HEIGHT * index, index}
           )}
           viewabilityConfig={{
@@ -262,7 +258,6 @@ class UserGame extends Component<any, any> {
                       modalVisible: false,
                       isLoading: true
                     }, () => {
-                      const currentPage = this.state.currentPage
                       const targetPage = URL.split('=').slice(0, -1).concat(this.state.sliderValue).join('=')
                       this.fetchMessages(targetPage, 'jump')
                     })
@@ -278,31 +273,8 @@ class UserGame extends Component<any, any> {
     )
   }
 
-}
+  isValueChanged = false
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    flexDirection: 'column',
-    backgroundColor: '#F5FCFF'
-  },
-  toolbar: {
-    backgroundColor: standardColor,
-    height: 56,
-    elevation: 4
-  },
-  selectedTitle: {
-    //backgroundColor: '#00ffff'
-    //fontSize: 20
-  },
-  avatar: {
-    width: 50,
-    height: 50
-  },
-  a: {
-    fontWeight: '300',
-    color: idColor // make links coloured pink
-  }
-})
+}
 
 export default UserGame

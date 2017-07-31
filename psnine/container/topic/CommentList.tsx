@@ -3,15 +3,12 @@ import {
   StyleSheet,
   Text,
   View,
-  Dimensions,
   TouchableNativeFeedback,
   RefreshControl,
   InteractionManager,
   Slider,
   FlatList
 } from 'react-native'
-
-const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window')
 
 import { standardColor, idColor } from '../../constant/colorConfig'
 
@@ -42,12 +39,12 @@ class CommentList extends Component<any, any> {
     }
   }
 
-  onNavClicked = (rowData) => {
+  onNavClicked = () => {
     const { navigation } = this.props
     navigation.goBack()
   }
 
-  componentWillMount = async () => {
+  async componentWillMount() {
     const { params } = this.props.navigation.state
     this.fetchMessages(params.URL, 'jump')
   }
@@ -59,8 +56,8 @@ class CommentList extends Component<any, any> {
     this.setState(state, () => {
       InteractionManager.runAfterInteractions(() => {
         getTopicCommentAPI(url).then(data => {
-          let thisList = []
-          const thisPage = parseInt(url.match(/\?page=(\d+)/)[1])
+          let thisList: any[] = []
+          const thisPage = parseInt(url.match(/\?page=(\d+)/)[1], 10)
           let cb = () => { }
           if (type === 'down') {
             thisList = this.state.list.concat(data.commentList)
@@ -119,12 +116,13 @@ class CommentList extends Component<any, any> {
           modalVisible: true
         })
         return
+      default:
+        return
     }
   }
 
   _renderItem = ({ item: rowData, index }) => {
     const { modeInfo } = this.props.screenProps
-    const { ITEM_HEIGHT } = this
     const { navigation } = this.props
     return <SimpleComment key={rowData.id || index} {...{
       navigation,
@@ -134,6 +132,9 @@ class CommentList extends Component<any, any> {
   }
 
   sliderValue = 1
+  flatlist: any = false
+  isValueChanged = false
+  refreshControl: any = false
   render() {
     const { modeInfo } = this.props.screenProps
     const { params } = this.props.navigation.state
@@ -171,7 +172,7 @@ class CommentList extends Component<any, any> {
           }
           ListFooterComponent={() => <FooterProgress isLoadingMore={this.state.isLoadingMore} modeInfo={modeInfo} />}
           data={this.state.list}
-          keyExtractor={(item, index) => item.id}
+          keyExtractor={(item) => item.id}
           renderItem={this._renderItem}
           onEndReached={this._onEndReached}
           onEndReachedThreshold={0.5}
@@ -181,10 +182,6 @@ class CommentList extends Component<any, any> {
           initialNumToRender={42}
           maxToRenderPerBatch={8}
           disableVirtualization={false}
-          contentContainerStyle={styles.list}
-          getItemLayout={(data, index) => (
-            { length: this.ITEM_HEIGHT, offset: this.ITEM_HEIGHT * index, index }
-          )}
           viewabilityConfig={{
             minimumViewTime: 1,
             viewAreaCoveragePercentThreshold: 0,
@@ -237,7 +234,6 @@ class CommentList extends Component<any, any> {
                     modalVisible: false,
                     isLoading: true
                   }, () => {
-                    const currentPage = this.state.currentPage
                     const targetPage = params.URL.split('=').slice(0, -1).concat(this.state.sliderValue).join('=')
                     this.fetchMessages(targetPage, 'jump')
                   })
@@ -267,8 +263,8 @@ const styles = StyleSheet.create({
     elevation: 4
   },
   selectedTitle: {
-    //backgroundColor: '#00ffff'
-    //fontSize: 20
+    // backgroundColor: '#00ffff'
+    // fontSize: 20
   },
   avatar: {
     width: 50,

@@ -26,24 +26,16 @@ import {
 
 const DefaultTabBar = TabNavigator.Presets.Default.tabBarComponent
 
-const styles = StyleSheet.create({
-  icon: {
-    width: 26,
-    height: 26
-  }
-})
-
 export default class TabContainer extends Component<any, any> {
   constructor(props) {
     super(props)
   }
 
-  shouldComponentUpdate(prop, state) {
-    const { communityType, geneType, circleType, modeInfo, searchTitle } = prop.screenProps
+  shouldComponentUpdate(prop) {
+    const { geneType, circleType, modeInfo, searchTitle } = prop.screenProps
     if (searchTitle !== this.props.screenProps.searchTitle) return true
     if (modeInfo.themeName !== this.props.screenProps.modeInfo.themeName) return true
     if (geneType !== this.props.screenProps.geneType) return true
-    // if (communityType !== this.props.screenProps.communityType) return true
     if (circleType !== this.props.screenProps.circleType) return true
     return false
   }
@@ -111,7 +103,6 @@ const Tabs = TabNavigator(routes, {
   },
   lazy: true,
   animationEnabled: false,
-  scrollEnabled: true,
   backBehavior: 'none',
   tabBarOptions: {
     activeTintColor: '#fff',
@@ -120,7 +111,6 @@ const Tabs = TabNavigator(routes, {
       backgroundColor: '#fff'
     },
     scrollEnabled: true,
-    animationEnabled: false,
     tabStyle: {
       height: 40,
       width: minWidth / 6

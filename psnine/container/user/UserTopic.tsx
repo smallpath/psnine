@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import {
-  StyleSheet,
   Text,
   View,
   TouchableNativeFeedback,
@@ -9,8 +8,6 @@ import {
   Slider,
   FlatList
 } from 'react-native'
-
-import { standardColor, idColor } from '../../constant/colorConfig'
 
 import { getUserTopicAPI } from '../../dao'
 
@@ -77,7 +74,7 @@ class UserGame extends Component<any, any> {
       InteractionManager.runAfterInteractions(() => {
         getUserTopicAPI(url).then(data => {
           let thisList: any = []
-          const thisPage = parseInt((url.match(/\?page=(\d+)/) || [0, 1])[1])
+          const thisPage = parseInt((url.match(/\?page=(\d+)/) || [0, 1])[1], 10)
           let cb = () => { }
           if (type === 'down') {
             thisList = this.state.list.concat(data.list)
@@ -268,7 +265,6 @@ class UserGame extends Component<any, any> {
                       modalVisible: false,
                       isLoading: true
                     }, () => {
-                      const currentPage = this.state.currentPage
                       const targetPage = URL.split('=').slice(0, -1).concat(this.state.sliderValue).join('=')
                       this.fetchMessages(targetPage, 'jump')
                     })
@@ -285,30 +281,5 @@ class UserGame extends Component<any, any> {
   }
 
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    flexDirection: 'column',
-    backgroundColor: '#F5FCFF'
-  },
-  toolbar: {
-    backgroundColor: standardColor,
-    height: 56,
-    elevation: 4
-  },
-  selectedTitle: {
-    //backgroundColor: '#00ffff'
-    //fontSize: 20
-  },
-  avatar: {
-    width: 50,
-    height: 50
-  },
-  a: {
-    fontWeight: '300',
-    color: idColor // make links coloured pink
-  }
-})
 
 export default UserGame

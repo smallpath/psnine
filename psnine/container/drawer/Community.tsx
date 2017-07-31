@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import {
-  StyleSheet,
   RefreshControl,
   FlatList,
   Animated
@@ -13,11 +12,9 @@ import TopicItem from '../../component/CommunityItem'
 import NewsItem from '../../component/NewsItem'
 import FooterProgress from '../../component/FooterProgress'
 
-let toolbarHeight = 56
-let releasedMarginTop = 0
-let prevPosition = -1
-
 const AnimatedFlatList = Animated.createAnimatedComponent(FlatList)
+
+declare var global
 
 class Community extends Component<any, any> {
   static navigationOptions = {
@@ -33,10 +30,10 @@ class Community extends Component<any, any> {
     }
   }
 
-  componentWillReceiveProps = (nextProps) => {
-    if (this.props.communityType != nextProps.communityType) {
+  componentWillReceiveProps(nextProps) {
+    if (this.props.communityType !== nextProps.communityType) {
       this._onRefresh(nextProps.communityType)
-    } else if (this.props.screenProps.modeInfo.themeName != nextProps.screenProps.modeInfo.themeName) {
+    } else if (this.props.screenProps.modeInfo.themeName !== nextProps.screenProps.modeInfo.themeName) {
 
     } else if (this.props.screenProps.searchTitle !== nextProps.screenProps.searchTitle) {
 
@@ -58,10 +55,10 @@ class Community extends Component<any, any> {
     }
   }
 
-  componentWillMount = () => {
-    const { community: communityReducer, communityType } = this.props
-    const { searchTitle, registerAfterEach } = this.props.screenProps
-    if (communityReducer.topicPage == 0) {
+  componentWillMount() {
+    const { community: communityReducer } = this.props
+    const { registerAfterEach } = this.props.screenProps
+    if (communityReducer.topicPage === 0) {
       // this._onRefresh(
       //   communityType,
       //   searchTitle
@@ -84,8 +81,8 @@ class Community extends Component<any, any> {
     })
   }
 
-  _onRefresh = (type, searchTitle) => {
-    const { community: communityReducer, dispatch, communityType } = this.props
+  _onRefresh: any = (type, searchTitle) => {
+    const { dispatch, communityType } = this.props
     this.setState({
       isRefreshing: true
     })
@@ -97,6 +94,9 @@ class Community extends Component<any, any> {
       })
     )
   }
+
+  flatlist: any = false
+  refreshControl: any = false
 
   _loadMoreData = () => {
     const { community: communityReducer, dispatch, communityType } = this.props
@@ -121,7 +121,7 @@ class Community extends Component<any, any> {
 
   ITEM_HEIGHT = 74 + 7
 
-  _renderItem = ({ item: rowData, index }) => {
+  _renderItem = ({ item: rowData }) => {
     const { modeInfo, navigation, toolbarDispatch } = this.props.screenProps
     const { ITEM_HEIGHT } = this
     // console.log(rowData)
@@ -145,8 +145,7 @@ class Community extends Component<any, any> {
   render() {
     const { community: reducer, communityType } = this.props
     const { modeInfo } = this.props.screenProps
-    const { searchTitle } = this.props.screenProps
-    log('Community.js rendered')
+    global.log('Community.js rendered')
     // console.log('Community.js rendered');
     return (
       <AnimatedFlatList style={{
@@ -165,7 +164,7 @@ class Community extends Component<any, any> {
         }
         ListFooterComponent={() => <FooterProgress isLoadingMore={this.state.isLoadingMore} modeInfo={modeInfo} />}
         data={reducer.topics}
-        keyExtractor={(item, index) => `${item.id}::${item.views}::${item.count}::${item.avatar}`}
+        keyExtractor={(item) => `${item.id}::${item.views}::${item.count}::${item.avatar}`}
         renderItem={this._renderItem}
         onEndReached={this._onEndReached}
         onEndReachedThreshold={0.5}
@@ -178,8 +177,7 @@ class Community extends Component<any, any> {
         key={modeInfo.themeName + communityType}
         renderScrollComponent={props => <global.NestedScrollView {...props} showsVerticalScrollIndicator={true}/>}
         numColumns={modeInfo.numColumns}
-        contentContainerStyle={styles.list}
-        getItemLayout={communityType !== 'news' ? (data, index) => (
+        getItemLayout={communityType !== 'news' ? (_, index) => (
           {length: this.ITEM_HEIGHT, offset: this.ITEM_HEIGHT * index, index}
         ) : null}
         viewabilityConfig={{
@@ -193,14 +191,7 @@ class Community extends Component<any, any> {
 
 }
 
-const styles = StyleSheet.create({
-  avatar: {
-    width: 50,
-    height: 50
-  }
-})
-
-function mapStateToProps(state, ownProps) {
+function mapStateToProps(state) {
   // console.log(state.app.communityType, 'mapStateToProps')
   return {
     community: state.community,

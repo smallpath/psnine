@@ -26,13 +26,12 @@ import {
 import ComplexComment from '../../component/ComplexComment'
 
 let screen = Dimensions.get('window')
-const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = screen
 
 declare var global
 
-let toolbarHeight = 56
 let config = { tension: 30, friction: 7, ease: Easing.in(Easing.ease(1, 0, 1, 1)), duration: 200 }
 
+/* tslint:disable */
 let toolbarActions = [
   {
     title: '回复', iconName: 'md-create', iconSize: 22, show: 'always', onPress: function () {
@@ -118,6 +117,7 @@ let toolbarActions = [
     }
   }
 ]
+/* tslint:enable */
 
 class QaTopic extends Component<any, any> {
 
@@ -156,20 +156,24 @@ class QaTopic extends Component<any, any> {
           cb()
         }
         return
+      default:
+        return
     }
   }
 
-  componentWillMount = () => {
+  componentWillMount() {
     this.preFetch()
   }
 
+  hasGame = false
+  hasComment = false
   preFetch = () => {
     this.setState({
       isLoading: true
     })
     const { params } = this.props.navigation.state
     InteractionManager.runAfterInteractions(() => {
-      const data = getQaTopicAPI(params.URL).then(data => {
+      getQaTopicAPI(params.URL).then(data => {
 
         const content = data.contentInfo.html
         this.hasGame = !!data.gameInfo.url
@@ -190,16 +194,10 @@ class QaTopic extends Component<any, any> {
       { url }
     ]
   })
-
-  shouldComponentUpdate = (nextProp, nextState) => {
-    return true
-  }
-
   renderHeader = (titleInfo) => {
     const { modeInfo } = this.props.screenProps
     const { params } = this.props.navigation.state
-    const nodeStyle = { flex: -1, color: modeInfo.standardTextColor, textAlign: 'center', textAlignVertical: 'center' }
-    const textStyle = { flex: -1, color: modeInfo.standardTextColor, textAlign: 'center', textAlignVertical: 'center' }
+    const textStyle: any = { flex: -1, color: modeInfo.standardTextColor, textAlign: 'center', textAlignVertical: 'center' }
     return ['battle'].includes(params.type) ? undefined : (
       <View key={'header'} style={{
         flex: 1,
@@ -231,7 +229,8 @@ class QaTopic extends Component<any, any> {
               />
 
               <View style={{ flex: 1.1, flexDirection: 'row', justifyContent: 'space-between' }}>
-                <Text selectable={false} style={{ flex: -1, color: modeInfo.standardColor, textAlign: 'center', textAlignVertical: 'center' }} onPress={
+                <Text selectable={false} style={{ flex: -1,
+                  color: modeInfo.standardColor, textAlign: 'center', textAlignVertical: 'center' }} onPress={
                   () => {
                     this.props.navigation.navigate('Home', {
                       title: titleInfo.psnid,
@@ -311,7 +310,8 @@ class QaTopic extends Component<any, any> {
               </Text>
 
               <View style={{ flex: 1.1, flexDirection: 'row', justifyContent: 'space-between' }}>
-                <Text selectable={false} style={{ flex: -1, color: modeInfo.standardTextColor, textAlign: 'center', textAlignVertical: 'center' }}>{rowData.platform.join(' ')}</Text>
+                <Text selectable={false} style={{ flex: -1,
+                  color: modeInfo.standardTextColor, textAlign: 'center', textAlignVertical: 'center' }}>{rowData.platform.join(' ')}</Text>
               </View>
 
             </View>
@@ -325,8 +325,7 @@ class QaTopic extends Component<any, any> {
   renderComment = (commentList) => {
     const { modeInfo } = this.props.screenProps
     const { navigation } = this.props
-    const list = []
-    let readMore = null
+    const list: any[] = []
     for (const rowData of commentList) {
       list.push(
         <ComplexComment key={rowData.id || list.length} {...{
@@ -363,8 +362,8 @@ class QaTopic extends Component<any, any> {
     // console.log('QaTopic.js rendered');
     const { modeInfo } = this.props.screenProps
     const { data: source } = this.state
-    const data = []
-    const renderFuncArr = []
+    const data: any[] = []
+    const renderFuncArr: any[] = []
     const shouldPushData = !this.state.isLoading
     if (shouldPushData) {
       data.push(source.titleInfo)
@@ -444,7 +443,6 @@ class QaTopic extends Component<any, any> {
             size={50}
           />
         )}
-        {params.type === 'community' && !this.state.isLoading && this.renderToolbar()}
         {!this.state.isLoading && <FlatList style={{
           flex: -1,
           backgroundColor: modeInfo.standardColor
@@ -522,80 +520,9 @@ class QaTopic extends Component<any, any> {
     )
   }
 
-  renderToolbar = () => {
-    const { modeInfo } = this.props.screenProps
-    const { openVal } = this.state
-    const tipHeight = toolbarHeight * 0.8
-    const list = []
-    const iconNameArr = ['md-arrow-down', 'md-arrow-up']
-    for (let i = 0; i < iconNameArr.length; i++) {
-      list.push(
-        this.renderToolbarItem({
-          iconName: iconNameArr[i],
-          openVal: openVal
-        }, i, iconNameArr.length)
-      )
-    }
-    return (
-      <View style={{ position: 'absolute', left: 0, top: 0, width: SCREEN_WIDTH, height: SCREEN_HEIGHT - toolbarHeight / 2 }}>
-        {list}
-        <Animated.View
-          ref={float => this.float = float}
-          collapsable={false}
-          style={{
-            width: 56,
-            height: 56,
-            borderRadius: 30,
-            backgroundColor: accentColor,
-            position: 'absolute',
-            bottom: 16,
-            right: 16,
-            elevation: 6,
-            zIndex: 1,
-            opacity: this.state.opacity,
-            transform: [{
-              rotateZ: this.state.rotation.interpolate({
-                inputRange: [0, 1],
-                outputRange: ['0deg', '360deg']
-              })
-            }]
-          }}>
-          <TouchableNativeFeedback
-            onPress={this.pressNew}
-            background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
-            onPressIn={() => {
-              this.float.setNativeProps({
-                style: {
-                  elevation: 12
-                }
-              })
-            }}
-            onPressOut={() => {
-              this.float.setNativeProps({
-                style: {
-                  elevation: 6
-                }
-              })
-            }}
-            style={{
-              width: 56,
-              height: 56,
-              borderRadius: 30,
-              flex: 1,
-              zIndex: 1,
-              backgroundColor: accentColor
-            }}>
-            <View style={{ borderRadius: 30, width: 56, height: 56, flex: -1, justifyContent: 'center', alignItems: 'center' }}>
-              <Ionicons name='ios-add' size={40} color='#fff' />
-            </View>
-          </TouchableNativeFeedback>
-        </Animated.View>
-      </View>
-    )
-  }
-
   index = 0
-
+  flatlist: any = false
+  float1: any = false
   pressToolbar = index => {
     const target = index === 0 ? this.viewTopIndex : this.viewBottomIndex
     this.flatlist && this.flatlist.scrollToIndex({ animated: true, viewPosition: 0, index: target })
@@ -640,8 +567,8 @@ const styles = StyleSheet.create({
     elevation: 4
   },
   selectedTitle: {
-    //backgroundColor: '#00ffff'
-    //fontSize: 20
+    // backgroundColor: '#00ffff'
+    // fontSize: 20
   },
   avatar: {
     width: 50,

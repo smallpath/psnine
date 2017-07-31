@@ -1,7 +1,6 @@
 import React from 'react'
 import {
-  Dimensions,
-  StyleSheet
+  Dimensions
 } from 'react-native'
 
 import {
@@ -24,14 +23,9 @@ const names = [
   '游戏', '新闻', '攻略', '心得', '问答', '折扣'
 ]
 
-const DefaultTabBar = TabNavigator.Presets.Default.tabBarComponent
+declare var global
 
-const styles = StyleSheet.create({
-  icon: {
-    width: 26,
-    height: 26
-  }
-})
+const DefaultTabBar = TabNavigator.Presets.Default.tabBarComponent
 
 const container = {
   NewGameProfile: {
@@ -98,8 +92,8 @@ const Tab = TabNavigator(container, {
   }
 })
 
-export default class TabContainer extends React.PureComponent {
-  constructor(props){
+export default class TabContainer extends React.PureComponent<any, any> {
+  constructor(props) {
     super(props)
   }
   render() {

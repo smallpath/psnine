@@ -2,12 +2,9 @@ import React, { Component } from 'react'
 import {
   StyleSheet,
   View,
-  Dimensions,
   InteractionManager,
   ActivityIndicator,
-  StatusBar,
   Animated,
-  Easing,
   ScrollView
 } from 'react-native'
 
@@ -19,24 +16,7 @@ import {
 
 import { fetchStore as getAPI } from '../../dao'
 
-// import CreateUserTab from './UserTab'
-
-let screen = Dimensions.get('window')
-const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = screen
-
-let toolbarActions = []
-let title = 'TOPIC'
-let WEBVIEW_REF = `WEBVIEW_REF`
-
-let toolbarHeight = 56
-let releasedMarginTop = 0
-
-const ACTUAL_SCREEN_HEIGHT = SCREEN_HEIGHT - StatusBar.currentHeight + 1
-
-let CIRCLE_SIZE = 56
-let config = { tension: 30, friction: 7, ease: Easing.in(Easing.ease(1, 0, 1, 1)), duration: 200 }
-
-const limit = SCREEN_WIDTH - toolbarHeight
+declare var global
 
 export default class extends Component<any, any> {
 
@@ -54,21 +34,12 @@ export default class extends Component<any, any> {
       openVal: new Animated.Value(0),
       modalVisible: false,
       modalOpenVal: new Animated.Value(0),
-      marginTop: new Animated.Value(0),
-      onActionSelected: this._onActionSelected
+      marginTop: new Animated.Value(0)
     }
   }
 
-  componentWillMount = () => {
+  componentWillMount() {
     this.preFetch()
-    this._previousTop = 0
-    const { openVal, marginTop } = this.state
-    this._viewStyles = {
-      style: {
-        top: this._previousTop
-      }
-    }
-
   }
 
   preFetch = () => {
@@ -77,7 +48,7 @@ export default class extends Component<any, any> {
       isLoading: true
     })
     InteractionManager.runAfterInteractions(() => {
-      const data = getAPI(params).then(data => {
+      getAPI(params).then(data => {
         this.setState({
           data,
           isLoading: false,
@@ -95,10 +66,6 @@ export default class extends Component<any, any> {
 
   renderHeader = (rowData) => {
     const { modeInfo } = this.props.screenProps
-    const { nightModeInfo } = modeInfo
-    const { titleInfo } = this.state
-    const color = 'rgba(255,255,255,1)'
-    const infoColor = 'rgba(255,255,255,0.8)'
     // console.log(rowData.content)
     return (
       <View style={{ padding: 12, margin: 7, backgroundColor: modeInfo.backgroundColor, elevation: 1, flex: 1 }}>
@@ -118,12 +85,6 @@ export default class extends Component<any, any> {
     const { params } = this.props.navigation.state
     // console.log('GamePage.js rendered');
     const { modeInfo } = this.props.screenProps
-    const { data: source, marginTop } = this.state
-    const data = []
-    const renderFuncArr = []
-    const shouldPushData = !this.state.isLoading
-
-    this.viewBottomIndex = Math.max(data.length - 1, 0)
 
     return (
       <View
@@ -141,13 +102,7 @@ export default class extends Component<any, any> {
           actions={this.state.toolbar}
           key={this.state.toolbar.map(item => item.text || '').join('::')}
           onIconClicked={() => {
-            if (marginTop._value === 0) {
-              this.props.navigation.goBack()
-              return
-            }
-            this._viewStyles.style.top = 0
-            this._previousTop = 0
-            Animated.timing(marginTop, { toValue: 0, ...config, duration: 200 }).start()
+            this.props.navigation.goBack()
           }}
           onActionSelected={this.state.onActionSelected}
         />
@@ -181,8 +136,8 @@ const styles = StyleSheet.create({
     elevation: 4
   },
   selectedTitle: {
-    //backgroundColor: '#00ffff'
-    //fontSize: 20
+    // backgroundColor: '#00ffff'
+    // fontSize: 20
   },
   avatar: {
     width: 50,

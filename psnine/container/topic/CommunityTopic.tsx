@@ -37,6 +37,7 @@ const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = screen
 
 declare var global
 
+/* tslint:disable */
 let toolbarActions = [
   {
     title: '回复', iconName: 'md-create', iconSize: 22, show: 'always', onPress: function () {
@@ -125,6 +126,7 @@ let toolbarActions = [
     }
   }
 ]
+/* tslint:enable */
 
 let toolbarHeight = 56
 let config = { tension: 30, friction: 7, ease: Easing.in(Easing.ease(1, 0, 1, 1)), duration: 200 }
@@ -177,11 +179,11 @@ class CommunityTopic extends Component<any, any> {
     })
   }
 
-  componentWillMount = () => {
+  componentWillMount() {
     const { params } = this.props.navigation.state
     InteractionManager.runAfterInteractions(() => {
       const API = ApiMapper[params.type] || getTopicAPI
-      const data = API(params.URL).then(data => {
+      API(params.URL).then(data => {
 
         const content = data.contentInfo.html
         const html = params.type !== 'gene' ? content : content.replace('<div>', '<div align="center">')
@@ -211,7 +213,7 @@ class CommunityTopic extends Component<any, any> {
   hasShare = false
   renderShare = (page) => {
     const { modeInfo } = this.props.screenProps
-    const list = []
+    const list: any[] = []
     for (const item of page) {
       const thisJSX = (
         <TouchableNativeFeedback key={item.url} onPress={() => {
@@ -244,8 +246,7 @@ class CommunityTopic extends Component<any, any> {
   renderHeader = (titleInfo) => {
     const { modeInfo } = this.props.screenProps
     const { params } = this.props.navigation.state
-    const nodeStyle = { flex: -1, color: modeInfo.standardTextColor, textAlign: 'center', textAlignVertical: 'center' }
-    const textStyle = { flex: -1, color: modeInfo.standardTextColor, textAlign: 'center', textAlignVertical: 'center' }
+    const textStyle: any = { flex: -1, color: modeInfo.standardTextColor, textAlign: 'center', textAlignVertical: 'center' }
     const isNotGene = params.type !== 'gene'
     let shouldRenderAvatar = isNotGene && !!(params.rowData && params.rowData.avatar)
     let avatar = ''
@@ -286,7 +287,8 @@ class CommunityTopic extends Component<any, any> {
               />
 
               <View style={{ flex: 1.1, flexDirection: 'row', justifyContent: 'space-between' }}>
-                <Text selectable={false} style={{ flex: -1, color: modeInfo.standardColor, textAlign: 'center', textAlignVertical: 'center' }} onPress={
+                <Text selectable={false} style={{ flex: -1,
+                  color: modeInfo.standardColor, textAlign: 'center', textAlignVertical: 'center' }} onPress={
                   () => {
                     this.props.navigation.navigate('Home', {
                       title: titleInfo.psnid,
@@ -297,7 +299,8 @@ class CommunityTopic extends Component<any, any> {
                 }>{titleInfo.psnid}</Text>
                 <Text selectable={false} style={textStyle}>{titleInfo.date}</Text>
                 <Text selectable={false} style={textStyle}>{titleInfo.reply}</Text>
-                {isNotGene === false && <Text selectable={false} style={{ flex: -1, color: modeInfo.standardColor, textAlign: 'center', textAlignVertical: 'center' }} onPress={
+                {isNotGene === false && <Text selectable={false} style={{
+                    flex: -1, color: modeInfo.standardColor, textAlign: 'center', textAlignVertical: 'center' }} onPress={
                   () => {
                     this.props.navigation.navigate('Circle', {
                       URL: `http://psnine.com/gene?ele=${(titleInfo.node || []).join('')}`,
@@ -341,7 +344,7 @@ class CommunityTopic extends Component<any, any> {
   hasGameTable = false
   renderGameTable = (gameTable) => {
     const { modeInfo } = this.props.screenProps
-    const list: any = []
+    const list: any[] = []
     for (const rowData of gameTable) {
       list.push(
         <View key={rowData.id} style={{
@@ -375,18 +378,23 @@ class CommunityTopic extends Component<any, any> {
                   numberOfLines={3}
                   style={{ flex: 2.5, color: modeInfo.titleTextColor }}>
                   {rowData.title}
-                  <Text selectable={false} style={{ fontSize: 12, flex: -1, color: modeInfo.standardTextColor, textAlign: 'center', textAlignVertical: 'center' }}>{rowData.region}</Text>
+                  <Text selectable={false} style={{
+                      fontSize: 12, flex: -1,
+                      color: modeInfo.standardTextColor, textAlign: 'center', textAlignVertical: 'center' }}>{rowData.region}</Text>
                 </Text>
 
                 <View style={{ flex: 1.1, flexDirection: 'row', justifyContent: 'space-between' }}>
-                  <Text selectable={false} style={{ fontSize: 12, flex: -1, color: modeInfo.standardColor, textAlign: 'center', textAlignVertical: 'center' }}>{rowData.platform}</Text>
+                  <Text selectable={false} style={{ fontSize: 12,
+                  flex: -1, color: modeInfo.standardColor, textAlign: 'center', textAlignVertical: 'center' }}>{rowData.platform}</Text>
                   {rowData.alert && <Text selectable={false} style={{
                     fontSize: 12, flex: -1,
                     color: getLevelColorFromProgress(rowData.allPercent), textAlign: 'center', textAlignVertical: 'center'
                   }}>{
                       rowData.alert + ' '
-                    }<Text style={{ fontSize: 12, flex: -1, color: modeInfo.standardTextColor, textAlign: 'center', textAlignVertical: 'center' }}>{rowData.allPercent}</Text></Text> || undefined}
-                  <Text selectable={false} style={{ fontSize: 12, flex: -1, color: modeInfo.standardTextColor, textAlign: 'center', textAlignVertical: 'center' }}>{
+                    }<Text style={{ fontSize: 12, flex: -1, color: modeInfo.standardTextColor,
+                    textAlign: 'center', textAlignVertical: 'center' }}>{rowData.allPercent}</Text></Text> || undefined}
+                  <Text selectable={false} style={{ fontSize: 12, flex: -1,
+                    color: modeInfo.standardTextColor, textAlign: 'center', textAlignVertical: 'center' }}>{
                     [rowData.platium, rowData.gold, rowData.selver, rowData.bronze].map((item, index) => {
                       return (
                         <Text key={index} style={{ color: colorConfig['trophyColor' + (index + 1)] }}>
@@ -455,7 +463,6 @@ class CommunityTopic extends Component<any, any> {
                 this._readMore(`${this.props.navigation.state.params.URL}/comment?page=1`)
               }}
               useForeground={true}
-
               background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
             >
               <View pointerEvents='box-only' style={{ flex: 1, flexDirection: 'row', padding: 12 }}>
@@ -474,11 +481,13 @@ class CommunityTopic extends Component<any, any> {
     const shouldMarginTop = !this.hasContent && !this.hasGameTable && !this.hasPage
     return (
       <View style={{ marginTop: shouldMarginTop ? 5 : 0 }}>
-        {readMore && <View style={{ elevation: 1, margin: 5, marginTop: 0, marginBottom: 5, backgroundColor: modeInfo.backgroundColor }}>{readMore}</View>}
+        {readMore && <View style={{ elevation: 1,
+          margin: 5, marginTop: 0, marginBottom: 5, backgroundColor: modeInfo.backgroundColor }}>{readMore}</View>}
         <View style={{ elevation: 1, margin: 5, marginTop: 0, backgroundColor: modeInfo.backgroundColor }}>
           {list}
         </View>
-        {readMore && <View style={{ elevation: 1, margin: 5, marginTop: 0, marginBottom: 5, backgroundColor: modeInfo.backgroundColor }}>{readMore}</View>}
+        {readMore && <View style={{ elevation: 1,
+          margin: 5, marginTop: 0, marginBottom: 5, backgroundColor: modeInfo.backgroundColor }}>{readMore}</View>}
       </View>
     )
   }
@@ -513,7 +522,7 @@ class CommunityTopic extends Component<any, any> {
   hasPage = false
   renderPage = (page) => {
     const { modeInfo } = this.props.screenProps
-    const list = []
+    const list: any[] = []
     for (const item of page) {
       const thisJSX: JSX.Element = (
         <View style={{margin: 2}} key={item.url}>
@@ -764,7 +773,7 @@ class CommunityTopic extends Component<any, any> {
     const { modeInfo } = this.props.screenProps
     const { openVal } = this.state
     const tipHeight = toolbarHeight * 0.8
-    const list = []
+    const list: any[] = []
     const iconNameArr = ['md-arrow-down', 'md-arrow-up']
     for (let i = 0; i < iconNameArr.length; i++) {
       list.push(
@@ -878,8 +887,8 @@ const styles = StyleSheet.create({
     elevation: 4
   },
   selectedTitle: {
-    //backgroundColor: '#00ffff'
-    //fontSize: 20
+    // backgroundColor: '#00ffff'
+    // fontSize: 20
   },
   avatar: {
     width: 50,

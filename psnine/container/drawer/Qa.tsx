@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import {
-  StyleSheet,
   View,
   RefreshControl,
   Picker,
@@ -16,15 +15,16 @@ import FooterProgress from '../../component/FooterProgress'
 
 const AnimatedFlatList = Animated.createAnimatedComponent(FlatList)
 
-let toolbarHeight = 56
-let releasedMarginTop = 0
-let prevPosition = -1
+declare var global
 
 class Qa extends Component<any, any> {
   static navigationOptions = {
     tabBarLabel: '问答',
     drawerLabel: '问答'
   }
+
+  flatlist: any = false
+  refreshControl: any = false
 
   constructor(props) {
     super(props)
@@ -84,8 +84,8 @@ class Qa extends Component<any, any> {
     })
   }
 
-  componentWillReceiveProps = (nextProps) => {
-    if (this.props.screenProps.modeInfo.themeName != nextProps.screenProps.modeInfo.themeName) {
+  componentWillReceiveProps(nextProps) {
+    if (this.props.screenProps.modeInfo.themeName !== nextProps.screenProps.modeInfo.themeName) {
 
     } else if (this.props.screenProps.searchTitle !== nextProps.screenProps.searchTitle) {
 
@@ -105,7 +105,7 @@ class Qa extends Component<any, any> {
     }
   }
 
-  componentWillMount = () => {
+  componentWillMount() {
     const { qa: qaReducer } = this.props
     const { registerAfterEach, searchTitle } = this.props.screenProps
     if (qaReducer.page === 0) {
@@ -123,8 +123,8 @@ class Qa extends Component<any, any> {
     })
   }
 
-  _onRefresh = (title) => {
-    const { qa: qaReducer, dispatch } = this.props
+  _onRefresh: any = (title) => {
+    const { dispatch } = this.props
 
     this.setState({
       isRefreshing: true
@@ -162,7 +162,7 @@ class Qa extends Component<any, any> {
 
   ITEM_HEIGHT = 74 + 7
 
-  _renderItem = ({ item: rowData, index }) => {
+  _renderItem = ({ item: rowData }) => {
     const { modeInfo, navigation } = this.props.screenProps
     const { ITEM_HEIGHT } = this
     return <TopicItem {...{
@@ -176,7 +176,7 @@ class Qa extends Component<any, any> {
   render() {
     const { qa: qaReducer } = this.props
     const { modeInfo } = this.props.screenProps
-    log('Qa.js rendered')
+    global.log('Qa.js rendered')
     return (
       <View style={{ backgroundColor: modeInfo.background, flex: 1 }}>
         {this._renderHeader()}
@@ -196,7 +196,7 @@ class Qa extends Component<any, any> {
           }
           ListFooterComponent={() => <FooterProgress isLoadingMore={this.state.isLoadingMore} modeInfo={modeInfo} />}
           data={qaReducer.qas}
-          keyExtractor={(item, index) => `${item.id}::${item.views}::${item.count}`}
+          keyExtractor={(item) => `${item.id}::${item.views}::${item.count}`}
           renderItem={this._renderItem}
           onEndReached={this._onEndReached}
           onEndReachedThreshold={0.5}
@@ -209,8 +209,7 @@ class Qa extends Component<any, any> {
           numColumns={modeInfo.numColumns}
           key={modeInfo.themeName}
           disableVirtualization={false}
-          contentContainerStyle={styles.list}
-          getItemLayout={(data, index) => (
+          getItemLayout={(_, index) => (
             {length: this.ITEM_HEIGHT, offset: this.ITEM_HEIGHT * index, index}
           )}
           viewabilityConfig={{
@@ -224,13 +223,6 @@ class Qa extends Component<any, any> {
   }
 
 }
-
-const styles = StyleSheet.create({
-  avatar: {
-    width: 50,
-    height: 50
-  }
-})
 
 function mapStateToProps(state) {
   return {

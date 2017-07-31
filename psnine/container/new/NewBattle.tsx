@@ -10,7 +10,6 @@ import {
   Keyboard,
   TextInput,
   Animated,
-  Easing,
   StatusBar,
   Picker,
   Button
@@ -24,8 +23,6 @@ import { getNewBattleAPI, getBattleEditAPI } from '../../dao'
 import { postCreateTopic } from '../../dao/post'
 
 import Emotion from '../../component/Emotion'
-
-let title = '创建问题'
 
 let toolbarActions = [
 
@@ -45,14 +42,12 @@ let CIRCLE_SIZE = 56
 
 const emotionToolbarHeight = 190
 
-let config = { tension: 30, friction: 7, ease: Easing.in(Easing.ease(1, 0, 1, 1)), duration: 200 }
+let config = { tension: 30, friction: 7 }
 
 export default class NewTopic extends Component<any, any> {
 
   constructor(props) {
     super(props)
-    const { params = {} } = this.props.navigation.state
-    const { at = '', shouldShowPoint = false, isOldPage = false } = params
     // console.log(params)
     this.state = {
       icon: false,
@@ -81,9 +76,8 @@ export default class NewTopic extends Component<any, any> {
     }
   }
 
-  componentDidMount = () => {
+  componentDidMount() {
     const { modeInfo } = this.props.screenProps
-    let config = { tension: 30, friction: 7 }
     // Animated.spring(this.state.openVal, { toValue: 1, ...config }).start(() => {
       if (modeInfo.settingInfo.psnid === '') {
         global.toast('请首先登录')
@@ -93,8 +87,8 @@ export default class NewTopic extends Component<any, any> {
     // });
   }
 
-  _pressButton = (callback) => {
-    const { marginTop, openVal } = this.state
+  _pressButton = (callback?) => {
+    const { marginTop } = this.state
     let value = marginTop._value
     if (Math.abs(value) >= 50) {
       Animated.spring(marginTop, { toValue: 0, ...config }).start()
@@ -109,6 +103,9 @@ export default class NewTopic extends Component<any, any> {
 
   }
 
+  content: any = false
+  shouldShowEmotion: any = false
+
   isKeyboardShowing = false
   _pressEmotion = () => {
     let config = { tension: 30, friction: 7 }
@@ -121,19 +118,18 @@ export default class NewTopic extends Component<any, any> {
     Animated.spring(this.state.toolbarOpenVal, { toValue: target, ...config }).start()
   }
 
-  componentWillUnmount = () => {
+  componentWillUnmount() {
     this.keyboardDidHideListener.remove()
     this.keyboardDidShowListener.remove()
     this.removeListener && this.removeListener.remove()
   }
 
-  componentWillMount = async () => {
-    // console.log('??', typeof getNewQaAPI)
-    let config = { tension: 30, friction: 7 }
-    const { openVal, marginTop } = this.state
-    const { callback } = this.props.navigation.state.params
+  keyboardDidHideListener: any = false
+  keyboardDidShowListener: any = false
+  removeListener: any = false
+
+  async componentWillMount() {
     const { params } = this.props.navigation.state
-    const { modeInfo } = this.props.screenProps
 
     InteractionManager.runAfterInteractions(() => {
       getNewBattleAPI().then(data => {
@@ -192,9 +188,11 @@ export default class NewTopic extends Component<any, any> {
 
   }
 
+  isToolbarShowing = false
+
   sendReply = () => {
     const { num, psngameid, startday, starttime, trophies, content, id, key } = this.state
-    const result = {
+    const result: any = {
       num, psngameid, startday, starttime, trophies, content
     }
     result[key] = ''
@@ -216,8 +214,8 @@ export default class NewTopic extends Component<any, any> {
         this._pressButton()
         global.toast('发布成功')
       })
-    }).catch(err => {
-      const msg = `发布失败: ${arr[1]}`
+    }).catch((err) => {
+      const msg = `发布失败: ${err}`
       global.toast(msg)
       // ToastAndroid.show(msg, ToastAndroid.SHORT);
     })
@@ -230,6 +228,8 @@ export default class NewTopic extends Component<any, any> {
       // this._onRefresh()
     })
   }
+
+  ref = false
 
   render() {
     let { openVal, marginTop } = this.state
@@ -255,11 +255,7 @@ export default class NewTopic extends Component<any, any> {
         inputRange: [0, 1],
         outputRange: [accentColor, modeInfo.backgroundColor]
       })
-      //elevation : openVal.interpolate({inputRange: [0 ,1], outputRange: [0, 8]})
-    }
-
-    let animatedSubmitStyle = {
-      height: openVal.interpolate({ inputRange: [0, 0.9, 1], outputRange: [0, 0, 40] })
+      // elevation : openVal.interpolate({inputRange: [0 ,1], outputRange: [0, 8]})
     }
 
     let animatedToolbarStyle = {
@@ -287,14 +283,12 @@ export default class NewTopic extends Component<any, any> {
             subtitleColor={modeInfo.isNightMode ? '#000' : '#fff'}
             actions={toolbarActions}
             onIconClicked={this._pressButton}
-            onActionSelected={this.onActionSelected}
           />
 
         </Animated.View >
         <Picker style={{
             flex: 1,
             borderWidth: 1,
-            color: modeInfo.standardTextColor,
             borderBottomColor: modeInfo.standardTextColor
           }}
             prompt='选择游戏'
@@ -331,8 +325,7 @@ export default class NewTopic extends Component<any, any> {
             }}/>
             </View>
             <Picker style={{
-              flex: 1.5,
-              color: modeInfo.standardTextColor
+              flex: 1.5
             }}
               prompt='选择人数'
               selectedValue={this.state.num}
@@ -350,8 +343,7 @@ export default class NewTopic extends Component<any, any> {
             flexDirection: 'row'
           }}>
             <Picker style={{
-              flex: 2,
-              color: modeInfo.standardTextColor
+              flex: 2
             }}
               prompt='选择日期'
               selectedValue={this.state.startday}
@@ -361,8 +353,7 @@ export default class NewTopic extends Component<any, any> {
               }
             </Picker>
             <Picker style={{
-              flex: 1,
-              color: modeInfo.standardTextColor
+              flex: 1
             }}
               prompt='选择时间'
               selectedValue={this.state.starttime}
@@ -399,7 +390,7 @@ export default class NewTopic extends Component<any, any> {
             />
             <Animated.View style={[{
               elevation: 4,
-              bottom: 0 //toolbarOpenVal.interpolate({ inputRange: [0, 1], outputRange: [0, 1] })
+              bottom: 0 // toolbarOpenVal.interpolate({ inputRange: [0, 1], outputRange: [0, 1] })
             }, animatedToolbarStyle]}>
               <View style={{
                 flex: 1,
@@ -423,7 +414,6 @@ export default class NewTopic extends Component<any, any> {
                   </TouchableNativeFeedback>
                   <TouchableNativeFeedback
                     onPress={this._pressImageButton}
-
                     background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
                     style={{ borderRadius: 25 }}
                   >
@@ -466,7 +456,7 @@ export default class NewTopic extends Component<any, any> {
             {/* 表情 */}
             <Animated.View style={{
               elevation: 4,
-              bottom: 0, //toolbarOpenVal.interpolate({ inputRange: [0, 1], outputRange: [0, 100] }),
+              bottom: 0, // toolbarOpenVal.interpolate({ inputRange: [0, 1], outputRange: [0, 100] }),
               backgroundColor: modeInfo.standardColor,
               height: toolbarOpenVal.interpolate({ inputRange: [-1, 0, 1], outputRange: [0, 0, emotionToolbarHeight] }),
               opacity: openVal.interpolate({ inputRange: [0, 0.9, 1], outputRange: [0, 0, 1] })
@@ -491,20 +481,10 @@ export default class NewTopic extends Component<any, any> {
     )
   }
 
-  onPressEmotion = ({ text, url }) => {
+  onPressEmotion = ({ text }) => {
     this.addText(
       text
     )
-  }
-
-  toolbar = () => {
-    const { params } = this.props.navigation.state
-    Keyboard.dismiss()
-    this.props.navigation.navigate('Toolbar', {
-      callback: ({ text, offset }) => {
-        this.addText(text, true)
-      }
-    })
   }
 
   addText = (text) => {
@@ -532,16 +512,14 @@ export default class NewTopic extends Component<any, any> {
   }
 
   toolbar = () => {
-    const { params } = this.props.navigation.state
     Keyboard.dismiss()
     this.props.navigation.navigate('Toolbar', {
-      callback: ({ text, offset }) => {
-        this.addText(text, true)
+      callback: ({ text }) => {
+        this.addText(text)
       }
     })
   }
-  _pressImageButton = (callback) => {
-    const { params } = this.props.navigation.state
+  _pressImageButton = () => {
     Keyboard.dismiss()
     this.props.navigation.navigate('UserPhoto', {
       URL: 'http://psnine.com/my/photo?page=1',
@@ -551,8 +529,6 @@ export default class NewTopic extends Component<any, any> {
     })
   }
 }
-
-const width = Dimensions.get('window').width
 
 const styles = StyleSheet.create({
   circle: {
@@ -592,13 +568,13 @@ const styles = StyleSheet.create({
   KeyboardAvoidingView: {
     flex: 10,
     // width: width,
-    //alignSelf:'center',
-    //justifyContent: 'space-between',
+    // alignSelf:'center',
+    // justifyContent: 'space-between',
     flexDirection: 'column'
   },
   titleView: {
     flex: 1,
-    //marginTop: -10,
+    // marginTop: -10,
     justifyContent: 'center'
     // flexDirection: 'column',
     // justifyContent: 'space-between',

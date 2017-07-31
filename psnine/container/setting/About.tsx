@@ -16,6 +16,8 @@ import packages from '../../../package.json'
 
 import checkVersion from '../../bootstrap/checkVersion'
 
+const errHandler = err => global.toast && global.toast(err.toString())
+
 let dataSource = new ListView.DataSource({
   rowHasChanged: (row1, row2) => row1 !== row2
 })
@@ -101,14 +103,14 @@ class About extends Component<any, any> {
       `联系作者`,
       `反馈问题或需要新功能请通过Github或邮箱联系`,
       [
-        {text: '站内', onPress: () => Linking.openURL(`p9://psnine.com/psnid/secondlife_xhm`).catch(err => global.toast && global.toast(err.toString()))},
-        {text: '邮箱', style: 'cancel', onPress: () => Linking.openURL(`mailto:smallpath2013@gmail.com`).catch(err => global.toast && global.toast(err.toString()))},
-        {text: 'Github', onPress: () => Linking.openURL(`https://github.com/smallpath/psnine`).catch(err => global.toast && global.toast(err.toString()))}
+        {text: '站内', onPress: () => Linking.openURL(`p9://psnine.com/psnid/secondlife_xhm`).catch(errHandler)},
+        {text: '邮箱', style: 'cancel', onPress: () => Linking.openURL(`mailto:smallpath2013@gmail.com`).catch(errHandler)},
+        {text: 'Github', onPress: () => Linking.openURL(`https://github.com/smallpath/psnine`).catch(errHandler)}
       ]
     )
   }
 
-  renderRow = (rowData, sectionID, rowID, highlightRow) => {
+  renderRow = (rowData) => {
     const { modeInfo } = this.props.screenProps
     return (
       <TouchableNativeFeedback

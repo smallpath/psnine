@@ -10,8 +10,8 @@ import {
 import { FlatlistItemProp } from '../interface'
 
 interface ExtendedProp extends FlatlistItemProp {
-  ITEM_HEIGHT: number,
-  shouldMargin: boolean
+  ITEM_HEIGHT?: number,
+  shouldMargin?: boolean
 }
 
 export default class CircleItem extends React.PureComponent<ExtendedProp, {}> {

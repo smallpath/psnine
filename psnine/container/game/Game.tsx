@@ -8,9 +8,7 @@ import {
   TouchableNativeFeedback,
   InteractionManager,
   ActivityIndicator,
-  StatusBar,
   Animated,
-  Easing,
   FlatList
 } from 'react-native'
 
@@ -25,20 +23,9 @@ import {
   getGameAPI
 } from '../../dao'
 
-let screen = Dimensions.get('window')
-const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = screen
-
 let toolbarActions = []
-let title = 'TOPIC'
-let WEBVIEW_REF = `WEBVIEW_REF`
 
-let toolbarHeight = 56
-let releasedMarginTop = 0
-
-const ACTUAL_SCREEN_HEIGHT = SCREEN_HEIGHT - StatusBar.currentHeight + 1
-
-let CIRCLE_SIZE = 56
-let config = { tension: 30, friction: 7, ease: Easing.in(Easing.ease(1, 0, 1, 1)), duration: 200 }
+declare var global
 
 export default class GamePage extends Component<any, any> {
 
@@ -46,7 +33,7 @@ export default class GamePage extends Component<any, any> {
     super(props)
     const { navigation } = this.props
     const { params } = navigation.state
-    const { selections = [], type = 'general' } = params
+    const { selections = [] } = params
     this.state = {
       data: false,
       isLoading: true,
@@ -63,7 +50,6 @@ export default class GamePage extends Component<any, any> {
   }
 
   _onActionSelected = (index) => {
-    const { params } = this.props.navigation.state
     switch (index) {
       case 0:
         const { navigation } = this.props
@@ -78,10 +64,12 @@ export default class GamePage extends Component<any, any> {
         return
       case 3:
         return
+      default:
+        return
     }
   }
 
-  componentWillMount = () => {
+  componentWillMount() {
     this.preFetch()
   }
 
@@ -91,7 +79,7 @@ export default class GamePage extends Component<any, any> {
       isLoading: true
     })
     InteractionManager.runAfterInteractions(() => {
-      const data = getGameAPI(params.URL).then(data => {
+      getGameAPI(params.URL).then(data => {
 
         this.hasPlayer = !!data.playerInfo.psnid
         this.setState({
@@ -119,7 +107,6 @@ export default class GamePage extends Component<any, any> {
 
           }}
           useForeground={true}
-
           background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
         >
           <View pointerEvents='box-only' style={{ flex: 1, flexDirection: 'row', padding: 12 }}>
@@ -145,7 +132,6 @@ export default class GamePage extends Component<any, any> {
               </View>
 
               <View style={{ flex: 1.1, flexDirection: 'row', justifyContent: 'space-between' }}>
-                {/*<Text selectable={false} style={{ flex: -1, color: idColor, textAlign: 'center', textAlignVertical: 'center' }}>{rowData.text}</Text>*/}
                 <Text selectable={false} style={{
                   flex: -1,
                   color: modeInfo.standardTextColor,
@@ -215,7 +201,7 @@ export default class GamePage extends Component<any, any> {
   renderToolbar = (list) => {
     const { modeInfo } = this.props.screenProps
     let screen = Dimensions.get('window')
-    const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = screen
+    const { width: SCREEN_WIDTH } = screen
     return (
       <View style={{
         flex: 0,
@@ -255,7 +241,8 @@ export default class GamePage extends Component<any, any> {
                 })
               }
             }}>
-            <View pointerEvents={'box-only'} style={{ flex: 1, alignItems: 'center', justifyContent: 'center', height: 55, width: SCREEN_WIDTH / (list.length) }}  key={index}>
+            <View pointerEvents={'box-only'} style={{
+              flex: 1, alignItems: 'center', justifyContent: 'center', height: 55, width: SCREEN_WIDTH / (list.length) }}  key={index}>
               <Text style={{ color: idColor, textAlign: 'left', fontSize: 12 }}>{item.text}</Text>
             </View>
           </TouchableNativeFeedback>
@@ -279,7 +266,6 @@ export default class GamePage extends Component<any, any> {
 
           }}
           useForeground={true}
-
           background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
         >
           <View pointerEvents='box-only' style={{ flex: 1, flexDirection: 'row', padding: 12 }}>
@@ -298,7 +284,6 @@ export default class GamePage extends Component<any, any> {
               </View>
 
               <View style={{ flex: 1.1, flexDirection: 'row', justifyContent: 'space-between' }}>
-                {/*<Text selectable={false} style={{ flex: -1, color: idColor, textAlign: 'center', textAlignVertical: 'center' }}>{rowData.text}</Text>*/}
                 <Text selectable={false} style={{
                   flex: -1,
                   color: modeInfo.standardTextColor,
@@ -411,7 +396,8 @@ export default class GamePage extends Component<any, any> {
     const { modeInfo } = this.props.screenProps
     return (
       <View key={index} style={{ backgroundColor: modeInfo.backgroundColor }}>
-        { index !== 0 && <Text style={{textAlign: 'left', color: modeInfo.standardTextColor, padding: 5, paddingLeft: 10, paddingBottom: 0, fontSize: 15}}>第{index}个DLC</Text>}
+        { index !== 0 && <Text style={{
+          textAlign: 'left', color: modeInfo.standardTextColor, padding: 5, paddingLeft: 10, paddingBottom: 0, fontSize: 15}}>第{index}个DLC</Text>}
         <View>
           { index !== 0 && this.renderGameHeader(rowData.banner, index) }
           { rowData.list.map((item , index) => this.renderTrophy(item , index)) }
@@ -421,7 +407,6 @@ export default class GamePage extends Component<any, any> {
   }
 
   renderAllProfiles = (rowData, index) => {
-    const { modeInfo } = this.props.screenProps
     return (
       <View key={index}>
         {
@@ -436,8 +421,8 @@ export default class GamePage extends Component<any, any> {
     // console.log('GamePage.js rendered');
     const { modeInfo } = this.props.screenProps
     const { data: source } = this.state
-    const data = []
-    const renderFuncArr = []
+    const data: any[] = []
+    const renderFuncArr: any[] = []
     const shouldPushData = !this.state.isLoading
     if (shouldPushData) {
       data.push(source.gameInfo)
@@ -453,10 +438,8 @@ export default class GamePage extends Component<any, any> {
       data.push(source.trophyArr)
       renderFuncArr.push(this.renderAllProfiles)
     }
-
-    this.viewBottomIndex = Math.max(data.length - 1, 0)
     const title = params.rowData.id ? `No.${params.rowData.id}` : (params.title || params.rowData.title)
-    const targetToolbar = toolbarActions.slice()
+    const targetToolbar: any = toolbarActions.slice()
     if (params.callbackAfterAll) {
       targetToolbar.push({ title: '确定', iconName: 'md-done-all', show: 'always' })
     }
@@ -515,6 +498,10 @@ export default class GamePage extends Component<any, any> {
       </View>
     )
   }
+
+  isValueChanged = false
+  flatlist: any = false
+  refreshControl: any = false
 }
 
 const styles = StyleSheet.create({
@@ -529,8 +516,8 @@ const styles = StyleSheet.create({
     elevation: 4
   },
   selectedTitle: {
-    //backgroundColor: '#00ffff'
-    //fontSize: 20
+    // backgroundColor: '#00ffff'
+    // fontSize: 20
   },
   avatar: {
     width: 50,
