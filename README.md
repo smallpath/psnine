@@ -1,7 +1,9 @@
 <img src="./android/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png">
 
 # Psnine
-Psnine第三方安卓客户端, 基于React Native、Redux, 支持安卓4.1及以上系统 
+Psnine第三方安卓客户端, 基于React Native、Redux, 支持安卓4.1及以上系统
+
+[![Get it on Google Play][play badge]][play link]
 
 # Features
 - 支持PSNINE网站的所有功能
@@ -15,10 +17,11 @@ Psnine第三方安卓客户端, 基于React Native、Redux, 支持安卓4.1及�
 <a href="art/3.gif"><img src="art/3.gif" width="32%"/></a>
 
 # Download
-> [https://fir.im/mf24](https://fir.im/mf24)
+- [google play][play link]
+- [fir.im][fir link]
 
 # Changelog
-请查看[Release页面](https://github.com/smallpath/psnine/releases)
+- [更新历史](./CHANGELOG.md)
 
 # Statement
 该项目已取得Psnine官方的第三方应用授权
@@ -61,3 +64,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 ```
+
+[play badge]: https://developer.android.com/images/brand/en_generic_rgb_wo_45.png
+[play link]: https://play.google.com/store/apps/details?id=com.psnine
+[fir link]: https://fir.im/mf24
