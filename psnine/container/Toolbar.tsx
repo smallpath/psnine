@@ -145,7 +145,7 @@ class Toolbar extends Component<any, any> {
     const callback = this.afterEachHooks[currentIndex]
     typeof callback === 'function' && callback(text)
     const currentRouteName = Object.keys(routes)[currentIndex]
-    this.searchMapper[currentRouteName] = this.state.search
+    this.searchMapper[currentRouteName] = text
   }
 
   _onSearchClicked = () => {

@@ -9,7 +9,8 @@ import {
   InteractionManager,
   ActivityIndicator,
   Animated,
-  FlatList
+  FlatList,
+  Button
 } from 'react-native'
 
 import Ionicons from 'react-native-vector-icons/Ionicons'
@@ -24,8 +25,6 @@ import {
 } from '../../dao'
 
 let toolbarActions = []
-
-declare var global
 
 export default class GamePage extends Component<any, any> {
 
@@ -46,26 +45,6 @@ export default class GamePage extends Component<any, any> {
       modalOpenVal: new Animated.Value(0),
       topicMarginTop: new Animated.Value(0),
       selections
-    }
-  }
-
-  _onActionSelected = (index) => {
-    switch (index) {
-      case 0:
-        const { navigation } = this.props
-        const { params } = navigation.state
-        params.callbackAfterAll && params.callbackAfterAll(this.state.selections)
-        navigation.goBack()
-        return
-      case 1:
-        this.preFetch()
-        return
-      case 2:
-        return
-      case 3:
-        return
-      default:
-        return
     }
   }
 
@@ -416,6 +395,19 @@ export default class GamePage extends Component<any, any> {
     )
   }
 
+  renderLinkHeader = (url) => {
+    const { modeInfo } = this.props.screenProps
+    const { navigation } = this.props
+    const onPress = () => navigation.navigate('NewGame', {
+      URL: url
+    })
+    return (
+    <View style={{margin: 5, backgroundColor: modeInfo.backgroundColor}}>
+      <Button onPress={onPress} title='关联游戏' color={modeInfo.accentColor}/>
+    </View>
+    )
+  }
+
   render() {
     const { params } = this.props.navigation.state
     // console.log('GamePage.js rendered');
@@ -427,6 +419,10 @@ export default class GamePage extends Component<any, any> {
     if (shouldPushData) {
       data.push(source.gameInfo)
       renderFuncArr.push(this.renderHeader)
+      if (source.gameInfo.linkGame) {
+        data.push(`${source.gameInfo.linkGame}?page=1`)
+        renderFuncArr.push(this.renderLinkHeader)
+      }
     }
     if (shouldPushData && this.hasPlayer) {
       data.push(source.playerInfo)
@@ -440,9 +436,15 @@ export default class GamePage extends Component<any, any> {
     }
     const title = params.rowData.id ? `No.${params.rowData.id}` : (params.title || params.rowData.title)
     const targetToolbar: any = toolbarActions.slice()
+    const { navigation } = this.props
     if (params.callbackAfterAll) {
-      targetToolbar.push({ title: '确定', iconName: 'md-done-all', show: 'always' })
+      targetToolbar.push({ title: '确定', iconName: 'md-done-all', show: 'always', onPress: () => {
+        const { params } = navigation.state
+        params.callbackAfterAll && params.callbackAfterAll(this.state.selections)
+        navigation.goBack()
+      } })
     }
+
     return (
       <View
         style={{ flex: 1, backgroundColor: modeInfo.backgroundColor }}
@@ -460,7 +462,7 @@ export default class GamePage extends Component<any, any> {
           onIconClicked={() => {
             this.props.navigation.goBack()
           }}
-          onActionSelected={this._onActionSelected}
+          onActionSelected={(index) => targetToolbar[index].onPress()}
         />
         {this.state.isLoading && (
           <ActivityIndicator
@@ -476,7 +478,7 @@ export default class GamePage extends Component<any, any> {
         )}
         {!this.state.isLoading && <FlatList style={{
           flex: -1,
-          backgroundColor: modeInfo.standardColor
+          backgroundColor: modeInfo.backgroundColor
         }}
           ref={flatlist => this.flatlist = flatlist}
           data={data}

@@ -128,7 +128,7 @@ class HtmlView extends Component<IProps, State> {
 
     return (
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', padding: 5, alignSelf: 'center', alignContent: 'center'  }}>
-        <Button color={this.props.modeInfo.accentColor} title={resolved.title} onPress={() => {
+        <Button color={this.props.modeInfo.accentColor} title={url.includes('psnine.com/huodong') ? '打开活动页面' : resolved.title} onPress={() => {
           return url.includes('psnine.com/huodong') ? this.setState({ modalVisible: true }) : this.props.linkPressHandler(url)
         }}></Button>
         {this.state.modalVisible && (
