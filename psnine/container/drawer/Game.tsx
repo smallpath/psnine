@@ -53,8 +53,7 @@ class Game extends Component<any, any> {
       }}>
         <Picker style={{
           flex: 1,
-          borderWidth: 1,
-          color: modeInfo.standardTextColor
+          borderWidth: 1
         }}
           prompt='选择平台'
           selectedValue={this.state.pf}
@@ -66,8 +65,7 @@ class Game extends Component<any, any> {
         </Picker>
         <Picker style={{
           flex: 1,
-          borderWidth: 1,
-          color: modeInfo.standardTextColor
+          borderWidth: 1
         }}
           prompt='选择DLC'
           selectedValue={this.state.dlc}
@@ -77,8 +75,7 @@ class Game extends Component<any, any> {
           <Picker.Item label='无DLC' value='nodlc' />
         </Picker>
         <Picker style={{
-          flex: 1.5,
-          color: modeInfo.standardTextColor
+          flex: 1.5
         }}
           prompt='排序'
           selectedValue={this.state.sort}

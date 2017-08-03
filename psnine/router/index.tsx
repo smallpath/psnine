@@ -31,6 +31,7 @@ import QaTopic from '../container/topic/QaTopic'
 import BattleTopic from '../container/topic/BattleTopic'
 import TradeTopic from '../container/topic/TradeTopic'
 import StoreTopic from '../container/topic/StoreTopic'
+import DiscountTopic from '../container/topic/DiscountTopic'
 
 import Circle from '../container/circle/Circle'
 import CircleRank from '../container/circle/CircleRank'
@@ -176,7 +177,12 @@ const Navigator = StackNavigator({
     path: 'my/fav'
   },
   StoreTopic: {
-    screen: StoreTopic
+    screen: StoreTopic,
+    path: 'store/:linkingID'
+  },
+  DiscountTopic: {
+    screen: DiscountTopic,
+    path: 'dd/:linkingID'
   },
   Home: {
     screen: Home,
@@ -274,6 +280,7 @@ const replyTypeMapper = {
 Object.assign(Navigator.router, {
   getActionForPathAndParams(path, params) {
     const action = previousGetActionForPathAndParams(path, params)
+    console.log(action, path, params)
     if (action && action.params && action.params.linkingID) {
       const id = action.params.linkingID
       switch (action.routeName) {
@@ -292,6 +299,16 @@ Object.assign(Navigator.router, {
           action.params.rowData = {
             id
           }
+          break
+        case 'StoreTopic':
+          action.params.URL = `http://psnine.com/${path}`
+          action.params.id = id.split('::')[0]
+          action.params.server = id.split('::')[1]
+          action.params.title = '数折'
+          break
+        case 'DiscountTopic':
+          action.params.URL = `http://psnine.com/${path}`
+          action.params.title = '数折'
           break
         case 'CommentList':
         case 'GeneCommentList':

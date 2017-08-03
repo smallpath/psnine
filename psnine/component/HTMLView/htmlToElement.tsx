@@ -61,6 +61,9 @@ export default function htmlToElement(rawHtml, opts, done) {
               styleObj.color = opts.modeInfo.reverseModeInfo.backgroundColor
               styleObj.isMark = true
               break
+            case 'dd_price_plus':
+              styleObj.color = '#ffc926'
+              break
             default:
               break
           }

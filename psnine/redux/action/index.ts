@@ -8,6 +8,7 @@ import gene from './gene'
 import circle from './circle'
 import store from './store'
 import trade from './trade'
+import discount from './discount'
 
 const actions = {}
 
@@ -21,5 +22,6 @@ Object.assign(actions, gene)
 Object.assign(actions, circle)
 Object.assign(actions, store)
 Object.assign(actions, trade)
+Object.assign(actions, discount)
 
 export default actions

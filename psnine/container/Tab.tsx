@@ -19,6 +19,7 @@ import Gene from './drawer/Gene'
 import Rank from './drawer/Rank'
 import Store from './drawer/Store'
 import Trade from './drawer/Trade'
+import Discount from './drawer/Discount'
 
 import {
   TabNavigator
@@ -62,6 +63,9 @@ export const routes = {
   },
   Game: {
     screen: Game
+  },
+  Discount: {
+    screen: Discount
   },
   Battle: {
     screen: Battle

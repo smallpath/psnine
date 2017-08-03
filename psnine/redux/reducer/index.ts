@@ -10,6 +10,7 @@ import circle from './circle'
 import store from './store'
 import trade from './trade'
 import recommend from './recommend'
+import discount from './discount'
 
 const rootReducer = combineReducers({
   app,
@@ -22,7 +23,8 @@ const rootReducer = combineReducers({
   circle,
   store,
   trade,
-  recommend
+  recommend,
+  discount
 })
 
 export default rootReducer

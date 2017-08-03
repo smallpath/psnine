@@ -210,7 +210,7 @@ class Store extends Component<any, any> {
       )
     }
     registerAfterEach({
-      index: 7,
+      index: 8,
       handler: (searchTitle) => {
         this._onRefresh(
           searchTitle

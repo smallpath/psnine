@@ -62,7 +62,7 @@ class Trade extends Component<any, any> {
       )
     }
     registerAfterEach({
-      index: 8,
+      index: 9,
       handler: (searchTitle) => {
         this._onRefresh(
           searchTitle

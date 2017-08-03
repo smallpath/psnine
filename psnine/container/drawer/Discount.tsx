@@ -4,39 +4,40 @@ import {
   RefreshControl,
   Picker,
   FlatList,
-  Animated
+  Animated,
+  Dimensions
 } from 'react-native'
 
 import { connect } from 'react-redux'
-import { getRankList } from '../../redux/action/rank.js'
+import { getDiscountList } from '../../redux/action/discount.js'
 
-import TopicItem from '../../component/RankItem'
+import TopicItem from '../../component/DiscountItem'
 import FooterProgress from '../../component/FooterProgress'
 
 const AnimatedFlatList = Animated.createAnimatedComponent(FlatList)
 
 declare var global
 
-class Rank extends Component<any, any> {
+class Game extends Component<any, any> {
   static navigationOptions = {
-    tabBarLabel: '排行',
-    drawerLabel: '排行'
+    tabBarLabel: '数折',
+    drawerLabel: '数折'
   }
+
+  flatlist: any = false
+  refreshControl: any = false
 
   constructor(props) {
     super(props)
 
     this.state = {
-      server: 'hk',
-      sort: 'point',
-      cheat: '0',
+      pf: 'all',
+      region: 'newest',
+      ddstatus: 'all',
       isRefreshing: false,
       isLoadingMore: false
     }
   }
-
-  flatlist: any = false
-  refreshControl: any = false
 
   _renderHeader = () => {
     const { modeInfo } = this.props.screenProps
@@ -51,49 +52,38 @@ class Rank extends Component<any, any> {
         paddingTop: 3,
         backgroundColor: modeInfo.backgroundColor
       }}>
-            {/*server: 'hk',
-      sort: 'point',
-      cheat: '0'*/}
         <Picker style={{
-          flex: 3,
+          flex: 1,
           borderWidth: 1
         }}
-          prompt='选择排序'
-          selectedValue={this.state.sort}
-          onValueChange={this.onValueChange.bind(this, 'sort')}>
-          <Picker.Item label='最后更新' value='datadate' />
-          <Picker.Item label='等级排行' value='point' />
-          <Picker.Item label='游戏最多' value='totalgame' />
-          <Picker.Item label='完美率' value='rarity' />
-          <Picker.Item label='签到最多' value='qidao' />
-          <Picker.Item label='N币最多' value='nb' />
-          <Picker.Item label='Z币最多' value='zb' />
-        </Picker>
-        <Picker style={{
-          flex: 2.5,
-          borderWidth: 1
-        }}
-          prompt='选服'
-          selectedValue={this.state.server}
-          onValueChange={this.onValueChange.bind(this, 'server')}>
-          <Picker.Item label='所有' value='all' />
-          <Picker.Item label='国服' value='cn' />
+          prompt='选择服务器'
+          selectedValue={this.state.region}
+          onValueChange={this.onValueChange.bind(this, 'region')}>
+          <Picker.Item label='全部' value='all' />
           <Picker.Item label='港服' value='hk' />
-          <Picker.Item label='日服' value='jp' />
-          <Picker.Item label='台服' value='tw' />
           <Picker.Item label='美服' value='us' />
-          <Picker.Item label='英服' value='gb' />
-          <Picker.Item label='加服' value='ca' />
+          <Picker.Item label='日服' value='jp' />
         </Picker>
         <Picker style={{
-          flex: 3
+          flex: 1,
+          borderWidth: 1
         }}
-          prompt='排序'
-          selectedValue={this.state.cheat}
-          onValueChange={this.onValueChange.bind(this, 'cheat')}>
-          <Picker.Item label='身家清白' value='0' />
-          <Picker.Item label='浪子回头' value='1' />
-          <Picker.Item label='无可救药' value='2' />
+          prompt='选择平台'
+          selectedValue={this.state.pf}
+          onValueChange={this.onValueChange.bind(this, 'pf')}>
+          <Picker.Item label='全部' value='all' />
+          <Picker.Item label='PSV' value='psvita' />
+          <Picker.Item label='PS3' value='ps3' />
+          <Picker.Item label='PS4' value='ps4' />
+        </Picker>
+        <Picker style={{
+          flex: 1
+        }}
+          prompt='选择状态'
+          selectedValue={this.state.ddstatus}
+          onValueChange={this.onValueChange.bind(this, 'ddstatus')}>
+          <Picker.Item label='全部' value='all' />
+          <Picker.Item label='进行中' value='on' />
         </Picker>
       </View>
     )
@@ -129,7 +119,7 @@ class Rank extends Component<any, any> {
   }
 
   componentWillMount() {
-    const { rank: reducer } = this.props
+    const { reducer } = this.props
     const { registerAfterEach, searchTitle } = this.props.screenProps
     if (reducer.page === 0) {
       this._onRefresh(
@@ -137,7 +127,7 @@ class Rank extends Component<any, any> {
       )
     }
     registerAfterEach({
-      index: 7,
+      index: 5,
       handler: (searchTitle) => {
         this._onRefresh(
           searchTitle
@@ -146,44 +136,47 @@ class Rank extends Component<any, any> {
     })
   }
 
-  _onRefresh: any = (title) => {
+  _onRefresh = (title?) => {
     const { dispatch } = this.props
 
     this.setState({
       isRefreshing: true
     })
     this.flatlist && this.flatlist.getNode().scrollToOffset({ offset: 0, animated: true })
-    const { server, sort, cheat } = this.state
-    dispatch(getRankList(1, {
-      sort, server, cheat,
-      title: typeof title !== 'undefined' ? title : this.props.screenProps.searchTitle
-    }))
+    const { pf, ddstatus, region } = this.state
+    dispatch(
+      getDiscountList(1, {
+        ddstatus,
+        pf,
+        region,
+        title: typeof title !== 'undefined' ? title : this.props.screenProps.searchTitle
+      })
+    )
   }
 
   _loadMoreData = () => {
-    const { rank: reducer, dispatch } = this.props
-    const { server, sort, cheat } = this.state
+    const { reducer, dispatch } = this.props
+    const { pf, ddstatus, region } = this.state
     let page = reducer.page + 1
-    dispatch(getRankList(page, {
-      sort, server, cheat,
+    dispatch(getDiscountList(page, {
+      ddstatus, pf, region,
       title: this.props.screenProps.searchTitle
     }))
   }
 
   _onEndReached = () => {
-    const { rank: reducer } = this.props
 
-    if (reducer.page === reducer.totalPage) return
     if (this.state.isRefreshing || this.state.isLoadingMore) return
 
     this.setState({
       isLoadingMore: true
     })
+
     this._loadMoreData()
   }
 
-  ITEM_HEIGHT = 93 + 7
-
+  ITEM_HEIGHT = 165
+  width = Dimensions.get('window').width
   _renderItem = ({ item: rowData }) => {
     const { modeInfo, navigation } = this.props.screenProps
     const { ITEM_HEIGHT } = this
@@ -196,9 +189,11 @@ class Rank extends Component<any, any> {
   }
 
   render() {
-    const { rank: reducer } = this.props
+    const { reducer } = this.props
     const { modeInfo } = this.props.screenProps
-    global.log('Rank.js rerendered')
+    const { width, height } = Dimensions.get('window')
+    this.width = Math.min(width, height)
+    global.log('Discount.js rendered', reducer.list.length)
     return (
       <View style={{ backgroundColor: modeInfo.background, flex: 1 }}>
         {this._renderHeader()}
@@ -217,19 +212,19 @@ class Rank extends Component<any, any> {
             />
           }
           ListFooterComponent={() => <FooterProgress isLoadingMore={this.state.isLoadingMore} modeInfo={modeInfo} />}
-          data={reducer.ranks}
-          keyExtractor={(item) => `${item.psnid}::${item.rank}`}
+          data={reducer.list}
+          keyExtractor={(item) => `${item.id}::${item.views}::${item.count}`}
           renderItem={this._renderItem}
           onEndReached={this._onEndReached}
           onEndReachedThreshold={0.5}
-          renderScrollComponent={props => <global.NestedScrollView {...props}/>}
           extraData={modeInfo}
           windowSize={21}
           updateCellsBatchingPeriod={1}
           initialNumToRender={42}
           maxToRenderPerBatch={8}
-          numColumns={modeInfo.numColumns}
           key={modeInfo.themeName}
+          numColumns={modeInfo.numColumns}
+          renderScrollComponent={props => <global.NestedScrollView {...props}/>}
           disableVirtualization={false}
           getItemLayout={(_, index) => (
             {length: this.ITEM_HEIGHT, offset: this.ITEM_HEIGHT * index, index}
@@ -248,10 +243,10 @@ class Rank extends Component<any, any> {
 
 function mapStateToProps(state) {
   return {
-    rank: state.rank
+    reducer: state.discount
   }
 }
 
 export default connect(
   mapStateToProps
-)(Rank)
+)(Game)

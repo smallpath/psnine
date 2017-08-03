@@ -17,6 +17,7 @@ import homeParser from '../parser/user/home'
 import trophyParser from '../parser/game/trophy'
 import myGameParser from '../parser/user/myGame'
 import gameTopicParser from '../parser/game/gameTopic'
+import discountParser from '../parser/discount'
 
 import gameBattleParser from '../parser/game/gameBattle'
 import gameListParser from '../parser/game/gameList'
@@ -90,6 +91,14 @@ const getTopicsAPI = ({ page, type, title }) => {
 
 const getGenesAPI = ({ page, type, title }) => `${webHost}/gene?page=${page}&type=${type}${title ? `&title=${title}` : '' }`
 
+const getDiscountAPI = ({
+  page, ddstatus, pf, region, title
+}) => `${webHost}/dd?page=${page}&ddstatus=${ddstatus}&pf=${pf}&region=${region}${title ? `&title=${title}` : '' }`
+
+export const fetchDiscountList = (args) => safeFetch(getDiscountAPI(args)).then(res => discountParser(res))
+
+export const fetchDiscountTopic = (args) => safeFetch(args).then(res => discountParser(res))
+
 export const fetchTopics = (args) => safeFetch(getTopicsAPI(args)).then(res => topicParser(res))
 
 export const fetchGenes = (args) => safeFetch(getGenesAPI(args)).then(res => geneParser(res))
@@ -140,7 +149,7 @@ export const getGameMapperAPI = uri => safeFetch(uri).then(res => {
       return newGameExpParser(res)
     case 'qa':
       return uri.includes('/psngame/') ? gameQaParser(res) : newGameQaParser(res)
-    case 'discount':
+    case 'dd':
       return newGameDiscountParser(res)
     case 'rank':
       return gameRankParser(res)
