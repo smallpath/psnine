@@ -54,14 +54,14 @@ export default class NewTopic extends Component<any, any> {
 
       num: '2',
       psngameid: '',
-      startday: '',
+      startdate: '',
       starttime: '0:00:00',
       trophies: '',
       content: '',
       data: {
         num: [],
         game: [],
-        startday: [],
+        startdate: [],
         starttime: []
       },
       id: '',
@@ -144,8 +144,7 @@ export default class NewTopic extends Component<any, any> {
           data,
           isLoading: false,
           psngameid: data.game.length !== 0 ? data.game[0].value : '',
-          starttime: data.starttime.length !== 0 ? data.starttime[0].value : '',
-          startday: data.startday.length !== 0 ? data.startday[0].value : ''
+          startdate: data.startdate.length !== 0 ? data.startdate[0].value : ''
         }, () => {
           if (params.URL) {
             getBattleEditAPI(params.URL).then(data => this.setState(data))
@@ -191,14 +190,15 @@ export default class NewTopic extends Component<any, any> {
   isToolbarShowing = false
 
   sendReply = () => {
-    const { num, psngameid, startday, starttime, trophies, content, id, key } = this.state
+    const { num, psngameid, startdate, trophies, content, id, key } = this.state
     const result: any = {
-      num, psngameid, startday, starttime, trophies, content
+      num, psngameid, startdate, trophies, content
     }
     result[key] = ''
     if (id !== '') {
       result.battleid = id
     }
+    // return
     postCreateTopic(result, 'battle').then(res => {
       return res
     }).then(res => res.text()).then(text => {
@@ -289,7 +289,8 @@ export default class NewTopic extends Component<any, any> {
         <Picker style={{
             flex: 1,
             borderWidth: 1,
-            borderBottomColor: modeInfo.standardTextColor
+            borderBottomColor: modeInfo.standardTextColor,
+            color: modeInfo.standardTextColor
           }}
             prompt='选择游戏'
             selectedValue={this.state.psngameid}
@@ -325,7 +326,8 @@ export default class NewTopic extends Component<any, any> {
             }}/>
             </View>
             <Picker style={{
-              flex: 1.5
+              flex: 1.5,
+              color: modeInfo.standardTextColor
             }}
               prompt='选择人数'
               selectedValue={this.state.num}
@@ -343,23 +345,14 @@ export default class NewTopic extends Component<any, any> {
             flexDirection: 'row'
           }}>
             <Picker style={{
-              flex: 2
+              flex: 2,
+              color: modeInfo.standardTextColor
             }}
               prompt='选择日期'
-              selectedValue={this.state.startday}
-              onValueChange={this.onValueChange.bind(this, 'startday')}>
+              selectedValue={this.state.startdate}
+              onValueChange={this.onValueChange.bind(this, 'startdate')}>
               {
-                this.state.data.startday.map((item, index) => <Picker.Item key={index} label={item.text} value={item.value}/>)
-              }
-            </Picker>
-            <Picker style={{
-              flex: 1
-            }}
-              prompt='选择时间'
-              selectedValue={this.state.starttime}
-              onValueChange={this.onValueChange.bind(this, 'starttime')}>
-              {
-                this.state.data.starttime.map((item, index) => <Picker.Item key={index} label={item.text} value={item.value}/>)
+                this.state.data.startdate.map((item, index) => <Picker.Item key={index} label={item.text} value={item.value}/>)
               }
             </Picker>
           </View>

@@ -66,7 +66,8 @@ class Theme extends Component<any, any> {
           </Text>
         </View>
         <Picker style={{
-          flex: 3
+          flex: 3,
+          color: modeInfo.standardTextColor
         }}
           prompt='首页模式'
           selectedValue={this.state.tabMode}
@@ -99,7 +100,8 @@ class Theme extends Component<any, any> {
           </Text>
         </View>
         <Picker style={{
-          flex: 3
+          flex: 3,
+          color: modeInfo.standardTextColor
         }}
           prompt='选择主题的默认颜色'
           selectedValue={this.state.colorTheme}
@@ -133,7 +135,8 @@ class Theme extends Component<any, any> {
           </Text>
         </View>
         <Picker style={{
-          flex: 3
+          flex: 3,
+          color: modeInfo.standardTextColor
         }}
           prompt='选择主题的强调颜色'
           selectedValue={this.state.secondaryColor}

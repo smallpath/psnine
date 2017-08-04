@@ -53,7 +53,8 @@ class General extends Component<any, any> {
         </Text>
       </View>
       <Picker style={{
-        flex: 3
+        flex: 3,
+        color: modeInfo.standardTextColor
       }}
         prompt='选择首页模式'
         selectedValue={this.state.tabMode}

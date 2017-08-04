@@ -18,6 +18,7 @@ import trophyParser from '../parser/game/trophy'
 import myGameParser from '../parser/user/myGame'
 import gameTopicParser from '../parser/game/gameTopic'
 import discountParser from '../parser/discount'
+import discountTopicParser from '../parser/discount/discount'
 
 import gameBattleParser from '../parser/game/gameBattle'
 import gameListParser from '../parser/game/gameList'
@@ -97,7 +98,7 @@ const getDiscountAPI = ({
 
 export const fetchDiscountList = (args) => safeFetch(getDiscountAPI(args)).then(res => discountParser(res))
 
-export const fetchDiscountTopic = (args) => safeFetch(args).then(res => discountParser(res))
+export const fetchDiscountTopic = (args) => safeFetch(args).then(res => discountTopicParser(res))
 
 export const fetchTopics = (args) => safeFetch(getTopicsAPI(args)).then(res => topicParser(res))
 

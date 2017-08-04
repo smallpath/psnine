@@ -5,8 +5,9 @@ import {
   InteractionManager,
   ActivityIndicator,
   Animated,
-  FlatList,
-  Dimensions
+  SectionList,
+  Dimensions,
+  Text
 } from 'react-native'
 
 import Ionicons from 'react-native-vector-icons/Ionicons'
@@ -18,6 +19,7 @@ import {
 import { fetchDiscountTopic as getAPI } from '../../dao'
 
 import DiscountItem from '../../component/DiscountItem'
+import GameItem from '../../component/GameItem'
 
 declare var global
 
@@ -96,15 +98,32 @@ export default class extends Component<any, any> {
       ITEM_HEIGHT
     }} />
   }
+  _renderGame = ({ item: rowData }) => {
+    const { modeInfo } = this.props.screenProps
+    const { navigation } = this.props
+    return <GameItem {...{
+      navigation,
+      rowData,
+      modeInfo,
+      ITEM_HEIGHT: 74 + 7
+    }} />
+  }
 
   render() {
     const { params } = this.props.navigation.state
     // console.log('GamePage.js rendered');
     const { modeInfo } = this.props.screenProps
-
+    const { data } = this. state
+    const keyMapper = ['优惠历史', '关联奖杯']
+    let sections = data.list ? [data.list, data.games].map((item, index) => ({
+      key: keyMapper[index],
+      modeInfo,
+      data: item,
+      renderItem: index === 0 ? this._renderItem : this._renderGame
+    })) : []
     return (
       <View
-        style={{ flex: 1, backgroundColor: modeInfo.backgroundColor }}
+        style={{ flex: 1, backgroundColor: modeInfo.background }}
         onStartShouldSetResponder={() => false}
         onMoveShouldSetResponder={() => false}
       >
@@ -112,7 +131,7 @@ export default class extends Component<any, any> {
           navIconName='md-arrow-back'
           overflowIconName='md-more'
           iconColor={modeInfo.isNightMode ? '#000' : '#fff'}
-          title={`${params.title || '数折'}`}
+          title={`${data && data.title || params.title || '数折'}`}
           titleColor={modeInfo.isNightMode ? '#000' : '#fff'}
           style={[styles.toolbar, { backgroundColor: modeInfo.standardColor }]}
           actions={this.state.toolbar}
@@ -134,34 +153,34 @@ export default class extends Component<any, any> {
             size={50}
           />
         ) || (
-          <FlatList style={{
-            flex: 1,
-            backgroundColor: modeInfo.background
-          }}
-            data={this.state.data}
-            keyExtractor={(item, index) => `${item.id}::${index}::${item.views}::${item.count}`}
-            renderItem={this._renderItem}
-            extraData={modeInfo}
-            windowSize={21}
-            updateCellsBatchingPeriod={1}
-            initialNumToRender={42}
-            maxToRenderPerBatch={8}
-            key={modeInfo.themeName}
-            numColumns={modeInfo.numColumns}
-            disableVirtualization={false}
-            getItemLayout={(_, index) => (
-              {length: this.ITEM_HEIGHT, offset: this.ITEM_HEIGHT * index, index}
-            )}
-            viewabilityConfig={{
-              minimumViewTime: 1,
-              viewAreaCoveragePercentThreshold: 0,
-              waitForInteractions: true
-            }}
-          />
+          <SectionList
+          enableVirtualization={false}
+          disableVirtualization={true}
+          keyExtractor={(item, index) => `${item.id || item.href}${index}`}
+          renderSectionHeader={renderSectionHeader}
+          stickySectionHeadersEnabled
+          sections={sections}
+        />
         )}
       </View>
     )
   }
+}
+
+const renderSectionHeader = ({ section }) => {
+  // console.log(section)
+  return (
+    <View style={{
+      backgroundColor: section.modeInfo.backgroundColor,
+      flex: -1,
+      padding: 7,
+      elevation: 2
+    }}>
+      <Text numberOfLines={1}
+        style={{ fontSize: 20, color: section.modeInfo.standardColor, textAlign: 'left', lineHeight: 25, marginLeft: 2, marginTop: 2 }}
+      >{section.key}</Text>
+    </View>
+  )
 }
 
 const styles = StyleSheet.create({

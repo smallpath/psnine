@@ -311,7 +311,8 @@ export default class NewTopic extends Component<any, any> {
           <Picker style={{
             flex: 1,
             borderWidth: 1,
-            borderBottomColor: modeInfo.standardTextColor
+            borderBottomColor: modeInfo.standardTextColor,
+            color: modeInfo.standardTextColor
           }}
             prompt='悬赏'
             selectedValue={this.state.open}
@@ -327,7 +328,8 @@ export default class NewTopic extends Component<any, any> {
             flexDirection: 'row'
           }}>
             <Picker style={{
-              flex: 1
+              flex: 1,
+              color: modeInfo.standardTextColor
             }}
               prompt='类型'
               selectedValue={this.state.type}
@@ -338,7 +340,8 @@ export default class NewTopic extends Component<any, any> {
             {
               this.state.type === 'game' && (
                 <Picker style={{
-                  flex: 2
+                  flex: 2,
+                  color: modeInfo.standardTextColor
                 }}
                   prompt='选择游戏'
                   selectedValue={this.state.psngameid}
@@ -349,7 +352,8 @@ export default class NewTopic extends Component<any, any> {
                 </Picker>
               ) || (
                 <Picker style={{
-                  flex: 2
+                  flex: 2,
+                  color: modeInfo.standardTextColor
                 }}
                   prompt='选择节点'
                   selectedValue={this.state.node}

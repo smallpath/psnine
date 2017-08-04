@@ -467,7 +467,8 @@ export default class NewTopic extends Component<any, any> {
                         <Picker style={{
                           flex: 1,
                           borderWidth: 1,
-                          borderBottomColor: modeInfo.standardTextColor
+                          borderBottomColor: modeInfo.standardTextColor,
+                          color: modeInfo.standardTextColor
                         }}
                           prompt='音乐类型'
                           selectedValue={this.state.muparam}

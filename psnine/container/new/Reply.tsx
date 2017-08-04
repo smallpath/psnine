@@ -372,7 +372,8 @@ export default class Reply extends Component<any, any> {
             <Picker style={{
               flex: 1,
               borderWidth: 1,
-              borderBottomColor: modeInfo.standardTextColor
+              borderBottomColor: modeInfo.standardTextColor,
+              color: modeInfo.standardTextColor
             }}
               prompt='选择评分'
               selectedValue={this.state.point}

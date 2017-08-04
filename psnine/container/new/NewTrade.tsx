@@ -333,7 +333,8 @@ export default class NewTopic extends Component<any, any> {
                       <Picker style={{
                         flex: 1,
                         borderWidth: 1,
-                        borderBottomColor: modeInfo.standardTextColor
+                        borderBottomColor: modeInfo.standardTextColor,
+                        color: modeInfo.standardTextColor
                       }}
                         prompt='分类'
                         selectedValue={this.state.category}
@@ -345,7 +346,8 @@ export default class NewTopic extends Component<any, any> {
                       <Picker style={{
                         flex: 1,
                         borderWidth: 1,
-                        borderBottomColor: modeInfo.standardTextColor
+                        borderBottomColor: modeInfo.standardTextColor,
+                        color: modeInfo.standardTextColor
                       }}
                         prompt='类型'
                         selectedValue={this.state.type}
@@ -358,7 +360,8 @@ export default class NewTopic extends Component<any, any> {
                       <Picker style={{
                         flex: 1,
                         borderWidth: 1,
-                        borderBottomColor: modeInfo.standardTextColor
+                        borderBottomColor: modeInfo.standardTextColor,
+                        color: modeInfo.standardTextColor
                       }}
                         prompt='平台'
                         selectedValue={this.state.pf}
@@ -374,7 +377,8 @@ export default class NewTopic extends Component<any, any> {
                       <Picker style={{
                         flex: 1,
                         borderWidth: 1,
-                        borderBottomColor: modeInfo.standardTextColor
+                        borderBottomColor: modeInfo.standardTextColor,
+                        color: modeInfo.standardTextColor
                       }}
                         prompt='方式'
                         selectedValue={this.state.way}
@@ -388,7 +392,8 @@ export default class NewTopic extends Component<any, any> {
                       <Picker style={{
                         flex: 1,
                         borderWidth: 1,
-                        borderBottomColor: modeInfo.standardTextColor
+                        borderBottomColor: modeInfo.standardTextColor,
+                        color: modeInfo.standardTextColor
                       }}
                         prompt='版本'
                         selectedValue={this.state.version}
@@ -404,7 +409,8 @@ export default class NewTopic extends Component<any, any> {
                       <Picker style={{
                         flex: 1,
                         borderWidth: 1,
-                        borderBottomColor: modeInfo.standardTextColor
+                        borderBottomColor: modeInfo.standardTextColor,
+                        color: modeInfo.standardTextColor
                       }}
                         prompt='语言'
                         selectedValue={this.state.lang}
@@ -419,7 +425,8 @@ export default class NewTopic extends Component<any, any> {
                       <Picker style={{
                         flex: 1,
                         borderWidth: 1,
-                        borderBottomColor: modeInfo.standardTextColor
+                        borderBottomColor: modeInfo.standardTextColor,
+                        color: modeInfo.standardTextColor
                       }}
                         prompt='地区'
                         selectedValue={this.state.province}

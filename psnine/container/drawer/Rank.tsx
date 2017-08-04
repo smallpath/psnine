@@ -56,7 +56,8 @@ class Rank extends Component<any, any> {
       cheat: '0'*/}
         <Picker style={{
           flex: 3,
-          borderWidth: 1
+          borderWidth: 1,
+          color: modeInfo.standardTextColor
         }}
           prompt='选择排序'
           selectedValue={this.state.sort}
@@ -71,7 +72,8 @@ class Rank extends Component<any, any> {
         </Picker>
         <Picker style={{
           flex: 2.5,
-          borderWidth: 1
+          borderWidth: 1,
+          color: modeInfo.standardTextColor
         }}
           prompt='选服'
           selectedValue={this.state.server}
@@ -86,7 +88,8 @@ class Rank extends Component<any, any> {
           <Picker.Item label='加服' value='ca' />
         </Picker>
         <Picker style={{
-          flex: 3
+          flex: 3,
+          color: modeInfo.standardTextColor
         }}
           prompt='排序'
           selectedValue={this.state.cheat}

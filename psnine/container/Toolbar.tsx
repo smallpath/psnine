@@ -73,12 +73,17 @@ let tradeActions = [
   searchAction
 ]
 
+let discountActions = [
+  searchAction
+]
+
 let toolbarActions = [
   recommendActions,
   communityActions,
   qaActions,
   geneActions,
   gameActions,
+  discountActions,
   battleActions,
   rankActions,
   /*circleActions,*/
@@ -183,9 +188,9 @@ class Toolbar extends Component<any, any> {
         index === 1 && this._onSearchClicked()
         index === 0 && this.props.navigation.navigate('NewGene', {})
       }
-    } else if (segmentedIndex === 5) {
+    } else if (segmentedIndex === 6) {
       this.props.navigation.navigate('NewBattle', {})
-    } else if (segmentedIndex === 8) {
+    } else if (segmentedIndex === 9) {
       index === 0 && this.props.navigation.navigate('NewTrade', {})
       index === 1 && this._onSearchClicked()
     } else {

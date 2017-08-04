@@ -164,7 +164,8 @@ class Store extends Component<any, any> {
       }}>
         <Picker style={{
           flex: 1,
-          borderWidth: 1
+          borderWidth: 1,
+          color: modeInfo.standardTextColor
         }}
           prompt='选择服务器'
           selectedValue={this.state.server}
@@ -175,7 +176,8 @@ class Store extends Component<any, any> {
           <Picker.Item label='美服' value='us' />
         </Picker>
         <Picker style={{
-          flex: 1
+          flex: 1,
+          color: modeInfo.standardTextColor
         }}
           prompt='选择平台'
           selectedValue={this.state.pf}
@@ -187,7 +189,8 @@ class Store extends Component<any, any> {
           <Picker.Item label='PSP' value='psp' />
         </Picker>
         <Picker style={{
-          flex: 1
+          flex: 1,
+          color: modeInfo.standardTextColor
         }}
           prompt='排序'
           selectedValue={this.state.ob}

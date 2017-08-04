@@ -34,7 +34,7 @@ export default class extends React.PureComponent<ExtendedProp, FlatlistItemState
   }
 
   render() {
-    const { modeInfo, rowData, ITEM_HEIGHT = 165, shouldMargin = true } = this.props
+    const { modeInfo, rowData, shouldMargin = true } = this.props
     const content = rowData.content
     const { width: SCREEN_WIDTH } = Dimensions.get('window')
     return (
@@ -42,7 +42,7 @@ export default class extends React.PureComponent<ExtendedProp, FlatlistItemState
         marginVertical: shouldMargin ? 3.5 : 0,
         backgroundColor: modeInfo.backgroundColor,
         elevation: shouldMargin ? 1 : 0,
-        height: ITEM_HEIGHT - (shouldMargin ? 7 : 0),
+        /* height: ITEM_HEIGHT - (shouldMargin ? 7 : 0), */
         alignItems: 'center',
         justifyContent: 'space-between',
         padding: 5
@@ -71,7 +71,7 @@ export default class extends React.PureComponent<ExtendedProp, FlatlistItemState
                 position: 'absolute',
                 top: 0,
                 flex: -1,
-                right: -4,
+                right: -5,
                 flexDirection: 'row',
                 backgroundColor: modeInfo.standardColor,
                 zIndex: 2  }}>
@@ -85,7 +85,7 @@ export default class extends React.PureComponent<ExtendedProp, FlatlistItemState
                 flex: -1,
                 left: 0,
                 flexDirection: 'row',
-                marginLeft: 4,
+                marginLeft: 5,
                 backgroundColor: modeInfo.accentColor,
                 zIndex: 2  }}>
                 <Text style={{ flex: -1, color: modeInfo.titleTextColor, padding: 2, paddingHorizontal: 4 }}>
@@ -102,7 +102,7 @@ export default class extends React.PureComponent<ExtendedProp, FlatlistItemState
                 position: 'absolute',
                 top: rowData.type === 'outter' ? 40 : 0,
                 flex: -1,
-                right: rowData.type === 'outter' ? 10 : -10,
+                right: rowData.type === 'outter' ? 10 : 0,
                 flexDirection: 'row',
                 backgroundColor: rowData.isOff === '进行中' ? modeInfo.accentColor : modeInfo.tintColor,
                 zIndex: 2  }}>

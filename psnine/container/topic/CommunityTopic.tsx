@@ -198,7 +198,8 @@ class CommunityTopic extends Component<any, any> {
           data,
           mainContent: html,
           commentList: data.commentList,
-          isLoading: false
+          isLoading: false,
+          page: data.contentInfo.page
         })
       })
     })
@@ -525,7 +526,7 @@ class CommunityTopic extends Component<any, any> {
     const list: any[] = []
     for (const item of page) {
       const thisJSX: JSX.Element = (
-        <View style={{margin: 2}} key={item.url}>
+        <View style={{margin: 2}} key={item.url + item.isCurrent}>
           <TouchableNativeFeedback key={item.url}
             useForeground={true}
             background={TouchableNativeFeedback.SelectableBackgroundBorderless()} onPress={() => {
@@ -538,11 +539,24 @@ class CommunityTopic extends Component<any, any> {
             getTopicContentAPI(item.url).then(data => {
               this.setState({
                 mainContent: data.contentInfo.html,
-                isLoading: false
+                isLoading: false,
+                page: this.state.page.map(inner => {
+                  if (inner.url === item.url) {
+                    return {
+                      ...inner,
+                      isCurrent: true
+                    }
+                  }
+                  return {
+                    ...inner,
+                    isCurrent: false
+                  }
+                })
               })
             })
           }}>
-            <View style={{ flex: -1, padding: 4, paddingHorizontal: 6, backgroundColor: modeInfo.standardColor, borderRadius: 2 }}>
+            <View style={{ flex: -1, padding: 4, paddingHorizontal: 6,
+              backgroundColor: item.isCurrent ? modeInfo.accentColor : modeInfo.standardColor, borderRadius: 2 }}>
               <Text style={{ color: modeInfo.backgroundColor }}>{item.text}</Text>
             </View>
           </TouchableNativeFeedback>
@@ -584,7 +598,7 @@ class CommunityTopic extends Component<any, any> {
       renderFuncArr.push(this.renderShare)
     }
     if (shouldPushData && this.hasPage) {
-      data.push(source.contentInfo.page)
+      data.push(this.state.page)
       renderFuncArr.push(this.renderPage)
     }
 

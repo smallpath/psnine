@@ -54,7 +54,8 @@ class Game extends Component<any, any> {
       }}>
         <Picker style={{
           flex: 1,
-          borderWidth: 1
+          borderWidth: 1,
+          color: modeInfo.standardTextColor
         }}
           prompt='选择服务器'
           selectedValue={this.state.region}
@@ -66,7 +67,8 @@ class Game extends Component<any, any> {
         </Picker>
         <Picker style={{
           flex: 1,
-          borderWidth: 1
+          borderWidth: 1,
+          color: modeInfo.standardTextColor
         }}
           prompt='选择平台'
           selectedValue={this.state.pf}
@@ -77,7 +79,8 @@ class Game extends Component<any, any> {
           <Picker.Item label='PS4' value='ps4' />
         </Picker>
         <Picker style={{
-          flex: 1
+          flex: 1,
+          color: modeInfo.standardTextColor
         }}
           prompt='选择状态'
           selectedValue={this.state.ddstatus}
@@ -226,9 +229,6 @@ class Game extends Component<any, any> {
           numColumns={modeInfo.numColumns}
           renderScrollComponent={props => <global.NestedScrollView {...props}/>}
           disableVirtualization={false}
-          getItemLayout={(_, index) => (
-            {length: this.ITEM_HEIGHT, offset: this.ITEM_HEIGHT * index, index}
-          )}
           viewabilityConfig={{
             minimumViewTime: 1,
             viewAreaCoveragePercentThreshold: 0,

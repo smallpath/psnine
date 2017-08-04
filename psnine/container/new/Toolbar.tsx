@@ -41,7 +41,8 @@ const items = [
       return (
         <Picker style={{
           flex: 1,
-          borderWidth: 1
+          borderWidth: 1,
+          color: modeInfo.standardTextColor
         }}
           prompt='选择颜色'
           selectedValue={this.state.color}
