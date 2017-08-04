@@ -47,6 +47,18 @@ export default class extends React.PureComponent<ExtendedProp, FlatlistItemState
         justifyContent: 'space-between',
         padding: 5
       }}>
+        <View style={{
+          position: 'absolute',
+          top: 0,
+          flex: -1,
+          right: 0,
+          flexDirection: 'row',
+          backgroundColor: rowData.isOff === '进行中' ? modeInfo.accentColor : modeInfo.tintColor,
+          zIndex: 2  }}>
+          <Text style={{ flex: -1, color: modeInfo.titleTextColor, padding: 2, paddingHorizontal: 4 }}>
+            {rowData.isOff}
+          </Text>
+        </View>
         <TouchableNativeFeedback
           onPress={() => { this._onRowPressed(rowData) }}
           background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
@@ -98,18 +110,6 @@ export default class extends React.PureComponent<ExtendedProp, FlatlistItemState
               maxWidth: SCREEN_WIDTH - 120,
               flexWrap: 'nowrap'
              }}>
-            <View style={{
-                position: 'absolute',
-                top: rowData.type === 'outter' ? 40 : 0,
-                flex: -1,
-                right: rowData.type === 'outter' ? 10 : 0,
-                flexDirection: 'row',
-                backgroundColor: rowData.isOff === '进行中' ? modeInfo.accentColor : modeInfo.tintColor,
-                zIndex: 2  }}>
-                <Text style={{ flex: -1, color: modeInfo.titleTextColor, padding: 2, paddingHorizontal: 4 }}>
-                  {rowData.isOff}
-                </Text>
-              </View>
               <global.HTMLView
                 value={content}
                 modeInfo={modeInfo}
