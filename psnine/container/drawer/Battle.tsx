@@ -47,7 +47,7 @@ class Battle extends Component<any, any> {
   componentWillReceiveProps(nextProps) {
     if (this.props.screenProps.modeInfo.themeName !== nextProps.screenProps.modeInfo.themeName) {
       this.props.screenProps.modeInfo = nextProps.screenProps.modeInfo
-    } else if (Object.keys(this.props.battle.battles).length < Object.keys(nextProps.battle.battles).length) {
+    } else {
       this.setState({
         isLoading: false
       })

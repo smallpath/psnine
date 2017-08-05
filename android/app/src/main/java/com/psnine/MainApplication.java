@@ -4,6 +4,8 @@ import android.app.Application;
 
 import com.oblador.vectoricons.VectorIconsPackage;
 import com.facebook.react.ReactApplication;
+import com.reactnative.photoview.PhotoViewPackage;
+import com.image.zoom.ReactImageZoom;
 import com.cboy.rn.splashscreen.SplashScreenReactPackage;
 import com.azendoo.reactnativesnackbar.SnackbarPackage;
 import com.BV.LinearGradient.LinearGradientPackage;
@@ -34,6 +36,8 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new PhotoViewPackage(),
+            new ReactImageZoom(),
             new SplashScreenReactPackage(),
             new SnackbarPackage(),
             new LinearGradientPackage(),

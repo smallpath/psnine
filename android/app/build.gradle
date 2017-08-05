@@ -152,6 +152,7 @@ android {
             }
         }
     }
+    
 }
 
 dependencies {
@@ -169,6 +170,8 @@ dependencies {
     compile project(':react-native-share')
     compile project(':react-native-linear-gradient')
     compile project(':react-native-splash-screen')
+    compile project(':react-native-photo-view')
+    compile project(':react-native-image-zoom')
 
     // For animated GIF support
     compile 'com.facebook.fresco:animated-gif:1.0.1'

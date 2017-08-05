@@ -9,7 +9,8 @@ import {
   InteractionManager,
   Slider,
   FlatList,
-  Alert
+  Alert,
+  ToastAndroid
 } from 'react-native'
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window')
@@ -152,12 +153,12 @@ export default class Photo extends Component<any, any> {
             let { uri = '', type = '', fileSize, fileName = '' } = response
             // console.log('??')
             if (fileSize > 1024 * 1024) {
-              return global.toast('PSNINE上传的图片文件最大为1M')
+              return ToastAndroid.show('PSNINE上传的图片文件最大为1M', ToastAndroid.SHORT)
             }
             if (!type) {
               type = 'image/' + (fileName || '').split('.').pop()
             }
-            global.toast('上传中')
+            ToastAndroid.show('上传中', ToastAndroid.SHORT)
             postImage({
               image: {
                 uri

@@ -130,7 +130,7 @@ export default class ComplexComment extends React.PureComponent<ExtendedProp, Fl
             </Text>
 
             <View style={{ flex: -1, flexDirection: 'row', justifyContent: 'space-between' }}>
-              <Text selectable={false} style={{
+              <Text selectable={false} numberOfLines={1} style={{
                   fontSize: 12, flex: -1, color: modeInfo.standardColor, textAlign: 'center', textAlignVertical: 'center' }} onPress={() => {
                   // this.flatlist.getNode().recordInteraction()
                   navigation.navigate('Home', {
@@ -139,15 +139,15 @@ export default class ComplexComment extends React.PureComponent<ExtendedProp, Fl
                     URL: `http://psnine.com/psnid/${rowData.psnid}`
                   })
                 }}>{rowData.psnid}</Text>
-              <Text selectable={false}
+              <Text selectable={false} numberOfLines={1}
                 style={{
                   fontSize: 12, flex: -1,
                   color: modeInfo.standardTextColor, textAlign: 'center', textAlignVertical: 'center' }}>{rowData.date}</Text>
-              <Text selectable={false}
+              <Text selectable={false} numberOfLines={1}
                 style={{
                   fontSize: 12, flex: -1,
                   color: modeInfo.standardTextColor, textAlign: 'center', textAlignVertical: 'center' }}>{rowData.count}回复</Text>
-              <Text selectable={false}
+              <Text selectable={false} numberOfLines={1}
                 style={{ fontSize: 12, flex: -1,
                 color: (rowData.type && toolbarDispatch) ? modeInfo.standardColor : modeInfo.standardTextColor,
                 textAlign: 'center', textAlignVertical: 'center'
