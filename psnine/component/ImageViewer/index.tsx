@@ -3,7 +3,9 @@ import {
   ToastAndroid,
   View,
   Animated,
-  Easing
+  Easing,
+  StatusBar,
+  Text
 } from 'react-native'
 
 import fs from 'react-native-fs'
@@ -123,7 +125,7 @@ export default class extends React.Component<any, any> {
             androidScaleType='fitCenter'
             style={{
               width: modeInfo.width,
-              height: modeInfo.height
+              height: modeInfo.height - (StatusBar.currentHeight || 0) + 1
             }}
             onTap={this.onTap}
           />
@@ -164,7 +166,27 @@ export default class extends React.Component<any, any> {
           style={{height: 56, elevation: 4}}
         />
         </Animated.View>
-         <ViewPagerZoom initialPage={this.initialIndex} style={{ backgroundColor: modeInfo.background, flex: 1 }}
+        {/* <Animated.View style={{
+          position: 'absolute',
+          top: 48,
+          left: 0,
+          right: 0,
+          zIndex: 2,
+          opacity: this.state.translate.interpolate({
+            inputRange: [0, 1],
+            outputRange: [0, 1]
+          })
+        }} pointerEvents='none'>
+          <Text style={{
+            color: modeInfo.dayModeInfo.backgroundColor,
+            fontSize: 15,
+            textAlign: 'center',
+            textAlignVertical: 'center'
+          }}>
+            {images.length !== 1 ? title : ''}
+          </Text>
+        </Animated.View> */}
+         <ViewPagerZoom initialPage={this.initialIndex} style={{ backgroundColor: '#000', flex: 1 }}
           onPageSelected={(event) => {
             this.setState({
               index: event.nativeEvent.position
