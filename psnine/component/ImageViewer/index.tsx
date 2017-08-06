@@ -166,9 +166,9 @@ export default class extends React.Component<any, any> {
           style={{height: 56, elevation: 4}}
         />
         </Animated.View>
-        {/* <Animated.View style={{
+         <Animated.View style={{
           position: 'absolute',
-          top: 48,
+          top: 56,
           left: 0,
           right: 0,
           zIndex: 2,
@@ -185,7 +185,7 @@ export default class extends React.Component<any, any> {
           }}>
             {images.length !== 1 ? title : ''}
           </Text>
-        </Animated.View> */}
+        </Animated.View> 
          <ViewPagerZoom initialPage={this.initialIndex} style={{ backgroundColor: '#000', flex: 1 }}
           onPageSelected={(event) => {
             this.setState({
