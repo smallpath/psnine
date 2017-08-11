@@ -121,6 +121,9 @@ export default class extends Component<any, any> {
       data: item,
       renderItem: index === 0 ? this._renderItem : this._renderGame
     })) : []
+    if (sections.length >= 2) {
+      sections[1].data.length === 0 && sections.pop()
+    }
     return (
       <View
         style={{ flex: 1, backgroundColor: modeInfo.background }}

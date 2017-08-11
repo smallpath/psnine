@@ -128,6 +128,7 @@ export default class extends React.Component<any, any> {
               height: modeInfo.height - (StatusBar.currentHeight || 0) + 1
             }}
             onTap={this.onTap}
+            onViewTap={this.onTap}
           />
         </View>
       )
@@ -185,7 +186,7 @@ export default class extends React.Component<any, any> {
           }}>
             {images.length !== 1 ? title : ''}
           </Text>
-        </Animated.View> 
+        </Animated.View>
          <ViewPagerZoom initialPage={this.initialIndex} style={{ backgroundColor: '#000', flex: 1 }}
           onPageSelected={(event) => {
             this.setState({
