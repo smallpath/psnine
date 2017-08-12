@@ -3,7 +3,7 @@
 # Psnine
 Psnine第三方安卓客户端, 基于React Native、Redux, 支持安卓4.1及以上系统
 
-[![Get it on Google Play][play badge]][play link]
+<a href="https://play.google.com/store/apps/details?id=com.psnine"><img src="https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png" width="175px">
 
 # Features
 - 支持PSNINE网站的所有功能
@@ -17,7 +17,7 @@ Psnine第三方安卓客户端, 基于React Native、Redux, 支持安卓4.1及�
 <a href="art/3.gif"><img src="art/3.gif" width="32%"/></a>
 
 # Download
-- [google play][play link]
+- [Google Play][play link]
 - [fir.im][fir link]
 
 # Changelog
@@ -65,6 +65,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ```
 
-[play badge]: https://developer.android.com/images/brand/en_generic_rgb_wo_45.png
+[play badge]: https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png
 [play link]: https://play.google.com/store/apps/details?id=com.psnine
 [fir link]: https://fir.im/mf24
