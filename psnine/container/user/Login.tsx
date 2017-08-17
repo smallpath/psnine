@@ -49,10 +49,10 @@ class Login extends Component<any, any> {
       return
     }
 
-    let data: any = await safeLogin(psnid, password)
+    let { text: data, isOK }: any = await safeLogin(psnid, password)
     let length = data.length
-
-    if (length > 10000) {
+    console.log(data, isOK)
+    if (isOK) {
       await AsyncStorage.setItem('@psnid', psnid)
       const user = await fetchUser(psnid)
       await AsyncStorage.setItem('@userInfo', JSON.stringify(user))
@@ -64,7 +64,7 @@ class Login extends Component<any, any> {
 
       await AsyncStorage.removeItem('@psnid')
       await AsyncStorage.getItem('@psnid')
-      global.toast && global.toast(`登录失败,请检查账号与密码是否输入正确`, 2000)
+      global.toast && global.toast(`登录失败: ${data}`, 2000)
     }
 
   }
