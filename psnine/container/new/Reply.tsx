@@ -241,15 +241,15 @@ export default class Reply extends Component<any, any> {
     if (type !== 'comson') {
       form.param = params.id
       form.com = ''
-      if (['qa', 'psngame', 'trophy'].indexOf(params.type) === -1){
-        form.old = 'yes'
+      if (['qa', 'psngame', 'trophy'].indexOf(params.type) === -1) {
+        form.old = 'true'
       }
     } else {
       form.id = params.id
     }
 
     if (this.state.isOldPage === true) {
-      form.old = 'yes'
+      form.old = 'true'
     }
     if (this.state.shouldShowPoint) {
       form.point = this.state.point
@@ -264,21 +264,18 @@ export default class Reply extends Component<any, any> {
       }
       replyType = 'edit'
     }
+    let isOK = true
     postReply(form, replyType).then(res => {
+      const status = res.status
+      if (status !== 200) {
+        isOK = false
+      }
       return res
     }).then(res => res.text()).then(text => {
-
-      if (text === '请认真评论') {
-        global.toast('请认真评论')
+      if (isOK === false) {
+        const msg = `评论失败: ${text}`
+        global.toast(msg)
         return
-      }
-      if (text.includes('玩脱了')) {
-        const arr = text.match(/\<title\>(.*?)\<\/title\>/)
-        if (arr && arr[1]) {
-          const msg = `评论失败: ${arr[1]}`
-          global.toast(msg)
-          return
-        }
       }
       InteractionManager.runAfterInteractions(() => {
         this._pressButton(() => params.callback && params.callback())

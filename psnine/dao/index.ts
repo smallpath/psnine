@@ -169,9 +169,10 @@ export const getHomeAPI = uri => safeFetch(uri).then(res => homeParser(res, uri.
 
 export const getTopicContentAPI = uri => safeFetch(uri).then(res => topicContentApiParser(res))
 
-export const getTopicCommentAPI = uri => safeFetch(uri).then(res => topicCommentApiParser(res))
+export const getTopicCommentAPI = uri => safeFetch(uri).then(res => topicCommentApiParser(res, uri.includes('/gene/') ? 'gene' : 'topic'))
 
-export const getTopicCommentSnapshotAPI = uri => safeFetch(uri).then(res => topicCommentSnapshotApiParser(res))
+export const getTopicCommentSnapshotAPI = uri => safeFetch(uri).then(res => topicCommentSnapshotApiParser(res,
+  uri.includes('/gene/') ? 'gene' : 'topic'))
 
 export const getTopicURL = id => webHost + '/topic/' + id
 

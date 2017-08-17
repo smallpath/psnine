@@ -37,7 +37,7 @@ const items = [
     text: '彩色字体',
     onPress: null,
     tip: '要使用彩色字体的文字',
-    renderComponent: function(index) {
+    renderComponent: function(index, modeInfo) {
       return (
         <Picker style={{
           flex: 1,
@@ -339,7 +339,7 @@ class About extends Component<any, any> {
                 <Text style={[styles.themeName, { flex: 1, color: modeInfo.titleTextColor }]}>
                   {item.text}
                 </Text>
-                {item.renderComponent && item.renderComponent.bind(this)(index) || undefined}
+                {item.renderComponent && item.renderComponent.bind(this)(index, modeInfo) || undefined}
               </View>
             )
             return item.renderComponent ? (

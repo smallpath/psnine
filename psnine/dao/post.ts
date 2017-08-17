@@ -1,6 +1,6 @@
 import { encodeForm } from '../utils'
 
-const replyURL = 'http://psnine.com/set/comment/post'
+const replyURL = 'http://psnine.com/set/comment/ajax'
 const ajaxURL = 'http://psnine.com/set/comson/ajax'
 const editURL = 'http://psnine.com/set/edit/ajax'
 const cainaURL = 'http://psnine.com/set/caina/ajax'
