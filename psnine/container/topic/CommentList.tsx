@@ -24,6 +24,7 @@ import SimpleComment from '../../component/SimpleComment'
 import FooterProgress from '../../component/FooterProgress'
 
 class CommentList extends Component<any, any> {
+
   constructor(props) {
     super(props)
     this.state = {

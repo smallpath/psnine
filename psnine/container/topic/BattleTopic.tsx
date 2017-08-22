@@ -68,6 +68,11 @@ let toolbarActions = [
 
 class CommunityTopic extends Component<any, any> {
 
+  static navigationOptions({ navigation }) {
+    return {
+      title: navigation.state.params.title || '约战'
+    }
+  }
   constructor(props) {
     super(props)
     this.state = {

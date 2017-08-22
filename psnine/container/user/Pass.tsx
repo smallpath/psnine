@@ -415,7 +415,8 @@ const styles = StyleSheet.create({
     color: accentColor
   },
   textInput: {
-    fontSize: 15
+    fontSize: 15,
+    minHeight: 40
   },
   customView: {
     flex: -1,

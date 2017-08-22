@@ -28,38 +28,9 @@ import {
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window')
 
-const RightDrawer = DrawerNavigator({
-  Recommend: {
-    screen: Recommend
-  },
-  Community: {
-    screen: Community
-  },
-  Qa: {
-    screen: Qa
-  },
-  Gene: {
-    screen: Gene
-  },
-  Game: {
-    screen: Game
-  },
-  Battle: {
-    screen: Battle
-  },
-  Rank: {
-    screen: Rank
-  },
-  // Circle: {
-  //   screen: Circle
-  // },
-  Store: {
-    screen: Store
-  },
-  Trade: {
-    screen: Trade
-  }
-}, {
+import { routes } from './Tab'
+
+const RightDrawer = DrawerNavigator(routes, {
   initialRouteName: 'Community',
   drawerWidth: SCREEN_WIDTH / 2,
   drawerPosition: 'right',
@@ -121,7 +92,7 @@ const RightDrawer = DrawerNavigator({
     )
   },
   backBehavior: 'none'
-})
+} as any)
 
 export default class RightDrawerContainer extends Component<any, any> {
   constructor(props) {

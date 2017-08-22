@@ -1,6 +1,7 @@
 import React from 'react'
 import {
-  Dimensions
+  Dimensions,
+  Platform
 } from 'react-native'
 
 import {
@@ -19,7 +20,7 @@ import UserDiary from './UserDiary'
 import UserTopic from './UserTopic'
 import UserGene from './UserGene'
 
-const DefaultTabBar = TabNavigator.Presets.Default.tabBarComponent
+const DefaultTabBar = TabNavigator.Presets['AndroidTopTabs'].tabBarComponent
 
 const container = {
   Home: {
@@ -49,27 +50,29 @@ const Tab = TabNavigator(container, {
     const { modeInfo } = props.screenProps
     return (
       <global.NestedScrollView style={{elevation: 0, height: 40, minHeight: 40, maxHeight: 40}}>
-      <DefaultTabBar
-        {...props}
-        activeTintColor={modeInfo.accentColor}
-        inactiveTintColor={modeInfo.titleTextColor}
-        indicatorStyle={{
-          backgroundColor: modeInfo.accentColor
-        }}
-        style={{
-          ...props.style,
-          backgroundColor: modeInfo.backgroundColor
-        }}
-      />
+        <DefaultTabBar
+          {...props}
+          activeTintColor={modeInfo.accentColor}
+          inactiveTintColor={modeInfo.titleTextColor}
+          indicatorStyle={{
+            backgroundColor: modeInfo.accentColor
+          }}
+          style={{
+            ...props.style,
+            backgroundColor: modeInfo.backgroundColor
+          }}
+        />
       </global.NestedScrollView>
     )
   },
   lazy: true,
   animationEnabled: false,
+  tabBarPosition: 'top',
   scrollEnabled: true,
   backBehavior: 'none',
   tabBarOptions: {
     scrollEnabled: true,
+    tabBarPosition: 'top',
     animationEnabled: false,
     tabStyle: {
       height: 40,

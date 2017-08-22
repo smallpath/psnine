@@ -3,16 +3,14 @@ import {
   Image,
   Dimensions,
   PixelRatio,
-  Text
+  Text,
+  Platform
 } from 'react-native'
 
 const { width } = Dimensions.get('window')
 
-const pixelRate = PixelRatio.get()
-
-const baseStyle = {
-  backgroundColor: 'transparent'
-}
+// ios scale inline images automatically while android doesn't
+const pixelRate = Platform.OS === 'ios' ? 1 : PixelRatio.get()
 
 export default props => {
   const width = Number(props.attribs.width) || Number(props.attribs['data-width']) || 0

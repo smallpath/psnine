@@ -14,7 +14,7 @@ import PhotoView from 'react-native-photo-view'
 
 declare var global
 
-const psnineFolder = fs.ExternalStorageDirectoryPath + '/psnine'
+const psnineFolder = fs.ExternalStorageDirectoryPath || fs.DocumentDirectoryPath + '/psnine'
 
 fs.stat(psnineFolder).then(data => {
   const isDirectory = data.isDirectory()
@@ -22,7 +22,7 @@ fs.stat(psnineFolder).then(data => {
     fs.unlink(psnineFolder).catch(() => { }).then(() => fs.mkdir(psnineFolder))
   }
 }).catch(() => {
-  fs.mkdir(psnineFolder)
+  fs.mkdir(psnineFolder).catch(err => console.log(err, 'ImageViewer:line#27'))
 })
 
 const onSave = (image) => {

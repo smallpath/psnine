@@ -139,6 +139,12 @@ const ApiMapper = {
 
 class CommunityTopic extends Component<any, any> {
 
+  static navigationOptions({ navigation }) {
+    return {
+      title: navigation.state.params.title || '讨论'
+    }
+  }
+
   constructor(props) {
     super(props)
     // console.log(this.props.navigation.state.params)

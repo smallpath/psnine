@@ -50,8 +50,7 @@ class Login extends Component<any, any> {
     }
 
     let { text: data, isOK }: any = await safeLogin(psnid, password)
-    let length = data.length
-    console.log(data, isOK)
+
     if (isOK) {
       await AsyncStorage.setItem('@psnid', psnid)
       const user = await fetchUser(psnid)
@@ -366,7 +365,8 @@ const styles = StyleSheet.create({
     color: accentColor
   },
   textInput: {
-    fontSize: 15
+    fontSize: 15,
+    minHeight: 40
   },
   customView: {
     flex: -1,

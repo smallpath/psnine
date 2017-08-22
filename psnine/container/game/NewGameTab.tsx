@@ -25,7 +25,7 @@ const names = [
 
 declare var global
 
-const DefaultTabBar = TabNavigator.Presets.Default.tabBarComponent
+const DefaultTabBar = TabNavigator.Presets['AndroidTopTabs'].tabBarComponent
 
 const container = {
   NewGameProfile: {
@@ -59,24 +59,25 @@ const Tab = TabNavigator(container, {
     const { modeInfo } = props.screenProps
     return (
       <global.NestedScrollView style={{elevation: 0, height: 40, minHeight: 40, maxHeight: 40}}>
-      <DefaultTabBar
-        {...props}
-        activeTintColor={modeInfo.accentColor}
-        inactiveTintColor={modeInfo.titleTextColor}
-        indicatorStyle={{
-          backgroundColor: modeInfo.accentColor
-        }}
-        style={{
-          ...props.style,
-          backgroundColor: modeInfo.backgroundColor
-        }}
-      />
+        <DefaultTabBar
+          {...props}
+          activeTintColor={modeInfo.accentColor}
+          inactiveTintColor={modeInfo.titleTextColor}
+          indicatorStyle={{
+            backgroundColor: modeInfo.accentColor
+          }}
+          style={{
+            ...props.style,
+            backgroundColor: modeInfo.backgroundColor
+          }}
+        />
       </global.NestedScrollView>
     )
   },
   lazy: true,
   animationEnabled: false,
   scrollEnabled: true,
+  tabBarPosition: 'top',
   backBehavior: 'none',
   tabBarOptions: {
     scrollEnabled: true,

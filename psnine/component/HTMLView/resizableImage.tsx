@@ -67,7 +67,7 @@ class ResizableImage extends Component<IProps, IState> {
       isLoading: this.props.isLoading || true,
       alignCenter: this.props.alignCenter || false,
       hasError: false,
-      shouldLoad: global.netInfo === 'WIFI' || global.loadImageWithoutWifi
+      shouldLoad: global.netInfo.toUpperCase() === 'WIFI' || global.loadImageWithoutWifi
     }
   }
 

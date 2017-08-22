@@ -1,6 +1,13 @@
 import {
   StackNavigator
 } from 'react-navigation'
+import React from 'react'
+import {
+  Platform,
+  View,
+  Button,
+  Text
+} from 'react-native'
 
 import { GoogleAnalyticsTracker } from 'react-native-google-analytics-bridge'
 
@@ -65,6 +72,41 @@ import { transitionConfig, onTransitionStart } from './transitionConfig'
 const enableGesture = () => {
   return {
     gesturesEnabled: false
+  }
+}
+
+const isIOS: boolean = Platform.OS === 'ios'
+
+const stackConfig: any = {
+  initialRouteName: 'Main',
+  headerMode: 'none',
+  mode: 'card',
+  cardStyle: {
+    backgroundColor: 'transparent'
+  },
+  transitionConfig,
+  onTransitionStart
+}
+
+if (isIOS) {
+  stackConfig.headerMode = 'float'
+  stackConfig.mode = 'modal'
+  delete stackConfig.transitionConfig
+  delete stackConfig.onTransitionStart
+  stackConfig.navigationOptions = ({ navigation, screenProps }) => {
+    const { modeInfo } = screenProps
+    const { params = {} } = navigation.state
+    return {
+      title: (params as any).title || 'PSNINE',
+      headerBackTitle: null,
+      headerTintColor: modeInfo.tintColor,
+      headerStyle: {
+        backgroundColor: modeInfo.standardColor
+      },
+      headerTitleStyle: {
+        color: modeInfo.backgroundColor
+      }
+    }
   }
 }
 
@@ -255,16 +297,7 @@ const Navigator = StackNavigator({
   ImageViewer: {
     screen: ImageViewer
   }
-}, {
-  initialRouteName: 'Main',
-  headerMode: 'none',
-  mode: 'card',
-  cardStyle: {
-    backgroundColor: 'transparent'
-  },
-  transitionConfig,
-  onTransitionStart
-})
+}, stackConfig as any)
 
 const previousGetActionForPathAndParams = Navigator.router.getActionForPathAndParams
 

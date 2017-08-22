@@ -24,7 +24,7 @@ if (__DEV__) {
   window.cancelIdleCallback = null
 }
 
-console.ignoredYellowBox = ['Warning: BackAndroid', 'Warning: flattenChildren', 'Warning: shouldComponentUpdate']
+console.ignoredYellowBox = ['Warning: BackAndroid', 'Warning: flattenChildren', 'Warning: shouldComponentUpdate', '<Error>: []', '<Warning>:']
 
 let debug = true
 // debug = false

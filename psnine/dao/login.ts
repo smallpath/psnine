@@ -1,6 +1,6 @@
 import { encodeForm } from '../utils'
 
-const loginURL = 'http://psnine.com/set/signin/ajax'
+const loginURL = 'http://psnine.com/sign/signin/ajax'
 
 export const registURL = `http://psnine.com/psnauth`
 
@@ -8,7 +8,7 @@ export const safeLogin = function (psnid, pass) {
   let signin = ''
   let details = { psnid, pass, signin }
   const formBody = encodeForm(details)
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     let isOK = true
     fetch(loginURL, {
       method: 'POST',
