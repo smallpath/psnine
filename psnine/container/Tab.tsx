@@ -25,7 +25,7 @@ import {
   TabNavigator
 } from 'react-navigation'
 
-const DefaultTabBar = TabNavigator.Presets.Default.tabBarComponent
+const DefaultTabBar = TabNavigator.Presets['AndroidTopTabs'].tabBarComponent
 
 export default class TabContainer extends Component<any, any> {
   constructor(props) {
@@ -90,24 +90,27 @@ const Tabs = TabNavigator(routes, {
     const { modeInfo } = props.screenProps
     const titleTextColor = modeInfo.modeInfo ? '#000' : '#fff'
     return (
-        <DefaultTabBar
-          {...props}
-          onTabPress={props.screenProps.onTabPress}
-          activeTintColor={titleTextColor}
-          inactiveTintColor={titleTextColor}
-          indicatorStyle={{
-            backgroundColor: titleTextColor
-          }}
-          style={{
-            ...props.style,
-            backgroundColor: modeInfo.standardColor
-          }}
-        />
+      <DefaultTabBar
+        {...props}
+        onTabPress={props.screenProps.onTabPress}
+        activeTintColor={titleTextColor}
+        inactiveTintColor={titleTextColor}
+        indicatorStyle={{
+          backgroundColor: titleTextColor
+        }}
+        style={{
+          ...props.style,
+          backgroundColor: modeInfo.standardColor
+        }}
+      />
     )
   },
   lazy: true,
   animationEnabled: false,
+  scrollEnabled: true,
   backBehavior: 'none',
+  swipeEnabled: true,
+  tabBarPosition: 'top',
   tabBarOptions: {
     activeTintColor: '#fff',
     inactiveTintColor: '#fff',
@@ -115,13 +118,15 @@ const Tabs = TabNavigator(routes, {
       backgroundColor: '#fff'
     },
     scrollEnabled: true,
+    swipeEnabled: true,
     tabStyle: {
       height: 40,
       width: minWidth / 6
     },
+    showIcon: false,
     style: {
       elevation: 4,
       height: 40
     }
   }
-})
+} as any)

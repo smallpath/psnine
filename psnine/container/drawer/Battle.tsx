@@ -119,6 +119,7 @@ class Battle extends Component<any, any> {
         renderSectionHeader={renderSectionHeader}
         stickySectionHeadersEnabled
         sections={sections}
+        style={{backgroundColor: modeInfo.background}}
       />
     )
   }

@@ -6,7 +6,8 @@ import {
   Animated,
   TouchableWithoutFeedback,
   StatusBar,
-  ViewPagerAndroid
+  ViewPagerAndroid,
+  Platform
 } from 'react-native'
 import Icon from 'react-native-vector-icons/Ionicons'
 
@@ -17,8 +18,8 @@ import { getRecommend } from '../redux/action/recommend'
 
 import { standardColor } from '../constant/colorConfig'
 
-import { routes } from './Tab'
-import RightDrawer from './RightDrawer'
+import Tab, { routes } from './Tab'
+// import RightDrawer from './RightDrawer'
 
 let title = 'PSNINE'
 
@@ -92,7 +93,7 @@ let toolbarActions = [
   tradeActions
 ]
 
-let toolbarHeight = 56
+let toolbarHeight = Platform.OS === 'ios' ? 64 : 56
 
 class Toolbar extends Component<any, any> {
 
@@ -193,7 +194,7 @@ class Toolbar extends Component<any, any> {
 
   _renderDrawerView = () => {
     return (
-      <RightDrawer
+      <Tab
         onNavigationStateChange={(prevRoute, nextRoute, action) => {
           if (prevRoute.index !== nextRoute.index && action.type === 'Navigation/NAVIGATE'
             && !(['DrawerOpen', 'DrawerClose'] as any).includes(nextRoute.routes[nextRoute.index].routeName)) {
@@ -228,6 +229,43 @@ class Toolbar extends Component<any, any> {
     // alert(appReducer.segmentedIndex)
     return (
       <View style={{ flex: 1 }}>
+        {/* <global.ToolbarIOS modeInfo={modeInfo}
+          actions={toolbarActions[appReducer.segmentedIndex]}
+          onActionSelected={this.onActionSelected}
+          onIconClicked={this.props._callDrawer()}
+        /> */}
+        <View style={styles.toolbar}>
+          <Icon.ToolbarAndroid
+            navIconName='md-menu'
+            style={[styles.toolbar, { backgroundColor: modeInfo.standardColor, elevation: 0 }]}
+            overflowIconName='md-more'
+            iconColor={modeInfo.isNightMode ? '#000' : '#fff'}
+            actions={toolbarActions[appReducer.segmentedIndex]}
+            key={appReducer.segmentedIndex}
+            onActionSelected={this.onActionSelected}
+            onIconClicked={this.props._callDrawer()}
+          >
+            <TouchableWithoutFeedback>
+              <View style={{ height: 56, flex: 1, flexDirection: 'column', justifyContent: 'center' }}>
+                <Text style={{ fontSize: 20, fontWeight: '500', color: modeInfo.isNightMode ? '#000' : '#fff' }} onPress={() => {
+                  const index = this._currentViewPagerPageIndex
+                  const callback = this.afterEachHooks[index]
+                  {/*log(callback, this.state.afterEachHooks, index)*/ }
+                  typeof callback === 'function' && callback()
+                }}>
+                  {title}
+                </Text>
+                {this.state.search && <Text
+                  onPress={() => {
+                    this._onSearch('')
+                  }}
+                  style={{ fontSize: 15, color: modeInfo.isNightMode ? '#000' : '#fff' }}>
+                  {`当前搜索: ${this.state.search}`}
+                </Text> || undefined}
+              </View>
+            </TouchableWithoutFeedback>
+          </Icon.ToolbarAndroid>
+        </View>
        { this._renderDrawerView() }
       </View>
     )

@@ -32,7 +32,7 @@ class Game extends Component<any, any> {
 
     this.state = {
       pf: 'all',
-      region: 'newest',
+      region: 'all',
       ddstatus: 'all',
       isRefreshing: false,
       isLoadingMore: false

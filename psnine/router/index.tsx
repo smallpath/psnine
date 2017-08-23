@@ -89,25 +89,25 @@ const stackConfig: any = {
 }
 
 if (isIOS) {
-  stackConfig.headerMode = 'float'
-  stackConfig.mode = 'modal'
+  // stackConfig.headerMode = 'float'
+  // stackConfig.mode = 'modal'
   delete stackConfig.transitionConfig
   delete stackConfig.onTransitionStart
-  stackConfig.navigationOptions = ({ navigation, screenProps }) => {
-    const { modeInfo } = screenProps
-    const { params = {} } = navigation.state
-    return {
-      title: (params as any).title || 'PSNINE',
-      headerBackTitle: null,
-      headerTintColor: modeInfo.tintColor,
-      headerStyle: {
-        backgroundColor: modeInfo.standardColor
-      },
-      headerTitleStyle: {
-        color: modeInfo.backgroundColor
-      }
-    }
-  }
+  // stackConfig.navigationOptions = ({ navigation, screenProps }) => {
+  //   const { modeInfo } = screenProps
+  //   const { params = {} } = navigation.state
+  //   return {
+  //     title: (params as any).title || 'PSNINE',
+  //     headerBackTitle: null,
+  //     headerTintColor: modeInfo.tintColor,
+  //     headerStyle: {
+  //       backgroundColor: modeInfo.standardColor
+  //     },
+  //     headerTitleStyle: {
+  //       color: modeInfo.backgroundColor
+  //     }
+  //   }
+  // }
 }
 
 const Navigator = StackNavigator({

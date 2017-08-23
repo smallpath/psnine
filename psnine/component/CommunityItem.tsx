@@ -4,7 +4,8 @@ import {
   Text,
   View,
   Image,
-  TouchableNativeFeedback
+  TouchableNativeFeedback,
+  Platform
 } from 'react-native'
 import {
   NavigationDispatch
@@ -24,6 +25,8 @@ interface ExtendedProp extends FlatlistItemProp {
   ITEM_HEIGHT: number
   toolbarDispatch?: NavigationDispatch<any>
 }
+
+const isIOS = Platform.OS === 'ios'
 
 export default class ComplexComment extends React.PureComponent<ExtendedProp, FlatlistItemState> {
 
@@ -52,6 +55,11 @@ export default class ComplexComment extends React.PureComponent<ExtendedProp, Fl
     const { modeInfo, rowData, onPress, navigation, ITEM_HEIGHT, modalList = [], toolbarDispatch } = this.props
     // console.log(modalList)
     const { numColumns = 1 } = modeInfo
+    const fuckingIOS: any = { marginLeft: 10, flex: 1, flexWrap: 'wrap', flexDirection: 'column', justifyContent: 'space-between'  }
+    if (isIOS) {
+      // set the width to 0 to avoid text not wrap on the fucking ios
+      fuckingIOS.width = 0
+    }
     return (
       <TouchableNativeFeedback
         onPress={() => {
@@ -121,7 +129,7 @@ export default class ComplexComment extends React.PureComponent<ExtendedProp, Fl
               )} />
             )
           }
-          <View style={{ marginLeft: 10, flex: 1, flexDirection: 'column', justifyContent: 'space-between'  }}>
+          <View style={fuckingIOS}>
             <Text
               ellipsizeMode={'tail'}
               numberOfLines={2}

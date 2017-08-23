@@ -18,6 +18,12 @@ if (drawerWidth > 720) {
 declare var global
 
 class Psnine extends Component<any, any> {
+  static navigationOptions({ navigation }) {
+    return {
+      header: null
+    }
+  }
+
   constructor(props) {
     super(props)
   }
