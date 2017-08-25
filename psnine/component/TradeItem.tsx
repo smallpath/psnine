@@ -105,7 +105,7 @@ export default class TradeItem extends React.PureComponent<ExtendedProp, Flatlis
             }
             <View style={{ marginLeft: 10, flex: 1, flexDirection: 'column' }}>
 
-              <View style={{ flex: 1, flexDirection: 'row', padding: 2 }}>
+              <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between', padding: 2 }}>
                 <Text
                   ellipsizeMode={'tail'}
                   numberOfLines={2}
@@ -113,7 +113,7 @@ export default class TradeItem extends React.PureComponent<ExtendedProp, Flatlis
                   {rowData.title}
                 </Text>
                 <Text style={{
-                  fontSize: 12, flex: -1, color: modeInfo.standardTextColor, textAlign: 'center', textAlignVertical: 'center'
+                  fontSize: 12, flex: -1, color: modeInfo.standardTextColor, alignSelf: 'flex-end', textAlign: 'center', textAlignVertical: 'center'
                 }}>{rowData.price}</Text>
               </View>
 
