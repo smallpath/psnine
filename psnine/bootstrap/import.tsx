@@ -44,16 +44,6 @@ class IOSActivityIndicator extends Component<any, any> {
   }
 }
 
-class ToolbarAndroid extends Component<any, any> {
-  constructor(props) {
-    super(props)
-  }
-
-  render() {
-    return null
-  }
-}
-
 let TouchableComponent
 
 if (!isIOS) {
@@ -84,7 +74,7 @@ class PickerIOS extends Component<any, any> {
   render() {
     const { style, prompt = '', selectedValue, onValueChange, children = [] } = this.props
     // console.log(Object.keys(children[0]), children[0].props, 'hehe ===>')
-    const arr = children.length ? children.map(item => item.props).slice() : []
+    const arr = children.length ? children.map(item => (item as any).props).slice() : []
     const data = arr.map(item => {
       return {
         value: item.value,
@@ -102,11 +92,12 @@ class PickerIOS extends Component<any, any> {
     //   console.log(item, 'what the fuck')
     // })
     const { borderWidth, ...targetStyle } = style
+    const head = prompt as any === '选择'
+    const text = head ? '' : prompt.replace('选择', ':')
     return (
       <ModalPicker
         data={data}
-        initValue={prompt.replace('选择', '') + ': ' + valueLabel[selectedValue]}
-        cancelText='取消'
+        initValue={text + valueLabel[selectedValue]}
         style={targetStyle}
         selectedStyle={targetStyle}
         onChange={(option) => {
