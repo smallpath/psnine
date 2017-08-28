@@ -196,8 +196,7 @@ class Toolbar extends Component<any, any> {
     return (
       <Tab
         onNavigationStateChange={(prevRoute, nextRoute, action) => {
-          if (prevRoute.index !== nextRoute.index && action.type === 'Navigation/NAVIGATE'
-            && !(['DrawerOpen', 'DrawerClose'] as any).includes(nextRoute.routes[nextRoute.index].routeName)) {
+          if (prevRoute.index !== nextRoute.index && action.type === 'Navigation/NAVIGATE') {
             /*setTimeout(() => {*/
               this.props.dispatch(changeSegmentIndex(nextRoute.index))
             /*}, 100)*/
@@ -225,10 +224,14 @@ class Toolbar extends Component<any, any> {
   }
 
   render() {
-    const { app: appReducer, modeInfo } = this.props
+    const { app: appReducer, modeInfo, drawerWidth, position } = this.props
     // alert(appReducer.segmentedIndex)
     return (
-      <View style={{ flex: 1 }}>
+      <Animated.View style={{ flex: 1,
+          transform: [{
+            translateX: position.interpolate({inputRange: [0, 1], outputRange: [0, drawerWidth]})
+          }]
+        }}>
         {/* <global.ToolbarIOS modeInfo={modeInfo}
           actions={toolbarActions[appReducer.segmentedIndex]}
           onActionSelected={this.onActionSelected}
@@ -267,7 +270,7 @@ class Toolbar extends Component<any, any> {
           </Icon.ToolbarAndroid>
         </View>
        { this._renderDrawerView() }
-      </View>
+      </Animated.View>
     )
   }
 }

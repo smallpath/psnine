@@ -1,7 +1,9 @@
 import React, { Component } from 'react'
 import {
   DrawerLayoutAndroid,
-  Dimensions
+  Dimensions,
+  Animated,
+  Platform
 } from 'react-native'
 
 import LeftDrawer from './LeftDrawer'
@@ -26,6 +28,10 @@ class Psnine extends Component<any, any> {
 
   constructor(props) {
     super(props)
+
+    this.state = {
+      leftValue: new Animated.Value(0)
+    }
   }
 
   callDrawer = () => {
@@ -34,6 +40,11 @@ class Psnine extends Component<any, any> {
 
   closeDrawer = () => {
     this.refs[DRAWER_REF].closeDrawer()
+  }
+
+  onDrawerSlide = (event) => {
+    const { offset } = event.nativeEvent
+    this.state.leftValue.setValue(offset)
   }
 
   render() {
@@ -46,6 +57,7 @@ class Psnine extends Component<any, any> {
         ref={DRAWER_REF}
         drawerWidth={drawerWidth}
         drawerPosition={DrawerLayoutAndroid.positions.Left}
+        onDrawerSlide={Platform.OS === 'ios' ? this.onDrawerSlide : undefined}
         renderNavigationView={() => (
           <LeftDrawer {...{
             closeDrawer: this.closeDrawer,
@@ -60,6 +72,8 @@ class Psnine extends Component<any, any> {
             modeInfo: screenProps.modeInfo,
             switchModeOnRoot: screenProps.switchModeOnRoot
           }}
+          position={this.state.leftValue}
+          drawerWidth={drawerWidth}
           _callDrawer={() => this.callDrawer.bind(this)}
         />
       </DrawerLayoutAndroid>
