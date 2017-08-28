@@ -87,17 +87,15 @@ class PickerIOS extends Component<any, any> {
       prev[curr.value] = curr.label
       return prev
     }, {})
-    // data.forEach(item => {
-    //   item.key = item.value
-    //   console.log(item, 'what the fuck')
-    // })
     const { borderWidth, ...targetStyle } = style
     const head = prompt as any === '选择'
-    const text = head ? '' : prompt.replace('选择', ':')
+    const text = head ? '' : prompt.replace('选择', '') + ':'
+    const previousValue = valueLabel[selectedValue] || ''
+    const initValue = previousValue.includes(text) ? previousValue : text + previousValue
     return (
       <ModalPicker
         data={data}
-        initValue={text + valueLabel[selectedValue]}
+        initValue={initValue}
         style={targetStyle}
         selectedStyle={targetStyle}
         onChange={(option) => {

@@ -339,7 +339,7 @@ class Login extends Component<any, any> {
                 onPress={this.login}
               >
                 <View style={[styles.submitButton, {backgroundColor: modeInfo.accentColor}]}>
-                  <Text style={[styles.textInput, { color: modeInfo.backgroundColor }]}>提交</Text>
+                  <Text style={[styles.textInput, { color: modeInfo.backgroundColor, padding: 12 }]}>提交</Text>
                 </View>
               </TouchableNativeFeedback>
             </View>
