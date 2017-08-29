@@ -1,10 +1,14 @@
 import {
   Easing,
   Animated,
-  Dimensions
+  Dimensions,
+  Platform
 } from 'react-native'
 
-const { width: SCREEN_WIDTH } = Dimensions.get('window')
+let { width: SCREEN_WIDTH } = Dimensions.get('window')
+if (Platform.OS === 'ios') {
+  SCREEN_WIDTH = 50
+}
 
 function forInitial(props) {
   const {
@@ -65,7 +69,6 @@ export function transitionConfig() {
       }
 
       const params = (navigation.state.routes[navigation.state.index] || {}).params || {}
-
       if (params.shouldSeeBackground === true) {
         if (scene.index + 1 >= navigation.state.index) {
           return {

@@ -11,7 +11,8 @@ import {
   Keyboard,
   TextInput,
   Animated,
-  StatusBar
+  StatusBar,
+  Platform
 } from 'react-native'
 
 import Ionicons from 'react-native-vector-icons/Ionicons'
@@ -28,6 +29,10 @@ SCREEN_HEIGHT = SCREEN_HEIGHT - (StatusBar.currentHeight || 0) + 1
 let CIRCLE_SIZE = 56
 
 let backConfig = { tension: 30, friction: 7 }
+
+const isIOS = Platform.OS === 'ios'
+const method = isIOS ? 'timing' : 'spring'
+const duration = isIOS ? { duration: 200 } : {}
 
 export default class Search extends Component<any, any> {
 
@@ -46,13 +51,13 @@ export default class Search extends Component<any, any> {
   }
 
   componentDidMount() {
-    Animated.spring(this.state.openVal, { toValue: 1 }).start()
+    Animated[method](this.state.openVal, { toValue: 1, ...duration }).start()
   }
 
   _pressBack = (callback) => {
     const { openVal } = this.state
     // Keyboard.dismiss()
-    Animated.spring(openVal, { toValue: 0, ...backConfig }).start(() => {
+    Animated[method](openVal, { toValue: 0, ...backConfig, ...duration }).start(() => {
       const _lastNativeText = this.content._lastNativeText
       this.props.navigation.goBack()
       InteractionManager.runAfterInteractions(() => {
@@ -84,7 +89,7 @@ export default class Search extends Component<any, any> {
     })
     this.isToolbarShowing = false
     this.removeListener = BackHandler.addEventListener('hardwareBackPress', () => {
-      Animated.spring(openVal, { toValue: 0, ...backConfig }).start(() => {
+      Animated[method](openVal, { toValue: 0, ...backConfig, ...duration }).start(() => {
         this.props.navigation.goBack()
         Keyboard.dismiss()
       })
