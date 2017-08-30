@@ -10,7 +10,8 @@ import {
   Slider,
   FlatList,
   Alert,
-  ToastAndroid
+  ToastAndroid,
+  Platform
 } from 'react-native'
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window')
@@ -144,7 +145,7 @@ export default class Photo extends Component<any, any> {
 
         ImagePicker.showImagePicker(uploadOptions, (response) => {
           // console.log('Response = ', response);
-
+          const toast = Platform.OS === 'ios' ? global.toast : ToastAndroid.show.bind(ToastAndroid)
           if (response.didCancel) {
             // console.log('User cancelled image picker');
           } else if (response.error) {
@@ -153,12 +154,12 @@ export default class Photo extends Component<any, any> {
             let { uri = '', type = '', fileSize, fileName = '' } = response
             // console.log('??')
             if (fileSize > 1024 * 1024) {
-              return ToastAndroid.show('PSNINE上传的图片文件最大为1M', ToastAndroid.SHORT)
+              return toast('PSNINE上传的图片文件最大为1M', ToastAndroid.SHORT)
             }
             if (!type) {
               type = 'image/' + (fileName || '').split('.').pop()
             }
-            ToastAndroid.show('上传中', ToastAndroid.SHORT)
+            toast('上传中', ToastAndroid.SHORT)
             postImage({
               image: {
                 uri

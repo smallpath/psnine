@@ -5,6 +5,7 @@
 	};
 	objectVersion = 46;
 	objects = {
+
 /* Begin PBXBuildFile section */
 		00C302E51ABCBA2D00DB3ED1 /* libRCTActionSheet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302AC1ABCB8CE00DB3ED1 /* libRCTActionSheet.a */; };
 		00C302E71ABCBA2D00DB3ED1 /* libRCTGeolocation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302BA1ABCB90400DB3ED1 /* libRCTGeolocation.a */; };
@@ -52,16 +53,16 @@
 		832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 832341B51AAA6A8300B99B32 /* libRCTText.a */; };
 		994DD2485821476C8BCA8B78 /* Ionicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4EE60F8EB1A1430D9EB21068 /* Ionicons.ttf */; };
 		A138D01208D84A0A85028C2F /* libSplashScreen.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5963F4089E974E40BD193BAB /* libSplashScreen.a */; };
+		AD6280F9F2684FD999AAEC93 /* libReactNativeTouchThroughView.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CA65C37841C1447B80E09FDA /* libReactNativeTouchThroughView.a */; };
 		B2A7E1189A954D36998DBCE8 /* MaterialIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 315BAE3F67B74EF582B31769 /* MaterialIcons.ttf */; };
 		CC95ED2AE9A3442AA146AE99 /* libBVLinearGradient.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CDA12E5E9A94E88B6699536 /* libBVLinearGradient.a */; };
+		D69744E25A554F5B961B5932 /* libInteractable.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7BD9C899B5104A1DAECD169D /* libInteractable.a */; };
 		E5A92470DF444F38AF3A3756 /* SimpleLineIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BC5AE9E3247A4F32BAFC39B6 /* SimpleLineIcons.ttf */; };
 		E809582E80A14FF3B9E346C0 /* libRCTGoogleAnalyticsBridge.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A06F69C8734845F19CBCC1E5 /* libRCTGoogleAnalyticsBridge.a */; };
 		EEC5A9AAE09D45DFA1FDD80D /* libRNImagePicker.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 932DF55CE08F4327A5D1C337 /* libRNImagePicker.a */; };
 		EF5479CC230C435EB8031DF9 /* EvilIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0DE3B61AB074458A967D885F /* EvilIcons.ttf */; };
 		FE64258DC4BC417A93130161 /* libLottieReactNative.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FB14DEEE2284349A790678B /* libLottieReactNative.a */; };
 		FF72EDE769CA4A20B8F0B2A5 /* libRNVectorIcons.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 28D3586DF1B94C5D997F6D42 /* libRNVectorIcons.a */; };
-		D69744E25A554F5B961B5932 /* libInteractable.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7BD9C899B5104A1DAECD169D /* libInteractable.a */; };
-		AD6280F9F2684FD999AAEC93 /* libReactNativeTouchThroughView.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CA65C37841C1447B80E09FDA /* libReactNativeTouchThroughView.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -127,6 +128,20 @@
 			proxyType = 2;
 			remoteGlobalIDString = 83CBBA2E1A601D0E00E9B192;
 			remoteInfo = React;
+		};
+		274B12421F56EF0A00C55C3D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 52F23B7DE18D4FEA8477B878 /* Interactable.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = CC0127971E3ACC3900B23C9F;
+			remoteInfo = Interactable;
+		};
+		274B126F1F56EF0B00C55C3D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 1392EA3A77054E1BA2A801B4 /* ReactNativeTouchThroughView.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 134814201AA4EA6300B7C361;
+			remoteInfo = ReactNativeTouchThroughView;
 		};
 		27DD98671F4BF9FD00B3F83C /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -411,6 +426,7 @@
 		0DE3B61AB074458A967D885F /* EvilIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = EvilIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/EvilIcons.ttf"; sourceTree = "<group>"; };
 		1369256651294444A1D9A719 /* FontAwesome.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome.ttf"; sourceTree = "<group>"; };
 		139105B61AF99BAD00B5F7CC /* RCTSettings.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTSettings.xcodeproj; path = "../node_modules/react-native/Libraries/Settings/RCTSettings.xcodeproj"; sourceTree = "<group>"; };
+		1392EA3A77054E1BA2A801B4 /* ReactNativeTouchThroughView.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = ReactNativeTouchThroughView.xcodeproj; path = "../node_modules/react-native-touch-through-view/ios/ReactNativeTouchThroughView.xcodeproj"; sourceTree = "<group>"; };
 		139FDEE61B06529A00C62182 /* RCTWebSocket.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTWebSocket.xcodeproj; path = "../node_modules/react-native/Libraries/WebSocket/RCTWebSocket.xcodeproj"; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* psnine.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = psnine.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = psnine/AppDelegate.h; sourceTree = "<group>"; };
@@ -437,6 +453,7 @@
 		3FB14DEEE2284349A790678B /* libLottieReactNative.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libLottieReactNative.a; sourceTree = "<group>"; };
 		4CDA12E5E9A94E88B6699536 /* libBVLinearGradient.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libBVLinearGradient.a; sourceTree = "<group>"; };
 		4EE60F8EB1A1430D9EB21068 /* Ionicons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Ionicons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Ionicons.ttf"; sourceTree = "<group>"; };
+		52F23B7DE18D4FEA8477B878 /* Interactable.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = Interactable.xcodeproj; path = "../node_modules/react-native-interactable/ios/Interactable.xcodeproj"; sourceTree = "<group>"; };
 		5963F4089E974E40BD193BAB /* libSplashScreen.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libSplashScreen.a; sourceTree = "<group>"; };
 		5E276BABF4864F9C86EEA020 /* BVLinearGradient.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = BVLinearGradient.xcodeproj; path = "../node_modules/react-native-linear-gradient/BVLinearGradient.xcodeproj"; sourceTree = "<group>"; };
 		5E91572D1DD0AC6500FF2AA8 /* RCTAnimation.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTAnimation.xcodeproj; path = "../node_modules/react-native/Libraries/NativeAnimation/RCTAnimation.xcodeproj"; sourceTree = "<group>"; };
@@ -445,6 +462,7 @@
 		70103118360644EDB59EE556 /* Zocial.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Zocial.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Zocial.ttf"; sourceTree = "<group>"; };
 		78C398B01ACF4ADC00677621 /* RCTLinking.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTLinking.xcodeproj; path = "../node_modules/react-native/Libraries/LinkingIOS/RCTLinking.xcodeproj"; sourceTree = "<group>"; };
 		7A5917F51E0B4D74A823A5B5 /* RNVectorIcons.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNVectorIcons.xcodeproj; path = "../node_modules/react-native-vector-icons/RNVectorIcons.xcodeproj"; sourceTree = "<group>"; };
+		7BD9C899B5104A1DAECD169D /* libInteractable.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libInteractable.a; sourceTree = "<group>"; };
 		832341B01AAA6A8300B99B32 /* RCTText.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTText.xcodeproj; path = "../node_modules/react-native/Libraries/Text/RCTText.xcodeproj"; sourceTree = "<group>"; };
 		8707EC590F444A17AB0CB89B /* LottieReactNative.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = LottieReactNative.xcodeproj; path = "../node_modules/lottie-react-native/lib/ios/LottieReactNative.xcodeproj"; sourceTree = "<group>"; };
 		8D6C3EED062E401F9C816AB8 /* RNFS.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNFS.xcodeproj; path = "../node_modules/react-native-fs/RNFS.xcodeproj"; sourceTree = "<group>"; };
@@ -453,14 +471,11 @@
 		A06F69C8734845F19CBCC1E5 /* libRCTGoogleAnalyticsBridge.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRCTGoogleAnalyticsBridge.a; sourceTree = "<group>"; };
 		BC5AE9E3247A4F32BAFC39B6 /* SimpleLineIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = SimpleLineIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/SimpleLineIcons.ttf"; sourceTree = "<group>"; };
 		C564F27CB8434CFEA0C0114F /* RNShare.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNShare.xcodeproj; path = "../node_modules/react-native-share/ios/RNShare.xcodeproj"; sourceTree = "<group>"; };
+		CA65C37841C1447B80E09FDA /* libReactNativeTouchThroughView.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libReactNativeTouchThroughView.a; sourceTree = "<group>"; };
 		E3ECEF3D95B3407FBE5E550E /* RNSnackbar.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNSnackbar.xcodeproj; path = "../node_modules/react-native-snackbar/ios/RNSnackbar.xcodeproj"; sourceTree = "<group>"; };
 		E9494AD3EADB467B90216869 /* SplashScreen.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = SplashScreen.xcodeproj; path = "../node_modules/react-native-splash-screen/ios/SplashScreen.xcodeproj"; sourceTree = "<group>"; };
 		F917CE3D5D9D41D0B36948D2 /* Octicons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Octicons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Octicons.ttf"; sourceTree = "<group>"; };
 		FFF6DCAC99E94FB1B344B63A /* libRNFS.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNFS.a; sourceTree = "<group>"; };
-		52F23B7DE18D4FEA8477B878 /* Interactable.xcodeproj */ = {isa = PBXFileReference; name = "Interactable.xcodeproj"; path = "../node_modules/react-native-interactable/ios/Interactable.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
-		7BD9C899B5104A1DAECD169D /* libInteractable.a */ = {isa = PBXFileReference; name = "libInteractable.a"; path = "libInteractable.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
-		1392EA3A77054E1BA2A801B4 /* ReactNativeTouchThroughView.xcodeproj */ = {isa = PBXFileReference; name = "ReactNativeTouchThroughView.xcodeproj"; path = "../node_modules/react-native-touch-through-view/ios/ReactNativeTouchThroughView.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
-		CA65C37841C1447B80E09FDA /* libReactNativeTouchThroughView.a */ = {isa = PBXFileReference; name = "libReactNativeTouchThroughView.a"; path = "libReactNativeTouchThroughView.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -633,6 +648,22 @@
 				3DAD3EAB1DF850E9000B6D8A /* libcxxreact.a */,
 				3DAD3EAD1DF850E9000B6D8A /* libjschelpers.a */,
 				3DAD3EAF1DF850E9000B6D8A /* libjschelpers.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		274B123E1F56EF0A00C55C3D /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				274B12431F56EF0A00C55C3D /* libInteractable.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		274B126C1F56EF0B00C55C3D /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				274B12701F56EF0B00C55C3D /* libReactNativeTouchThroughView.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -969,6 +1000,10 @@
 					ProjectRef = 5E276BABF4864F9C86EEA020 /* BVLinearGradient.xcodeproj */;
 				},
 				{
+					ProductGroup = 274B123E1F56EF0A00C55C3D /* Products */;
+					ProjectRef = 52F23B7DE18D4FEA8477B878 /* Interactable.xcodeproj */;
+				},
+				{
 					ProductGroup = 27DD98A81F4BFAFB00B3F83C /* Products */;
 					ProjectRef = 27DD98A71F4BFAFB00B3F83C /* Lottie.xcodeproj */;
 				},
@@ -1027,6 +1062,10 @@
 				{
 					ProductGroup = 146834001AC3E56700842450 /* Products */;
 					ProjectRef = 146833FF1AC3E56700842450 /* React.xcodeproj */;
+				},
+				{
+					ProductGroup = 274B126C1F56EF0B00C55C3D /* Products */;
+					ProjectRef = 1392EA3A77054E1BA2A801B4 /* ReactNativeTouchThroughView.xcodeproj */;
 				},
 				{
 					ProductGroup = 27DD98601F4BF9FD00B3F83C /* Products */;
@@ -1122,6 +1161,20 @@
 			fileType = archive.ar;
 			path = libReact.a;
 			remoteRef = 146834031AC3E56700842450 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		274B12431F56EF0A00C55C3D /* libInteractable.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libInteractable.a;
+			remoteRef = 274B12421F56EF0A00C55C3D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		274B12701F56EF0B00C55C3D /* libReactNativeTouchThroughView.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libReactNativeTouchThroughView.a;
+			remoteRef = 274B126F1F56EF0B00C55C3D /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		27DD98681F4BF9FD00B3F83C /* libBVLinearGradient.a */ = {
