@@ -156,6 +156,8 @@ android {
 }
 
 dependencies {
+    compile project(':react-native-touch-through-view')
+    compile project(':react-native-interactable')
     compile fileTree(dir: "libs", include: ["*.jar"])
     compile "com.android.support:appcompat-v7:23.0.1"
     compile project(':ReactAndroid')

@@ -14,12 +14,15 @@ import ReactNative, {
   Platform,
   TouchableNativeFeedback,
   ScrollView,
-  TouchableOpacity
+  TouchableOpacity,
+  View
 } from 'react-native'
 
 const { ActivityIndicator } = ReactNative
 
 const isIOS = Platform.OS === 'ios'
+
+declare var global
 
 Object.assign(global, {
   NestedScrollView: isIOS ? ScrollView : NestedScrollView,
@@ -62,6 +65,17 @@ Object.defineProperty(ReactNative, 'TouchableNativeFeedback', {
   get: function () {
     return TouchableComponent
   }
+})
+
+// // 安卓能否引入？
+import {
+  TouchThroughView,
+  TouchThroughWrapper
+} from 'react-native-touch-through-view'
+
+Object.assign(global, {
+  TouchThroughView: Platform.OS === 'ios' ? TouchThroughView : View,
+  TouchThroughWrapper
 })
 
 import DrawerLayout from 'react-native-drawer-layout'

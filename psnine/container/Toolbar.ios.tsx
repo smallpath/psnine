@@ -229,7 +229,7 @@ class Toolbar extends Component<any, any> {
     return (
       <Animated.View style={{ flex: 1,
           transform: [{
-            translateX: position.interpolate({inputRange: [0, 1], outputRange: [0, drawerWidth]})
+            translateX: position.interpolate({inputRange: [0, 1], outputRange: [0, drawerWidth / 2]})
           }]
         }}>
         {/* <global.ToolbarIOS modeInfo={modeInfo}

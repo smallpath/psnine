@@ -10,8 +10,16 @@ import {
   StatusBar,
   Animated,
   Easing,
-  Linking
+  Linking,
+  ScrollView
 } from 'react-native'
+
+import Interactable from 'react-native-interactable'
+
+import {
+  TouchThroughWrapper,
+  TouchThroughView
+} from 'react-native-touch-through-view'
 
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import {
@@ -60,7 +68,7 @@ export default class Home extends Component<any, any> {
       onActionSelected: this._onActionSelected,
       leftIcon: false,
       rightIcon: false,
-      _scrollHeight: this.props.screenProps.modeInfo.height - StatusBar.currentHeight - 56
+      _scrollHeight: this.props.screenProps.modeInfo.height - (StatusBar.currentHeight || 0) - 56
     }
   }
 
@@ -193,6 +201,8 @@ export default class Home extends Component<any, any> {
     )
   }
 
+  _deltaY = new Animated.Value(0)
+
   render() {
     const { params } = this.props.navigation.state
     // console.log('GamePage.js rendered');
@@ -214,18 +224,61 @@ export default class Home extends Component<any, any> {
     }
     return source.titleInfo && this.state.leftIcon ? (
       <View style={{flex: 1}}>
-        <View
+        <Animated.View style={{
+          /* opacity: this._deltaY.interpolate({
+            inputRange: [-130, -50],
+            outputRange: [1, 0],
+            extrapolateRight: 'clamp'
+          }), */
+          backgroundColor: this._deltaY.interpolate({
+            inputRange: [-158, 0],
+            outputRange: [modeInfo.standardColor, 'transparent'],
+            extrapolateRight: 'clamp'
+          }),
+          zIndex: 10
+        }}>
+          <Ionicons.ToolbarAndroid
+            navIconName='md-arrow-back'
+            overflowIconName='md-more'
+            iconColor={modeInfo.isNightMode ? '#000' : '#fff'}
+            title={source.titleInfo.title}
+            style={{backgroundColor: modeInfo.standardColor}}
+            onIconClicked={() => this.props.navigation.goBack()}
+            titleColor={modeInfo.isNightMode ? '#000' : '#fff'}
+            actions={actions}
+            style={{backgroundColor: '#transparent'}}
+            onActionSelected={this.onActionSelected}
+          />
+        </Animated.View>
+        <Animated.View
           style={{
-            flex: 1,
-            backgroundColor: modeInfo.standardColor
+            height: limit + toolbarHeight + 1,
+            backgroundColor: modeInfo.standardColor,
+            marginTop: -toolbarHeight - 8,
+            transform: [{
+              translateY: this._deltaY.interpolate({
+                inputRange: [-158, -0],
+                outputRange: [-80, 0],
+                extrapolateRight: 'clamp'
+              })
+            }]
           }}>
           {source.titleInfo && this.renderHeader(source.titleInfo)}
-        </View>
-        <View
-          style={[styles.scrollView, { height: this.state._scrollHeight, backgroundColor: modeInfo.brighterLevelOne }]}
-          ref={this._setScrollView}>
-          {this.renderTabContainer()}
-        </View>
+        </Animated.View>
+        <Interactable.View
+          verticalOnly={true}
+          snapPoints={[{y: 0}, {y: -158}]}
+          boundaries={{top: -158, bottom: 0}}
+          animatedValueY={this._deltaY}>
+          <View
+            style={[styles.scrollView, {
+              height: this.state._scrollHeight,
+              backgroundColor: modeInfo.brighterLevelOne
+            }]}
+            ref={this._setScrollView}>
+            {this.renderTabContainer()}
+          </View>
+        </Interactable.View>
       </View>
     ) : <View style={{ flex: 1, backgroundColor: modeInfo.backgroundColor }}>
       <Ionicons.ToolbarAndroid

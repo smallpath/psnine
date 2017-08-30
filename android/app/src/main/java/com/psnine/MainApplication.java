@@ -4,6 +4,8 @@ import android.app.Application;
 
 import com.oblador.vectoricons.VectorIconsPackage;
 import com.facebook.react.ReactApplication;
+import com.rome2rio.android.reactnativetouchthroughview.TouchThroughViewPackage;
+import com.wix.interactable.Interactable;
 import com.reactnative.photoview.PhotoViewPackage;
 import com.image.zoom.ReactImageZoom;
 import com.cboy.rn.splashscreen.SplashScreenReactPackage;
@@ -36,6 +38,8 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new TouchThroughViewPackage(),
+            new Interactable(),
             new PhotoViewPackage(),
             new ReactImageZoom(),
             new SplashScreenReactPackage(),
