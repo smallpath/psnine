@@ -61,7 +61,7 @@ const Tab = TabNavigator(container, {
   tabBarComponent: props => {
     const { modeInfo } = props.screenProps
     return (
-      <TouchThroughWrapper style={{elevation: 0, height: 40, minHeight: 40, maxHeight: 40}}>
+      // <TouchThroughWrapper style={{elevation: 0, height: 40, minHeight: 40, maxHeight: 40}}>
         <DefaultTabBar
           {...props}
           activeTintColor={modeInfo.accentColor}
@@ -74,7 +74,7 @@ const Tab = TabNavigator(container, {
             backgroundColor: modeInfo.backgroundColor
           }}
         />
-      </TouchThroughWrapper>
+      // </TouchThroughWrapper>
     )
   },
   lazy: true,

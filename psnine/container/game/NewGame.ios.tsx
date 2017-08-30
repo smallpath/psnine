@@ -250,26 +250,27 @@ export default class Home extends Component<any, any> {
             onActionSelected={this.onActionSelected}
           />
         </Animated.View>
-        <Animated.View
-          style={{
-            height: limit + toolbarHeight + 1,
-            backgroundColor: modeInfo.standardColor,
-            marginTop: -toolbarHeight - 8,
-            transform: [{
-              translateY: this._deltaY.interpolate({
-                inputRange: [-158, -0],
-                outputRange: [-80, 0],
-                extrapolateRight: 'clamp'
-              })
-            }]
-          }}>
-          {source.titleInfo && this.renderHeader(source.titleInfo)}
-        </Animated.View>
         <Interactable.View
           verticalOnly={true}
           snapPoints={[{y: 0}, {y: -158}]}
           boundaries={{top: -158, bottom: 0}}
           animatedValueY={this._deltaY}>
+        <Animated.View
+          style={{
+            height: limit + toolbarHeight + 1,
+            backgroundColor: modeInfo.standardColor,
+            marginTop: -toolbarHeight - 8
+            /* transform: [{
+              translateY: this._deltaY.interpolate({
+                inputRange: [-158, -0],
+                outputRange: [-80, 0],
+                extrapolateRight: 'clamp'
+              })
+            }] */
+          }}>
+          {source.titleInfo && this.renderHeader(source.titleInfo)}
+        </Animated.View>
+
           <View
             style={[styles.scrollView, {
               height: this.state._scrollHeight,

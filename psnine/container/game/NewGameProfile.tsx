@@ -149,7 +149,6 @@ class GameTopic extends Component<any, any> {
         onStartShouldSetResponder={() => false}
         onMoveShouldSetResponder={() => false}
       >
-      <TouchThroughWrapper>
         <FlatList style={{
           flex: 1,
           backgroundColor: modeInfo.background
@@ -184,7 +183,6 @@ class GameTopic extends Component<any, any> {
             waitForInteractions: true
           }}
         />
-        </TouchThroughWrapper>
         {this.state.modalVisible && (
           <global.MyDialog modeInfo={modeInfo}
             modalVisible={this.state.modalVisible}

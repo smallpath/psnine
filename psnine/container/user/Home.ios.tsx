@@ -15,6 +15,7 @@ import {
 } from 'react-native'
 
 import { sync, updown, fav, upBase, block } from '../../dao/sync'
+import Interactable from 'react-native-interactable'
 
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import {
@@ -409,6 +410,8 @@ export default class Home extends Component<any, any> {
     {'title': '屏蔽', 'iconName': 'md-sync', 'show': 'never'}
   ]
 
+  _deltaY = new Animated.Value(0)
+
   render() {
     const { params } = this.props.navigation.state
     console.log('Home.js rendered')
@@ -417,15 +420,46 @@ export default class Home extends Component<any, any> {
 
     // console.log(JSON.stringify(profileToolbar))
     return source.playerInfo && this.state.leftIcon && !this.state.isLoading ? (
-      <View style={{flex: 1, backgroundColor: '#f00', height: 100}}>
-        <View
-          style={{
-            flex: 1,
-            backgroundColor: modeInfo.standardColor
-          }}>
-          {source.playerInfo && this.renderHeader(source.playerInfo)}
-        </View>
-        <View
+      <View style={{flex: 1}}>
+        <Animated.View style={{
+          /* opacity: this._deltaY.interpolate({
+            inputRange: [-130, -50],
+            outputRange: [1, 0],
+            extrapolateRight: 'clamp'
+          }), */
+          backgroundColor: this._deltaY.interpolate({
+            inputRange: [-358, 0],
+            outputRange: [modeInfo.standardColor, 'transparent'],
+            extrapolateRight: 'clamp'
+          }),
+          zIndex: 10
+        }}>
+          <Ionicons.ToolbarAndroid
+            navIconName='md-arrow-back'
+            overflowIconName='md-more'
+            iconColor={modeInfo.isNightMode ? '#000' : '#fff'}
+            title={`${params.title}`}
+            titleColor={modeInfo.isNightMode ? '#000' : '#fff'}
+            actions={this.toolbar}
+            onIconClicked={this.onIconClicked}
+            style={{backgroundColor: 'transparent' }}
+            onActionSelected={this._onActionSelected}
+          />
+        </Animated.View>
+        <Interactable.View
+          verticalOnly={true}
+          snapPoints={[{y: 0}, {y: -358}]}
+          boundaries={{top: -358, bottom: 0}}
+          animatedValueY={this._deltaY}>
+          <View
+            style={{
+              height: limit + toolbarHeight + 1,
+              backgroundColor: modeInfo.standardColor,
+              marginTop: -toolbarHeight - 8
+            }}>
+            {source.playerInfo && this.renderHeader(source.playerInfo)}
+          </View>
+          <View
             style={[styles.scrollView, { height: this.state._scrollHeight, backgroundColor: modeInfo.backgroundColor }]}
             ref={this._setScrollView}>
             {/*<NestedScrollViewAndroid>
@@ -433,6 +467,7 @@ export default class Home extends Component<any, any> {
             </NestedScrollViewAndroid>*/}
             {this.renderTabContainer(source.toolbarInfo)}
           </View>
+        </Interactable.View>
       </View>
     ) : <View style={{ flex: 1, backgroundColor: modeInfo.backgroundColor }}>
       <Ionicons.ToolbarAndroid
