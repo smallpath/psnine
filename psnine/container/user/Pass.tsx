@@ -9,6 +9,7 @@ import {
   TextInput,
   Linking,
   Animated,
+  Platform,
   Keyboard
 } from 'react-native'
 declare var global
@@ -416,7 +417,8 @@ const styles = StyleSheet.create({
   },
   textInput: {
     fontSize: 15,
-    minHeight: 40
+    minHeight: 40,
+    padding: Platform.OS === 'ios' ? 12 : 0
   },
   customView: {
     flex: -1,

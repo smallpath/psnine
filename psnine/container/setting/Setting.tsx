@@ -3,11 +3,14 @@ import {
   StyleSheet,
   Text,
   View,
-  TouchableNativeFeedback
+  TouchableNativeFeedback,
+  Platform
 } from 'react-native'
 
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import { standardColor, idColor, accentColor } from '../../constant/colorConfig'
+
+const isIOS = Platform.OS === 'ios'
 
 /* tslint:disable */
 const items = [
@@ -79,7 +82,8 @@ class Setting extends Component<any, any> {
             flex: 4,
             height: 80
           }}>
-            <Text style={[styles.themeName, { alignContent: 'stretch', textAlignVertical: 'center', flex: 1, color: modeInfo.titleTextColor }]}>
+            <Text style={[styles.themeName, { alignContent: 'stretch', textAlignVertical: 'center', 
+              flex: isIOS ? -1 : 1, color: modeInfo.titleTextColor }]}>
               {item.text}
             </Text>
           </View>

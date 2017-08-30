@@ -343,6 +343,17 @@ class Login extends Component<any, any> {
                 </View>
               </TouchableNativeFeedback>
             </View>
+            <View style={styles.submit}>
+              <TouchableNativeFeedback
+                onPress={() => {
+                  this.props.navigation.goBack()
+                }}
+              >
+                <View style={[styles.submitButton, { backgroundColor: undefined }]}>
+                  <Text style={[styles.textInput, { color: modeInfo.backgroundColor, padding: 12, color: modeInfo.accentColor }]}>返回</Text>
+                </View>
+              </TouchableNativeFeedback>
+            </View>
           </View>
 
         </Animated.View>
