@@ -259,14 +259,14 @@ export default class Home extends Component<any, any> {
           style={{
             height: limit + toolbarHeight + 1,
             backgroundColor: modeInfo.standardColor,
-            marginTop: -toolbarHeight - 8
-            /* transform: [{
+            marginTop: -toolbarHeight - 8,
+            transform: [{
               translateY: this._deltaY.interpolate({
                 inputRange: [-158, -0],
-                outputRange: [-80, 0],
+                outputRange: [79, 0],
                 extrapolateRight: 'clamp'
               })
-            }] */
+            }]
           }}>
           {source.titleInfo && this.renderHeader(source.titleInfo)}
         </Animated.View>

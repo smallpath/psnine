@@ -451,14 +451,21 @@ export default class Home extends Component<any, any> {
           snapPoints={[{y: 0}, {y: -358}]}
           boundaries={{top: -358, bottom: 0}}
           animatedValueY={this._deltaY}>
-          <View
+          <Animated.View
             style={{
               height: limit + toolbarHeight + 1,
               backgroundColor: modeInfo.standardColor,
-              marginTop: -toolbarHeight - 8
+              marginTop: -toolbarHeight - 8,
+              transform: [{
+                translateY: this._deltaY.interpolate({
+                  inputRange: [-358, -0],
+                  outputRange: [358 / 2, 0],
+                  extrapolateRight: 'clamp'
+                })
+              }]
             }}>
             {source.playerInfo && this.renderHeader(source.playerInfo)}
-          </View>
+          </Animated.View>
           <View
             style={[styles.scrollView, { height: this.state._scrollHeight, backgroundColor: modeInfo.backgroundColor }]}
             ref={this._setScrollView}>
