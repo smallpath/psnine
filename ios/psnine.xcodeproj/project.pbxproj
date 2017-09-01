@@ -1663,6 +1663,7 @@
 					"-ObjC",
 					"-lc++",
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = org.reactjs.native.me.smallpath.psnine;
 				PRODUCT_NAME = psnine;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
@@ -1686,6 +1687,7 @@
 					"-ObjC",
 					"-lc++",
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = org.reactjs.native.me.smallpath.psnine;
 				PRODUCT_NAME = psnine;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
