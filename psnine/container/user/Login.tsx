@@ -10,7 +10,8 @@ import {
   AsyncStorage,
   Linking,
   Animated,
-  Keyboard
+  Keyboard,
+  Platform
 } from 'react-native'
 
 import Ionicons from 'react-native-vector-icons/Ionicons'
@@ -343,7 +344,7 @@ class Login extends Component<any, any> {
                 </View>
               </TouchableNativeFeedback>
             </View>
-            <View style={styles.submit}>
+            {Platform.OS === 'ios' && <View style={styles.submit}>
               <TouchableNativeFeedback
                 onPress={() => {
                   this.props.navigation.goBack()
@@ -353,7 +354,7 @@ class Login extends Component<any, any> {
                   <Text style={[styles.textInput, { color: modeInfo.backgroundColor, padding: 12, color: modeInfo.accentColor }]}>返回</Text>
                 </View>
               </TouchableNativeFeedback>
-            </View>
+            </View> }
           </View>
 
         </Animated.View>
