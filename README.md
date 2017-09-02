@@ -1,7 +1,7 @@
 <img src="./android/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png">
 
 # Psnine
-Psnine第三方安卓客户端, 基于React Native、Redux, 支持安卓4.1及以上系统
+Psnine第三方安卓和iOS客户端, 基于React Native、Redux
 
 <a href="https://play.google.com/store/apps/details?id=com.psnine"><img src="https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png" width="175px">
 
@@ -17,8 +17,16 @@ Psnine第三方安卓客户端, 基于React Native、Redux, 支持安卓4.1及�
 <a href="art/3.gif"><img src="art/3.gif" width="32%"/></a>
 
 # Download
+
+## Android
 - [Google Play][play link]
 - [fir.im][fir link]
+
+## iOS
+- [x] 兼容iOS
+- [ ] 申请开发者账号
+  - 已申请，正在审核中
+- [ ] 上架
 
 # Changelog
 - [更新历史](./CHANGELOG.md)
@@ -29,19 +37,21 @@ Psnine第三方安卓客户端, 基于React Native、Redux, 支持安卓4.1及�
 # Todo
 - [ ] 重构 (1.0.0)
   - [ ] react-native-navigation
-  - [ ] react-native-interactable (IOS)
+  - [x] react-native-interactable (IOS)
   - [x] collapse-toolbar-layout (Android)
   - [x] coordinator-layout (Android)
   - [x] nested-scroll-view (Android)
   - [x] react-native-fs
   - [x] react-native-share
   - [x] react-native-snackbar
+  - [x] react-native-photo-view
   - [x] react-native-image-picker
   - [x] react-native-vector-icons
+  - [x] react-native-splash-screen
   - [x] react-native-linear-gradient
   - [x] react-native-google-analytics-bridge
-- [ ] 兼容 (1.0.0)
-  - [ ] IOS
+- [x] 兼容
+  - [x] IOS
   - [x] 安卓从5.0兼容至4.1
 
 
