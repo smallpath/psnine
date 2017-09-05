@@ -506,9 +506,9 @@ export default class NewTopic extends Component<any, any> {
                 autoCorrect={false}
                 multiline={true}
                 keyboardType='default'
-                returnKeyType='go'
+                returnKeyType={global.isIOS ? 'default' : 'go'}
+                blurOnSubmit={global.isIOS ? false : true}
                 returnKeyLabel='go'
-                blurOnSubmit={true}
                 ref={ref => this.content = ref}
                 onChange={({ nativeEvent }) => { this.setState({ content: nativeEvent.text }) }}
                 value={this.state.content}

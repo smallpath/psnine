@@ -390,17 +390,18 @@ export default class Reply extends Component<any, any> {
             </Picker>
             )
           }
-          <AnimatedKeyboardAvoidingView behavior={'padding'} style={[styles.contentView, {
+          <AnimatedKeyboardAvoidingView behavior={'padding'} keyboardVerticalOffset={-44} style={[styles.contentView, {
             flex: openVal.interpolate({ inputRange: [0, 1], outputRange: [0, 12] })
-          }]}>
+          }]}
+            >
             <TextInput placeholder='输入回复'
               autoCorrect={false}
               multiline={true}
               keyboardType='default'
-              returnKeyType='go'
+              returnKeyType={global.isIOS ? 'default' : 'go'}
+              blurOnSubmit={global.isIOS ? false : true}
               returnKeyLabel='go'
               onSelectionChange={this.onSelectionChange}
-              blurOnSubmit={true}
               numberOfLines={100}
               ref={ref => this.content = ref}
               onChange={({ nativeEvent }) => { this.setState({ content: nativeEvent.text }) }}

@@ -358,15 +358,15 @@ export default class NewTopic extends Component<any, any> {
           </View>
           <AnimatedKeyboardAvoidingView behavior={'padding'} style={[styles.contentView, {
             flex: openVal.interpolate({ inputRange: [0, 1], outputRange: [0, 12] })
-          }]}>
+          }]} keyboardVerticalOffset={global.isIOS ? -44 : 0}>
             <TextInput placeholder='简单介绍一下你的房间吧，最多只能写500字哦'
               autoCorrect={false}
               multiline={true}
               keyboardType='default'
-              returnKeyType='go'
+              returnKeyType={global.isIOS ? 'default' : 'go'}
+              blurOnSubmit={global.isIOS ? false : true}
               returnKeyLabel='go'
               onSelectionChange={this.onSelectionChange}
-              blurOnSubmit={true}
               numberOfLines={100}
               ref={ref => this.content = ref}
               onChange={({ nativeEvent }) => { this.setState({ content: nativeEvent.text }) }}

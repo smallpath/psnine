@@ -171,12 +171,15 @@ export default class Search extends Component<any, any> {
       >
         <Animated.View style={[styles.KeyboardAvoidingView, {
           height: searchHeight,
-          flexDirection: 'row'
+          flexDirection: 'row',
+          borderRadius: 4
         }]} >
 
           <Animated.View style={[styles.toolbar, animatedToolbarStyle, {
-              alignItems: 'center',
-              justifyContent: 'center'
+            alignItems: 'center',
+            justifyContent: 'center',
+            borderBottomLeftRadius: 4,
+            borderTopLeftRadius: 4
           }]}>
             <View style={{
               height: searchHeight,
@@ -192,7 +195,7 @@ export default class Search extends Component<any, any> {
                 <View style={{ width: searchHeight, height: searchHeight, borderRadius: 25, justifyContent: 'center', alignItems: 'center' }}>
                   {icon && <Image
                     source={icon.backIcon}
-                    style={{ width: 20, height: 20, alignSelf: 'center', alignContent: 'center'}}
+                    style={{ width: 15, height: 15, alignSelf: 'center', alignContent: 'center'}}
                   />}
                 </View>
               </TouchableNativeFeedback>
@@ -229,9 +232,11 @@ export default class Search extends Component<any, any> {
           </AnimatedKeyboardAvoidingView>
 
           <Animated.View style={[styles.toolbar, animatedToolbarStyle, {
-              alignItems: 'center',
-              justifyContent: 'center',
-              height: searchHeight
+            alignItems: 'center',
+            justifyContent: 'center',
+            height: searchHeight,
+            borderTopRightRadius: 4,
+            borderBottomRightRadius: 4
           }]}>
             <View style={{
               height: searchHeight,
@@ -248,7 +253,7 @@ export default class Search extends Component<any, any> {
                 <View style={{ width: searchHeight, height: searchHeight, borderRadius: 25, justifyContent: 'center', alignItems: 'center' }}>
                   {icon && <Image
                     source={icon.sendIcon}
-                    style={{ width: 20, height: 20, alignSelf: 'center', alignContent: 'center'}}
+                    style={{ width: 15, height: 15, alignSelf: 'center', alignContent: 'center'}}
                   />}
                 </View>
               </TouchableNativeFeedback>

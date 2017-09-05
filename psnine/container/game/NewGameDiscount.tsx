@@ -29,7 +29,8 @@ export default class NewGameGuide extends Component<any, any> {
       isRefreshing: false,
       isLoadingMore: false,
       modalVisible: false,
-      sliderValue: 1
+      sliderValue: 1,
+      scrollEnabled: true
     }
   }
 
@@ -48,6 +49,21 @@ export default class NewGameGuide extends Component<any, any> {
             list: data,
             isLoadingMore: false,
             isRefreshing: false
+          }, () => {
+            this.props.screenProps.setToolbar({
+              index: 5,
+              handler: () => {},
+              afterSnap: (scrollEnabled) => {
+                const refs = this.flatlist && this.flatlist._listRef && this.flatlist._listRef._scrollRef.getScrollResponder()
+                if (refs && refs.setNativeProps) {
+                  refs.setNativeProps({
+                    scrollEnabled
+                  })
+                } else {
+                  this.setState({ scrollEnabled })
+                }
+              }
+            })
           })
         })
       })
@@ -104,6 +120,8 @@ export default class NewGameGuide extends Component<any, any> {
           backgroundColor: modeInfo.background
         }}
           ref={flatlist => this.flatlist = flatlist}
+          scrollEnabled={this.state.scrollEnabled}
+          removeClippedSubviews={false}
           refreshControl={
             <RefreshControl
               refreshing={this.state.isRefreshing}

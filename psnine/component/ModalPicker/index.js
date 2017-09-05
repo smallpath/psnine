@@ -46,6 +46,12 @@ export default class PickerIOSItem extends React.Component<any, any> {
             textAlign: 'center',
             textAlignVertical: 'center'
           }}>{initValue}</Text>
+          <global.Icons style={{
+            position: 'absolute',
+            right: 8,
+            top: 0,
+            bottom: 0
+          }} name='md-arrow-dropdown' size={20} color={color} />
         </View>
       </TouchableOpacity>
     )

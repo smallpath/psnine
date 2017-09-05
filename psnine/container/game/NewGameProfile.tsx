@@ -33,7 +33,8 @@ class GameTopic extends Component<any, any> {
       isRefreshing: false,
       isLoadingMore: false,
       modalVisible: false,
-      sliderValue: 1
+      sliderValue: 1,
+      scrollEnabled: true
     }
   }
 
@@ -44,6 +45,20 @@ class GameTopic extends Component<any, any> {
 
   async componentWillMount() {
     // this.fetchMessages(params.URL, 'jump');
+    this.props.screenProps.setToolbar({
+      index: 0,
+      handler: () => {},
+      afterSnap: (scrollEnabled) => {
+        const refs = this.flatlist && this.flatlist._listRef && this.flatlist._listRef._scrollRef.getScrollResponder()
+        if (refs && refs.setNativeProps) {
+          refs.setNativeProps({
+            scrollEnabled
+          })
+        } else {
+          this.setState({ scrollEnabled })
+        }
+      }
+    })
   }
 
   fetchMessages = (url, type = 'down') => {
@@ -54,7 +69,6 @@ class GameTopic extends Component<any, any> {
         getGameNewTopicAPI(url).then(data => {
           let thisList: any = []
           const thisPage = parseInt((url.match(/\?page=(\d+)/) || [0, 1])[1], 10)
-          let cb = () => { }
           if (type === 'down') {
             thisList = this.state.list.concat(data.list)
             this.pageArr.push(thisPage)
@@ -79,7 +93,7 @@ class GameTopic extends Component<any, any> {
             currentPage: thisPage,
             isLoadingMore: false,
             isRefreshing: false
-          }, cb)
+          }, () => {})
         })
       })
     })
@@ -165,6 +179,8 @@ class GameTopic extends Component<any, any> {
           }
           ListFooterComponent={() => <FooterProgress isLoadingMore={this.state.isLoadingMore} modeInfo={modeInfo} />}
           data={data}
+          scrollEnabled={this.state.scrollEnabled}
+          removeClippedSubviews={false}
           keyExtractor={(item) => item.id}
           renderItem={this._renderItem}
           onEndReached={this._onEndReached}

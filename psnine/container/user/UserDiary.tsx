@@ -28,7 +28,8 @@ class UserBoard extends Component<any, any> {
       diary: [],
       isLoading: true,
       modalVisible: false,
-      sliderValue: 1
+      sliderValue: 1,
+      scrollEnabled: true
     }
   }
 
@@ -96,7 +97,17 @@ class UserBoard extends Component<any, any> {
                   toolbarActions: this.onActionSelected,
                   componentDidFocus: {
                     index: 2,
-                    handler: componentDidFocus
+                    handler: componentDidFocus,
+                    afterSnap: (scrollEnabled) => {
+                      const refs = this.flatlist && this.flatlist._listRef && this.flatlist._listRef.getScrollableNode()
+                      if (refs && refs.setNativeProps) {
+                        refs.setNativeProps({
+                          scrollEnabled
+                        })
+                      } else {
+                        this.setState({ scrollEnabled })
+                      }
+                    }
                   }
                 })
               })
@@ -139,6 +150,7 @@ class UserBoard extends Component<any, any> {
           flex: -1,
           backgroundColor: modeInfo.backgroundColor
         }}
+          scrollEnabled={this.state.scrollEnabled}
           refreshControl={
             <RefreshControl
               refreshing={this.state.isLoading}
@@ -153,6 +165,8 @@ class UserBoard extends Component<any, any> {
             return this.renderDiary(item)
           }}
           extraData={this.state}
+          removeClippedSubviews={false}
+          ref={(list) => this.flatlist = list}
           windowSize={999}
           renderScrollComponent={props => <global.NestedScrollView {...props}/>}
           disableVirtualization={true}

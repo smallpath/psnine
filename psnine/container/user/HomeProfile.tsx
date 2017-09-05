@@ -31,8 +31,29 @@ export default class Home extends Component<any, any> {
       openVal: new Animated.Value(0),
       modalVisible: false,
       modalOpenVal: new Animated.Value(0),
-      topicMarginTop: new Animated.Value(0)
+      topicMarginTop: new Animated.Value(0),
+      scrollEnabled: true
     }
+  }
+
+  flatlist: any
+  componentWillMount() {
+    this.props.screenProps.setToolbar({
+      componentDidFocus: {
+        index: 0,
+        handler: () => {},
+        afterSnap: (scrollEnabled) => {
+          const refs = this.flatlist && this.flatlist._listRef && this.flatlist._listRef._scrollRef.getScrollResponder()
+          if (refs && refs.setNativeProps) {
+            refs.setNativeProps({
+              scrollEnabled
+            })
+          } else {
+            this.setState({ scrollEnabled })
+          }
+        }
+      }
+    })
   }
 
   handleImageOnclick = (url) => this.props.navigation.navigate('ImageViewer', {
@@ -168,6 +189,8 @@ export default class Home extends Component<any, any> {
           backgroundColor: modeInfo.backgroundColor
         }}
           data={data}
+          ref={(list) => this.flatlist = list}
+          scrollEnabled={this.state.scrollEnabled}
           keyExtractor={(item, index) => item.href || index}
           renderItem={({ item, index }) => {
             return renderFunc(item, index)
@@ -177,6 +200,7 @@ export default class Home extends Component<any, any> {
           renderScrollComponent={props => <global.NestedScrollView {...props}/>}
           key={modeInfo.themeName}
           numColumns={diaryTable.length ? 1 : modeInfo.numColumns}
+          removeClippedSubviews={false}
           disableVirtualization={true}
           viewabilityConfig={{
             minimumViewTime: 3000,

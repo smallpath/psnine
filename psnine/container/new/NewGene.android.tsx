@@ -287,7 +287,7 @@ export default class NewTopic extends Component<any, any> {
         }]} >
           <AnimatedKeyboardAvoidingView behavior={'padding'} style={[styles.contentView, {
             flex: openVal.interpolate({ inputRange: [0, 1], outputRange: [0, 12] })
-          }]}>
+          }]} keyboardVerticalOffset={global.isIOS ? -44 : 0}>
             <TextInput placeholder='请说说你对这些图/音乐/视频/电影的感受和看法，不要超过600字哦'
               autoCorrect={false}
               multiline={true}

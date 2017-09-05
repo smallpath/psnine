@@ -37,7 +37,8 @@ class UserGame extends Component<any, any> {
       isRefreshing: true,
       isLoadingMore: false,
       modalVisible: false,
-      sliderValue: 1
+      sliderValue: 1,
+      scrollEnabled: true
     }
   }
 
@@ -105,7 +106,17 @@ class UserGame extends Component<any, any> {
                   toolbarActions: this.onActionSelected,
                   componentDidFocus: {
                     index: 5,
-                    handler: componentDidFocus
+                    handler: componentDidFocus,
+                    afterSnap: (scrollEnabled) => {
+                      const refs = this.flatlist && this.flatlist._listRef && this.flatlist._listRef.getScrollableNode()
+                      if (refs && refs.setNativeProps) {
+                        refs.setNativeProps({
+                          scrollEnabled
+                        })
+                      } else {
+                        this.setState({ scrollEnabled })
+                      }
+                    }
                   }
                 })
               })
@@ -190,8 +201,11 @@ class UserGame extends Component<any, any> {
               progressBackgroundColor={modeInfo.backgroundColor}
             />
           }
+          removeClippedSubviews={false}
           ListFooterComponent={() => <FooterProgress isLoadingMore={this.state.isLoadingMore} modeInfo={modeInfo}/>}
           data={this.state.list}
+          ref={(list) => this.flatlist = list}
+          scrollEnabled={this.state.scrollEnabled}
           keyExtractor={(item) => item.id}
           renderItem={this._renderItem}
           onEndReached={this._onEndReached}

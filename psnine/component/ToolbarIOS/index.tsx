@@ -61,7 +61,7 @@ export default class ToolbarIOS extends React.Component<any, any> {
   }
 
   render() {
-    const { children, navIconName, onIconClicked, iconColor: color, title, actions = [], subtitle, subtitleColor } = this.props
+    const { renderStatusBar, children, navIconName, onIconClicked, iconColor: color, title, actions = [], subtitle, subtitleColor } = this.props
     // const color = modeInfo.backgroundColor
     const style: any = StyleSheet.flatten(this.props.style)
     const shouldShow = actions.map((item, index) => (item.index = index, item)).filter(item => item.show !== 'never')
@@ -71,12 +71,12 @@ export default class ToolbarIOS extends React.Component<any, any> {
     if (!subtitle) { delete childrenStyle.position; delete childrenStyle.left; delete childrenStyle.top; childrenStyle.marginLeft = -12 }
     return (
       <View style={{
-        height: 44 + 20,
+        height: typeof renderStatusBar !== 'undefined' ? 44 : 44 + 20,
         backgroundColor: style.backgroundColor
       }}>
         <View style={{
           height: 44,
-          marginTop: 18,
+          marginTop: typeof renderStatusBar !== 'undefined'  ? 0 : 18,
           alignItems: 'center',
           flexDirection: 'row'
         }}>

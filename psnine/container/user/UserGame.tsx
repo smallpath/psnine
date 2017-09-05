@@ -39,7 +39,8 @@ class UserGame extends Component<any, any> {
       pf: 'all',
       ob: 'date',
       dlc: 'all',
-      text: ''
+      text: '',
+      scrollEnabled: true
     }
   }
 
@@ -110,7 +111,17 @@ class UserGame extends Component<any, any> {
                   toolbarActions: this.onActionSelected,
                   componentDidFocus: {
                     index: 1,
-                    handler: componentDidFocus
+                    handler: componentDidFocus,
+                    afterSnap: (scrollEnabled) => {
+                      const refs = this.flatlist && this.flatlist._listRef && this.flatlist._listRef.getScrollableNode()
+                      if (refs && refs.setNativeProps) {
+                        refs.setNativeProps({
+                          scrollEnabled
+                        })
+                      } else {
+                        this.setState({ scrollEnabled })
+                      }
+                    }
                   }
                 })
               })
@@ -195,6 +206,8 @@ class UserGame extends Component<any, any> {
           }
           ListFooterComponent={() => <FooterProgress isLoadingMore={this.state.isLoadingMore} modeInfo={modeInfo}/>}
           data={this.state.list}
+          scrollEnabled={this.state.scrollEnabled}
+          removeClippedSubviews={false}
           keyExtractor={(item) => item.href}
           renderItem={this._renderItem}
           onEndReached={this._onEndReached}

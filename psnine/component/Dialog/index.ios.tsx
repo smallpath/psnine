@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import {
   View,
   Dimensions,
-  TouchableNativeFeedback,
+  TouchableWithoutFeedback,
   Modal
 } from 'react-native'
 
@@ -30,7 +30,7 @@ class Dialog extends Component<Props> {
         visible={this.props.modalVisible}
         onRequestClose={onRequestClose}
       >
-        <TouchableNativeFeedback onPress={onDismiss}>
+        <TouchableWithoutFeedback onPress={onDismiss} onLongPress={onDismiss}>
           <View style={{
             flex: -1,
             position: 'absolute',
@@ -43,7 +43,7 @@ class Dialog extends Component<Props> {
           }}>
             {renderContent()}
           </View>
-        </TouchableNativeFeedback>
+        </TouchableWithoutFeedback>
       </Modal>
     )
   }

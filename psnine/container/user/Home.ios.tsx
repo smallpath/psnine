@@ -9,9 +9,7 @@ import {
   InteractionManager,
   ActivityIndicator,
   StatusBar,
-  Animated,
-  Keyboard,
-  ToolbarAndroid
+  Animated
 } from 'react-native'
 
 import { sync, updown, fav, upBase, block } from '../../dao/sync'
@@ -173,7 +171,8 @@ export default class Home extends Component<any, any> {
             height: 360,
             marginTop: 56
           }}>
-            <View style={{ flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center', flex: -1, padding: 5, marginTop: -10  }}>
+            <View style={{ marginTop: 4,
+              flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center', flex: -1, padding: 5, marginTop: -10  }}>
               <View style={{ justifyContent: 'center', alignItems: 'center', flex: 2, marginTop: 2  }}>
                 <Text style={{ flex: -1, color: infoColor, fontSize: 15, textAlign: 'center' }}>{rowData.description}</Text>
                 {
@@ -220,7 +219,7 @@ export default class Home extends Component<any, any> {
               <View borderRadius={20} style={{ marginTop: 10,
                 paddingHorizontal: 10, alignSelf: 'center', alignContent: 'center',
                 flexDirection: 'row', justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0,0,0,0.3)'  }}>
-                <Text style={{ height: 30, textAlignVertical: 'center', textAlign: 'center' }}>
+                <Text style={{ height: 30, textAlignVertical: 'center', textAlign: 'center', padding: 5}}>
                   <Text style={{ flex: 1, color: trophyColor1, marginVertical: 2, textAlign: 'center', fontSize: 15 }}>{rowData.platinum + ' '}</Text>
                   <Text style={{ flex: 1, color: trophyColor2, marginVertical: 2, textAlign: 'center', fontSize: 15 }}>{rowData.gold + ' '}</Text>
                   <Text style={{ flex: 1, color: trophyColor3, marginVertical: 2, textAlign: 'center', fontSize: 15 }}>{rowData.silver + ' '}</Text>
@@ -273,10 +272,14 @@ export default class Home extends Component<any, any> {
             onActionSelected: toolbarActions
           }
           if (componentDidFocus) {
-            const { index, handler } = componentDidFocus
+            const { index, handler, afterSnap } = componentDidFocus
             if (!this.state.afterEachHooks[index]) {
               obj.afterEachHooks = [...this.state.afterEachHooks]
               obj.afterEachHooks[index] = handler
+            }
+            if (afterSnap && !this.afterSnapHooks[index]) {
+              this.afterSnapHooks[index] = afterSnap
+              afterSnap(this.scrollEnable)
             }
           }
           {/*this.setState(obj)*/}
@@ -293,11 +296,16 @@ export default class Home extends Component<any, any> {
         navigation: this.props.navigation
       }} onNavigationStateChange={(prevRoute, nextRoute, action) => {
         if (prevRoute.index !== nextRoute.index && action.type === 'Navigation/NAVIGATE') {
-
+          this.currentTabIndex = nextRoute.index
+          const target = this.afterSnapHooks[this.currentTabIndex]
+          target && target(/* scrollEnable */ this.scrollEnable)
         }
       }}/>
     )
   }
+
+  afterSnapHooks = []
+  currentTabIndex = 0
 
  _onActionSelected = (index) => {
     const { params } = this.props.navigation.state
@@ -411,6 +419,12 @@ export default class Home extends Component<any, any> {
   ]
 
   _deltaY = new Animated.Value(0)
+  scrollEnable = false
+  onSnap = (event) => {
+    this.scrollEnable = event.nativeEvent.index === 1
+    const target = this.afterSnapHooks[this.currentTabIndex]
+    target && target(/* scrollEnable */ event.nativeEvent.index === 1)
+  }
 
   render() {
     const { params } = this.props.navigation.state
@@ -450,7 +464,8 @@ export default class Home extends Component<any, any> {
           verticalOnly={true}
           snapPoints={[{y: 0}, {y: -358}]}
           boundaries={{top: -358, bottom: 0}}
-          animatedValueY={this._deltaY}>
+          animatedValueY={this._deltaY}
+          onSnap={this.onSnap}>
           <Animated.View
             style={{
               height: limit + toolbarHeight + 1,

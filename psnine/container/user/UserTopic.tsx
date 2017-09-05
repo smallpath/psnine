@@ -35,7 +35,8 @@ class UserGame extends Component<any, any> {
       isRefreshing: true,
       isLoadingMore: false,
       modalVisible: false,
-      sliderValue: 1
+      sliderValue: 1,
+      scrollEnabled: true
     }
   }
 
@@ -107,7 +108,17 @@ class UserGame extends Component<any, any> {
                   toolbarActions: this.onActionSelected,
                   componentDidFocus: {
                     index: 4,
-                    handler: componentDidFocus
+                    handler: componentDidFocus,
+                    afterSnap: (scrollEnabled) => {
+                      const refs = this.flatlist && this.flatlist._listRef && this.flatlist._listRef.getScrollableNode()
+                      if (refs && refs.setNativeProps) {
+                        refs.setNativeProps({
+                          scrollEnabled
+                        })
+                      } else {
+                        this.setState({ scrollEnabled })
+                      }
+                    }
                   }
                 })
               })
@@ -198,6 +209,7 @@ class UserGame extends Component<any, any> {
           ListFooterComponent={() => <FooterProgress isLoadingMore={this.state.isLoadingMore} modeInfo={modeInfo}/>}
           data={this.state.list}
           keyExtractor={(item) => item.id}
+          scrollEnabled={this.state.scrollEnabled}
           renderItem={this._renderItem}
           onEndReached={this._onEndReached}
           onEndReachedThreshold={0.5}
@@ -205,6 +217,8 @@ class UserGame extends Component<any, any> {
           windowSize={21}
           updateCellsBatchingPeriod={1}
           initialNumToRender={42}
+          ref={(list) => this.flatlist = list}
+          removeClippedSubviews={false}
           maxToRenderPerBatch={8}
           disableVirtualization={false}
           key={modeInfo.themeName}

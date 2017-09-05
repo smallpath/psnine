@@ -196,11 +196,30 @@ export default class Home extends Component<any, any> {
         baseUrl: params.URL.replace(/\?.*?$/, ''),
         list: this.state.data.list,
         gameTable: this.state.data.gameTable,
-        navigation: this.props.navigation
+        navigation: this.props.navigation,
+        setToolbar: ({ index, afterSnap }) => {
+          if (afterSnap && !this.afterSnapHooks[index]) {
+            this.afterSnapHooks[index] = afterSnap
+            afterSnap(this.scrollEnable)
+          }
+        }
+      }}  onNavigationStateChange={(prevRoute, nextRoute, action) => {
+        if (prevRoute.index !== nextRoute.index && action.type === 'Navigation/NAVIGATE') {
+          this.currentTabIndex = nextRoute.index
+          const target = this.afterSnapHooks[this.currentTabIndex]
+          target && target(/* scrollEnable */ this.scrollEnable)
+        }
       }}/>
     )
   }
-
+  onSnap = (event) => {
+    this.scrollEnable = event.nativeEvent.index === 1
+    const target = this.afterSnapHooks[this.currentTabIndex]
+    target && target(/* scrollEnable */ event.nativeEvent.index === 1)
+  }
+  currentTabIndex = 0
+  afterSnapHooks = []
+  scrollEnable = false
   _deltaY = new Animated.Value(0)
 
   render() {
@@ -254,7 +273,8 @@ export default class Home extends Component<any, any> {
           verticalOnly={true}
           snapPoints={[{y: 0}, {y: -158}]}
           boundaries={{top: -158, bottom: 0}}
-          animatedValueY={this._deltaY}>
+          animatedValueY={this._deltaY}
+          onSnap={this.onSnap}>
         <Animated.View
           style={{
             height: limit + toolbarHeight + 1,

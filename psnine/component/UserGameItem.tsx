@@ -69,12 +69,12 @@ export default class extends React.PureComponent<ExtendedProp> {
             ) || undefined}
             {rowData.syncTime && (<View style={{ flex: -1, flexDirection: 'row' }}>
                 <Text style={{ color: modeInfo.standardTextColor , fontSize: 12, marginLeft: 2 }}>{rowData.syncTime + ' '}</Text>
-                <Text selectable={false} style={{
+                <Text numberOfLines={1} selectable={false} style={{
                   flex: -1,
                   color: modeInfo.standardTextColor,
                   fontSize: 12
                 }}>{ rowData.allTime ? '总耗时 ' : ''}</Text>
-                <Text selectable={false} style={{
+                <Text numberOfLines={1} selectable={false} style={{
                   flex: -1,
                   fontSize: 12,
                   color: modeInfo.standardColor

@@ -285,15 +285,15 @@ export default class NewTopic extends Component<any, any> {
           </Picker>
           <KeyboardAvoidingView behavior={'padding'} style={[styles.contentView, {
             flex: 12
-          }]}>
+          }]} keyboardVerticalOffset={global.isIOS ? -44 : 0}>
             <TextInput placeholder='内容'
               autoCorrect={false}
               multiline={true}
               keyboardType='default'
-              returnKeyType='go'
+              returnKeyType={global.isIOS ? 'default' : 'go'}
+              blurOnSubmit={global.isIOS ? false : true}
               returnKeyLabel='go'
               onSelectionChange={this.onSelectionChange}
-              blurOnSubmit={true}
               numberOfLines={100}
               ref={ref => this.content = ref}
               onChange={({ nativeEvent }) => { this.setState({ content: nativeEvent.text }) }}

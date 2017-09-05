@@ -11,23 +11,24 @@ import {
   TextInput,
   Animated,
   StatusBar,
-  Picker
+  Picker,
+  Button
 } from 'react-native'
 
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import { standardColor, accentColor } from '../../constant/colorConfig'
 
-import { getNewQaAPI, getQaEditAPI } from '../../dao'
+import { getGeneEditAPI } from '../../dao'
 
 import { postCreateTopic } from '../../dao/post'
 
 import Emotion from '../../component/Emotion'
 
+declare var global
+
 let toolbarActions = [
 
 ]
-
-declare var global
 
 let AnimatedKeyboardAvoidingView = Animated.createAnimatedComponent(KeyboardAvoidingView)
 
@@ -47,24 +48,22 @@ export default class NewTopic extends Component<any, any> {
 
   constructor(props) {
     super(props)
-    const { params = {} } = this.props.navigation.state
+    const { params } = this.props.navigation.state
     // console.log(params)
     this.state = {
       icon: false,
-      title: '',
-      hb: '10',
-      psngameid: '',
-      node: '',
+
       content: '',
-      type: 'game',
-      data: {
-        hb: [],
-        game: [],
-        node: []
-      },
-      id: '',
-      key: 'addqa',
-      isLoading: true,
+      element: '',
+      photo: [],
+      video: '',
+      music: '',
+      muparam: '',
+      muid: '',
+      url: '',
+      id: params.id || '',
+      key: 'addgene',
+
       openVal: new Animated.Value(1),
       marginTop: new Animated.Value(0),
       toolbarOpenVal: new Animated.Value(0),
@@ -84,7 +83,7 @@ export default class NewTopic extends Component<any, any> {
     // });
   }
 
-  _pressButton = (callback) => {
+  _pressButton: any = (callback?) => {
     const { marginTop } = this.state
     let value = marginTop._value
     if (Math.abs(value) >= 50) {
@@ -105,7 +104,7 @@ export default class NewTopic extends Component<any, any> {
   keyboardDidHideListener: any = false
   keyboardDidShowListener: any = false
   removeListener: any = false
-  isToolbarShowing: any = false
+
 
   isKeyboardShowing = false
   _pressEmotion = () => {
@@ -127,31 +126,14 @@ export default class NewTopic extends Component<any, any> {
 
   async componentWillMount() {
     const { params } = this.props.navigation.state
-    InteractionManager.runAfterInteractions(() => {
-      getNewQaAPI().then(data => {
-        // console.log(data)
-        if ((params.URL || '').includes('?psngameid=')) {
-          data.game = data.game.concat({
-            text: params.URL.split('=').pop(),
-            value: params.URL.split('=').pop()
-          })
-        }
-        this.setState({
-          data,
-          isLoading: false
-        }, () => {
-          // console.log(params)
-          if (params.URL) {
-            getQaEditAPI(params.URL).then(data => {
-              if (params.URL.includes('?psngameid=')) {
-                global.toast('已设置对应游戏ID' + data.psngameid)
-              }
-              this.setState(data)
-            })
-          }
+
+    if (params.URL) {
+      InteractionManager.runAfterInteractions(() => {
+        getGeneEditAPI(params.URL).then(data => {
+          this.setState(data)
         })
       })
-    })
+    }
 
     this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () => {
       this.isKeyboardShowing = true
@@ -187,20 +169,38 @@ export default class NewTopic extends Component<any, any> {
 
   }
 
+  isToolbarShowing = false
+
   sendReply = () => {
-    const { title, hb, psngameid, node, content } = this.state
+    const {
+      content,
+      photo,
+      url,
+      key,
+      id,
+      element,
+      video,
+      music,
+      muparam,
+      muid
+    }  = this.state
     const result: any = {
-      title, hb, psngameid, node, content
+      content, photo: photo.join(',') || '', url,
+      key,
+      id,
+      element,
+      video,
+      music,
+      muparam,
+      muid
     }
-    result[this.state.key] = ''
-    if (this.state.id !== '') {
-      result.qaid = this.state.id
+    result[key] = ''
+    if (id !== '') {
+      result.geneid = id
     }
-    postCreateTopic(result, 'qa').then(res => {
-      // console.log(res)
+    postCreateTopic(result, 'gene').then(res => {
       return res
     }).then(res => res.text()).then(text => {
-      // console.log(text, text.length)
       if (text.includes('玩脱了')) {
         const arr = text.match(/\<title\>(.*?)\<\/title\>/)
         if (arr && arr[1]) {
@@ -251,7 +251,6 @@ export default class NewTopic extends Component<any, any> {
         inputRange: [0, 1],
         outputRange: [accentColor, modeInfo.backgroundColor]
       })
-      // elevation : openVal.interpolate({inputRange: [0 ,1], outputRange: [0, 8]})
     }
 
     let animatedToolbarStyle = {
@@ -273,7 +272,7 @@ export default class NewTopic extends Component<any, any> {
             navIconName='md-arrow-back'
             overflowIconName='md-more'
             iconColor={modeInfo.isNightMode ? '#000' : '#fff'}
-            title={params.URL ? '编辑问答' : '创建问答'}
+            title={params.URL ? '编辑机因' : '创建机因'}
             style={[styles.toolbar, { backgroundColor: modeInfo.standardColor }]}
             titleColor={modeInfo.isNightMode ? '#000' : '#fff'}
             subtitleColor={modeInfo.isNightMode ? '#000' : '#fff'}
@@ -286,89 +285,10 @@ export default class NewTopic extends Component<any, any> {
         <Animated.View style={[styles.KeyboardAvoidingView, {
           flex: openVal.interpolate({ inputRange: [0, 1], outputRange: [0, 10] })
         }]} >
-          <TextInput placeholder='标题'
-            autoCorrect={false}
-            multiline={false}
-            keyboardType='default'
-            returnKeyType='next'
-            returnKeyLabel='next'
-            blurOnSubmit={false}
-            numberOfLines={100}
-            ref={ref => this.title = ref}
-            onChange={({ nativeEvent }) => { this.setState({ title: nativeEvent.text }) }}
-            value={this.state.title}
-            style={[styles.textInput, {
-              color: modeInfo.titleTextColor,
-              textAlign: 'left',
-              height: 56,
-              borderBottomColor: modeInfo.brighterLevelOne,
-              borderBottomWidth: StyleSheet.hairlineWidth
-            }]}
-            placeholderTextColor={modeInfo.standardTextColor}
-            // underlineColorAndroid={accentColor}
-            underlineColorAndroid='rgba(0,0,0,0)'
-          />
-          <Picker style={{
-            flex: 1,
-            borderWidth: 1,
-            borderBottomColor: modeInfo.standardTextColor,
-            color: modeInfo.standardTextColor
-          }}
-            prompt='悬赏'
-            selectedValue={this.state.open}
-            onValueChange={this.onValueChange.bind(this, 'open')}>
-            {
-              this.state.isLoading &&
-                <Picker.Item label={'加载中'} value={''}/>
-               || this.state.data.hb.map((item, index) => <Picker.Item key={index} label={'悬赏: ' + item.text} value={item.value}/>)
-            }
-          </Picker>
-          <View style={{
-            flex: 1,
-            flexDirection: 'row'
-          }}>
-            <Picker style={{
-              flex: 1,
-              color: modeInfo.standardTextColor
-            }}
-              prompt='类型'
-              selectedValue={this.state.type}
-              onValueChange={this.onValueChange.bind(this, 'type')}>
-              <Picker.Item label={'游戏'} value={'game'}/>
-              <Picker.Item label={'节点'} value={'node'}/>
-            </Picker>
-            {
-              this.state.type === 'game' && (
-                <Picker style={{
-                  flex: 2,
-                  color: modeInfo.standardTextColor
-                }}
-                  prompt='选择游戏'
-                  selectedValue={this.state.psngameid}
-                  onValueChange={this.onValueChange.bind(this, 'psngameid')}>
-                  {
-                    this.state.data.game.map((item, index) => <Picker.Item key={index} label={item.text} value={item.value}/>)
-                  }
-                </Picker>
-              ) || (
-                <Picker style={{
-                  flex: 2,
-                  color: modeInfo.standardTextColor
-                }}
-                  prompt='选择节点'
-                  selectedValue={this.state.node}
-                  onValueChange={this.onValueChange.bind(this, 'node')}>
-                  {
-                    this.state.data.node.map((item, index) => <Picker.Item key={index} label={item.text} value={item.value}/>)
-                  }
-                </Picker>
-              )
-            }
-          </View>
           <AnimatedKeyboardAvoidingView behavior={'padding'} style={[styles.contentView, {
             flex: openVal.interpolate({ inputRange: [0, 1], outputRange: [0, 12] })
           }]} keyboardVerticalOffset={global.isIOS ? -44 : 0}>
-            <TextInput placeholder='内容'
+            <TextInput placeholder='请说说你对这些图/音乐/视频/电影的感受和看法，不要超过600字哦'
               autoCorrect={false}
               multiline={true}
               keyboardType='default'
@@ -384,15 +304,36 @@ export default class NewTopic extends Component<any, any> {
                 color: modeInfo.titleTextColor,
                 textAlign: 'left',
                 textAlignVertical: 'top',
-                flex: 1
+                flex: 20,
+                padding: global.isIOS ? 4 : 0,
+                margin: global.isIOS ? 4 : 0
               }]}
               placeholderTextColor={modeInfo.standardTextColor}
               // underlineColorAndroid={accentColor}
               underlineColorAndroid='rgba(0,0,0,0)'
             />
+            <Button title={'编辑元素(选填)'} onPress={() => {
+              Keyboard.dismiss()
+              this.setState({
+                modalVisible: true
+              })
+            }} color={modeInfo.standardColor}/>
+            <Button title={'点我选择图片(已选择' + this.state.photo.length + '张)'} onPress={() => {
+              Keyboard.dismiss()
+              this.props.navigation.navigate('UserPhoto', {
+                URL: 'http://psnine.com/my/photo?page=1',
+                type: 'multi',
+                selections: this.state.photo,
+                callbackAfterAll: (imageArr) => {
+                  this.setState({
+                    photo: imageArr
+                  })
+                }
+              })
+            }} color={modeInfo.standardColor}/>
             <Animated.View style={[{
               elevation: 4,
-              bottom: 0 // toolbarOpenVal.interpolate({ inputRange: [0, 1], outputRange: [0, 1] })
+              bottom: 0
             }, animatedToolbarStyle]}>
               <View style={{
                 flex: 1,
@@ -422,7 +363,7 @@ export default class NewTopic extends Component<any, any> {
                     <View style={{ width: 50, height: 50, marginLeft: 0, borderRadius: 25, justifyContent: 'center', alignItems: 'center' }}>
                       {icon && <Image
                         source={icon.photoIcon}
-                        style={{ width: 22, height: 22 }}
+                        style={{ width: 22, height: 22}}
                       />}
                     </View>
                   </TouchableNativeFeedback>
@@ -449,12 +390,149 @@ export default class NewTopic extends Component<any, any> {
                   <View style={{ width: 50, height: 50, marginLeft: 0, borderRadius: 25, justifyContent: 'center', alignItems: 'center' }}>
                     {icon && <Image
                       source={icon.sendIcon}
-                      style={{ width: 22, height: 22 }}
+                      style={{ width: 22, height: 22}}
                     />}
                   </View>
                 </TouchableNativeFeedback>
               </View>
             </Animated.View>
+            {
+              this.state.modalVisible && (
+                <global.MyDialog modeInfo={modeInfo}
+                  modalVisible={this.state.modalVisible}
+                  onDismiss={() => { this.setState({ modalVisible: false }); this.isValueChanged = false }}
+                  onRequestClose={() => { this.setState({ modalVisible: false }); this.isValueChanged = false }}
+                  renderContent={() => (
+                    <View style={{
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      backgroundColor: modeInfo.backgroundColor,
+                      paddingVertical: 10,
+                      paddingHorizontal: 10,
+                      elevation: 4,
+                      position: 'absolute',
+                      left: 20,
+                      right: 20,
+                      opacity: 1,
+                      flex: 0,
+                      borderRadius: 2
+                    }} >
+                      <View style={{flex: 1, flexDirection: 'row', height: 56}}>
+                      <TextInput placeholder='元素，只能由2~15个中文字母数字组成'
+                        autoCorrect={false}
+                        multiline={false}
+                        keyboardType='default'
+                        returnKeyType='next'
+                        returnKeyLabel='next'
+                        blurOnSubmit={false}
+                        numberOfLines={1}
+                        ref={ref => this.element = ref}
+                        onChange={({ nativeEvent }) => { this.setState({ element: nativeEvent.text }) }}
+                        value={this.state.element}
+                        style={[styles.textInput, {
+                          color: modeInfo.titleTextColor,
+                          textAlign: 'left',
+                          flex: 1,
+                          borderBottomColor: modeInfo.brighterLevelOne,
+                          borderBottomWidth: StyleSheet.hairlineWidth
+                        }]}
+                        placeholderTextColor={modeInfo.standardTextColor}
+                        // underlineColorAndroid={accentColor}
+                        underlineColorAndroid='rgba(0,0,0,0)'
+                      />
+                      </View>
+                      <View style={{flex: 1, flexDirection: 'row', height: 56}}>
+                      <TextInput placeholder='视频地址，目前仅支持youku和bilibili'
+                        autoCorrect={false}
+                        multiline={false}
+                        keyboardType='default'
+                        returnKeyType='next'
+                        returnKeyLabel='next'
+                        blurOnSubmit={false}
+                        numberOfLines={1}
+                        ref={ref => this.element = ref}
+                        onChange={({ nativeEvent }) => { this.setState({ video: nativeEvent.text }) }}
+                        value={this.state.video}
+                        style={[styles.textInput, {
+                          color: modeInfo.titleTextColor,
+                          textAlign: 'left',
+                          flex: 1,
+                          borderBottomColor: modeInfo.brighterLevelOne,
+                          borderBottomWidth: StyleSheet.hairlineWidth
+                        }]}
+                        placeholderTextColor={modeInfo.standardTextColor}
+                        // underlineColorAndroid={accentColor}
+                        underlineColorAndroid='rgba(0,0,0,0)'
+                      />
+                      </View>
+                      <View style={{flex: 1, flexDirection: 'row', alignItems: 'center', height: 56}}>
+                        <Picker style={{
+                          flex: 1,
+                          borderWidth: 1,
+                          borderBottomColor: modeInfo.standardTextColor,
+                          color: modeInfo.standardTextColor
+                        }}
+                          prompt='音乐类型'
+                          selectedValue={this.state.muparam}
+                          onValueChange={this.onValueChange.bind(this, 'muparam')}>
+                          <Picker.Item label='音乐类型' value='' />
+                          <Picker.Item label='单曲' value='mu' />
+                          <Picker.Item label='专辑' value='al' />
+                          <Picker.Item label='电台' value='dj' />
+                          <Picker.Item label='歌单' value='pl' />
+                        </Picker>
+                        <TextInput placeholder='网易音乐的纯数字ID'
+                          autoCorrect={false}
+                          multiline={false}
+                          keyboardType='default'
+                          returnKeyType='next'
+                          returnKeyLabel='next'
+                          blurOnSubmit={false}
+                          numberOfLines={1}
+                          ref={ref => this.muid = ref}
+                          onChange={({ nativeEvent }) => { this.setState({ muid: nativeEvent.text }) }}
+                          value={this.state.muid}
+                          style={[styles.textInput, {
+                            color: modeInfo.titleTextColor,
+                            textAlign: 'left',
+                            flex: 1.5,
+                            borderBottomColor: modeInfo.brighterLevelOne,
+                            borderBottomWidth: StyleSheet.hairlineWidth
+                          }]}
+                          placeholderTextColor={modeInfo.standardTextColor}
+                          // underlineColorAndroid={accentColor}
+                          underlineColorAndroid='rgba(0,0,0,0)'
+                        />
+                      </View>
+                      <View style={{flex: 1, flexDirection: 'row', height: 56}}>
+                        <TextInput placeholder='出处，选填，http开头哦'
+                          autoCorrect={false}
+                          multiline={false}
+                          keyboardType='default'
+                          returnKeyType='next'
+                          returnKeyLabel='next'
+                          blurOnSubmit={false}
+                          numberOfLines={1}
+                          ref={ref => this.url = ref}
+                          onChange={({ nativeEvent }) => { this.setState({ url: nativeEvent.text }) }}
+                          value={this.state.url}
+                          style={[styles.textInput, {
+                            color: modeInfo.titleTextColor,
+                            textAlign: 'left',
+                            height: 56,
+                            flex: 1,
+                            borderBottomColor: modeInfo.brighterLevelOne,
+                            borderBottomWidth: StyleSheet.hairlineWidth
+                          }]}
+                          placeholderTextColor={modeInfo.standardTextColor}
+                          // underlineColorAndroid={accentColor}
+                          underlineColorAndroid='rgba(0,0,0,0)'
+                        />
+                      </View>
+                    </View>
+                  )} />
+              )
+            }
             {/* 表情 */}
             <Animated.View style={{
               elevation: 4,

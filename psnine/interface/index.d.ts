@@ -15,6 +15,7 @@ declare module 'react-native' {
     useForeground?: boolean
   }
   interface FlatListProperties<ItemT> {
+    refs?: any
     windowSize?: number
     updateCellsBatchingPeriod?: number
     maxToRenderPerBatch?: number

@@ -227,11 +227,7 @@ class Toolbar extends Component<any, any> {
     const { app: appReducer, modeInfo, drawerWidth, position } = this.props
     // alert(appReducer.segmentedIndex)
     return (
-      <Animated.View style={{ flex: 1,
-          transform: [{
-            translateX: position.interpolate({inputRange: [0, 1], outputRange: [0, drawerWidth / 2]})
-          }]
-        }}>
+      <View style={{ flex: 1 }}>
         {/* <global.ToolbarIOS modeInfo={modeInfo}
           actions={toolbarActions[appReducer.segmentedIndex]}
           onActionSelected={this.onActionSelected}
@@ -270,7 +266,7 @@ class Toolbar extends Component<any, any> {
           </Icon.ToolbarAndroid>
         </View>
        { this._renderDrawerView() }
-      </Animated.View>
+      </View>
     )
   }
 }

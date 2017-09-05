@@ -3,7 +3,9 @@ import {
   DrawerLayoutAndroid,
   Dimensions,
   Animated,
-  Platform
+  Platform,
+  ScrollView,
+  View
 } from 'react-native'
 
 import LeftDrawer from './LeftDrawer'
@@ -57,7 +59,6 @@ class Psnine extends Component<any, any> {
         ref={DRAWER_REF}
         drawerWidth={drawerWidth}
         drawerPosition={DrawerLayoutAndroid.positions.Left}
-        onDrawerSlide={Platform.OS === 'ios' ? this.onDrawerSlide : undefined}
         renderNavigationView={() => (
           <LeftDrawer {...{
             closeDrawer: this.closeDrawer,

@@ -29,7 +29,8 @@ export default class NewGameGuide extends Component<any, any> {
       isRefreshing: false,
       isLoadingMore: false,
       modalVisible: false,
-      sliderValue: 1
+      sliderValue: 1,
+      scrollEnabled: true
     }
   }
 
@@ -47,6 +48,21 @@ export default class NewGameGuide extends Component<any, any> {
             list: data,
             isLoadingMore: false,
             isRefreshing: false
+          }, () => {
+            this.props.screenProps.setToolbar({
+              index: 3,
+              handler: () => {},
+              afterSnap: (scrollEnabled) => {
+                const refs = this.flatlist && this.flatlist._listRef && this.flatlist._listRef._scrollRef.getScrollResponder()
+                if (refs && refs.setNativeProps) {
+                  refs.setNativeProps({
+                    scrollEnabled
+                  })
+                } else {
+                  this.setState({ scrollEnabled })
+                }
+              }
+            })
           })
         })
       })
@@ -113,6 +129,8 @@ export default class NewGameGuide extends Component<any, any> {
             />
           }
           data={data}
+          scrollEnabled={this.state.scrollEnabled}
+          removeClippedSubviews={false}
           keyExtractor={(item, _) => item.id}
           renderItem={this._renderItem}
           onEndReachedThreshold={0.5}

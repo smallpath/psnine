@@ -87,7 +87,7 @@ const Tab = TabNavigator(container, {
     animationEnabled: false,
     tabStyle: {
       height: 40,
-      width: minWidth / 6
+      width: minWidth / 4
     },
     style: {
       elevation: 0,

@@ -28,7 +28,8 @@ class UserBoard extends Component<any, any> {
       commentList: [],
       isLoading: true,
       modalVisible: false,
-      sliderValue: 1
+      sliderValue: 1,
+      scrollEnabled: true
     }
   }
 
@@ -102,7 +103,17 @@ class UserBoard extends Component<any, any> {
                   toolbarActions: this.onActionSelected,
                   componentDidFocus: {
                     index: 3,
-                    handler: componentDidFocus
+                    handler: componentDidFocus,
+                    afterSnap: (scrollEnabled) => {
+                      const refs = this.flatlist && this.flatlist._listRef && this.flatlist._listRef.getScrollableNode()
+                      if (refs && refs.setNativeProps) {
+                        refs.setNativeProps({
+                          scrollEnabled
+                        })
+                      } else {
+                        this.setState({ scrollEnabled })
+                      }
+                    }
                   }
                 })
               })
@@ -172,11 +183,13 @@ class UserBoard extends Component<any, any> {
           backgroundColor: modeInfo.backgroundColor
         }}
           data={this.state.commentList}
+          scrollEnabled={this.state.scrollEnabled}
           keyExtractor={(item, index) => item.id || index}
           renderItem={({ item, index }) => {
             return this.renderComment(item, index)
           }}
           extraData={this.state}
+          ref={(list) => this.flatlist = list}
           windowSize={999}
           renderScrollComponent={props => <global.NestedScrollView {...props}/>}
           disableVirtualization={true}

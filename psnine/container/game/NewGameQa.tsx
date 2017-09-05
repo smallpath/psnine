@@ -26,7 +26,8 @@ export default class NewGameGuide extends Component<any, any> {
       isRefreshing: false,
       isLoadingMore: false,
       modalVisible: false,
-      sliderValue: 1
+      sliderValue: 1,
+      scrollEnabled: true
     }
   }
 
@@ -112,6 +113,8 @@ export default class NewGameGuide extends Component<any, any> {
           data={data}
           keyExtractor={(item) => item.id}
           renderItem={this._renderItem}
+          scrollEnabled={this.state.scrollEnabled}
+          removeClippedSubviews={false}
           onEndReachedThreshold={0.5}
           extraData={modeInfo}
           windowSize={21}

@@ -121,7 +121,7 @@ const Tabs = TabNavigator(routes, {
     swipeEnabled: true,
     tabStyle: {
       height: 40,
-      width: minWidth / 6
+      width: minWidth / 4
     },
     showIcon: false,
     style: {
