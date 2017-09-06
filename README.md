@@ -24,9 +24,11 @@ Psnine第三方安卓和iOS客户端, 基于React Native、Redux
 
 ## iOS
 - [x] 兼容iOS
-- [ ] 申请开发者账号
-  - 已申请，正在审核中
+- [x] 申请开发者账号
 - [ ] 上架
+  - 已提交，正在审核中
+  - 可试用beta测试版本
+    - 请发送iOS账号邮箱到smallpath2013@gmail.com
 
 # Changelog
 - [更新历史](./CHANGELOG.md)

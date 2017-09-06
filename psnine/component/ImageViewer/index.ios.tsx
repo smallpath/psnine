@@ -9,7 +9,7 @@ import {
 
 declare var global
 
-const psnineFolder = fs.ExternalStorageDirectoryPath || fs.DocumentDirectoryPath + '/psnine'
+const psnineFolder = fs.DocumentDirectoryPath + '/psnine'
 
 fs.stat(psnineFolder).then(data => {
   const isDirectory = data.isDirectory()
@@ -28,6 +28,7 @@ const onSave = (image) => {
   })
   return result.promise.then(() => {
     global.toast('保存成功')
+    console.log(image, psnineFolder + '/' + image.split('/').pop())
   }).catch(err => global.toast('保存失败: ' + err.toString()))
 }
 
@@ -40,7 +41,17 @@ export default class extends React.Component<any, any> {
     this.state = {
       translate: new Animated.Value(1)
     }
+    this.index = 0
+    const { images } = this.props.navigation.state.params
+    this.images = images
+    if (typeof images[0].url === 'object') {
+      this.index = images[0].url.index
+      this.images = images[0].url.imageUrls
+    }
   }
+
+  index = 0
+  images = []
 
   componentDidMount() {
     this.onTap(200)
@@ -61,11 +72,11 @@ export default class extends React.Component<any, any> {
   }
 
   onActionSelected = (index) => {
-    const { images, index: currentIndex } = this.state
+    const { images } = this
     switch (index) {
       case 0:
-        const url = images[currentIndex].url
-        return onSave(url).then((data) => {
+        const url = images[this.index].url
+        return onSave(url).then(() => {
           // console.log(data)
           global.Share.open({
             url: `file:///${psnineFolder + '/' + url.split('/').pop()}`,
@@ -73,11 +84,8 @@ export default class extends React.Component<any, any> {
             title: 'PSNINE'
           }).catch((err) => { err && console.log(err) })
         }).catch(errHandler)
-      case 0:
-        return onSave(images[currentIndex].url).then(() => {
-          // console.log(data)
-          global.toast.show('保存成功')
-        }).catch(errHandler)
+      case 1:
+        return onSave(images[this.index].url)
     }
   }
   isHidden = true
@@ -120,20 +128,16 @@ export default class extends React.Component<any, any> {
     )
   }
 
-  render() {
-    const images = this.props.navigation.state.params.images
-    if (images.length === 0) return null
+  onChange = (index) => {
+    this.index = index
+  }
 
-    if (typeof images[0].url === 'object') {
-      return <ImageViewer onClick={this.onTap}
-        renderFooter={this.renderFooter}
-        imageUrls={images[0].url.imageUrls} index={images[0].url.index} onSave={onSave}/>
-    }
+  render() {
     return (
       <ImageViewer
         onClick={this.onTap}
         renderFooter={this.renderFooter}
-        imageUrls={images} onSave={onSave} />
+        imageUrls={this.images} onChange={this.onChange} saveToLocalByLongPress={false} index={this.index} onSave={onSave} />
     )
   }
 }

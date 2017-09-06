@@ -69,7 +69,7 @@ export default class extends React.Component<any, any> {
             title: 'PSNINE'
           }).catch((err) => { err && console.log(err) })
         }).catch(errHandler)
-      case 0:
+      case 1:
         return onSave(images[currentIndex].url).then(() => {
           // console.log(data)
           ToastAndroid.show('保存成功', ToastAndroid.SHORT)

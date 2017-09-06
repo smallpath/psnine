@@ -105,14 +105,11 @@ class PickerIOS extends Component<any, any> {
       return prev
     }, {})
     const { borderWidth, ...targetStyle } = style
-    const head = prompt as any === '选择'
-    const text = head ? '' : prompt.replace('选择', '') + ':'
-    const previousValue = valueLabel[selectedValue] || ''
-    const initValue = previousValue.includes(text) ? previousValue : text + previousValue
+
     return (
       <ModalPicker
         data={data}
-        initValue={initValue}
+        initValue={valueLabel[selectedValue]}
         style={targetStyle}
         selectedStyle={targetStyle}
         onChange={(option) => {
