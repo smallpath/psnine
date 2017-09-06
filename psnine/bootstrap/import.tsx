@@ -70,17 +70,6 @@ Object.defineProperty(ReactNative, 'TouchableNativeFeedback', {
   }
 })
 
-// // 安卓能否引入？
-import {
-  TouchThroughView,
-  TouchThroughWrapper
-} from 'react-native-touch-through-view'
-
-Object.assign(global, {
-  TouchThroughView: Platform.OS === 'ios' ? TouchThroughView : View,
-  TouchThroughWrapper
-})
-
 import DrawerLayout from 'react-native-drawer-layout'
 
 class PickerIOS extends Component<any, any> {

@@ -16,11 +16,6 @@ import {
 
 import Interactable from 'react-native-interactable'
 
-import {
-  TouchThroughWrapper,
-  TouchThroughView
-} from 'react-native-touch-through-view'
-
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import {
   standardColor,

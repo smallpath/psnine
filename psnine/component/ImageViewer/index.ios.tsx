@@ -4,7 +4,8 @@ import fs from 'react-native-fs'
 import ImageViewer from 'react-native-image-zoom-viewer'
 import {
   Animated,
-  Easing
+  Easing,
+  CameraRoll
 } from 'react-native'
 
 declare var global
@@ -14,7 +15,7 @@ const psnineFolder = fs.DocumentDirectoryPath + '/psnine'
 fs.stat(psnineFolder).then(data => {
   const isDirectory = data.isDirectory()
   if (!isDirectory) {
-    fs.unlink(psnineFolder).catch(() => { }).then(() => fs.mkdir(psnineFolder))
+    fs.unlink(psnineFolder).catch(() => {}).then(() => fs.mkdir(psnineFolder))
   }
 }).catch(() => {
   fs.mkdir(psnineFolder).catch(err => console.log(err, 'ImageViewer:line#27'))
@@ -22,13 +23,10 @@ fs.stat(psnineFolder).then(data => {
 
 const onSave = (image) => {
   // console.log(image, psnineFolder + '/' + image.split('/').pop())
-  const result = fs.downloadFile({
-    fromUrl: image,
-    toFile: psnineFolder + '/' + image.split('/').pop()
-  })
-  return result.promise.then(() => {
+  const result = CameraRoll.saveToCameraRoll(image)
+  return result.then((url) => {
     global.toast('保存成功')
-    console.log(image, psnineFolder + '/' + image.split('/').pop())
+    return url
   }).catch(err => global.toast('保存失败: ' + err.toString()))
 }
 
@@ -76,10 +74,10 @@ export default class extends React.Component<any, any> {
     switch (index) {
       case 0:
         const url = images[this.index].url
-        return onSave(url).then(() => {
+        return onSave(url).then((realURL) => {
           // console.log(data)
           global.Share.open({
-            url: `file:///${psnineFolder + '/' + url.split('/').pop()}`,
+            url: realURL,
             message: '[PSNINE] ',
             title: 'PSNINE'
           }).catch((err) => { err && console.log(err) })
@@ -135,7 +133,7 @@ export default class extends React.Component<any, any> {
   render() {
     return (
       <ImageViewer
-        onClick={this.onTap}
+        onDoubleClick={this.onTap}
         renderFooter={this.renderFooter}
         imageUrls={this.images} onChange={this.onChange} saveToLocalByLongPress={false} index={this.index} onSave={onSave} />
     )

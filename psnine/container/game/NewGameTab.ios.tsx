@@ -6,9 +6,6 @@ import {
 import {
   TabNavigator
 } from 'react-navigation'
-import {
-  TouchThroughWrapper
-} from 'react-native-touch-through-view'
 
 let screen = Dimensions.get('screen')
 
@@ -61,20 +58,18 @@ const Tab = TabNavigator(container, {
   tabBarComponent: props => {
     const { modeInfo } = props.screenProps
     return (
-      // <TouchThroughWrapper style={{elevation: 0, height: 40, minHeight: 40, maxHeight: 40}}>
-        <DefaultTabBar
-          {...props}
-          activeTintColor={modeInfo.accentColor}
-          inactiveTintColor={modeInfo.titleTextColor}
-          indicatorStyle={{
-            backgroundColor: modeInfo.accentColor
-          }}
-          style={{
-            ...props.style,
-            backgroundColor: modeInfo.backgroundColor
-          }}
-        />
-      // </TouchThroughWrapper>
+      <DefaultTabBar
+        {...props}
+        activeTintColor={modeInfo.accentColor}
+        inactiveTintColor={modeInfo.titleTextColor}
+        indicatorStyle={{
+          backgroundColor: modeInfo.accentColor
+        }}
+        style={{
+          ...props.style,
+          backgroundColor: modeInfo.backgroundColor
+        }}
+      />
     )
   },
   lazy: true,
