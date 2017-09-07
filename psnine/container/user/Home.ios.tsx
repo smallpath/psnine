@@ -9,7 +9,8 @@ import {
   InteractionManager,
   ActivityIndicator,
   StatusBar,
-  Animated
+  Animated,
+  PanResponder
 } from 'react-native'
 
 import { sync, updown, fav, upBase, block } from '../../dao/sync'
@@ -105,6 +106,8 @@ export default class Home extends Component<any, any> {
     // })
     this.preFetch()
   }
+
+  PanResponder
 
   preFetch = async () => {
     const { params } = this.props.navigation.state
@@ -279,7 +282,7 @@ export default class Home extends Component<any, any> {
             }
             if (afterSnap && !this.afterSnapHooks[index]) {
               this.afterSnapHooks[index] = afterSnap
-              afterSnap(this.scrollEnable)
+              {/* afterSnap(this.scrollEnable) */}
             }
           }
           {/*this.setState(obj)*/}
@@ -298,7 +301,7 @@ export default class Home extends Component<any, any> {
         if (prevRoute.index !== nextRoute.index && action.type === 'Navigation/NAVIGATE') {
           this.currentTabIndex = nextRoute.index
           const target = this.afterSnapHooks[this.currentTabIndex]
-          target && target(/* scrollEnable */ this.scrollEnable)
+          {/* target && target( this.scrollEnable) */}
         }
       }}/>
     )
@@ -423,7 +426,7 @@ export default class Home extends Component<any, any> {
   onSnap = (event) => {
     this.scrollEnable = event.nativeEvent.index === 1
     const target = this.afterSnapHooks[this.currentTabIndex]
-    target && target(/* scrollEnable */ event.nativeEvent.index === 1)
+    // target && target(/* scrollEnable */ event.nativeEvent.index === 1)
   }
 
   render() {
@@ -489,6 +492,21 @@ export default class Home extends Component<any, any> {
             </NestedScrollViewAndroid>*/}
             {this.renderTabContainer(source.toolbarInfo)}
           </View>
+          <Animated.View style={{
+            height: this._deltaY.interpolate({
+              inputRange: [-358, -0],
+              outputRange: [0, this.state._scrollHeight - 40 + 1]
+            }),
+            backgroundColor: 'transparent',
+            position: 'absolute',
+            bottom: 0,
+            left: 0,
+            right: 0,
+            opacity: this._deltaY.interpolate({
+              inputRange: [-358, -0],
+              outputRange: [0, 1]
+            })
+          }}/>
         </Interactable.View>
       </View>
     ) : <View style={{ flex: 1, backgroundColor: modeInfo.backgroundColor }}>

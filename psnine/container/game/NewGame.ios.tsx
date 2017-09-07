@@ -195,14 +195,14 @@ export default class Home extends Component<any, any> {
         setToolbar: ({ index, afterSnap }) => {
           if (afterSnap && !this.afterSnapHooks[index]) {
             this.afterSnapHooks[index] = afterSnap
-            afterSnap(this.scrollEnable)
+            {/* afterSnap(this.scrollEnable) */}
           }
         }
       }}  onNavigationStateChange={(prevRoute, nextRoute, action) => {
         if (prevRoute.index !== nextRoute.index && action.type === 'Navigation/NAVIGATE') {
           this.currentTabIndex = nextRoute.index
           const target = this.afterSnapHooks[this.currentTabIndex]
-          target && target(/* scrollEnable */ this.scrollEnable)
+          {/* target && target( this.scrollEnable) */}
         }
       }}/>
     )
@@ -210,7 +210,7 @@ export default class Home extends Component<any, any> {
   onSnap = (event) => {
     this.scrollEnable = event.nativeEvent.index === 1
     const target = this.afterSnapHooks[this.currentTabIndex]
-    target && target(/* scrollEnable */ event.nativeEvent.index === 1)
+    // target && target(/* scrollEnable */ event.nativeEvent.index === 1)
   }
   currentTabIndex = 0
   afterSnapHooks = []
@@ -218,17 +218,10 @@ export default class Home extends Component<any, any> {
   _deltaY = new Animated.Value(0)
 
   render() {
-    const { params } = this.props.navigation.state
     // console.log('GamePage.js rendered');
     const { modeInfo } = this.props.screenProps
-    const { data: source, marginTop } = this.state
-    const data: any[] = []
-    const renderFuncArr: any[] = []
-    const shouldPushData = !this.state.isLoading
+    const { data: source } = this.state
 
-    this.viewBottomIndex = Math.max(data.length - 1, 0)
-    let { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window')
-    let ACTUAL_SCREEN_HEIGHT = SCREEN_HEIGHT - StatusBar.currentHeight + 1
     const actions = toolbarActions.slice()
     if (source && source.titleInfo && source.titleInfo.content && source.titleInfo.content.length) {
       const has = source.titleInfo.content.some(item => item.includes('href'))
@@ -294,6 +287,21 @@ export default class Home extends Component<any, any> {
             ref={this._setScrollView}>
             {this.renderTabContainer()}
           </View>
+          <Animated.View style={{
+            height: this._deltaY.interpolate({
+              inputRange: [-158, -0],
+              outputRange: [0, this.state._scrollHeight - 40 + 1]
+            }),
+            backgroundColor: 'transparent',
+            position: 'absolute',
+            bottom: 0,
+            left: 0,
+            right: 0,
+            opacity: this._deltaY.interpolate({
+              inputRange: [-158, -0],
+              outputRange: [0, 1]
+            })
+          }}/>
         </Interactable.View>
       </View>
     ) : <View style={{ flex: 1, backgroundColor: modeInfo.backgroundColor }}>
