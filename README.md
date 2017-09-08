@@ -3,7 +3,7 @@
 # Psnine
 Psnine第三方安卓和iOS客户端, 基于React Native、Redux
 
-<a href="https://play.google.com/store/apps/details?id=com.psnine"><img src="https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png" width="175px">
+<a href="https://play.google.com/store/apps/details?id=com.psnine"><img src="https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png" width="175px" align="center"></a><a href="https://itunes.apple.com/cn/app/psnine/id1279618123"><img src="art/store.svg" width="155px" align="center"></a>
 
 # Features
 - 支持PSNINE网站的所有功能
@@ -23,12 +23,7 @@ Psnine第三方安卓和iOS客户端, 基于React Native、Redux
 - [fir.im][fir link]
 
 ## iOS
-- [x] 兼容iOS
-- [x] 申请开发者账号
-- [ ] 上架
-  - 已提交，正在审核中
-  - 可试用beta测试版本
-    - 请发送iOS账号邮箱到smallpath2013@gmail.com
+- [Apple Store](https://itunes.apple.com/cn/app/psnine/id1279618123)
 
 # Changelog
 - [更新历史](./CHANGELOG.md)
