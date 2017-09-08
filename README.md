@@ -1,5 +1,3 @@
-<img src="./android/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png">
-
 # Psnine
 Psnine第三方安卓和iOS客户端, 基于React Native、Redux
 
