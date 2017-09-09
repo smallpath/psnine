@@ -5,9 +5,9 @@ Psnine第三方安卓和iOS客户端, 基于React Native、Redux
 
 # Features
 - 支持PSNINE网站的所有功能
-- 支持自动签到、消息快捷回复、回复中插入图片、拍摄图片后直接上传、非WIFI环境懒加载图片等功能
-- 支持网易云音乐和B站链接的客户端跳转
-- 支持主题的切换, 可以切换首页布局和19种主题颜色, 以及对应的强调色和夜间主题
+- 支持自动签到、消息快捷回复、图片快捷插入、拍摄图片直传、非WIFI环境懒加载图片等功能
+- 支持过滤DNS劫持广告
+- 支持主题的切换, 可以切换19种主题颜色, 以及对应的强调色和夜间主题
 
 # Screenshots
 <a href="art/1.gif"><img src="art/1.gif" width="32%"/></a>
@@ -46,9 +46,35 @@ Psnine第三方安卓和iOS客户端, 基于React Native、Redux
   - [x] react-native-linear-gradient
   - [x] react-native-google-analytics-bridge
 - [x] 兼容
-  - [x] IOS
+  - [x] iOS
   - [x] 安卓从5.0兼容至4.1
 
+# Development
+```
+git clone https://github.com/smallpath/psnine.git
+cd psnine
+npm install --registry=https://registry.npm.taobao.org
+```
+
+## Android
+> 前置: Android Studio, SDK Platform 23 ~ 26, SDK Build-Tools 23.0.1、23.0.3、25.0.0、25.0.2、26.0.0、26.0.1
+
+下载[psnine-patcher](https://github.com/smallpath/psnine-patcher), 并将其中所有内容全部拷贝至`node_modules`
+
+```
+react-native run-android // for development
+cd android && ./gradlew assembleRelease  // for release
+```
+请根据命令行中的提示信息下载对应的Android SDK和Build Tool版本
+
+
+## iOS
+> 前置: XCode
+
+```
+react-native run-iOS // for development
+react-native run-ios --configuration Release // for release
+```
 
 # Contribution
 如果发现了漏洞或者需要新功能, 请在本仓库新建issue, 也可联系邮箱`smallpath2013@gmail.com`
