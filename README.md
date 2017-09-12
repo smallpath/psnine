@@ -26,9 +26,6 @@ Psnine第三方安卓和iOS客户端, 基于React Native、Redux
 # Changelog
 - [更新历史](./CHANGELOG.md)
 
-# Statement
-该项目已取得Psnine官方的第三方应用授权
-
 # Todo
 - [ ] 重构 (1.0.0)
   - [ ] react-native-navigation
@@ -65,16 +62,17 @@ npm install --registry=https://registry.npm.taobao.org
 react-native run-android // for development
 cd android && ./gradlew assembleRelease  // for release
 ```
-请根据命令行中的提示信息下载对应的Android SDK和Build Tool版本
-
 
 ## iOS
 > 前置: XCode
 
 ```
-react-native run-iOS // for development
+react-native run-ios // for development
 react-native run-ios --configuration Release // for release
 ```
+
+# Statement
+该项目已取得Psnine官方的第三方应用授权
 
 # Contribution
 如果发现了漏洞或者需要新功能, 请在本仓库新建issue, 也可联系邮箱`smallpath2013@gmail.com`
