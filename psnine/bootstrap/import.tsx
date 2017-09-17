@@ -33,7 +33,8 @@ Object.assign(global, {
   MyDialog,
   Icons,
   Snackbar,
-  isIOS
+  isIOS,
+  OriginImage: Image
 })
 
 class ExtendedTouchableOpacity extends Component<any, any> {
