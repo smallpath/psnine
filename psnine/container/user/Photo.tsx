@@ -241,23 +241,10 @@ export default class Photo extends Component<any, any> {
         }
       },
       onLongPress: () => {
-        Alert.alert(
-          '提示',
-          '是否删除图片?',
-          [
-            {
-              text: '取消', style: 'cancel'
-            },
-            {
-              text: '确定', onPress: () => {
-                postDeleteImage({ delimg: rowData.delimg }).then(res => res.text()).then(() => {
-                  global.toast('删除成功')
-                  this.fetchMessages(params.URL, 'jump')
-                })
-              }
-            }
-          ]
-        )
+        postDeleteImage({ delimg: rowData.delimg }).then(res => res.text()).then(() => {
+          global.toast('删除成功')
+          this.fetchMessages(params.URL, 'jump')
+        })
       }
     }} />
   }
