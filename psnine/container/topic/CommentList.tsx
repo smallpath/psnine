@@ -173,7 +173,7 @@ class CommentList extends Component<any, any> {
           }
           ListFooterComponent={() => <FooterProgress isLoadingMore={this.state.isLoadingMore} modeInfo={modeInfo} />}
           data={this.state.list}
-          keyExtractor={(item) => item.id}
+          keyExtractor={(item, index) => `${item.psnid}::${item.content.length}::${index}`}
           renderItem={this._renderItem}
           onEndReached={this._onEndReached}
           onEndReachedThreshold={0.5}

@@ -9,8 +9,6 @@ export default function (html, type = 'gene') {
 
   const len = all.find('.page li').find('.disabled a').last().html()
 
-  const numPages = Math.ceil(parseInt(len) / 60)
-
   const commentList = []
   all.find('.post').each(function (i, elem) {
     const $this = $(this)
@@ -45,10 +43,12 @@ export default function (html, type = 'gene') {
     })
   })
 
+  const numPages = Math.ceil(parseInt(len) / (commentList.length || 60))
+
   return {
     len: parseInt(len),
     numPages,
-    numberPerPage: 60,
+    numberPerPage: commentList.length,
     commentList: commentList
   }
 }
