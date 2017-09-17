@@ -20,11 +20,11 @@ export default class PickerIOSItem extends React.Component<any, any> {
   }
 
   actionSheet = () => {
-    const { data, onChange } = this.props
+    const { title, data, onChange } = this.props
     ActionSheetIOS.showActionSheetWithOptions({
       options: data.map(item => item.label).concat('取消'),
       cancelButtonIndex: data.length,
-      title: '选择操作'
+      title
     }, (index) => {
       if (index !== data.length) {
         onChange(data[index])
@@ -33,8 +33,8 @@ export default class PickerIOSItem extends React.Component<any, any> {
   }
 
   render() {
-    const { data, initValue } = this.props
     // const color = modeInfo.backgroundColor
+    const { initValue } = this.props
     const style: any = StyleSheet.flatten(this.props.style)
     const { color } = style
     return (

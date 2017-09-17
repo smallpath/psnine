@@ -11,6 +11,7 @@ export interface ColorInfo {
   brighterLevelOne: string
   standardTextColor: string
   titleTextColor: string
+  hairColor: string
 }
 
 export interface ModeInfo extends ColorInfo {

@@ -14,14 +14,16 @@ const dayColor = {
   backgroundColor: '#fff',
   brighterLevelOne: '#f8f8f8',
   standardTextColor: '#757575',
-  titleTextColor: '#202020'
+  titleTextColor: '#202020',
+  hairColor: '#e8e8e8'
 }
 
 const nightColor = {
   backgroundColor: '#212121',
   brighterLevelOne: '#424242',
   standardTextColor: '#e0e0e0',
-  titleTextColor: '#fff'
+  titleTextColor: '#fff',
+  hairColor: '#424242'
 }
 
 const prevGetColor = palette.get.bind(palette)

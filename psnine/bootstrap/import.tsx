@@ -16,7 +16,6 @@ import ReactNative, {
   TouchableNativeFeedback,
   ScrollView,
   TouchableOpacity,
-  View,
   ProgressViewIOS
 } from 'react-native'
 
@@ -37,6 +36,16 @@ Object.assign(global, {
   isIOS
 })
 
+class ExtendedTouchableOpacity extends Component<any, any> {
+  constructor(props) {
+    super(props)
+  }
+
+  render() {
+    return <TouchableOpacity {...this.props} delayPressIn={140} />
+  }
+}
+
 class IOSActivityIndicator extends Component<any, any> {
   constructor(props) {
     super(props)
@@ -53,9 +62,9 @@ class IOSActivityIndicator extends Component<any, any> {
 let TouchableComponent
 
 if (!isIOS) {
-  TouchableComponent = Platform.Version <= 20 ? TouchableOpacity : TouchableNativeFeedback
+  TouchableComponent = Platform.Version <= 20 ? ExtendedTouchableOpacity : TouchableNativeFeedback
 } else {
-  TouchableComponent = TouchableOpacity
+  TouchableComponent = ExtendedTouchableOpacity
 }
 
 if (TouchableComponent !== TouchableNativeFeedback) {
@@ -97,6 +106,7 @@ class PickerIOS extends Component<any, any> {
 
     return (
       <ModalPicker
+        title={prompt}
         data={data}
         initValue={valueLabel[selectedValue]}
         style={targetStyle}

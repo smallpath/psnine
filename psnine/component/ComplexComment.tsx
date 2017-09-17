@@ -53,8 +53,8 @@ export default class ComplexComment extends React.PureComponent<ExtendedProp, Ex
             backgroundColor: modeInfo.brighterLevelOne,
             borderBottomWidth: StyleSheet.hairlineWidth,
             borderTopWidth: StyleSheet.hairlineWidth,
-            borderBottomColor: modeInfo.backgroundColor,
-            borderTopColor: modeInfo.backgroundColor,
+            borderBottomColor: modeInfo.hairColor,
+            borderTopColor: modeInfo.hairColor,
             padding: 5
         }}>
           {

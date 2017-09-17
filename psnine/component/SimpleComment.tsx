@@ -36,7 +36,7 @@ export default class extends React.PureComponent<ExtendedProp, FlatlistItemState
       <View key={rowData.id || index} style={{
         borderBottomWidth: StyleSheet.hairlineWidth,
         backgroundColor: modeInfo.backgroundColor,
-        borderBottomColor: modeInfo.brighterLevelOne
+        borderBottomColor: modeInfo.hairColor
       }}>
         <TouchableNativeFeedback
           onLongPress={() => {
