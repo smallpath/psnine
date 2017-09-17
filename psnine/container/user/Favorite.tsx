@@ -233,9 +233,6 @@ class Fav extends Component<any, any> {
           initialNumToRender={42}
           maxToRenderPerBatch={8}
           disableVirtualization={false}
-          getItemLayout={(_, index) => (
-            {length: this.ITEM_HEIGHT, offset: this.ITEM_HEIGHT * index, index}
-          )}
           viewabilityConfig={{
             minimumViewTime: 1,
             viewAreaCoveragePercentThreshold: 0,

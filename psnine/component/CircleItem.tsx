@@ -37,7 +37,6 @@ export default class CircleItem extends React.PureComponent<ExtendedProp, {}> {
         borderBottomWidth: shouldMargin ? 0 : StyleSheet.hairlineWidth,
         borderBottomColor: modeInfo.brighterLevelOne,
         elevation: shouldMargin ? 1 : 0,
-        height: ITEM_HEIGHT - (shouldMargin ? 7 : 0),
         alignItems: 'center',
         justifyContent: 'center'
       }}>

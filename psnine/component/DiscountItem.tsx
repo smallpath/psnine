@@ -42,7 +42,6 @@ export default class extends React.PureComponent<ExtendedProp, FlatlistItemState
         marginVertical: shouldMargin ? 3.5 : 0,
         backgroundColor: modeInfo.backgroundColor,
         elevation: shouldMargin ? 1 : 0,
-        /* height: ITEM_HEIGHT - (shouldMargin ? 7 : 0), */
         alignItems: 'center',
         justifyContent: 'space-between',
         padding: 5

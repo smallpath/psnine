@@ -44,7 +44,6 @@ export default class extends React.PureComponent<ExtendedProp> {
           borderBottomColor: modeInfo.brighterLevelOne,
           marginHorizontal: numColumns === 1 ? 0 : 3.5,
           padding: 0,
-          height: ITEM_HEIGHT,
           flex: numColumns === 1 ? -1 : 1,
           alignItems: 'center'
         }}>

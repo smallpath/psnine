@@ -217,9 +217,6 @@ class UserGame extends Component<any, any> {
           maxToRenderPerBatch={8}
           disableVirtualization={false}
           renderScrollComponent={props => <global.NestedScrollView {...props}/>}
-          getItemLayout={(_, index) => (
-            {length: this.ITEM_HEIGHT, offset: this.ITEM_HEIGHT * index, index}
-          )}
           viewabilityConfig={{
             minimumViewTime: 1,
             viewAreaCoveragePercentThreshold: 0,

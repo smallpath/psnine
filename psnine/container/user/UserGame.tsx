@@ -221,9 +221,6 @@ class UserGame extends Component<any, any> {
           key={modeInfo.themeName}
           renderScrollComponent={props => <global.NestedScrollView {...props}/>}
           numColumns={modeInfo.numColumns}
-          getItemLayout={(_, index) => (
-            {length: this.ITEM_HEIGHT, offset: this.ITEM_HEIGHT * index, index}
-          )}
           viewabilityConfig={{
             minimumViewTime: 1,
             viewAreaCoveragePercentThreshold: 0,

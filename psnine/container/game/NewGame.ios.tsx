@@ -133,7 +133,7 @@ export default class Home extends Component<any, any> {
       <ImageBackground
         source={{uri: rowData.backgroundImage}}
         style={{
-          height: limit + toolbarHeight + 1,
+          height: limit + toolbarHeight,
           width: SCREEN_WIDTH
         }}
         >
@@ -265,7 +265,7 @@ export default class Home extends Component<any, any> {
           onSnap={this.onSnap}>
         <Animated.View
           style={{
-            height: limit + toolbarHeight + 1,
+            height: limit + toolbarHeight,
             backgroundColor: modeInfo.standardColor,
             marginTop: -toolbarHeight - 8,
             transform: [{

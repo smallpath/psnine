@@ -83,8 +83,7 @@ export default class ComplexComment extends React.PureComponent<ExtendedProp, Fl
         marginHorizontal: numColumns === 1 ? 0 : 3.5,
         backgroundColor: modeInfo.backgroundColor,
         elevation: 1,
-        flex: numColumns === 1 ? -1 : 1,
-        height: ITEM_HEIGHT - 7
+        flex: numColumns === 1 ? -1 : 1
       }}>
           <Image
             source={{ uri: rowData.avatar }}

@@ -226,9 +226,6 @@ class Game extends Component<any, any> {
           numColumns={modeInfo.numColumns}
           renderScrollComponent={props => <global.NestedScrollView {...props}/>}
           disableVirtualization={false}
-          getItemLayout={(_, index) => (
-            {length: this.ITEM_HEIGHT, offset: this.ITEM_HEIGHT * index, index}
-          )}
           viewabilityConfig={{
             minimumViewTime: 1,
             viewAreaCoveragePercentThreshold: 0,

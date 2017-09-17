@@ -177,9 +177,6 @@ class Community extends Component<any, any> {
         key={modeInfo.themeName + communityType}
         renderScrollComponent={props => <global.NestedScrollView {...props} showsVerticalScrollIndicator={true}/>}
         numColumns={modeInfo.numColumns}
-        getItemLayout={communityType !== 'news' ? (_, index) => (
-          {length: this.ITEM_HEIGHT, offset: this.ITEM_HEIGHT * index, index}
-        ) : null}
         viewabilityConfig={{
           minimumViewTime: 1,
           viewAreaCoveragePercentThreshold: 0,

@@ -234,9 +234,6 @@ class Rank extends Component<any, any> {
           numColumns={modeInfo.numColumns}
           key={modeInfo.themeName}
           disableVirtualization={false}
-          getItemLayout={(_, index) => (
-            {length: this.ITEM_HEIGHT, offset: this.ITEM_HEIGHT * index, index}
-          )}
           viewabilityConfig={{
             minimumViewTime: 1,
             viewAreaCoveragePercentThreshold: 0,

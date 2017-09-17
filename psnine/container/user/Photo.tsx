@@ -154,12 +154,14 @@ export default class Photo extends Component<any, any> {
             let { uri = '', type = '', fileSize, fileName = '' } = response
             // console.log('??')
             if (fileSize > 1024 * 1024) {
-              return toast('PSNINE上传的图片文件最大为1M', ToastAndroid.SHORT)
+              toast('PSNINE上传的图片文件最大为1M, 上传可能会失败', ToastAndroid.SHORT)
+            } else {
+              toast('上传中', ToastAndroid.SHORT)
             }
             if (!type) {
               type = 'image/' + (fileName || '').split('.').pop()
             }
-            toast('上传中', ToastAndroid.SHORT)
+
             postImage({
               image: {
                 uri
@@ -312,9 +314,6 @@ export default class Photo extends Component<any, any> {
           initialNumToRender={42}
           maxToRenderPerBatch={8}
           disableVirtualization={false}
-          getItemLayout={(_, index) => (
-            {length: this.ITEM_HEIGHT, offset: this.ITEM_HEIGHT * index, index}
-          )}
           viewabilityConfig={{
             minimumViewTime: 1,
             viewAreaCoveragePercentThreshold: 0,

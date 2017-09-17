@@ -50,8 +50,7 @@ export default class PhotoItem extends React.PureComponent<ExtendedProp, Flatlis
           backgroundColor: isChecked ? modeInfo.accentColor : modeInfo.backgroundColor,
           alignSelf: 'flex-start',
           alignContent: 'flex-end',
-          width: ITEM_HEIGHT,
-          height: ITEM_HEIGHT
+          width: ITEM_HEIGHT
         }}>
           {
             this.state.modalVisible && (

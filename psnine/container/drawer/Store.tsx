@@ -48,7 +48,6 @@ class StoreItem extends React.PureComponent<any, any> {
           marginHorizontal: numColumns === 1 ? 0 : 3.5,
           elevation: 1,
           flex: numColumns === 1 ? -1 : 1,
-          height: ITEM_HEIGHT - 7,
           justifyContent: 'center', alignItems: 'center'
         }}>
           <View style={{
@@ -313,9 +312,6 @@ class Store extends Component<any, any> {
           initialNumToRender={42}
           maxToRenderPerBatch={8}
           disableVirtualization={false}
-          getItemLayout={(_, index) => (
-            {length: this.ITEM_HEIGHT, offset: this.ITEM_HEIGHT * index, index}
-          )}
           viewabilityConfig={{
             minimumViewTime: 1,
             viewAreaCoveragePercentThreshold: 0,
