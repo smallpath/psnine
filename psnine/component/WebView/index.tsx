@@ -42,7 +42,6 @@ class Deal extends Component<any, any> {
   webview
   onNavigationStateChange = (navState) => {
     const { url, navigationType } = navState
-    console.log(navState, '===>')
     if (url.includes('//psnine.com/dd/') && navigationType !== 'other') {
       this.webview && this.webview.stopLoading()
       Linking.openURL('p9://' + url.split('//').pop()).catch(err => {

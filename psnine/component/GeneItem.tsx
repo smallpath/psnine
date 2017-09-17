@@ -168,7 +168,7 @@ const styles = StyleSheet.create({
     height: 50
   },
   geneImage: {
-    margin: 3,
+    margin: StyleSheet.hairlineWidth,
     width: 100,
     height: 100
   }
