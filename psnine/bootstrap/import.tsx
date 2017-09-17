@@ -19,7 +19,7 @@ import ReactNative, {
   ProgressViewIOS
 } from 'react-native'
 
-const { ActivityIndicator } = ReactNative
+const { ActivityIndicator, Image } = ReactNative
 
 const isIOS = Platform.OS === 'ios'
 
@@ -118,7 +118,7 @@ class PickerIOS extends Component<any, any> {
   }
 }
 
-PickerIOS.Item = class extends Component<any, any> {
+(PickerIOS as any).Item = class extends Component<any, any> {
   render() { return null }
 }
 
@@ -137,7 +137,22 @@ class ProgressBarIOS extends React.Component<any, any> {
   }
 }
 
+import { CachedImage } from 'react-native-cached-image'
 if (isIOS) {
+
+  class CachedImageWrapper extends Component<any, any> {
+    constructor(props) {
+      super(props)
+    }
+
+    renderImage = props => <Image ref={'cachedImage'} {...props}/>
+
+    render() {
+      return <CachedImage {...this.props} renderImage={this.renderImage}/>
+    }
+  }
+  for (const i in Image) CachedImageWrapper[i] = Image[i]
+
   Object.defineProperties(ReactNative, {
     'DrawerLayoutAndroid': {
       get() {
@@ -162,6 +177,11 @@ if (isIOS) {
     'ProgressBarAndroid': {
       get() {
         return ProgressBarIOS
+      }
+    },
+    'Image': {
+      get() {
+        return CachedImageWrapper
       }
     }
   })
