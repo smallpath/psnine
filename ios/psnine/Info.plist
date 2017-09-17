@@ -20,6 +20,19 @@
 	<string>0.8.8</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
+			<string>p9</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>p9</string>
+			</array>
+		</dict>
+	</array>
 	<key>CFBundleVersion</key>
 	<string>583</string>
 	<key>LSRequiresIPhoneOS</key>

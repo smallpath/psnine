@@ -129,7 +129,9 @@ class HtmlView extends Component<IProps, State> {
     return (
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', padding: 5, alignSelf: 'center', alignContent: 'center'  }}>
         <Button color={this.props.modeInfo.accentColor} title={url.includes('psnine.com/huodong') ? '打开活动页面' : resolved.title} onPress={() => {
-          return url.includes('psnine.com/huodong') ? this.setState({ modalVisible: true }) : this.props.linkPressHandler(url)
+          return url.includes('psnine.com/huodong')
+            ? Linking.openURL('p9://psnine.com/WebView/NEED_DECODE_' + encodeURIComponent(url))
+            : this.props.linkPressHandler(url)
         }}></Button>
         {this.state.modalVisible && (
           <global.MyDialog modeInfo={this.props.modeInfo}
@@ -167,7 +169,15 @@ class HtmlView extends Component<IProps, State> {
                   style={{ flex: 1, padding: 0, width: width, height: this.state.height }}
                   injectedJavaScript={'<script>window.location.hash = 1;document.title = document.height;console.log("fuckyou")</script>'}
                   javaScriptEnabled={true}
-                  onNavigationStateChange={(navState: any) => {
+                  onNavigationStateChange={async (navState: any) => {
+                    const { url } = navState
+                    if (url.includes('//psnine.com/dd/')) {
+                      this.webview && this.webview.stopLoading()
+                      Linking.openURL('p9://' + url.split('//').pop()).catch(err => {
+                        console.log(err)
+                      })
+                      return false
+                    }
                     this.setState({
                       canGoBack: navState.canGoBack,
                       title: navState.title

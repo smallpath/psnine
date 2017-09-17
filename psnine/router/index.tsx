@@ -292,7 +292,8 @@ const Navigator = StackNavigator({
     navigationOptions: enableGesture
   },
   WebView: {
-    screen: WebView
+    screen: WebView,
+    path: 'WebView/:URL'
   },
   ImageViewer: {
     screen: ImageViewer
