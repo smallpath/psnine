@@ -40,17 +40,10 @@ class Dialog extends Component<Props> {
             alignItems: 'center',
             backgroundColor: 'rgba(1, 1, 1, 0.1)',
             opacity: this.props.backgroundOpacity || 1
-          }}/>
-        </TouchableWithoutFeedback>
-        <View style={{
-          flex: -1,
-          justifyContent: 'center',
-          height: SCREEN_HEIGHT,
-          width: SCREEN_WIDTH,
-          alignItems: 'center'
-        }}>
+          }}>
           {renderContent()}
-        </View>
+          </View>
+        </TouchableWithoutFeedback>
       </Modal>
     )
   }

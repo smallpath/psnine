@@ -150,27 +150,14 @@ class ResizableImage extends Component<IProps, IState> {
               </View>
             ) || undefined}
           {
-            this.state.isLoading && this.state.shouldLoad &&
-            <ActivityIndicator
-              animating={true}
-              style={{
-                justifyContent: 'center',
-                alignItems: 'center',
-                marginBottom: 4,
-                height: source.height,
-                width: source.width
-              }}
-              color={modeInfo.accentColor} /> || undefined
-          }
-          {
-            !this.state.isLoading && this.state.shouldLoad && this.state.hasError && (
+            this.state.shouldLoad && this.state.hasError && (
               <View style={{flex: 1, backgroundColor: modeInfo.brighterLevelOne, alignItems: 'center', justifyContent: 'center' }}>
                 <Text style={{color: modeInfo.standardTextColor, textAlign: 'center', textAlignVertical: 'center'}}>
                   {'加载失败: ' + this.state.hasError}
                 </Text>
               </View>) || undefined
           }
-          {!this.state.isLoading && this.state.shouldLoad && !this.state.hasError &&
+          {this.state.shouldLoad && !this.state.hasError &&
             <Image
               resizeMode={'contain'}
               resizeMethod={'resize'}
