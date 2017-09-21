@@ -315,15 +315,15 @@ export default class GamePage extends Component<any, any> {
           flexDirection: 'row',
           borderBottomWidth: StyleSheet.hairlineWidth,
           borderBottomColor: modeInfo.brighterLevelOne,
-          padding: 2
+          padding: 0
         }}>
-          <View pointerEvents='box-only' style={{ flex: -1, flexDirection: 'row', padding: 12 }}>
+          <View pointerEvents='box-only' style={{ flex: -1, flexDirection: 'row', padding: 12, backgroundColor: rowData.backgroundColor }}>
             <Image
               source={{ uri: rowData.avatar }}
               style={[styles.avatar, { width: 54, height: 54 }]}
             />
           </View>
-          <View style={{ justifyContent: 'space-around', flex: 3 }}>
+          <View style={{ justifyContent: 'space-around', flex: 3, padding: 4 }}>
             <Text
               ellipsizeMode={'tail'}
               style={{ flex: -1, color: modeInfo.titleTextColor }}>
@@ -349,7 +349,7 @@ export default class GamePage extends Component<any, any> {
               </View>
             )
           }
-          <View style={{ flex: 1, justifyContent: 'center', padding: 2 }}>
+          <View style={{ flex: 0.8, justifyContent: 'center', padding: 2 }}>
             <Text selectable={false}
               style={{
                 flex: -1,

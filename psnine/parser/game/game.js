@@ -1,5 +1,12 @@
 import parser from 'cheerio-without-node-native'
 
+const backgroundColorMapper = {
+  t1: '#d5d9e4',
+  t2: '#f6e5c8',
+  t3: '#dcdcdc',
+  t4: '#e4cdc1',
+}
+
 export default function (html) {
   const $ = parser.load(html)
   const all = $('.mt40 .main')
@@ -122,6 +129,7 @@ export default function (html) {
         const hasTranslate = !className
         const hasTip = className && className.length !== 0
         const tryTip = $this.find('p a').next().next().text()
+        const indexID = ($this.find('.h-p').parent().find('.r').text() || '').replace('#', '')
         const info = {
           id: (($this.find('p a').attr('href') || '-1').match(/trophy\/(\d+)/) || [0, -1])[1],
           avatar: $this.find('img').attr('src'),
@@ -132,7 +140,8 @@ export default function (html) {
           tip: tryTip ? tryTip : hasTip ? $this.find('p a').next().text() : '',
           rare: $this.find('td').last().text().replace('珍贵度', ''),
           translateText: $this.find('td p').next().next().text(),
-          indexID: ($this.find('.h-p').parent().find('.r').text() || '').replace('#', '')
+          indexID,
+          backgroundColor: backgroundColorMapper[$this.find('td').attr('class') || 't1'] || backgroundColorMapper['t1']
         }
         const time = $this.find('td em.lh180')
         if (time.attr('tips')) {

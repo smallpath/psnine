@@ -229,7 +229,7 @@ export const getRanksAPI = ({
   server = 'hk',
   cheat = '0',
   title
-}) => `${webHost}/psnid?page=${page}&ob=${sort}&server=${server}&cheat=${cheat}${title ? `&title=${title}` : '' }`
+}) => `${webHost}/psnid?page=${page}&ob=${sort}&region=${server}&cheat=${cheat}${title ? `&title=${title}` : '' }`
 
 export const getGamesAPI = ({
   page = 1, sort = 'newest', pf = 'all', dlc = 'all', title
