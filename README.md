@@ -52,11 +52,10 @@ git clone https://github.com/smallpath/psnine.git
 cd psnine
 npm install --registry=https://registry.npm.taobao.org
 ```
+下载 [psnine-patcher](https://github.com/smallpath/psnine-patcher) , 并将其中所有内容全部拷贝至`node_modules`
 
 ## Android
 > 前置: Android Studio, SDK Platform 23 ~ 26, SDK Build-Tools 23.0.1、23.0.3、25.0.0、25.0.2、26.0.0、26.0.1
-
-下载[psnine-patcher](https://github.com/smallpath/psnine-patcher), 并将其中所有内容全部拷贝至`node_modules`
 
 ```
 react-native run-android // for development
