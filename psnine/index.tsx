@@ -185,7 +185,7 @@ export default class Root extends React.Component<any, any> {
         secondaryColor: settingInfo.secondaryColor
       }, () => {
         SplashScreen.hide()
-        checkVersion().catch(() => {})
+        if (global.isIOS === false) checkVersion().catch(() => {})
       })
     })
   }

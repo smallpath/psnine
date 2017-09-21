@@ -19,6 +19,7 @@ const versionInfo = {
 const format = (str = '') => (str.replace(/\#/igm, '').replace(/\-/igm, '*').split('更新记录').pop() || '').trim()
 
 export default () => fetch(versionInfo.checkVersionURL).then(res => res.json()).then(data => {
+  if (global.isIOS) return Alert.alert('请前往App Store检查更新')
   let latestTag = (data.tag_name || versionInfo.version).replace('v', '')
   const isBigger = semver(versionInfo.version, latestTag) < 0
   // const isBigger = semver('0.6.9', '0.6.8') < 0
