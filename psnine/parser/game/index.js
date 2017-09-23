@@ -12,12 +12,12 @@ export default function (html) {
     const text = $this.text()
     const arr = text.split('\n').map(item => item.replace(/\t/g, '').trim()).filter(item => item.trim())
 
-    const title = $this.find('td p a').text()
+    const title = $this.find('td.title a').text()
     const matched = img.match(/\/(\d+)\./)
 
     const id = matched ? matched[1] : arr[1] + arr[2]
 
-    const startIndex = arr.some(item => item.includes('%')) ? -8 : -7
+    const startIndex = -8
     const regionArr = arr.slice(1, startIndex)
     const trophyArr = arr.slice(startIndex)
 
@@ -25,15 +25,15 @@ export default function (html) {
       title: title,
       avatar: img,
       id,
-      region: regionArr.join(''),
+      region: arr.slice(0, arr.length -2).pop(),
       platium: trophyArr[0],
       gold: trophyArr[1],
       selver: trophyArr[2],
       bronze: trophyArr[3],
-      platform: $this.find('td p span').text()
+      platform: arr.slice(0, arr.length -1).pop()
     }
-
     result.push(mock)
   })
+  // console.log(result)
   return result
 }

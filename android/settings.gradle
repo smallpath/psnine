@@ -1,4 +1,6 @@
 rootProject.name = 'Psnine'
+include ':react-native-fetch-blob'
+project(':react-native-fetch-blob').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-fetch-blob/android')
 include ':react-native-touch-through-view'
 project(':react-native-touch-through-view').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-touch-through-view/android')
 include ':react-native-interactable'

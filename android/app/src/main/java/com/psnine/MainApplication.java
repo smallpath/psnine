@@ -4,6 +4,7 @@ import android.app.Application;
 
 import com.oblador.vectoricons.VectorIconsPackage;
 import com.facebook.react.ReactApplication;
+import com.RNFetchBlob.RNFetchBlobPackage;
 import com.reactnative.photoview.PhotoViewPackage;
 import com.image.zoom.ReactImageZoom;
 import com.cboy.rn.splashscreen.SplashScreenReactPackage;
@@ -36,6 +37,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new RNFetchBlobPackage(),
             new PhotoViewPackage(),
             new ReactImageZoom(),
             new SplashScreenReactPackage(),

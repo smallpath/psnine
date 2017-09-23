@@ -61,7 +61,7 @@ export default class extends React.Component<any, any> {
     switch (index) {
       case 0:
         const url = images[currentIndex].url
-        return onSave(url).then((data) => {
+        return onSave(url).then(() => {
           // console.log(data)
           global.Share.open({
             url: `file:///${psnineFolder + '/' + url.split('/').pop()}`,
@@ -71,7 +71,6 @@ export default class extends React.Component<any, any> {
         }).catch(errHandler)
       case 1:
         return onSave(images[currentIndex].url).then(() => {
-          // console.log(data)
           ToastAndroid.show('保存成功', ToastAndroid.SHORT)
         }).catch(errHandler)
     }
