@@ -44,7 +44,7 @@ class GameTopic extends Component<any, any> {
             isLoadingMore: false,
             isRefreshing: false
           }, () => {
-            this.props.screenProps.setToolbar({
+            this.props.screenProps.setToolbar && this.props.screenProps.setToolbar({
               index: 1,
               handler: () => {},
               afterSnap: (scrollEnabled) => {

@@ -45,7 +45,7 @@ class GameTopic extends Component<any, any> {
 
   async componentWillMount() {
     // this.fetchMessages(params.URL, 'jump');
-    this.props.screenProps.setToolbar({
+    this.props.screenProps.setToolbar && this.props.screenProps.setToolbar({
       index: 0,
       handler: () => {},
       afterSnap: (scrollEnabled) => {

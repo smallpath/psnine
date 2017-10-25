@@ -66,14 +66,13 @@ export default class Home extends Component<any, any> {
       onActionSelected: this._onActionSelected,
       leftIcon: false,
       rightIcon: false,
-      _scrollHeight: this.props.screenProps.modeInfo.height - StatusBar.currentHeight - 56
+      _scrollHeight: this.props.screenProps.modeInfo.height - (/*(StatusBar.currentHeight)*/0 || 0 ) - 56
     }
   }
 
   componentWillReceiveProps(nextProps) {
     if (this.props.screenProps.modeInfo.width !== nextProps.screenProps.modeInfo.width) {
-      const { params } = this.props.navigation.state
-      this.props.navigation.goBack()
+      this.preFetch()
       // this.props.navigation.navigate('Home', params)
     }
   }
@@ -172,7 +171,8 @@ export default class Home extends Component<any, any> {
                 imagePaddingOffset={120 + 10}
                 shouldForceInline={true}
               />*/
-            ) : <Text key={index} style={{ fontSize: index === 0 ? 18 : 12}}>{item}</Text>
+            ) : <Text key={index} style={{ fontSize: index === 0 ? 18 : 12, textShadowRadius: 3,
+              textShadowColor: 'rgba(255,255,255,1)', textShadowOffset: { width: 1, height: 2 } }}>{item}</Text>
           })}
 
         </View>

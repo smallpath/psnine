@@ -76,13 +76,13 @@ export default class Home extends Component<any, any> {
       leftIcon: false,
       rightIcon: false,
       middleIcon: false,
-      _scrollHeight: this.props.screenProps.modeInfo.height - (StatusBar.currentHeight || 0) - 56 + 1
+      _scrollHeight: this.props.screenProps.modeInfo.height - (/*StatusBar.currentHeight*/ 0 || 0) - 56 + 1
     }
   }
 
   componentWillReceiveProps(nextProps) {
     if (this.props.screenProps.modeInfo.width !== nextProps.screenProps.modeInfo.width) {
-      this.props.navigation.goBack()
+      this.preFetch()
       // this.props.navigation.navigate('Home', params)
     }
   }
@@ -427,6 +427,7 @@ export default class Home extends Component<any, any> {
 
           <AppBarLayoutAndroid
             ref={this._setAppBarLayout}
+            fitsSystemWindows={false}
             style={styles.appbar} >
             <CollapsingToolbarLayoutAndroid
               collapsedTitleColor={modeInfo.backgroundColor}
@@ -459,7 +460,7 @@ export default class Home extends Component<any, any> {
                 titleColor={modeInfo.isNightMode ? '#000' : '#fff'}
                 actions={this.toolbar}
                 layoutParams={{
-                  height: 56, // required
+                  height: 56, // required,
                   collapseMode: CollapsingToolbarLayoutAndroid.CollapseMode.COLLAPSE_MODE_PIN // required
                 }}
                 onIconClicked={this.onIconClicked}

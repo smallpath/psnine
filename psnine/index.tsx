@@ -287,6 +287,15 @@ export default class Root extends React.Component<any, any> {
           const { routeName = 'Unknow' } = currentScreen
           tracker.trackScreenView(routeName)
         }
+        if (currentScreen.routeName === 'Home' || currentScreen.routeName === 'NewGame') {
+          StatusBar.setTranslucent(true)
+          StatusBar.setBackgroundColor('transparent')
+          modeInfo.isNightMode && StatusBar.setBarStyle('dark-content')
+        } else if (prevScreen.routeName === 'Home' || prevScreen.routeName === 'NewGame') {
+          StatusBar.setTranslucent(false)
+          StatusBar.setBackgroundColor(modeInfo.deepColor)
+          modeInfo.isNightMode && StatusBar.setBarStyle('light-content')
+        }
       }
     } : undefined
 

@@ -30,24 +30,6 @@ declare var global
 /* tslint:disable */
 const ListItems = [
   {
-    text: '个人主页',
-    iconName: 'md-home',
-    onPress: function () {
-      const { navigation, closeDrawer } = this.props
-      closeDrawer()
-
-      let URL = getHomeURL(this.state.psnid)
-      navigation.navigate('Home', {
-        URL,
-        title: this.state.psnid
-      })
-      // navigation.navigate('Home', {
-      //   URL: 'http://psnine.com/psnid/Summer_1_Breeze',
-      //   title: 'Summer_1_Breeze'
-      // });
-    }
-  },
-  {
     text: '我收藏的',
     iconName: 'md-star',
     onPress: function () {
