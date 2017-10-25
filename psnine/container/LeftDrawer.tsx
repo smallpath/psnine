@@ -454,7 +454,6 @@ export default class NavigationDrawer extends Component<any, any> {
                     <Text style={{ flex: -1, color: color, textAlign: 'center', fontSize: 12 }}>{userInfo.gold + ' '}</Text>
                     <Text style={{ flex: -1, color: color, textAlign: 'center', fontSize: 12 }}>{userInfo.silver + ' '}</Text>
                     <Text style={{ flex: -1, color: color, textAlign: 'center', fontSize: 12 }}>{userInfo.bronze + ' '}</Text>
-                    <Text style={{ flex: -1, color: color, textAlign: 'center', fontSize: 12 }}>{userInfo.all + ' '}</Text>
                   </Text>
                 </View>
               </View>) || undefined}

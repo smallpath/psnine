@@ -228,7 +228,6 @@ export default class Home extends Component<any, any> {
                   <Text style={{ flex: 1, color: trophyColor2, marginVertical: 2, textAlign: 'center', fontSize: 15 }}>{rowData.gold + ' '}</Text>
                   <Text style={{ flex: 1, color: trophyColor3, marginVertical: 2, textAlign: 'center', fontSize: 15 }}>{rowData.silver + ' '}</Text>
                   <Text style={{ flex: 1, color: trophyColor4, marginVertical: 2, textAlign: 'center', fontSize: 15 }}>{rowData.bronze + ' '}</Text>
-                  <Text style={{ flex: 1, color: infoColor, marginVertical: 2, textAlign: 'center', fontSize: 15 }}>{rowData.all + ' '}</Text>
                 </Text>
               </View>
             </View>
@@ -252,7 +251,7 @@ export default class Home extends Component<any, any> {
               </View>
               <View style={{ justifyContent: 'center', alignItems: 'center', flex: 1  }}>
                 <Text style={{ flex: 1, color: color, textAlign: 'center', fontSize: 20 }}>{rowData.followed}</Text>
-                <Text style={{ flex: 1, color: infoColor, textAlign: 'center', fontSize: 12 }}>被关注</Text>
+                <Text style={{ flex: 1, color: infoColor, textAlign: 'center', fontSize: 12 }}>总奖杯</Text>
               </View>
             </View>
           </View>
