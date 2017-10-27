@@ -164,6 +164,7 @@ dependencies {
     compile project(':react-native-vector-icons')
     compile project(':react-native-dialogs')
     compile project(':react-native-snackbar')
+    compile project(':react-native-charts-wrapper')
     compile project(':lottie-react-native')
     compile project(':react-native-google-analytics-bridge')
     compile project(':react-native-image-picker')
