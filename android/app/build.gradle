@@ -162,6 +162,7 @@ dependencies {
     compile "com.android.support:appcompat-v7:23.0.1"
     compile project(':ReactAndroid')
     compile project(':react-native-vector-icons')
+    compile project(':react-native-dialogs')
     compile project(':react-native-snackbar')
     compile project(':lottie-react-native')
     compile project(':react-native-google-analytics-bridge')

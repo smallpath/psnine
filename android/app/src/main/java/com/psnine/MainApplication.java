@@ -4,6 +4,7 @@ import android.app.Application;
 
 import com.oblador.vectoricons.VectorIconsPackage;
 import com.facebook.react.ReactApplication;
+import com.aakashns.reactnativedialogs.ReactNativeDialogsPackage;
 import com.RNFetchBlob.RNFetchBlobPackage;
 import com.reactnative.photoview.PhotoViewPackage;
 import com.image.zoom.ReactImageZoom;
@@ -37,6 +38,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new ReactNativeDialogsPackage(),
             new RNFetchBlobPackage(),
             new PhotoViewPackage(),
             new ReactImageZoom(),
