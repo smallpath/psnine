@@ -11,10 +11,10 @@ export default function (html, psnid) {
   }
 
   $('.hd4').each(function (i, elem) {
-    if (i === 0) return
+    // if (i === 0) return
     const $this = $(this)
     setting.sections.push($this.text())
-    if (i === 1) {
+    if (i === 0) {
       setting.bg = {
         items: Array.from($this.next().find('input').map(function (j, elem){
           const $this = $(this)
@@ -22,11 +22,11 @@ export default function (html, psnid) {
             img: $this.prev().prev().attr('src'),
             href: $this.prev().prev().attr('src'),
             value: $this.attr('value'),
-            id: $this.attr('id').replace('sel_', '')
+            id: ($this.attr('id') || '').replace('sel_', '')
           } 
         }))
       }
-    } else if ($this.text() === 'VIP功能区') {
+    } else if ($this.text() === 'VIP自定义') {
       setting.isVIP = true
     }
   })
@@ -48,9 +48,9 @@ export default function (html, psnid) {
     setting: $('input[name="setting"]').filter(filter).val() || '',
     topicopen: $('input[name="topicopen"]').filter(filter).val() || '0',
     geneopen: $('input[name="geneopen"]').filter(filter).val() || '0',
+    adopen: $('input[name="adopen"]').filter(filter).val() || '0',
   }
-  // console.log(setting.form)
 
-  // console.log(setting.form)
+  // console.log(setting)
   return setting
 }

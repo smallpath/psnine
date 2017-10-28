@@ -24,7 +24,6 @@ let toolbarActions = []
 import PhotoItem from '../../component/PhotoItem'
 
 const renderSectionHeader = ({ section }) => {
-  // console.log(section)
   return (
     <View style={{
       backgroundColor: section.modeInfo.backgroundColor,
@@ -75,6 +74,29 @@ export default class Custom extends Component<any, any> {
   }
 
   ITEM_HEIGHT = 74 + 7
+
+  renderAD = () => {
+    const { modeInfo } = this.props.screenProps
+    const adopen = this.state.data.form.adopen
+
+    return (
+      <View style={{ flex: 1, padding: 10 }}>
+        <Button title={(adopen === '0' ? '显示' : '隐藏') + '广告'} color={adopen !== '0' ? modeInfo.standardColor : modeInfo.standardTextColor}
+          onPress={() => {
+            Alert.alert(
+              '广告设定',
+              `是否${adopen === '1' ? '显示' : '隐藏'}广告?`,
+              [
+                {text: '取消', style: 'cancel'},
+                {text: '确定', onPress: () => this.setSetting({
+                  adopen: adopen === '0' ? '1' : '0'
+                })}
+              ]
+            )
+          }}/>
+      </View>
+    )
+  }
 
   renderVIP = () => {
     const { modeInfo } = this.props.screenProps
@@ -248,9 +270,10 @@ export default class Custom extends Component<any, any> {
   }
 
   render() {
+
     const { modeInfo } = this.props.screenProps
     const { data } = this.state
-
+    // console.log(data, '===>')
     let sections = data.sections ? data.sections.map((item, index) => ({
       key: item,
       modeInfo,
@@ -286,6 +309,10 @@ export default class Custom extends Component<any, any> {
               text: '显示机因'
             }
           ]]
+        } else if (index === 5) {
+          return [[{
+            text: '广告设定'
+          }]]
         }
       })(),
       renderItem: [
@@ -293,7 +320,8 @@ export default class Custom extends Component<any, any> {
         this.renderShow,
         this.renderTheme,
         this.renderGene,
-        this.renderVIP
+        this.renderVIP,
+        this.renderAD
       ][index]
     })) : []
     if (!this.state.data.isVIP && data.sections) {
