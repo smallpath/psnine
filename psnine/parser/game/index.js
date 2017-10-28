@@ -20,7 +20,9 @@ export default function (html) {
     const startIndex = -8
     const regionArr = arr.slice(1, startIndex)
     const trophyArr = arr.slice(startIndex)
-
+    if (trophyArr[0] && trophyArr[0].includes('白') === false) {
+      trophyArr.unshift(arr[1])
+    }
     const mock = {
       title: title,
       avatar: img,
