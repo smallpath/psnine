@@ -7,7 +7,7 @@ const backgroundColorMapper = {
   t4: '#e4cdc1',
 }
 
-export default function (html) {
+export default function (html, hasPsnid = false) {
   const $ = parser.load(html)
   const all = $('.mt40 .main')
   const childrens = all.children()
@@ -20,12 +20,14 @@ export default function (html) {
 
   let node = first
   let prevObj = {}
+  const toolbarId = hasPsnid ? 2 : 1
+  const playerId = hasPsnid ? 1 : 2
   while (node.prev().attr('class')) {
     index++
     node = node.prev()
-    if (index === 1) {
+    if (index === toolbarId) {
       prevObj['toolbar'] = node
-    } else if (index === 2) {
+    } else if (index === playerId) {
       if (node.prev().attr('class')) {
         prevObj['player'] = node
       } else {

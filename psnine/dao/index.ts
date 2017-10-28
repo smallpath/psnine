@@ -112,7 +112,7 @@ export const getBattleAPI = uri => safeFetch(uri).then(res => battleTopicParser(
 
 export const getNBAPI = uri => safeFetch(uri).then(res => nbParser(res))
 
-export const getGameAPI = uri => safeFetch(uri).then(res => gameParser(res))
+export const getGameAPI = uri => safeFetch(uri).then(res => gameParser(res, uri.includes('?psnid=')))
 
 export const getTrophyAPI = uri => safeFetch(uri).then(res => trophyParser(res))
 
