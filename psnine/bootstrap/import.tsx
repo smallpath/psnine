@@ -12,25 +12,7 @@ import ModalPicker from '../component/ModalPicker'
 import Values from 'values.js'
 import DialogAndroid from 'react-native-dialogs'
 
-let options = {
-  progress: {
-    indeterminate: true
-  },
-  content: "www hahaha",
-  positiveText: "Choose",
-  title: "Social Networks"
-}
-
-let showDialog = function () {
-  var dialog = new DialogAndroid()
-  dialog.set(options)
-  dialog.show();
-}
-
-setTimeout(showDialog, 2000)
-
 import ReactNative, {
-  ToastAndroid,
   Platform,
   TouchableNativeFeedback,
   ScrollView,
@@ -47,6 +29,7 @@ declare var global
 Object.assign(global, {
   NestedScrollView: isIOS ? ScrollView : NestedScrollView,
   Share,
+  DialogAndroid,
   LinearGradient,
   HTMLView,
   MyDialog,

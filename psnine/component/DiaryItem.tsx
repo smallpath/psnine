@@ -27,6 +27,19 @@ export default class extends React.PureComponent<ExtendedProp, FlatlistItemState
     }
   }
 
+  showDialog = () => {
+    const { rowData, modalList = [] } = this.props
+    const options = {
+      items: modalList.map(item => item.text),
+      itemsCallback: (id) => this.setState({
+        modalVisible: false
+      }, () => modalList[id].onPress(rowData))
+    }
+    const dialog = new global.DialogAndroid()
+    dialog.set(options)
+    dialog.show()
+  }
+
   handleImageOnclick = () => {}
 
   render() {
@@ -46,11 +59,17 @@ export default class extends React.PureComponent<ExtendedProp, FlatlistItemState
               })
             }
           }).catch(err => global.toast(err.toString()))
-        }} onLongPress={() => {
-            modalList.length && this.setState({
-            modalVisible: true
-          })
-        }}>
+        }}
+        onLongPress={modalList.length ? () => {
+          if (global.isIOS) {
+            this.setState({
+              modalVisible: true
+            })
+          } else {
+            this.showDialog()
+          }
+        } : undefined}
+        >
         <View pointerEvents={'box-only'} style={{
           backgroundColor: modeInfo.backgroundColor,
           flexDirection: 'column',

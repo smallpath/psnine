@@ -30,21 +30,6 @@ declare var global
 /* tslint:disable */
 const ListItems = [
   {
-    text: '测试',
-    iconName: 'md-star',
-    onPress: function () {
-      const { navigation, closeDrawer } = this.props
-      closeDrawer()
-
-      let URL = 'http://psnine.com/my/fav?page=1'
-
-      navigation.navigate('TestChart', {
-        URL,
-        title: '测试图标'
-      })
-    }
-  },
-  {
     text: '我收藏的',
     iconName: 'md-star',
     onPress: function () {

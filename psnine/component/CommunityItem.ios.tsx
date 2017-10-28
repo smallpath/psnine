@@ -52,7 +52,7 @@ export default class ComplexComment extends React.PureComponent<ExtendedProp, Fl
   }
 
   render() {
-    const { modeInfo, rowData, onPress, navigation, ITEM_HEIGHT, modalList = [], toolbarDispatch } = this.props
+    const { modeInfo, rowData, onPress, navigation, modalList = [], toolbarDispatch } = this.props
     // console.log(modalList)
     const { numColumns = 1 } = modeInfo
     const fuckingIOS: any = { marginLeft: 10, flex: 1, flexWrap: 'wrap', flexDirection: 'column', justifyContent: 'space-between'  }

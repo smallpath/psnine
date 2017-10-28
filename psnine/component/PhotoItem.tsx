@@ -15,6 +15,9 @@ interface ExtendedProp extends FlatlistItemProp {
   width?: number
   ITEM_HEIGHT?: number
 }
+
+declare var global
+
 export default class PhotoItem extends React.PureComponent<ExtendedProp, FlatlistItemState> {
 
   constructor(props) {
@@ -23,6 +26,48 @@ export default class PhotoItem extends React.PureComponent<ExtendedProp, Flatlis
     this.state = {
       modalVisible: false
     }
+
+    this.initModal()
+  }
+
+  modalItems: any
+  initModal = () => {
+    const { rowData, onLongPress } = this.props
+    const modalItems = [{
+      text: '查看图片',
+      onPress: () => {
+        requestAnimationFrame(() => {
+          this.props.navigation.navigate('ImageViewer', {
+            images: [
+              { url: rowData.img }
+            ]
+          })
+        })
+      }
+    }]
+
+    if (onLongPress) {
+      modalItems.push({
+        text: '删除图片',
+        onPress: () => {
+          onLongPress()
+        }
+      })
+    }
+
+    this.modalItems = modalItems
+  }
+
+  showDialog = () => {
+    const options = {
+      items: this.modalItems.map(item => item.text),
+      itemsCallback: (id) => this.setState({
+        modalVisible: false
+      }, () => this.modalItems[id].onPress())
+    }
+    const dialog = new global.DialogAndroid()
+    dialog.set(options)
+    dialog.show()
   }
 
   render() {
@@ -36,10 +81,10 @@ export default class PhotoItem extends React.PureComponent<ExtendedProp, Flatlis
             onPress && onPress()
           }
         }
-        onLongPress={() => {
-          this.setState({
+        onLongPress={!onLongPress ? undefined : () => {
+          global.isIOS ? this.setState({
             modalVisible: true
-          })
+          }) : this.showDialog()
         }}
         useForeground={true}
 
@@ -75,13 +120,7 @@ export default class PhotoItem extends React.PureComponent<ExtendedProp, Flatlis
                         this.setState({
                           modalVisible: false
                         }, () => {
-                          requestAnimationFrame(() => {
-                            this.props.navigation.navigate('ImageViewer', {
-                              images: [
-                                { url: rowData.img }
-                              ]
-                            })
-                          })
+
                         })
                       }}>
                       <View style={{

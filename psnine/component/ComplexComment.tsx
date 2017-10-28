@@ -43,11 +43,117 @@ export default class ComplexComment extends React.PureComponent<ExtendedProp, Ex
       modalVisible: false,
       modalIndex: -1
     }
+
+    this.initModal()
+  }
+
+  modalItems: any
+  initModal = () => {
+    const { modeInfo, rowData } = this.props
+    const modalItems: any = []
+
+    modalItems.push({
+      text: '回复',
+      onPress: () => {
+        requestAnimationFrame(() => {
+          this.onCommentLongPress(rowData)
+        })
+      }
+    })
+    modalItems.push({
+      text: '点赞',
+      onPress: () => {
+        requestAnimationFrame(() => {
+          updown({
+            type: 'comment',
+            param: rowData.id,
+            updown: 'up'
+          }).then(res => res.text()).then(html => {
+            if (html) {
+              return global.toast(`点赞失败: ${html}`)
+            }
+            global.toast('点赞成功')
+          })
+        })
+      }
+    })
+    modalItems.push({
+      text: '复制',
+      onPress: () => {
+        requestAnimationFrame(() => {
+          Clipboard.setString(entities.decodeHTML(rowData.text).replace(/<.*?>/igm, ''))
+          global.toast('评论文字已复制到剪贴板')
+        })
+      }
+    })
+
+    if (rowData.caina && rowData.isAccepted === false) {
+      modalItems.push({
+        text: '采纳',
+        onPress: () => {
+          requestAnimationFrame(() => {
+            postReply({
+              qid: rowData.qid,
+              psnid: rowData.psnid
+            }, 'caina').then(res => { return res.text() }).then(() => {
+              return global.toast('采纳成功')
+            }).catch(err => global.toast(err.toString()))
+          })
+        }
+      })
+    }
+    if (rowData.psnid === modeInfo.settingInfo.psnid) {
+      modalItems.push({
+        text: '编辑',
+        onPress: () => {
+          requestAnimationFrame(() => {
+            this.props.navigation.navigate('Reply', {
+              type: 'comment',
+              id: (rowData.id.match(/\d+/) || [0])[0],
+              content: rowData.editcomment,
+              shouldSeeBackground: true
+            })
+          })
+        }
+      })
+    }
+
+    this.modalItems = modalItems
+  }
+
+  showDialog = () => {
+    const options = {
+      items: this.modalItems.map(item => item.text),
+      itemsCallback: (id) => this.setState({
+        modalVisible: false
+      }, () => this.modalItems[id].onPress())
+    }
+    const dialog = new global.DialogAndroid()
+    dialog.set(options)
+    dialog.show()
   }
 
   renderSonComment = (list, parentRowData) => {
     const { modeInfo, onLongPress } = this.props
+
     const result = list.map((rowData, index) => {
+      const modalItems: any = [{
+        text: '回复',
+        onPress: () => {
+          requestAnimationFrame(() => {
+            this.onCommentLongPress(parentRowData, rowData.psnid)
+          })
+        }
+      }, {
+        text: '复制',
+        onPress: () => {
+          requestAnimationFrame(() => {
+            Clipboard.setString(entities.decodeHTML(rowData.text).replace(/<.*?>/igm, ''))
+            global.toast('评论文字已复制到剪贴板')
+          })
+        }
+      }]
+
       return (
         <View key={rowData.id || index} style={{
             backgroundColor: modeInfo.brighterLevelOne,
@@ -76,44 +182,35 @@ export default class ComplexComment extends React.PureComponent<ExtendedProp, Ex
                     opacity: 1,
                     borderRadius: 2
                   }}>
-                    <TouchableNativeFeedback onPress={() => {
-                        this.setState({
-                          modalIndex: -1
-                        }, () => {
-                          requestAnimationFrame(() => {
-                            this.onCommentLongPress(parentRowData, rowData.psnid)
-                          })
-                        })
-                      }}>
-                      <View style={{height: 50,
-                        paddingVertical: 10, paddingLeft: 20 , alignSelf: 'stretch', alignContent: 'stretch', justifyContent: 'center'}}>
-                        <Text style={{textAlignVertical: 'center', fontSize: 18, color: modeInfo.standardTextColor}}>回复</Text>
-                      </View>
-                    </TouchableNativeFeedback>
-                    <TouchableNativeFeedback onPress={() => {
-                        this.setState({
-                          modalIndex: -1
-                        }, () => {
-                          requestAnimationFrame(() => {
-                            Clipboard.setString(entities.decodeHTML(rowData.text).replace(/<.*?>/igm, ''))
-                            global.toast('评论文字已复制到剪贴板')
-                          })
-                        })
-                      }}>
-                      <View style={{height: 50,
-                          paddingVertical: 10, paddingLeft: 20 , alignSelf: 'stretch', alignContent: 'stretch', justifyContent: 'center'}}>
-                        <Text style={{textAlignVertical: 'center', fontSize: 18, color: modeInfo.standardTextColor}}>复制</Text>
-                      </View>
-                    </TouchableNativeFeedback>
+                    {this.modalItems.map((item, index) => (
+                      <TouchableNativeFeedback key={index} onPress={item.onPress}>
+                        <View style={{
+                          height: 50, paddingVertical: 10, paddingLeft: 20 , alignSelf: 'stretch', alignContent: 'stretch', justifyContent: 'center'
+                        }}>
+                          <Text style={{textAlignVertical: 'center', fontSize: 18, color: modeInfo.standardTextColor}}>{item.text}</Text>
+                        </View>
+                      </TouchableNativeFeedback>
+                    ))}
                   </View>
                 )} />
             )
           }
           <Text
             onLongPress={() => {
-              this.setState({
-                modalIndex: index
-              })
+              if (global.isIOS) {
+                return this.setState({
+                  modalIndex: index
+                })
+              }
+              const options = {
+                items: modalItems.map(item => item.text),
+                itemsCallback: (id) => this.setState({
+                  modalIndex: -1
+                }, () => modalItems[id].onPress())
+              }
+              const dialog = new global.DialogAndroid()
+              dialog.set(options)
+              dialog.show()
             }}
           >
             <global.HTMLView
@@ -159,11 +256,10 @@ export default class ComplexComment extends React.PureComponent<ExtendedProp, Ex
         borderBottomColor: modeInfo.brighterLevelOne
       }}>
         <TouchableNativeFeedback
-          onLongPress={() => {
-            // this.onCommentLongPress(rowData)
-            this.setState({
+          onLongPress={!onLongPress ? undefined : () => {
+            global.isIOS ? this.setState({
               modalVisible: true
-            })
+            }) : this.showDialog()
           }}
           useForeground={true}
           background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
@@ -188,115 +284,15 @@ export default class ComplexComment extends React.PureComponent<ExtendedProp, Ex
                       opacity: 1,
                       borderRadius: 2
                     }}>
-                      <TouchableNativeFeedback onPress={() => {
-                          this.setState({
-                            modalVisible: false
-                          }, () => {
-                            requestAnimationFrame(() => {
-                              this.onCommentLongPress(rowData)
-                            })
-                          })
-                        }}>
-                        <View style={{
-                          height: 50,
-                          paddingVertical: 10, paddingLeft: 20 , alignSelf: 'stretch', alignContent: 'stretch', 
-                          justifyContent: 'center'
-                        }}>
-                          <Text style={{textAlignVertical: 'center', fontSize: 18, color: modeInfo.standardTextColor}}>回复</Text>
-                        </View>
-                      </TouchableNativeFeedback>
-                      <TouchableNativeFeedback onPress={() => {
-                          this.setState({
-                            modalVisible: false
-                          }, () => {
-                            requestAnimationFrame(() => {
-                              updown({
-                                type: 'comment',
-                                param: rowData.id,
-                                updown: 'up'
-                              }).then(res => res.text()).then(html => {
-                                if (html) {
-                                  return global.toast(`点赞失败: ${html}`)
-                                }
-                                global.toast('点赞成功')
-                              })
-                            })
-                          })
-                        }}>
-                        <View style={{
-                          height: 50, paddingVertical: 10, paddingLeft: 20 , alignSelf: 'stretch', alignContent: 'stretch', justifyContent: 'center'
-                        }}>
-                          <Text style={{textAlignVertical: 'center', fontSize: 18, color: modeInfo.standardTextColor}}>点赞</Text>
-                        </View>
-                      </TouchableNativeFeedback>
-                      <TouchableNativeFeedback onPress={() => {
-                          this.setState({
-                            modalVisible: false
-                          }, () => {
-                            requestAnimationFrame(() => {
-                              Clipboard.setString(entities.decodeHTML(rowData.text).replace(/<.*?>/igm, ''))
-                              global.toast('评论文字已复制到剪贴板')
-                            })
-                          })
-                        }}>
-                        <View style={{
-                          height: 50, paddingVertical: 10, paddingLeft: 20 , alignSelf: 'stretch', alignContent: 'stretch', 
-                          justifyContent: 'center'
-                        }}>
-                          <Text style={{textAlignVertical: 'center', fontSize: 18, color: modeInfo.standardTextColor}}>复制</Text>
-                        </View>
-                      </TouchableNativeFeedback>
-                      {
-                        rowData.caina && rowData.isAccepted === false && (
-                          <TouchableNativeFeedback onPress={() => {
-                            this.setState({
-                              modalVisible: false
-                            }, () => {
-                              requestAnimationFrame(() => {
-                                const { params } = this.props.navigation.state
-
-                                postReply({
-                                  qid: rowData.qid,
-                                  psnid: rowData.psnid
-                                }, 'caina').then(res => { return res.text() }).then(html => {
-                                  return global.toast('采纳成功')
-                                }).catch(err => global.toast(err.toString()))
-                              })
-                            })
-                          }}>
+                      {this.modalItems.map((item, index) => (
+                        <TouchableNativeFeedback key={index} onPress={item.onPress}>
                           <View style={{
                             height: 50, paddingVertical: 10, paddingLeft: 20 , alignSelf: 'stretch', alignContent: 'stretch', justifyContent: 'center'
                           }}>
-                            <Text style={{textAlignVertical: 'center', fontSize: 18, color: modeInfo.standardTextColor}}>采纳</Text>
+                            <Text style={{textAlignVertical: 'center', fontSize: 18, color: modeInfo.standardTextColor}}>{item.text}</Text>
                           </View>
                         </TouchableNativeFeedback>
-                        )
-                      }
-                      {
-                        rowData.psnid === modeInfo.settingInfo.psnid && (
-                          <TouchableNativeFeedback onPress={() => {
-                            this.setState({
-                              modalVisible: false
-                            }, () => {
-                              requestAnimationFrame(() => {
-                                /*console.log((rowData.id.match(/\d+/) || [0])[0])*/
-                                  this.props.navigation.navigate('Reply', {
-                                    type: 'comment',
-                                    id: (rowData.id.match(/\d+/) || [0])[0],
-                                    content: rowData.editcomment,
-                                    shouldSeeBackground: true
-                                  })
-                              })
-                            })
-                          }}>
-                          <View style={{
-                            height: 50, paddingVertical: 10, paddingLeft: 20 , alignSelf: 'stretch', alignContent: 'stretch', justifyContent: 'center'
-                          }}>
-                            <Text style={{textAlignVertical: 'center', fontSize: 18, color: modeInfo.standardTextColor}}>编辑</Text>
-                          </View>
-                        </TouchableNativeFeedback>
-                        )
-                      }
+                      ))}
                     </View>
                   )} />
               )
@@ -326,7 +322,8 @@ export default class ComplexComment extends React.PureComponent<ExtendedProp, Ex
                   }
                 }>{rowData.psnid}</Text>
                 <Text style={{ flex: -1, color: modeInfo.standardTextColor, textAlign: 'center', textAlignVertical: 'center' }}>
-                  {!!rowData.count && isNaN(rowData.count) === false && <Text style={{ flex: -1, color: modeInfo.accentColor }}>+{rowData.count}   </Text>}
+                  {!!rowData.count && isNaN(rowData.count) === false && <Text
+                    style={{ flex: -1, color: modeInfo.accentColor }}>+{rowData.count}   </Text>}
                   {rowData.date}
                 </Text>
               </View>

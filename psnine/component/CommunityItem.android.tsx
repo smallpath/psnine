@@ -25,6 +25,8 @@ interface ExtendedProp extends FlatlistItemProp {
   toolbarDispatch?: NavigationDispatch<any>
 }
 
+declare var global
+
 export default class ComplexComment extends React.PureComponent<ExtendedProp, FlatlistItemState> {
 
   constructor(props) {
@@ -48,8 +50,21 @@ export default class ComplexComment extends React.PureComponent<ExtendedProp, Fl
     })
   }
 
+  showDialog = () => {
+    const { rowData, modalList = [] } = this.props
+    const options = {
+      items: modalList.map(item => item.text),
+      itemsCallback: (id) => this.setState({
+        modalVisible: false
+      }, () => modalList[id].onPress(rowData))
+    }
+    const dialog = new global.DialogAndroid()
+    dialog.set(options)
+    dialog.show()
+  }
+
   render() {
-    const { modeInfo, rowData, onPress, navigation, ITEM_HEIGHT, modalList = [], toolbarDispatch } = this.props
+    const { modeInfo, rowData, onPress, navigation, modalList = [], toolbarDispatch } = this.props
     // console.log(modalList)
     const { numColumns = 1 } = modeInfo
     return (
@@ -61,11 +76,15 @@ export default class ComplexComment extends React.PureComponent<ExtendedProp, Fl
             this._onRowPressed(rowData)
           }
         }}
-        onLongPress={() => {
-          modalList.length && this.setState({
-            modalVisible: true
-          })
-        }}
+        onLongPress={modalList.length ? () => {
+          if (global.isIOS) {
+            this.setState({
+              modalVisible: true
+            })
+          } else {
+            this.showDialog()
+          }
+        } : undefined}
         useForeground={true}
         background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
       >

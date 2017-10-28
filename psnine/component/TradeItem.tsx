@@ -12,6 +12,9 @@ import { FlatlistItemProp, FlatlistItemState, ModalList } from '../interface'
 interface ExtendedProp extends FlatlistItemProp {
   modalList?: ModalList[]
 }
+
+declare var global
+
 export default class TradeItem extends React.PureComponent<ExtendedProp, FlatlistItemState> {
   constructor(props) {
     super(props)
@@ -19,6 +22,19 @@ export default class TradeItem extends React.PureComponent<ExtendedProp, Flatlis
     this.state = {
       modalVisible: false
     }
+  }
+
+  showDialog = () => {
+    const { rowData, modalList = [] } = this.props
+    const options = {
+      items: modalList.map(item => item.text),
+      itemsCallback: (id) => this.setState({
+        modalVisible: false
+      }, () => modalList[id].onPress(rowData))
+    }
+    const dialog = new global.DialogAndroid()
+    dialog.set(options)
+    dialog.show()
   }
 
   _onRowPressed = (rowData) => {
@@ -50,11 +66,15 @@ export default class TradeItem extends React.PureComponent<ExtendedProp, Flatlis
       }}>
         <TouchableNativeFeedback
           onPress={() => { this._onRowPressed(rowData) }}
-          onLongPress={() => {
-             modalList.length && this.setState({
-              modalVisible: true
-            })
-          }}
+          onLongPress={modalList.length ? () => {
+            if (global.isIOS) {
+              this.setState({
+                modalVisible: true
+              })
+            } else {
+              this.showDialog()
+            }
+          } : undefined}
           background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
         >
           <View style={{ flex: 1, flexDirection: 'row', padding: 12 }}>

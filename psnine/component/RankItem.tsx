@@ -20,6 +20,8 @@ interface ExtendedProp extends FlatlistItemProp {
   ITEM_HEIGHT: number
 }
 
+declare var global
+
 export default class extends React.PureComponent<ExtendedProp, FlatlistItemState> {
   constructor(props) {
     super(props)
@@ -40,23 +42,39 @@ export default class extends React.PureComponent<ExtendedProp, FlatlistItemState
     })
   }
 
+  showDialog = () => {
+    const { rowData, modalList = [] } = this.props
+    const options = {
+      items: modalList.map(item => item.text),
+      itemsCallback: (id) => this.setState({
+        modalVisible: false
+      }, () => modalList[id].onPress(rowData))
+    }
+    const dialog = new global.DialogAndroid()
+    dialog.set(options)
+    dialog.show()
+  }
+
   handleImageOnclick = () => {}
 
   render() {
-    const { modeInfo, rowData, ITEM_HEIGHT, modalList = [] } = this.props
+    const { modeInfo, rowData, modalList = [] } = this.props
     const { numColumns = 1 } = modeInfo
     return (
       <TouchableNativeFeedback
         onPress={() => {
           this._onRowPressed(rowData)
         }}
-        onLongPress={() => {
-            modalList.length && this.setState({
-            modalVisible: true
-          })
-        }}
+        onLongPress={modalList.length ? () => {
+          if (global.isIOS) {
+            this.setState({
+              modalVisible: true
+            })
+          } else {
+            this.showDialog()
+          }
+        } : undefined}
         useForeground={true}
-
         background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
       >
         <View pointerEvents={'box-only'} style={{
