@@ -312,6 +312,21 @@ export default class NavigationDrawer extends Component<any, any> {
     switchModeOnRoot()
   }
 
+  goToStatistics = () => {
+    const { navigation, closeDrawer } = this.props
+    closeDrawer()
+    if (this.state.psnid === '') {
+      global.toast && global.toast('未登录', 2000)
+      return
+    }
+
+    // alert(this.state.userInfo.nums)
+    navigation.navigate('TestChart', {
+      psnid: this.state.psnid,
+      title: `${this.state.psnid}的奖杯统计`
+    })
+  }
+
   onUserLongPress = () => {
     if (this.state.psnid === '') return
     Alert.alert(
@@ -444,6 +459,15 @@ export default class NavigationDrawer extends Component<any, any> {
             paddingRight: toolActions.length === 4 ? 20 : 0, flex: 1,
             flexDirection: 'row', alignSelf: 'flex-start', alignContent: 'flex-end', justifyContent: 'center', alignItems: 'flex-end' }}>
             {toolActions}
+            { psnid && <TouchableNativeFeedback
+              background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
+              key={'changeStyle'}
+              onPress={this.goToStatistics}
+            >
+              <View borderRadius={borderRadius} style={iconStyle}>
+                <Icon name='md-trophy' size={size} color={color} />
+              </View>
+            </TouchableNativeFeedback> || undefined }
           </View>
         </View>
       </View>
