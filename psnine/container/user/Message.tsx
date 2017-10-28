@@ -48,6 +48,9 @@ class Message extends Component<any, any> {
     } else if (URL.includes('/trade/')) {
       type = 'TradeTopic'
       replyType = 'trade'
+    } else if (URL.includes('/trophy/')) {
+      type = 'Trophy'
+      replyType = 'game'
     } else if (URL.includes('/psnid/') && URL.includes('comment')) {
       type = 'Home'
       replyType = ''
