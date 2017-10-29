@@ -10,7 +10,9 @@ import update from 'immutability-helper'
 import {LineChart} from 'react-native-charts-wrapper'
 import { getTrophyList } from '../../utils/statistics'
 
-getTrophyList('secondlife_xhm')
+getTrophyList('secondlife_xhm', undefined).then((data) => {
+  console.log(Object.keys(data))
+})
 
 export default class LineChartScreen extends React.Component<any, any> {
 

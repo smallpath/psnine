@@ -26,6 +26,7 @@ export const getTrophyList = async (psnid, callback, forceNew = false) => {
   if (forceNew === false) {
     let cacheStr = await AsyncStorage.getItem('Statistics::TrophyList')
     if (cacheStr) {
+      console.log('hehe')
       const cache = JSON.parse(cacheStr)
       return cache
     }
@@ -51,6 +52,9 @@ export const getTrophyList = async (psnid, callback, forceNew = false) => {
     })
     index++
   }
-  await AsyncStorage.setItem('Statistics::TrophyList', JSON.stringify(trophyList))
+  await AsyncStorage.setItem('Statistics::TrophyList', JSON.stringify({
+    gameList,
+    trophyList
+  }))
   return trophyList
 }
