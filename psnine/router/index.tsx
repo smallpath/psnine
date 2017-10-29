@@ -72,7 +72,7 @@ import { transitionConfig, onTransitionStart } from './transitionConfig'
 
 const enableGesture = () => {
   return {
-    gesturesEnabled: false
+    gesturesEnabled: true
   }
 }
 
@@ -84,6 +84,9 @@ const stackConfig: any = {
   mode: 'card',
   cardStyle: {
     backgroundColor: 'transparent'
+  },
+  navigationOptions: {
+    gesturesEnabled: true
   },
   transitionConfig,
   onTransitionStart
