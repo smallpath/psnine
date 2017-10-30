@@ -63,9 +63,12 @@ cd android && ./gradlew assembleRelease  // for release
 ```
 
 ## iOS
-> 前置: XCode
+> 前置: XCode, CocoaPods
 
 ```
+mv node_modules/react-native-charts-wrapper/ios/ReactNativeCharts ios/ReactNativeCharts
+cd ios
+pod install && cd ..
 react-native run-ios // for development
 react-native run-ios --configuration Release // for release
 ```
