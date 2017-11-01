@@ -320,8 +320,11 @@ export default class NavigationDrawer extends Component<any, any> {
       return
     }
 
+    const { psnid } = this.state
+    let URL = getHomeURL(psnid)
     // alert(this.state.userInfo.nums)
-    navigation.navigate('TestChart', {
+    navigation.navigate('Stats', {
+      URL,
       psnid: this.state.psnid,
       title: `${this.state.psnid}的奖杯统计`
     })
@@ -458,7 +461,6 @@ export default class NavigationDrawer extends Component<any, any> {
           <View style={{
             paddingRight: toolActions.length === 4 ? 20 : 0, flex: 1,
             flexDirection: 'row', alignSelf: 'flex-start', alignContent: 'flex-end', justifyContent: 'center', alignItems: 'flex-end' }}>
-            {toolActions}
             { psnid && <TouchableNativeFeedback
               background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
               key={'changeStyle'}
@@ -468,6 +470,7 @@ export default class NavigationDrawer extends Component<any, any> {
                 <Icon name='md-trophy' size={size} color={color} />
               </View>
             </TouchableNativeFeedback> || undefined }
+            {toolActions}
           </View>
         </View>
       </View>

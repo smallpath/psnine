@@ -56,5 +56,5 @@ export const getTrophyList = async (psnid, callback, forceNew = false) => {
     gameList,
     trophyList
   }))
-  return trophyList
+  return { gameList, trophyList }
 }

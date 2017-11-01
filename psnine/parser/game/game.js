@@ -147,7 +147,9 @@ export default function (html, hasPsnid = false) {
         }
         const time = $this.find('td em.lh180')
         if (time.attr('tips')) {
-          info.time = formatTime($this.find('td em.lh180').attr('tips') + ($this.find('td em.lh180').text().match(/(\d+\-\d+\:\d+)/igm) || [''])[0])
+          const result = formatTime($this.find('td em.lh180').attr('tips') + ($this.find('td em.lh180').text().match(/(\d+\-\d+\:\d+)/igm) || [''])[0])
+          info.time = result[0]
+          info.timestamp = result[1]
         }
         temp.list.push(info)
       }
@@ -165,10 +167,17 @@ export default function (html, hasPsnid = false) {
 }
 
 function formatTime(text) {
-  if (!text) return ''
+  if (!text) return ['', 0]
   const arr = text.split('').filter(item => item !== '-' && item !== ':')
+  const ts = arr.slice()
   arr.splice(7, 0, '月')
   arr.splice(10, 0, '日')
-  arr.splice(13, 0, '分')
-  return arr.join('')
+  arr.splice(13, 0, '点')
+  ts.splice(4, 1, '-')
+  ts.splice(7, 0, '-')
+  ts.splice(10, 0, 'T')
+  ts.splice(13, 0, ':')
+  ts.push(':00.000Z')
+  const timestamp = ts.join('')
+  return [arr.join(''), new Date(timestamp).valueOf()]
 }

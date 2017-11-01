@@ -22,6 +22,7 @@ import Favorite from '../container/user/Favorite'
 import Issue from '../container/user/Issue'
 import UserCreateDiary from '../container/user/NewDiary'
 import TestChart from '../container/statistics/Test'
+import Stats from '../container/statistics/Stats'
 
 import Trophy from '../container/game/Trophy'
 import GameTopic from '../container/game/GameTopic'
@@ -135,6 +136,9 @@ const Navigator = StackNavigator({
   },
   UserElement: {
     screen: UserElement
+  },
+  Stats: {
+    screen: Stats
   },
   UserDetail: {
     screen: UserDetail
