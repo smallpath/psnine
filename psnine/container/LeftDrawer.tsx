@@ -326,7 +326,7 @@ export default class NavigationDrawer extends Component<any, any> {
     navigation.navigate('Stats', {
       URL,
       psnid: this.state.psnid,
-      title: `${this.state.psnid}的奖杯统计`
+      title: `${this.state.psnid} 奖杯统计`
     })
   }
 
@@ -367,15 +367,15 @@ export default class NavigationDrawer extends Component<any, any> {
       justifyContent: 'center',
       alignItems: 'center',
       backgroundColor: 'transparent',
-      height: 26,
-      width: 26,
+      height: 30,
+      width: 30,
       flex: 0,
-      marginLeft: 14
+      marginLeft: 16
     }
 
     const color = '#fff'
-    const size = 24
-    const borderRadius = 12
+    const size = 26
+    const borderRadius = 13
 
     if (psnid) {
       let dot: any = undefined

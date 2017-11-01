@@ -14,11 +14,8 @@ const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = screen
 const minWidth = Math.min(SCREEN_HEIGHT, SCREEN_WIDTH)
 
 import HomeProfile from './HomeProfile'
-import UserGame from './UserGame'
-import UserBoard from './UserBoard'
-import UserDiary from './UserDiary'
-import UserTopic from './UserTopic'
-import UserGene from './UserGene'
+import TrophyList from './TrophyList'
+import TrophyAdvisor from './TrophyAdvisor'
 
 const DefaultTabBar = TabNavigator.Presets['AndroidTopTabs'].tabBarComponent
 
@@ -26,20 +23,11 @@ const container = {
   Home: {
     screen: HomeProfile
   },
-  UserGame: {
-    screen: UserGame
+  TrophyList: {
+    screen: TrophyList
   },
-  UserDiary: {
-    screen: UserDiary
-  },
-  UserBoard: {
-    screen: UserBoard
-  },
-  UserTopic: {
-    screen: UserTopic
-  },
-  UserGene: {
-    screen: UserGene
+  TrophyAdvisor: {
+    screen: TrophyAdvisor
   }
 }
 

@@ -15,6 +15,7 @@ const minWidth = Math.min(SCREEN_HEIGHT, SCREEN_WIDTH)
 
 import HomeProfile from './HomeProfile'
 import TrophyList from './TrophyList'
+import TrophyAdvisor from './TrophyAdvisor'
 
 const DefaultTabBar = TabNavigator.Presets['AndroidTopTabs'].tabBarComponent
 
@@ -24,6 +25,9 @@ const container = {
   },
   TrophyList: {
     screen: TrophyList
+  },
+  TrophyAdvisor: {
+    screen: TrophyAdvisor
   }
 }
 

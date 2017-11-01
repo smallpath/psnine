@@ -3,11 +3,16 @@ import {
   StyleSheet,
   Text,
   View,
+  SectionList,
   TouchableNativeFeedback,
   ActivityIndicator,
+  processColor,
   Animated,
   FlatList
 } from 'react-native'
+import update from 'immutability-helper'
+
+import PieChart from './PieChart'
 
 import UserGameItem from '../../component/UserGameItem'
 import {
@@ -17,9 +22,25 @@ import {
 
 declare var global
 
+const renderSectionHeader = ({ section }) => {
+  // console.log(section)
+  return (
+    <View style={{
+      backgroundColor: section.modeInfo.backgroundColor,
+      flex: -1,
+      padding: 7,
+      elevation: 2
+    }}>
+      <Text numberOfLines={1}
+        style={{ fontSize: 20, color: section.modeInfo.standardColor, textAlign: 'left', lineHeight: 25, marginLeft: 2, marginTop: 2 }}
+      >{section.key}</Text>
+    </View>
+  )
+}
+
 export default class Home extends Component<any, any> {
   static navigationOptions = {
-     tabBarLabel: '主页'
+     tabBarLabel: '奖杯状态'
   }
   constructor(props) {
     super(props)
@@ -30,6 +51,7 @@ export default class Home extends Component<any, any> {
       opacity: new Animated.Value(1),
       openVal: new Animated.Value(0),
       modalVisible: false,
+      sections: [],
       modalOpenVal: new Animated.Value(0),
       topicMarginTop: new Animated.Value(0),
       scrollEnabled: true
@@ -38,22 +60,39 @@ export default class Home extends Component<any, any> {
 
   flatlist: any
   componentWillMount() {
-    this.props.screenProps.setToolbar({
-      componentDidFocus: {
-        index: 0,
-        handler: () => {},
-        afterSnap: (scrollEnabled) => {
-          const refs = this.flatlist && this.flatlist._listRef && this.flatlist._listRef._scrollRef.getScrollResponder()
-          if (refs && refs.setNativeProps) {
-            refs.setNativeProps({
-              scrollEnabled
-            })
-          } else {
-            this.setState({ scrollEnabled })
-          }
-        }
-      }
-    })
+    const { modeInfo, statsInfo } = this.props.screenProps
+    const sections = [{
+      data: [statsInfo.platform],
+      modeInfo,
+      key: '平台',
+      renderItem: this.renderItem.bind(this, 0)
+    }, {
+      data: [statsInfo.trophyNumber],
+      modeInfo,
+      key: '奖杯',
+      renderItem: this.renderItem.bind(this, 1)
+    }, {
+      data: [statsInfo.trophyPoints],
+      modeInfo,
+      key: '奖杯点数',
+      renderItem: this.renderItem.bind(this, 2)
+    }, {
+      data: [statsInfo.trophyRare],
+      modeInfo,
+      key: '奖杯稀有度',
+      renderItem: this.renderItem.bind(this, 3)
+    }, {
+      data: [statsInfo.gamePercent],
+      modeInfo,
+      key: '游戏完成率',
+      renderItem: this.renderItem.bind(this, 4)
+    }, {
+      data: [statsInfo.gameDifficulty],
+      modeInfo,
+      key: '游戏难度',
+      renderItem: this.renderItem.bind(this, 5)
+    }]
+    this.setState({ sections })
   }
 
   handleImageOnclick = (url) => this.props.navigation.navigate('ImageViewer', {
@@ -62,108 +101,33 @@ export default class Home extends Component<any, any> {
     ]
   })
 
-  ITEM_HEIGHT = 83
-
-  renderGameItem = (rowData) => {
-    const { modeInfo, navigation } = this.props.screenProps
-    const { ITEM_HEIGHT } = this
-    return <UserGameItem {...{
-      navigation,
-      rowData,
-      modeInfo,
-      ITEM_HEIGHT
-    }} />
-  }
-
   hasGameTable = false
 
-  renderDiary = (rowData, index) => {
-    const { modeInfo } = this.props.screenProps
-    const shouldShowImage = rowData.thumbs.length !== 0
-    const suffix = '<div>' + rowData.thumbs.map(text => `<img src="${text}">`).join('') + '</div>'
-    const content = `<div>${rowData.content}<br><br>${shouldShowImage ? suffix : ''}</div>`
-
-    return (
-      <TouchableNativeFeedback key={rowData.id || index}   onPress={() => {
-        fetch(rowData.href).then(res => {
-          if (res.url && typeof res.url === 'string') {
-            this.props.screenProps.navigation.navigate('CommunityTopic', {
-              URL: res.url,
-              title: rowData.psnid,
-              rowData: {
-                id: res.url.split('/').pop()
-              },
-              type: res.url.includes('gene') ? 'gene' : 'community' // todo
-            })
-          }
-        }).catch(err => global.toast(err.toString()))
-
-        }}>
-        <View pointerEvents={'box-only'} style={{
-          backgroundColor: modeInfo.backgroundColor,
-          flexDirection: 'column',
-          borderBottomWidth: StyleSheet.hairlineWidth,
-          borderBottomColor: modeInfo.brighterLevelOne,
-          padding: 10
-        }}>
-
-          <View style={{ flex: -1, flexDirection: 'row', padding: 5 }}>
-            <global.HTMLView
-              value={content}
-              modeInfo={Object.assign({}, modeInfo, {
-                standardTextColor: modeInfo.titleTextColor
-              })}
-              stylesheet={styles}
-              onImageLongPress={this.handleImageOnclick}
-              imagePaddingOffset={30 + 10}
-              shouldForceInline={true}
-            />
-          </View>
-          <View style={{
-            flex: 1,
-            justifyContent: 'space-around',
-            flexDirection: 'row',
-            alignItems: 'flex-start',
-            padding: 2,
-            paddingLeft: 12
-          }}>
-            <Text
-              style={{
-                flex: 2,
-                textAlign: 'left',
-                textAlignVertical: 'center',
-                color: modeInfo.standardTextColor }}>{rowData.psnid}</Text>
-            <Text
-              style={{
-                flex: 1,
-                textAlign: 'left',
-                textAlignVertical: 'center',
-                color: modeInfo.standardTextColor }}>{rowData.date}</Text>
-            <Text
-              style={{
-                flex: 1,
-                textAlign: 'left',
-                textAlignVertical: 'center',
-                color: modeInfo.standardTextColor }}>{rowData.count}</Text>
-          </View>
-        </View>
-      </TouchableNativeFeedback>
-    )
+  renderItem = (index, { item }) => {
+    const { modeInfo, statsInfo } = this.props.screenProps
+    switch (index) {
+      case 0:
+        return <PieChart modeInfo={modeInfo} suffix='游戏' value={item}/>
+      case 1:
+        return <PieChart modeInfo={modeInfo} suffix='奖杯' value={item}/>
+      case 2:
+        return <PieChart modeInfo={modeInfo} suffix='奖杯点数' value={item}/>
+      case 3:
+        return <PieChart modeInfo={modeInfo} suffix='奖杯稀有度'
+          selectedEntry={statsInfo.trophyRarePercent} value={item}/>
+      case 4:
+        return <PieChart modeInfo={modeInfo} suffix='游戏完成率'
+          selectedEntry={statsInfo.gameRarePercent} value={item}/>
+      case 5:
+        return <PieChart modeInfo={modeInfo} suffix='游戏难度'
+          ignore value={item}/>
+    }
+    return null
   }
 
   render() {
     // console.log('GamePage.js rendered');
-    const { modeInfo, gameTable, diaryTable } = this.props.screenProps
-    let data = []
-    let renderFunc: any = () => null
-    if (gameTable.length !== 0) {
-      data = gameTable
-      renderFunc = this.renderGameItem
-    }
-    if (diaryTable.length !== 0) {
-      data = diaryTable
-      renderFunc = this.renderDiary
-    }
+    const { modeInfo } = this.props.screenProps
 
     // console.log(modeInfo.themeName)
     return (
@@ -184,22 +148,18 @@ export default class Home extends Component<any, any> {
             size={50}
           />
         )}
-        {!this.state.isLoading && <FlatList style={{
+        {!this.state.isLoading && <SectionList style={{
           flex: -1,
           backgroundColor: modeInfo.backgroundColor
         }}
-          data={data}
+          sections={this.state.sections}
+          stickySectionHeadersEnabled
           ref={(list) => this.flatlist = list}
-          scrollEnabled={this.state.scrollEnabled}
-          keyExtractor={(item, index) => item.href || index}
-          renderItem={({ item, index }) => {
-            return renderFunc(item, index)
-          }}
+          keyExtractor={(_, index) => index.toString()}
+          renderSectionHeader={renderSectionHeader as any}
           extraData={this.state}
-          windowSize={999}
           renderScrollComponent={props => <global.NestedScrollView {...props}/>}
           key={modeInfo.themeName}
-          numColumns={diaryTable.length ? 1 : modeInfo.numColumns}
           removeClippedSubviews={false}
           disableVirtualization={true}
           viewabilityConfig={{
@@ -208,7 +168,7 @@ export default class Home extends Component<any, any> {
             waitForInteraction: true
           }}
         >
-        </FlatList>
+        </SectionList>
         }
       </View>
     )

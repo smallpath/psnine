@@ -37,14 +37,6 @@ declare var global
 
 let toolbarHeight = 56
 
-const iconMapper = {
-  '游戏同步': 'md-sync',
-  '关注': 'md-star-half',
-  '感谢': 'md-thumbs-up',
-  '等级同步': 'md-sync',
-  '屏蔽': 'md-sync'
-}
-
 const limit = 360 // - toolbarHeight
 
 import {
@@ -62,7 +54,10 @@ export default class Home extends Component<any, any> {
     this.state = {
       data: false,
       isLoading: true,
-      toolbar: [],
+      toolbar: [{
+        title: '同步最新数据', iconName: 'md-sync', value: '', show: 'never'
+      }],
+      text: '同步中',
       gameList: [],
       trophyList: [],
       afterEachHooks: [],
@@ -79,6 +74,7 @@ export default class Home extends Component<any, any> {
       leftIcon: false,
       rightIcon: false,
       middleIcon: false,
+      statsInfo: {},
       _scrollHeight: this.props.screenProps.modeInfo.height - (StatusBar.currentHeight || 0) - 56 + 1
     }
   }
@@ -114,7 +110,7 @@ export default class Home extends Component<any, any> {
     this.preFetch()
   }
 
-  preFetch = async () => {
+  preFetch = async (forceNew = false) => {
     const { params } = this.props.navigation.state
     await this.setState({
       isLoading: true
@@ -132,25 +128,33 @@ export default class Home extends Component<any, any> {
       rightIcon: result[2]
     })
 
+    const data = await getHomeAPI(params.URL)
+
     const {
       gameList,
-      trophyList
-    } = await getTrophyList('secondlife_xhm', undefined)
-
-    InteractionManager.runAfterInteractions(() => {
-
-      getHomeAPI(params.URL).then(data => {
-
-        this.hasGameTable = data.gameTable.length !== 0
-        // console.log(profileToolbar)
-        this.setState({
-          data,
-          isLoading: false,
-          gameList,
-          trophyList
-        }, () => this._coordinatorLayout.setScrollingViewBehavior(this._scrollView))
+      trophyList,
+      statsInfo
+    } = await getTrophyList('secondlife_xhm', ({
+      gameIndex,
+      gameInfo,
+      title
+    }) => {
+      this.setState({
+        text: title || `正在同步 ${gameInfo.title} (${gameIndex}/${data.playerInfo.allGames})`
       })
-    })
+    }, forceNew)
+
+    this.hasGameTable = data.gameTable.length !== 0
+    // console.log(profileToolbar)
+    this.setState({
+      data,
+      isLoading: false,
+      gameList,
+      text: '同步中',
+      trophyList,
+      statsInfo
+    }, () => this._coordinatorLayout.setScrollingViewBehavior(this._scrollView))
+
   }
 
   hasGameTable = false
@@ -244,7 +248,7 @@ export default class Home extends Component<any, any> {
 
             <View style={{ flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center', flex: 1, padding: 5  }}>
               <View style={{ justifyContent: 'center', alignItems: 'center', flex: 1  }}>
-                <Text style={{ flex: 1, color: color, textAlign: 'center', fontSize: 20 }}>{rowData. allGames}</Text>
+                <Text style={{ flex: 1, color: color, textAlign: 'center', fontSize: 20 }}>{rowData.allGames}</Text>
                 <Text style={{ flex: 1, color: infoColor, textAlign: 'center', fontSize: 12 }}>总游戏</Text>
               </View>
               <View style={{ justifyContent: 'center', alignItems: 'center', flex: 1  }}>
@@ -281,6 +285,7 @@ export default class Home extends Component<any, any> {
         preFetch: this.preFetch,
         gameList: this.state.gameList,
         trophyList: this.state.trophyList,
+        statsInfo: this.state.statsInfo,
         setToolbar: ({ toolbar, toolbarActions, componentDidFocus }) => {
           const obj: any = {
             toolbar,
@@ -295,15 +300,7 @@ export default class Home extends Component<any, any> {
           }
           {/*this.setState(obj)*/}
         },
-        profileToolbar: this.state.data.psnButtonInfo.reverse().map(item => {
-          const result = { title: item.text, iconName: iconMapper[item.text], show: item.text.includes('游戏同步') ? 'always' : 'never' }
-          if (!iconMapper[item.text]) delete result.iconName
-          if (item.text.includes('冷却') || iconMapper[item.text]) return result
-          return undefined
-        }).filter(item => item),
         psnid: params.title,
-        gameTable: this.state.data.gameTable,
-        diaryTable: this.state.data.diaryTable,
         navigation: this.props.navigation
       }} onNavigationStateChange={(prevRoute, nextRoute, action) => {
         if (prevRoute.index !== nextRoute.index && action.type === 'Navigation/NAVIGATE') {
@@ -314,102 +311,9 @@ export default class Home extends Component<any, any> {
   }
 
  _onActionSelected = (index) => {
-    const { params } = this.props.navigation.state
-    const { preFetch } = this
-    const psnid = params.URL.split('/').filter(item => item.trim()).pop()
-    // alert(index)
     switch (index) {
-      case 4:
-        // if (psnid === modeInfo.settingInfo.psnid) return global.toast('不可以屏蔽自己')
-        block({
-          type: 'psnid',
-          param: psnid
-        }).then(res => res.text()).then(text => {
-          // console.log(text)
-          // ToastAndroid.show('同步成功', ToastAndroid.SHORT);
-          if (text) return global.toast(text)
-          global.toast('屏蔽成功')
-          preFetch && preFetch()
-        }).catch(err => {
-          const msg = `屏蔽失败: ${err.toString()}`
-          global.toast(msg)
-          // ToastAndroid.show(msg, ToastAndroid.SHORT);
-        })
-        return
-      case 3:
-        fav({
-          type: 'psnid',
-          param: psnid
-        }).then(res => res.text()).then(text => {
-          // console.log(text)
-          // ToastAndroid.show('同步成功', ToastAndroid.SHORT);
-          if (text) return global.toast(text)
-          global.toast('关注成功')
-          preFetch && preFetch()
-        }).catch(err => {
-          const msg = `操作失败: ${err.toString()}`
-          global.toast(msg)
-          // ToastAndroid.show(msg, ToastAndroid.SHORT);
-        })
-        return
-      case 2:
-        updown({
-          type: 'psnid',
-          param: psnid,
-          updown: 'up'
-        }).then(res => res.text()).then(text => {
-          // ToastAndroid.show('同步成功', ToastAndroid.SHORT);
-          if (text) return global.toast(text)
-          global.toast('感谢成功')
-          preFetch && preFetch()
-        }).catch(err => {
-          const msg = `操作失败: ${err.toString()}`
-          global.toast(msg)
-          // ToastAndroid.show(msg, ToastAndroid.SHORT);
-        })
-        return
-      case 1:
-        ToastAndroid.show('等级同步中..', ToastAndroid.SHORT)
-        upBase(psnid).then(res => res.text()).then(text => {
-          // console.log(text)
-          if (text.includes('玩脱了')) {
-            const arr = text.match(/\<title\>(.*?)\<\/title\>/)
-            if (arr && arr[1]) {
-              const msg = `同步失败: ${arr[1]}`
-              // ToastAndroid.show(msg, ToastAndroid.SHORT);
-              global.toast(msg)
-              return
-            }
-          }
-          // ToastAndroid.show('同步成功', ToastAndroid.SHORT);
-          global.toast('同步成功')
-          preFetch && preFetch()
-        }).catch(err => {
-          const msg = `同步失败: ${err.toString()}`
-          global.toast(msg)
-          // ToastAndroid.show(msg, ToastAndroid.SHORT);
-        })
-        return
       case 0:
-        ToastAndroid.show('游戏同步中..', ToastAndroid.SHORT)
-        sync(psnid).then(res => res.text()).then(text => {
-          if (text.includes('玩脱了')) {
-            const arr = text.match(/\<title\>(.*?)\<\/title\>/)
-            if (arr && arr[1]) {
-              const msg = `同步失败: ${arr[1]}`
-              // ToastAndroid.show(msg, ToastAndroid.SHORT);
-              global.toast(msg)
-              return
-            }
-          }
-          // ToastAndroid.show('同步成功', ToastAndroid.SHORT);
-          global.toast('同步成功')
-          preFetch && preFetch()
-        }).catch(err => {
-          const msg = `同步失败: ${err.toString()}`
-          global.toast(msg)
-          // ToastAndroid.show(msg, ToastAndroid.SHORT);
-        })
+        this.preFetch(true)
         return
     }
   }
@@ -470,7 +374,7 @@ export default class Home extends Component<any, any> {
                 overflowIcon={this.state.rightIcon}
                 title={`${params.title}`}
                 titleColor={modeInfo.isNightMode ? '#000' : '#fff'}
-                actions={this.toolbar}
+                actions={this.state.toolbar}
                 layoutParams={{
                   height: 56, // required,
                   collapseMode: CollapsingToolbarLayoutAndroid.CollapseMode.COLLAPSE_MODE_PIN // required
@@ -508,11 +412,23 @@ export default class Home extends Component<any, any> {
         style={{
           flex: 999,
           justifyContent: 'center',
-          alignItems: 'center'
+          alignItems: 'center',
+          marginBottom: 50
         }}
         color={modeInfo.accentColor}
         size={50}
       />
+      <Text style={{
+        position: 'absolute',
+        top: 100,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        zIndex: 100,
+        textAlign: 'center',
+        textAlignVertical: 'center',
+        color: modeInfo.standardTextColor
+      }}>{this.state.text}</Text>
     </View>
   }
 

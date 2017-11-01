@@ -7,6 +7,20 @@ const backgroundColorMapper = {
   t4: '#e4cdc1',
 }
 
+const typeMapper = {
+  t1: '白金',
+  t2: '金',
+  t3: '银',
+  t4: '铜'
+}
+
+const pointMapper = {
+  t1: 180,
+  t2: 90,
+  t3: 30,
+  t4: 15
+}
+
 export default function (html, hasPsnid = false) {
   const $ = parser.load(html)
   const all = $('.mt40 .main')
@@ -132,6 +146,7 @@ export default function (html, hasPsnid = false) {
         const hasTip = className && className.length !== 0
         const tryTip = $this.find('p a').next().next().text()
         const indexID = ($this.find('.h-p').parent().find('.r').text() || '').replace('#', '')
+        const t = $this.find('td').attr('class') || 't1'
         const info = {
           id: (($this.find('p a').attr('href') || '-1').match(/trophy\/(\d+)/) || [0, -1])[1],
           avatar: $this.find('img').attr('src'),
@@ -143,7 +158,9 @@ export default function (html, hasPsnid = false) {
           rare: $this.find('td').last().text().replace('珍贵度', ''),
           translateText: $this.find('td p').next().next().text(),
           indexID,
-          backgroundColor: backgroundColorMapper[$this.find('td').attr('class') || 't1'] || backgroundColorMapper['t1']
+          backgroundColor: backgroundColorMapper[t] || backgroundColorMapper['t4'],
+          type: typeMapper[t] || typeMapper['t4'],
+          point: pointMapper[t] || pointMapper['t4']
         }
         const time = $this.find('td em.lh180')
         if (time.attr('tips')) {
