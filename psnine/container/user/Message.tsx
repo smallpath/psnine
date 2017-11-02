@@ -36,6 +36,7 @@ class Message extends Component<any, any> {
     let URL = rowData.url
     let type = 'CommunityTopic'
     let replyType = 'community'
+    let customId = 0
     if (URL.includes('/gene/')) {
       type = 'GeneTopic'
       replyType = 'gene'
@@ -51,6 +52,10 @@ class Message extends Component<any, any> {
     } else if (URL.includes('/trophy/')) {
       type = 'Trophy'
       replyType = 'game'
+    } else if (URL.includes('/psngame/')) {
+      type = 'GamePoint'
+      replyType = 'psngame'
+      customId = (URL.match(/\/psngame\/(\d+)\/comment/) || [0, -1])[1]
     } else if (URL.includes('/psnid/') && URL.includes('comment')) {
       type = 'Home'
       replyType = ''
@@ -64,18 +69,16 @@ class Message extends Component<any, any> {
       })
       return
     }
-    if (getParams) return [type, {
+    const customObj = {}
+    if (customId) customObj.id = customId
+    const options = {
       URL,
       title: '@' + rowData.psnid ,
       type: replyType,
-      rowData
-    }]
-    navigation.navigate(type, {
-      URL,
-      title: '@' + rowData.psnid ,
-      type: replyType,
-      rowData
-    })
+      rowData: Object.assign({}, rowData, customObj)
+    }
+    if (getParams) return [type, options]
+    navigation.navigate(type, options)
   }
 
   handleImageOnclick = (url) => this.props.navigation.navigate('ImageViewer', {
