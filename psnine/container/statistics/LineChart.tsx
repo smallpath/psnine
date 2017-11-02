@@ -17,8 +17,8 @@ const config =  {
   drawFilled: true,
   fillColor: processColor('red'),
   fillAlpha: 60,
-  valueTextSize: 15,
-  valueFormatter: '##'
+  // valueTextSize: 15,
+  // valueFormatter: '##'
 }
 
 export default class LineChartScreen extends React.Component<any, any> {
@@ -39,7 +39,7 @@ export default class LineChartScreen extends React.Component<any, any> {
       label: '',
       config
     }]
-    // console.log(dataSets)
+
     this.state = {
       data: {
         dataSets

@@ -252,8 +252,61 @@ function statsd(statsInfo, gameList, trophyList) {
   })
 
   statsInfo.dayTrophy = mapObjToLine(dayTrophyObj)
-  console.log(statsInfo.dayArr, statsInfo.dayTrophy)
+
+  const tempHour = trophyList.reduce((prev, curr) => {
+    const date = new Date(curr.timestamp)
+    const str = date.getHours().toString()
+    if (prev[str]) {
+      prev[str] ++
+    } else {
+      prev[str] = 1
+    }
+    return prev
+  }, {})
+  const hours = '0'.repeat(24).split('').map((_, i) => i.toString())
+  Object.keys(tempHour).forEach(item => {
+    const index = hours.indexOf(item)
+    if (index !== -1) hours.splice(index, 1)
+  })
+  hours.forEach(str => {
+    tempHour[str] = 0
+  })
+  statsInfo.hourTrophy = mapObj(tempHour).sort((a: any, b: any) => {
+    return parseInt(a.label, 10) - parseInt(b.label, 10)
+  })
+
+  const tempWeek = trophyList.reduce((prev, curr) => {
+    const date = new Date(curr.timestamp)
+    const num = date.getDay()
+    const str = weekdays[num]
+    if (prev[str]) {
+      prev[str] ++
+    } else {
+      prev[str] = 1
+    }
+    return prev
+  }, {})
+  const weekdaysTemp = weekdays.slice()
+  Object.keys(tempWeek).forEach(item => {
+    const index = weekdays.indexOf(item)
+    if (index !== -1) weekdaysTemp.splice(index, 1)
+  })
+  weekdaysTemp.forEach(str => {
+    tempWeek[str] = 0
+  })
+  statsInfo.weekTrophy = mapObj(tempWeek).sort((a: any, b: any) => {
+    return weekdays.indexOf(a.label) - weekdays.indexOf(b.label)
+  })
 }
+
+const weekdays: any = []
+weekdays[0] = '周一'
+weekdays[1] = '周二'
+weekdays[2] = '周三'
+weekdays[3] = '周四'
+weekdays[4] = '周五'
+weekdays[5] = '周六'
+weekdays[6] = '周天'
 
 function mapObjToLine(obj) {
   return Object.keys(obj).map(name => {
