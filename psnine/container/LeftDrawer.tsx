@@ -374,8 +374,8 @@ export default class NavigationDrawer extends Component<any, any> {
     }
 
     const color = '#fff'
-    const size = 26
-    const borderRadius = 13
+    const size = 24
+    const borderRadius = 12
 
     if (psnid) {
       let dot: any = undefined

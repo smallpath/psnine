@@ -13,6 +13,7 @@ import {
 import update from 'immutability-helper'
 
 import PieChart from './PieChart'
+import LineChart from './LineChart'
 
 import UserGameItem from '../../component/UserGameItem'
 import {
@@ -91,7 +92,18 @@ export default class Home extends Component<any, any> {
       modeInfo,
       key: '游戏难度',
       renderItem: this.renderItem.bind(this, 5)
+    }, {
+      data: [statsInfo.monthTrophy],
+      modeInfo,
+      key: '月活跃度',
+      renderItem: this.renderItem.bind(this, 6)
+    }, {
+      data: [{ dataSets: statsInfo.dayTrophy, xAxis: statsInfo.dayArr }],
+      modeInfo,
+      key: '奖杯进度',
+      renderItem: this.renderItem.bind(this, 7)
     }]
+    // console.log(statsInfo.monthTrophy)
     this.setState({ sections })
   }
 
@@ -121,6 +133,12 @@ export default class Home extends Component<any, any> {
       case 5:
         return <PieChart modeInfo={modeInfo} suffix='游戏难度'
           ignore value={item}/>
+      case 6:
+        return <LineChart modeInfo={modeInfo} suffix='月活跃度'
+          value={item}/>
+      case 7:
+        return <LineChart modeInfo={modeInfo} suffix='月活跃度'
+          value={item.dataSets} xAxis={item.xAxis}/>
     }
     return null
   }

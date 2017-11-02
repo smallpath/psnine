@@ -142,7 +142,7 @@ export default class Home extends Component<any, any> {
       this.setState({
         text: title || `正在同步 ${gameInfo.title} (${gameIndex}/${data.playerInfo.allGames})`
       })
-    }, forceNew)
+    }, true)
 
     this.hasGameTable = data.gameTable.length !== 0
     // console.log(profileToolbar)

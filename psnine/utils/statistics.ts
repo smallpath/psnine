@@ -13,6 +13,9 @@ const getGameURL = (psnid, page) => `http://psnine.com/psnid/${psnid}/psngame?pa
 const getGameList = async (psnid, callback) => {
   const list: any = []
   let page = 1
+  callback && callback({
+    title: `正在获取第${page}页游戏`
+  })
   let result = await getMyGameAPI(getGameURL(psnid, page))
   while (result.list.length !== 0) {
     list.push(...result.list)
@@ -35,7 +38,7 @@ export const getTrophyList = async (psnid, callback, forceNew = false) => {
     }
   }
   const statsInfo: any = {}
-  const gameList = (await getGameList(psnid, callback))//.slice(0, 2)
+  const gameList = (await getGameList(psnid, callback)).slice(0, 2)
   const trophyList: any = []
 
   let index = 0
@@ -115,7 +118,6 @@ function statsd(statsInfo, gameList, trophyList) {
   statsInfo.trophyPoints = mapObj(trophyList.reduce((prev, curr) => {
     const { point, type } = curr
     if (!type) {
-      console.log(curr)
       return prev
     }
     if (prev[type]) {
@@ -200,5 +202,83 @@ function statsd(statsInfo, gameList, trophyList) {
     }
     return prev
   }, {}))
-  // statsInfo.gameDifficultyAverage = 
+
+  statsInfo.monthTrophy = mapObjToLine(trophyList.reduce((prev, curr) => {
+    const date = new Date(curr.timestamp)
+    const month = (date.getUTCMonth() + 1)
+    const str = date.getUTCFullYear() + '-' + (month < 10 ? '0' + month : month)
+    if (prev[str]) {
+      prev[str] += 1
+    } else {
+      prev[str] = 1
+    }
+    return prev
+  }, {})).sort((a: any, b: any) => a.time - b.time)
+
+  const tempDayTrophy = mapObjToMultiLine(trophyList.reduce((prev, curr) => {
+    const date = new Date(curr.timestamp)
+    const month = (date.getUTCMonth() + 1)
+    const day = date.getUTCDate()
+    const str = date.getUTCFullYear() + '-' + (month < 10 ? '0' + month : month) + '-'
+      + (day < 10 ? '0' + day : day)
+    const type = curr.type
+    if (prev[str]) {
+      prev[str][type] ++
+    } else {
+      prev[str] = {
+        '白金': 0,
+        '金': 0,
+        '银': 0,
+        '铜': 0
+      }
+      prev[str][type] ++
+    }
+    return prev
+  }, {})).sort((a: any, b: any) => a.time - b.time)
+
+  const dayTrophyObj: any = {
+    '白金': [],
+    '金': [],
+    '银': [],
+    '铜': []
+  }
+  statsInfo.dayArr = []
+  tempDayTrophy.forEach(item => {
+    statsInfo.dayArr.push(item.label)
+    dayTrophyObj.白金.push(item.value.白金)
+    dayTrophyObj.金.push(item.value.金)
+    dayTrophyObj.银.push(item.value.银)
+    dayTrophyObj.铜.push(item.value.铜)
+  })
+
+  statsInfo.dayTrophy = mapObjToLine(dayTrophyObj)
+  console.log(statsInfo.dayArr, statsInfo.dayTrophy)
+}
+
+function mapObjToLine(obj) {
+  return Object.keys(obj).map(name => {
+    const arr = name.split('-')
+
+    return {
+      label: name,
+      y: obj[name],
+      time: new Date(parseInt(arr[0], 10), parseInt(arr[1], 10)).valueOf()
+    }
+  })
+}
+
+function mapObjToMultiLine(obj) {
+  return Object.keys(obj).map(name => {
+    const arr = name.split('-')
+
+    return {
+      label: name,
+      value: obj[name],
+      time: new Date(
+        parseInt(arr[0], 10),
+        parseInt(arr[1], 10),
+        parseInt(arr[2], 10)
+      ).valueOf()
+    }
+  })
 }

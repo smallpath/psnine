@@ -21,7 +21,6 @@ import UserBoard from '../container/user/UserBoard'
 import Favorite from '../container/user/Favorite'
 import Issue from '../container/user/Issue'
 import UserCreateDiary from '../container/user/NewDiary'
-import TestChart from '../container/statistics/Test'
 import Stats from '../container/statistics/Stats'
 
 import Trophy from '../container/game/Trophy'
@@ -173,9 +172,6 @@ const Navigator = StackNavigator({
   },
   GameList: {
     screen: GameList
-  },
-  TestChart: {
-    screen: TestChart
   },
   CommentList: {
     screen: CommentList,
