@@ -30,7 +30,7 @@ const getGameList = async (psnid, callback) => {
 
 export const getTrophyList = async (psnid, callback, forceNew = false) => {
   if (forceNew === false) {
-    let cacheStr = await AsyncStorage.getItem('Statistics::TrophyList')
+    let cacheStr = await AsyncStorage.getItem(`Statistics::TrophyList::${psnid.toLowerCase()}`)
     if (cacheStr) {
       const cache = JSON.parse(cacheStr)
       // console.log('hehe', Object.keys(cache))
@@ -38,7 +38,7 @@ export const getTrophyList = async (psnid, callback, forceNew = false) => {
     }
   }
   const statsInfo: any = {}
-  const gameList = (await getGameList(psnid, callback)).slice(0, 2)
+  const gameList = (await getGameList(psnid, callback))//.slice(0, 2)
   const trophyList: any = []
 
   let index = 0
@@ -62,7 +62,7 @@ export const getTrophyList = async (psnid, callback, forceNew = false) => {
 
   statsd(statsInfo, gameList, trophyList)
 
-  await AsyncStorage.setItem('Statistics::TrophyList', JSON.stringify({
+  await AsyncStorage.setItem(`Statistics::TrophyList::${psnid.toLowerCase()}`, JSON.stringify({
     gameList,
     trophyList,
     statsInfo
@@ -204,6 +204,7 @@ function statsd(statsInfo, gameList, trophyList) {
   }, {}))
 
   statsInfo.monthTrophy = mapObjToLine(trophyList.reduce((prev, curr) => {
+    if (!curr.timestamp) return prev
     const date = new Date(curr.timestamp)
     const month = (date.getUTCMonth() + 1)
     const str = date.getUTCFullYear() + '-' + (month < 10 ? '0' + month : month)
@@ -216,6 +217,7 @@ function statsd(statsInfo, gameList, trophyList) {
   }, {})).sort((a: any, b: any) => a.time - b.time)
 
   const tempDayTrophy = mapObjToMultiLine(trophyList.reduce((prev, curr) => {
+    if (!curr.timestamp) return prev
     const date = new Date(curr.timestamp)
     const month = (date.getUTCMonth() + 1)
     const day = date.getUTCDate()
@@ -255,7 +257,8 @@ function statsd(statsInfo, gameList, trophyList) {
 
   const tempHour = trophyList.reduce((prev, curr) => {
     const date = new Date(curr.timestamp)
-    const str = date.getHours().toString()
+    const str = date.getHours()
+    if (!str) return prev
     if (prev[str]) {
       prev[str] ++
     } else {
@@ -275,10 +278,26 @@ function statsd(statsInfo, gameList, trophyList) {
     return parseInt(a.label, 10) - parseInt(b.label, 10)
   })
 
+  let points = 0
+  statsInfo.levelTrophy = []
   const tempWeek = trophyList.reduce((prev, curr) => {
+    if (!curr.timestamp) return prev
     const date = new Date(curr.timestamp)
+
     const num = date.getDay()
     const str = weekdays[num]
+    const { point } = curr
+    let nextPoints = points + point
+    const targetPoints = historyLevel[statsInfo.levelTrophy.length]
+    const isBigger = targetPoints ? nextPoints >= targetPoints : nextPoints > 0
+    // console.log(nextPoints, points, targetPoints, isBigger, points <= targetPoints, isBigger && points <= targetPoints)
+    if (isBigger && points <= targetPoints) {
+      // console.log('hit level')
+      statsInfo.levelTrophy.push(Object.assign({}, curr, {
+        level: statsInfo.levelTrophy.length + 1
+      }))
+    }
+    points = nextPoints
     if (prev[str]) {
       prev[str] ++
     } else {
@@ -297,6 +316,9 @@ function statsd(statsInfo, gameList, trophyList) {
   statsInfo.weekTrophy = mapObj(tempWeek).sort((a: any, b: any) => {
     return weekdays.indexOf(a.label) - weekdays.indexOf(b.label)
   })
+
+  // 等级历史
+
 }
 
 const weekdays: any = []
@@ -334,4 +356,38 @@ function mapObjToMultiLine(obj) {
       ).valueOf()
     }
   })
+}
+
+const historyLevel: any = [
+  0,
+  200,
+  600,
+  1200,
+  2400,
+  4000,
+  6000,
+  8000,
+  10000,
+  12000,
+  14000,
+  16000,
+  24000,
+  32000,
+  40000,
+  48000,
+  56000,
+  64000,
+  72000,
+  80000,
+  88000,
+  96000,
+  104000,
+  112000,
+  120000,
+  128000
+]
+
+for (let i = historyLevel.length; i < 100 ; i++) {
+  const finalOne = historyLevel[historyLevel.length - 1]
+  historyLevel.push(finalOne + 10000)
 }
