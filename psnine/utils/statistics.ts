@@ -42,8 +42,31 @@ export const getTrophyList = async (psnid, callback, forceNew = false) => {
   const trophyList: any = []
 
   let index = 0
+  // gameList[0].percent = '0%'
   for (const game of gameList) {
-    const result = await getGameAPI(game.href)
+    const cacheKey = `${game.href}`
+    // ::${game.trophyArr}::${game.percent}
+    const cacheGame = await AsyncStorage.getItem(cacheKey)
+    const cacheResult = await AsyncStorage.getItem(`${cacheKey}::trophy`)
+    let outterResult
+    console.log(!!cacheGame, !!cacheResult)
+    if (cacheGame && cacheResult) {
+      const parsedGame = JSON.parse(cacheGame)
+      console.log('===>', parsedGame.percent, game.percent)
+      if (parsedGame.trophyArr === game.trophyArr
+          && parsedGame.percent === game.percent) {
+        console.log('cache hit for game ' + game.title)
+        outterResult = JSON.parse(cacheResult)
+      } else {
+        console.log('=================> cache not hit')
+      }
+    }
+    const result = outterResult || (await getGameAPI(game.href))
+    if (!outterResult) {
+      console.log('cache game for ' + game.title)
+      await AsyncStorage.setItem(cacheKey, JSON.stringify(game))
+      await AsyncStorage.setItem(`${cacheKey}::trophy`, JSON.stringify(result))
+    }
     result.trophyArr.forEach(temp => {
       temp.list.forEach(trophy => {
         trophy.gameInfo = result.gameInfo
