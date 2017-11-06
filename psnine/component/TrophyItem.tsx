@@ -46,6 +46,7 @@ export default class extends React.PureComponent<ExtendedProp, {}> {
             <Text
               ellipsizeMode={'tail'}
               style={{ flex: -1, color: modeInfo.titleTextColor }}>
+              {rowData.level && <Text style={{ marginHorizontal: 2, color: modeInfo.accentColor }}>{rowData.level}</Text> || undefined}
               {rowData.title}
               { rowData.translate && <Text style={{ color: modeInfo.standardTextColor, marginLeft: 2  }}>{' ' + rowData.translate}</Text> }
               { rowData.tip && <Text style={{ color: modeInfo.standardColor , fontSize: 12, marginLeft: 2 }}>{' ' + rowData.tip}</Text> }

@@ -217,8 +217,9 @@ export default class TrophyAdvisor extends Component<any, any> {
   onValueChanged = () => {
     const { pf, ob } = this.state
 
-    const { trophyList } = this.props.screenProps
-    let data = trophyList.filter(item => !item.timestamp && item.rare)
+    const { unearnedTrophyList } = this.props.screenProps
+    // console.log(unearnedTrophyList && unearnedTrophyList.length, '===>')
+    let data = unearnedTrophyList.filter(item => !item.timestamp && item.rare)
     switch (pf) {
       case 'psvita':
         data = data.filter(item => item.gameInfo.platform.includes('PSV'))

@@ -52,6 +52,7 @@ export const getTrophyList = async (psnid, callback, forceNew = false) => {
         trophyList.push(trophy)
       })
     })
+
     callback && callback({
       gameInfo: result.gameInfo,
       trophyLength: trophyList.length,
@@ -60,14 +61,20 @@ export const getTrophyList = async (psnid, callback, forceNew = false) => {
     index++
   }
 
-  statsd(statsInfo, gameList, trophyList)
+  const earnedTrophyList = trophyList.filter(item => item.timestamp).sort((a: any, b: any) => b.time - a.time)
+  const unearnedTrophyList = trophyList.filter(item => !item.timestamp)
+  statsd(statsInfo, gameList, {
+    earnedTrophyList,
+    unearnedTrophyList
+  })
 
   await AsyncStorage.setItem(`Statistics::TrophyList::${psnid.toLowerCase()}`, JSON.stringify({
     gameList,
     trophyList,
+    unearnedTrophyList,
     statsInfo
   }))
-  return { gameList, trophyList, statsInfo }
+  return { gameList, trophyList: earnedTrophyList, statsInfo, unearnedTrophyList }
 }
 
 function mapObj(obj) {
@@ -79,7 +86,10 @@ function mapObj(obj) {
   })
 }
 
-function statsd(statsInfo, gameList, trophyList) {
+function statsd(statsInfo, gameList, {
+  unearnedTrophyList,
+  earnedTrophyList
+}) {
   // 平台
   statsInfo.platform = mapObj(gameList.reduce((prev, curr) => {
     const { platform } = curr
@@ -103,7 +113,7 @@ function statsd(statsInfo, gameList, trophyList) {
   }, {}))
 
   // 奖杯种类
-  statsInfo.trophyNumber = mapObj(trophyList.reduce((prev, curr) => {
+  statsInfo.trophyNumber = mapObj(earnedTrophyList.reduce((prev, curr) => {
     const { type } = curr
 
     if (prev[type]) {
@@ -115,7 +125,7 @@ function statsd(statsInfo, gameList, trophyList) {
   }, {}))
 
   // 点数
-  statsInfo.trophyPoints = mapObj(trophyList.reduce((prev, curr) => {
+  statsInfo.trophyPoints = mapObj(earnedTrophyList.reduce((prev, curr) => {
     const { point, type } = curr
     if (!type) {
       return prev
@@ -129,10 +139,10 @@ function statsd(statsInfo, gameList, trophyList) {
   }, {}))
 
   // 奖杯稀有度
-  statsInfo.trophyRarePercent = trophyList.reduce((prev, curr) => {
+  statsInfo.trophyRarePercent = (earnedTrophyList.reduce((prev, curr) => {
     return prev + parseFloat(curr.rare)
-  }, 0) / trophyList.length
-  statsInfo.trophyRare = mapObj(trophyList.reduce((prev, curr) => {
+  }, 0) / earnedTrophyList.length).toFixed(2) + '%'
+  statsInfo.trophyRare = mapObj(earnedTrophyList.reduce((prev, curr) => {
     const { rare } = curr
     const num = parseFloat(rare)
 
@@ -155,16 +165,19 @@ function statsd(statsInfo, gameList, trophyList) {
         break
     }
 
-    if (prev[type]) {
-      prev[type] += 1
-    } else {
-      prev[type] = 1
-    }
+    prev[type] += 1
     return prev
-  }, {}))
+  }, {
+    '地狱': 0,
+    '噩梦': 0,
+    '困难': 0,
+    '普通': 0,
+    '一般': 0,
+    '简单': 0
+  }))
 
   // 游戏完成率
-  statsInfo.gameRarePercent = trophyList.filter(item => item.time).length / trophyList.length
+  statsInfo.gameRarePercent = (earnedTrophyList.length / unearnedTrophyList.length).toFixed(2) + '%'
   statsInfo.gamePercent = mapObj(gameList.reduce((prev, curr) => {
 
     const num = new Function(`return ${curr.percent.replace('%', '/100')}`)()
@@ -193,7 +206,7 @@ function statsd(statsInfo, gameList, trophyList) {
   }, {}))
 
   // 游戏难度
-  statsInfo.gameDifficulty = mapObj(gameList.reduce((prev, curr) => {
+  const tempDiff = gameList.reduce((prev, curr) => {
     const type = curr.alert
     if (prev[type]) {
       prev[type] += 1
@@ -201,9 +214,18 @@ function statsd(statsInfo, gameList, trophyList) {
       prev[type] = 1
     }
     return prev
-  }, {}))
+  }, {})
+  statsInfo.gameDifficulty = mapObj({
+    '地狱': tempDiff.地狱,
+    '噩梦': tempDiff.噩梦,
+    '困难': tempDiff.困难,
+    '麻烦': tempDiff.麻烦,
+    '普通': tempDiff.普通,
+    '容易': tempDiff.容易
+  })
 
-  statsInfo.monthTrophy = mapObjToLine(trophyList.reduce((prev, curr) => {
+  // 月活
+  statsInfo.monthTrophy = mapObjToLine(earnedTrophyList.reduce((prev, curr) => {
     if (!curr.timestamp) return prev
     const date = new Date(curr.timestamp)
     const month = (date.getUTCMonth() + 1)
@@ -216,13 +238,23 @@ function statsd(statsInfo, gameList, trophyList) {
     return prev
   }, {})).sort((a: any, b: any) => a.time - b.time)
 
-  const tempDayTrophy = mapObjToMultiLine(trophyList.reduce((prev, curr) => {
+  // 日活
+  const tempAllMinute = {}
+  const tempDayTrophy = mapObjToMultiLine(earnedTrophyList.reverse().reduce((prev, curr) => {
     if (!curr.timestamp) return prev
     const date = new Date(curr.timestamp)
     const month = (date.getUTCMonth() + 1)
     const day = date.getUTCDate()
     const str = date.getUTCFullYear() + '-' + (month < 10 ? '0' + month : month) + '-'
       + (day < 10 ? '0' + day : day)
+    const hour = date.getHours()
+    const minute = date.getMinutes()
+    const tempAllMinuteStr = str + `:${hour}-${minute}`
+    if (tempAllMinute[tempAllMinuteStr]) {
+      tempAllMinute[tempAllMinuteStr]++
+    } else {
+      tempAllMinute[tempAllMinuteStr] = 1
+    }
     const type = curr.type
     if (prev[str]) {
       prev[str][type] ++
@@ -236,7 +268,7 @@ function statsd(statsInfo, gameList, trophyList) {
       prev[str][type] ++
     }
     return prev
-  }, {})).sort((a: any, b: any) => a.time - b.time)
+  }, {}))
 
   const dayTrophyObj: any = {
     '白金': [],
@@ -244,6 +276,7 @@ function statsd(statsInfo, gameList, trophyList) {
     '银': [],
     '铜': []
   }
+  statsInfo.minuteArr = Object.keys(tempAllMinute)
   statsInfo.dayArr = []
   tempDayTrophy.forEach(item => {
     statsInfo.dayArr.push(item.label)
@@ -255,9 +288,10 @@ function statsd(statsInfo, gameList, trophyList) {
 
   statsInfo.dayTrophy = mapObjToLine(dayTrophyObj)
 
-  const tempHour = trophyList.reduce((prev, curr) => {
+  const tempHour = earnedTrophyList.reduce((prev, curr) => {
     const date = new Date(curr.timestamp)
-    const str = date.getHours()
+    const str = date.getUTCHours()
+    // if (str === 6) console.log(curr.timestamp)
     if (!str) return prev
     if (prev[str]) {
       prev[str] ++
@@ -280,7 +314,7 @@ function statsd(statsInfo, gameList, trophyList) {
 
   let points = 0
   statsInfo.levelTrophy = []
-  const tempWeek = trophyList.reduce((prev, curr) => {
+  const tempWeek = earnedTrophyList.reverse().sort((a, b) => a.timestamp - b.timestamp).reduce((prev, curr) => {
     if (!curr.timestamp) return prev
     const date = new Date(curr.timestamp)
 
@@ -305,14 +339,18 @@ function statsd(statsInfo, gameList, trophyList) {
     }
     return prev
   }, {})
+  statsInfo.levelTrophy = statsInfo.levelTrophy.reverse()
   const weekdaysTemp = weekdays.slice()
   Object.keys(tempWeek).forEach(item => {
-    const index = weekdays.indexOf(item)
+    const index = weekdaysTemp.indexOf(item)
+    // console.log(item, index, '===>')
     if (index !== -1) weekdaysTemp.splice(index, 1)
   })
+  // console.log(weekdaysTemp, '===> deleted')
   weekdaysTemp.forEach(str => {
     tempWeek[str] = 0
   })
+  // console.log(tempWeek)
   statsInfo.weekTrophy = mapObj(tempWeek).sort((a: any, b: any) => {
     return weekdays.indexOf(a.label) - weekdays.indexOf(b.label)
   })
@@ -322,13 +360,14 @@ function statsd(statsInfo, gameList, trophyList) {
 }
 
 const weekdays: any = []
-weekdays[0] = '周一'
-weekdays[1] = '周二'
-weekdays[2] = '周三'
-weekdays[3] = '周四'
-weekdays[4] = '周五'
-weekdays[5] = '周六'
-weekdays[6] = '周天'
+weekdays[0] = '周天'
+weekdays[1] = '周一'
+weekdays[2] = '周二'
+weekdays[3] = '周三'
+weekdays[4] = '周四'
+weekdays[5] = '周五'
+weekdays[6] = '周六'
+
 
 function mapObjToLine(obj) {
   return Object.keys(obj).map(name => {

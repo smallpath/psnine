@@ -15,50 +15,48 @@ declare var global
 
 import { LineChart } from 'react-native-charts-wrapper'
 
-const config =  {
-  lineWidth: 2,
-  drawCircles: false,
-  highlightColor: processColor('red'),
-  color: processColor('red'),
-  drawFilled: true,
-  fillColor: processColor('red'),
-  fillAlpha: 60,
-  // valueTextSize: 15,
-  // valueFormatter: '##'
-}
-
 export default class LevelHistory extends Component<any, any> {
   static navigationOptions = {
      tabBarLabel: '等级历史'
   }
   constructor(props) {
     super(props)
-
+    const { modeInfo } = props.screenProps
     const value = props.screenProps.statsInfo.levelTrophy
     const obj = value.reduce((prev, curr) => {
       const date = new Date(curr.timestamp)
       const month = (date.getUTCMonth() + 1)
       const day = date.getUTCDate()
-      const str = date.getUTCFullYear() + '-' + (month < 10 ? '0' + month : month) + '-'
-        + (day < 10 ? '0' + day : day)
+      const hour = date.getHours()
+      const minute = date.getMinutes()
+      let str = date.getUTCFullYear() + '-' + (month < 10 ? '0' + month : month) + '-'
+        + (day < 10 ? '0' + day : day) + `:${hour}-${minute}`
       prev[str] = curr
       return prev
     }, {})
-    const valueFormatter = props.screenProps.statsInfo.dayArr
+    const valueFormatter = props.screenProps.statsInfo.minuteArr.slice()//.reverse()
     const dataSets = [{
       label: ``,
-      config,
+      config: {
+        lineWidth: 2,
+        drawCircles: false,
+        highlightColor: processColor(modeInfo.accentColor),
+        color: processColor(modeInfo.accentColor),
+        drawFilled: true,
+        fillColor: processColor(modeInfo.accentColor),
+        fillAlpha: 150
+      },
       values: valueFormatter.map(item => {
-        if (obj[item]) {
+        // console.log(item)
+        if (obj[item.replace(/\_suffix/igm, '')]) {
+          // console.log(item, 'intter ===>')
           return {
             y: obj[item].level
           }
-        } else {
-          return { y: 0 }
         }
       })
     }]
-    // console.log(dataSets[0], valueFormatter[0])
+    // console.log(dataSets[0].values, value.map(item => item.level))
 
     this.state = {
       data: [],
@@ -68,12 +66,17 @@ export default class LevelHistory extends Component<any, any> {
         },
         xAxis: {
           valueFormatter,
-          granularity: 1,
+          position: 'BOTTOM',
+          drawGridLines: false,
           granularityEnabled: true,
-          position: 'BOTTOM'
+          granularity: 1,
+          labelRotationAngle: 15
+          // avoidFirstLastClipping: true
+          // labelCountForce: true,
+          // labelCount: 12
         },
         legend: {
-          enabled: true,
+          enabled: false,
           textColor: processColor('blue'),
           textSize: 12,
           position: 'BELOW_CHART_RIGHT',
@@ -123,7 +126,7 @@ export default class LevelHistory extends Component<any, any> {
         <LineChart
         style={styles.chart}
         data={this.state.lineData.data}
-        description={{text: ''}}
+        chartDescription={{text: ''}}
         legend={this.state.lineData.legend}
         marker={this.state.lineData.marker}
         xAxis={this.state.lineData.xAxis}
@@ -131,7 +134,14 @@ export default class LevelHistory extends Component<any, any> {
         borderColor={processColor('teal')}
         borderWidth={1}
         drawBorders={true}
-
+        yAxis={{
+          left: {
+            axisMinimum: 0
+          },
+          right: {
+            axisMinimum: 0
+          }
+        }}
         touchEnabled={true}
         dragEnabled={true}
         scaleEnabled={true}
@@ -158,7 +168,7 @@ export default class LevelHistory extends Component<any, any> {
   render() {
     // console.log('GamePage.js rendered');
     const { modeInfo } = this.props.screenProps
-    console.log(this.state.data, 're renred', this.state.data.length)
+    // console.log(this.state.data, 're renred', this.state.data.length)
     return (
       <View
         style={{ flex: 1, backgroundColor: modeInfo.backgroundColor }}

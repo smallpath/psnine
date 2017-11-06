@@ -9,19 +9,45 @@ export const rankColor = '#67c613'
 export const ps4Color = '#8662DD'
 export const ps3Color = '#F05561'
 export const psvColor = '#0AAAE9'
-export const warningColor = '#faa732'
-export const textWarningColor = '#c09853'
-export const textErrorColor = '#b94a48'
+
+export const textWarningColor = '#c09853' // 麻烦
+export const textDifficultColor = '#c09853' // 困难
+export const textErrorColor = '#b94a48' // 噩梦
+export const textHellColor = '#b94a48' // 地狱
 export const textPerfectColor = '#659f13'
-export const textSuccessColor = '#3a87ad'
-export const errorColor = '#da314b'
-export const perfectColor = '#00a8e6'
-export const successColor = '#8cc14c'
+export const textSuccessColor = '#3a87ad' // 容易
+
+export const errorColor = '#da314b'  // <25%
+export const warningColor = '#faa732' // <50%
+export const successColor = '#8cc14c' // <90%
+export const perfectColor = '#00a8e6'  // 100%
+
+export const gamePercentColor = [
+  errorColor,
+  textHellColor,
+  textWarningColor,
+  warningColor,
+  textSuccessColor,
+  perfectColor
+]
+
 export const trophyColor1 = '#7a96d1'
 export const trophyColor2 = '#cd9a46'
 export const trophyColor3 = '#a6a6a6'
 export const trophyColor4 = '#bf6a3a'
 export const trophyColor5 = 'rgba(0000.5)'
+export const backgroundColorMapper = {
+  '白金': '#d5d9e4',
+  '金': '#f6e5c8',
+  '银': '#dcdcdc',
+  '铜': '#e4cdc1'
+}
+export const backgroundColorArrMapper = [
+  'rgb(102, 127, 178)',
+  'rgb(194, 144, 62)',
+  'rgb(119, 119, 119)',
+  'rgb(196, 100, 56)'
+]
 
 export const getColorFromProgress = (progress) => {
   const value = parseInt(progress)

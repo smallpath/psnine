@@ -1,31 +1,17 @@
 import React from 'react'
 import {
   StyleSheet,
-  Text,
-  View, processColor,
-  ScrollView
+  View, processColor
 } from 'react-native'
-import update from 'immutability-helper'
 
 import { BarChart } from 'react-native-charts-wrapper'
-
-const config =  {
-  lineWidth: 2,
-  drawCircles: false,
-  highlightColor: processColor('red'),
-  color: processColor('red'),
-  drawFilled: true,
-  fillColor: processColor('red'),
-  fillAlpha: 60,
-  valueTextSize: 15,
-  valueFormatter: '##'
-}
 
 export default class BarChartScreen extends React.Component<any, any> {
 
   constructor(props) {
     super(props)
     // console.log(props.value)
+    const { modeInfo } = props
     this.state = {
       legend: {
         enabled: true,
@@ -41,21 +27,25 @@ export default class BarChartScreen extends React.Component<any, any> {
       data: {
         dataSets: [{
           values: props.value.map(item => ({ y: item.value })),
-          label: 'Bar dataSet',
+          label: '奖杯数',
           config: {
-            color: processColor('teal'),
-            barSpacePercent: 40,
-            barShadowColor: processColor('lightgrey'),
+            color: processColor(modeInfo.deepColor),
+            barSpacePercent: 1,
+            barShadowColor: processColor(modeInfo.deepColor),
             highlightAlpha: 90,
-            highlightColor: processColor('red')
+            highlightColor: processColor(modeInfo.deepColor)
           }
-        }]
+        }],
+        config: {
+          barSpacePercent: 1
+        }
       },
       xAxis: {
         valueFormatter: props.value.map(item => item.label),
         granularity : 1,
         granularityEnabled: true,
-        position: 'BOTTOM'
+        position: 'BOTTOM',
+        drawGridLines: false
       }
     }
   }
@@ -74,7 +64,8 @@ export default class BarChartScreen extends React.Component<any, any> {
           xAxis={this.state.xAxis}
           animation={{durationX: 2000}}
           legend={this.state.legend}
-          gridBackgroundColor={processColor('#ffffff')}
+          gridBackgroundColor={processColor(modeInfo.background)}
+          chartDescription={{text: ''}}
           drawBarShadow={false}
           drawValueAboveBar={true}
           drawHighlightArrow={true}

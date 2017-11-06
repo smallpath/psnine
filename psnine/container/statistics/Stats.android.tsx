@@ -75,6 +75,7 @@ export default class Home extends Component<any, any> {
       rightIcon: false,
       middleIcon: false,
       statsInfo: {},
+      unearnedTrophyList: [],
       _scrollHeight: this.props.screenProps.modeInfo.height - (StatusBar.currentHeight || 0) - 56 + 1
     }
   }
@@ -133,7 +134,8 @@ export default class Home extends Component<any, any> {
     const {
       gameList,
       trophyList,
-      statsInfo
+      statsInfo,
+      unearnedTrophyList
     } = await getTrophyList('secondlife_xhm', ({
       gameIndex,
       gameInfo,
@@ -152,6 +154,7 @@ export default class Home extends Component<any, any> {
       gameList,
       text: '同步中',
       trophyList,
+      unearnedTrophyList,
       statsInfo
     }, () => this._coordinatorLayout.setScrollingViewBehavior(this._scrollView))
 
@@ -285,6 +288,7 @@ export default class Home extends Component<any, any> {
         preFetch: this.preFetch,
         gameList: this.state.gameList,
         trophyList: this.state.trophyList,
+        unearnedTrophyList: this.state.unearnedTrophyList,
         statsInfo: this.state.statsInfo,
         setToolbar: ({ toolbar, toolbarActions, componentDidFocus }) => {
           const obj: any = {

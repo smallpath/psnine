@@ -1,11 +1,9 @@
 import React from 'react'
 import {
   StyleSheet,
-  Text,
-  View, processColor,
-  ScrollView
+  View, processColor
 } from 'react-native'
-import update from 'immutability-helper'
+import Values from 'values.js'
 
 import { PieChart } from 'react-native-charts-wrapper'
 
@@ -31,11 +29,15 @@ export default class PieChartScreen extends React.Component<any, any> {
           values: props.value,
           label: '',
           config: {
-            colors: [processColor('#C0FF8C'), processColor('#FFF78C'), processColor('#FFD08C'), processColor('#8CEAFF'), processColor('#FF8C9D')],
+            colors: props.colors || [
+              '#C0FF8C',
+              '#FFF78C', '#FFD08C', '#8CEAFF',
+              '#FF8C9D'].map(item => processColor(new Values(item).shade(25).hexString())),
             valueTextSize: 16,
             valueTextColor: processColor(props.modeInfo.titleTextColor),
             sliceSpace: 5,
-            selectionShift: 13
+            selectionShift: 13,
+            valueFormatter: '##'
           }
         }]
       },
@@ -62,7 +64,7 @@ export default class PieChartScreen extends React.Component<any, any> {
           chartDescription={this.state.description}
           data={this.state.data}
           legend={this.state.legend}
-          entryLabelColor={processColor(modeInfo.standardTextColor)}
+          entryLabelColor={processColor(modeInfo.titleTextColor)}
           entryLabelTextSize = {15}
           rotationEnabled={false}
           drawSliceText={true}

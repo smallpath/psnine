@@ -4,19 +4,16 @@ import {
   Text,
   View,
   SectionList,
-  TouchableNativeFeedback,
-  ActivityIndicator,
   processColor,
-  Animated,
-  FlatList
+  ActivityIndicator,
+  Animated
 } from 'react-native'
-import update from 'immutability-helper'
 
 import PieChart from './PieChart'
 import LineChart from './LineChart'
 import BarChart from './BarChart'
+import Values from 'values.js'
 
-import UserGameItem from '../../component/UserGameItem'
 import {
   standardColor,
   idColor
@@ -128,21 +125,25 @@ export default class Home extends Component<any, any> {
 
   renderItem = (index, { item }) => {
     const { modeInfo, statsInfo } = this.props.screenProps
+    const colors = modeInfo.backgroundColorArrMapper.map(item => processColor(
+      new Values(item).tint(25).hexString()
+    ))
+    const percentColors = modeInfo.gamePercentColor.map(item => processColor(item))
     switch (index) {
       case 0:
         return <PieChart modeInfo={modeInfo} suffix='游戏' value={item}/>
       case 1:
-        return <PieChart modeInfo={modeInfo} suffix='奖杯' value={item}/>
+        return <PieChart modeInfo={modeInfo} colors={colors} suffix='奖杯' value={item}/>
       case 2:
-        return <PieChart modeInfo={modeInfo} suffix='奖杯点数' value={item}/>
+        return <PieChart modeInfo={modeInfo} colors={colors} suffix='奖杯点数' value={item}/>
       case 3:
-        return <PieChart modeInfo={modeInfo} suffix='奖杯稀有度'
+        return <PieChart modeInfo={modeInfo} colors={percentColors} suffix='奖杯稀有度'
           selectedEntry={statsInfo.trophyRarePercent} value={item}/>
       case 4:
-        return <PieChart modeInfo={modeInfo} suffix='游戏完成率'
+        return <PieChart modeInfo={modeInfo} colors={percentColors.reverse()} suffix='游戏完成率'
           selectedEntry={statsInfo.gameRarePercent} value={item}/>
       case 5:
-        return <PieChart modeInfo={modeInfo} suffix='游戏难度'
+        return <PieChart modeInfo={modeInfo} colors={percentColors} suffix='游戏难度'
           ignore value={item}/>
       case 6:
         return <LineChart modeInfo={modeInfo} suffix='月活跃度'
