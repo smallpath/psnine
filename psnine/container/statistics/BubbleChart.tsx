@@ -1,0 +1,95 @@
+import React from 'react'
+import {
+  StyleSheet,
+  View,
+  processColor
+} from 'react-native'
+import { BubbleChart } from 'react-native-charts-wrapper'
+
+class BubbleChartScreen extends React.Component<any, any> {
+
+  constructor(props) {
+    super(props)
+
+    const { modeInfo } = props
+    const temp = props.value.weekLoc.sort((a, b) => {
+      const day = a.x - b.x
+      return day || (a.y - b.y)
+    })
+    const valueFormatter = props.value.daysMapper.slice()
+    valueFormatter.unshift()
+    valueFormatter.push(props.value.daysMapper[0])
+    const isX = item => item.x === 6
+    const values = [...temp.filter(isX), ...temp.filter(item => item.x !== 6)]
+    this.state = {
+      data: {
+        dataSets: [{
+          values,
+          label: '奖杯数',
+          config: {
+            color: processColor(modeInfo.deepColor),
+            highlightCircleWidth: 2
+          }
+        }]
+      },
+      legend: {
+        enabled: true,
+        textSize: 14,
+        form: 'CIRCLE',
+        wordWrapEnabled: true
+      },
+      xAxis: {
+        valueFormatter,
+        position: 'BOTTOM',
+        drawGridLines: false,
+        granularityEnabled: true,
+        granularity: 1,
+        labelRotationAngle: 15
+        // avoidFirstLastClipping: true
+        // labelCountForce: true,
+        // labelCount: 12
+      },
+      yAxis: {
+        left: {
+          axisMinimum: 0,
+          axisMaximum: 23
+        },
+        right: {
+          axisMinimum: 0,
+          axisMaximum: 23
+        }
+      }
+    }
+  }
+
+  handleSelect = () => {
+  }
+
+  render() {
+    // console.log(this.state.data.dataSets[0].values.filter(item => item.x === 6))
+    return (
+      <View style={{ height: 250 }}>
+        <BubbleChart
+          style={styles.chart}
+          data={this.state.data}
+          legend={this.state.legend}
+          xAxis={this.state.xAxis}
+          yAxis={this.state.yAxis}
+          onSelect={this.handleSelect}
+        />
+      </View>
+    )
+  }
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#F5FCFF'
+  },
+  chart: {
+    flex: 1
+  }
+})
+
+export default BubbleChartScreen

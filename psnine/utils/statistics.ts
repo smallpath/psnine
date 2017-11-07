@@ -29,8 +29,9 @@ const getGameList = async (psnid, callback) => {
 }
 
 export const getTrophyList = async (psnid, callback, forceNew = false) => {
+  const prefix = `Statistics::TrophyList::${psnid.toLowerCase()}`
   if (forceNew === false) {
-    let cacheStr = await AsyncStorage.getItem(`Statistics::TrophyList::${psnid.toLowerCase()}`)
+    let cacheStr = await AsyncStorage.getItem(prefix)
     if (cacheStr) {
       const cache = JSON.parse(cacheStr)
       // console.log('hehe', Object.keys(cache))
@@ -44,7 +45,7 @@ export const getTrophyList = async (psnid, callback, forceNew = false) => {
   let index = 0
   // gameList[0].percent = '0%'
   for (const game of gameList) {
-    const cacheKey = `${game.href}`
+    const cacheKey = `${prefix}::${game.href}`
     // ::${game.trophyArr}::${game.percent}
     const cacheGame = await AsyncStorage.getItem(cacheKey)
     const cacheResult = await AsyncStorage.getItem(`${cacheKey}::trophy`)
@@ -378,7 +379,46 @@ function statsd(statsInfo, gameList, {
     return weekdays.indexOf(a.label) - weekdays.indexOf(b.label)
   })
 
-  // 等级历史
+  // 星期活跃度分布
+
+  const weekLoc = earnedTrophyList.reduce((prev, curr) => {
+    if (!curr.timestamp) return prev
+    const date = new Date(curr.timestamp)
+
+    const num = date.getDay()
+    // const day = weekdays[num]
+    const hour = date.getUTCHours()
+
+    const key = `${num}-${hour}`
+    if (prev[key]) {
+      prev[key] ++
+    } else {
+      prev[key] = 1
+    }
+    return prev
+  }, {})
+  statsInfo.weekLoc = Object.keys(weekLoc).map(item => {
+    return {
+      x: parseInt(item.split('-')[0] as string, 10),
+      y: parseInt(item.split('-').pop() as string, 10),
+      size: weekLoc[item],
+      data: {
+        y: parseInt(item.split('-').pop() as string, 10),
+        size: weekLoc[item]
+      }
+    }
+  })
+  statsInfo.daysMapper = weekdays
+  console.log(statsInfo.weekLoc)
+  // [{
+  //   x: '周一',
+  //   y: 19,
+  //   size: 20,
+  //   data: {
+  //     y: 19,
+  //     size: 20
+  //   }
+  // }]
 
 }
 

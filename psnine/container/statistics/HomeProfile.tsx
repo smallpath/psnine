@@ -12,6 +12,7 @@ import {
 import PieChart from './PieChart'
 import LineChart from './LineChart'
 import BarChart from './BarChart'
+import BubbleChart from './BubbleChart'
 import Values from 'values.js'
 
 import {
@@ -110,6 +111,11 @@ export default class Home extends Component<any, any> {
       modeInfo,
       key: '星期活跃度',
       renderItem: this.renderItem.bind(this, 9)
+    }, {
+      data: [statsInfo || {}],
+      modeInfo,
+      key: '星期活跃度分布',
+      renderItem: this.renderItem.bind(this, 10)
     }]
     // console.log(statsInfo.monthTrophy)
     this.setState({ sections })
@@ -156,6 +162,9 @@ export default class Home extends Component<any, any> {
           value={item}/>
       case 9:
         return <BarChart modeInfo={modeInfo} suffix='星期活跃度'
+          value={item}/>
+      case 10:
+        return <BubbleChart modeInfo={modeInfo} suffix='星期活跃度分布'
           value={item}/>
     }
     return null
