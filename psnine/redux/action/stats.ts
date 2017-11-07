@@ -4,6 +4,7 @@ declare var global
 
 export function getTrophyList(psnid, data, forceNew) {
   return dispatch => {
+    dispatch(changeLoading(true))
     const callback = notifyCallback.bind(data, dispatch)
     return core(psnid, callback, forceNew)
       .then(response => {
@@ -43,6 +44,13 @@ function getError(argument) {
 function notify(argument) {
   return {
     type: ActionTypes.SET_NOTIFY,
+    value: argument
+  }
+}
+
+function changeLoading(argument) {
+  return {
+    type: ActionTypes.CHANGE_STATS_LOADING,
     value: argument
   }
 }

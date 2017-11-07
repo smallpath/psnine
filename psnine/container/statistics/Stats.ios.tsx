@@ -89,10 +89,10 @@ class StatsHome extends Component<any, any> {
       this.preFetch()
       // this.props.navigation.navigate('Home', params)
     } else if (this.props.stats.notifyText !== '同步中' && nextProps.stats.notifyText === '同步中') {
-      const { gameList, trophyList, unearnedTrophyList, statsInfo } = nextProps.stats
+      const { gameList, trophyList, isLoading, unearnedTrophyList, statsInfo } = nextProps.stats
       console.log(gameList.length, '===> receiver')
       this.setState({
-        isLoading: false,
+        isLoading,
         gameList,
         trophyList,
         unearnedTrophyList,
@@ -144,8 +144,9 @@ class StatsHome extends Component<any, any> {
     })
 
     const data = await getHomeAPI(params.URL)
+    await this.setState({ data })
     console.log(this.props.stats.gameList.length, '====> start dispatch')
-    // if (this.props.stats.gameList.length === 0) {
+    if (this.props.stats.isLoading === true) return
     const {
       gameList,
       trophyList,
@@ -158,7 +159,6 @@ class StatsHome extends Component<any, any> {
     console.log(gameList.length, '===> prefetch')
     console.log('preFetch end')
     this.setState({
-      data,
       isLoading: false,
       gameList,
       trophyList,
