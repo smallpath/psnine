@@ -67,7 +67,7 @@ export default class extends React.PureComponent<ExtendedProp, {}> {
               {rowData.translateText || rowData.text}
             </Text>
           </View>
-          <View style={{ flex: 0.8, justifyContent: 'center', padding: 2 }}>
+          <View style={{ flex: 1, justifyContent: 'center', padding: 2 }}>
             <Text selectable={false}
               style={{
                 flex: -1,

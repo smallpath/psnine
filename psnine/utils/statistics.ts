@@ -147,7 +147,12 @@ function statsd(statsInfo, gameList, {
       prev[type] = 1
     }
     return prev
-  }, {}))
+  }, {
+    '白金': 0,
+    '金': 0,
+    '银': 0,
+    '铜': 0
+  }))
 
   // 点数
   statsInfo.trophyPoints = mapObj(earnedTrophyList.reduce((prev, curr) => {
@@ -161,9 +166,14 @@ function statsd(statsInfo, gameList, {
       prev[type] = point
     }
     return prev
-  }, {}))
+  }, {
+    '白金': 0,
+    '金': 0,
+    '银': 0,
+    '铜': 0
+  }))
 
-  // 奖杯稀有度
+  // 奖杯稀有率
   statsInfo.trophyRarePercent = (earnedTrophyList.reduce((prev, curr) => {
     return prev + parseFloat(curr.rare)
   }, 0) / earnedTrophyList.length).toFixed(2) + '%'

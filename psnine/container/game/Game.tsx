@@ -317,8 +317,6 @@ export default class GamePage extends Component<any, any> {
         <View key={rowData.id || index} pointerEvents={'box-only'} style={{
           backgroundColor: backgroundColor,
           flexDirection: 'row',
-          borderBottomWidth: StyleSheet.hairlineWidth,
-          borderBottomColor: modeInfo.brighterLevelOne,
           padding: 0
         }}>
           <View pointerEvents='box-only' style={{ flex: -1, flexDirection: 'row', padding: 12 }}>
