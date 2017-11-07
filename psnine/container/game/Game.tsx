@@ -13,6 +13,8 @@ import {
   Button
 } from 'react-native'
 
+import Values from 'values.js'
+
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import colorConfig, {
   standardColor, idColor,
@@ -290,6 +292,8 @@ export default class GamePage extends Component<any, any> {
     // console.log(this.props.navigation)
     const { callbackAfterAll } = this.props.navigation.state.params
     const isChecked = selections.includes(rowData.indexID)
+    const targetColor = isChecked ? modeInfo.tintColor : (rowData.backgroundColor || modeInfo.backgroundColor)
+    const backgroundColor = modeInfo.isNightMode ? new Values(targetColor).shade(60).hexString() : targetColor
     return (
       <TouchableNativeFeedback key={rowData.id || index} onPress={
         () => {
@@ -311,13 +315,13 @@ export default class GamePage extends Component<any, any> {
         }
       }>
         <View key={rowData.id || index} pointerEvents={'box-only'} style={{
-          backgroundColor: isChecked ? modeInfo.tintColor : modeInfo.backgroundColor,
+          backgroundColor: backgroundColor,
           flexDirection: 'row',
           borderBottomWidth: StyleSheet.hairlineWidth,
           borderBottomColor: modeInfo.brighterLevelOne,
           padding: 0
         }}>
-          <View pointerEvents='box-only' style={{ flex: -1, flexDirection: 'row', padding: 12, backgroundColor: rowData.backgroundColor }}>
+          <View pointerEvents='box-only' style={{ flex: -1, flexDirection: 'row', padding: 12 }}>
             <Image
               source={{ uri: rowData.avatar }}
               style={[styles.avatar, { width: 54, height: 54 }]}

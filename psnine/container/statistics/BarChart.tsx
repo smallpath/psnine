@@ -17,6 +17,7 @@ export default class BarChartScreen extends React.Component<any, any> {
         enabled: true,
         textSize: 14,
         form: 'SQUARE',
+        textColor: processColor(props.modeInfo.standardTextColor),
         formSize: 14,
         xEntrySpace: 10,
         yEntrySpace: 5,
@@ -33,11 +34,13 @@ export default class BarChartScreen extends React.Component<any, any> {
             barSpacePercent: 1,
             barShadowColor: processColor(modeInfo.deepColor),
             highlightAlpha: 90,
-            highlightColor: processColor(modeInfo.deepColor)
+            highlightColor: processColor(modeInfo.deepColor),
+            valueTextColor: processColor(modeInfo.titleTextColor)
           }
         }],
         config: {
-          barSpacePercent: 1
+          barSpacePercent: 1,
+          valueTextColor: processColor(modeInfo.titleTextColor)
         }
       },
       xAxis: {
@@ -45,6 +48,7 @@ export default class BarChartScreen extends React.Component<any, any> {
         granularity : 1,
         granularityEnabled: true,
         position: 'BOTTOM',
+        textColor: processColor(props.modeInfo.standardTextColor),
         drawGridLines: false
       }
     }
@@ -62,9 +66,20 @@ export default class BarChartScreen extends React.Component<any, any> {
           style={styles.chart}
           data={this.state.data}
           xAxis={this.state.xAxis}
+          yAxis={{
+            left: {
+              axisMinimum: 0,
+              textColor: processColor(modeInfo.standardTextColor)
+            },
+            right: {
+              axisMinimum: 0,
+              textColor: processColor(modeInfo.standardTextColor)
+            }
+          }}
           animation={{durationX: 2000}}
           legend={this.state.legend}
           gridBackgroundColor={processColor(modeInfo.background)}
+          entryLabelColor={processColor(modeInfo.titleTextColor)}
           chartDescription={{text: ''}}
           drawBarShadow={false}
           drawValueAboveBar={true}

@@ -37,20 +37,24 @@ export default class LineChartScreen extends React.Component<any, any> {
             color: processColor(modeInfo.backgroundColorArrMapper[index]),
             fillColor: processColor(modeInfo.backgroundColorArrMapper[index]),
             fillAlpha: 255,
-            valueFormatter: '##'
+            valueFormatter: '##',
+            valueTextColor: processColor(modeInfo.titleTextColor)
           })
         }
       }).reverse() : [{
         values: props.value,
         label: '奖杯数',
-        config
+        config: Object.assign({}, config, {
+          valueTextColor: processColor(modeInfo.titleTextColor)
+        })
       }]
     const xAxis: any = {
       valueFormatter: props.xAxis || props.value.map(item => item.label),
       granularity : 1,
       granularityEnabled: true,
       position: 'BOTTOM',
-      drawGridLines: false
+      drawGridLines: false,
+      textColor: processColor(props.modeInfo.standardTextColor)
     }
     if (props.xAxis) {
       xAxis.labelRotationAngle = 15
@@ -62,10 +66,12 @@ export default class LineChartScreen extends React.Component<any, any> {
       xAxis,
       yAxis: {
         left: {
-          axisMinimum: 0
+          axisMinimum: 0,
+          textColor: processColor(props.modeInfo.standardTextColor)
         },
         right: {
-          axisMinimum: 0
+          axisMinimum: 0,
+          textColor: processColor(props.modeInfo.standardTextColor)
         }
       },
       legend: {
@@ -87,9 +93,9 @@ export default class LineChartScreen extends React.Component<any, any> {
       },
       marker: {
         enabled: true,
-        backgroundTint: processColor('teal'),
+        backgroundTint: processColor(modeInfo.standardColor),
         markerColor: processColor('#F0C0FF8C'),
-        textColor: processColor('white')
+        textColor: processColor(modeInfo.standardTextColor)
       }
     }
   }
@@ -111,6 +117,7 @@ export default class LineChartScreen extends React.Component<any, any> {
           xAxis={this.state.xAxis}
           yAxis={this.state.yAxis}
           drawGridBackground={false}
+          entryLabelColor={processColor(modeInfo.titleTextColor)}
           borderColor={processColor('teal')}
           borderWidth={1}
           drawBorders={true}

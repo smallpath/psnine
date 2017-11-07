@@ -85,7 +85,7 @@ export const getTrophyList = async (psnid, callback, forceNew = false) => {
     index++
   }
 
-  const earnedTrophyList = trophyList.filter(item => item.timestamp).sort((a: any, b: any) => b.time - a.time)
+  const earnedTrophyList = trophyList.filter(item => item.timestamp).sort((a: any, b: any) => b.timestamp - a.timestamp)
   const unearnedTrophyList = trophyList.filter(item => !item.timestamp)
   statsd(statsInfo, gameList, {
     earnedTrophyList,
@@ -409,16 +409,6 @@ function statsd(statsInfo, gameList, {
     }
   })
   statsInfo.daysMapper = weekdays
-  console.log(statsInfo.weekLoc)
-  // [{
-  //   x: '周一',
-  //   y: 19,
-  //   size: 20,
-  //   data: {
-  //     y: 19,
-  //     size: 20
-  //   }
-  // }]
 
 }
 

@@ -28,7 +28,8 @@ class BubbleChartScreen extends React.Component<any, any> {
           label: '奖杯数',
           config: {
             color: processColor(modeInfo.deepColor),
-            highlightCircleWidth: 2
+            highlightCircleWidth: 2,
+            valueTextColor: processColor(modeInfo.titleTextColor)
           }
         }]
       },
@@ -36,7 +37,8 @@ class BubbleChartScreen extends React.Component<any, any> {
         enabled: true,
         textSize: 14,
         form: 'CIRCLE',
-        wordWrapEnabled: true
+        wordWrapEnabled: true,
+        textColor: processColor(props.modeInfo.standardTextColor)
       },
       xAxis: {
         valueFormatter,
@@ -44,7 +46,7 @@ class BubbleChartScreen extends React.Component<any, any> {
         drawGridLines: false,
         granularityEnabled: true,
         granularity: 1,
-        labelRotationAngle: 15
+        textColor: processColor(props.modeInfo.standardTextColor)
         // avoidFirstLastClipping: true
         // labelCountForce: true,
         // labelCount: 12
@@ -52,11 +54,13 @@ class BubbleChartScreen extends React.Component<any, any> {
       yAxis: {
         left: {
           axisMinimum: 0,
-          axisMaximum: 23
+          axisMaximum: 23,
+          textColor: processColor(props.modeInfo.standardTextColor)
         },
         right: {
           axisMinimum: 0,
-          axisMaximum: 23
+          axisMaximum: 23,
+          textColor: processColor(props.modeInfo.standardTextColor)
         }
       }
     }
@@ -75,6 +79,7 @@ class BubbleChartScreen extends React.Component<any, any> {
           legend={this.state.legend}
           xAxis={this.state.xAxis}
           yAxis={this.state.yAxis}
+          entryLabelColor={processColor(this.props.modeInfo.titleTextColor)}
           onSelect={this.handleSelect}
         />
       </View>

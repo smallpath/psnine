@@ -35,6 +35,7 @@ export default class LevelHistory extends Component<any, any> {
       return prev
     }, {})
     const valueFormatter = props.screenProps.statsInfo.minuteArr.slice()//.reverse()
+    // console.log(valueFormatter)
     const dataSets = [{
       label: ``,
       config: {
@@ -44,12 +45,13 @@ export default class LevelHistory extends Component<any, any> {
         color: processColor(modeInfo.accentColor),
         drawFilled: true,
         fillColor: processColor(modeInfo.accentColor),
-        fillAlpha: 150
+        fillAlpha: 150,
+        valueTextColor: processColor(modeInfo.titleTextColor)
       },
       values: valueFormatter.map(item => {
         // console.log(item)
         if (obj[item.replace(/\_suffix/igm, '')]) {
-          // console.log(item, 'intter ===>')
+          console.log(item, 'intter ===>')
           return {
             y: obj[item].level
           }
@@ -57,7 +59,15 @@ export default class LevelHistory extends Component<any, any> {
       })
     }]
     // console.log(dataSets[0].values, value.map(item => item.level))
-
+    console.log(valueFormatter.map(item => {
+      // console.log(item)
+      if (obj[item.replace(/\_suffix/igm, '')]) {
+        // console.log(item, 'intter ===>')
+        return {
+          y: obj[item].level
+        }
+      }
+    }).filter(item => item))
     this.state = {
       data: [],
       lineData: {
@@ -70,7 +80,8 @@ export default class LevelHistory extends Component<any, any> {
           drawGridLines: false,
           granularityEnabled: true,
           granularity: 1,
-          labelRotationAngle: 15
+          labelRotationAngle: 15,
+          textColor: processColor(modeInfo.standardTextColor)
           // avoidFirstLastClipping: true
           // labelCountForce: true,
           // labelCount: 12
@@ -122,7 +133,7 @@ export default class LevelHistory extends Component<any, any> {
     const { modeInfo, navigation } = this.props.screenProps
     // console.log(index)
     if (index === 0) return (
-      <View style={{height: 250}}>
+      <View style={{height: 250, marginBottom: 5}}>
         <LineChart
         style={styles.chart}
         data={this.state.lineData.data}
@@ -136,9 +147,11 @@ export default class LevelHistory extends Component<any, any> {
         drawBorders={true}
         yAxis={{
           left: {
+            textColor: processColor(modeInfo.standardTextColor),
             axisMinimum: 0
           },
           right: {
+            textColor: processColor(modeInfo.standardTextColor),
             axisMinimum: 0
           }
         }}

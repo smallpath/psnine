@@ -17,6 +17,7 @@ export default class PieChartScreen extends React.Component<any, any> {
       legend: {
         enabled: true,
         textSize: 10,
+        textColor: processColor(props.modeInfo.standardTextColor),
         form: 'CIRCLE',
         position: 'RIGHT_OF_CHART',
         wordWrapEnabled: true
@@ -35,7 +36,7 @@ export default class PieChartScreen extends React.Component<any, any> {
               '#FF8C9D'].map(item => processColor(new Values(item).shade(25).hexString())),
             valueTextSize: 16,
             valueTextColor: processColor(props.modeInfo.titleTextColor),
-            sliceSpace: 5,
+            sliceSpace: 3,
             selectionShift: 13,
             valueFormatter: '##'
           }
@@ -60,7 +61,7 @@ export default class PieChartScreen extends React.Component<any, any> {
         <PieChart
           style={styles.chart}
           logEnabled={true}
-          chartBackgroundColor={processColor(modeInfo.background)}
+          chartBackgroundColor={processColor(modeInfo.backgroundColor)}
           chartDescription={this.state.description}
           data={this.state.data}
           legend={this.state.legend}
@@ -75,7 +76,7 @@ export default class PieChartScreen extends React.Component<any, any> {
           holeColor={processColor('#f0f0f0')}
           transparentCircleRadius={45}
           transparentCircleColor={processColor('#f0f0f088')}
-          maxAngle={350}
+          maxAngle={360}
           onSelect={this.handleSelect}
         />
       </View>
