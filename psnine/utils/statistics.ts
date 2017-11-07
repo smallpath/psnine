@@ -30,11 +30,12 @@ const getGameList = async (psnid, callback) => {
 
 export const getTrophyList = async (psnid, callback, forceNew = false) => {
   const prefix = `Statistics::TrophyList::${psnid.toLowerCase()}`
+  console.log('===> it really starts')
   if (forceNew === false) {
     let cacheStr = await AsyncStorage.getItem(prefix)
     if (cacheStr) {
       const cache = JSON.parse(cacheStr)
-      // console.log('hehe', Object.keys(cache))
+      console.log('hehe global cache hit', Object.keys(cache))
       return cache
     }
   }

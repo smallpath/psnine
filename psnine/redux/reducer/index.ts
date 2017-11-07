@@ -11,6 +11,7 @@ import store from './store'
 import trade from './trade'
 import recommend from './recommend'
 import discount from './discount'
+import stats from './stats'
 
 const rootReducer = combineReducers({
   app,
@@ -24,7 +25,8 @@ const rootReducer = combineReducers({
   store,
   trade,
   recommend,
-  discount
+  discount,
+  stats
 })
 
 export default rootReducer

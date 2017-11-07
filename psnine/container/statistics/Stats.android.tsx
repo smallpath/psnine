@@ -1,12 +1,10 @@
 import React, { Component } from 'react'
 import {
   StyleSheet,
-  ToastAndroid,
   Text,
   View,
   Image,
   Dimensions,
-  InteractionManager,
   ActivityIndicator,
   StatusBar,
   Animated,
@@ -14,8 +12,9 @@ import {
   ToolbarAndroid
 } from 'react-native'
 
-import { sync, updown, fav, upBase, block } from '../../dao/sync'
-import { getTrophyList } from '../../utils/statistics'
+import { connect } from 'react-redux'
+
+import { getTrophyList } from '../../redux/action/stats'
 
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import {
@@ -47,7 +46,7 @@ import {
 
 import ImageBackground from '../../component/ImageBackground'
 
-export default class Home extends Component<any, any> {
+class StatsHome extends Component<any, any> {
 
   constructor(props) {
     super(props)
@@ -81,9 +80,22 @@ export default class Home extends Component<any, any> {
   }
 
   componentWillReceiveProps(nextProps) {
+    console.log(this.props.stats.notifyText !== '同步中' && nextProps.stats.notifyText === '同步中', '===> receiver start')
     if (this.props.screenProps.modeInfo.width !== nextProps.screenProps.modeInfo.width) {
       this.preFetch()
       // this.props.navigation.navigate('Home', params)
+    } else if (this.props.stats.notifyText !== '同步中' && nextProps.stats.notifyText === '同步中') {
+      const { gameList, trophyList, unearnedTrophyList, statsInfo } = nextProps.stats
+      console.log(gameList.length, '===> receiver')
+      this.setState({
+        isLoading: false,
+        gameList,
+        trophyList,
+        unearnedTrophyList,
+        statsInfo
+      }, () => this._coordinatorLayout && this._coordinatorLayout.setScrollingViewBehavior(
+        this._scrollView
+      ))
     }
   }
 
@@ -99,7 +111,7 @@ export default class Home extends Component<any, any> {
     this.keyboardDidHideListener && this.keyboardDidHideListener.remove()
   }
 
-  componentWillMount() {
+  async componentWillMount() {
     // this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', (event) => {
     //   // console.log(event.nativeEvent, this._coordinatorLayout.resetBehavior)
     //   this._coordinatorLayout.resetBehavior(this._appBarLayout, false, true)
@@ -108,6 +120,7 @@ export default class Home extends Component<any, any> {
       // this._coordinatorLayout.setScrollingViewBehavior(this._scrollView)
       this._coordinatorLayout.resetBehavior(this._appBarLayout, false)
     })
+
     this.preFetch()
   }
 
@@ -130,37 +143,31 @@ export default class Home extends Component<any, any> {
     })
 
     const data = await getHomeAPI(params.URL)
-
+    console.log(this.props.stats.gameList.length, '====> start dispatch')
+    // if (this.props.stats.gameList.length === 0) {
     const {
       gameList,
       trophyList,
-      statsInfo,
-      unearnedTrophyList
-    } = await getTrophyList('secondlife_xhm', ({
-      gameIndex,
-      gameInfo,
-      title
-    }) => {
-      this.setState({
-        text: title || `正在同步 ${gameInfo.title} (${gameIndex}/${data.playerInfo.allGames})`
-      })
-    }, forceNew)
-
-    this.hasGameTable = data.gameTable.length !== 0
-    // console.log(profileToolbar)
+      unearnedTrophyList,
+      statsInfo
+    } = await this.props.dispatch(
+      getTrophyList(data.playerInfo.psnid, data, forceNew)
+    )
+    console.log('preFetch start')
+    console.log(gameList.length, '===> prefetch')
+    console.log('preFetch end')
     this.setState({
       data,
       isLoading: false,
       gameList,
-      text: '同步中',
       trophyList,
       unearnedTrophyList,
       statsInfo
-    }, () => this._coordinatorLayout.setScrollingViewBehavior(this._scrollView))
+    }, () => this._coordinatorLayout && this._coordinatorLayout.setScrollingViewBehavior(
+      this._scrollView
+    ))
 
   }
-
-  hasGameTable = false
 
   handleImageOnclick = (url) => this.props.navigation.navigate('ImageViewer', {
     images: [
@@ -336,10 +343,12 @@ export default class Home extends Component<any, any> {
     const { params } = this.props.navigation.state
     console.log('Home.js rendered')
     const { modeInfo } = this.props.screenProps
-    const { data: source } = this.state
-
+    const { data: source, gameList } = this.state
+    console.log(!!source.playerInfo, 
+      !!this.state.leftIcon,
+      gameList.length !== 0, !this.state.isLoading, '===> render')
     // console.log(JSON.stringify(profileToolbar))
-    return source.playerInfo && this.state.leftIcon && !this.state.isLoading ? (
+    return source.playerInfo && this.state.leftIcon && gameList.length !== 0 && !this.state.isLoading ? (
       <View style={{flex: 1}}>
         <CoordinatorLayoutAndroid
           fitsSystemWindows={false}
@@ -432,7 +441,7 @@ export default class Home extends Component<any, any> {
         textAlign: 'center',
         textAlignVertical: 'center',
         color: modeInfo.standardTextColor
-      }}>{this.state.text}</Text>
+      }}>{this.props.stats.notifyText}</Text>
     </View>
   }
 
@@ -531,3 +540,13 @@ const styles = StyleSheet.create({
     color: '#FFF'
   }
 })
+
+function mapStateToProps(state) {
+  return {
+    stats: state.stats
+  }
+}
+
+export default connect(
+  mapStateToProps
+)(StatsHome)

@@ -9,11 +9,13 @@ import {
   InteractionManager,
   ActivityIndicator,
   StatusBar,
-  Animated,
-  PanResponder
+  Animated
 } from 'react-native'
 
-import { sync, updown, fav, upBase, block } from '../../dao/sync'
+import { connect } from 'react-redux'
+
+import { getTrophyList } from '../../redux/action/stats'
+
 import Interactable from 'react-native-interactable'
 
 import Ionicons from 'react-native-vector-icons/Ionicons'
@@ -46,23 +48,24 @@ const iconMapper = {
 
 const limit = 360 // - toolbarHeight
 
-import {
-  AppBarLayoutAndroid,
-  CoordinatorLayoutAndroid,
-  CollapsingToolbarLayoutAndroid
-} from 'mao-rn-android-kit'
-
 import ImageBackground from '../../component/ImageBackground'
 
-export default class Home extends Component<any, any> {
+class StatsHome extends Component<any, any> {
 
   constructor(props) {
     super(props)
     this.state = {
       data: false,
       isLoading: true,
-      toolbar: [],
+      toolbar: [{
+        title: '同步最新数据', iconName: 'md-sync', value: '', show: 'never'
+      }],
+      text: '同步中',
+      gameList: [],
+      trophyList: [],
       afterEachHooks: [],
+      statsInfo: {},
+      unearnedTrophyList: [],
       mainContent: false,
       rotation: new Animated.Value(1),
       scale: new Animated.Value(1),
@@ -81,9 +84,22 @@ export default class Home extends Component<any, any> {
   }
 
   componentWillReceiveProps(nextProps) {
+    console.log(this.props.stats.notifyText !== '同步中' && nextProps.stats.notifyText === '同步中', '===> receiver start')
     if (this.props.screenProps.modeInfo.width !== nextProps.screenProps.modeInfo.width) {
-      this.props.navigation.goBack()
+      this.preFetch()
       // this.props.navigation.navigate('Home', params)
+    } else if (this.props.stats.notifyText !== '同步中' && nextProps.stats.notifyText === '同步中') {
+      const { gameList, trophyList, unearnedTrophyList, statsInfo } = nextProps.stats
+      console.log(gameList.length, '===> receiver')
+      this.setState({
+        isLoading: false,
+        gameList,
+        trophyList,
+        unearnedTrophyList,
+        statsInfo
+      }, () => this._coordinatorLayout && this._coordinatorLayout.setScrollingViewBehavior(
+        this._scrollView
+      ))
     }
   }
 
@@ -109,7 +125,7 @@ export default class Home extends Component<any, any> {
 
   PanResponder
 
-  preFetch = async () => {
+  preFetch = async (forceNew = false) => {
     const { params } = this.props.navigation.state
     await this.setState({
       isLoading: true
@@ -127,18 +143,31 @@ export default class Home extends Component<any, any> {
       rightIcon: result[2]
     })
 
-    InteractionManager.runAfterInteractions(() => {
+    const data = await getHomeAPI(params.URL)
+    console.log(this.props.stats.gameList.length, '====> start dispatch')
+    // if (this.props.stats.gameList.length === 0) {
+    const {
+      gameList,
+      trophyList,
+      unearnedTrophyList,
+      statsInfo
+    } = await this.props.dispatch(
+      getTrophyList(data.playerInfo.psnid, data, forceNew)
+    )
+    console.log('preFetch start')
+    console.log(gameList.length, '===> prefetch')
+    console.log('preFetch end')
+    this.setState({
+      data,
+      isLoading: false,
+      gameList,
+      trophyList,
+      unearnedTrophyList,
+      statsInfo
+    }, () => this._coordinatorLayout && this._coordinatorLayout.setScrollingViewBehavior(
+      this._scrollView
+    ))
 
-      getHomeAPI(params.URL).then(data => {
-
-        this.hasGameTable = data.gameTable.length !== 0
-        // console.log(profileToolbar)
-        this.setState({
-          data,
-          isLoading: false
-        })
-      })
-    })
   }
 
   hasGameTable = false
@@ -268,6 +297,10 @@ export default class Home extends Component<any, any> {
         modeInfo: modeInfo,
         toolbar: list,
         preFetch: this.preFetch,
+        gameList: this.state.gameList,
+        trophyList: this.state.trophyList,
+        unearnedTrophyList: this.state.unearnedTrophyList,
+        statsInfo: this.state.statsInfo,
         setToolbar: ({ toolbar, toolbarActions, componentDidFocus }) => {
           const obj: any = {
             toolbar,
@@ -293,8 +326,6 @@ export default class Home extends Component<any, any> {
           return undefined
         }).filter(item => item),
         psnid: params.title,
-        gameTable: this.state.data.gameTable,
-        diaryTable: this.state.data.diaryTable,
         navigation: this.props.navigation
       }} onNavigationStateChange={(prevRoute, nextRoute, action) => {
         if (prevRoute.index !== nextRoute.index && action.type === 'Navigation/NAVIGATE') {
@@ -309,106 +340,6 @@ export default class Home extends Component<any, any> {
   afterSnapHooks = []
   currentTabIndex = 0
 
- _onActionSelected = (index) => {
-    const { params } = this.props.navigation.state
-    const { preFetch } = this
-    const psnid = params.URL.split('/').filter(item => item.trim()).pop()
-    // alert(index)
-    switch (index) {
-      case 4:
-        // if (psnid === modeInfo.settingInfo.psnid) return global.toast('不可以屏蔽自己')
-        block({
-          type: 'psnid',
-          param: psnid
-        }).then(res => res.text()).then(text => {
-          // console.log(text)
-          // ToastAndroid.show('同步成功', ToastAndroid.SHORT);
-          if (text) return global.toast(text)
-          global.toast('屏蔽成功')
-          preFetch && preFetch()
-        }).catch(err => {
-          const msg = `屏蔽失败: ${err.toString()}`
-          global.toast(msg)
-          // ToastAndroid.show(msg, ToastAndroid.SHORT);
-        })
-        return
-      case 3:
-        fav({
-          type: 'psnid',
-          param: psnid
-        }).then(res => res.text()).then(text => {
-          // console.log(text)
-          // ToastAndroid.show('同步成功', ToastAndroid.SHORT);
-          if (text) return global.toast(text)
-          global.toast('关注成功')
-          preFetch && preFetch()
-        }).catch(err => {
-          const msg = `操作失败: ${err.toString()}`
-          global.toast(msg)
-          // ToastAndroid.show(msg, ToastAndroid.SHORT);
-        })
-        return
-      case 2:
-        updown({
-          type: 'psnid',
-          param: psnid,
-          updown: 'up'
-        }).then(res => res.text()).then(text => {
-          // ToastAndroid.show('同步成功', ToastAndroid.SHORT);
-          if (text) return global.toast(text)
-          global.toast('感谢成功')
-          preFetch && preFetch()
-        }).catch(err => {
-          const msg = `操作失败: ${err.toString()}`
-          global.toast(msg)
-          // ToastAndroid.show(msg, ToastAndroid.SHORT);
-        })
-        return
-      case 1:
-        ToastAndroid.show('等级同步中..', ToastAndroid.SHORT)
-        upBase(psnid).then(res => res.text()).then(text => {
-          // console.log(text)
-          if (text.includes('玩脱了')) {
-            const arr = text.match(/\<title\>(.*?)\<\/title\>/)
-            if (arr && arr[1]) {
-              const msg = `同步失败: ${arr[1]}`
-              // ToastAndroid.show(msg, ToastAndroid.SHORT);
-              global.toast(msg)
-              return
-            }
-          }
-          // ToastAndroid.show('同步成功', ToastAndroid.SHORT);
-          global.toast('同步成功')
-          preFetch && preFetch()
-        }).catch(err => {
-          const msg = `同步失败: ${err.toString()}`
-          global.toast(msg)
-          // ToastAndroid.show(msg, ToastAndroid.SHORT);
-        })
-        return
-      case 0:
-        ToastAndroid.show('游戏同步中..', ToastAndroid.SHORT)
-        sync(psnid).then(res => res.text()).then(text => {
-          if (text.includes('玩脱了')) {
-            const arr = text.match(/\<title\>(.*?)\<\/title\>/)
-            if (arr && arr[1]) {
-              const msg = `同步失败: ${arr[1]}`
-              // ToastAndroid.show(msg, ToastAndroid.SHORT);
-              global.toast(msg)
-              return
-            }
-          }
-          // ToastAndroid.show('同步成功', ToastAndroid.SHORT);
-          global.toast('同步成功')
-          preFetch && preFetch()
-        }).catch(err => {
-          const msg = `同步失败: ${err.toString()}`
-          global.toast(msg)
-          // ToastAndroid.show(msg, ToastAndroid.SHORT);
-        })
-        return
-    }
-  }
 
   onIconClicked = () => this.props.navigation.goBack()
 
@@ -432,10 +363,10 @@ export default class Home extends Component<any, any> {
     const { params } = this.props.navigation.state
     console.log('Home.js rendered')
     const { modeInfo } = this.props.screenProps
-    const { data: source } = this.state
+    const { data: source, gameList } = this.state
 
     // console.log(JSON.stringify(profileToolbar))
-    return source.playerInfo && this.state.leftIcon && !this.state.isLoading ? (
+    return source.playerInfo && this.state.leftIcon && gameList.length !== 0 && !this.state.isLoading ? (
       <View style={{flex: 1}}>
         <Animated.View style={{
           /* opacity: this._deltaY.interpolate({
@@ -530,6 +461,17 @@ export default class Home extends Component<any, any> {
         color={modeInfo.accentColor}
         size={50}
       />
+      <Text style={{
+        position: 'absolute',
+        top: 100,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        zIndex: 100,
+        textAlign: 'center',
+        textAlignVertical: 'center',
+        color: modeInfo.standardTextColor
+      }}>{this.props.stats.notifyText}</Text>
     </View>
   }
 
@@ -628,3 +570,13 @@ const styles = StyleSheet.create({
     color: '#FFF'
   }
 })
+
+function mapStateToProps(state) {
+  return {
+    stats: state.stats
+  }
+}
+
+export default connect(
+  mapStateToProps
+)(StatsHome)
