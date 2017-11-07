@@ -13,7 +13,7 @@ export function getTrophyList(psnid, data, forceNew) {
       }).catch(err => {
         console.error('stats.js line12', err)
         dispatch(getError('ww'))
-        global.toast && global.toast('网络错误', 2000)
+        global.toast && global.toast('网络错误 ' + err.toString(), 2000)
       })
   }
 }

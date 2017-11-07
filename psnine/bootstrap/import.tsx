@@ -9,6 +9,7 @@ import HTMLView from '../component/HTMLView'
 import MyDialog from '../component/Dialog'
 import ToolbarIOS from '../component/ToolbarIOS'
 import ModalPicker from '../component/ModalPicker'
+import DiskStorage from '../component/DiskStorage'
 import Values from 'values.js'
 import DialogAndroid from 'react-native-dialogs'
 
@@ -79,6 +80,12 @@ if (TouchableComponent !== TouchableNativeFeedback) {
 Object.defineProperty(ReactNative, 'TouchableNativeFeedback', {
   get: function () {
     return TouchableComponent
+  }
+})
+
+Object.defineProperty(ReactNative, 'DiskStorage', {
+  get: function () {
+    return DiskStorage
   }
 })
 

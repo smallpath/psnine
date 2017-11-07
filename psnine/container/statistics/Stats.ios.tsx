@@ -15,6 +15,7 @@ import {
 import { connect } from 'react-redux'
 
 import { getTrophyList } from '../../redux/action/stats'
+import { removeAll } from '../../utils/statistics'
 
 import Interactable from 'react-native-interactable'
 
@@ -59,6 +60,8 @@ class StatsHome extends Component<any, any> {
       isLoading: true,
       toolbar: [{
         title: '同步最新数据', iconName: 'md-sync', value: '', show: 'never'
+      }, {
+        title: '清空同步数据', iconName: 'md-sync', value: '', show: 'never'
       }],
       text: '同步中',
       gameList: [],
@@ -177,6 +180,16 @@ class StatsHome extends Component<any, any> {
       { url }
     ]
   })
+
+  _onActionSelected = (index) => {
+    switch (index) {
+      case 0:
+        this.preFetch(true)
+        return
+      case 1:
+        return removeAll()
+    }
+  }
 
   renderHeader = (rowData) => {
     const color = 'rgba(255,255,255,1)'
@@ -387,7 +400,7 @@ class StatsHome extends Component<any, any> {
             iconColor={modeInfo.isNightMode ? '#000' : '#fff'}
             title={`${params.title}`}
             titleColor={modeInfo.isNightMode ? '#000' : '#fff'}
-            actions={this.toolbar}
+            actions={this.state.toolbar}
             onIconClicked={this.onIconClicked}
             style={{backgroundColor: 'transparent' }}
             onActionSelected={this._onActionSelected}
@@ -447,8 +460,9 @@ class StatsHome extends Component<any, any> {
         title={params.title}
         titleColor={modeInfo.isNightMode ? '#000' : '#fff'}
         style={[styles.toolbar, { backgroundColor: this.state.isLoading ? modeInfo.standardColor : 'transparent' }]}
-        actions={[]}
+        actions={this.state.toolbar}
         key={this.state.toolbar.map(item => item.text || '').join('::')}
+        onActionSelected={this._onActionSelected}
         onIconClicked={() => this.props.navigation.goBack()}
       />
       <ActivityIndicator

@@ -15,6 +15,7 @@ import {
 import { connect } from 'react-redux'
 
 import { getTrophyList } from '../../redux/action/stats'
+import { removeAll } from '../../utils/statistics'
 
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import {
@@ -55,6 +56,8 @@ class StatsHome extends Component<any, any> {
       isLoading: true,
       toolbar: [{
         title: '同步最新数据', iconName: 'md-sync', value: '', show: 'never'
+      }, {
+        title: '清空同步数据', iconName: 'md-sync', value: '', show: 'never'
       }],
       text: '同步中',
       gameList: [],
@@ -326,6 +329,8 @@ class StatsHome extends Component<any, any> {
       case 0:
         this.preFetch(true)
         return
+      case 1:
+        return removeAll()
     }
   }
 
@@ -416,9 +421,10 @@ class StatsHome extends Component<any, any> {
         title={params.title}
         titleColor={modeInfo.isNightMode ? '#000' : '#fff'}
         style={[styles.toolbar, { backgroundColor: this.state.isLoading ? modeInfo.standardColor : 'transparent' }]}
-        actions={[]}
+        actions={this.state.toolbar}
         key={this.state.toolbar.map(item => item.text || '').join('::')}
         onIconClicked={() => this.props.navigation.goBack()}
+        onActionSelected={this._onActionSelected}
       />
       <ActivityIndicator
         animating={this.state.isLoading}

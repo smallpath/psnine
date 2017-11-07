@@ -29,6 +29,7 @@ class BubbleChartScreen extends React.Component<any, any> {
           config: {
             color: processColor(modeInfo.deepColor),
             highlightCircleWidth: 2,
+            drawValues: false,
             valueTextColor: processColor(modeInfo.titleTextColor)
           }
         }]

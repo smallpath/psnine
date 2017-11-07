@@ -15,7 +15,7 @@ import PhotoView from 'react-native-photo-view'
 declare var global
 
 const psnineFolder = fs.ExternalStorageDirectoryPath + '/psnine'
-
+console.log('==========================>')
 fs.stat(psnineFolder).then(data => {
   const isDirectory = data.isDirectory()
   if (!isDirectory) {

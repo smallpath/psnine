@@ -1,7 +1,11 @@
 
 import {
-  AsyncStorage
+  DiskStorage
 } from 'react-native'
+
+const AsyncStorage = new DiskStorage({
+  namespace: 'stats'
+})
 
 import {
   getMyGameAPI,
@@ -27,6 +31,8 @@ const getGameList = async (psnid, callback) => {
   }
   return list
 }
+declare var global
+export const removeAll = () => AsyncStorage.removeAll().then(() => global.toast('清理完毕')).catch(err => global.toast('清理失败: ' + err.toString()))
 
 export const getTrophyList = async (psnid, callback, forceNew = false) => {
   const prefix = `Statistics::TrophyList::${psnid.toLowerCase()}`
@@ -408,7 +414,7 @@ function statsd(statsInfo, gameList, {
     }
     return prev
   }, {})
-  statsInfo.weekLoc = Object.keys(weekLoc).map(item => {
+  const tempWeekLoc = Object.keys(weekLoc).map(item => {
     return {
       x: parseInt(item.split('-')[0] as string, 10),
       y: parseInt(item.split('-').pop() as string, 10),
@@ -419,6 +425,24 @@ function statsd(statsInfo, gameList, {
       }
     }
   })
+  const max = tempWeekLoc.reduce((prev, curr) => {
+    // console.log(curr.size)
+    if (curr.size > prev) return curr.size
+    return prev
+  }, 0)
+  const div = (max / 100) > 1 ? (max / 100) : 1
+  statsInfo.weekLoc = tempWeekLoc.map(item => {
+    return {
+      ...item,
+      size: ~~(item.size / div),
+      data: {
+        ...item.data,
+        size: ~~(item.size / div),
+      }
+    }
+  })
+  // console.log(statsInfo.weekLoc, div, max)
+  // console.log(div, max)
   statsInfo.daysMapper = weekdays
 
 }

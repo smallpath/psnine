@@ -307,6 +307,13 @@ export default class Home extends Component<any, any> {
     const psnid = params.URL.split('/').filter(item => item.trim()).pop()
     // alert(index)
     switch (index) {
+      case 5:
+        this.props.navigation.navigate('Stats', {
+          URL: params.URL,
+          psnid,
+          title: `${psnid} 奖杯统计`
+        })
+        return
       case 4:
         // if (psnid === modeInfo.settingInfo.psnid) return global.toast('不可以屏蔽自己')
         block({
@@ -419,6 +426,14 @@ export default class Home extends Component<any, any> {
     const { data: source } = this.state
 
     // console.log(JSON.stringify(profileToolbar))
+    const psnid = modeInfo.settingInfo.psnid.toLowerCase()
+    const toolbar: any = this.toolbar.slice()
+    if (psnid === 'secondlife_xhm') {
+      toolbar.push({
+        title: '奖杯统计', show: 'never'
+      })
+    }
+
     return source.playerInfo && this.state.leftIcon && !this.state.isLoading ? (
       <View style={{flex: 1}}>
         <CoordinatorLayoutAndroid
@@ -458,7 +473,7 @@ export default class Home extends Component<any, any> {
                 overflowIcon={this.state.rightIcon}
                 title={`${params.title}`}
                 titleColor={modeInfo.isNightMode ? '#000' : '#fff'}
-                actions={this.toolbar}
+                actions={toolbar}
                 layoutParams={{
                   height: 56, // required,
                   collapseMode: CollapsingToolbarLayoutAndroid.CollapseMode.COLLAPSE_MODE_PIN // required
