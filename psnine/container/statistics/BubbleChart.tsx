@@ -25,7 +25,7 @@ class BubbleChartScreen extends React.Component<any, any> {
       data: {
         dataSets: [{
           values,
-          label: '奖杯数',
+          label: '奖杯数比例',
           config: {
             color: processColor(modeInfo.deepColor),
             highlightCircleWidth: 2,
@@ -78,6 +78,7 @@ class BubbleChartScreen extends React.Component<any, any> {
           style={styles.chart}
           data={this.state.data}
           legend={this.state.legend}
+          chartDescription={{text: ''}}
           xAxis={this.state.xAxis}
           yAxis={this.state.yAxis}
           entryLabelColor={processColor(this.props.modeInfo.titleTextColor)}

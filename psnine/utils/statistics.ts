@@ -215,7 +215,7 @@ function statsd(statsInfo, gameList, {
     '普通': 0,
     '一般': 0,
     '简单': 0
-  }))
+  })).filter(item => item.value !== 0)
 
   // 游戏完成率
   statsInfo.gameRarePercent = (earnedTrophyList.length / unearnedTrophyList.length).toFixed(2) + '%'
@@ -244,7 +244,13 @@ function statsd(statsInfo, gameList, {
       prev[type] = 1
     }
     return prev
-  }, {}))
+  }, {
+    '80%': 0,
+    '60%': 0,
+    '40%': 0,
+    '20%': 0,
+    '0%': 0
+  })).filter(item => item.value !== 0)
 
   // 游戏难度
   const tempDiff = gameList.reduce((prev, curr) => {
@@ -332,8 +338,8 @@ function statsd(statsInfo, gameList, {
   const tempHour = earnedTrophyList.reduce((prev, curr) => {
     const date = new Date(curr.timestamp)
     const str = date.getUTCHours()
+
     // if (str === 6) console.log(curr.timestamp)
-    if (!str) return prev
     if (prev[str]) {
       prev[str] ++
     } else {
@@ -346,6 +352,7 @@ function statsd(statsInfo, gameList, {
     const index = hours.indexOf(item)
     if (index !== -1) hours.splice(index, 1)
   })
+
   hours.forEach(str => {
     tempHour[str] = 0
   })

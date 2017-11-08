@@ -1,8 +1,11 @@
 
 import fs from 'react-native-fs'
-declare var global
+import {
+  Platform
+} from 'react-native'
+const isIOS = Platform.OS === 'ios'
 
-const key = global.isIOS ? 'DocumentDirectoryPath' : 'ExternalStorageDirectoryPath'
+const key = isIOS ? 'DocumentDirectoryPath' : 'ExternalStorageDirectoryPath'
 
 const en = encodeURIComponent
 
