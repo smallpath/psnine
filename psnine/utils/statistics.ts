@@ -261,7 +261,14 @@ function statsd(statsInfo, gameList, {
       prev[type] = 1
     }
     return prev
-  }, {})
+  }, {
+    '地狱': 0,
+    '噩梦': 0,
+    '困难': 0,
+    '麻烦': 0,
+    '普通': 0,
+    '容易': 0
+  })
   statsInfo.gameDifficulty = mapObj({
     '地狱': tempDiff.地狱,
     '噩梦': tempDiff.噩梦,

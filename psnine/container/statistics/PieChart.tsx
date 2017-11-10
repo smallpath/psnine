@@ -12,7 +12,14 @@ export default class PieChartScreen extends React.Component<any, any> {
   constructor(props) {
     super(props)
 
-    this.games = props.value.reduce((prev, curr) => prev + curr.value, 0) + ' ' + props.suffix
+    const target = props.value.map(item => {
+      if (typeof item.value !== 'undefined') return item
+      return {
+        ...item,
+        value: 0
+      }
+    })
+    this.games = target.reduce((prev, curr) => prev + curr.value, 0) + ' ' + props.suffix
     this.state = {
       legend: {
         enabled: true,
@@ -27,7 +34,7 @@ export default class PieChartScreen extends React.Component<any, any> {
       ) : '',
       data: {
         dataSets: [{
-          values: props.value,
+          values: target,
           label: '',
           config: {
             colors: props.colors || [
