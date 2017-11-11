@@ -307,7 +307,7 @@ export default class Root extends React.Component<any, any> {
       <View style={{ flex: 1 }}/>
     ) : (
         <View style={{ flex: 1 }}>
-          {/* {<StatusBar translucent={true} hidden={false} backgroundColor={'rgba(0,0,0,0.251)'} barStyle={'light-content'} />} */}
+          <StatusBar translucent={true} hidden={false} backgroundColor={modeInfo.deepColor} barStyle={'light-content'} />
           <StackNavigator
             uriPrefix={'p9://psnine.com/'}
             onNavigationStateChange={onNavigationStateChange} screenProps={{

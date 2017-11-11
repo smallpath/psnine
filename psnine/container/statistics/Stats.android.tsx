@@ -9,6 +9,7 @@ import {
   StatusBar,
   Animated,
   Keyboard,
+  PixelRatio,
   ToolbarAndroid
 } from 'react-native'
 
@@ -399,12 +400,14 @@ class StatsHome extends Component<any, any> {
                 titleColor={modeInfo.isNightMode ? '#000' : '#fff'}
                 actions={this.state.toolbar}
                 layoutParams={{
-                  height: 56 + StatusBar.currentHeight, // required,
+                  height: 56 + StatusBar.currentHeight / 2, // required,
                   collapseMode: CollapsingToolbarLayoutAndroid.CollapseMode.COLLAPSE_MODE_PIN // required
                 }}
                 onIconClicked={this.onIconClicked}
                 onActionSelected={this._onActionSelected}
                 marginTop={56 + 8}
+                paddingTop={PixelRatio.getPixelSizeForLayoutSize(8)}
+                minHeight={PixelRatio.getPixelSizeForLayoutSize(64)}
               />
             </CollapsingToolbarLayoutAndroid>
           </AppBarLayoutAndroid>

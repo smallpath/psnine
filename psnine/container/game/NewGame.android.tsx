@@ -10,7 +10,8 @@ import {
   StatusBar,
   Animated,
   Easing,
-  Linking
+  Linking,
+  PixelRatio
 } from 'react-native'
 
 import Ionicons from 'react-native-vector-icons/Ionicons'
@@ -268,7 +269,8 @@ export default class Home extends Component<any, any> {
                   height: 56 + StatusBar.currentHeight, // required
                   collapseMode: CollapsingToolbarLayoutAndroid.CollapseMode.COLLAPSE_MODE_PIN // required
                 }}
-                marginTop={56 + 8}
+                paddingTop={PixelRatio.getPixelSizeForLayoutSize(8)}
+                minHeight={PixelRatio.getPixelSizeForLayoutSize(74)}
               />
             </CollapsingToolbarLayoutAndroid>
           </AppBarLayoutAndroid>
