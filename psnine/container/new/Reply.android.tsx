@@ -126,11 +126,13 @@ export default class Reply extends Component<any, any> {
     this.PanResponder = PanResponder.create({
 
       onStartShouldSetPanResponderCapture: (e) => {
-        return e.nativeEvent.pageX <= 56 ? false : true
+        const isLess = e.nativeEvent.pageX <= 56 + StatusBar.currentHeight
+        const isBigger = e.nativeEvent.pageX >= StatusBar.currentHeight
+        return isLess && isBigger ? false : true
       },
       onPanResponderGrant: (_, gesture) => {
         Keyboard.dismiss()
-        const target = gesture.y0 <= 56 ? 0 : SCREEN_HEIGHT - 56
+        const target = gesture.y0 <= 56 + StatusBar.currentHeight ? 0 : SCREEN_HEIGHT - 56
         marginTop.setOffset(target)
       },
       onPanResponderMove: Animated.event([
@@ -309,7 +311,7 @@ export default class Reply extends Component<any, any> {
 
     let animatedStyle = {
       left: openVal.interpolate({ inputRange: [0, 1], outputRange: [SCREEN_WIDTH - 56 - 16, 0] }),
-      top: openVal.interpolate({ inputRange: [0, 1], outputRange: [SCREEN_HEIGHT - 16 - 56, 0] }),
+      top: openVal.interpolate({ inputRange: [0, 1], outputRange: [SCREEN_HEIGHT - 16 - 56, StatusBar.currentHeight] }),
       width: openVal.interpolate({ inputRange: [0, 1], outputRange: [CIRCLE_SIZE, SCREEN_WIDTH] }),
       height: openVal.interpolate({ inputRange: [0, 1], outputRange: [CIRCLE_SIZE, SCREEN_HEIGHT + 100] }),
       borderWidth: openVal.interpolate({ inputRange: [0, 0.5, 1], outputRange: [2, 2, 0] }),

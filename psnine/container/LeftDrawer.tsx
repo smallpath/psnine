@@ -8,7 +8,8 @@ import {
   View,
   TouchableNativeFeedback,
   TouchableWithoutFeedback,
-  Alert
+  Alert,
+  StatusBar
 } from 'react-native'
 
 import {
@@ -516,7 +517,11 @@ export default class NavigationDrawer extends Component<any, any> {
   render() {
     // console.log('navigationDrawer.js rendered');
     return (
-      <View style={styles.container} {...this.props}>
+      <View style={{
+        flex: 1,
+        backgroundColor: '#FAFAFA',
+        paddingTop: StatusBar.currentHeight || 24,
+        backgroundColor: this.props.modeInfo.standardColor}} {...this.props}>
         <ListView
           ref='themeslistview'
           dataSource={this.state.psnid !== '' ? this.state.dataSource : this.state.dataSource.cloneWithRows(ListItems.slice(-2))}

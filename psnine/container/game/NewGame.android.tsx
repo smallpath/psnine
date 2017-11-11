@@ -146,7 +146,7 @@ export default class Home extends Component<any, any> {
         alignItems: 'center',
         justifyContent: 'center',
         padding: 10,
-        marginTop: 56
+        marginTop: 56 + 10
       }}>
         <View style={{ justifyContent: 'center', alignItems: 'center', flex: -1, marginLeft: 20, marginBottom: 15  }}>
           <Image
@@ -262,11 +262,13 @@ export default class Home extends Component<any, any> {
                 onIconClicked={() => this.props.navigation.goBack()}
                 titleColor={modeInfo.isNightMode ? '#000' : '#fff'}
                 actions={actions}
+                origin
                 onActionSelected={this.onActionSelected}
                 layoutParams={{
-                  height: 56, // required
+                  height: 56 + StatusBar.currentHeight, // required
                   collapseMode: CollapsingToolbarLayoutAndroid.CollapseMode.COLLAPSE_MODE_PIN // required
                 }}
+                marginTop={56 + 8}
               />
             </CollapsingToolbarLayoutAndroid>
           </AppBarLayoutAndroid>

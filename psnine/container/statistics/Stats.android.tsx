@@ -185,6 +185,7 @@ class StatsHome extends Component<any, any> {
     const onPressPoint = () => {
       global.toast(rowData.point)
     }
+    const statusHeight = StatusBar.currentHeight || 0
     return (
       <ImageBackground
         source={{uri: rowData.backgroundImage}}
@@ -195,13 +196,13 @@ class StatsHome extends Component<any, any> {
         blurRadis={0}
         >
         <global.LinearGradient
-          colors={['rgba(0,0,0,0.5)', 'rgba(0,0,0,0)', 'rgba(0,0,0,0)', 'rgba(0,0,0,0.5)']}
-          locations={[0, 0.3, 0.7, 1]}
+          colors={['rgba(0,0,0,0.6)', 'rgba(0,0,0,0)', 'rgba(0,0,0,0)', 'rgba(0,0,0,0.5)']}
+          locations={[0, 0.4, 0.6, 1]}
           start={{x: 0.5, y: 0}} end={{x: 0.5, y: 1}}>
           <View key={rowData.id} style={{
             backgroundColor: 'transparent',
             height: 360,
-            marginTop: 56
+            marginTop: 56 + statusHeight / 2 + 8
           }}>
             <View style={{ flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center', flex: -1, padding: 5, marginTop: -10  }}>
               <View style={{ justifyContent: 'center', alignItems: 'center', flex: 2, marginTop: 2  }}>
@@ -232,7 +233,8 @@ class StatsHome extends Component<any, any> {
             </View>
 
             <View style={{ position: 'absolute', top: 0, left: 0, right: 0, height: limit }}>
-              <View style={{ justifyContent: 'center', alignItems: 'center', alignSelf: 'center', flex: 3, marginTop: -70 }}>
+              <View style={{ justifyContent: 'center', alignItems: 'center',
+                alignSelf: 'center', flex: 3, marginTop: -70 - statusHeight * 1.5 + 10 }}>
                 <View borderRadius={75} style={{width: 150, height: 150, backgroundColor: 'transparent'}} >
                   <Image
                     borderRadius={75}
@@ -247,9 +249,9 @@ class StatsHome extends Component<any, any> {
             </View>
 
             <View style={{ flex: 1, padding: 5}}>
-              <View borderRadius={20} style={{ marginTop: 10,
+              <View borderRadius={20} style={{
                 paddingHorizontal: 10, alignSelf: 'center', alignContent: 'center',
-                flexDirection: 'row', justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0,0,0,0.3)'  }}>
+                flexDirection: 'row', justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0,0,0,0.5)'  }}>
                 <Text style={{ height: 30, textAlignVertical: 'center', textAlign: 'center' }}>
                   <Text style={{ flex: 1, color: trophyColor1, marginVertical: 2, textAlign: 'center', fontSize: 15 }}>{rowData.platinum + ' '}</Text>
                   <Text style={{ flex: 1, color: trophyColor2, marginVertical: 2, textAlign: 'center', fontSize: 15 }}>{rowData.gold + ' '}</Text>
@@ -259,7 +261,9 @@ class StatsHome extends Component<any, any> {
               </View>
             </View>
 
-            <View style={{ flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center', flex: 1, padding: 5  }}>
+            <View style={{ flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center', flex: 1,
+              padding: 6,
+              bottom: 20  }}>
               <View style={{ justifyContent: 'center', alignItems: 'center', flex: 1  }}>
                 <Text style={{ flex: 1, color: color, textAlign: 'center', fontSize: 20 }}>{rowData.allGames}</Text>
                 <Text style={{ flex: 1, color: infoColor, textAlign: 'center', fontSize: 12 }}>总游戏</Text>
@@ -391,14 +395,16 @@ class StatsHome extends Component<any, any> {
                 navIcon={this.state.leftIcon}
                 overflowIcon={this.state.rightIcon}
                 title={`${params.title}`}
+                origin
                 titleColor={modeInfo.isNightMode ? '#000' : '#fff'}
                 actions={this.state.toolbar}
                 layoutParams={{
-                  height: 56, // required,
+                  height: 56 + StatusBar.currentHeight, // required,
                   collapseMode: CollapsingToolbarLayoutAndroid.CollapseMode.COLLAPSE_MODE_PIN // required
                 }}
                 onIconClicked={this.onIconClicked}
                 onActionSelected={this._onActionSelected}
+                marginTop={56 + 8}
               />
             </CollapsingToolbarLayoutAndroid>
           </AppBarLayoutAndroid>

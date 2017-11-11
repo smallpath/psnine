@@ -5,6 +5,8 @@
         <!-- Customize your theme here. -->
         <item name="android:windowBackground">@color/colorPrimaryDark</item>
         <item name="android:statusBarColor">@color/colorPrimaryDark</item>
+        <!-- <item name="android:fitsSystemWindows">false</item> -->
+        <!-- <item name="android:windowDrawsSystemBarBackgrounds">true</item> -->
     </style>
 
 </resources>

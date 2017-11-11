@@ -279,6 +279,9 @@ export default class Root extends React.Component<any, any> {
       background: (shouldChangeBackground || isNightMode) ? targetModeInfo.brighterLevelOne : targetModeInfo.backgroundColor
     })
 
+    global.modeInfo = modeInfo
+
+    const screens = ['Home', 'NewGame', 'Stats', 'Main']
     const onNavigationStateChange = global.shouldSendGA ? (prevState, currentState) => {
       const currentScreen = getCurrentRoute(currentState)
       const prevScreen = getCurrentRoute(prevState)
@@ -287,11 +290,12 @@ export default class Root extends React.Component<any, any> {
           const { routeName = 'Unknow' } = currentScreen
           tracker.trackScreenView(routeName)
         }
-        // if (currentScreen.routeName === 'Home' || currentScreen.routeName === 'NewGame') {
+
+        // if (screens.includes(currentScreen.routeName)) {
         //   StatusBar.setTranslucent(true)
-        //   StatusBar.setBackgroundColor('transparent')
+        //   StatusBar.setBackgroundColor('rgba(0,0,0,0.251)')
         //   modeInfo.isNightMode && StatusBar.setBarStyle('dark-content')
-        // } else if (prevScreen.routeName === 'Home' || prevScreen.routeName === 'NewGame') {
+        // } else if (screens.includes(prevScreen.routeName)) {
         //   StatusBar.setTranslucent(false)
         //   StatusBar.setBackgroundColor(modeInfo.deepColor)
         //   modeInfo.isNightMode && StatusBar.setBarStyle('light-content')
@@ -303,7 +307,7 @@ export default class Root extends React.Component<any, any> {
       <View style={{ flex: 1 }}/>
     ) : (
         <View style={{ flex: 1 }}>
-          <StatusBar translucent={false} hidden={false} backgroundColor={modeInfo.deepColor} barStyle={'light-content'} />
+          {/* {<StatusBar translucent={true} hidden={false} backgroundColor={'rgba(0,0,0,0.251)'} barStyle={'light-content'} />} */}
           <StackNavigator
             uriPrefix={'p9://psnine.com/'}
             onNavigationStateChange={onNavigationStateChange} screenProps={{

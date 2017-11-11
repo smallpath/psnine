@@ -158,9 +158,9 @@ export default class Search extends Component<any, any> {
         ref={ref => this.ref = ref}
         style={[
           styles.circle, styles.open, animatedStyle, {
-            top: 0,
+            top: StatusBar.currentHeight || 24,
             right: 0,
-            backgroundColor: 'rgba(0,0,0,0.2)',
+            backgroundColor: 'rgba(0,0,0,0.251)',
             padding: 6,
             borderBottomLeftRadius: openVal.interpolate({
               inputRange: [0, 9 / 16, 1],

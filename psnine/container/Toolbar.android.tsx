@@ -230,6 +230,7 @@ class Toolbar extends Component<any, any> {
                   iconColor={modeInfo.isNightMode ? '#000' : '#fff'}
                   actions={toolbarActions[appReducer.segmentedIndex]}
                   key={appReducer.segmentedIndex}
+                  origin
                   onActionSelected={this.onActionSelected}
                   onIconClicked={this.props._callDrawer()}
                 >

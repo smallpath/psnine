@@ -58,6 +58,7 @@ class Psnine extends Component<any, any> {
       <DrawerLayoutAndroid
         ref={DRAWER_REF}
         drawerWidth={drawerWidth}
+        statusBarBackgroundColor={modeInfo.deepColor}
         drawerPosition={DrawerLayoutAndroid.positions.Left}
         renderNavigationView={() => (
           <LeftDrawer {...{
