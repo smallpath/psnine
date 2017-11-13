@@ -16,7 +16,7 @@ import {
 import { connect } from 'react-redux'
 
 import { getTrophyList } from '../../redux/action/stats'
-import { removeAll } from '../../utils/statistics'
+import { removeAll, removeItem } from '../../utils/statistics'
 
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import {
@@ -79,7 +79,7 @@ class StatsHome extends Component<any, any> {
       middleIcon: false,
       statsInfo: {},
       unearnedTrophyList: [],
-      _scrollHeight: this.props.screenProps.modeInfo.height - (StatusBar.currentHeight || 0) - 56 + 1
+      _scrollHeight: this.props.screenProps.modeInfo.height - 64
     }
   }
 
@@ -329,13 +329,15 @@ class StatsHome extends Component<any, any> {
     )
   }
 
- _onActionSelected = (index) => {
+ _onActionSelected = async (index) => {
     switch (index) {
       case 0:
         this.preFetch(true)
         return
       case 1:
-        return removeAll()
+        const { params } = this.props.navigation.state
+        const data = await getHomeAPI(params.URL)
+        return removeItem(data.playerInfo.psnid)
     }
   }
 

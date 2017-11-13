@@ -34,6 +34,10 @@ const getGameList = async (psnid, callback) => {
 declare var global
 export const removeAll = () => AsyncStorage.removeAll().then(() => global.toast('清理完毕')).catch(err => global.toast('清理失败: ' + err.toString()))
 
+export const removeItem = (psnid) => AsyncStorage.removeItem(`Statistics::TrophyList::${psnid.toLowerCase()}`).then((
+
+) => global.toast('清理完毕')).catch(err => global.toast('清理失败: ' + err.toString()))
+
 export const getTrophyList = async (psnid, callback, forceNew = false) => {
   const prefix = `Statistics::TrophyList::${psnid.toLowerCase()}`
   console.log('===> it really starts')
@@ -41,8 +45,35 @@ export const getTrophyList = async (psnid, callback, forceNew = false) => {
     let cacheStr = await AsyncStorage.getItem(prefix)
     if (cacheStr) {
       const cache = JSON.parse(cacheStr)
-      console.log('hehe global cache hit', Object.keys(cache))
-      return cache
+      // await AsyncStorage.removeItem(prefix)
+      if (cache && cache.trophyList) {
+        console.log('removing !!')
+        // alert('remove cahce')
+        await AsyncStorage.removeItem(prefix)
+      } else {
+        console.log('hehe global cache hit', Object.keys(cache))
+        const { gameList, statsInfo, trophyChunks, unearnedTrophyChunks } = cache
+        console.log({
+          trophyChunks,
+          unearnedTrophyChunks
+        })
+        const trophyList = ([] as any).concat(...(await Promise.all(
+          '0'.repeat(trophyChunks).split('').map((_, index) => {
+            return AsyncStorage.getItem(`${prefix}::trophyChunk::${index}`)
+          })
+        )).map(str => JSON.parse(str)))
+        // console.log(trophyList[0], trophyList[1], trophyList[2])
+        const unearnedTrophyList = ([] as any).concat(...(await Promise.all(
+          '0'.repeat(unearnedTrophyChunks).split('').map((_, index) => {
+            return AsyncStorage.getItem(`${prefix}::unearnedTrophyChunk::${index}`)
+          })
+        )).map(str => JSON.parse(str)))
+        // console.log(unearnedTrophyList[0])
+        // console.log(trophyList.length, unearnedTrophyList.length, 'combined')
+        return {
+          gameList, statsInfo, trophyList, unearnedTrophyList
+        }
+      }
     }
   }
   const statsInfo: any = {}
@@ -62,7 +93,7 @@ export const getTrophyList = async (psnid, callback, forceNew = false) => {
       const parsedGame = JSON.parse(cacheGame)
       console.log('===>', parsedGame.percent, game.percent)
       if (parsedGame.trophyArr === game.trophyArr
-          && parsedGame.percent === game.percent) {
+        && parsedGame.percent === game.percent) {
         console.log('cache hit for game ' + game.title)
         outterResult = JSON.parse(cacheResult)
       } else {
@@ -83,7 +114,7 @@ export const getTrophyList = async (psnid, callback, forceNew = false) => {
         trophyList.push(trophy)
       })
     })
-
+    // console.log('=========================================================>', index + 1, i)
     callback && callback({
       gameInfo: result.gameInfo,
       trophyLength: trophyList.length,
@@ -91,7 +122,7 @@ export const getTrophyList = async (psnid, callback, forceNew = false) => {
     })
     index++
   }
-
+  // console.log(gameList.length, trophyList.length)
   const earnedTrophyList = trophyList.filter(item => item.timestamp).sort((a: any, b: any) => b.timestamp - a.timestamp)
   const unearnedTrophyList = trophyList.filter(item => !item.timestamp)
   statsd(statsInfo, gameList, {
@@ -99,12 +130,31 @@ export const getTrophyList = async (psnid, callback, forceNew = false) => {
     unearnedTrophyList
   })
 
-  await AsyncStorage.setItem(`Statistics::TrophyList::${psnid.toLowerCase()}`, JSON.stringify({
+  const allTrophyArr = sliceArrayByNumber(trophyList, 500)
+  const allUnearnedTrophyArr = sliceArrayByNumber(unearnedTrophyList, 500)
+  await AsyncStorage.setItem(prefix, JSON.stringify({
     gameList,
-    trophyList,
-    unearnedTrophyList,
-    statsInfo
+    statsInfo,
+    trophyChunks: allTrophyArr.length,
+    unearnedTrophyChunks: allUnearnedTrophyArr.length
   }))
+  console.log({
+    trophyChunks: allTrophyArr.length,
+    unearnedTrophyChunks: allUnearnedTrophyArr.length,
+    trophyList: trophyList.length
+  })
+  await Promise.all(
+    allTrophyArr.map((item, index) => {
+      // console.log('=========================================>',item.length, item[0])
+      return AsyncStorage.setItem(`${prefix}::trophyChunk::${index}`, JSON.stringify(item))
+    })
+  )
+  await Promise.all(
+    allUnearnedTrophyArr.map((item, index) => {
+      return AsyncStorage.setItem(`${prefix}::unearnedTrophyChunk::${index}`, JSON.stringify(item))
+    })
+  )
+
   return { gameList, trophyList: earnedTrophyList, statsInfo, unearnedTrophyList }
 }
 
@@ -154,11 +204,11 @@ function statsd(statsInfo, gameList, {
     }
     return prev
   }, {
-    '白金': 0,
-    '金': 0,
-    '银': 0,
-    '铜': 0
-  }))
+      '白金': 0,
+      '金': 0,
+      '银': 0,
+      '铜': 0
+    }))
 
   // 点数
   statsInfo.trophyPoints = mapObj(earnedTrophyList.reduce((prev, curr) => {
@@ -173,11 +223,11 @@ function statsd(statsInfo, gameList, {
     }
     return prev
   }, {
-    '白金': 0,
-    '金': 0,
-    '银': 0,
-    '铜': 0
-  }))
+      '白金': 0,
+      '金': 0,
+      '银': 0,
+      '铜': 0
+    }))
 
   // 奖杯稀有率
   statsInfo.trophyRarePercent = (earnedTrophyList.reduce((prev, curr) => {
@@ -209,13 +259,13 @@ function statsd(statsInfo, gameList, {
     prev[type] += 1
     return prev
   }, {
-    '地狱': 0,
-    '噩梦': 0,
-    '困难': 0,
-    '普通': 0,
-    '一般': 0,
-    '简单': 0
-  })).filter(item => item.value !== 0)
+      '地狱': 0,
+      '噩梦': 0,
+      '困难': 0,
+      '普通': 0,
+      '一般': 0,
+      '简单': 0
+    })).filter(item => item.value !== 0)
 
   // 游戏完成率
   statsInfo.gameRarePercent = (earnedTrophyList.length / unearnedTrophyList.length).toFixed(2) + '%'
@@ -245,12 +295,12 @@ function statsd(statsInfo, gameList, {
     }
     return prev
   }, {
-    '80%': 0,
-    '60%': 0,
-    '40%': 0,
-    '20%': 0,
-    '0%': 0
-  })).filter(item => item.value !== 0)
+      '80%': 0,
+      '60%': 0,
+      '40%': 0,
+      '20%': 0,
+      '0%': 0
+    })).filter(item => item.value !== 0)
 
   // 游戏难度
   const tempDiff = gameList.reduce((prev, curr) => {
@@ -262,20 +312,22 @@ function statsd(statsInfo, gameList, {
     }
     return prev
   }, {
-    '地狱': 0,
-    '噩梦': 0,
-    '困难': 0,
-    '麻烦': 0,
-    '普通': 0,
-    '容易': 0
-  })
+      '地狱': 0,
+      '噩梦': 0,
+      '困难': 0,
+      '麻烦': 0,
+      '普通': 0,
+      '容易': 0,
+      '极易': 0
+    })
   statsInfo.gameDifficulty = mapObj({
     '地狱': tempDiff.地狱,
     '噩梦': tempDiff.噩梦,
     '困难': tempDiff.困难,
     '麻烦': tempDiff.麻烦,
     '普通': tempDiff.普通,
-    '容易': tempDiff.容易
+    '容易': tempDiff.容易,
+    '极易': tempDiff.极易
   })
 
   // 月活
@@ -311,7 +363,7 @@ function statsd(statsInfo, gameList, {
     }
     const type = curr.type
     if (prev[str]) {
-      prev[str][type] ++
+      prev[str][type]++
     } else {
       prev[str] = {
         '白金': 0,
@@ -319,7 +371,7 @@ function statsd(statsInfo, gameList, {
         '银': 0,
         '铜': 0
       }
-      prev[str][type] ++
+      prev[str][type]++
     }
     return prev
   }, {}))
@@ -348,7 +400,7 @@ function statsd(statsInfo, gameList, {
 
     // if (str === 6) console.log(curr.timestamp)
     if (prev[str]) {
-      prev[str] ++
+      prev[str]++
     } else {
       prev[str] = 1
     }
@@ -388,7 +440,7 @@ function statsd(statsInfo, gameList, {
     }
     points = nextPoints
     if (prev[str]) {
-      prev[str] ++
+      prev[str]++
     } else {
       prev[str] = 1
     }
@@ -422,7 +474,7 @@ function statsd(statsInfo, gameList, {
 
     const key = `${num}-${hour}`
     if (prev[key]) {
-      prev[key] ++
+      prev[key]++
     } else {
       prev[key] = 1
     }
@@ -528,7 +580,15 @@ const historyLevel: any = [
   128000
 ]
 
-for (let i = historyLevel.length; i < 100 ; i++) {
+for (let i = historyLevel.length; i < 100; i++) {
   const finalOne = historyLevel[historyLevel.length - 1]
   historyLevel.push(finalOne + 10000)
+}
+
+function sliceArrayByNumber(arr, num) {
+  const result: any = []
+  for (let i = 0, len = arr.length; i < len; i += num) {
+    result.push(arr.slice(i, i + num))
+  }
+  return result
 }

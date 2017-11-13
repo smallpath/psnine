@@ -47,6 +47,18 @@ export default class DiskStorage {
     }
   }
 
+  async removeItem(key) {
+    const filePath = this.psnineFolder + `/${en(key)}.json`
+    try {
+      await fs.unlink(filePath)
+      // console.log(content)
+      return true
+    } catch (err) {
+      // console.log(err)
+      return false
+    }
+  }
+
   async removeAll() {
     await fs.unlink(this.psnineFolder).catch(() => {})
     await fs.mkdir(this.psnineFolder)

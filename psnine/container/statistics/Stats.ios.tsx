@@ -15,7 +15,7 @@ import {
 import { connect } from 'react-redux'
 
 import { getTrophyList } from '../../redux/action/stats'
-import { removeAll } from '../../utils/statistics'
+import { removeAll, removeItem } from '../../utils/statistics'
 
 import Interactable from 'react-native-interactable'
 
@@ -181,13 +181,15 @@ class StatsHome extends Component<any, any> {
     ]
   })
 
-  _onActionSelected = (index) => {
+  _onActionSelected = async (index) => {
     switch (index) {
       case 0:
         this.preFetch(true)
         return
       case 1:
-        return removeAll()
+        const { params } = this.props.navigation.state
+        const data = await getHomeAPI(params.URL)
+        return removeItem(data.playerInfo.psnid)
     }
   }
 

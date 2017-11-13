@@ -366,7 +366,7 @@ export default class GamePage extends Component<any, any> {
                 textAlign: 'center',
                 textAlignVertical: 'center',
                 fontSize: 10
-              }}>{rowData.rare ? '珍惜度' : ''}</Text>
+              }}>{rowData.rare ? '珍稀度' : ''}</Text>
           </View>
         </View>
       </TouchableNativeFeedback>

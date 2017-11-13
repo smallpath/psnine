@@ -82,7 +82,7 @@ export default class extends React.PureComponent<ExtendedProp, {}> {
                 textAlign: 'center',
                 textAlignVertical: 'center',
                 fontSize: 10
-              }}>{rowData.rare ? '珍惜度' : ''}</Text>
+              }}>{rowData.rare ? '珍稀度' : ''}</Text>
               { rowData.time && (
                   <View style={{ flex: 1, justifyContent: 'center', padding: 2 }}>
                     <Text selectable={false} style={{

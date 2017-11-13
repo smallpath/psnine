@@ -77,7 +77,7 @@ export default class Home extends Component<any, any> {
       leftIcon: false,
       rightIcon: false,
       middleIcon: false,
-      _scrollHeight: this.props.screenProps.modeInfo.height - (StatusBar.currentHeight || 0) - 56 + 1
+      _scrollHeight: this.props.screenProps.modeInfo.height - 64
     }
   }
 

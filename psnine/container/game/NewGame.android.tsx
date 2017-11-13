@@ -67,7 +67,7 @@ export default class Home extends Component<any, any> {
       onActionSelected: this._onActionSelected,
       leftIcon: false,
       rightIcon: false,
-      _scrollHeight: this.props.screenProps.modeInfo.height - (StatusBar.currentHeight || 0 ) - 56
+      _scrollHeight: this.props.screenProps.modeInfo.height - 74
     }
   }
 
@@ -311,7 +311,6 @@ export default class Home extends Component<any, any> {
   _scrollHeight = (
     ExtraDimensionsAndroid.getStatusBarHeight() +
     ExtraDimensionsAndroid.getAppClientHeight() -
-    ExtraDimensionsAndroid.getStatusBarHeight() -
     56
   )
 
