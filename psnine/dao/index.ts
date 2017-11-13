@@ -90,7 +90,7 @@ const getTopicsAPI = ({ page, type, title }) => {
   }
 }
 
-const getGenesAPI = ({ page, type, title }) => `${webHost}/gene?page=${page}&type=${type}${title ? `&title=${title}` : '' }`
+const getGenesAPI = ({ page, type, title }) => `${webHost}/gene?page=${page}&ob=${type || 'obdate'}${title ? `&title=${title}` : '' }`
 
 const getDiscountAPI = ({
   page, ddstatus, pf, region, title

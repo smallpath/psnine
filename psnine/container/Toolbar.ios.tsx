@@ -63,7 +63,9 @@ let battleActions = [
 
 let geneActions = [
   { title: '新建', iconName: 'md-create', value: '', show: 'always', iconSize: 22 },
-  searchAction
+  searchAction,
+  { title: '综合排序', value: 'obdate', show: 'never' },
+  { title: '最新', value: 'date', show: 'never' }
 ]
 
 let storeActions = [

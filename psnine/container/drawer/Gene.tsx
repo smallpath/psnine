@@ -37,6 +37,8 @@ class Gene extends Component<any, any> {
 
     } else if (this.props.screenProps.searchTitle !== nextProps.screenProps.searchTitle) {
 
+    } else if (this.props.geneType !== nextProps.geneType) {
+      this._onRefresh(undefined, nextProps.geneType)
     } else {
       this.setState({
         isRefreshing: false,
@@ -116,7 +118,7 @@ class Gene extends Component<any, any> {
 
   render() {
     global.log('Gene.js rendered')
-    const { gene: geneReducer } = this.props
+    const { gene: geneReducer, geneType } = this.props
     const { modeInfo } = this.props.screenProps
 
     return (
@@ -144,6 +146,7 @@ class Gene extends Component<any, any> {
         extraData={modeInfo}
         windowSize={21}
         updateCellsBatchingPeriod={1}
+        key={modeInfo.themeName + geneType}
         initialNumToRender={42}
         maxToRenderPerBatch={8}
         disableVirtualization={true}
@@ -160,7 +163,8 @@ class Gene extends Component<any, any> {
 
 function mapStateToProps(state) {
   return {
-    gene: state.gene
+    gene: state.gene,
+    geneType: state.app.geneType
   }
 }
 
