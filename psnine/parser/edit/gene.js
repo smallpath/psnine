@@ -4,7 +4,7 @@ export default function (html) {
   const $ = parser.load(html)
 
   const obj =  {
-    content: $('textarea').text(),
+    content: $('textarea').first().text(),
     element: $('input[name=element]').val(),
     photo: $('input[name=photo]').val().split(',').filter(item => item),
     video: $('input[name=video]').val(),
@@ -13,7 +13,7 @@ export default function (html) {
     muid: $('input[name=muid]').val(),
     url: $('input[name=url]').val(),
     key: 'editgene',
-    id: $('input[name=geneid]').last().val()
+    id: $('input[name=element]').parent().parent().parent().attr('id').split('-').pop()
   }
   // console.log(obj)
   return obj

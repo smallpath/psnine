@@ -75,21 +75,21 @@ const ListItems = [
       })
     }
   },
-  {
-    text: '元素',
-    iconName: 'md-snow',
-    onPress: function () {
-      const { navigation, closeDrawer } = this.props
-      closeDrawer()
+  // {
+  //   text: '元素',
+  //   iconName: 'md-snow',
+  //   onPress: function () {
+  //     const { navigation, closeDrawer } = this.props
+  //     closeDrawer()
 
-      let URL = 'http://psnine.com/my/element'
+  //     let URL = 'http://psnine.com/my/element'
 
-      navigation.navigate('UserElement', {
-        URL,
-        title: '元素'
-      })
-    }
-  },
+  //     navigation.navigate('UserElement', {
+  //       URL,
+  //       title: '元素'
+  //     })
+  //   }
+  // },
   {
     text: '图床',
     iconName: 'md-image',

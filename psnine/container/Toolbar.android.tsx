@@ -51,7 +51,6 @@ let gameActions = [
 ]
 
 let rankActions = [
-  { title: '新建', iconName: 'md-create', value: '', show: 'always', iconSize: 22 },
   searchAction
 ]
 

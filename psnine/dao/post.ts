@@ -15,7 +15,7 @@ const diaryURL = 'http://psnine.com/set/diary/post'
 const createMapper = {
   'topic': 'http://psnine.com/set/topic/post',
   'qa': 'http://psnine.com/set/qa/post',
-  'gene': 'http://psnine.com/set/gene/post',
+  'gene': 'http://psnine.com/set/edit/ajax',
   'battle': 'http://psnine.com/set/battle/post',
   'trade': 'http://psnine.com/set/trade/post'
 }

@@ -159,6 +159,7 @@ export default class Issue extends Component<any, any> {
         text: '编辑',
         onPress: (rowData) => {
           const URL = rowData.edit
+          console.log(this.state.finalType !== 'gene' ? URL : rowData)
           requestAnimationFrame(() => {
             const target = ({
               'topic' : 'NewTopic',
@@ -168,7 +169,7 @@ export default class Issue extends Component<any, any> {
               'trade' : 'NewTrade'
             })[this.state.finalType]
             navigation.navigate(target, {
-              URL
+              URL: this.state.finalType !== 'gene' ? URL : rowData.url
             })
           })
         }

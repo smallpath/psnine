@@ -196,8 +196,12 @@ export default class NewTopic extends Component<any, any> {
     }
     result[key] = ''
     if (id !== '') {
-      result.geneid = id
+      result.type = 'gene'
+      result.id = id
+      // delete result.key
     }
+
+    console.log(result)
     postCreateTopic(result, 'gene').then(res => {
       return res
     }).then(res => res.text()).then(text => {
@@ -231,18 +235,18 @@ export default class NewTopic extends Component<any, any> {
     let { openVal, marginTop } = this.state
     const { icon, toolbarOpenVal } = this.state
     const { modeInfo } = this.props.screenProps
+    const statusHeight = StatusBar.currentHeight || 24
     let outerStyle = {
       marginTop: marginTop.interpolate({
         inputRange: [0, SCREEN_HEIGHT],
         outputRange: [0, SCREEN_HEIGHT]
       })
     }
-
     let animatedStyle = {
-      left: openVal.interpolate({ inputRange: [0, 1], outputRange: [SCREEN_WIDTH - 56 - 16, 0] }),
-      top: openVal.interpolate({ inputRange: [0, 1], outputRange: [SCREEN_HEIGHT - 16 - 56, 0] }),
+      // left: openVal.interpolate({ inputRange: [0, 1], outputRange: [SCREEN_WIDTH - height - 16, 0] }),
+      // top: openVal.interpolate({ inputRange: [0, 1], outputRange: [SCREEN_HEIGHT - 16 - height, 0] }),
       width: openVal.interpolate({ inputRange: [0, 1], outputRange: [CIRCLE_SIZE, SCREEN_WIDTH] }),
-      height: openVal.interpolate({ inputRange: [0, 1], outputRange: [CIRCLE_SIZE, SCREEN_HEIGHT + 100] }),
+      height: openVal.interpolate({ inputRange: [0, 1], outputRange: [CIRCLE_SIZE, SCREEN_HEIGHT + 100 + statusHeight] }),
       borderWidth: openVal.interpolate({ inputRange: [0, 0.5, 1], outputRange: [2, 2, 0] }),
       borderRadius: openVal.interpolate({ inputRange: [-0.15, 0, 0.5, 1], outputRange: [0, CIRCLE_SIZE / 2, CIRCLE_SIZE * 1.3, 0] }),
       opacity: openVal.interpolate({ inputRange: [0, 0.1, 1], outputRange: [0, 1, 1] }),
@@ -267,7 +271,9 @@ export default class NewTopic extends Component<any, any> {
         ]}
 
       >
-        <Animated.View style={[styles.toolbar, animatedToolbarStyle]}>
+        <Animated.View style={[styles.toolbar, animatedToolbarStyle, {
+          height: 56 + statusHeight
+        }]}>
           <Ionicons.ToolbarAndroid
             navIconName='md-arrow-back'
             overflowIconName='md-more'

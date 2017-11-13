@@ -652,7 +652,7 @@ class CommunityTopic extends Component<any, any> {
             const { navigation } = this.props
             const target = params.type === 'gene' ? 'NewGene' : 'NewTopic'
             navigation.navigate(target, {
-              URL: shareInfo.edit
+              URL: params.type !== 'gene' ? shareInfo.edit : params.URL
             })
           }
         })

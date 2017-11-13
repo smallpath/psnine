@@ -196,8 +196,11 @@ export default class NewTopic extends Component<any, any> {
     }
     result[key] = ''
     if (id !== '') {
-      result.geneid = id
+      result.type = 'gene'
+      result.id = id
+      // delete result.key
     }
+
     postCreateTopic(result, 'gene').then(res => {
       return res
     }).then(res => res.text()).then(text => {

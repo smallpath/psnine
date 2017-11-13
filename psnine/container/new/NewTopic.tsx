@@ -202,6 +202,7 @@ export default class NewTopic extends Component<any, any> {
   render() {
     const { icon, toolbarOpenVal } = this.state
     const { modeInfo } = this.props.screenProps
+    const statusHeight = global.isIOS ? 0 : (StatusBar.currentHeight || 0)
     let outerStyle = {
       marginTop: 0
     }
@@ -210,7 +211,7 @@ export default class NewTopic extends Component<any, any> {
       left: 0,
       top: 0,
       width: SCREEN_WIDTH,
-      height: SCREEN_HEIGHT + 100,
+      height: SCREEN_HEIGHT + 100 + statusHeight,
       borderWidth: 0,
       borderRadius: 0,
       opacity: 1,
@@ -219,7 +220,7 @@ export default class NewTopic extends Component<any, any> {
       // elevation : openVal.interpolate({inputRange: [0 ,1], outputRange: [0, 8]})
     }
     let animatedToolbarStyle = {
-      height: 56,
+      height: 56 + statusHeight,
       backgroundColor: modeInfo.standardColor
     }
     const { params } = this.props.navigation.state
@@ -311,7 +312,9 @@ export default class NewTopic extends Component<any, any> {
             <View style={[{
               elevation: 4,
               bottom: 0 // toolbarOpenVal.interpolate({ inputRange: [0, 1], outputRange: [0, 1] })
-            }, animatedToolbarStyle]}>
+            }, animatedToolbarStyle, {
+              height: 56
+            }]}>
               <View style={{
                 flex: 1,
                 flexDirection: 'row',
