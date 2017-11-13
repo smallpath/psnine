@@ -147,7 +147,7 @@ export default class Home extends Component<any, any> {
           selectedEntry={statsInfo.trophyRarePercent} value={item}/>
       case 4:
         return <PieChart modeInfo={modeInfo} colors={percentColors.reverse()} suffix='游戏完成率'
-          selectedEntry={statsInfo.gameRarePercent} value={item}/>
+          selectedEntry={statsInfo.gameRarePercent} ignore value={item}/>
       case 5:
         return <PieChart modeInfo={modeInfo} colors={percentColors} suffix='游戏难度'
           ignore value={item}/>

@@ -28,7 +28,8 @@ export const gamePercentColor = [
   textWarningColor,
   warningColor,
   textSuccessColor,
-  perfectColor
+  perfectColor,
+  textPerfectColor
 ]
 
 export const trophyColor1 = '#7a96d1'
