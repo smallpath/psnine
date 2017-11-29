@@ -71,7 +71,7 @@ export default class extends React.Component<any, any> {
         }).catch(errHandler)
       case 1:
         return onSave(images[currentIndex].url).then(() => {
-          ToastAndroid.show('保存成功', ToastAndroid.SHORT)
+          ToastAndroid.show('保存成功, 请查看psnine文件夹', ToastAndroid.SHORT)
         }).catch(errHandler)
     }
   }
@@ -143,11 +143,11 @@ export default class extends React.Component<any, any> {
           right: 0,
           zIndex: 2,
           elevation: 4,
-          backgroundColor: modeInfo.standardColor, height: 56,
+          backgroundColor: modeInfo.deepColor, height: 56 + (StatusBar.currentHeight || 24),
           transform: [{
             translateY: this.state.translate.interpolate({
               inputRange: [0, 1],
-              outputRange: [0, -56]
+              outputRange: [0, -56 - (StatusBar.currentHeight || 24)]
             })
           }]
         }}>
@@ -156,6 +156,7 @@ export default class extends React.Component<any, any> {
           iconColor={color}
           title={title}
           titleColor={color}
+          // origin
           actions={[{
             title: '分享图片', iconName: 'md-share', value: '', show: 'always'
           }, {
@@ -163,7 +164,7 @@ export default class extends React.Component<any, any> {
           }]}
           onActionSelected={this.onActionSelected}
           onIconClicked={() => this.props.navigation.goBack()}
-          style={{height: 56, elevation: 4}}
+          style={{height: 56, elevation: 4, backgroundColor: modeInfo.standardColor}}
         />
         </Animated.View>
          <Animated.View style={{
