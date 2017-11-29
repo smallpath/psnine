@@ -10,6 +10,7 @@ import {
 
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import { standardColor, idColor, accentColor } from '../../constant/colorConfig'
+import { removeAll } from '../../utils/statistics'
 
 declare var global
 
@@ -59,6 +60,31 @@ class Theme extends Component<any, any> {
               AsyncStorage.setItem('@Theme:loadImageWithoutWifi', value.toString())
             })}
             value={this.state.loadImageWithoutWifi} />
+        </View>
+      </TouchableNativeFeedback>
+    )
+  }
+
+  clearStatsCache = (_?, index?) => {
+    const { modeInfo } = this.props.screenProps
+    return (
+      <TouchableNativeFeedback onPress={removeAll}>
+        <View key={index} pointerEvents='box-only' style={[styles.themeItem, {
+            flex: -1,
+            height: 80,
+            flexDirection: 'row',
+            padding: 10,
+            borderBottomWidth: StyleSheet.hairlineWidth,
+            borderBottomColor: modeInfo.brighterLevelOne
+        }]}>
+          <View style={{flex: 4, justifyContent: 'center', alignItems: 'flex-start'}}>
+            <Text style={[styles.themeName, { marginTop: 12, flex: 1, color: modeInfo.titleTextColor }]}>
+              {'清理奖杯统计文件'}
+            </Text>
+            <Text style={[styles.themeName, { marginTop: -12, fontSize: 13, flex: 1, color: modeInfo.standardTextColor }]}>
+              {'这将清除所有游戏缓存'}
+            </Text>
+          </View>
         </View>
       </TouchableNativeFeedback>
     )
@@ -125,6 +151,7 @@ class Theme extends Component<any, any> {
         <View style={{flex: 1}}>
           {this.loadImageWithoutWIFI()}
           {this.sendGA()}
+          {this.clearStatsCache()}
         </View>
       </View>
     )

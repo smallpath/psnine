@@ -52,22 +52,29 @@ export const getTrophyList = async (psnid, callback, forceNew = false) => {
         await AsyncStorage.removeItem(prefix)
       } else {
         console.log('hehe global cache hit', Object.keys(cache))
-        const { gameList, statsInfo, trophyChunks, unearnedTrophyChunks } = cache
+        const { gameList, statsInfo, trophyChunks } = cache
         console.log({
-          trophyChunks,
-          unearnedTrophyChunks
+          trophyChunks
         })
-        const trophyList = ([] as any).concat(...(await Promise.all(
-          '0'.repeat(trophyChunks).split('').map((_, index) => {
-            return AsyncStorage.getItem(`${prefix}::trophyChunk::${index}`)
-          })
-        )).map(str => JSON.parse(str)))
+        let trophyList: any = []
+        if (trophyChunks < 20) {
+          trophyList = ([] as any).concat(...(await Promise.all(
+            '0'.repeat(trophyChunks).split('').map((_, index) => {
+              return AsyncStorage.getItem(`${prefix}::trophyChunk::${index}`)
+            })
+          )).map(str => JSON.parse(str)))
+        } else {
+          for (let i = 0; i < trophyChunks; i++) {
+            const str: string = await AsyncStorage.getItem(`${prefix}::trophyChunk::${i}`)
+            trophyList.push(...JSON.parse(str))
+            callback && callback({
+              title: `正在读取中 (${i + 1}/${trophyChunks})`
+            })
+          }
+        }
         // console.log(trophyList[0], trophyList[1], trophyList[2])
-        const unearnedTrophyList = ([] as any).concat(...(await Promise.all(
-          '0'.repeat(unearnedTrophyChunks).split('').map((_, index) => {
-            return AsyncStorage.getItem(`${prefix}::unearnedTrophyChunk::${index}`)
-          })
-        )).map(str => JSON.parse(str)))
+        const unearnedTrophyList = trophyList.filter(item => !item.timestamp)
+
         // console.log(unearnedTrophyList[0])
         // console.log(trophyList.length, unearnedTrophyList.length, 'combined')
         return {
@@ -131,30 +138,30 @@ export const getTrophyList = async (psnid, callback, forceNew = false) => {
   })
 
   const allTrophyArr = sliceArrayByNumber(trophyList, 500)
-  const allUnearnedTrophyArr = sliceArrayByNumber(unearnedTrophyList, 500)
   await AsyncStorage.setItem(prefix, JSON.stringify({
     gameList,
     statsInfo,
-    trophyChunks: allTrophyArr.length,
-    unearnedTrophyChunks: allUnearnedTrophyArr.length
+    trophyChunks: allTrophyArr.length
   }))
   console.log({
     trophyChunks: allTrophyArr.length,
-    unearnedTrophyChunks: allUnearnedTrophyArr.length,
     trophyList: trophyList.length
   })
-  await Promise.all(
-    allTrophyArr.map((item, index) => {
-      // console.log('=========================================>',item.length, item[0])
-      return AsyncStorage.setItem(`${prefix}::trophyChunk::${index}`, JSON.stringify(item))
-    })
-  )
-  await Promise.all(
-    allUnearnedTrophyArr.map((item, index) => {
-      return AsyncStorage.setItem(`${prefix}::unearnedTrophyChunk::${index}`, JSON.stringify(item))
-    })
-  )
-
+  if (allTrophyArr.length < 20) {
+    await Promise.all(
+      allTrophyArr.map((item, index) => {
+        // console.log('=========================================>',item.length, item[0])
+        return AsyncStorage.setItem(`${prefix}::trophyChunk::${index}`, JSON.stringify(item))
+      })
+    )
+  } else {
+    for (let index = 0; index < allTrophyArr.length; index++) {
+      await AsyncStorage.setItem(`${prefix}::trophyChunk::${index}`, JSON.stringify(allTrophyArr[index]))
+      callback && callback({
+        title: `正在存储中 (${index + 1}/${allTrophyArr.length})`
+      })
+    }
+  }
   return { gameList, trophyList: earnedTrophyList, statsInfo, unearnedTrophyList }
 }
 
