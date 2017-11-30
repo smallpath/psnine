@@ -265,7 +265,7 @@ class StatsHome extends Component<any, any> {
             <View style={{ flex: 1, padding: 5}}>
               <View borderRadius={20} style={{ marginTop: 10,
                 paddingHorizontal: 10, alignSelf: 'center', alignContent: 'center',
-                flexDirection: 'row', justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0,0,0,0.3)'  }}>
+                flexDirection: 'row', justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0,0,0,0.5)'  }}>
                 <Text style={{ height: 30, textAlignVertical: 'center', textAlign: 'center', padding: 5}}>
                   <Text style={{ flex: 1, color: trophyColor1, marginVertical: 2, textAlign: 'center', fontSize: 15 }}>{rowData.platinum + ' '}</Text>
                   <Text style={{ flex: 1, color: trophyColor2, marginVertical: 2, textAlign: 'center', fontSize: 15 }}>{rowData.gold + ' '}</Text>
