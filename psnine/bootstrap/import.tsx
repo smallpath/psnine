@@ -66,7 +66,7 @@ class IOSActivityIndicator extends Component<any, any> {
 let TouchableComponent
 
 if (!isIOS) {
-  TouchableComponent = Platform.Version <= 20 ? ExtendedTouchableOpacity : TouchableNativeFeedback
+  TouchableComponent = Platform.Version <= 22 ? ExtendedTouchableOpacity : TouchableNativeFeedback
 } else {
   TouchableComponent = ExtendedTouchableOpacity
 }
