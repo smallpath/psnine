@@ -481,7 +481,7 @@ export default class Home extends Component<any, any> {
                 titleColor={modeInfo.isNightMode ? '#000' : '#fff'}
                 actions={toolbar}
                 layoutParams={{
-                  height: 56 + StatusBar.currentHeight / 2, // required,
+                  height: parseInt(56 + (StatusBar.currentHeight || 0) / 2, 10), // required,
                   collapseMode: CollapsingToolbarLayoutAndroid.CollapseMode.COLLAPSE_MODE_PIN // required
                 }}
                 onIconClicked={this.onIconClicked}

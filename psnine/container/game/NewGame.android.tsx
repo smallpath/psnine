@@ -266,7 +266,7 @@ export default class Home extends Component<any, any> {
                 origin
                 onActionSelected={this.onActionSelected}
                 layoutParams={{
-                  height: 56 + StatusBar.currentHeight, // required
+                  height: parseInt(56 + (StatusBar.currentHeight || 0) / 2, 10), // required
                   collapseMode: CollapsingToolbarLayoutAndroid.CollapseMode.COLLAPSE_MODE_PIN // required
                 }}
                 paddingTop={PixelRatio.getPixelSizeForLayoutSize(8)}
