@@ -15,7 +15,10 @@ export default function (html) {
     const text = $this.text()
     const arr = text.split('\n').map(item => item.replace(/\t/g, '').trim()).filter(item => item)
 
-    const matched = $this.find('.content')[0].parent.attribs.href.match(/\d+/)
+    const target = $this.find('.content')
+    if (!target) return
+    if (!target.length) return
+    const matched = target[0].parent.attribs.href.match(/\d+/)
     const id = matched ? matched[0] : arr[1] + arr[2]
     const nextArr = arr.slice(-3)
     let circle = $this.find('a.node').text() || ''
