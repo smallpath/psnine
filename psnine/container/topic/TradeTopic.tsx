@@ -244,7 +244,7 @@ export default class extends Component<any, any> {
                     this.props.navigation.navigate('Home', {
                       title: titleInfo.psnid,
                       id: titleInfo.psnid,
-                      URL: `http://psnine.com/psnid/${titleInfo.psnid}`
+                      URL: `https://psnine.com/psnid/${titleInfo.psnid}`
                     })
                   }
                 }>{titleInfo.psnid}</Text>

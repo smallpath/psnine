@@ -73,7 +73,7 @@ export default class extends Component<any, any> {
         // alert(id)
         this.props.navigation.navigate('NewGene', {
           // shouldSeeBackground: true,
-          URL: `http://psnine.com/set/gene?ele=${id}`
+          URL: `https://psnine.com/set/gene?ele=${id}`
         })
         break
       case 0:
@@ -201,7 +201,7 @@ export default class extends Component<any, any> {
                   this.props.navigation.navigate('Home', {
                     title: rowData.owner,
                     id: rowData.owner,
-                    URL: `http://psnine.com/psnid/${rowData.owner}`
+                    URL: `https://psnine.com/psnid/${rowData.owner}`
                   })
                 }}><Text style={{fontSize: 12, color: modeInfo.standardTextColor}}>元素发起者：</Text>{rowData.owner}</Text>
             </View>

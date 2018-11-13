@@ -37,7 +37,7 @@ const ListItems = [
       const { navigation, closeDrawer } = this.props
       closeDrawer()
 
-      let URL = 'http://psnine.com/my/fav?page=1'
+      let URL = 'https://psnine.com/my/fav?page=1'
 
       navigation.navigate('Favorite', {
         URL,
@@ -52,7 +52,7 @@ const ListItems = [
       const { navigation, closeDrawer } = this.props
       closeDrawer()
 
-      let URL = 'http://psnine.com/my/issue?page=1'
+      let URL = 'https://psnine.com/my/issue?page=1'
 
       navigation.navigate('Issue', {
         URL,
@@ -67,7 +67,7 @@ const ListItems = [
       const { navigation, closeDrawer } = this.props
       closeDrawer()
 
-      let URL = 'http://psnine.com/my/block'
+      let URL = 'https://psnine.com/my/block'
 
       navigation.navigate('UserBlock', {
         URL,
@@ -82,7 +82,7 @@ const ListItems = [
   //     const { navigation, closeDrawer } = this.props
   //     closeDrawer()
 
-  //     let URL = 'http://psnine.com/my/element'
+  //     let URL = 'https://psnine.com/my/element'
 
   //     navigation.navigate('UserElement', {
   //       URL,
@@ -97,7 +97,7 @@ const ListItems = [
       const { navigation, closeDrawer } = this.props
       closeDrawer()
 
-      let URL = 'http://psnine.com/my/photo?page=1'
+      let URL = 'https://psnine.com/my/photo?page=1'
 
       navigation.navigate('UserPhoto', {
         URL,
@@ -112,7 +112,7 @@ const ListItems = [
       const { navigation, closeDrawer } = this.props
       closeDrawer()
 
-      let URL = 'http://psnine.com/my/account'
+      let URL = 'https://psnine.com/my/account'
 
       navigation.navigate('UserDetail', {
         URL,
@@ -127,7 +127,7 @@ const ListItems = [
       const { navigation, closeDrawer } = this.props
       closeDrawer()
 
-      let URL = 'http://psnine.com/my/setting'
+      let URL = 'https://psnine.com/my/setting'
 
       navigation.navigate('UserCustom', {
         URL,
@@ -341,7 +341,7 @@ export default class NavigationDrawer extends Component<any, any> {
           const { navigation, closeDrawer } = this.props
           closeDrawer()
 
-          let URL = 'http://psnine.com/my/pass'
+          let URL = 'https://psnine.com/my/pass'
 
           navigation.navigate('Pass', {
             URL,

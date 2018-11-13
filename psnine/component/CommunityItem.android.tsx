@@ -154,7 +154,7 @@ export default class ComplexComment extends React.PureComponent<ExtendedProp, Fl
                   navigation.navigate('Home', {
                     title: rowData.psnid,
                     id: rowData.psnid,
-                    URL: `http://psnine.com/psnid/${rowData.psnid}`
+                    URL: `https://psnine.com/psnid/${rowData.psnid}`
                   })
                 }}>{rowData.psnid}</Text>
               <Text selectable={false} numberOfLines={1}

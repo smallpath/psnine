@@ -325,7 +325,7 @@ export default class NewTopic extends Component<any, any> {
             <Button title={'点我选择图片(已选择' + this.state.photo.length + '张)'} onPress={() => {
               Keyboard.dismiss()
               this.props.navigation.navigate('UserPhoto', {
-                URL: 'http://psnine.com/my/photo?page=1',
+                URL: 'https://psnine.com/my/photo?page=1',
                 type: 'multi',
                 selections: this.state.photo,
                 callbackAfterAll: (imageArr) => {
@@ -607,7 +607,7 @@ export default class NewTopic extends Component<any, any> {
   _pressImageButton = () => {
     Keyboard.dismiss()
     this.props.navigation.navigate('UserPhoto', {
-      URL: 'http://psnine.com/my/photo?page=1',
+      URL: 'https://psnine.com/my/photo?page=1',
       callback: ({ url }) => {
         this.addText(`[img]${url}[/img]`)
       }

@@ -324,7 +324,7 @@ Object.assign(Navigator.router, {
       switch (action.routeName) {
         case 'Home':
           action.params.title = `${id}`
-          action.params.URL = `http://psnine.com/${path}`
+          action.params.URL = `https://psnine.com/${path}`
           break
         case 'OlderCommunityTopic':
         case 'CommunityTopic':
@@ -332,30 +332,30 @@ Object.assign(Navigator.router, {
         case 'QaTopic':
         case 'BattleTopic':
         case 'GamePage':
-          action.params.URL = `http://psnine.com/${path}`
+          action.params.URL = `https://psnine.com/${path}`
           action.params.type = replyTypeMapper[action.routeName] || 'gene'
           action.params.rowData = {
             id
           }
           break
         case 'StoreTopic':
-          action.params.URL = `http://psnine.com/${path}`
+          action.params.URL = `https://psnine.com/${path}`
           action.params.id = id.split('::')[0]
           action.params.server = id.split('::')[1]
           action.params.title = '数折'
           break
         case 'DiscountTopic':
-          action.params.URL = `http://psnine.com/${path}`
+          action.params.URL = `https://psnine.com/${path}`
           action.params.title = '数折'
           break
         case 'CommentList':
         case 'GeneCommentList':
         case 'GameTopic':
         case 'UserGame':
-          action.params.URL = `http://psnine.com/${path}?page=1`
+          action.params.URL = `https://psnine.com/${path}?page=1`
           break
         case 'Trophy':
-          action.params.URL = `http://psnine.com/${path}`
+          action.params.URL = `https://psnine.com/${path}`
           action.params.title = `No.${id}`
           break
         default:

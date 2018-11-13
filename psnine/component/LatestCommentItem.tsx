@@ -54,7 +54,7 @@ export default class PhotoItem extends React.PureComponent<FlatlistItemProp> {
                 navigation.navigate('Home', {
                   title: rowData.psnid,
                   id: rowData.psnid,
-                  URL: `http://psnine.com/psnid/${rowData.psnid}`
+                  URL: `https://psnine.com/psnid/${rowData.psnid}`
                 })
               }}>{rowData.psnid}</Text>
             <Text numberOfLines={1} ellipsizeMode='tail' selectable={false} style={{

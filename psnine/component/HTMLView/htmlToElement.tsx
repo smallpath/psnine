@@ -213,7 +213,7 @@ export default function htmlToElement(rawHtml, opts, done) {
           if (ImageComponent === ResizableImgComponent) {
               let src = node.attribs.src
               if (/^(.*?):\/\//.exec(src)) {} else {
-                src = 'http://psnine.com' + src
+                src = 'https://psnine.com' + src
               }
               // console.log('pushing', src)
               opts.imageArr.push({ url: src })

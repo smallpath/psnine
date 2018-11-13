@@ -237,7 +237,7 @@ export default class ComplexComment extends React.PureComponent<ExtendedProp, Ex
         id: rowData.id.replace('comment-', ''),
         at: name ? name : rowData.psnid,
         callback: () => {
-          fetch(`http://psnine.com/get/comson?id=${rowData.id.replace('comment-', '')}`).then(() => {
+          fetch(`https://psnine.com/get/comson?id=${rowData.id.replace('comment-', '')}`).then(() => {
             preFetch && preFetch()
           })
         },
@@ -317,7 +317,7 @@ export default class ComplexComment extends React.PureComponent<ExtendedProp, Ex
                     this.props.navigation.navigate('Home', {
                       title: rowData.psnid,
                       id: rowData.psnid,
-                      URL: `http://psnine.com/psnid/${rowData.psnid}`
+                      URL: `https://psnine.com/psnid/${rowData.psnid}`
                     })
                   }
                 }>{rowData.psnid}</Text>

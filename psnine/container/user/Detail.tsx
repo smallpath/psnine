@@ -41,8 +41,8 @@ export default class Detail extends Component<any, any> {
     })
     InteractionManager.runAfterInteractions(() => {
       Promise.all([
-        getNBAPI('http://psnine.com/my'),
-        getDetailAPI('http://psnine.com/my/account')
+        getNBAPI('https://psnine.com/my'),
+        getDetailAPI('https://psnine.com/my/account')
       ]).then(arr => {
         this.setState({
           data: arr[1],
@@ -76,7 +76,7 @@ export default class Detail extends Component<any, any> {
       <ScrollView style={{flex: 1, padding: 5}}>
         <Button color={modeInfo.accentColor} title={'捐助PSNINE'} onPress={() => {
           navigation.navigate('WebView', {
-            URL: 'http://psnine.com/set/mujuan',
+            URL: 'https://psnine.com/set/mujuan',
             title: '捐助PSNINE'
           })
         }}/>

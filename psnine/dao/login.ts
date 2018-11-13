@@ -1,8 +1,8 @@
 import { encodeForm } from '../utils'
 
-const loginURL = 'http://psnine.com/sign/signin/ajax'
+const loginURL = 'https://psnine.com/sign/signin/ajax'
 
-export const registURL = `http://psnine.com/psnauth`
+export const registURL = `https://psnine.com/psnauth`
 
 export const safeLogin = function (psnid, pass) {
   let signin = ''

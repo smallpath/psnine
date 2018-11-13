@@ -23,7 +23,7 @@ export default class extends React.PureComponent<ExtendedProp, {}> {
     const { navigation } = this.props
     const URL = getGameUrl(rowData.id)
     navigation.navigate('GamePage', {
-      // URL: 'http://psnine.com/psngame/5424?psnid=Smallpath',
+      // URL: 'https://psnine.com/psngame/5424?psnid=Smallpath',
       URL,
       title: rowData.title,
       rowData,

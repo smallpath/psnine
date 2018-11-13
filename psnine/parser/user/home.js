@@ -55,7 +55,7 @@ export default function (html, psnid) {
   //     text: '同步'
   //   })
   // }
-  const base = `http://psnine.com/psnid/${psnid}`
+  const base = `https://psnine.com/psnid/${psnid}`
   const psnButtonInfo = [{
     text: '屏蔽',
     psnid
@@ -133,7 +133,7 @@ export default function (html, psnid) {
     if (!mock.content) {
       mock.content = $this.find('.title').html()
     }
-    mock.href = 'http://psnine.com/diary/' + mock.id
+    mock.href = 'https://psnine.com/diary/' + mock.id
     diaryTable.push(mock)
   })
 

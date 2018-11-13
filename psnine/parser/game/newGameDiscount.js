@@ -19,7 +19,7 @@ export default function (html) {
     const prevContent = contentArr.join('<br>')
     const storeLink = prevContent.match(/store\(\'(.*?)\',\'(.*?)\'/)
     const isOK = storeLink && storeLink[1] && storeLink[2]
-    const onclick = isOK ? `http://psnine.com/store/${storeLink[1]}::${storeLink[2]}` : ''
+    const onclick = isOK ? `https://psnine.com/store/${storeLink[1]}::${storeLink[2]}` : ''
     const mock = {
       avatar: img,
       platform: arr[0],

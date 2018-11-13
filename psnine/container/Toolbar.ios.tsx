@@ -168,7 +168,7 @@ class Toolbar extends Component<any, any> {
         index === 1 && this._onSearchClicked()
         const obj: any = {}
         if (communityType) {
-          obj.URL = `http://psnine.com/node/${communityType}/add`
+          obj.URL = `https://psnine.com/node/${communityType}/add`
         }
         index === 0 && this.props.navigation.navigate('NewTopic', obj)
       }

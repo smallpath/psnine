@@ -300,7 +300,7 @@ class CommunityTopic extends Component<any, any> {
                     this.props.navigation.navigate('Home', {
                       title: titleInfo.psnid,
                       id: titleInfo.psnid,
-                      URL: `http://psnine.com/psnid/${titleInfo.psnid}`
+                      URL: `https://psnine.com/psnid/${titleInfo.psnid}`
                     })
                   }
                 }>{titleInfo.psnid}</Text>
@@ -310,7 +310,7 @@ class CommunityTopic extends Component<any, any> {
                     flex: -1, color: modeInfo.standardColor, textAlign: 'center', textAlignVertical: 'center' }} onPress={
                   () => {
                     this.props.navigation.navigate('Circle', {
-                      URL: `http://psnine.com/gene?ele=${(titleInfo.node || []).join('')}`,
+                      URL: `https://psnine.com/gene?ele=${(titleInfo.node || []).join('')}`,
                       title: (titleInfo.node || []).join('')
                     })
                   }
@@ -362,7 +362,7 @@ class CommunityTopic extends Component<any, any> {
               const { navigation } = this.props
               const URL = getGameUrl(rowData.id)
               navigation.navigate('GamePage', {
-                // URL: 'http://psnine.com/psngame/5424?psnid=Smallpath',
+                // URL: 'https://psnine.com/psngame/5424?psnid=Smallpath',
                 URL,
                 title: rowData.title,
                 rowData,

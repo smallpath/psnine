@@ -235,7 +235,7 @@ class QaTopic extends Component<any, any> {
                     this.props.navigation.navigate('Home', {
                       title: titleInfo.psnid,
                       id: titleInfo.psnid,
-                      URL: `http://psnine.com/psnid/${titleInfo.psnid}`
+                      URL: `https://psnine.com/psnid/${titleInfo.psnid}`
                     })
                   }
                 }>{titleInfo.psnid}</Text>
@@ -284,7 +284,7 @@ class QaTopic extends Component<any, any> {
           onPress={() => {
             const { navigation } = this.props
             navigation.navigate('GamePage', {
-              // URL: 'http://psnine.com/psngame/5424?psnid=Smallpath',
+              // URL: 'https://psnine.com/psngame/5424?psnid=Smallpath',
               URL: rowData.url,
               title: rowData.title,
               rowData,

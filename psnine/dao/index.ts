@@ -79,7 +79,7 @@ const safeFetch = function(reqUrl, type = 'text') {
   })
 }
 
-const webHost = `http://psnine.com`
+const webHost = `https://psnine.com`
 
 const getTopicsAPI = ({ page, type, title }) => {
   if (!type) {
@@ -243,9 +243,9 @@ export const fetchStores = (args) => safeFetch(getStoresAPI(args)).then(res => s
 
 export const getCustomAPI = url => safeFetch(url).then(res => customParser(res))
 
-export const getNewBattleAPI = () => safeFetch('http://psnine.com/set/battle').then(res => newBattleParser(res))
+export const getNewBattleAPI = () => safeFetch('https://psnine.com/set/battle').then(res => newBattleParser(res))
 
-export const getNewQaAPI = () => safeFetch('http://psnine.com/set/qa').then(res => newQaParser(res))
+export const getNewQaAPI = () => safeFetch('https://psnine.com/set/qa').then(res => newQaParser(res))
 
 export const getStoreAPI = ({ id, server}) => {
   let param

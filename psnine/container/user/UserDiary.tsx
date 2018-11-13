@@ -36,7 +36,7 @@ class UserBoard extends Component<any, any> {
   onActionSelected = (index) => {
     if (index === 0) {
       return this.props.screenProps.navigation.navigate('WebView', {
-        URL: 'http://psnine.com/set/diary'
+        URL: 'https://psnine.com/set/diary'
       })
     }
   }

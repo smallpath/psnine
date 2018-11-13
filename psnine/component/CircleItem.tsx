@@ -71,7 +71,7 @@ export default class CircleItem extends React.PureComponent<ExtendedProp, {}> {
                   this.props.navigation.navigate('Home', {
                     title: rowData.owner,
                     id: rowData.owner,
-                    URL: `http://psnine.com/psnid/${rowData.owner}`
+                    URL: `https://psnine.com/psnid/${rowData.owner}`
                   })
                 }
               }><Text style={{ flex: -1, color: modeInfo.standardTextColor, fontSize: 12 }} numberOfLines={1}>机长：</Text>{rowData.owner}</Text>

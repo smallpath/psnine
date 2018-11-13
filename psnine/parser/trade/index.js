@@ -39,7 +39,7 @@ export default function (html) {
 
   $('.page a').each(function (i, elem) {
     const $this = $(this)
-    const url = 'http://psnine.com' + $this.attr('href')
+    const url = 'https://psnine.com' + $this.attr('href')
     const text = $this.text() || '1'
     page.push({
       url,

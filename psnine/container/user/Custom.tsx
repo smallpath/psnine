@@ -60,7 +60,7 @@ export default class Custom extends Component<any, any> {
       isLoading: true
     })
     InteractionManager.runAfterInteractions(() => {
-      getCustomAPI('http://psnine.com/my/setting').then(data => {
+      getCustomAPI('https://psnine.com/my/setting').then(data => {
         this.setState({
           data,
           isLoading: false
@@ -108,7 +108,7 @@ export default class Custom extends Component<any, any> {
         <Button title={'自定义背景图'} color={bgvip !== 0 ? modeInfo.standardColor : modeInfo.standardTextColor}
           onPress={() => {
             this.props.navigation.navigate('UserPhoto', {
-              URL: 'http://psnine.com/my/photo?page=1',
+              URL: 'https://psnine.com/my/photo?page=1',
               afterAlert: ({ url }) => {
                 this.setSetting({
                   bgvip: url.split('/').pop().split('.')[0]
@@ -129,7 +129,7 @@ export default class Custom extends Component<any, any> {
                   avavip: ''
                 })},
                 {text: '自定义头像', onPress: () => this.props.navigation.navigate('UserPhoto', {
-                  URL: 'http://psnine.com/my/photo?page=1',
+                  URL: 'https://psnine.com/my/photo?page=1',
                   afterAlert: ({ url }) => {
                     this.setSetting({
                       avavip: url.split('/').pop().split('.')[0]

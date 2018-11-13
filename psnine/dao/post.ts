@@ -1,23 +1,23 @@
 import { encodeForm } from '../utils'
 
-const replyURL = 'http://psnine.com/set/comment/ajax'
-const ajaxURL = 'http://psnine.com/set/comson/ajax'
-const editURL = 'http://psnine.com/set/edit/ajax'
-const cainaURL = 'http://psnine.com/set/caina/ajax'
-const dalao = 'http://psnine.com//set/dalao/ajax'
-const passURL = 'http://psnine.com/my/pass'
-const translateURL = 'http://psnine.com/set/cn/post'
-const imageURL = 'http://psnine.com/my/photo'
-const settingURL = 'http://psnine.com/my/setting'
-const circleURL = 'http://psnine.com/set/group/ajax'
-const diaryURL = 'http://psnine.com/set/diary/post'
+const replyURL = 'https://psnine.com/set/comment/ajax'
+const ajaxURL = 'https://psnine.com/set/comson/ajax'
+const editURL = 'https://psnine.com/set/edit/ajax'
+const cainaURL = 'https://psnine.com/set/caina/ajax'
+const dalao = 'https://psnine.com//set/dalao/ajax'
+const passURL = 'https://psnine.com/my/pass'
+const translateURL = 'https://psnine.com/set/cn/post'
+const imageURL = 'https://psnine.com/my/photo'
+const settingURL = 'https://psnine.com/my/setting'
+const circleURL = 'https://psnine.com/set/group/ajax'
+const diaryURL = 'https://psnine.com/set/diary/post'
 
 const createMapper = {
-  'topic': 'http://psnine.com/set/topic/post',
-  'qa': 'http://psnine.com/set/qa/post',
-  'gene': 'http://psnine.com/set/edit/ajax',
-  'battle': 'http://psnine.com/set/battle/post',
-  'trade': 'http://psnine.com/set/trade/post'
+  'topic': 'https://psnine.com/set/topic/post',
+  'qa': 'https://psnine.com/set/qa/post',
+  'gene': 'https://psnine.com/set/edit/ajax',
+  'battle': 'https://psnine.com/set/battle/post',
+  'trade': 'https://psnine.com/set/trade/post'
 }
 
 const config = {

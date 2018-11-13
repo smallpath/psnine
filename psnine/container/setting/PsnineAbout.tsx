@@ -110,13 +110,13 @@ export default class PsnineAbout extends Component<any, any> {
       {
         title: 'PSNINE',
         desc: 'P9 · 酷玩趣友',
-        onPress: () => Linking.openURL('http://psnine.com').catch(err => global.toast(err.toString()))
+        onPress: () => Linking.openURL('https://psnine.com').catch(err => global.toast(err.toString()))
       },
       {
         title: '关于',
         desc: '关于我们 & 意见建议 & 站务问题',
         onPress: () => navigation.navigate('CommunityTopic', {
-          URL: 'http://psnine.com/topic/1',
+          URL: 'https://psnine.com/topic/1',
           title: '关于我们 & 意见建议 & 站务问题'
         })
       },
@@ -124,7 +124,7 @@ export default class PsnineAbout extends Component<any, any> {
         title: '发帖教学',
         desc: '如何花式发贴',
         onPress: () => navigation.navigate('CommunityTopic', {
-          URL: 'http://psnine.com/topic/10422',
+          URL: 'https://psnine.com/topic/10422',
           title: '发帖教学'
         })
       },
@@ -132,7 +132,7 @@ export default class PsnineAbout extends Component<any, any> {
         title: '作弊举报',
         desc: 'PSN作弊玩家举报专用帖',
         onPress: () => navigation.navigate('CommunityTopic', {
-          URL: 'http://psnine.com/topic/2',
+          URL: 'https://psnine.com/topic/2',
           title: 'PSN作弊玩家举报专用帖'
         })
       },
@@ -140,7 +140,7 @@ export default class PsnineAbout extends Component<any, any> {
         title: '关于约战',
         desc: '使用说明+BUG汇总+建议提交',
         onPress: () => navigation.navigate('CommunityTopic', {
-          URL: 'http://psnine.com/topic/7552',
+          URL: 'https://psnine.com/topic/7552',
           title: 'P9「约战」公测'
         })
       },
@@ -148,7 +148,7 @@ export default class PsnineAbout extends Component<any, any> {
         title: '捐赠',
         desc: '你的捐助能让我们更好地前行',
         onPress: () => navigation.navigate('CommunityTopic', {
-          URL: 'http://psnine.com/topic/29077',
+          URL: 'https://psnine.com/topic/29077',
           title: '「PSNINE募捐帖」'
         })
       },

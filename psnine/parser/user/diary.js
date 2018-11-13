@@ -23,7 +23,7 @@ export default function (html, psnid) {
     if (!mock.content) {
       mock.content = $this.find('.title').html()
     }
-    mock.href = 'http://psnine.com/diary/' + mock.id
+    mock.href = 'https://psnine.com/diary/' + mock.id
     diary.push(mock)
   })
 

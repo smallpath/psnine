@@ -22,8 +22,8 @@ export default class extends React.PureComponent<ExtendedProp, FlatlistItemState
     const { navigation } = this.props
     const id = rowData.id || parseInt(rowData.url.split('/').pop(), 10)
     const URL = rowData.type === 'outter' ?
-      'http://psnine.com/dd/' + id :
-      'http://psnine.com/topic/' + id
+      'https://psnine.com/dd/' + id :
+      'https://psnine.com/topic/' + id
     navigation.navigate(rowData.type === 'outter' ? 'DiscountTopic' : 'CommunityTopic', {
       URL,
       title: rowData.title,

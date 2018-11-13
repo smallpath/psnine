@@ -312,7 +312,7 @@ export default class NewTopic extends Component<any, any> {
             <Button title='选择联机奖杯' color={modeInfo.standardColor} onPress={() => {
               if (this.state.psngameid === '') return global.toast('请先选择游戏')
               this.props.navigation.navigate('GamePage', {
-                URL: 'http://psnine.com/psngame/' + this.state.psngameid,
+                URL: 'https://psnine.com/psngame/' + this.state.psngameid,
                 title: this.state.data.game.reduce((prev, curr) => {
                   if (this.state.psngameid === curr.value) return curr.text
                   return prev
@@ -518,7 +518,7 @@ export default class NewTopic extends Component<any, any> {
   _pressImageButton = () => {
     Keyboard.dismiss()
     this.props.navigation.navigate('UserPhoto', {
-      URL: 'http://psnine.com/my/photo?page=1',
+      URL: 'https://psnine.com/my/photo?page=1',
       callback: ({ url }) => {
         this.addText(`[img]${url}[/img]`)
       }

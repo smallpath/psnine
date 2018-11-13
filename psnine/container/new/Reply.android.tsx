@@ -586,7 +586,7 @@ export default class Reply extends Component<any, any> {
   _pressImageButton = () => {
     Keyboard.dismiss()
     this.props.navigation.navigate('UserPhoto', {
-      URL: 'http://psnine.com/my/photo?page=1',
+      URL: 'https://psnine.com/my/photo?page=1',
       callback: ({ url }) => {
         this.addText(`[img]${url}[/img]`)
       }

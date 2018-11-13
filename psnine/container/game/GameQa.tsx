@@ -118,7 +118,7 @@ class GameTopic extends Component<any, any> {
         const { params } = this.props.navigation.state
         const id = (params.URL.match(/\d+/) || [0])[0]
         this.props.navigation.navigate('NewQa', {
-          URL: `http://psnine.com/set/qa?psngameid=${id}`
+          URL: `https://psnine.com/set/qa?psngameid=${id}`
         })
         // console.log(id)
         return

@@ -16,7 +16,7 @@ export default function (html) {
   titleInfo.content = `<div>${title.first().find('.content').html()}</div>`
   titleInfo.owner = title.find('a.psnnode').text()
   titleInfo.isJoined = !html.includes('class="btn-success">申请加入</button>')
-  titleInfo.isLogined = !html.includes('<a href="http://psnine.com/sign/in">登录</a>')
+  titleInfo.isLogined = !html.includes('<a href="https://psnine.com/sign/in">登录</a>')
 
   const list = []
 
@@ -51,7 +51,7 @@ export default function (html) {
   
   $('.page li a').each(function (i, elem) {
     const $this = $(this)
-    const url = 'http://psnine.com' + $this.attr('href')
+    const url = 'https://psnine.com' + $this.attr('href')
     const text = $this.text()
     page.push({
       url,

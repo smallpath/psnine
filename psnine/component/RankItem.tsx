@@ -35,7 +35,7 @@ export default class extends React.PureComponent<ExtendedProp, FlatlistItemState
     const { navigation } = this.props
     const URL = getHomeURL(rowData.psnid)
     navigation.navigate('Home', {
-      // URL: 'http://psnine.com/psngame/5424?psnid=Smallpath',
+      // URL: 'https://psnine.com/psngame/5424?psnid=Smallpath',
       URL,
       title: rowData.psnid,
       rowData

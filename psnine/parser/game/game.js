@@ -112,7 +112,7 @@ export default function (html, hasPsnid = false) {
   if (toolbar) {
     toolbar.find('li').each(function (i, elem) {
       const $this = $(this)
-      const img = 'http://psnine.com' + $this.find('img').attr('src')
+      const img = 'https://psnine.com' + $this.find('img').attr('src')
       const text = $this.find('a').text()
       const url = $this.find('a').attr('href')
       toolbarInfo.push({ img, text, url })

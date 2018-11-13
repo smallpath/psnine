@@ -1,7 +1,7 @@
 let numStr = '<b style="color:red;">'
 let dayStr = '<b style="color:green;">'
 
-const signonURL = 'http://psnine.com/set/qidao/ajax'
+const signonURL = 'https://psnine.com/set/qidao/ajax'
 
 export const fetchSignOn = function () {
 

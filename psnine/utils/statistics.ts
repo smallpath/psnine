@@ -12,7 +12,7 @@ import {
   getGameAPI
 } from '../dao'
 
-const getGameURL = (psnid, page) => `http://psnine.com/psnid/${psnid}/psngame?page=${page}`
+const getGameURL = (psnid, page) => `https://psnine.com/psnid/${psnid}/psngame?page=${page}`
 
 const getGameList = async (psnid, callback) => {
   const list: any = []

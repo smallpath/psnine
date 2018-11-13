@@ -110,7 +110,7 @@ class CommunityTopic extends Component<any, any> {
         onPress={() => {
           if (rowData.url) {
             this.props.navigation.navigate('GamePage', {
-              // URL: 'http://psnine.com/psngame/5424?psnid=Smallpath',
+              // URL: 'https://psnine.com/psngame/5424?psnid=Smallpath',
               URL: rowData.url,
               title: rowData.title,
               rowData,

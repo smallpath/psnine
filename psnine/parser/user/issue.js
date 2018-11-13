@@ -90,7 +90,7 @@ export default function (html, type) {
         price: $this.find('.title .r').text(),
         count: nextArr[2]
       }
-      mock.edit = 'http://psnine.com/trade/' + mock.id + '/edit'
+      mock.edit = 'https://psnine.com/trade/' + mock.id + '/edit'
       list.push(mock)
     })
   } else if (type === 'qa') {
@@ -174,7 +174,7 @@ export default function (html, type) {
 
   $('.page ul').last().find('a').each(function (i, elem) {
     const $this = $(this)
-    const url = 'http://psnine.com' + $this.attr('href')
+    const url = 'https://psnine.com' + $this.attr('href')
     const text = $this.text()
     page.push({
       url,

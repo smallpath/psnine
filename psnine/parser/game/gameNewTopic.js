@@ -107,7 +107,7 @@ export default function parseThophy(html) {
 
   $('.page a').each(function (i, elem) {
     const $this = $(this)
-    const url = 'http://psnine.com' + $this.attr('href')
+    const url = 'https://psnine.com' + $this.attr('href')
     const text = $this.text()
     page.push({
       url,

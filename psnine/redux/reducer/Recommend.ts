@@ -56,7 +56,7 @@ function callWarning (text) {
       if (matched) {
         let url = matched[1]
         if (url.startsWith('/')) {
-          url = 'http://psnine.com' + url
+          url = 'https://psnine.com' + url
         }
         button = {
           text: '点我查看',

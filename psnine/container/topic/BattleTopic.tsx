@@ -187,7 +187,7 @@ class CommunityTopic extends Component<any, any> {
                       this.props.navigation.navigate('Home', {
                         title: rowData.psnid,
                         id: rowData.psnid,
-                        URL: `http://psnine.com/psnid/${rowData.psnid}`
+                        URL: `https://psnine.com/psnid/${rowData.psnid}`
                       })
                     }
                   }>{rowData.psnid}</Text>
