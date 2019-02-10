@@ -13,7 +13,8 @@ export default function (html) {
     const arr = text.split('\n').map(item => item.replace(/\t/g, '').trim()).filter(item => item.trim())
 
     const title = $this.find('td.title a').text()
-    const matched = img.match(/\/(\d+)\./)
+    const idUrl = $this.find('a').attr('href')
+    const matched = idUrl.match(/\/(\d+)/)
 
     const id = matched ? matched[1] : arr[1] + arr[2]
 
