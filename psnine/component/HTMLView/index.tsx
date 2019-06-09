@@ -150,7 +150,7 @@ class HtmlView extends Component<IProp, {
     // 加一个空文字来将最开头的表情内联
     let target = (value || '').replace(urlMapper, urlExtractor)
 
-    if (target.indexOf('<img src="http://photo.psnine.com/face/') === 0) {
+    if (target.indexOf('<img src="https://psnine.com/Upload/face/') === 0) {
       target = '<span/>' + target
     }
     htmlToElement(target, opts, (err, element) => {
